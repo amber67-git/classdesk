@@ -193,6 +193,21 @@ tbody tr:hover td{background:#fafbfc}
 .selbar-count{font-size:12px;font-weight:600;color:var(--pri-t);display:inline-flex;align-items:center;gap:5px;margin-right:4px}
 .selbar .btn{height:30px;background:var(--surf)}
 .selbar .btn:disabled{opacity:.45;cursor:not-allowed}
+/* READING REPORT — print only this page, with a heading the screen never shows */
+.rd-print-head{display:none}
+@media print{
+  body.print-reading .sb,body.print-reading .topbar,body.print-reading .fbar,body.print-reading .mob-overlay{display:none!important}
+  body.print-reading .main{margin-left:0}
+  body.print-reading .page{display:none}
+  body.print-reading #page-reading{display:block}
+  body.print-reading .pc{padding:0}
+  body.print-reading .card{box-shadow:none;break-inside:avoid}
+  body.print-reading .grid-row{break-inside:avoid}
+  body.print-reading .rd-print-head{display:block;margin-bottom:14px}
+  .rd-ph-title{font-size:18px;font-weight:700}
+  .rd-ph-title span{font-weight:400;color:var(--txt2);font-size:14px}
+  .rd-ph-sub{font-size:11px;color:var(--txt3);margin-top:2px}
+}
 /* Quiet icon button in a stat card's corner (dashboard amount reveal) */
 .sc-eye{position:absolute;top:6px;right:6px;background:none;border:none;cursor:pointer;color:var(--txt3);opacity:.5;font-size:15px;padding:4px;border-radius:6px;display:inline-flex;transition:all .12s}
 .sc-eye:hover{opacity:1;background:var(--surf2)}
@@ -215,6 +230,15 @@ tbody tr:hover td{background:#fafbfc}
   .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tw table{min-width:900px}
   .tw th{position:static}
+  /* First column stays put while the rest scrolls, so you always know which row you're on */
+  .card:has(.grid-head) .grid-head>:first-child,
+  .card:has(.grid-head) .grid-row>:first-child,
+  .card:has(.grid-head) .pr>:first-child{position:sticky;left:0;z-index:2;background:var(--surf);margin-left:-14px;padding-left:14px;box-shadow:6px 0 8px -6px rgba(15,23,42,.14)}
+  .card:has(.grid-head) .grid-head>:first-child{background:var(--surf2)}
+  .card:has(.grid-head) .grid-row:hover>:first-child,
+  .card:has(.grid-head) .pr:hover>:first-child{background:#fafbfc}
+  /* Books: the first column is the checkbox — sticking it would be pointless */
+  #page-booklib .grid-head>:first-child,#page-booklib .grid-row>:first-child{position:static;margin-left:0;padding-left:0;box-shadow:none}
 }
 /* ── Draggable column widths ──
    A thin handle sits on the right edge of every list-header cell. Dragging it resizes that
@@ -681,6 +705,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <button class="ni" data-page="dashboard" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
     <button class="ni" data-page="students" onclick="showPage('students')"><i class="ti ti-users"></i>Students</button>
     <button class="ni" data-page="sessions" onclick="showPage('sessions')"><i class="ti ti-notebook"></i>Classes</button>
+    <button class="ni" data-page="reading" onclick="showPage('reading')"><i class="ti ti-book"></i>Reading</button>
     <button class="ni" data-page="payments" onclick="showPage('payments')"><i class="ti ti-receipt"></i>Payments</button>
     <button class="ni" data-page="curriculum" onclick="showPage('curriculum')"><i class="ti ti-calendar-month"></i>Curriculum</button>
     <button class="ni" data-page="books" onclick="showPage('books')"><i class="ti ti-notebook"></i>Workbooks</button>
@@ -859,6 +884,47 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <tbody id="curr-body"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- READING LOG — per-student books read, AR trend, printable parent report -->
+<div id="page-reading" class="page">
+  <div class="fbar">
+    <select id="rd-sid" onchange="renderReading()"></select>
+    <select id="rd-range" onchange="renderReading()">
+      <option value="3">Last 3 months</option>
+      <option value="1">This month</option>
+      <option value="6">Last 6 months</option>
+      <option value="12">Last 12 months</option>
+      <option value="0">All time</option>
+    </select>
+    <div class="fbar-right">
+      <span id="rd-count" class="cell-muted2"></span>
+      <button class="btn btn-p" onclick="printReading()"><i class="ti ti-printer"></i> Print report</button>
+    </div>
+  </div>
+  <div class="pc">
+    <div id="rd-print-head" class="rd-print-head"></div>
+    <div class="stats cols-4">
+      <div class="sc grn"><div class="sc-lbl">Books read</div><div class="sc-val" id="rd-n">—</div><div class="sc-sub" id="rd-n-sub"></div></div>
+      <div class="sc blu"><div class="sc-lbl">Average AR</div><div class="sc-val" id="rd-avg">—</div><div class="sc-sub" id="rd-avg-sub"></div></div>
+      <div class="sc amb"><div class="sc-lbl">Current level</div><div class="sc-val sm" id="rd-lvl">—</div><div class="sc-sub" id="rd-lvl-sub"></div></div>
+      <div class="sc gry"><div class="sc-lbl">Not in library</div><div class="sc-val" id="rd-miss">—</div><div class="sc-sub">titles without AR data</div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct"><i class="ti ti-chart-line"></i>AR level over time</div><span class="cell-muted2" id="rd-chart-note"></span></div>
+      <div class="cb p" id="rd-chart"></div>
+    </div>
+    <div class="card">
+      <div class="grid-head" style="display:grid;grid-template-columns:100px minmax(0,1fr) 90px 120px 90px;gap:8px" data-header-page="reading">
+        <div class="col-hdr">Date</div>
+        <div class="col-hdr">Book</div>
+        <div class="col-hdr">AR</div>
+        <div class="col-hdr">Level</div>
+        <div class="col-hdr">Lexile</div>
+      </div>
+      <div id="rd-list"></div>
     </div>
   </div>
 </div>
@@ -1176,6 +1242,19 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Do I still need backups?</dt><dd>The cloud acts as a copy, but accidental deletions sync too. A monthly Export backup is still recommended.</dd>
         </dl>
 
+        <h3>Reading page — books read per student</h3>
+        <p>Built automatically from the <b>Books read</b> entries you record in each lesson. Pick a student and a period: you get books read, the average AR level (with the change against the previous period), the current level (average of the last five books), an AR-over-time chart, and the list of books. <b>Print report</b> prints just this page for a parent meeting.</p>
+        <dl>
+          <dt>A book shows "not in the Books library"</dt><dd>The title typed in the lesson doesn't match any book in Books, so it has no AR level and is left out of the averages. Add the book to Books (or fix the spelling in the lesson) and it links up on its own.</dd>
+          <dt>Which lessons count?</dt><dd>Every lesson except cancelled ones. Double-click a row on the Reading page to open that lesson.</dd>
+        </dl>
+
+        <h3>Schedule changes</h3>
+        <dl>
+          <dt>A student drops one of two weekly classes (e.g. keeps Saturday, stops Sunday)</dt><dd>Students → edit the student → remove that slot with its trash icon → Save. You're asked <b>from which date</b> the change applies: pick the first day without that class. Everything before that date keeps the old schedule (and its billing); from that date on only the remaining class is generated.</dd>
+          <dt>A student's day or time changes</dt><dd>Same flow — change the day/time, Save, pick the effective date. Choose "Apply to everything" only for a correction of a typo, never for a real change.</dd>
+        </dl>
+
         <h3>Working with the lists</h3>
         <dl>
           <dt>I want to resize columns</dt><dd>Hover over the <b>gray vertical line</b> between column headers — it turns green. Drag left or right. Adjusted widths are saved on this device. <b>Double-click to reset.</b></dd>
@@ -1222,7 +1301,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v74</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v75</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2088,7 +2167,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v74";
+const APP_VERSION="v75";
 const APP_BUILT="2026-09-12";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2599,7 +2678,7 @@ function calcM(sid,month){
 // ═══════════════════════════════════════════════
 // NAV
 // ═══════════════════════════════════════════════
-const PT={"dashboard":"Dashboard","students":"Students","sessions":"Classes","payments":"Payments","curriculum":"Curriculum","books":"Workbooks","booklib":"Books","material":"Material","settings":"Settings"};
+const PT={"dashboard":"Dashboard","students":"Students","sessions":"Classes","reading":"Reading","payments":"Payments","curriculum":"Curriculum","books":"Workbooks","booklib":"Books","material":"Material","settings":"Settings"};
 let curPage="dashboard";
 function toggleMobileSidebar(){
   document.querySelector(".sb")?.classList.toggle("mob-open");
@@ -2631,6 +2710,7 @@ function showPage(p){
   else if(p==="books")renderBooks();
   else if(p==="booklib")renderBookLib();
   else if(p==="material")renderMaterial();
+  else if(p==="reading")renderReading();
   else if(p==="settings")renderSettings();
   // Attach/refresh column-resize handles after the page's list has rendered
   setTimeout(ensureColumnResizers,0);
@@ -3324,7 +3404,10 @@ function saveLesson(){
   });
   const bkRows=document.querySelectorAll("#lm-books-rows .bk-row-inp");
   const booksRead=[];
-  bkRows.forEach(inp=>{const name=(inp.value||"").trim();if(name)booksRead.push({name:name});});
+  // Keep the typed name, and remember which Books-library record it is (bookId) when the title
+  // matches — the Reading page then survives a later rename of the library entry.
+  const libIdx=bookLibIndex();
+  bkRows.forEach(inp=>{const name=(inp.value||"").trim();if(!name)return;const lib=libIdx.get(normTitle(name));booksRead.push(lib?{name:name,bookId:lib.id}:{name:name});});
   const brRows=document.querySelectorAll("#lm-bract-rows .br-row-inp");
   const breakItems=[];
   brRows.forEach(inp=>{const name=(inp.value||"").trim();if(name)breakItems.push({name:name});});
@@ -4157,6 +4240,140 @@ function renderStudents(){
     <div class="row-actions" ondblclick="event.stopPropagation()"><button class="bic" onclick="openStudentModal('${s.id}')" title="Edit"><i class="ti ti-pencil"></i></button></div>
   </div>`;
   }).join("");
+}
+
+// ═══════════════════════════════════════════════
+// READING LOG (per student)
+// ═══════════════════════════════════════════════
+// Built from what's already recorded: every non-cancelled lesson's "Books read" entries, matched
+// to the Books library by bookId (saved since v75) or by normalised title. No new collection.
+const normTitle=s=>(s||"").toLowerCase().replace(/[^a-z0-9가-힣]+/g," ").trim();
+function bookLibIndex(){
+  const m=new Map();
+  bookLib.forEach(b=>{const k=normTitle(b.title);if(k&&!m.has(k))m.set(k,b);});
+  return m;
+}
+function findLibBook(entry,idx){
+  if(entry.bookId){const b=bookLib.find(x=>x.id===entry.bookId);if(b)return b;}
+  return idx.get(normTitle(entry.name))||null;
+}
+// [{date,name,book|null,ar(NaN if unknown),lessonId}] newest first, from `fromDate` ("" = all)
+function readingEntries(sid,fromDate){
+  const idx=bookLibIndex(),out=[];
+  lessons.forEach(l=>{
+    if(l.sid!==sid)return;
+    if(["cancelled","cancelpaid","deleted"].includes(l.status))return;
+    if(fromDate&&l.date<fromDate)return;
+    (l.books||[]).forEach(e=>{
+      if(!e||!e.name)return;
+      const b=findLibBook(e,idx);
+      const ar=b?parseFloat(b.arLevel):NaN;
+      out.push({date:l.date,name:e.name,book:b,ar:isNaN(ar)?NaN:ar,lessonId:l.id});
+    });
+  });
+  out.sort((a,b)=>b.date.localeCompare(a.date));
+  return out;
+}
+// First day of the month `months-1` months ago (KST); "" for all time
+function readingRangeStart(months){
+  if(!months)return "";
+  const n=nowKST();
+  return fmtDate(new Date(n.getFullYear(),n.getMonth()-(months-1),1));
+}
+function renderReading(){
+  const sel=document.getElementById("rd-sid");if(!sel)return;
+  const active=students.filter(s=>!s.archived);
+  const wanted=active.map(s=>s.id).join("|");
+  if(sel.dataset.ids!==wanted){
+    const cur=sel.value;
+    sel.innerHTML=active.map(s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}</option>`).join("");
+    sel.dataset.ids=wanted;
+    if(cur&&active.some(s=>s.id===cur))sel.value=cur;
+  }
+  const sid=sel.value,s=gs(sid);
+  const months=parseInt(document.getElementById("rd-range")?.value||"3");
+  const from=readingRangeStart(months);
+  const entries=s?readingEntries(sid,from):[];
+  const withAr=entries.filter(e=>!isNaN(e.ar));
+  const mean=a=>a.reduce((x,e)=>x+e.ar,0)/a.length;
+  const avg=withAr.length?mean(withAr):NaN;
+  // Trend against the same-length period just before this one
+  let trend="";
+  if(months&&s&&!isNaN(avg)){
+    const prev=readingEntries(sid,readingRangeStart(months*2)).filter(e=>e.date<from&&!isNaN(e.ar));
+    if(prev.length){const d=avg-mean(prev);trend=(d>=0?"▲ +":"▼ ")+d.toFixed(1)+" vs the period before";}
+  }
+  // "Current level": the band of the average of the last five books with AR data
+  const recent=withAr.slice(0,5);
+  const recentAvg=recent.length?mean(recent):NaN;
+  const band=isNaN(recentAvg)?null:arLevelBand(recentAvg.toFixed(1));
+  const uniq=new Set(entries.map(e=>normTitle(e.name))).size;
+  const missing=entries.filter(e=>!e.book).length;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set("rd-n",entries.length);
+  set("rd-n-sub",`${uniq} different title${uniq===1?"":"s"}`);
+  set("rd-avg",isNaN(avg)?"—":avg.toFixed(1));
+  set("rd-avg-sub",trend||(withAr.length?`from ${withAr.length} book${withAr.length===1?"":"s"} with AR data`:"no AR data in this period"));
+  const lvl=document.getElementById("rd-lvl");
+  if(lvl)lvl.innerHTML=band?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:${band.color};display:inline-block"></span>L${band.level} ${band.colorName}</span>`:"—";
+  set("rd-lvl-sub",band?`last ${recent.length} book${recent.length===1?"":"s"} average AR ${recentAvg.toFixed(1)}`:"no AR data yet");
+  set("rd-miss",missing);
+  set("rd-count",s?`${entries.length} book${entries.length===1?"":"s"}`:"");
+  const rangeLabel=document.getElementById("rd-range")?.selectedOptions?.[0]?.textContent||"";
+  const ph=document.getElementById("rd-print-head");
+  if(ph)ph.innerHTML=s?`<div class="rd-ph-title">${escapeHTMLBasic(s.name)} <span>${escapeHTMLBasic(s.k||"")}</span> — Reading report</div><div class="rd-ph-sub">${rangeLabel} · printed ${td()}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`:"";
+  renderReadingChart(withAr.slice().reverse());
+  const list=document.getElementById("rd-list");if(!list)return;
+  if(!entries.length){list.innerHTML='<div class="empty"><i class="ti ti-book-off"></i><p>No books recorded for this period</p></div>';return;}
+  list.innerHTML=entries.map(e=>{
+    const b=e.book,bd=b?arLevelBand(b.arLevel):null;
+    return `<div class="grid-row clickable" style="grid-template-columns:100px minmax(0,1fr) 90px 120px 90px" ondblclick="openLessonModal('${e.lessonId}')" title="Double-click to open the lesson">
+      <div class="cell-mono">${e.date.slice(5).replace("-","/")}<div class="cell-muted">${e.date.slice(0,4)}</div></div>
+      <div style="display:flex;align-items:center;gap:8px;min-width:0">
+        ${b&&b.thumb?`<img src="${b.thumb}" alt="" style="width:28px;height:38px;object-fit:cover;border-radius:3px;flex-shrink:0" onerror="this.style.display='none'"/>`:`<div style="width:28px;height:38px;border-radius:3px;background:var(--surf2);flex-shrink:0"></div>`}
+        <div style="min-width:0"><div class="cell-main">${escapeHTMLBasic(b?b.title:e.name)}</div><div class="cell-sub">${b?escapeHTMLBasic(b.author||""):'<span style="color:var(--amb)">not in the Books library</span>'}</div></div>
+      </div>
+      <div>${b?arLevelBadgeHTML(b.arLevel):"—"}</div>
+      <div>${bd?`<span class="badge" style="background:${bd.color}22;border:1px solid ${bd.color};color:var(--txt)">L${bd.level} ${bd.colorName}</span>`:"—"}</div>
+      <div class="cell-mono">${b&&b.lexile?escapeHTMLBasic(String(b.lexile)):"—"}</div>
+    </div>`;
+  }).join("");
+}
+// Inline SVG: one dot per book (colour = level band), a line through the monthly averages.
+function renderReadingChart(pts){
+  const el=document.getElementById("rd-chart");if(!el)return;
+  const note=document.getElementById("rd-chart-note");
+  if(pts.length<2){
+    el.innerHTML='<div class="empty" style="padding:22px"><p>Two or more books with AR levels are needed to draw the trend</p></div>';
+    if(note)note.textContent="";
+    return;
+  }
+  const W=800,H=220,L=40,R=16,T=14,B=30;
+  const ms=d=>new Date(d+"T00:00:00Z").getTime();
+  const t0=ms(pts[0].date),t1=ms(pts[pts.length-1].date),span=Math.max(t1-t0,7*86400000);
+  const ars=pts.map(p=>p.ar);
+  let yMin=Math.max(0,Math.floor(Math.min(...ars)*2)/2-0.5),yMax=Math.ceil(Math.max(...ars)*2)/2+0.5;
+  if(yMax-yMin<1.5)yMax=yMin+1.5;
+  const x=d=>L+((ms(d)-t0)/span)*(W-L-R),y=v=>T+(1-(v-yMin)/(yMax-yMin))*(H-T-B);
+  let g="";
+  for(let v=Math.ceil(yMin*2)/2;v<=yMax+1e-9;v+=0.5){
+    g+=`<line x1="${L}" x2="${W-R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--bdr)"/><text x="${L-6}" y="${(y(v)+3).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--txt3)" font-family="var(--mono)">${v.toFixed(1)}</text>`;
+  }
+  const byM={};pts.forEach(p=>{const k=p.date.slice(0,7);(byM[k]=byM[k]||[]).push(p.ar);});
+  const months=Object.keys(byM).sort();
+  months.forEach(k=>{const xx=x(k+"-01");if(xx>=L&&xx<=W-R)g+=`<text x="${xx.toFixed(1)}" y="${H-8}" font-size="10" fill="var(--txt3)" text-anchor="middle">${k.slice(2).replace("-","/")}</text>`;});
+  const mpts=months.map(k=>({date:k+"-15",ar:byM[k].reduce((a,b)=>a+b,0)/byM[k].length}));
+  const line=mpts.length>1?`<path d="${mpts.map((p,i)=>(i?"L":"M")+x(p.date).toFixed(1)+" "+y(p.ar).toFixed(1)).join(" ")}" fill="none" stroke="var(--pri)" stroke-width="2" stroke-linejoin="round" opacity=".85"/>`:"";
+  const dots=pts.map(p=>{const bd=arLevelBand(p.ar.toFixed(1));return `<circle cx="${x(p.date).toFixed(1)}" cy="${y(p.ar).toFixed(1)}" r="4.5" fill="${bd?bd.color:"#94a3b8"}" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${escapeHTMLBasic(p.book?p.book.title:p.name)} · AR ${p.ar}</title></circle>`;}).join("");
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="AR level over time">${g}${line}${dots}</svg>`;
+  if(note)note.textContent=`${pts.length} books · dot = one book (colour = level) · line = monthly average`;
+}
+function printReading(){
+  document.body.classList.add("print-reading");
+  const done=()=>{document.body.classList.remove("print-reading");window.removeEventListener("afterprint",done);};
+  window.addEventListener("afterprint",done);
+  window.print();
+  setTimeout(done,2000); // browsers that never fire afterprint
 }
 
 // ═══════════════════════════════════════════════
