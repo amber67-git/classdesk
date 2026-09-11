@@ -179,8 +179,8 @@ tbody tr:hover td{background:#fafbfc}
 .sw input:checked+.sw-track::after{transform:translateX(12px)}
 .sw input:focus-visible+.sw-track{box-shadow:0 0 0 3px var(--grn-l)}
 /* SEGMENTED CONTROL — small set of mutually exclusive views (e.g. Payments: Calendar / Summary) */
-.seg{display:inline-flex;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);padding:2px;gap:2px}
-.seg-btn{border:none;background:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;font-family:var(--font);line-height:1.2;transition:all .12s}
+.seg{display:inline-flex;align-items:center;height:34px;box-sizing:border-box;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);padding:2px;gap:2px}
+.seg-btn{border:none;background:none;height:28px;padding:0 12px;border-radius:6px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;font-family:var(--font);line-height:1.2;transition:all .12s;display:inline-flex;align-items:center;gap:5px}
 .seg-btn:hover:not(.active){background:var(--surf2);color:var(--txt)}
 .seg-btn.active{background:var(--grn-l);color:var(--grn-t);font-weight:600}
 /* Quiet icon button in a stat card's corner (dashboard amount reveal) */
@@ -360,8 +360,19 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .month-nav{display:flex;align-items:center;gap:4px}
 .month-nav .mn-label{font-size:13px;font-weight:600;min-width:120px;text-align:center;color:var(--txt)}
 .month-nav .btn-sm{margin-left:6px}
-.fbar select,.fbar input[type=month],.fbar input[type=text]{width:auto;height:34px;font-size:12px;padding:0 10px}
+/* Toolbar controls have FIXED sizes so every page's toolbar reads the same:
+   dropdown 160px · search 280px · primary (green) button 150px · height 34px · gap 10px.
+   Per-page width classes/inline styles are deliberately overridden here. */
+.fbar select,.fbar input[type=month],.fbar input[type=text]{height:34px;font-size:12px;padding:0 10px}
+.fbar select{width:160px!important;min-width:0!important;max-width:none!important}
+.fbar input[type=text]{width:280px!important;flex:none!important;min-width:0!important;max-width:none!important}
 .fbar .btn{height:34px;min-height:0;padding:0 12px;font-size:12px;line-height:1.2}
+.fbar .btn-p{width:150px!important;max-width:none!important;padding:0 8px}
+@media(max-width:640px){
+  .fbar select{width:auto!important;flex:1 1 46%}
+  .fbar input[type=text]{width:auto!important;flex:1 1 100%!important}
+  .fbar .btn-p{width:auto!important;flex:1 1 auto}
+}
 /* QUICK STATUS */
 .qs{font-size:11px;font-weight:500;height:28px;padding:0 8px;border:1px solid var(--bdr);border-radius:99px;background:var(--surf2);cursor:pointer;font-family:var(--font);color:var(--txt2)}
 /* SETTINGS */
@@ -1197,7 +1208,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v70</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v71</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1316,9 +1327,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
 <!-- ═══ BOOK LIBRARY (real books) ═══════════════════════════════════ -->
 <div id="page-booklib" class="page">
-  <div class="fbar" style="flex-direction:column;align-items:stretch;gap:8px">
+  <div class="fbar" style="flex-direction:column;align-items:stretch;gap:10px">
    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-    <input type="text" id="bl-search" placeholder="Search title, author, ISBN…" oninput="renderBookLib()" style="flex:1 1 220px;max-width:420px"/>
+    <input type="text" id="bl-search" placeholder="Search title, author, ISBN…" oninput="renderBookLib()"/>
     <button class="btn" id="bl-filter-btn" onclick="toggleBookFilters()" title="Show / hide filters"><i class="ti ti-adjustments-horizontal"></i> Filters<span id="bl-filter-n" class="u-badge" style="display:none;margin-left:6px;background:var(--grn-l);color:var(--grn-t);border-color:transparent"></span></button>
     <div class="fbar-right">
       <span id="bl-count" class="cell-muted2"></span>
@@ -1328,7 +1339,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="btn btn-p" onclick="openBookLibModal()"><i class="ti ti-plus"></i> Add book</button>
     </div>
    </div>
-   <div id="bl-filters" style="display:none;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r)">
+   <div id="bl-filters" style="display:none;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r)">
     <select id="bl-cat" onchange="renderBookLib()" class="u-w-145" title="Category">
       <option value="">All categories</option>
     </select>
@@ -2058,7 +2069,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v70";
+const APP_VERSION="v71";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
