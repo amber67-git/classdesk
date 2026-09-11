@@ -1197,7 +1197,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v69</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v70</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1319,6 +1319,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <div class="fbar" style="flex-direction:column;align-items:stretch;gap:8px">
    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <input type="text" id="bl-search" placeholder="Search title, author, ISBN…" oninput="renderBookLib()" style="flex:1 1 220px;max-width:420px"/>
+    <button class="btn" id="bl-filter-btn" onclick="toggleBookFilters()" title="Show / hide filters"><i class="ti ti-adjustments-horizontal"></i> Filters<span id="bl-filter-n" class="u-badge" style="display:none;margin-left:6px;background:var(--grn-l);color:var(--grn-t);border-color:transparent"></span></button>
     <div class="fbar-right">
       <span id="bl-count" class="cell-muted2"></span>
       <button id="bl-bulk-btn" class="btn" style="display:none" title="Edit category/genre of all selected books at once" onclick="openBulkEditBooks()"><i class="ti ti-pencil"></i> Edit (<span id="bl-bulk-count">0</span>)</button>
@@ -1327,7 +1328,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="btn btn-p" onclick="openBookLibModal()"><i class="ti ti-plus"></i> Add book</button>
     </div>
    </div>
-   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+   <div id="bl-filters" style="display:none;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r)">
     <select id="bl-cat" onchange="renderBookLib()" class="u-w-145" title="Category">
       <option value="">All categories</option>
     </select>
@@ -1384,6 +1385,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <option value="lex-asc">Sort: Lexile ↑</option>
       <option value="lex-desc">Sort: Lexile ↓</option>
     </select>
+    <button class="btn btn-sm" id="bl-filter-clear" onclick="clearBookFilters()" style="display:none"><i class="ti ti-x"></i> Clear</button>
    </div>
   </div>
   <div class="pc">
@@ -2056,12 +2058,15 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v69";
+const APP_VERSION="v70";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
   applyBranding();
+  // Books filter panel: reopen if it was left open on this device
+  let blOpen=false;try{blOpen=localStorage.getItem("cd_bl_filters_open")==="1";}catch(e){}
+  if(blOpen)toggleBookFilters(true);
 });
 // Installable app: the service worker (sw.js) serves the latest deploy when online and the cached
 // copy when offline. Skipped on file:// (unsupported there — and Firebase doesn't work there anyway).
@@ -5943,6 +5948,28 @@ function triggerPageRerender(pageKey){
 // escapeAttr — for text going into HTML attributes (title="...")
 function escapeAttr(s){return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
+// Books toolbar: the seven filter controls live in a collapsible panel so the top of the page
+// is one row like every other list. The button carries a badge with the number of active filters.
+const BL_FILTER_IDS=["bl-cat","bl-genre","bl-printed","bl-ar","bl-level","bl-lex"];
+function toggleBookFilters(force){
+  const p=document.getElementById("bl-filters");if(!p)return;
+  const open=typeof force==="boolean"?force:p.style.display==="none";
+  p.style.display=open?"flex":"none";
+  try{localStorage.setItem("cd_bl_filters_open",open?"1":"0");}catch(e){}
+  document.getElementById("bl-filter-btn")?.classList.toggle("btn-p",open);
+}
+function clearBookFilters(){
+  BL_FILTER_IDS.forEach(id=>{const e=document.getElementById(id);if(e)e.value="";});
+  const s=document.getElementById("bl-sort");if(s)s.value="title";
+  renderBookLib();
+}
+function renderBookFilterBadge(){
+  const n=BL_FILTER_IDS.filter(id=>document.getElementById(id)?.value).length
+         +((document.getElementById("bl-sort")?.value||"title")!=="title"?1:0);
+  const b=document.getElementById("bl-filter-n");
+  if(b){b.textContent=n;b.style.display=n?"":"none";}
+  const c=document.getElementById("bl-filter-clear");if(c)c.style.display=n?"":"none";
+}
 function renderBookLib(){
   const cat=document.getElementById("bl-cat")?.value||"";
   const genreF=document.getElementById("bl-genre")?.value||"";
@@ -5952,6 +5979,7 @@ function renderBookLib(){
   const lexF=document.getElementById("bl-lex")?.value||"";
   const sortBy=document.getElementById("bl-sort")?.value||"title";
   const q=(document.getElementById("bl-search")?.value||"").toLowerCase();
+  renderBookFilterBadge();
 
   // Parse helpers — return numeric value or NaN
   const arNum=b=>{const n=parseFloat(b.arLevel);return isNaN(n)?NaN:n;};
