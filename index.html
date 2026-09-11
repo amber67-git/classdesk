@@ -469,7 +469,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 /* STUDENT GRID */
 .std-archived{opacity:.55}
 .std-arch-badge{display:inline-block;font-size:9px;font-weight:700;background:#e2e8f0;color:#475569;padding:1px 5px;border-radius:4px;margin-left:6px;vertical-align:middle}
-.std-row{display:grid;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr);gap:8px;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 44px;transition:background .1s;cursor:pointer}
+.std-row{display:grid;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr);gap:8px;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 76px;transition:background .1s;cursor:pointer}
 .std-row:last-child{border-bottom:none}
 .std-row:hover{background:#fafbfc}
 .std-row:hover .av{box-shadow:0 0 0 2px var(--grn-l)}
@@ -759,7 +759,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   </div>
 <div class="pc">
   <div class="card">
-    <div class="grid-head" style="display:grid;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 44px;gap:8px" data-header-page="students">
+    <div class="grid-head" style="display:grid;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 76px;gap:8px" data-header-page="students">
       <div class="col-hdr">No.</div>
       <div class="col-hdr" data-col="name">Student</div>
       <div class="col-hdr" data-col="korean">Korean</div>
@@ -1301,7 +1301,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v75</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v76</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2167,7 +2167,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v75";
+const APP_VERSION="v76";
 const APP_BUILT="2026-09-12";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -4237,9 +4237,15 @@ function renderStudents(){
     <div class="tm" title="${tip}">${rateDisp}</div>
     <div><span class="badge ${PTYPE_META[s.ptype]?.cls||"bpo"}">${PTYPE_META[s.ptype]?.lbl||"Post-pay"}</span></div>
     <div class="u-hint" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${s.notes||""}">${s.notes||"—"}</div>
-    <div class="row-actions" ondblclick="event.stopPropagation()"><button class="bic" onclick="openStudentModal('${s.id}')" title="Edit"><i class="ti ti-pencil"></i></button></div>
+    <div class="row-actions" ondblclick="event.stopPropagation()"><button class="bic" onclick="openReadingFor('${s.id}')" title="Reading log"><i class="ti ti-book"></i></button><button class="bic" onclick="openStudentModal('${s.id}')" title="Edit"><i class="ti ti-pencil"></i></button></div>
   </div>`;
   }).join("");
+}
+// Students → book icon: open the Reading page on that student
+function openReadingFor(sid){
+  showPage("reading");
+  const sel=document.getElementById("rd-sid");
+  if(sel&&[...sel.options].some(o=>o.value===sid)){sel.value=sid;renderReading();}
 }
 
 // ═══════════════════════════════════════════════
@@ -4282,13 +4288,16 @@ function readingRangeStart(months){
 }
 function renderReading(){
   const sel=document.getElementById("rd-sid");if(!sel)return;
-  const active=students.filter(s=>!s.archived);
-  const wanted=active.map(s=>s.id).join("|");
+  // Active students first; archived ones after a divider (a parent meeting can happen after a
+  // student has left — their history is still here).
+  const active=students.filter(s=>!s.archived),archived=students.filter(s=>s.archived);
+  const wanted=[...active,...archived].map(s=>s.id).join("|");
   if(sel.dataset.ids!==wanted){
     const cur=sel.value;
-    sel.innerHTML=active.map(s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}</option>`).join("");
+    const opt=s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}${s.archived?" · archived":""}</option>`;
+    sel.innerHTML=active.map(opt).join("")+(archived.length?`<option disabled>──────────</option>`+archived.map(opt).join(""):"");
     sel.dataset.ids=wanted;
-    if(cur&&active.some(s=>s.id===cur))sel.value=cur;
+    if(cur&&students.some(s=>s.id===cur))sel.value=cur;
   }
   const sid=sel.value,s=gs(sid);
   const months=parseInt(document.getElementById("rd-range")?.value||"3");
