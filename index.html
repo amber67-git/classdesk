@@ -194,11 +194,17 @@ tbody tr:hover td{background:#fafbfc}
 .step-btn:hover{background:var(--surf3);border-color:var(--bdr2)}
 .step-val{font-size:13px;font-weight:500;color:var(--txt);min-width:50px;text-align:center;white-space:nowrap}
 /* FORMS */
-/* Mobile scroll hint: right-edge shadow tells users the table scrolls sideways */
-@media(max-width:900px){
+/* Narrow windows (phones, tablets, a PC window snapped to half the screen): wide lists scroll
+   sideways INSIDE their card instead of spilling past its edge. Sticky headers are given up
+   inside the scroll container; a right-edge shadow hints that the table continues. */
+@media(max-width:1280px){
   .card:has(.grid-head),.tw{position:relative;background-image:linear-gradient(to right,transparent 92%,rgba(15,23,42,.08) 100%);background-attachment:local}
+  .card:has(.grid-head){overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .card:has(.grid-head) .grid-head,.card:has(.grid-head) .grid-row{min-width:840px}
+  .grid-head{position:static}
   .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tw table{min-width:900px}
+  .tw th{position:static}
 }
 /* ── Draggable column widths ──
    A thin handle sits on the right edge of every list-header cell. Dragging it resizes that
@@ -433,11 +439,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   .stats,.stats.cols-4,.stats.cols-5{grid-template-columns:repeat(2,1fr)}
   .gms,.g2{grid-template-columns:1fr}
   .fbar .month-nav{position:static!important;left:auto!important;top:auto!important;transform:none!important;margin:0 auto}
-  /* Data tables keep their column layout and scroll horizontally instead of squashing.
-     Sticky headers are sacrificed inside the scroll container — acceptable on touch. */
-  .card:has(.grid-head){overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .card:has(.grid-head) .grid-head,.card:has(.grid-head) .grid-row{min-width:840px}
-  .grid-head{position:static}
   .mb.wide{min-width:0;width:100%}
 }
 
@@ -1196,7 +1197,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v68</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v69</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1210,15 +1211,15 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
 <!-- ═══ WORKBOOKS & WORKSHEETS ═════════════════════════════════════ -->
 <div id="page-books" class="page">
-  <div class="fbar" style="display:grid;grid-template-columns:minmax(150px,170px) minmax(240px,1fr) auto;gap:12px;align-items:center">
-    <select id="bk-cat" onchange="renderBooks()" style="width:100%;min-width:150px">
+  <div class="fbar">
+    <select id="bk-cat" onchange="renderBooks()" class="u-w-145">
       <option value="">All categories</option>
       <option>Reading</option><option>Writing</option><option>Speaking</option><option>Listening</option><option>Vocabulary</option><option>Grammar</option><option>Other</option>
     </select>
-    <input type="text" id="bk-search" placeholder="Search…" oninput="renderBooks()" style="width:100%"/>
-    <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end">
+    <input type="text" id="bk-search" placeholder="Search…" oninput="renderBooks()" class="u-w-220"/>
+    <div class="fbar-right">
       <span id="bk-count" class="cell-muted2"></span>
-      <button class="btn btn-p" style="max-width:150px" onclick="openBookModal()"><i class="ti ti-plus"></i> Add workbook</button>
+      <button class="btn btn-p" onclick="openBookModal()"><i class="ti ti-plus"></i> Add workbook</button>
     </div>
   </div>
   <div class="pc">
@@ -1317,7 +1318,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-booklib" class="page">
   <div class="fbar" style="flex-direction:column;align-items:stretch;gap:8px">
    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-    <input type="text" id="bl-search" placeholder="Search title, author, ISBN…" oninput="renderBookLib()" style="flex:1;min-width:220px"/>
+    <input type="text" id="bl-search" placeholder="Search title, author, ISBN…" oninput="renderBookLib()" style="flex:1 1 220px;max-width:420px"/>
     <div class="fbar-right">
       <span id="bl-count" class="cell-muted2"></span>
       <button id="bl-bulk-btn" class="btn" style="display:none" title="Edit category/genre of all selected books at once" onclick="openBulkEditBooks()"><i class="ti ti-pencil"></i> Edit (<span id="bl-bulk-count">0</span>)</button>
@@ -1327,7 +1328,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     </div>
    </div>
    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <i class="ti ti-filter" style="color:var(--txt3);font-size:14px"></i>
     <select id="bl-cat" onchange="renderBookLib()" class="u-w-145" title="Category">
       <option value="">All categories</option>
     </select>
@@ -2056,7 +2056,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v68";
+const APP_VERSION="v69";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2238,7 +2238,7 @@ function renderPinState(){
   if(tc)tc.checked=deviceTrusted();
   const hint=document.getElementById("pm-lock-hint");
   if(hint)hint.innerHTML=on
-    ?(deviceTrusted()?'<i class="ti ti-lock-open"></i> PC — no PIN needed':'<i class="ti ti-lock"></i> PIN-locked on this device')
+    ?""
     :'<a href="#" onclick="event.preventDefault();showPage(\'settings\');document.querySelector(\'.stab-btn[onclick*=account]\')?.click()" style="color:var(--amb)"><i class="ti ti-lock-open"></i> Not locked — set a PIN</a>';
 }
 // Google Books API key — restricted to this site's origin & Books API only (set in Google Cloud Console)
