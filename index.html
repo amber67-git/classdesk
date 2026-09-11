@@ -430,7 +430,11 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .wg-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;justify-content:space-between;padding:0 2px}
 .wg-tot{font-family:var(--mono);color:var(--txt2)}
 /* PAYMENT ROW */
-.pr{display:grid;align-items:center;grid-template-columns:200px 64px 64px 116px 116px 116px 200px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bdr);transition:background .1s}
+.pr{display:grid;align-items:center;grid-template-columns:200px 64px 64px 116px 116px 116px 280px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bdr);transition:background .1s}
+/* Status cell: badge · action · request — fixed slots so every row's buttons line up */
+.pr-status{display:grid;grid-template-columns:62px 86px 122px;gap:8px;align-items:center}
+.pr-status .badge{justify-content:center}
+.pr-status .pm-act,.pr-status .pm-req{width:100%;justify-content:center;height:24px}
 .pr:hover{background:#fafbfc}
 .pr:last-child{border-bottom:none}
 .pr:hover{background:#fafbfc}
@@ -821,7 +825,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <span class="badge bc">Cancelled</span>
         </div>
       </div>
-      <div class="grid-head" style="display:grid;grid-template-columns:200px 64px 64px 116px 116px 116px 200px;gap:8px" data-header-page="payments">
+      <div class="grid-head" style="display:grid;grid-template-columns:200px 64px 64px 116px 116px 116px 280px;gap:8px" data-header-page="payments">
         <div class="col-hdr">Student</div>
         <div class="col-hdr center">Lessons</div>
         <div class="col-hdr center">Cancel</div>
@@ -1218,7 +1222,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v73</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v74</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2084,7 +2088,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v73";
+const APP_VERSION="v74";
 const APP_BUILT="2026-09-12";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -3902,6 +3906,17 @@ function recalcDurationsFromAmounts(){
   say(changed?`✓ ${changed} lesson(s) had their hours corrected from amounts.`:"Nothing to correct — all lessons already match.");
 }
 
+// The reverse of markAllPaid — for a mis-click. Every paid/prepaid lesson of the month goes back
+// to unpaid; cancelled lessons are left alone.
+function markAllUnpaid(sid,month){
+  const s=gs(sid);if(!s)return;
+  const targets=getOccurrencesForMonth(sid,month).filter(o=>["paid","prepaid","partial"].includes(o.status));
+  if(!targets.length)return;
+  if(!confirm(`${s.name} — mark ${targets.length} paid lesson${targets.length===1?"":"s"} in ${month} as unpaid again?`))return;
+  targets.forEach(o=>{const real=materializeOccurrence(o);real.status="unpaid";});
+  save();
+  renderPayments();
+}
 // Mark every still-owed lesson for a student in the given month as paid — for when the parent
 // pays the whole month at once. Virtual (schedule-generated) occurrences are materialised into
 // real records first so the "paid" status actually persists.
@@ -4374,10 +4389,14 @@ function renderPayments(){
     <div class="tm">${won(c.exp)}</div>
     <div class="tm">${won(c.paidT)}</div>
     <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}">${c.diff>0?won(c.diff):"—"}</div>
-    <div style="display:flex;align-items:center;gap:8px">
+    <div class="pr-status">
       ${bdg(c.ov)}
-      ${c.diff>0?`<button class="btn btn-xs" style="background:var(--grn);color:#fff;border-color:var(--grn)" onclick="markAllPaid('${s.id}','${mon}')" title="Mark all unpaid lessons this month as paid"><i class="ti ti-check"></i> All paid</button>`:""}
-      <button class="btn btn-xs" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>
+      ${c.diff>0
+        ?`<button class="btn btn-xs btn-p pm-act" onclick="markAllPaid('${s.id}','${mon}')" title="Mark every unpaid lesson this month as paid"><i class="ti ti-check"></i> All paid</button>`
+        :c.paidT>0
+          ?`<button class="btn btn-xs pm-act" onclick="markAllUnpaid('${s.id}','${mon}')" title="Undo — mark this month's paid lessons as unpaid again"><i class="ti ti-arrow-back-up"></i> Undo paid</button>`
+          :`<span class="pm-act"></span>`}
+      <button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>
     </div>
   </div>`).join("");
   renderPaymentCalendar(mon);
