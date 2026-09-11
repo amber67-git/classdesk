@@ -56,9 +56,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:13p
 .layout{display:flex;min-height:100vh}
 /* SIDEBAR */
 .sb{width:220px;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
-.sb-brand{padding:18px 20px 14px;border-bottom:1px solid var(--bdr)}
-.sb-logo{font-size:13px;font-weight:700;color:var(--grn);letter-spacing:1px}
-.sb-sub{font-size:10px;color:var(--txt3);margin-top:2px;letter-spacing:.5px}
+/* Same height as .topbar so the two bottom borders form one continuous line across the screen */
+.sb-brand{height:52px;padding:0 20px;display:flex;align-items:center;border-bottom:1px solid var(--bdr)}
+.sb-logo{font-size:13px;font-weight:700;color:var(--grn);letter-spacing:1px;line-height:1.15}
+.sb-sub{font-size:10px;color:var(--txt3);margin-top:1px;letter-spacing:.5px;line-height:1.15}
 .sb-brand-row{display:flex;align-items:center;gap:10px}
 .sb-logo-img{width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0}
 .sb-nav{flex:1;padding:10px 10px;display:flex;flex-direction:column;gap:2px}
@@ -102,7 +103,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:13p
 table{width:100%;border-collapse:collapse}
 thead{background:var(--surf2)}
 thead tr{background:var(--surf2)}
-th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;background:var(--surf2);border-bottom:1px solid var(--bdr);white-space:nowrap;position:sticky;top:52px;z-index:5}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;background:var(--surf2);border-bottom:1px solid var(--bdr);white-space:nowrap;position:sticky;top:52px;z-index:5}
 /* Dashboard mini-tables are short, stacked cards — a sticky header here overlaps the next card's title as you scroll, so keep these static. */
 #dash-sched th{position:static}
 /* Dashboard schedule: content hugs the left; the Notes column absorbs leftover width */
@@ -114,7 +115,7 @@ th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--t
 #dash-sched th:nth-child(6){width:92px}
 #dash-sched tr.clickable{cursor:pointer}
 #dash-sched tbody tr:hover{background:var(--surf2)}
-td{padding:10px 12px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--txt2);vertical-align:middle}
+td{padding:10px 14px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--txt2);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:#fafbfc}
 .tn{font-weight:500;color:var(--txt);font-size:13px}
@@ -211,7 +212,7 @@ tbody tr:hover td{background:#fafbfc}
 thead[data-header-page] th:not(:last-child)::after{
   content:"";position:absolute;top:0;right:-4px;width:9px;height:100%;
   cursor:col-resize;z-index:6;
-  background:linear-gradient(to right,transparent 3px,#cbd5e1 3px,#cbd5e1 5px,transparent 5px);
+  background:transparent;   /* invisible at rest — it used to draw a gray line that read as a column separator */
   transition:background .12s}
 .grid-head > *:not(:last-child):hover::after,
 thead[data-header-page] th:not(:last-child):hover::after{
@@ -347,7 +348,8 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .sml{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
 .ses-footer{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surf2);border-top:1px solid var(--bdr);flex-wrap:wrap}
 /* FILTER BAR */
-.fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 18px;background:var(--surf2);border-bottom:1px solid var(--bdr)}
+/* Toolbar left edge lines up with the page title (.topbar) and the cards (.pc): all 28px */
+.fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 28px;background:var(--surf2);border-bottom:1px solid var(--bdr)}
 /* MONTH NAV — unified prev/label/next/Today control used across pages */
 .month-nav{display:flex;align-items:center;gap:4px}
 .month-nav .mn-label{font-size:13px;font-weight:600;min-width:120px;text-align:center;color:var(--txt)}
@@ -401,7 +403,8 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .wg-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;justify-content:space-between;padding:0 2px}
 .wg-tot{font-family:var(--mono);color:var(--txt2)}
 /* PAYMENT ROW */
-.pr{display:grid;align-items:center;grid-template-columns:200px 64px 64px 116px 116px 116px 200px;gap:8px;padding:9px 14px;border-bottom:1px solid var(--bdr)}
+.pr{display:grid;align-items:center;grid-template-columns:200px 64px 64px 116px 116px 116px 200px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bdr);transition:background .1s}
+.pr:hover{background:#fafbfc}
 .pr:last-child{border-bottom:none}
 .pr:hover{background:#fafbfc}
 .plr{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid var(--bdr);font-size:12px}
@@ -500,7 +503,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
 /* CALENDAR */
 .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surf2);border-bottom:1px solid var(--bdr)}
-.cal-weekdays>div{padding:8px 10px;font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.cal-weekdays>div{padding:9px 10px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;text-align:center}
 .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));width:100%}
 .cal-day{min-height:108px;min-width:0;overflow:hidden;border-right:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:6px;display:flex;flex-direction:column;gap:3px;position:relative;box-sizing:border-box}
 .cal-day:nth-child(7n){border-right:none}
@@ -1193,7 +1196,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v67</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v68</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2053,7 +2056,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v67";
+const APP_VERSION="v68";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
