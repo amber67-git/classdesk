@@ -185,6 +185,8 @@ tbody tr:hover td{background:#fafbfc}
 /* Quiet icon button in a stat card's corner (dashboard amount reveal) */
 .sc-eye{position:absolute;top:6px;right:6px;background:none;border:none;cursor:pointer;color:var(--txt3);opacity:.5;font-size:15px;padding:4px;border-radius:6px;display:inline-flex;transition:all .12s}
 .sc-eye:hover{opacity:1;background:var(--surf2)}
+/* PIN prompt: fully opaque backdrop — nothing behind it (amounts included) may show through */
+#pin-dialog{background:var(--bg);backdrop-filter:none}
 /* STEPPER */
 .stepper{display:flex;align-items:center;gap:5px}
 .step-btn{width:24px;height:24px;border-radius:6px;border:1px solid var(--bdr2);background:var(--surf2);cursor:pointer;font-size:15px;color:var(--txt);display:flex;align-items:center;justify-content:center;font-family:var(--font);flex-shrink:0;transition:all .12s}
@@ -1191,7 +1193,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v66</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v67</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2051,7 +2053,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v66";
+const APP_VERSION="v67";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
