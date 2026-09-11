@@ -1218,7 +1218,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v72</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v73</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2084,8 +2084,8 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v72";
-const APP_BUILT="2026-09-11";
+const APP_VERSION="v73";
+const APP_BUILT="2026-09-12";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -3456,7 +3456,7 @@ function saveCurr(){
   else curriculum.push({id:uid(),...obj});
   save();closeModal("mo-curr");renderCurriculum();
 }
-async function delCurr(id){if(!confirm("Delete?"))return;curriculum=curriculum.filter(c=>c.id!==id);save();renderCurriculum();}
+async function delCurr(id){if(!confirm("Delete?"))return;const i=curriculum.findIndex(c=>c.id===id);if(i>=0)curriculum.splice(i,1);save();renderCurriculum();}
 
 // ── Settings ──
 function switchSettingsTab(t){
@@ -4079,7 +4079,7 @@ function toggleTodo(id){
 }
 async function delTodo(id){
   if(!confirm("Delete this to-do?"))return;
-  todos=todos.filter(x=>x.id!==id);save();renderTodos();
+  const ti=todos.findIndex(x=>x.id===id);if(ti>=0)todos.splice(ti,1);save();renderTodos();
 }
 
 // ── Parse schedule strings like "Mon 4pm" / "Tue 17:30" into a sortable weekly-minute key ──
