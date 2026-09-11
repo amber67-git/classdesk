@@ -1001,8 +1001,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What is ClassDesk?</h3>
         <p>An <b>all-in-one class management tool</b> for English reading tutors and home-library owners. Manage students, lessons, tuition, curriculum, workbooks, and your English book library in one place — and print <b>library-style level labels</b> for your books yourself.</p>
         <ul>
-          <li><b>No installation</b> — just open a single HTML file in a browser (Chrome recommended).</li>
-          <li><b>Stored on your computer</b> — all data lives inside the browser (localStorage). Nothing is sent to a server, so student information never leaves your machine.</li>
+          <li><b>No installation</b> — open the app's web address in a browser (Chrome recommended). Works on PC, phone, and tablet.</li>
+          <li><b>Your data, your account</b> — everything is saved in this browser first, so the app keeps working offline. Sign in with Google (Settings → Account) to sync across your devices; synced data is stored privately under your own account and no one else can see it.</li>
           <li><b>Automation</b> — auto-filled book info, auto-generated parent report messages, automatic level colors, and more to cut down repetitive work.</li>
         </ul>
 
@@ -1119,7 +1119,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v53</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v54</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1897,7 +1897,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v53";
+const APP_VERSION="v54";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
