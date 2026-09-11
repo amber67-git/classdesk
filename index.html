@@ -1159,7 +1159,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v58</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v59</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2003,7 +2003,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v58";
+const APP_VERSION="v59";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -6972,8 +6972,10 @@ function initAuthListener(){
     const dot=document.getElementById("auth-dot");
     if(dot)dot.style.background=user?"#16a34a":"transparent";
     // Start mirroring to Firestore on login; tear it down on logout.
-    if(user)startCloudSync(user).catch(e=>{console.error(e);setSyncStatus("Sync error: "+(e.message||e.code),"err");});
-    else stopCloudSync();
+    try{
+      if(user)startCloudSync(user);
+      else stopCloudSync();
+    }catch(e){console.error(e);setSyncStatus("Sync error: "+(e.message||e.code),"err");}
   });
 }
 window.addEventListener("firebase-ready",initAuthListener);
