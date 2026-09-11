@@ -1,0 +1,6 @@
+# Local handoff notes — contain real student names/schedules; must not go to the public repo
+CLAUDE.md
+CLAUDE.local.md
+
+# Local working copies — only index.html is deployed
+classdesk_*.html
