@@ -1145,12 +1145,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
           <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. On iPhone/iPad the home-screen app keeps its own storage, separate from Safari — <b>sign in once inside it</b> (Settings → Account) and choose OK to download your cloud data.</dd>
+          <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap <b>Show amounts</b> (top-right of the Dashboard) to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v55</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v56</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1928,7 +1929,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v55";
+const APP_VERSION="v56";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -1981,6 +1982,34 @@ function nowKST(){
 const td=()=>{const n=nowKST();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;};
 const tm=()=>{const n=nowKST();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}`;};
 const won=n=>`₩${(n||0).toLocaleString("ko-KR")}`;
+// Dashboard privacy: amounts and Paid/Unpaid badges are masked until the 👁 button is tapped.
+// Phones/tablets (students may see the screen) ALWAYS start masked and re-mask whenever the app is
+// left and reopened; PCs start visible and remember the choice. Device-only — the key has no "mc_"
+// prefix so it is neither synced nor included in Export.
+const PRIV_KEY="cd_privacy_hidden";
+const isTouchDevice=()=>window.matchMedia("(pointer:coarse)").matches;
+let privacyHidden=isTouchDevice()?true:(()=>{try{return localStorage.getItem(PRIV_KEY)==="1";}catch(e){return false;}})();
+const MASK_AMT="₩ •••••"; // non-breaking space: keeps the mask on one line in narrow stat cards
+const pwon=n=>privacyHidden?MASK_AMT:won(n);
+function togglePrivacy(){
+  privacyHidden=!privacyHidden;
+  if(!isTouchDevice()){try{localStorage.setItem(PRIV_KEY,privacyHidden?"1":"0");}catch(e){}}
+  if(curPage==="dashboard")renderDash();
+  renderTopbarActions(curPage);
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="hidden"&&isTouchDevice()&&!privacyHidden){
+    privacyHidden=true;
+    if(curPage==="dashboard")renderDash();
+    renderTopbarActions(curPage);
+  }
+});
+function renderTopbarActions(p){
+  const el=document.getElementById("tb-actions");if(!el)return;
+  el.innerHTML=p==="dashboard"
+    ?`<button class="btn btn-sm" onclick="togglePrivacy()" title="Show or hide amounts and payment status"><i class="ti ${privacyHidden?"ti-eye":"ti-eye-off"}"></i> ${privacyHidden?"Show amounts":"Hide amounts"}</button>`
+    :"";
+}
 // Google Books API key — restricted to this site's origin & Books API only (set in Google Cloud Console)
 const GOOGLE_BOOKS_API_KEY="AIzaSyDSq9gNkKSIsi9x4i6_jLb5620R8bCmfnA";
 // Google Custom Search API — for cover image search (Workbooks & Books)
@@ -2321,6 +2350,7 @@ function showPage(p){
   document.querySelectorAll(".ni").forEach(n=>{if(n.dataset.page===p)n.classList.add("active");});
   document.getElementById("tb-title").textContent=PT[p]||p;
   curPage=p;
+  renderTopbarActions(p);
   if(p==="dashboard")renderDash();
   else if(p==="students")renderStudents();
   else if(p==="sessions")renderCalendar();
@@ -3695,7 +3725,7 @@ function renderDash(){
   setT("st-s",students.length);setT("st-t",todayOccs.length);
   const monthActive=monthOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid").length;
   setT("st-ml",monthActive+"/"+monthOccs.length);
-  setT("st-ex",won(totE));setT("st-up",won(totE-totP));
+  setT("st-ex",pwon(totE));setT("st-up",pwon(totE-totP));
 
   // ── TODAY SCHEDULE ──
   const sc=document.getElementById("dash-sched");
@@ -3716,7 +3746,7 @@ function renderDash(){
         +"<div><div class='tn'>"+(s?.name||"?")+"</div><div style='font-size:11px;color:var(--txt3)'>"+(s?.k||"")+"</div></div></div></td>"
         +"<td>"+(cancelled?"<span style='color:var(--txt3)'>Cancelled"+(l.cancel?" — "+l.cancel:"")+"</span>":l.topic||"—")+"</td>"
         +"<td style='font-size:11px;color:var(--txt2)'>"+content+"</td>"
-        +"<td>"+bdg(l.status)+"</td>"
+        +"<td>"+(privacyHidden?"<span class='badge bc' title='Hidden — tap Show amounts'>•••</span>":bdg(l.status))+"</td>"
         +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'>"+(l.note||"")+"</td>"
         +"</tr>";
     }).join("");
@@ -3726,8 +3756,8 @@ function renderDash(){
 
   // ── PROGRESS BAR ──
   const pct=totE>0?Math.round(totP/totE*100):0;
-  const pb=document.getElementById("d-pbar");if(pb)pb.style.width=pct+"%";
-  const pl=document.getElementById("d-plbl");if(pl)pl.textContent=won(totP)+" of "+won(totE)+" ("+pct+"%)";
+  const pb=document.getElementById("d-pbar");if(pb)pb.style.width=(privacyHidden?0:pct)+"%";
+  const pl=document.getElementById("d-plbl");if(pl)pl.textContent=privacyHidden?MASK_AMT+" of "+MASK_AMT:won(totP)+" of "+won(totE)+" ("+pct+"%)";
 
   renderTodos();
 }
