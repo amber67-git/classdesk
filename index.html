@@ -499,7 +499,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence }
     from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, onSnapshot, writeBatch, serverTimestamp }
+  import { initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager,
+           doc, getDoc, collection, getDocs, onSnapshot, writeBatch }
     from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
   import { getStorage, ref as storageRef, uploadString, getDownloadURL, deleteObject }
     from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
@@ -513,7 +514,12 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  // Persistent local cache = the offline story. Writes made while offline are queued in IndexedDB
+  // (they survive closing the app) and sent automatically when a connection returns; reads are
+  // served from the cache first. Falls back to a memory cache where IndexedDB is unavailable.
+  let db;
+  try { db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); }
+  catch (e) { console.warn("Persistent cache unavailable, using memory cache:", e); db = getFirestore(app); }
   const storage = getStorage(app);
 
   // Cover images and answer PDFs used to live inside localStorage as base64 data-URLs. Because
@@ -533,31 +539,40 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   setPersistence(auth, browserLocalPersistence).catch(console.error);
   const provider = new GoogleAuthProvider();
 
-  // Firestore caps a single document at 1 MB. Our book library alone is ~1 MB and will grow, so
-  // every collection is stored as N chunk documents (users/{uid}/data/{key}/chunks/{i}) plus a
-  // small meta doc recording how many chunks exist. Reads reassemble them; writes replace them.
-  const CHUNK_CHARS = 600000; // ~600 KB of JSON per doc — comfortably under the 1 MB ceiling
-  const metaRef  = (uid, key)    => doc(db, "users", uid, "data", key);
-  const chunksOf = (uid, key)    => collection(db, "users", uid, "data", key, "chunks");
+  // ── Sync storage layout ──
+  // Every record (one student, one lesson, one book…) is its own document:
+  //   users/{uid}/data/{key}/recs/{id}  =  { j: JSON of the record, u: last-modified ms, d: deleted? }
+  // so devices only ever exchange the records that actually changed, and two devices editing
+  // different records never clobber each other. Deleted records stay as tombstones (d:true) so an
+  // old copy on another device can't bring them back.
+  // The pre-v58 format (whole collection as chunk docs under users/{uid}/data/{key}/chunks) is
+  // only READ now, once, to migrate — it is left in place untouched as a backup.
+  const metaRef  = (uid, key) => doc(db, "users", uid, "data", key);
+  const chunksOf = (uid, key) => collection(db, "users", uid, "data", key, "chunks");
+  const recsOf   = (uid, key) => collection(db, "users", uid, "data", key, "recs");
 
-  async function cloudWrite(uid, key, value){
-    const json = JSON.stringify(value);
-    const parts = [];
-    for (let i = 0; i < json.length; i += CHUNK_CHARS) parts.push(json.slice(i, i + CHUNK_CHARS));
-    if (!parts.length) parts.push("");
-    const batch = writeBatch(db);
-    parts.forEach((p, i) => batch.set(doc(chunksOf(uid, key), String(i)), { p }));
-    batch.set(metaRef(uid, key), { n: parts.length, updatedAt: serverTimestamp() });
-    await batch.commit();
-    // Remove any leftover chunks from a previously larger payload
-    const existing = await getDocs(chunksOf(uid, key));
-    const stale = existing.docs.filter(d => Number(d.id) >= parts.length);
-    if (stale.length){
-      const b2 = writeBatch(db);
-      stale.forEach(d => b2.delete(d.ref));
-      await b2.commit();
+  // Write a list of record ops. A batch holds up to 500 ops; we use 400 to leave headroom.
+  // Resolves when the server has acknowledged; while offline it simply stays pending (the
+  // writes are already safe in the persistent cache), so callers must NOT block on it.
+  async function syncWrite(uid, key, ops){
+    for (let i = 0; i < ops.length; i += 400){
+      const batch = writeBatch(db);
+      ops.slice(i, i + 400).forEach(op => {
+        const data = op.d ? { u: op.u, d: true } : { j: op.j, u: op.u, d: false };
+        batch.set(doc(recsOf(uid, key), op.id), data);
+      });
+      await batch.commit();
     }
   }
+  // Live feed of one collection. cb gets { fromCache, changes:[{type,id,data,pending}] } — first
+  // from the local cache (instant, possibly stale), then from the server, then on every change.
+  function syncWatch(uid, key, cb){
+    return onSnapshot(recsOf(uid, key), { includeMetadataChanges: true },
+      snap => cb({ fromCache: snap.metadata.fromCache,
+                   changes: snap.docChanges().map(c => ({ type: c.type, id: c.doc.id, data: c.doc.data(), pending: c.doc.metadata.hasPendingWrites })) }),
+      err  => cb({ error: err }));
+  }
+  // Legacy whole-collection read (migration only).
   async function cloudRead(uid, key){
     const meta = await getDoc(metaRef(uid, key));
     if (!meta.exists()) return undefined;          // never written — caller decides what to do
@@ -570,22 +585,14 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     if (!json) return undefined;
     try { return JSON.parse(json); } catch(e){ console.error("Corrupt cloud data for", key, e); return undefined; }
   }
-  // Notify when ANY collection changes remotely (another device). Debounced by the app layer.
-  function cloudWatch(uid, keys, cb){
-    const unsubs = keys.map(k => onSnapshot(metaRef(uid, k),
-      snap => { if (snap.exists() && !snap.metadata.hasPendingWrites) cb(k); },
-      err => console.error("watch failed", k, err)));
-    return () => unsubs.forEach(u => u());
-  }
-
   // Expose a tiny facade for the non-module app code below.
   window.__auth = auth;
   window.__signInGoogle = () => signInWithPopup(auth, provider);
   window.__signOut = () => signOut(auth);
   window.__onAuthChange = cb => onAuthStateChanged(auth, cb);
-  window.__cloudWrite = cloudWrite;
+  window.__syncWrite = syncWrite;
+  window.__syncWatch = syncWatch;
   window.__cloudRead = cloudRead;
-  window.__cloudWatch = cloudWatch;
   window.__uploadAsset = uploadAsset;
   window.__deleteAsset = deleteAsset;
   // Fire a synthetic event once the module has finished so the app's auth-render code can
@@ -1099,9 +1106,10 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>Cloud sync</h3>
         <p>Sign in with your Google Account in Settings → Account and <b>all your devices (PC, phone, tablet) share the same data in real time</b>. It runs automatically — no extra buttons.</p>
         <dl>
-          <dt>How do I turn it on?</dt><dd>Sign in once on each device. On first sign-in, when asked "Download cloud data?", choose <b>OK (recommended)</b>. You won't be asked again.</dd>
+          <dt>How do I turn it on?</dt><dd>Sign in once on each device — that's all. Your cloud data appears within a few seconds and from then on every change made anywhere shows up everywhere.</dd>
+          <dt>What if two devices edit at the same time?</dt><dd>Each student, lesson and book is synced on its own, so changes to different items never interfere. If the very same item is edited on two devices, the more recent edit wins. Deleted items stay deleted — an old copy on another device can't bring them back.</dd>
           <dt>Where are covers and PDFs stored?</dt><dd>In Firebase Storage (the cloud); only the link stays in the browser. That's why you can register hundreds of books and PDFs without worrying about space. For older data, click <b>Move covers & PDFs to cloud</b> in Settings → Backup once.</dd>
-          <dt>What if my internet goes down?</dt><dd>The app keeps working as usual. Changes are saved to this browser first, then uploaded to the cloud automatically when the connection returns.</dd>
+          <dt>What if my internet goes down?</dt><dd>The app keeps working as usual. Changes are saved to this browser first and queued; they upload automatically when the connection returns — even if you closed the app in between.</dd>
           <dt>Where do I see sync status?</dt><dd>Settings → Account shows "✓ Synced (time)". If a sync failure message persists, check your sign-in status and internet connection.</dd>
           <dt>Do I still need backups?</dt><dd>The cloud acts as a copy, but accidental deletions sync too. A monthly Export backup is still recommended.</dd>
         </dl>
@@ -1151,7 +1159,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v57</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v58</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1895,41 +1903,107 @@ let todos=lg("mc_todos",[]);
 let settings=lg("mc_settings",DSET);
 // Persist all app state. Returns false if ANY key failed to write (ls() already alerted the
 // user), so future callers can react — e.g. skip closing a modal on a failed save.
-// Snapshot of what we last wrote, so save() can tell which collections actually changed.
-// Previously every save() re-uploaded all 9 collections to Firestore — editing one workbook
-// re-sent the entire book library, flooding the write queue ("resource-exhausted").
+//
+// Record-level change tracking: _lastSaved[key] is a Map id → JSON of each record as last saved
+// (settings: one JSON string). save() compares every record against it, stamps the ones that
+// changed with `_u` (last-modified ms — the sync layer's conflict rule is "newest _u wins"), and
+// hands only those records — plus tombstones for records that vanished — to the sync layer.
+// The maps are built from the loaded data at startup so a plain reload never re-stamps anything.
 const _lastSaved={};
-function save(){
-  const pairs=[
-    ["students",students],["lessons",lessons],["homework",homework],
-    ["curriculum",curriculum],["books",books],["booklib",bookLib],
-    ["materials",materials],["todos",todos],["settings",settings],
-  ];
-  let ok=true;
-  const changed=[];
-  for(const [key,val] of pairs){
-    const json=JSON.stringify(val);
-    if(_lastSaved[key]===json)continue;   // untouched — skip both the write and the upload
-    if(!ls("mc_"+key,val))ok=false;
-    else{_lastSaved[key]=json;changed.push(key);}
+const uid=()=>"id"+Date.now()+Math.random().toString(36).slice(2,5);
+const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","settings"];
+const SYNC_VARS={
+  students:()=>students, lessons:()=>lessons, homework:()=>homework, curriculum:()=>curriculum,
+  books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, settings:()=>settings,
+};
+// JSON without the sync stamp — what "did this record change?" is judged on.
+const cmpJson=rec=>JSON.stringify(rec,(k,v)=>k==="_u"?undefined:v);
+function initLastSaved(){
+  for(const key of SYNC_KEYS){
+    const val=SYNC_VARS[key]();
+    if(key==="settings"){_lastSaved.settings=cmpJson(val);continue;}
+    const m=new Map();
+    val.forEach(r=>{if(!r.id)r.id=uid();m.set(r.id,cmpJson(r));});
+    _lastSaved[key]=m;
   }
-  // Mirror only what changed (no-op when signed out or offline — it retries later)
-  if(changed.length){
-    try{queueCloudPush(changed);}catch(e){console.error("Cloud push queue failed:",e);}
-    // Move any freshly-added base64 covers off to Cloud Storage (async, never blocks the UI)
-    if(changed.includes("books")||changed.includes("booklib")){
+}
+// Tombstones for records deleted while signed out / before the first server contact, so the
+// deletion is still sent when sync starts. {key:{id:deletedAtMs}}. Not an mc_ key on purpose:
+// it's device bookkeeping, not data — Export/Import leave it alone.
+const TOMB_KEY="cd_tomb";
+function loadTombs(){try{return JSON.parse(localStorage.getItem(TOMB_KEY)||"{}")||{};}catch(e){return {};}}
+function rememberTombs(key,ids,u){
+  const t=loadTombs();t[key]=t[key]||{};ids.forEach(id=>{t[key][id]=u;});
+  try{localStorage.setItem(TOMB_KEY,JSON.stringify(t));}catch(e){}
+}
+function save(){
+  let ok=true;
+  const ops={};       // key → [{id,j,u} | {id,u,d:true}] for the sync layer
+  const now=Date.now();
+  for(const key of SYNC_KEYS){
+    const val=SYNC_VARS[key]();
+    if(key==="settings"){
+      const c=cmpJson(val);
+      if(_lastSaved.settings===c)continue;
+      val._u=now;
+      if(!ls("mc_settings",val)){ok=false;continue;}
+      _lastSaved.settings=c;
+      ops.settings=[{id:"settings",j:JSON.stringify(val),u:now}];
+      continue;
+    }
+    const prev=_lastSaved[key]||new Map(),cur=new Map(),changed=[];
+    for(const rec of val){
+      if(!rec.id)rec.id=uid();
+      const c=cmpJson(rec);
+      cur.set(rec.id,c);
+      if(prev.get(rec.id)!==c){rec._u=now;changed.push(rec);}
+    }
+    const deleted=[...prev.keys()].filter(id=>!cur.has(id));
+    if(!changed.length&&!deleted.length)continue;
+    if(!ls("mc_"+key,val)){ok=false;continue;}
+    _lastSaved[key]=cur;
+    ops[key]=[
+      ...changed.map(r=>({id:r.id,j:cloudJson(r),u:now})),
+      ...deleted.map(id=>({id,u:now,d:true})),
+    ];
+    if(deleted.length)rememberTombs(key,deleted,now);
+  }
+  const keys=Object.keys(ops);
+  if(keys.length){
+    try{syncPush(ops);}catch(e){console.error("Sync push failed:",e);}
+    // Move any freshly-added base64 covers/PDFs off to Cloud Storage (async, never blocks the UI)
+    if(ops.books||ops.booklib){
       setTimeout(()=>{uploadPendingAssets().catch(e=>console.error(e));},100);
     }
   }
   return ok;
 }
+// The copy of a record that goes to Firestore. Base64 covers/PDFs can exceed the 1 MB document
+// limit, so they are blanked here — uploadPendingAssets() swaps them for a Storage URL and the
+// next save() sends that. Small data-URLs (e.g. the app logo, kept under ~100 KB) pass through.
+function cloudJson(rec){
+  let out=rec;
+  for(const f of Object.keys(rec)){
+    const v=rec[f];
+    if(typeof v==="string"&&v.length>150000&&v.startsWith("data:")){
+      if(out===rec)out=Object.assign({},rec);
+      out[f]="";
+    }
+  }
+  return JSON.stringify(out);
+}
+// Baseline for record-level change detection — runs once at load, after the load-time
+// migrations above and before anything can call save().
+initLastSaved();
+// Did this browser start on the untouched built-in samples? (See localIsSample() in the sync code.)
+const startedWithSamples=JSON.stringify(students)===JSON.stringify(DS)&&lessons.length===0;
 async function resetData(){if(!confirm("Reset to sample data?"))return;["mc_students","mc_lessons","mc_homework","mc_curriculum","mc_books","mc_booklib","mc_materials","mc_todos","mc_settings"].forEach(k=>localStorage.removeItem(k));location.reload();}
 const gs=id=>students.find(s=>s.id===id);
 // "Today" and "this month" are always computed in Korea Standard Time (UTC+9), regardless of
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v57";
+const APP_VERSION="v58";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2075,7 +2149,6 @@ async function testGcseKeys(){
   }
 }
 const ini=n=>(n||"?").split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-const uid=()=>"id"+Date.now()+Math.random().toString(36).slice(2,5);
 const isOD=d=>d<td();
 
 // STATUS
@@ -3427,9 +3500,7 @@ async function uploadPendingAssets(){
     }
   }
   if(changed){
-    ls("mc_booklib",bookLib);
-    ls("mc_books",books);
-    try{queueCloudPush(["booklib","books"]);}catch(e){console.error(e);}
+    save(); // records now carry URLs instead of base64 — save() syncs just those records
     renderStorageGauge();
   }
   return changed;
@@ -3525,6 +3596,9 @@ function importBackupFile(inp){
       alert("⚠️ Restore failed.\n\nStorage may be full, or the browser blocked saving.\nYour existing data was restored to how it was.\n\n"+(e.message||""));
       return;
     }
+    // Tell the sync layer this browser's data is now the truth: on the next server contact it
+    // uploads every record and tombstones whatever the cloud has that the backup doesn't.
+    try{localStorage.setItem("cd_restore_pending","1");localStorage.removeItem(TOMB_KEY);}catch(e){}
     alert("Backup imported. The app will now reload.");
     location.reload();
   };
@@ -6513,24 +6587,29 @@ function makeCollapseBtn(section,total){
 // ═══════════════════════════════════════════════
 // INIT — runs last, once all functions above are defined
 // ═══════════════════════════════════════════════
-// ── Cloud sync (Firestore) ──
-// Design: localStorage stays the single source of truth the UI reads from — the app works
-// fully offline and stays fast. Firestore is a mirror: every save() pushes changed collections
-// up (debounced), and a listener pulls changes down when another device writes.
-const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","settings"];
-const SYNC_VARS={
-  students:()=>students, lessons:()=>lessons, homework:()=>homework, curriculum:()=>curriculum,
-  books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, settings:()=>settings,
-};
-const SYNC_SETTERS={
-  students:v=>students=v, lessons:v=>lessons=v, homework:v=>homework=v, curriculum:v=>curriculum=v,
-  books:v=>books=v, booklib:v=>bookLib=v, materials:v=>materials=v, todos:v=>todos=v, settings:v=>{settings=v;applyBranding();},
-};
-let syncUser=null;        // current signed-in user, or null
-let syncUnwatch=null;     // detach function for the remote listener
-let syncPending=new Set();// collections changed locally, waiting to upload
-let syncTimer=null;
-let syncApplyingRemote=false; // guard: don't re-upload what we just downloaded
+// ── Cloud sync (Firestore, record-level) ──
+// Design: the in-memory arrays + localStorage stay what the UI reads, so the app is instant and
+// works fully offline (signed in or not). Every record is mirrored as its own Firestore document
+// (see the module script at the top). Rules:
+//   • save() sends only the records that changed, stamped with _u (ms). Firestore's persistent
+//     cache queues them while offline and uploads when a connection returns — even after the
+//     app was closed in between.
+//   • A live listener per collection applies remote changes record by record. A remote record
+//     replaces the local one only when its _u is newer ("newest edit wins", per record). Our own
+//     writes echo back with the same _u and are ignored.
+//   • Deletions are tombstones (d:true) — an older copy elsewhere can never resurrect a record.
+//   • First server contact on a device reconciles: local records created under this system
+//     (they carry _u) that the cloud lacks are uploaded; records without _u that the cloud has
+//     no trace of are pre-v58 leftovers and yield to the cloud. Nothing is ever asked.
+//   • Legacy whole-collection data (pre-v58) is migrated once, the first time a signed-in device
+//     finds a collection empty in the new format. The old data is left in place as a backup.
+let syncUser=null;            // current signed-in user, or null
+let syncUnwatchers=[];        // detach functions for the per-collection listeners
+let syncApplyingRemote=false; // true while remote changes are being written into local state
+const cloudSeen={};           // key → Map id → {u,d}: every record the cloud has told us about
+const syncReconciled={};      // key → true once this device has reconciled with the server
+let _syncRerenderTimer=null;
+let _syncInFlight=0;
 
 function setSyncStatus(text,tone){
   const el=document.getElementById("sync-status");
@@ -6538,160 +6617,183 @@ function setSyncStatus(text,tone){
   el.textContent=text;
   el.style.color=tone==="err"?"#dc2626":tone==="ok"?"#16a34a":"var(--txt3)";
 }
-// Called by save() with the list of collections that actually changed.
-function queueCloudPush(keys){
-  if(!syncUser||syncApplyingRemote)return;
-  (keys&&keys.length?keys:SYNC_KEYS).forEach(k=>syncPending.add(k));
-  clearTimeout(syncTimer);
-  // 0.8s debounce: long enough to batch rapid edits into one upload, short enough that a
-  // quick page reload right after a change (e.g. deleting a book) rarely beats the flush.
-  syncTimer=setTimeout(flushCloudPush,800);
+function syncStatusIdle(){
+  if(!syncUser)return;
+  if(navigator.onLine===false)setSyncStatus("Offline — changes are saved here and upload when you're back online");
+  else setSyncStatus("✓ Synced "+new Date().toLocaleTimeString(),"ok");
 }
-// If the tab is closed or hidden while a push is still queued, flush immediately — otherwise
-// the change only lives in this browser, and the next load pulls the OLD cloud copy over it
-// (this was exactly why deleted books appeared to "come back").
-document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden"&&syncPending.size){clearTimeout(syncTimer);flushCloudPush();}
-});
-window.addEventListener("beforeunload",()=>{
-  if(syncPending.size){clearTimeout(syncTimer);flushCloudPush();}
-});
-// Uploads run one at a time — parallel writes of large chunked collections are what
-// exhausted the write stream before.
-let _flushing=false;
-async function flushCloudPush(){
-  if(!syncUser||!window.__cloudWrite||!syncPending.size)return;
-  if(_flushing){clearTimeout(syncTimer);syncTimer=setTimeout(flushCloudPush,1500);return;}
-  _flushing=true;
-  const keys=[...syncPending];syncPending.clear();
-  setSyncStatus("Syncing…");
-  const failed=[];
-  try{
-    for(const k of keys){
-      try{await window.__cloudWrite(syncUser.uid,k,SYNC_VARS[k]());}
-      catch(e){console.error("Cloud write failed:",k,e);failed.push(k);}
-    }
-    if(failed.length){
-      failed.forEach(k=>syncPending.add(k));
-      setSyncStatus("Some items failed to sync — saved locally. Retrying","err");
-      clearTimeout(syncTimer);
-      syncTimer=setTimeout(flushCloudPush,8000); // back off, then retry
-    }else{
-      setSyncStatus("✓ Synced "+new Date().toLocaleTimeString(),"ok");
-    }
-  }finally{_flushing=false;}
+window.addEventListener("online",syncStatusIdle);
+window.addEventListener("offline",syncStatusIdle);
+
+// Called by save() with {key:[ops]} — only records that changed. Fire-and-forget: the promise
+// resolves on server ack, which while offline may be much later; the data is already safe.
+function syncPush(ops){
+  if(!syncUser||!window.__syncWrite)return;   // signed out: tombstones are remembered, edits keep their _u and upload on next sign-in
+  const uid_=syncUser.uid;
+  for(const key of Object.keys(ops)){
+    const list=ops[key];if(!list.length)continue;
+    _syncInFlight++;
+    setSyncStatus("Syncing…");
+    window.__syncWrite(uid_,key,list)
+      .then(()=>{_syncInFlight--;if(_syncInFlight<=0){_syncInFlight=0;syncStatusIdle();}})
+      .catch(e=>{_syncInFlight--;console.error("Sync write failed:",key,e);setSyncStatus("Sync failed — saved on this device, will retry","err");});
+  }
 }
-// Pull one collection down and apply it locally (used on login and on remote changes).
-async function pullCollection(k){
-  const v=await window.__cloudRead(syncUser.uid,k);
-  if(v===undefined)return false;
-  syncApplyingRemote=true;
-  try{
-    SYNC_SETTERS[k](v);
-    ls("mc_"+k,v); // SYNC_KEYS deliberately match the localStorage suffixes 1:1
-  }finally{syncApplyingRemote=false;}
+
+// Write one remote record into the local array/object in place (keeps existing object identity
+// for anything holding a reference). Returns true if local state changed.
+function applyRemoteRecord(key,id,data){
+  const ru=data.u||0;
+  if(key==="settings"){
+    if(id!=="settings"||data.d)return false;
+    if(!(ru>(settings._u||0)))return false;
+    let obj;try{obj=JSON.parse(data.j);}catch(e){console.error("Bad settings doc",e);return false;}
+    Object.keys(settings).forEach(k=>delete settings[k]);
+    Object.assign(settings,obj);settings._u=ru;
+    applyBranding();
+    return true;
+  }
+  const arr=SYNC_VARS[key]();
+  const idx=arr.findIndex(r=>r.id===id);
+  const lu=idx>=0?(arr[idx]._u||0):0;
+  if(data.d){
+    if(idx>=0&&ru>lu){arr.splice(idx,1);return true;}
+    return false;
+  }
+  if(idx<0){
+    const tombU=(loadTombs()[key]||{})[id]||0;
+    if(tombU>=ru)return false;           // we deleted it more recently than this copy was edited
+    let rec;try{rec=JSON.parse(data.j);}catch(e){console.error("Bad record",key,id,e);return false;}
+    rec.id=id;rec._u=ru;arr.push(rec);return true;
+  }
+  if(!(ru>lu))return false;
+  let rec;try{rec=JSON.parse(data.j);}catch(e){console.error("Bad record",key,id,e);return false;}
+  const cur=arr[idx];
+  // A remote copy carries "" where we still hold a base64 cover/PDF that hasn't been uploaded
+  // yet (cloudJson blanks those) — keep ours until uploadPendingAssets() replaces it with a URL.
+  for(const f of ["thumb","pdf"])if(typeof cur[f]==="string"&&cur[f].startsWith("data:")&&!rec[f])rec[f]=cur[f];
+  Object.keys(cur).forEach(k=>delete cur[k]);
+  Object.assign(cur,rec);cur.id=id;cur._u=ru;
   return true;
 }
-async function pullAllFromCloud(){
-  for(const k of SYNC_KEYS)await pullCollection(k);
-  rerenderCurrentPage();
+function afterRemoteApplied(key){
+  syncApplyingRemote=true;
+  try{
+    const val=SYNC_VARS[key]();
+    ls("mc_"+key,val);
+    if(key==="settings")_lastSaved.settings=cmpJson(val);
+    else{const m=new Map();val.forEach(r=>m.set(r.id,cmpJson(r)));_lastSaved[key]=m;}
+  }finally{syncApplyingRemote=false;}
+  clearTimeout(_syncRerenderTimer);
+  _syncRerenderTimer=setTimeout(()=>{rerenderCurrentPage();renderStorageGauge?.();},250);
 }
 function rerenderCurrentPage(){
   try{showPage(curPage||"dashboard");}catch(e){console.error(e);}
 }
-// First login on a device: decide whether to seed the cloud from this browser, or replace this
-// browser's data with the cloud's. Getting this wrong silently destroys data, so we always ask.
-async function startCloudSync(user){
-  syncUser=user;
-  if(!window.__cloudRead){setSyncStatus("Loading Firebase…");return;}
-  // Once a device has been linked to a cloud account, it just pulls — asking "which side wins?"
-  // on every page load is both annoying and dangerous (one stray click reverses the direction).
-  const linkKey="mc_cloud_linked_"+user.uid;
-  const alreadyLinked=localStorage.getItem(linkKey)==="1";
-  setSyncStatus("Checking cloud…");
-  let remoteHas=false;
-  try{
-    const probe=await window.__cloudRead(user.uid,"booklib");
-    const probe2=probe===undefined?await window.__cloudRead(user.uid,"students"):undefined;
-    remoteHas=(probe!==undefined&&probe.length>0)||(probe2!==undefined&&probe2.length>0);
-  }catch(e){
-    console.error("Cloud probe failed:",e);
-    setSyncStatus("Cloud connection failed — continuing offline","err");
-    return;
-  }
-  // A browser that has never been used still shows the built-in sample data (14 students, no
-  // lessons). That must never count as "this browser's data": on a fresh install of the app the
-  // owner was offered "Cancel = upload this browser's data", which would have replaced her real
-  // cloud data with the samples. Untouched samples → just download the cloud, no question asked.
-  const localIsSample=(students===DS||JSON.stringify(students)===JSON.stringify(DS))&&lessons.length===0;
-  const localCount=localIsSample?0:(bookLib?.length||0)+(students?.length||0);
 
-  if(alreadyLinked){
-    // Routine load on a known device: cloud is the source of truth, pull silently.
-    if(remoteHas){
-      setSyncStatus("Syncing…");
-      await pullAllFromCloud();
-      setSyncStatus("✓ Synced "+new Date().toLocaleTimeString(),"ok");
-    }else setSyncStatus("Cloud is empty");
-    watchRemote(user);
-    return;
+// One collection's listener callback.
+async function onSyncSnapshot(key,ev){
+  if(ev.error){console.error("Sync listener failed:",key,ev.error);setSyncStatus("Sync error: "+(ev.error.message||ev.error.code),"err");return;}
+  const seen=cloudSeen[key]||(cloudSeen[key]=new Map());
+  // While a restored backup is waiting to be reconciled, this browser's data is the truth —
+  // cloud records must not flow in first, or the reconcile would keep them instead of deleting them.
+  const holdOff=!syncReconciled[key]&&localStorage.getItem("cd_restore_pending")==="1";
+  let touched=false;
+  for(const ch of ev.changes){
+    if(ch.type==="removed"){seen.delete(ch.id);continue;} // docs are never deleted server-side; defensive
+    seen.set(ch.id,{u:ch.data.u||0,d:!!ch.data.d});
+    if(!holdOff&&applyRemoteRecord(key,ch.id,ch.data))touched=true;
   }
-
-  if(!remoteHas){
-    // Cloud is empty → this browser's data becomes the starting point.
-    if(localCount>0){
-      if(!confirm(`Cloud is empty.\n\nUpload this browser's data (${bookLib.length} books, ${students.length} students) to the cloud?\n\nOK = upload / Cancel = not syncing`)){
-        syncUser=null;setSyncStatus("Not syncing");return;
-      }
-      setSyncStatus("Uploading… (first time only, may take a moment)");
-      try{
-        for(const k of SYNC_KEYS)await window.__cloudWrite(user.uid,k,SYNC_VARS[k]());
-        setSyncStatus("✓ Upload complete — devices now sync","ok");
-      }catch(e){
-        console.error(e);
-        setSyncStatus("Upload failed: "+(e.message||e.code),"err");
-        return;
-      }
-    }else setSyncStatus("Cloud is empty");
-  }else{
-    // Cloud has data AND this is a new device. If it also has local data, the two may differ —
-    // this is the ONE moment where we must ask, because either choice discards something.
-    if(localCount>0){
-      const useCloud=confirm(`There is data saved in the cloud.\n\nOK = download the cloud data and overwrite this browser (recommended)\nCancel = upload this browser's data and overwrite the cloud\n\n⚠️ Either way, one side will be replaced. If unsure, take a backup (Export) first.\n\n(You'll only be asked this once on this device)`);
-      if(useCloud){
-        setSyncStatus("Downloading…");
-        await pullAllFromCloud();
-        setSyncStatus("✓ Loaded from cloud","ok");
-      }else{
-        setSyncStatus("Uploading…");
-        try{
-          for(const k of SYNC_KEYS)await window.__cloudWrite(user.uid,k,SYNC_VARS[k]());
-          setSyncStatus("✓ Overwrote the cloud with this browser's data","ok");
-        }catch(e){setSyncStatus("Upload failed: "+(e.message||e.code),"err");return;}
-      }
-    }else{
-      setSyncStatus("Downloading…");
-      await pullAllFromCloud();
-      setSyncStatus(localIsSample?"✓ Sample data replaced by your cloud data":"✓ Loaded from cloud","ok");
-    }
+  if(touched)afterRemoteApplied(key);
+  if(!ev.fromCache&&!syncReconciled[key]){
+    syncReconciled[key]=true;
+    try{await reconcileKey(key);}
+    catch(e){console.error("Reconcile failed:",key,e);setSyncStatus("Sync error: "+(e.message||e.code),"err");return;}
   }
-  // Device is now linked — don't ask again on this browser.
-  localStorage.setItem(linkKey,"1");
-  watchRemote(user);
+  if(!ev.fromCache&&_syncInFlight<=0)syncStatusIdle();
 }
-// Listen for changes made on other devices
-function watchRemote(user){
-  if(syncUnwatch)syncUnwatch();
-  syncUnwatch=window.__cloudWatch(user.uid,SYNC_KEYS,async k=>{
-    if(syncPending.size)return; // local changes not uploaded yet — pulling now would undo them
-    await pullCollection(k);
-    rerenderCurrentPage();
-    setSyncStatus("✓ Applied changes from another device "+new Date().toLocaleTimeString(),"ok");
-  });
+
+// First server contact for a collection on this device.
+async function reconcileKey(key){
+  const uid_=syncUser.uid,seen=cloudSeen[key],now=Date.now();
+  const restore=localStorage.getItem("cd_restore_pending")==="1";
+  const ops=[];
+  const local=SYNC_VARS[key]();
+  // "Empty" means no document at all — tombstones count as the new format being in use.
+  const serverEmpty=seen.size===0&&!restore;
+  if(serverEmpty){
+    // Nothing in the new format yet → migrate. Source = legacy cloud copy merged with this
+    // device's data (device wins per id; untouched sample data is ignored entirely).
+    setSyncStatus("Upgrading cloud data format…");
+    let legacy;
+    try{legacy=await window.__cloudRead(uid_,key);}catch(e){console.error("Legacy read failed",key,e);}
+    const merged=new Map();
+    if(key==="settings"){
+      const src=(!localIsSample()&&Object.keys(settings).length)?settings:(legacy&&typeof legacy==="object"?legacy:settings);
+      Object.keys(settings).forEach(k=>delete settings[k]);Object.assign(settings,src);
+      settings._u=now;ops.push({id:"settings",j:JSON.stringify(settings),u:now});
+      applyBranding();
+    }else{
+      if(Array.isArray(legacy))legacy.forEach(r=>{if(r&&r.id)merged.set(r.id,r);});
+      if(!localIsSample())local.forEach(r=>merged.set(r.id,r));
+      local.length=0;
+      merged.forEach(r=>{r._u=now;local.push(r);ops.push({id:r.id,j:cloudJson(r),u:now});});
+    }
+    afterRemoteApplied(key);
+    if(ops.length)await window.__syncWrite(uid_,key,ops);
+    return;
+  }
+  if(key==="settings"){
+    const c=seen.get("settings");
+    if(restore||(!c&&settings._u)){settings._u=now;ops.push({id:"settings",j:JSON.stringify(settings),u:now});afterRemoteApplied(key);}
+  }else{
+    const tombs=loadTombs()[key]||{};
+    const keepIds=new Set();
+    for(let i=local.length-1;i>=0;i--){
+      const r=local[i],c=seen.get(r.id);
+      if(restore){r._u=now;ops.push({id:r.id,j:cloudJson(r),u:now});keepIds.add(r.id);continue;}
+      if(!c){
+        if(r._u)ops.push({id:r.id,j:cloudJson(r),u:r._u});   // created here under the new system → upload
+        else local.splice(i,1);                                // pre-v58 leftover / sample → cloud wins
+        continue;
+      }
+      if(!c.d&&(r._u||0)>c.u)ops.push({id:r.id,j:cloudJson(r),u:r._u}); // edited here more recently than the cloud copy
+    }
+    if(restore){
+      // A restored backup is the whole truth: everything the cloud has that the backup lacks is deleted.
+      seen.forEach((c,id)=>{if(!c.d&&!keepIds.has(id))ops.push({id,u:now,d:true});});
+    }
+    // Deletions made while signed out
+    for(const id of Object.keys(tombs)){
+      const c=seen.get(id);
+      if(!c||(!c.d&&tombs[id]>c.u))ops.push({id,u:tombs[id],d:true});
+    }
+    afterRemoteApplied(key);
+  }
+  if(ops.length){setSyncStatus("Syncing…");await window.__syncWrite(uid_,key,ops);}
+  // Once every collection has reconciled, the restore flag and the tombstone list have done their job.
+  if(SYNC_KEYS.every(k=>syncReconciled[k])){
+    localStorage.removeItem("cd_restore_pending");
+    localStorage.removeItem(TOMB_KEY);
+  }
+}
+// An unused browser still shows the built-in sample data (14 students, no lessons). That must
+// never be mistaken for the user's data — on the tablet's fresh install it looked like "old data
+// came back". Samples are ignored by the migration/reconcile logic above.
+// Decided once at load, before sync can mix cloud records into the local arrays.
+function localIsSample(){return startedWithSamples;}
+function startCloudSync(user){
+  stopCloudSync();
+  syncUser=user;
+  if(!window.__syncWatch){setSyncStatus("Loading Firebase…");return;}
+  setSyncStatus("Connecting…");
+  syncUnwatchers=SYNC_KEYS.map(key=>window.__syncWatch(user.uid,key,ev=>{onSyncSnapshot(key,ev).catch(e=>console.error(e));}));
 }
 function stopCloudSync(){
-  if(syncUnwatch){syncUnwatch();syncUnwatch=null;}
-  syncUser=null;syncPending.clear();clearTimeout(syncTimer);
+  syncUnwatchers.forEach(u=>{try{u();}catch(e){}});
+  syncUnwatchers=[];
+  syncUser=null;
+  SYNC_KEYS.forEach(k=>{delete cloudSeen[k];delete syncReconciled[k];});
   setSyncStatus("");
 }
 
