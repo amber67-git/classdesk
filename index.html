@@ -1144,14 +1144,14 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>What happens to my data when I replace the file with a new version?</dt><dd>It stays, as long as it's the same computer and browser — data lives in the browser, not in the file. With cloud sync on, there's a copy in the cloud too. To be safe, Export before replacing.</dd>
           <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
-          <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. On iPhone/iPad the home-screen app keeps its own storage, separate from Safari — <b>sign in once inside it</b> (Settings → Account) and choose OK to download your cloud data.</dd>
+          <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. The installed app may get its own storage, separate from the browser — if it shows the sample students (e.g. a Friday class for a student who moved to Thursday) and no payment marks, it simply isn't signed in yet: <b>sign in once inside it</b> (Settings → Account) and your cloud data replaces the samples.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap <b>Show amounts</b> (top-right of the Dashboard) to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v56</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v57</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1929,7 +1929,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v56";
+const APP_VERSION="v57";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -6619,7 +6619,12 @@ async function startCloudSync(user){
     setSyncStatus("Cloud connection failed — continuing offline","err");
     return;
   }
-  const localCount=(bookLib?.length||0)+(students?.length||0);
+  // A browser that has never been used still shows the built-in sample data (14 students, no
+  // lessons). That must never count as "this browser's data": on a fresh install of the app the
+  // owner was offered "Cancel = upload this browser's data", which would have replaced her real
+  // cloud data with the samples. Untouched samples → just download the cloud, no question asked.
+  const localIsSample=(students===DS||JSON.stringify(students)===JSON.stringify(DS))&&lessons.length===0;
+  const localCount=localIsSample?0:(bookLib?.length||0)+(students?.length||0);
 
   if(alreadyLinked){
     // Routine load on a known device: cloud is the source of truth, pull silently.
@@ -6667,7 +6672,7 @@ async function startCloudSync(user){
     }else{
       setSyncStatus("Downloading…");
       await pullAllFromCloud();
-      setSyncStatus("✓ Loaded from cloud","ok");
+      setSyncStatus(localIsSample?"✓ Sample data replaced by your cloud data":"✓ Loaded from cloud","ok");
     }
   }
   // Device is now linked — don't ask again on this browser.
