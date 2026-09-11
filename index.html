@@ -78,11 +78,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:13p
 .page{display:none}.page.active{display:block}
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.stats.cols-4{grid-template-columns:repeat(4,1fr)}
+.stats.cols-5{grid-template-columns:repeat(5,1fr)}
+.sc:has(.sc-eye) .sc-lbl{padding-right:24px}
 .sc{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;position:relative;overflow:hidden;box-shadow:var(--sh)}
 .sc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
 .sc.grn::before{background:var(--grn)}.sc.blu::before{background:var(--blu)}.sc.amb::before{background:var(--amb)}.sc.red::before{background:var(--red)}.sc.gry::before{background:var(--txt3)}
 .sc-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
-.sc-val{font-size:22px;font-weight:700;color:var(--txt);font-family:var(--mono);line-height:1}
+.sc-val{font-size:22px;font-weight:700;color:var(--txt);font-family:var(--mono);line-height:1;white-space:nowrap}
 .sc-val.sm{font-size:17px}
 .sc-sub{font-size:11px;color:var(--txt3);margin-top:3px}
 /* CARDS */
@@ -166,6 +169,22 @@ tbody tr:hover td{background:#fafbfc}
 .bic{padding:5px;border-radius:var(--r);background:none;border:none;cursor:pointer;color:var(--txt3);font-size:16px;transition:all .12s;display:inline-flex;align-items:center}
 .bic:hover{background:var(--surf2);color:var(--txt)}
 .bg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+/* SWITCH — the one on/off control used in toolbars and settings (replaces bare checkboxes) */
+.sw{position:relative;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:500;color:var(--txt2);user-select:none;white-space:nowrap}
+.sw input{position:absolute;opacity:0;width:0;height:0;margin:0}
+.sw-track{width:30px;height:18px;border-radius:99px;background:var(--bdr2);position:relative;transition:background .15s;flex-shrink:0}
+.sw-track::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+.sw input:checked+.sw-track{background:var(--grn)}
+.sw input:checked+.sw-track::after{transform:translateX(12px)}
+.sw input:focus-visible+.sw-track{box-shadow:0 0 0 3px var(--grn-l)}
+/* SEGMENTED CONTROL — small set of mutually exclusive views (e.g. Payments: Calendar / Summary) */
+.seg{display:inline-flex;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);padding:2px;gap:2px}
+.seg-btn{border:none;background:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;font-family:var(--font);line-height:1.2;transition:all .12s}
+.seg-btn:hover:not(.active){background:var(--surf2);color:var(--txt)}
+.seg-btn.active{background:var(--grn-l);color:var(--grn-t);font-weight:600}
+/* Quiet icon button in a stat card's corner (dashboard amount reveal) */
+.sc-eye{position:absolute;top:6px;right:6px;background:none;border:none;cursor:pointer;color:var(--txt3);opacity:.5;font-size:15px;padding:4px;border-radius:6px;display:inline-flex;transition:all .12s}
+.sc-eye:hover{opacity:1;background:var(--surf2)}
 /* STEPPER */
 .stepper{display:flex;align-items:center;gap:5px}
 .step-btn{width:24px;height:24px;border-radius:6px;border:1px solid var(--bdr2);background:var(--surf2);cursor:pointer;font-size:15px;color:var(--txt);display:flex;align-items:center;justify-content:center;font-family:var(--font);flex-shrink:0;transition:all .12s}
@@ -406,7 +425,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   .sb.mob-open{transform:translateX(0)}
   .main{margin-left:0}
   .mob-menu-btn{display:inline-flex;align-items:center}
-  .stats{grid-template-columns:repeat(2,1fr)}
+  .stats,.stats.cols-4,.stats.cols-5{grid-template-columns:repeat(2,1fr)}
   .gms,.g2{grid-template-columns:1fr}
   .fbar .month-nav{position:static!important;left:auto!important;top:auto!important;transform:none!important;margin:0 auto}
   /* Data tables keep their column layout and scroll horizontally instead of squashing.
@@ -640,54 +659,37 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- DASHBOARD -->
 <div id="page-dashboard" class="page active">
 <div class="pc">
-  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+  <div class="stats cols-4">
     <div class="sc grn"><div class="sc-lbl">Active students</div><div class="sc-val" id="st-s">—</div><div class="sc-sub">enrolled</div></div>
     <div class="sc blu"><div class="sc-lbl">Today's lessons</div><div class="sc-val" id="st-t">—</div><div class="sc-sub">scheduled</div></div>
     <div class="sc gry"><div class="sc-lbl">Month lessons</div><div class="sc-val" id="st-ml">—</div><div class="sc-sub">held / scheduled</div></div>
-    <div class="sc amb"><div class="sc-lbl">Expected (month)</div><div class="sc-val sm" id="st-ex">—</div></div>
+    <div class="sc amb"><div class="sc-lbl">Expected (month)</div><div class="sc-val sm" id="st-ex">—</div><div class="sc-sub" id="st-up-sub"></div>
+      <button class="sc-eye" id="st-eye" onclick="togglePrivacy()" title="Show / hide amounts"><i class="ti ti-eye"></i></button></div>
   </div>
   <div class="card">
     <div class="ch"><div class="ct"><i class="ti ti-calendar-event"></i>Today's Schedule</div>
       <button class="btn btn-p btn-sm" onclick="openLessonModal()"><i class="ti ti-plus"></i> Add lesson</button></div>
     <div class="cb" id="dash-sched"></div>
   </div>
-  <div class="gms">
-    <div>
-      <div class="card">
-        <div class="ch"><div class="ct"><i class="ti ti-checklist"></i>To-Do</div>
-          <button class="btn btn-sm" onclick="addTodo()"><i class="ti ti-plus"></i> Add</button></div>
-        <div class="cb p" id="dash-todo"></div>
-      </div>
-    </div>
-    <div>
-      <div class="card">
-        <div class="ch"><div class="ct"><i class="ti ti-chart-pie"></i>Payment Status</div>
-          <button class="btn btn-sm" onclick="showPage('payments')">Full view →</button></div>
-        <div class="cb p">
-          <div class="prog-track"><div class="prog-fill" id="d-pbar" style="width:0%"></div></div>
-          <div class="prog-lbl" id="d-plbl"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--bdr)">
-            <span style="font-size:12px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Unpaid total</span>
-            <span class="tm" style="font-size:15px;font-weight:700;color:var(--red)" id="st-up">—</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="card">
+    <div class="ch"><div class="ct"><i class="ti ti-checklist"></i>To-Do</div>
+      <button class="btn btn-sm" onclick="addTodo()"><i class="ti ti-plus"></i> Add</button></div>
+    <div class="cb p" id="dash-todo"></div>
   </div>
 </div>
 </div>
 
 <!-- STUDENTS -->
 <div id="page-students" class="page">
+  <div class="fbar">
+    <label class="sw" title="Include retired (archived) students"><input id="std-show-archived" type="checkbox" onchange="renderStudents()"/><span class="sw-track"></span><span>Show archived</span></label>
+    <div class="fbar-right">
+      <span id="std-cnt" class="cell-muted2"></span>
+      <button class="btn btn-p" onclick="openStudentModal()"><i class="ti ti-plus"></i> Add student</button>
+    </div>
+  </div>
 <div class="pc">
   <div class="card">
-    <div class="ch">
-      <div class="ct"><i class="ti ti-users"></i>All Students <span id="std-cnt" style="font-size:11px;font-weight:400;color:var(--txt3);margin-left:5px"></span></div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--txt2);cursor:pointer" title="Show archived (retired) students"><input id="std-show-archived" type="checkbox" onchange="renderStudents()"/> Show archived</label>
-        <button class="btn btn-p" onclick="openStudentModal()"><i class="ti ti-plus"></i> Add student</button>
-      </div>
-    </div>
     <div class="grid-head" style="display:grid;grid-template-columns:30px 190px 90px 170px 140px 70px 95px 110px 76px minmax(0,1fr);gap:8px" data-header-page="students">
       <div class="col-hdr">No.</div>
       <div class="col-hdr" data-col="name">Student</div>
@@ -730,9 +732,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- PAYMENTS -->
 <div id="page-payments" class="page">
   <div class="fbar" style="position:relative">
-    <div id="pm-tabs" style="display:flex;gap:2px">
-      <button class="stab-btn pm-tab-btn active" data-tab="calendar" onclick="pmSwitchTab('calendar')" style="border:1px solid var(--bdr);border-radius:var(--r) 0 0 var(--r);border-bottom:1px solid var(--bdr)">Calendar</button>
-      <button class="stab-btn pm-tab-btn" data-tab="summary" onclick="pmSwitchTab('summary')" style="border:1px solid var(--bdr);border-left:none;border-radius:0 var(--r) var(--r) 0;border-bottom:1px solid var(--bdr)">Summary</button>
+    <div id="pm-tabs" class="seg">
+      <button class="seg-btn pm-tab-btn active" data-tab="calendar" onclick="pmSwitchTab('calendar')"><i class="ti ti-calendar-event"></i> Calendar</button>
+      <button class="seg-btn pm-tab-btn" data-tab="summary" onclick="pmSwitchTab('summary')"><i class="ti ti-table"></i> Summary</button>
     </div>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
       <button class="bic" onclick="pmChangeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
@@ -743,7 +745,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   </div>
   <div class="pc">
     <div id="pm-summary-stats" style="display:none">
-      <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stats cols-5">
         <div class="sc amb"><div class="sc-lbl">Expected</div><div class="sc-val sm" id="pm-ex">—</div></div>
         <div class="sc grn"><div class="sc-lbl">Collected</div><div class="sc-val sm" id="pm-pd">—</div></div>
         <div class="sc red"><div class="sc-lbl">Remaining</div><div class="sc-val sm text-red" id="pm-rm">—</div></div>
@@ -973,8 +975,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="ch"><div class="ct"><i class="ti ti-key"></i>Google Custom Search API <span style="font-size:11px;font-weight:400;color:var(--txt3)">(for cover image search)</span></div></div>
       <div class="cb p">
         <p class="u-hint" style="margin-bottom:16px">
-          <a href="https://console.cloud.google.com" target="_blank" style="color:var(--grn)">Get one at console.cloud.google.com — API Key,
-          <a href="https://programmablesearchengine.google.com" target="_blank" style="color:var(--grn)">and at programmablesearchengine.google.com — Search Engine ID(cx)create your Search Engine ID.
+          Get an API key at <a href="https://console.cloud.google.com" target="_blank" style="color:var(--grn)">console.cloud.google.com</a>
+          and a Search Engine ID (cx) at <a href="https://programmablesearchengine.google.com" target="_blank" style="color:var(--grn)">programmablesearchengine.google.com</a>.
           100 free queries per day.
         </p>
         <div class="fr c2">
@@ -999,6 +1001,17 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <!-- Account tab: Google login/logout. Today's build only IDENTIFIES the user; cloud sync
        of the actual data (Firestore) lands in a follow-up step, hence the notice below. -->
   <div class="stab-pane" id="st-account">
+    <div class="card" style="margin-bottom:16px">
+      <div class="ch"><div class="ct"><i class="ti ti-lock"></i>Payments PIN</div></div>
+      <div class="cb p">
+        <p class="u-hint" style="margin-bottom:12px">On phones and tablets, opening <b>Payments</b> or revealing hidden amounts on the Dashboard asks for this PIN. PCs never ask. The PIN applies to every device signed in with this account.</p>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span id="pin-state" class="u-badge">Not set</span>
+          <button class="btn btn-sm" onclick="setPayPin()"><i class="ti ti-key"></i> <span id="pin-set-lbl">Set PIN</span></button>
+          <button class="btn btn-sm" id="pin-remove-btn" onclick="removePayPin()" style="display:none"><i class="ti ti-trash"></i> Remove</button>
+        </div>
+      </div>
+    </div>
     <div class="card" style="margin-bottom:16px">
       <div class="ch"><div class="ct"><i class="ti ti-user-circle"></i>Account</div></div>
       <div class="cb p">
@@ -1153,13 +1166,14 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
           <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. The installed app may get its own storage, separate from the browser — if it shows the sample students (e.g. a Friday class for a student who moved to Thursday) and no payment marks, it simply isn't signed in yet: <b>sign in once inside it</b> (Settings → Account) and your cloud data replaces the samples.</dd>
-          <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap <b>Show amounts</b> (top-right of the Dashboard) to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
+          <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
+          <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, phones and tablets ask for the PIN before Payments opens or hidden amounts are revealed, and lock again whenever you leave the app. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v61</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v62</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2012,7 +2026,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v61";
+const APP_VERSION="v62";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2074,24 +2088,95 @@ const isTouchDevice=()=>window.matchMedia("(pointer:coarse)").matches;
 let privacyHidden=isTouchDevice()?true:(()=>{try{return localStorage.getItem(PRIV_KEY)==="1";}catch(e){return false;}})();
 const MASK_AMT="₩ •••••"; // non-breaking space: keeps the mask on one line in narrow stat cards
 const pwon=n=>privacyHidden?MASK_AMT:won(n);
-function togglePrivacy(){
+async function togglePrivacy(){
+  if(privacyHidden&&pinRequired()&&!(await verifyPin()))return; // revealing on a phone/tablet needs the PIN
   privacyHidden=!privacyHidden;
   if(!isTouchDevice()){try{localStorage.setItem(PRIV_KEY,privacyHidden?"1":"0");}catch(e){}}
   if(curPage==="dashboard")renderDash();
-  renderTopbarActions(curPage);
 }
+// Leaving the app on a phone/tablet re-locks everything: amounts hide again, the Payments page
+// needs its PIN again (and is left, so it isn't the first thing on screen when the app reopens).
 document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden"&&isTouchDevice()&&!privacyHidden){
-    privacyHidden=true;
-    if(curPage==="dashboard")renderDash();
-    renderTopbarActions(curPage);
-  }
+  if(document.visibilityState!=="hidden"||!isTouchDevice())return;
+  payUnlocked=false;
+  if(!privacyHidden){privacyHidden=true;if(curPage==="dashboard")renderDash();}
+  if(curPage==="payments"&&settings.payPin)showPage("dashboard");
 });
 function renderTopbarActions(p){
-  const el=document.getElementById("tb-actions");if(!el)return;
-  el.innerHTML=p==="dashboard"
-    ?`<button class="btn btn-sm" onclick="togglePrivacy()" title="Show or hide amounts and payment status"><i class="ti ${privacyHidden?"ti-eye":"ti-eye-off"}"></i> ${privacyHidden?"Show amounts":"Hide amounts"}</button>`
-    :"";
+  const el=document.getElementById("tb-actions");if(el)el.innerHTML="";
+}
+// ── Payments PIN (phones & tablets only) ──
+// A student handling the tablet shouldn't be able to open Payments or reveal amounts. The PIN is
+// stored hashed in settings (so every device of this account shares it); PCs never ask.
+let payUnlocked=false;
+function pinRequired(){return isTouchDevice()&&!!settings.payPin&&!payUnlocked;}
+async function sha256Hex(s){
+  if(window.crypto?.subtle){
+    const h=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("classdesk:"+s));
+    return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
+  }
+  let h=5381;for(const ch of "classdesk:"+s)h=((h*33)^ch.charCodeAt(0))>>>0;return "x"+h.toString(16); // insecure contexts only
+}
+function pinDialog({title,hint,confirm=false,error=""}){
+  return new Promise(resolve=>{
+    document.getElementById("pin-dialog")?.remove();
+    const ov=document.createElement("div");ov.id="pin-dialog";ov.className="mo show";
+    const field=(id,ph)=>`<div class="fg"><input id="${id}" type="password" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="${ph}" style="font-size:20px;letter-spacing:6px;text-align:center;height:46px"/></div>`;
+    ov.innerHTML=`<div class="mb" style="width:340px">
+      <div class="mt"><span><i class="ti ti-lock" style="color:var(--txt3);margin-right:6px"></i>${title}</span></div>
+      ${hint?`<p class="u-hint" style="margin:-8px 0 12px">${hint}</p>`:""}
+      ${field("pin-inp",confirm?"New PIN (4–8 digits)":"PIN")}
+      ${confirm?field("pin-inp2","Confirm PIN"):""}
+      <div id="pin-err" style="font-size:12px;color:var(--red);min-height:16px;margin-bottom:10px">${error}</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="pin-cancel">Cancel</button><button class="btn btn-p" id="pin-ok">OK</button></div>
+    </div>`;
+    document.body.appendChild(ov);
+    const inp=ov.querySelector("#pin-inp"),inp2=ov.querySelector("#pin-inp2"),err=ov.querySelector("#pin-err");
+    const done=v=>{ov.remove();resolve(v);};
+    const submit=()=>{
+      const v=inp.value.trim();
+      if(!/^\d{4,8}$/.test(v)){err.textContent="Enter 4–8 digits.";inp.focus();return;}
+      if(confirm&&inp2.value.trim()!==v){err.textContent="The two PINs don't match.";inp2.focus();return;}
+      done(v);
+    };
+    ov.querySelector("#pin-cancel").onclick=()=>done(null);
+    ov.querySelector("#pin-ok").onclick=submit;
+    ov.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();submit();}else if(e.key==="Escape")done(null);});
+    setTimeout(()=>inp.focus(),50);
+  });
+}
+// Ask for the PIN until it's right or the user gives up. Resolves true when unlocked.
+async function verifyPin(){
+  let error="";
+  for(;;){
+    const v=await pinDialog({title:"Enter PIN",hint:"Payments are protected on phones and tablets.",error});
+    if(v===null)return false;
+    if(await sha256Hex(v)===settings.payPin){payUnlocked=true;return true;}
+    error="Wrong PIN — try again.";
+  }
+}
+async function setPayPin(){
+  if(settings.payPin&&isTouchDevice()&&!(await verifyPin()))return; // changing it on a tablet needs the old one
+  const v=await pinDialog({title:settings.payPin?"Change PIN":"Set a PIN",hint:"Asked on phones and tablets before Payments opens or amounts are revealed. PCs never ask.",confirm:true});
+  if(v===null)return;
+  settings.payPin=await sha256Hex(v);
+  save();renderPinState();
+}
+async function removePayPin(){
+  if(!settings.payPin)return;
+  if(isTouchDevice()&&!(await verifyPin()))return;
+  if(!confirm("Remove the Payments PIN? Phones and tablets will open Payments without asking."))return;
+  delete settings.payPin;payUnlocked=false;
+  save();renderPinState();
+}
+function renderPinState(){
+  const st=document.getElementById("pin-state"),lbl=document.getElementById("pin-set-lbl"),rm=document.getElementById("pin-remove-btn");
+  if(!st)return;
+  const on=!!settings.payPin;
+  st.textContent=on?"PIN set":"Not set";
+  st.style.background=on?"var(--grn-l)":"";st.style.color=on?"var(--grn-t)":"";st.style.borderColor=on?"transparent":"";
+  if(lbl)lbl.textContent=on?"Change PIN":"Set PIN";
+  if(rm)rm.style.display=on?"":"none";
 }
 // Google Books API key — restricted to this site's origin & Books API only (set in Google Cloud Console)
 const GOOGLE_BOOKS_API_KEY="AIzaSyDSq9gNkKSIsi9x4i6_jLb5620R8bCmfnA";
@@ -2430,6 +2515,11 @@ function showPage(p){
   document.getElementById("mob-overlay")?.classList.remove("show");
   document.getElementById("page-"+p)?.classList.add("active");
   document.querySelectorAll(".ni").forEach(n=>{if(n.dataset.page===p)n.classList.add("active");});
+  if(p==="payments"&&pinRequired()){
+    // Phone/tablet: unlock first; showPage runs again once the PIN checks out.
+    verifyPin().then(ok=>{if(ok)showPage("payments");});
+    return;
+  }
   document.getElementById("tb-title").textContent=PT[p]||p;
   curPage=p;
   renderTopbarActions(p);
@@ -3618,6 +3708,7 @@ function renderSettings(){
   const libInp=document.getElementById("library-name-inp");
   if(libInp)libInp.value=localStorage.getItem("mc_library_name")??"AMBER LIBRARY";
   applyBranding();
+  renderPinState();
   // Workbook tags grouped by category
   const wbEl=document.getElementById("wb-tags");
   if(wbEl){
@@ -3809,6 +3900,9 @@ function renderDash(){
   const monthActive=monthOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid").length;
   setT("st-ml",monthActive+"/"+monthOccs.length);
   setT("st-ex",pwon(totE));setT("st-up",pwon(totE-totP));
+  setT("st-up-sub",privacyHidden?"amounts hidden":"unpaid "+won(totE-totP));
+  const eye=document.getElementById("st-eye");
+  if(eye){eye.innerHTML=`<i class="ti ${privacyHidden?"ti-eye":"ti-eye-off"}"></i>`;eye.title=privacyHidden?"Show amounts":"Hide amounts";}
 
   // ── TODAY SCHEDULE ──
   const sc=document.getElementById("dash-sched");
@@ -3923,7 +4017,7 @@ function renderStudents(){
   const archived=students.filter(s=>s.archived);
   const visible=showArchived?students:active;
   const cnt=document.getElementById("std-cnt");
-  if(cnt)cnt.textContent=archived.length?`(${active.length} active · ${archived.length} archived)`:`(${active.length})`;
+  if(cnt)cnt.textContent=showArchived&&archived.length?`${active.length} active · ${archived.length} archived`:`${active.length} students`;
   const el=document.getElementById("std-list");
   if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(showArchived?"No students yet":"No active students")+'</p></div>';return;}
   const sortedStudents=[...visible].sort((a,b)=>studentSortKey(a)-studentSortKey(b));
