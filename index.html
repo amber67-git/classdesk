@@ -1018,15 +1018,15 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="card" style="margin-bottom:16px">
       <div class="ch"><div class="ct"><i class="ti ti-lock"></i>Payments PIN</div></div>
       <div class="cb p">
-        <p class="u-hint" style="margin-bottom:12px">Opening <b>Payments</b> or revealing hidden amounts on the Dashboard asks for this PIN, and the page locks again whenever you leave the app. The PIN applies to every device signed in with this account; devices you mark as <b>trusted</b> (your own PC) never ask.</p>
+        <p class="u-hint" style="margin-bottom:12px">On tablets and phones, opening <b>Payments</b> or revealing hidden amounts on the Dashboard asks for this PIN, and Payments locks again as soon as you leave it. PCs never ask. The PIN applies to every device signed in with this account.</p>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <span id="pin-state" class="u-badge">Not set</span>
           <button class="btn btn-sm" onclick="setPayPin()"><i class="ti ti-key"></i> <span id="pin-set-lbl">Set PIN</span></button>
           <button class="btn btn-sm" id="pin-remove-btn" onclick="removePayPin()" style="display:none"><i class="ti ti-trash"></i> Remove</button>
         </div>
         <div id="pin-trust-wrap" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid var(--bdr)">
-          <label class="sw"><input id="pin-trust" type="checkbox" onchange="setDeviceTrusted(this.checked)"/><span class="sw-track"></span><span>Don't ask on this device (trusted — my own PC)</span></label>
-          <p class="u-hint" style="margin-top:6px">Leave this off on the tablet and phone. Turning it on requires the PIN.</p>
+          <label class="sw"><input id="pin-trust" type="checkbox" onchange="setDeviceTrusted(this.checked)"/><span class="sw-track"></span><span>Treat this device as my PC (never ask here)</span></label>
+          <p class="u-hint" style="margin-top:6px">Automatic: PCs never ask, tablets and phones always do. Use this switch only to override that on one device. Turning it on requires the PIN.</p>
         </div>
       </div>
     </div>
@@ -1185,13 +1185,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
           <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. The installed app may get its own storage, separate from the browser — if it shows the sample students (e.g. a Friday class for a student who moved to Thursday) and no payment marks, it simply isn't signed in yet: <b>sign in once inside it</b> (Settings → Account) and your cloud data replaces the samples.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
-          <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, every device asks for the PIN before Payments opens or hidden amounts are revealed, and locks again whenever you leave the app — except devices you mark as <b>trusted</b> (the PC you set the PIN on is trusted automatically). The PIN is shared by every device signed in with your account, so set it once on the PC and leave the tablet untrusted.</dd>
+          <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v65</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v66</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2051,7 +2051,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v65";
+const APP_VERSION="v66";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2142,7 +2142,15 @@ function renderTopbarActions(p){
 // non-trusted device locks again whenever the app is left.
 let payUnlocked=false;
 const TRUST_KEY="cd_pin_trusted";
-function deviceTrusted(){try{return localStorage.getItem(TRUST_KEY)==="1";}catch(e){return false;}}
+// Rule: tablets and phones (anything touch-capable) always ask; a PC never does. The per-device
+// switch in Settings only overrides that for odd cases (a touchscreen laptop, a tablet with a mouse).
+const touchCapable=()=>window.matchMedia("(pointer:coarse)").matches||(navigator.maxTouchPoints||0)>0;
+function deviceTrusted(){
+  let f=null;try{f=localStorage.getItem(TRUST_KEY);}catch(e){}
+  if(f==="1")return true;
+  if(f==="0")return false;
+  return !touchCapable();
+}
 function pinRequired(){return !!settings.payPin&&!deviceTrusted()&&!payUnlocked;}
 async function setDeviceTrusted(on){
   // Trusting a device is itself protected — otherwise a student could just flip the switch.
@@ -2199,7 +2207,7 @@ async function verifyPin(){
 async function setPayPin(){
   const had=!!settings.payPin;
   if(had&&!deviceTrusted()&&!(await verifyPin()))return; // changing it on an untrusted device needs the old one
-  const v=await pinDialog({title:had?"Change PIN":"Set a PIN",hint:"Asked before Payments opens or hidden amounts are revealed, on every device except the ones you mark as trusted.",confirm:true});
+  const v=await pinDialog({title:had?"Change PIN":"Set a PIN",hint:"Asked on tablets and phones before Payments opens or hidden amounts are revealed. PCs never ask.",confirm:true});
   if(v===null)return;
   settings.payPin=await sha256Hex(v);
   // The device you create the PIN on is your own — trust it so the PC doesn't start asking.
@@ -2225,7 +2233,7 @@ function renderPinState(){
   if(tc)tc.checked=deviceTrusted();
   const hint=document.getElementById("pm-lock-hint");
   if(hint)hint.innerHTML=on
-    ?(deviceTrusted()?'<i class="ti ti-lock-open"></i> Trusted device':'<i class="ti ti-lock"></i> PIN-locked')
+    ?(deviceTrusted()?'<i class="ti ti-lock-open"></i> PC — no PIN needed':'<i class="ti ti-lock"></i> PIN-locked on this device')
     :'<a href="#" onclick="event.preventDefault();showPage(\'settings\');document.querySelector(\'.stab-btn[onclick*=account]\')?.click()" style="color:var(--amb)"><i class="ti ti-lock-open"></i> Not locked — set a PIN</a>';
 }
 // Google Books API key — restricted to this site's origin & Books API only (set in Google Cloud Console)
