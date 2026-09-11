@@ -22,7 +22,12 @@
   --bg:#f8fafc;--surf:#fff;--surf2:#f1f5f9;--surf3:#e2e8f0;
   --bdr:#e2e8f0;--bdr2:#cbd5e1;
   --txt:#0f172a;--txt2:#475569;--txt3:#94a3b8;
-  --grn:#16a34a;--grn-l:#dcfce7;--grn-t:#14532d;
+  /* Brand / primary — change these four to re-theme the whole app (nav, buttons, focus, switch…) */
+  --pri:#16a34a;--pri-h:#15803d;--pri-l:#dcfce7;--pri-t:#14532d;
+  /* Success (paid / done) — semantic, stays green even if the brand color changes */
+  --ok:#16a34a;--ok-l:#dcfce7;--ok-t:#15803d;
+  /* Legacy aliases (the code says --grn everywhere; they now follow the primary tokens) */
+  --grn:var(--pri);--grn-l:var(--pri-l);--grn-t:var(--pri-t);
   --red:#dc2626;--red-l:#fee2e2;
   --amb:#d97706;--amb-l:#fef3c7;
   --blu:#2563eb;--blu-l:#dbeafe;
@@ -139,7 +144,7 @@ tbody tr:hover td{background:#fafbfc}
 .modal-delete-btn{margin-right:auto;display:none}
 /* BADGES */
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;letter-spacing:.02em}
-.bp{background:#dcfce7;color:#15803d}
+.bp{background:var(--ok-l);color:var(--ok-t)}
 .bpa{background:var(--amb-l);color:#92400e}
 .bu{background:var(--red-l);color:#991b1b}
 .bc{background:#f1f5f9;color:#64748b}
@@ -149,20 +154,20 @@ tbody tr:hover td{background:#fafbfc}
 .bcp{background:#cffafe;color:#0e7490;text-decoration:line-through}
 .bns{background:#f1f5f9;color:#64748b}
 .bip{background:var(--blu-l);color:#1e40af}
-.bd{background:#dcfce7;color:#15803d}
+.bd{background:var(--ok-l);color:var(--ok-t)}
 .bsk{background:var(--red-l);color:#991b1b}
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 14px;border-radius:var(--r);font-size:var(--fs-base);font-weight:500;cursor:pointer;border:1px solid var(--bdr2);background:var(--surf);color:var(--txt);font-family:var(--font);transition:all .12s;white-space:nowrap}
 .btn:hover{background:var(--surf2)}
 .btn-p{background:var(--grn);color:#fff;border-color:var(--grn)}
-.btn-p:hover{background:#15803d;border-color:#15803d}
+.btn-p:hover{background:var(--pri-h);border-color:var(--pri-h)}
 .btn-d{background:var(--surf);color:var(--red);border-color:var(--red)}
 .btn-d:hover{background:var(--red-l)}
 .btn-sm{padding:4px 10px;font-size:var(--fs-sm)}
 .btn-xs{padding:2px 7px;font-size:var(--fs-xs)}
 /* Unified named button variants — usable in any modal or page */
 .btn-primary{background:var(--grn);color:#fff;border:1px solid var(--grn)}
-.btn-primary:hover{background:#15803d;border-color:#15803d}
+.btn-primary:hover{background:var(--pri-h);border-color:var(--pri-h)}
 .btn-secondary{background:var(--surf);color:var(--txt);border:1px solid var(--bdr2)}
 .btn-secondary:hover{background:var(--surf2)}
 .btn-danger{background:var(--surf);color:var(--red);border:1px solid var(--red)}
@@ -183,6 +188,11 @@ tbody tr:hover td{background:#fafbfc}
 .seg-btn{border:none;background:none;height:28px;padding:0 12px;border-radius:6px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;font-family:var(--font);line-height:1.2;transition:all .12s;display:inline-flex;align-items:center;gap:5px}
 .seg-btn:hover:not(.active){background:var(--surf2);color:var(--txt)}
 .seg-btn.active{background:var(--grn-l);color:var(--grn-t);font-weight:600}
+/* SELECTION BAR — contextual actions for checked rows; sits above the list, only while something is selected */
+.selbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:14px;background:var(--pri-l);border:1px solid var(--pri);border-radius:var(--r)}
+.selbar-count{font-size:12px;font-weight:600;color:var(--pri-t);display:inline-flex;align-items:center;gap:5px;margin-right:4px}
+.selbar .btn{height:30px;background:var(--surf)}
+.selbar .btn:disabled{opacity:.45;cursor:not-allowed}
 /* Quiet icon button in a stat card's corner (dashboard amount reveal) */
 .sc-eye{position:absolute;top:6px;right:6px;background:none;border:none;cursor:pointer;color:var(--txt3);opacity:.5;font-size:15px;padding:4px;border-radius:6px;display:inline-flex;transition:all .12s}
 .sc-eye:hover{opacity:1;background:var(--surf2)}
@@ -526,7 +536,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-event{font-size:10.5px;padding:2px 4px 2px 6px;border-radius:5px;cursor:pointer;border-left:3px solid;transition:filter .1s;line-height:1.5;display:flex;align-items:center;gap:4px;width:100%;min-width:0;box-sizing:border-box}
 .cal-event:hover{filter:brightness(0.95)}
 .cal-event{background:#e0e7ff;border-color:#6366f1;color:#3730a3}
-.cal-event.completed{background:#dcfce7;border-color:#16a34a;color:#14532d}
+.cal-event.completed{background:var(--ok-l);border-color:var(--ok);color:var(--ok-t)}
 .cal-event.partial-chip{background:#fef3c7;border-color:#d97706;color:#78350f}
 .cal-event.pay-unpaid{background:#fee2e2;border-color:#dc2626;color:#7f1d1d}
 .cal-event.cancelled-chip{background:#f1f5f9;border-color:#94a3b8;color:#64748b;text-decoration:line-through}
@@ -536,7 +546,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-event-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 .pay-chip-main{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
 .pay-chip-sub{display:none}
-.cal-event-check{cursor:pointer;width:15px;height:15px;flex-shrink:0;accent-color:#16a34a;margin:0}
+.cal-event-check{cursor:pointer;width:15px;height:15px;flex-shrink:0;accent-color:var(--ok);margin:0}
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
 .cal-more-btn:hover{color:var(--grn);text-decoration:underline}
 @media(max-width:900px){.cal-day{min-height:70px}.cal-event{font-size:10px}}
@@ -1208,7 +1218,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v71</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v72</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1333,9 +1343,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <button class="btn" id="bl-filter-btn" onclick="toggleBookFilters()" title="Show / hide filters"><i class="ti ti-adjustments-horizontal"></i> Filters<span id="bl-filter-n" class="u-badge" style="display:none;margin-left:6px;background:var(--grn-l);color:var(--grn-t);border-color:transparent"></span></button>
     <div class="fbar-right">
       <span id="bl-count" class="cell-muted2"></span>
-      <button id="bl-bulk-btn" class="btn" style="display:none" title="Edit category/genre of all selected books at once" onclick="openBulkEditBooks()"><i class="ti ti-pencil"></i> Edit (<span id="bl-bulk-count">0</span>)</button>
-      <button id="bl-print-cover-btn" class="btn" style="display:none" title="Print Book Cover Labels (SC9178 · 78 per sheet)" onclick="printBookLabels('cover')"><i class="ti ti-photo"></i> Covers (<span id="bl-print-cover-count">0</span>)</button>
-      <button id="bl-print-info-btn" class="btn" style="display:none" title="Print Book Info Labels (WP9140 · 40 per sheet)" onclick="printBookLabels('info')"><i class="ti ti-tag"></i> Info (<span id="bl-print-info-count">0</span>)</button>
       <button class="btn btn-p" onclick="openBookLibModal()"><i class="ti ti-plus"></i> Add book</button>
     </div>
    </div>
@@ -1400,6 +1407,14 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
    </div>
   </div>
   <div class="pc">
+    <!-- Selection actions: appears only while books are checked, so the toolbar itself never changes shape -->
+    <div id="bl-selbar" class="selbar" style="display:none">
+      <span class="selbar-count"><i class="ti ti-checkbox"></i> <span id="bl-bulk-count">0</span> selected</span>
+      <button id="bl-bulk-btn" class="btn btn-sm" title="Edit category/genre of all selected books at once" onclick="openBulkEditBooks()"><i class="ti ti-pencil"></i> Edit category / genre</button>
+      <button id="bl-print-cover-btn" class="btn btn-sm" title="Print Book Cover Labels (SC9178 · 78 per sheet)" onclick="printBookLabels('cover')"><i class="ti ti-photo"></i> Print covers (<span id="bl-print-cover-count">0</span>)</button>
+      <button id="bl-print-info-btn" class="btn btn-sm" title="Print Book Info Labels (WP9140 · 40 per sheet)" onclick="printBookLabels('info')"><i class="ti ti-tag"></i> Print info labels (<span id="bl-print-info-count">0</span>)</button>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="clearBookSelection()"><i class="ti ti-x"></i> Clear selection</button>
+    </div>
     <div class="card">
       <div class="grid-head" id="booklib-head"></div>
       <div id="booklib-list"></div>
@@ -2069,7 +2084,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v71";
+const APP_VERSION="v72";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -5178,6 +5193,7 @@ function toggleAllBookSelection(checked){
   document.querySelectorAll(".bl-row-check").forEach(cb=>{cb.checked=selectedBookIds.has(cb.dataset.id);});
   updateBookSelectionUI();
 }
+function clearBookSelection(){selectedBookIds.clear();renderBookLib();}
 function updateBookSelectionUI(){
   const fl=window._blFiltered||[];
   const selectedInView=fl.filter(b=>selectedBookIds.has(b.id));
@@ -5193,9 +5209,11 @@ function updateBookSelectionUI(){
   if(coverCnt)coverCnt.textContent=withCovers;
   if(infoCnt)infoCnt.textContent=total;
   if(bulkCnt)bulkCnt.textContent=total;
-  if(coverBtn)coverBtn.style.display=total>0?"inline-flex":"none";
-  if(infoBtn)infoBtn.style.display=total>0?"inline-flex":"none";
-  if(bulkBtn)bulkBtn.style.display=total>0?"inline-flex":"none";
+  const selbar=document.getElementById("bl-selbar");
+  if(selbar)selbar.style.display=total>0?"flex":"none";
+  if(coverBtn)coverBtn.disabled=withCovers===0;
+  if(infoBtn)infoBtn.disabled=total===0;
+  if(bulkBtn)bulkBtn.disabled=total===0;
   if(selAll){
     if(total===0){selAll.checked=false;selAll.indeterminate=false;}
     else if(total===fl.length){selAll.checked=true;selAll.indeterminate=false;}
