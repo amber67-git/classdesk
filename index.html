@@ -755,6 +755,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="bic" onclick="pmChangeMonth(1)"><i class="ti ti-chevron-right"></i></button>
     </div>
     <input type="month" id="pm-mon" onchange="renderPayments()" style="width:0;opacity:0;position:absolute;pointer-events:none"/>
+    <span id="pm-lock-hint" class="cell-muted2" style="margin-left:auto;display:inline-flex;align-items:center;gap:4px"></span>
   </div>
   <div class="pc">
     <div id="pm-summary-stats" style="display:none">
@@ -1017,11 +1018,15 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="card" style="margin-bottom:16px">
       <div class="ch"><div class="ct"><i class="ti ti-lock"></i>Payments PIN</div></div>
       <div class="cb p">
-        <p class="u-hint" style="margin-bottom:12px">On phones and tablets, opening <b>Payments</b> or revealing hidden amounts on the Dashboard asks for this PIN. PCs never ask. The PIN applies to every device signed in with this account.</p>
+        <p class="u-hint" style="margin-bottom:12px">Opening <b>Payments</b> or revealing hidden amounts on the Dashboard asks for this PIN, and the page locks again whenever you leave the app. The PIN applies to every device signed in with this account; devices you mark as <b>trusted</b> (your own PC) never ask.</p>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <span id="pin-state" class="u-badge">Not set</span>
           <button class="btn btn-sm" onclick="setPayPin()"><i class="ti ti-key"></i> <span id="pin-set-lbl">Set PIN</span></button>
           <button class="btn btn-sm" id="pin-remove-btn" onclick="removePayPin()" style="display:none"><i class="ti ti-trash"></i> Remove</button>
+        </div>
+        <div id="pin-trust-wrap" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid var(--bdr)">
+          <label class="sw"><input id="pin-trust" type="checkbox" onchange="setDeviceTrusted(this.checked)"/><span class="sw-track"></span><span>Don't ask on this device (trusted — my own PC)</span></label>
+          <p class="u-hint" style="margin-top:6px">Leave this off on the tablet and phone. Turning it on requires the PIN.</p>
         </div>
       </div>
     </div>
@@ -1180,13 +1185,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
           <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. The installed app may get its own storage, separate from the browser — if it shows the sample students (e.g. a Friday class for a student who moved to Thursday) and no payment marks, it simply isn't signed in yet: <b>sign in once inside it</b> (Settings → Account) and your cloud data replaces the samples.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
-          <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, phones and tablets ask for the PIN before Payments opens or hidden amounts are revealed, and lock again whenever you leave the app. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
+          <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, every device asks for the PIN before Payments opens or hidden amounts are revealed, and locks again whenever you leave the app — except devices you mark as <b>trusted</b> (the PC you set the PIN on is trusted automatically). The PIN is shared by every device signed in with your account, so set it once on the PC and leave the tablet untrusted.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v63</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v64</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -2046,7 +2051,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v63";
+const APP_VERSION="v64";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2117,19 +2122,32 @@ async function togglePrivacy(){
 // Leaving the app on a phone/tablet re-locks everything: amounts hide again, the Payments page
 // needs its PIN again (and is left, so it isn't the first thing on screen when the app reopens).
 document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState!=="hidden"||!isTouchDevice())return;
-  payUnlocked=false;
-  if(!privacyHidden){privacyHidden=true;if(curPage==="dashboard")renderDash();}
-  if(curPage==="payments"&&settings.payPin)showPage("dashboard");
+  if(document.visibilityState!=="hidden")return;
+  if(!deviceTrusted()){
+    payUnlocked=false;
+    if(curPage==="payments"&&settings.payPin)showPage("dashboard");
+  }
+  if(isTouchDevice()&&!privacyHidden){privacyHidden=true;if(curPage==="dashboard")renderDash();}
 });
 function renderTopbarActions(p){
   const el=document.getElementById("tb-actions");if(el)el.innerHTML="";
 }
-// ── Payments PIN (phones & tablets only) ──
+// ── Payments PIN ──
 // A student handling the tablet shouldn't be able to open Payments or reveal amounts. The PIN is
-// stored hashed in settings (so every device of this account shares it); PCs never ask.
+// stored hashed in settings (so every device of this account shares it). It is asked on every
+// device except the ones marked "trusted" (a per-device flag — the owner's own PC), and a
+// non-trusted device locks again whenever the app is left.
 let payUnlocked=false;
-function pinRequired(){return isTouchDevice()&&!!settings.payPin&&!payUnlocked;}
+const TRUST_KEY="cd_pin_trusted";
+function deviceTrusted(){try{return localStorage.getItem(TRUST_KEY)==="1";}catch(e){return false;}}
+function pinRequired(){return !!settings.payPin&&!deviceTrusted()&&!payUnlocked;}
+async function setDeviceTrusted(on){
+  // Trusting a device is itself protected — otherwise a student could just flip the switch.
+  if(on&&!(await verifyPin())){renderPinState();return;}
+  try{localStorage.setItem(TRUST_KEY,on?"1":"0");}catch(e){}
+  if(!on)payUnlocked=false;
+  renderPinState();
+}
 async function sha256Hex(s){
   if(window.crypto?.subtle){
     const h=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("classdesk:"+s));
@@ -2169,34 +2187,43 @@ function pinDialog({title,hint,confirm=false,error=""}){
 async function verifyPin(){
   let error="";
   for(;;){
-    const v=await pinDialog({title:"Enter PIN",hint:"Payments are protected on phones and tablets.",error});
+    const v=await pinDialog({title:"Enter PIN",hint:"Payments are protected on this device.",error});
     if(v===null)return false;
     if(await sha256Hex(v)===settings.payPin){payUnlocked=true;return true;}
     error="Wrong PIN — try again.";
   }
 }
 async function setPayPin(){
-  if(settings.payPin&&isTouchDevice()&&!(await verifyPin()))return; // changing it on a tablet needs the old one
-  const v=await pinDialog({title:settings.payPin?"Change PIN":"Set a PIN",hint:"Asked on phones and tablets before Payments opens or amounts are revealed. PCs never ask.",confirm:true});
+  const had=!!settings.payPin;
+  if(had&&!deviceTrusted()&&!(await verifyPin()))return; // changing it on an untrusted device needs the old one
+  const v=await pinDialog({title:had?"Change PIN":"Set a PIN",hint:"Asked before Payments opens or hidden amounts are revealed, on every device except the ones you mark as trusted.",confirm:true});
   if(v===null)return;
   settings.payPin=await sha256Hex(v);
+  // The device you create the PIN on is your own — trust it so the PC doesn't start asking.
+  if(!had){try{localStorage.setItem(TRUST_KEY,"1");}catch(e){}}
   save();renderPinState();
 }
 async function removePayPin(){
   if(!settings.payPin)return;
-  if(isTouchDevice()&&!(await verifyPin()))return;
-  if(!confirm("Remove the Payments PIN? Phones and tablets will open Payments without asking."))return;
+  if(!deviceTrusted()&&!(await verifyPin()))return;
+  if(!confirm("Remove the Payments PIN? Every device will open Payments without asking."))return;
   delete settings.payPin;payUnlocked=false;
   save();renderPinState();
 }
 function renderPinState(){
-  const st=document.getElementById("pin-state"),lbl=document.getElementById("pin-set-lbl"),rm=document.getElementById("pin-remove-btn");
+  const st=document.getElementById("pin-state"),lbl=document.getElementById("pin-set-lbl"),rm=document.getElementById("pin-remove-btn"),tr=document.getElementById("pin-trust-wrap"),tc=document.getElementById("pin-trust");
   if(!st)return;
   const on=!!settings.payPin;
   st.textContent=on?"PIN set":"Not set";
   st.style.background=on?"var(--grn-l)":"";st.style.color=on?"var(--grn-t)":"";st.style.borderColor=on?"transparent":"";
   if(lbl)lbl.textContent=on?"Change PIN":"Set PIN";
   if(rm)rm.style.display=on?"":"none";
+  if(tr)tr.style.display=on?"":"none";
+  if(tc)tc.checked=deviceTrusted();
+  const hint=document.getElementById("pm-lock-hint");
+  if(hint)hint.innerHTML=on
+    ?(deviceTrusted()?'<i class="ti ti-lock-open"></i> Trusted device':'<i class="ti ti-lock"></i> PIN-locked')
+    :'<a href="#" onclick="event.preventDefault();showPage(\'settings\');document.querySelector(\'.stab-btn[onclick*=account]\')?.click()" style="color:var(--amb)"><i class="ti ti-lock-open"></i> Not locked — set a PIN</a>';
 }
 // Google Books API key — restricted to this site's origin & Books API only (set in Google Cloud Console)
 const GOOGLE_BOOKS_API_KEY="AIzaSyDSq9gNkKSIsi9x4i6_jLb5620R8bCmfnA";
@@ -3832,10 +3859,12 @@ function recalcDurationsFromAmounts(){
 function markAllPaid(sid,month){
   const s=gs(sid);if(!s)return;
   const occs=getOccurrencesForMonth(sid,month);
-  const OWED=o=>!["paid","prepaid","cancelpaid","cancelled","partial","deleted"].includes(o.status);
+  // "All paid" means the parent settled the month: legacy "partial" lessons are collected too,
+  // otherwise their remaining half kept the student showing as owing after the button was used.
+  const OWED=o=>!["paid","prepaid","cancelpaid","cancelled","deleted"].includes(o.status);
   const targets=occs.filter(OWED);
   if(!targets.length){alert("No unpaid lessons to collect this month.");return;}
-  const total=targets.reduce((t,o)=>t+(o.amt||0),0);
+  const total=targets.reduce((t,o)=>t+(o.status==="partial"?Math.ceil((o.amt||0)/2):(o.amt||0)),0);
   if(!confirm(`${s.name} — mark all ${targets.length} unpaid lesson${targets.length===1?"":"s"} in ${month} (${won(total)}) as paid?`))return;
   targets.forEach(o=>{
     const real=materializeOccurrence(o);   // no-op if already a real record
@@ -3916,7 +3945,7 @@ function renderDash(){
   let totE=0,totP=0;
   students.forEach(s=>{const cv=calcM(s.id,m);totE+=cv.exp;totP+=cv.paidT;});
   const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  setT("st-s",students.length);setT("st-t",todayOccs.length);
+  setT("st-s",students.filter(s=>!s.archived).length);setT("st-t",todayOccs.length);
   const monthActive=monthOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid").length;
   setT("st-ml",monthActive+"/"+monthOccs.length);
   setT("st-ex",pwon(totE));setT("st-up",pwon(totE-totP));
@@ -4271,8 +4300,12 @@ function renderPayments(){
   const mlbl=document.getElementById("pm-mlbl");
   if(mlbl)mlbl.textContent=new Date(mon+"-01").toLocaleDateString("en-GB",{month:"long",year:"numeric"});
   let totE=0,totP=0,totC=0,totH=0,totCH=0,totCA=0;
-  const ss=students.filter(s=>!s.archived).map(s=>{const c=calcM(s.id,mon);totE+=c.exp;totP+=c.paidT;totC+=c.cancelled;totH+=c.hours;totCH+=c.cancHours;totCA+=c.cancAmt;return{s,c};}).sort((a,b)=>{const o={unpaid:0,partial:1,paid:2,cancelled:3};return(o[a.c.ov]??4)-(o[b.c.ov]??4);});
+  // Archived students are listed only when they have lessons this month (e.g. a one-off class
+  // before they left) — those lessons are real money and the Dashboard counts them, so the
+  // Summary must too, or the two totals disagree.
+  const ss=students.filter(s=>!s.archived||getOccurrencesForMonth(s.id,mon).length>0).map(s=>{const c=calcM(s.id,mon);totE+=c.exp;totP+=c.paidT;totC+=c.cancelled;totH+=c.hours;totCH+=c.cancHours;totCA+=c.cancAmt;return{s,c};}).sort((a,b)=>{const o={unpaid:0,partial:1,paid:2,cancelled:3};return(o[a.c.ov]??4)-(o[b.c.ov]??4);});
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  renderPinState();
   set("pm-ex",won(totE));set("pm-pd",won(totP));set("pm-rm",won(Math.max(0,totE-totP)));set("pm-hr",fmtHours(totH)+" hrs");
   const cnEl=document.getElementById("pm-cn");
   if(cnEl)cnEl.innerHTML=totC
@@ -4284,7 +4317,7 @@ function renderPayments(){
   // Student rows
   document.getElementById("pm-rows").innerHTML=ss.map(({s,c})=>`<div class="pr">
     <div>
-      <div style="font-weight:600;font-size:13px">${s.name}</div>
+      <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div>
       <div class="cell-muted">${s.k} · ${s.sched}</div>
     </div>
     <div class="tm" style="text-align:center" title="lessons · hours">${c.count}${c.hours?` · ${fmtHours(c.hours)}h`:""}</div>
