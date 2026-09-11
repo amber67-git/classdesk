@@ -225,11 +225,17 @@ tbody tr:hover td{background:#fafbfc}
 @media(max-width:1280px){
   .card:has(.grid-head),.tw{position:relative;background-image:linear-gradient(to right,transparent 92%,rgba(15,23,42,.08) 100%);background-attachment:local}
   .card:has(.grid-head){overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .card:has(.grid-head) .grid-head,.card:has(.grid-head) .grid-row{min-width:840px}
+  /* Header band and rows get one shared min-width from syncListWidths(), so the band never ends mid-scroll */
+  .card:has(.grid-head) .grid-head,.card:has(.grid-head) .grid-row,.card:has(.grid-head) .std-row,.card:has(.grid-head) .pr{min-width:100%}
+  /* Group bands (e.g. Workbooks categories) pin to the left edge instead */
+  .card:has(.grid-head) .list-group{position:sticky;left:0;width:auto;min-width:0;max-width:100%}
   .grid-head{position:static}
   .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tw table{min-width:900px}
   .tw th{position:static}
+}
+/* Tablets and half-screen PC windows only — on phones the pinned column would eat half the screen */
+@media(min-width:641px) and (max-width:1280px){
   /* First column stays put while the rest scrolls, so you always know which row you're on */
   .card:has(.grid-head) .grid-head>:first-child,
   .card:has(.grid-head) .grid-row>:first-child,
@@ -1301,7 +1307,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v76</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v77</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1993,10 +1999,13 @@ function showMsgPreview(title,text){
 // that looks identical to "all my data vanished" and the user might then overwrite the (possibly
 // recoverable) raw value. Instead: warn, keep the raw string in a *_corrupt backup key, and
 // return the fallback so the app still boots.
+// The fallback (DS, DSET…) must stay pristine: renderSettings falls back to DSET text, and a fresh
+// device mutating what lg() returned used to change the built-in defaults themselves.
+const copyFb=fb=>(fb&&typeof fb==="object")?JSON.parse(JSON.stringify(fb)):fb;
 function lg(k,fb){
   let raw;
   try{raw=localStorage.getItem(k);}catch(e){console.error("Storage read blocked:",k,e);return fb;}
-  if(raw===null||raw===undefined)return fb;
+  if(raw===null||raw===undefined)return copyFb(fb);
   let parsed;
   try{parsed=JSON.parse(raw);}
   catch(e){
@@ -2167,7 +2176,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v76";
+const APP_VERSION="v77";
 const APP_BUILT="2026-09-12";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2702,6 +2711,7 @@ function showPage(p){
   document.getElementById("tb-title").textContent=PT[p]||p;
   curPage=p;
   renderTopbarActions(p);
+  if(typeof _slwQueue==="function")_slwQueue(); // list widths depend on the viewport — re-measure on every page switch
   if(p==="dashboard")renderDash();
   else if(p==="students")renderStudents();
   else if(p==="sessions")renderCalendar();
@@ -3909,9 +3919,11 @@ function renderSettings(){
   const actEl=document.getElementById("act-tags");
   if(actEl)actEl.innerHTML=settings.activities.map((a,i)=>`<span class="tag">${a}<button onclick="removeAct(${i})"><i class="ti ti-x"></i></button></span>`).join("");
   // Templates
-  const pt=document.getElementById("pt-tmpl");if(pt)pt.value=settings.parentTmpl;
-  const tu=document.getElementById("tmpl-unpaid");if(tu)tu.value=settings.payUnpaid;
-  const tpa=document.getElementById("tmpl-partial");if(tpa)tpa.value=settings.payPartial;
+  // A template can be missing on a device whose settings came from an older cloud copy — show the
+  // built-in text rather than the string "undefined". Nothing is written until the user saves.
+  const pt=document.getElementById("pt-tmpl");if(pt)pt.value=settings.parentTmpl??DSET.parentTmpl;
+  const tu=document.getElementById("tmpl-unpaid");if(tu)tu.value=settings.payUnpaid??DSET.payUnpaid;
+  const tpa=document.getElementById("tmpl-partial");if(tpa)tpa.value=settings.payPartial??DSET.payPartial;
 }
 function addWorkbookTag(){
   const inp=document.getElementById("wb-new");
@@ -4873,7 +4885,7 @@ function renderBooks(){
   const catColors={Reading:"#2563eb",Writing:"#16a34a",Speaking:"#d97706",Listening:"#7c3aed",Vocabulary:"#db2777",Grammar:"#dc2626",Other:"#6b7280"};
   el.innerHTML=Object.entries(cats).map(([cat,items])=>`
     <div>
-      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surf2);border-bottom:1px solid var(--bdr)">
+      <div class="list-group" style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surf2);border-bottom:1px solid var(--bdr)">
         <span style="width:8px;height:8px;border-radius:50%;background:${catColors[cat]||"#94a3b8"};display:inline-block"></span>
         <span style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em">${cat}</span>
         <span class="cell-muted">(${items.length})</span>
@@ -7125,6 +7137,10 @@ function applyRemoteRecord(key,id,data){
     if(id!=="settings"||data.d)return false;
     if(!(ru>(settings._u||0)))return false;
     let obj;try{obj=JSON.parse(data.j);}catch(e){console.error("Bad settings doc",e);return false;}
+    // Keep text the incoming copy lacks: a settings doc written by a device that never had the
+    // templates (or the logo) must not erase them here. Everything else is replaced wholesale.
+    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin"];
+    KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k])obj[k]=settings[k];});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
     applyBranding();
@@ -7164,6 +7180,28 @@ function afterRemoteApplied(key){
   clearTimeout(_syncRerenderTimer);
   _syncRerenderTimer=setTimeout(()=>{rerenderCurrentPage();renderStorageGauge?.();},250);
 }
+// Narrow windows: a list card scrolls sideways, and its header band must be as wide as the widest
+// row (fixed px tracks can exceed the card). Measure after every render and give header + rows one
+// shared min-width. A MutationObserver triggers it, so renderers don't have to remember to.
+function syncListWidths(){
+  document.querySelectorAll(".page.active .card").forEach(card=>{
+    const head=card.querySelector(":scope > .grid-head");if(!head)return;
+    const els=[head,...card.querySelectorAll(".grid-row,.std-row,.pr")];
+    els.forEach(e=>{e.style.minWidth="";});
+    if(window.innerWidth>1280)return;
+    let w=0;els.forEach(e=>{w=Math.max(w,e.scrollWidth);});
+    if(w>card.clientWidth+1)els.forEach(e=>{e.style.minWidth=w+"px";});
+  });
+}
+let _slwTimer=null;
+// setTimeout, not requestAnimationFrame: rAF never fires in a hidden tab, and a list rendered while
+// the app was in the background must still be measured once it is shown.
+const _slwQueue=()=>{clearTimeout(_slwTimer);_slwTimer=setTimeout(syncListWidths,0);};
+document.addEventListener("DOMContentLoaded",()=>{
+  new MutationObserver(muts=>{if(muts.some(m=>m.addedNodes.length))_slwQueue();}).observe(document.body,{childList:true,subtree:true});
+  window.addEventListener("resize",_slwQueue);
+  _slwQueue();
+});
 function rerenderCurrentPage(){
   try{showPage(curPage||"dashboard");}catch(e){console.error(e);}
 }
