@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>ClassDesk</title>
+<!-- Installable app (PWA): home-screen icon, opens full-screen without the address bar.
+     favicon / apple-touch-icon hrefs are swapped at runtime by applyBranding() when a custom logo is set. -->
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="theme-color" content="#ffffff"/>
+<link id="fav-link" rel="icon" type="image/png" href="icons/favicon-32.png"/>
+<link id="apple-icon-link" rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="ClassDesk"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
@@ -49,6 +59,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:13p
 .sb-brand{padding:18px 20px 14px;border-bottom:1px solid var(--bdr)}
 .sb-logo{font-size:13px;font-weight:700;color:var(--grn);letter-spacing:1px}
 .sb-sub{font-size:10px;color:var(--txt3);margin-top:2px;letter-spacing:.5px}
+.sb-brand-row{display:flex;align-items:center;gap:10px}
+.sb-logo-img{width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0}
 .sb-nav{flex:1;padding:10px 10px;display:flex;flex-direction:column;gap:2px}
 .ni{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--r);font-size:13px;font-weight:500;color:var(--txt2);cursor:pointer;border:none;background:none;font-family:var(--font);width:100%;text-align:left;transition:all .12s}
 .ni i{font-size:16px;flex-shrink:0}
@@ -587,8 +599,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- SIDEBAR -->
 <aside class="sb">
   <div class="sb-brand">
-    <div class="sb-logo">CLASSDESK</div>
-    <div class="sb-sub">Class Management</div>
+    <div class="sb-brand-row">
+      <img id="sb-logo-img" class="sb-logo-img" alt="" style="display:none"/>
+      <div>
+        <div class="sb-logo">CLASSDESK</div>
+        <div class="sb-sub">Class Management</div>
+      </div>
+    </div>
   </div>
   <nav class="sb-nav">
     <button class="ni" data-page="dashboard" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
@@ -814,6 +831,18 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p class="u-hint" style="margin-bottom:10px">Ownership mark printed at the bottom-right of info labels (e.g. AMBER LIBRARY). Leave blank to omit it.</p>
         <input id="library-name-inp" type="text" style="max-width:320px" placeholder="e.g. AMBER LIBRARY"
           oninput="localStorage.setItem('mc_library_name',this.value)"/>
+      </div>
+    </div>
+    <!-- App logo (sidebar + favicon + iOS home-screen icon) -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="ch"><div class="ct"><i class="ti ti-photo"></i>App logo</div></div>
+      <div class="cb p">
+        <p class="u-hint" style="margin-bottom:10px">Shown in the sidebar and as the browser-tab icon (favicon). A square image works best — others are cropped to the center. On iPhone/iPad it also becomes the home-screen icon if you add ClassDesk to the home screen after setting it.</p>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <img id="brand-logo-preview" alt="" src="icons/icon-192.png" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid var(--bdr);background:var(--surf2)"/>
+          <label class="btn btn-sm"><i class="ti ti-upload"></i> Choose image<input type="file" accept="image/*" onchange="setBrandLogo(this)" style="display:none"/></label>
+          <button class="btn btn-sm" id="brand-logo-reset" onclick="clearBrandLogo()"><i class="ti ti-rotate"></i> Use default</button>
+        </div>
       </div>
     </div>
     <!-- Parent note template -->
@@ -1115,11 +1144,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>What happens to my data when I replace the file with a new version?</dt><dd>It stays, as long as it's the same computer and browser — data lives in the browser, not in the file. With cloud sync on, there's a copy in the cloud too. To be safe, Export before replacing.</dd>
           <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
+          <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. On iPhone/iPad the home-screen app keeps its own storage, separate from Safari — <b>sign in once inside it</b> (Settings → Account) and choose OK to download your cloud data.</dd>
+          <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v54</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          Guide written against version: <b>v55</b> · FAQ current as of: <b>2026-09-11</b><br/>
           (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
@@ -1897,12 +1928,52 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v54";
+const APP_VERSION="v55";
 const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
+  applyBranding();
 });
+// Installable app: the service worker (sw.js) serves the latest deploy when online and the cached
+// copy when offline. Skipped on file:// (unsupported there — and Firebase doesn't work there anyway).
+if("serviceWorker" in navigator&&location.protocol==="https:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(e=>console.warn("Service worker registration failed:",e)));
+}
+// Custom logo (Settings → Templates → App logo). Kept in settings so it syncs to every device.
+// Stored as a small data URL — cropped square and shrunk to 192px — so it's only a few KB–tens of KB.
+function applyBranding(){
+  const logo=settings.brandLogo||"";
+  const fav=document.getElementById("fav-link");if(fav)fav.href=logo||"icons/favicon-32.png";
+  const ap=document.getElementById("apple-icon-link");if(ap)ap.href=logo||"icons/apple-touch-icon.png";
+  const img=document.getElementById("sb-logo-img");if(img){img.src=logo;img.style.display=logo?"":"none";}
+  const pv=document.getElementById("brand-logo-preview");if(pv)pv.src=logo||"icons/icon-192.png";
+  const rs=document.getElementById("brand-logo-reset");if(rs)rs.disabled=!logo;
+}
+function setBrandLogo(inp){
+  const f=inp.files&&inp.files[0];inp.value="";if(!f)return;
+  const url=URL.createObjectURL(f),img=new Image();
+  img.onload=()=>{
+    URL.revokeObjectURL(url);
+    const S=192,c=document.createElement("canvas");c.width=c.height=S;
+    const ctx=c.getContext("2d");
+    // White backing: transparent PNGs turn black as an iOS home-screen icon.
+    ctx.fillStyle="#fff";ctx.fillRect(0,0,S,S);
+    const side=Math.min(img.naturalWidth,img.naturalHeight);
+    ctx.drawImage(img,(img.naturalWidth-side)/2,(img.naturalHeight-side)/2,side,side,0,0,S,S);
+    let data=c.toDataURL("image/png");
+    if(data.length>80000)data=c.toDataURL("image/jpeg",0.9); // photos compress far better as JPEG
+    settings.brandLogo=data;
+    save();applyBranding();
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);alert("Couldn't read that image. Please try a PNG or JPG file.");};
+  img.src=url;
+}
+function clearBrandLogo(){
+  if(!settings.brandLogo)return;
+  delete settings.brandLogo;
+  save();applyBranding();
+}
 function nowKST(){
   const utcMs=Date.now()+new Date().getTimezoneOffset()*60000; // current moment, as UTC ms
   return new Date(utcMs+9*3600000); // shift to UTC+9
@@ -3172,7 +3243,7 @@ function showOnboarding(){
       <ul style="font-size:13px;line-height:1.8;padding-left:18px;margin-bottom:6px">
         <li>Register students in <b>Students</b> and log lessons in <b>Classes</b></li>
         <li>Search &amp; register books in <b>Books</b> and print level labels</li>
-        <li>All data is stored only in this browser — <b>regular backups (Export) are essential</b></li>
+        <li>Data is saved in this browser — <b>sign in (Settings → Account)</b> to sync across your devices, and keep <b>regular backups (Export)</b></li>
       </ul>
       <p class="u-hint" style="margin-bottom:14px">The full guide is in the Settings → Guide tab.</p>
       <div style="display:flex;justify-content:flex-end;gap:8px">
@@ -3433,6 +3504,7 @@ function importBackupFile(inp){
 function renderSettings(){
   const libInp=document.getElementById("library-name-inp");
   if(libInp)libInp.value=localStorage.getItem("mc_library_name")??"AMBER LIBRARY";
+  applyBranding();
   // Workbook tags grouped by category
   const wbEl=document.getElementById("wb-tags");
   if(wbEl){
@@ -6422,7 +6494,7 @@ const SYNC_VARS={
 };
 const SYNC_SETTERS={
   students:v=>students=v, lessons:v=>lessons=v, homework:v=>homework=v, curriculum:v=>curriculum=v,
-  books:v=>books=v, booklib:v=>bookLib=v, materials:v=>materials=v, todos:v=>todos=v, settings:v=>settings=v,
+  books:v=>books=v, booklib:v=>bookLib=v, materials:v=>materials=v, todos:v=>todos=v, settings:v=>{settings=v;applyBranding();},
 };
 let syncUser=null;        // current signed-in user, or null
 let syncUnwatch=null;     // detach function for the remote listener
