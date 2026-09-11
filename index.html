@@ -995,132 +995,132 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <!-- Guide tab: full user manual -->
   <div class="stab-pane" id="st-guide">
     <div class="card" style="margin-bottom:16px">
-      <div class="ch"><div class="ct"><i class="ti ti-book-2"></i>ClassDesk 사용 설명서</div></div>
+      <div class="ch"><div class="ct"><i class="ti ti-book-2"></i>ClassDesk User Guide</div></div>
       <div class="cb p guide-body">
 
-        <h3>ClassDesk란?</h3>
-        <p>영어 리딩 수업·공부방 운영자를 위한 <b>올인원 수업 관리 도구</b>입니다. 학생·수업·수업료·커리큘럼·교재·원서 라이브러리를 한 곳에서 관리하고, 원서에는 <b>도서관 스타일의 레벨 라벨</b>을 직접 인쇄해 붙일 수 있습니다.</p>
+        <h3>What is ClassDesk?</h3>
+        <p>An <b>all-in-one class management tool</b> for English reading tutors and home-library owners. Manage students, lessons, tuition, curriculum, workbooks, and your English book library in one place — and print <b>library-style level labels</b> for your books yourself.</p>
         <ul>
-          <li><b>설치 불필요</b> — HTML 파일 하나를 브라우저(Chrome 권장)로 열면 끝입니다.</li>
-          <li><b>내 컴퓨터에만 저장</b> — 모든 데이터는 브라우저 안(localStorage)에 저장됩니다. 서버 전송이 없어 학생 정보가 외부로 나가지 않습니다.</li>
-          <li><b>자동화</b> — 책 정보 자동 입력, 학부모 알림장 자동 생성, 레벨 색상 자동 계산 등 반복 작업을 줄였습니다.</li>
+          <li><b>No installation</b> — just open a single HTML file in a browser (Chrome recommended).</li>
+          <li><b>Stored on your computer</b> — all data lives inside the browser (localStorage). Nothing is sent to a server, so student information never leaves your machine.</li>
+          <li><b>Automation</b> — auto-filled book info, auto-generated parent report messages, automatic level colors, and more to cut down repetitive work.</li>
         </ul>
 
-        <h3>페이지별 기능</h3>
+        <h3>What each page does</h3>
         <dl>
-          <dt>Dashboard</dt><dd>오늘의 수업, 할 일(To-do)을 한눈에 확인하는 시작 화면입니다.</dd>
-          <dt>Students</dt><dd>학생 프로필 관리 — 이름, 수업 요일·시간, 연락처, 메모. 다른 모든 페이지의 기준 데이터입니다.</dd>
-          <dt>Classes</dt><dd>수업 기록의 중심입니다. 회차별 수업 내용·숙제·읽은 책을 기록하고, Settings의 템플릿으로 <b>학부모 알림장 메시지를 자동 생성</b>해 복사할 수 있습니다.</dd>
-          <dt>Payments</dt><dd>수업료 관리 — 결제 기록과 결제 안내 메시지 템플릿.</dd>
-          <dt>Curriculum</dt><dd>월별 달력에 수업 계획을 배치하는 커리큘럼 보드입니다.</dd>
-          <dt>Workbooks</dt><dd>교재(문제집) 관리 — 표지, 진도, 학생별 배정.</dd>
-          <dt>Books</dt><dd>원서 라이브러리 — 아래 "Books 자세히" 참고. 이 앱의 핵심 페이지입니다.</dd>
-          <dt>Material</dt><dd>수업 자료·교구·프린트물 관리.</dd>
-          <dt>Settings</dt><dd>알림장·결제 템플릿, 커스텀 필드(컬럼 숨김/순서/이름 변경), 백업, API 키, 이 설명서.</dd>
+          <dt>Dashboard</dt><dd>Your starting screen — today's classes and to-dos at a glance.</dd>
+          <dt>Students</dt><dd>Student profiles — name, class days &amp; times, contact info, notes. The base data every other page builds on.</dd>
+          <dt>Classes</dt><dd>The heart of lesson records. Log each session's content, homework, and books read, and <b>auto-generate a parent report message</b> from your Settings template, ready to copy.</dd>
+          <dt>Payments</dt><dd>Tuition management — payment records and a payment-notice message template.</dd>
+          <dt>Curriculum</dt><dd>A curriculum board for laying out lesson plans on a monthly calendar.</dd>
+          <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
+          <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
+          <dt>Material</dt><dd>Teaching materials, aids, and printouts.</dd>
+          <dt>Settings</dt><dd>Report &amp; payment templates, custom fields (hide/reorder/rename columns), backup, API keys, and this guide.</dd>
         </dl>
 
-        <h3>Books 자세히 — 원서 라이브러리</h3>
-        <p><b>책 추가:</b> 상단 검색창에 제목 입력 → Search → 결과 선택. 표지·저자·출판사·ISBN이 자동 입력되고, AR/Lexile 검색이 백그라운드로 실행됩니다. 저자명이 대문자(MARC BROWN)로 오면 자동으로 Marc Brown 형태로 정리됩니다.</p>
+        <h3>Books in depth — the book library</h3>
+        <p><b>Adding a book:</b> type the title in the search box at the top → Search → pick a result. Cover, author, publisher, and ISBN are filled in automatically, and an AR/Lexile lookup runs in the background. Authors that arrive in all caps (MARC BROWN) are automatically cleaned up to Marc Brown.</p>
         <ul>
-          <li><b>Category / Genre</b> — 형태(그림책·챕터북 등)와 주제(Animals·Adventure 등)를 드롭다운으로 선택. 목록에 없으면 "+ Custom…"으로 직접 입력. Genre는 Google 분류에서 자동 매핑되며, <b>같은 저자·같은 시리즈 책이 이미 있으면 그 분류를 자동으로 물려받습니다.</b></li>
-          <li><b>Level 자동 계산</b> — AR Level을 입력하면 색상 레벨(L1~L8)이 자동 표시됩니다. 기준: Red L1 (AR 0.0–0.9) · Orange L2 (1.0–1.9) · Yellow L3 (2.0–2.4) · Green L4 (2.5–2.9) · Blue L5 (3.0–3.4) · Purple L6 (3.5–3.9) · Pink L7 (4.0–4.9) · Black L8 (5.0+)</li>
-          <li><b>Search AR level / Search Lexile</b> — 자동 검색이 못 찾은 경우 클릭 한 번으로 arbookfind.com / 구글 검색이 열립니다.</li>
-          <li><b>Search Google Images</b> — 더 깨끗한 표지 이미지가 필요할 때. 제목이 클립보드에 복사된 채 이미지 검색이 열리고, 찾은 이미지를 커버 박스에 붙여넣으면 됩니다.</li>
-          <li><b>필터·검색</b> — 카테고리, 장르, AR 범위, 레벨, Lexile, 라벨 인쇄 상태로 필터링. 검색창은 제목·저자·출판사·ISBN·장르·메모를 모두 찾습니다.</li>
+          <li><b>Category / Genre</b> — choose the format (picture book, chapter book, …) and subject (Animals, Adventure, …) from dropdowns. If it's not listed, use "+ Custom…" to type your own. Genre is auto-mapped from Google's classification, and <b>if you already have a book by the same author or in the same series, its classification is inherited automatically.</b></li>
+          <li><b>Automatic level</b> — enter the AR Level and the color level (L1–L8) is shown automatically. Scale: Red L1 (AR 0.0–0.9) · Orange L2 (1.0–1.9) · Yellow L3 (2.0–2.4) · Green L4 (2.5–2.9) · Blue L5 (3.0–3.4) · Purple L6 (3.5–3.9) · Pink L7 (4.0–4.9) · Black L8 (5.0+)</li>
+          <li><b>Search AR level / Search Lexile</b> — if the automatic lookup can't find it, one click opens arbookfind.com / a Google search.</li>
+          <li><b>Search Google Images</b> — for when you need a cleaner cover image. An image search opens with the title already copied to your clipboard; paste the image you find into the cover box.</li>
+          <li><b>Filter &amp; search</b> — filter by category, genre, AR range, level, Lexile, and label-print status. The search box matches title, author, publisher, ISBN, genre, and notes.</li>
         </ul>
 
-        <h3>라벨 인쇄 — 준비물과 순서</h3>
-        <p><b>준비물 (글로리텍 라벨지 2종):</b></p>
+        <h3>Label printing — supplies and steps</h3>
+        <p><b>Supplies (two Glorytech label sheets):</b></p>
         <ul>
-          <li><b>SC9178</b> — 표지 라벨용. 30×21mm, A4 한 장에 78칸(6열×13행). 책 앞표지에 붙이는 미니 커버.</li>
-          <li><b>WP9140</b> — 정보 라벨용. 47×26.9mm, A4 한 장에 40칸(4열×10행). 색상 밴드(레벨 표시) + 제목 + 저자 + AR/Lexile + 카테고리 + 소장 표시(도서관 이름, Settings → Templates에서 변경).</li>
+          <li><b>SC9178</b> — for cover labels. 30×21mm, 78 cells per A4 sheet (6 columns × 13 rows). A mini cover to stick on the front of the book.</li>
+          <li><b>WP9140</b> — for info labels. 47×26.9mm, 40 cells per A4 sheet (4 columns × 10 rows). Color band (level) + title + author + AR/Lexile + category + ownership mark (library name — change it in Settings → Templates).</li>
         </ul>
-        <p><b>인쇄 순서:</b></p>
+        <p><b>Printing steps:</b></p>
         <ol>
-          <li>Books에서 인쇄할 책들을 <b>체크박스로 선택</b> → 상단 <b>Covers</b> 또는 <b>Info</b> 버튼 클릭</li>
-          <li><b>시작 칸 번호</b> 입력 — 새 라벨지면 1, 쓰다 만 라벨지면 이어서 붙일 칸 번호. 칸 세는 방향: 표지 라벨은 <b>세로(위→아래)</b>, 정보 라벨은 <b>가로(왼쪽→오른쪽)</b>입니다.</li>
-          <li>미리보기에서 배치 확인 (점선 = 라벨 칸 테두리, 인쇄에는 안 나옴) → <b>Print</b></li>
-          <li>브라우저 인쇄 설정: <b>용지 A4 · Margins(여백) None · Scale 100%</b> (Fit to page 끄기) · More settings에서 <b>Background graphics 체크</b> (색상 밴드 인쇄용)</li>
-          <li>인쇄가 잘 나왔으면 <b>✓ Mark printed</b> 클릭 → 목록에 인쇄 완료 표시가 저장됩니다</li>
+          <li>In Books, <b>select the books with checkboxes</b> → click the <b>Covers</b> or <b>Info</b> button at the top</li>
+          <li>Enter the <b>starting cell number</b> — 1 for a fresh sheet, or the next free cell on a partly used sheet. Counting direction: cover labels run <b>vertically (top→bottom)</b>, info labels run <b>horizontally (left→right)</b>.</li>
+          <li>Check the layout in the preview (dotted lines = label cell borders; they don't print) → <b>Print</b></li>
+          <li>Browser print settings: <b>Paper A4 · Margins None · Scale 100%</b> (turn off Fit to page) · under More settings, <b>check Background graphics</b> (needed for the color bands)</li>
+          <li>If the print came out well, click <b>✓ Mark printed</b> → the list records the labels as printed</li>
         </ol>
-        <p><b>인쇄 추적:</b> 목록의 <b>C / I 뱃지</b>가 초록이면 해당 라벨 인쇄 완료(마우스를 올리면 날짜 표시), 클릭하면 완료↔미완료 전환. 필터의 "Cover not printed"로 <b>새로 추가한 책만 골라 인쇄</b>할 수 있습니다. 테스트 인쇄는 Mark printed를 누르지 않으면 기록에 남지 않습니다.</p>
-        <p><b>급지 팁:</b> 프린터마다 인쇄면 방향이 다릅니다. A4에 X를 그려 한 장 인쇄해 어느 면에 나오는지 확인한 뒤, 라벨 면을 그 방향으로 넣으세요. 라벨지의 위/아래 여백이 달라 <b>넣는 위아래 방향도 항상 동일하게</b> 유지해야 합니다.</p>
+        <p><b>Print tracking:</b> a green <b>C / I badge</b> in the list means that label has been printed (hover to see the date); click it to toggle printed↔not printed. Use the "Cover not printed" filter to <b>print only newly added books</b>. Test prints leave no record unless you click Mark printed.</p>
+        <p><b>Paper-feed tip:</b> every printer feeds differently. Draw an X on a plain A4 sheet, print once to see which side it lands on, then load the label side facing that way. The top and bottom margins of the label sheet differ, so <b>always load it the same way up</b> too.</p>
 
-        <h3>학부모 알림장 &amp; 결제 메시지</h3>
-        <p>Settings → Templates에서 문구를 한 번 만들어두면, 수업 기록의 내용([student_name], [topic], [hw_page], [books_read] 등 플레이스홀더)이 자동으로 채워진 메시지가 생성됩니다. 복사해서 카톡 등으로 보내면 됩니다.</p>
+        <h3>Parent reports &amp; payment messages</h3>
+        <p>Create your wording once in Settings → Templates, and messages are generated with the lesson record filled in automatically (placeholders like [student_name], [topic], [hw_page], [books_read]). Copy and send via KakaoTalk or any messenger.</p>
 
-        <h3>화면 커스터마이징</h3>
-        <p>Settings → Custom Fields에서 각 페이지의 <b>컬럼 순서(드래그), 이름 변경(클릭), 숨김(체크 해제)</b>이 가능하고 나만의 필드도 추가할 수 있습니다. 숨긴 필드도 편집 창에는 항상 표시되므로 데이터 입력에는 지장이 없습니다.</p>
+        <h3>Customizing the screens</h3>
+        <p>In Settings → Custom Fields you can <b>reorder columns (drag), rename them (click), and hide them (uncheck)</b> on every page, and add your own fields. Hidden fields still always appear in the edit dialog, so data entry is unaffected.</p>
 
-        <h3>자동 검색 설정 (API Keys) — 선택사항</h3>
-        <p>책 정보 검색(Google Books)은 설정 없이 바로 작동합니다. <b>이미지 검색(🔍)과 AR/Lexile 자동 검색</b>을 쓰려면 Settings → API Keys에 두 가지를 등록하세요:</p>
+        <h3>Automatic search setup (API Keys) — optional</h3>
+        <p>Book info search (Google Books) works out of the box with no setup. To use <b>image search (🔍) and automatic AR/Lexile lookup</b>, register two things under Settings → API Keys:</p>
         <ol>
-          <li><b>Google API 키</b> — Google Cloud Console에서 발급 후, "Custom Search API"를 사용 설정하고 키의 API 제한사항에 포함시키세요.</li>
-          <li><b>Search Engine ID (cx)</b> — programmablesearchengine.google.com에서 검색엔진을 만들면 발급됩니다.</li>
+          <li><b>Google API key</b> — create one in the Google Cloud Console, enable the "Custom Search API", and include it in the key's API restrictions.</li>
+          <li><b>Search Engine ID (cx)</b> — issued when you create a search engine at programmablesearchengine.google.com.</li>
         </ol>
-        <p>등록 후 API Keys 탭의 테스트 버튼으로 연결을 확인하세요. 무료 할당량은 <b>하루 100건</b>입니다. 파일을 file:///로 직접 열면 키 제한 설정에 따라 차단될 수 있어요 — 아래 FAQ를 참고하세요.</p>
+        <p>After registering, use the test button on the API Keys tab to confirm the connection. The free quota is <b>100 requests per day</b>. Opening the file directly via file:/// may be blocked depending on your key restrictions — see the FAQ below.</p>
 
-        <h3>데이터 보관 — 꼭 읽어주세요</h3>
+        <h3>Where your data lives — please read</h3>
         <ul>
-          <li>데이터는 <b>이 브라우저에</b> 저장됩니다. 같은 컴퓨터·같은 브라우저로 열면 파일을 새 버전으로 바꿔도 데이터가 유지됩니다.</li>
-          <li>다른 컴퓨터로 옮기거나 브라우저를 바꿀 땐 <b>Settings → Backup → Export</b>로 파일을 내려받아 새 환경에서 <b>Import</b> 하세요.</li>
-          <li>브라우저의 "인터넷 사용 기록 삭제"에서 <b>사이트 데이터를 지우면 모든 데이터가 사라집니다.</b> 정기적인 Export(백업)를 강력히 권장합니다.</li>
+          <li>Data is stored <b>in this browser</b>. As long as you use the same computer and browser, your data survives even when you replace the file with a new version.</li>
+          <li>To move to another computer or switch browsers, download a file via <b>Settings → Backup → Export</b> and <b>Import</b> it in the new environment.</li>
+          <li>If you clear <b>site data</b> in your browser's "Clear browsing data", <b>all data is gone.</b> Regular Export backups are strongly recommended.</li>
         </ul>
 
-        <h3>클라우드 동기화</h3>
-        <p>Settings → Account에서 Google Account으로 로그인하면 <b>모든 기기(PC·폰·태블릿)가 같은 데이터를 실시간으로 공유</b>합니다. 별도 버튼 없이 자동으로 동작해요.</p>
+        <h3>Cloud sync</h3>
+        <p>Sign in with your Google Account in Settings → Account and <b>all your devices (PC, phone, tablet) share the same data in real time</b>. It runs automatically — no extra buttons.</p>
         <dl>
-          <dt>어떻게 켜나요?</dt><dd>각 기기에서 한 번만 로그인하면 됩니다. 첫 로그인 때 "클라우드 데이터를 내려받을까요?" 질문이 나오면 <b>확인(권장)</b>을 누르세요. 그 뒤로는 묻지 않습니다.</dd>
-          <dt>표지·PDF는 어디에 저장되나요?</dt><dd>Firebase Storage(클라우드)에 저장되고 브라우저에는 링크만 남습니다. 덕분에 책·PDF를 수백 개 등록해도 저장 공간 걱정이 없어요. 예전 데이터는 Settings → Backup의 <b>Move covers & PDFs to cloud</b> 버튼으로 한 번만 옮기면 됩니다.</dd>
-          <dt>인터넷이 끊기면요?</dt><dd>앱은 평소처럼 작동합니다. 변경사항은 이 브라우저에 먼저 저장되고, 연결이 돌아오면 자동으로 클라우드에 올라갑니다.</dd>
-          <dt>동기화 상태는 어디서 보나요?</dt><dd>Settings → Account에 "✓ Synced (시각)"으로 표시됩니다. "동기화 실패"가 계속 보이면 로그인 상태와 인터넷 연결을 확인하세요.</dd>
-          <dt>백업은 이제 안 해도 되나요?</dt><dd>클라우드가 사본 역할을 하지만, 실수로 삭제한 것도 그대로 동기화됩니다. 월 1회 Export 백업은 여전히 권장해요.</dd>
+          <dt>How do I turn it on?</dt><dd>Sign in once on each device. On first sign-in, when asked "Download cloud data?", choose <b>OK (recommended)</b>. You won't be asked again.</dd>
+          <dt>Where are covers and PDFs stored?</dt><dd>In Firebase Storage (the cloud); only the link stays in the browser. That's why you can register hundreds of books and PDFs without worrying about space. For older data, click <b>Move covers & PDFs to cloud</b> in Settings → Backup once.</dd>
+          <dt>What if my internet goes down?</dt><dd>The app keeps working as usual. Changes are saved to this browser first, then uploaded to the cloud automatically when the connection returns.</dd>
+          <dt>Where do I see sync status?</dt><dd>Settings → Account shows "✓ Synced (time)". If a sync failure message persists, check your sign-in status and internet connection.</dd>
+          <dt>Do I still need backups?</dt><dd>The cloud acts as a copy, but accidental deletions sync too. A monthly Export backup is still recommended.</dd>
         </dl>
 
-        <h3>목록 화면 다루기</h3>
+        <h3>Working with the lists</h3>
         <dl>
-          <dt>컬럼 폭을 조절하고 싶어요</dt><dd>컬럼 제목 사이의 <b>회색 세로선</b>에 마우스를 올리면 초록색으로 바뀝니다. 그 상태에서 좌우로 드래그하세요. 조절한 폭은 이 기기에 저장됩니다. <b>더블클릭하면 초기화</b>돼요.</dd>
-          <dt>행을 빠르게 편집하려면?</dt><dd>모든 목록에서 <b>행을 더블클릭</b>하면 편집 창이 열립니다. Dashboard의 오늘 수업도 동일해요.</dd>
+          <dt>I want to resize columns</dt><dd>Hover over the <b>gray vertical line</b> between column headers — it turns green. Drag left or right. Adjusted widths are saved on this device. <b>Double-click to reset.</b></dd>
+          <dt>How do I edit a row quickly?</dt><dd><b>Double-click any row</b> in any list to open the edit dialog. Today's classes on the Dashboard work the same way.</dd>
         </dl>
 
-        <h3>표지 이미지</h3>
+        <h3>Cover images</h3>
         <dl>
-          <dt>표지가 옆으로 누워 있어요</dt><dd>편집 창에서 표지 아래 <b>↻ 90°</b> 버튼을 누르세요. 누를 때마다 시계방향으로 돌아가고, 저장하면 목록·라벨 인쇄에도 회전된 상태로 나옵니다. 직접 올린 이미지든 Google 표지든 똑같이 작동해요.</dd>
-          <dt>저자·일러스트레이터를 매번 입력하기 귀찮아요</dt><dd>몇 글자만 입력하면 이전에 등록한 이름 중 일치하는 것이 아래에 떠서 클릭으로 선택할 수 있습니다. 출판사도 동일해요.</dd>
+          <dt>The cover is sideways</dt><dd>In the edit dialog, click the <b>↻ 90°</b> button below the cover. Each click rotates it clockwise, and after saving it appears rotated in the list and on printed labels too. Works the same for uploaded images and Google covers.</dd>
+          <dt>Typing authors/illustrators every time is tedious</dt><dd>Type a few letters and matching names you've entered before appear below for one-click selection. Publishers work the same way.</dd>
         </dl>
 
-        <h3>자주 묻는 질문</h3>
-        <p style="font-weight:700;margin-bottom:4px">인쇄</p>
+        <h3>Frequently asked questions</h3>
+        <p style="font-weight:700;margin-bottom:4px">Printing</p>
         <dl>
-          <dt>인쇄가 두 페이지로 나뉘어요</dt><dd>인쇄 설정에서 여백(Margins)을 None으로, 용지를 A4로, 배율을 100%로 확인하세요.</dd>
-          <dt>색상 밴드가 인쇄에 안 나와요</dt><dd>인쇄 창 More settings에서 Background graphics를 체크하세요.</dd>
-          <dt>라벨과 인쇄 위치가 몇 mm 어긋나요</dt><dd>프린터 급지 오차입니다. 급지 가이드를 용지에 딱 맞추고, 라벨지 넣는 방향(앞뒤·위아래)을 확인하세요. 위아래 여백이 달라 180° 돌려 넣으면 약 2mm 어긋납니다.</dd>
-          <dt>종이 뒷면에 인쇄돼요</dt><dd>급지 방향 문제입니다. A4에 X를 그려 테스트 인쇄해 어느 면에 나오는지 확인한 뒤, 라벨 면을 그 방향으로 넣으세요.</dd>
-          <dt>표지 라벨에 흰 테두리가 인쇄돼요</dt><dd>이미지 파일 자체에 포함된 스캔 여백입니다. 자동 제거가 시도되지만, 남는 경우 Search Google Images로 더 깨끗한 표지로 교체하세요.</dd>
-          <dt>Mark printed를 눌렀는데 반영이 안 돼요</dt><dd>인쇄 탭은 원래 ClassDesk 탭과 연결되어 있어야 합니다. ClassDesk 탭을 닫지 않은 상태에서 눌러주세요. 놓쳤다면 목록의 C/I 뱃지를 직접 클릭해 표시할 수 있습니다.</dd>
+          <dt>The printout splits across two pages</dt><dd>In print settings, check that Margins is None, paper is A4, and Scale is 100%.</dd>
+          <dt>The color bands don't print</dt><dd>Check Background graphics under More settings in the print dialog.</dd>
+          <dt>The print is off by a few millimeters from the labels</dt><dd>Printer feed tolerance. Snug the paper guides against the sheet and check which way you loaded it (front/back, top/bottom). The top and bottom margins differ, so loading it rotated 180° shifts everything by about 2mm.</dd>
+          <dt>It prints on the back of the sheet</dt><dd>A feed-direction issue. Draw an X on a plain A4 sheet, test-print to see which side it lands on, then load the label side facing that way.</dd>
+          <dt>Cover labels print with a white border</dt><dd>That's scan margin baked into the image file itself. Automatic trimming is attempted, but if it remains, replace the cover with a cleaner one via Search Google Images.</dd>
+          <dt>I clicked Mark printed but nothing changed</dt><dd>The print tab must still be connected to the original ClassDesk tab. Click it while the ClassDesk tab is still open. If you missed it, click the C/I badge in the list directly to mark it.</dd>
         </dl>
-        <p style="font-weight:700;margin-bottom:4px">자동 검색 · API</p>
+        <p style="font-weight:700;margin-bottom:4px">Automatic search · API</p>
         <dl>
-          <dt>AR/Lexile을 자동으로 못 찾아요</dt><dd>모든 책이 데이터베이스에 있지는 않습니다. Search AR level / Search Lexile 링크로 확인 후 직접 입력하세요.</dd>
-          <dt>arbookfind에 "AR Level"이 없고 "ATOS Book Level"만 있어요</dt><dd>같은 값입니다. ATOS는 AR 레벨의 공식 명칭이에요 — 그 숫자를 AR Level 칸에 입력하면 됩니다.</dd>
-          <dt>이미지 검색 버튼이 "Search failed (HTTP 403)" 오류를 내요</dt><dd>Google API 설정 문제입니다. ① Google Cloud Console에서 Custom Search API가 "사용 설정"되어 있는지, ② API 키의 "API 제한사항"에 Custom Search API가 포함되어 있는지 확인 후, Settings → API Keys에 API 키와 Search Engine ID(cx)를 모두 저장하세요.</dd>
-          <dt>"Requests from referer null are blocked" 오류가 나요</dt><dd>파일을 file:///로 직접 열었을 때 발생합니다. VSCode Live Server 등 로컬 서버(127.0.0.1)로 열거나, Google Cloud Console에서 API 키의 "애플리케이션 제한사항"을 "없음"으로 바꾸세요.</dd>
-          <dt>잘 되던 자동 검색이 갑자기 안 돼요 (HTTP 429)</dt><dd>Google Custom Search 무료 할당량(하루 100건)을 초과한 것입니다. 다음 날 자동으로 리셋됩니다. 대량 등록하는 날은 수동 입력을 섞어 쓰세요.</dd>
-          <dt>책 검색 결과에 원하는 책이 안 나와요</dt><dd>제목 + 저자로 검색해 보세요 (예: "arthur snow marc brown"). 한국 유통사 등록본은 제목에 "(CD포함)" 같은 문구가 붙어 오기도 하니, 불러온 뒤 제목을 정리하면 됩니다.</dd>
+          <dt>AR/Lexile isn't found automatically</dt><dd>Not every book is in the databases. Check via the Search AR level / Search Lexile links and enter it manually.</dd>
+          <dt>arbookfind shows "ATOS Book Level" instead of "AR Level"</dt><dd>They're the same value. ATOS is the official name for AR levels — enter that number in the AR Level field.</dd>
+          <dt>The image search button says "Search failed (HTTP 403)"</dt><dd>A Google API configuration issue. Check that ① the Custom Search API is enabled in the Google Cloud Console, and ② the API key's "API restrictions" include the Custom Search API. Then save both the API key and the Search Engine ID (cx) in Settings → API Keys.</dd>
+          <dt>I get "Requests from referer null are blocked"</dt><dd>Happens when the file is opened directly via file:///. Open it through a local server (127.0.0.1, e.g. VSCode Live Server), or set the API key's "Application restrictions" to "None" in the Google Cloud Console.</dd>
+          <dt>Automatic search worked before but suddenly stopped (HTTP 429)</dt><dd>You've exceeded the Google Custom Search free quota (100 requests/day). It resets automatically the next day. On bulk-entry days, mix in manual entry.</dd>
+          <dt>The book I want doesn't appear in search results</dt><dd>Try searching title + author (e.g. "arthur snow marc brown"). Editions registered by Korean distributors sometimes arrive with things like "(CD included)" in the title — just clean up the title after importing.</dd>
         </dl>
-        <p style="font-weight:700;margin-bottom:4px">기타</p>
+        <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
-          <dt>날짜·요일 계산이 컴퓨터 시간과 달라요</dt><dd>ClassDesk의 "오늘"은 항상 한국 표준시(KST) 기준입니다. 해외에서 열거나 컴퓨터 시간대가 달라도 수업 스케줄은 한국 시간으로 계산됩니다.</dd>
-          <dt>편집 창에서 특정 입력칸이 안 보여요</dt><dd>편집 창에는 모든 필드가 항상 표시됩니다. Custom Fields의 숨김 설정은 목록 컬럼에만 적용돼요. 그래도 안 보이면 파일이 구버전인지 확인하세요.</dd>
-          <dt>파일을 새 버전으로 교체하면 데이터는요?</dt><dd>같은 컴퓨터·같은 브라우저라면 유지됩니다. 데이터는 파일이 아니라 브라우저에 저장되기 때문이에요. 클라우드 동기화를 켰다면 클라우드에도 사본이 있습니다. 안전을 위해 교체 전 Export를 권장합니다.</dd>
-          <dt>삭제했는데 잠깐 뒤 되살아나요</dt><dd>구버전에서 발생하던 문제로, 현재 버전에서 해결됐습니다. 여전히 발생하면 다른 기기가 구버전 파일을 열고 있는지 확인하세요 — 모든 기기가 같은 최신 주소(amber67-git.github.io/classdesk)를 사용해야 합니다.</dd>
-          <dt>삭제를 실수했어요</dt><dd>삭제 직후 하단에 6초간 <b>실행 취소</b> 버튼이 나타납니다. 놓쳤다면 백업 파일 Import로 복구할 수 있어요.</dd>
-          <dt>폰에서 앱이 이상하거나 옛날 화면이 보여요</dt><dd>브라우저가 옛 파일을 기억(캐시)하는 경우입니다. 주소 뒤에 <b>?v=숫자</b>를 붙여 접속하거나, Chrome 설정에서 "캐시된 이미지 및 파일"만 삭제하세요. <b>"쿠키 및 사이트 데이터"는 절대 지우면 안 됩니다</b> — 앱 데이터가 삭제돼요(클라우드 동기화를 켰다면 재로그인으로 복구 가능).</dd>
+          <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk's "today" is always Korea Standard Time (KST). Even if you open it abroad or your computer uses a different timezone, class schedules are computed in Korean time.</dd>
+          <dt>A field is missing in the edit dialog</dt><dd>The edit dialog always shows every field. Custom Fields hiding only applies to list columns. If it's still missing, check whether the file is an old version.</dd>
+          <dt>What happens to my data when I replace the file with a new version?</dt><dd>It stays, as long as it's the same computer and browser — data lives in the browser, not in the file. With cloud sync on, there's a copy in the cloud too. To be safe, Export before replacing.</dd>
+          <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
+          <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
+          <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          이 설명서 기준 버전: <b>classdesk_26</b> · FAQ 반영 시점: <b>2026-07-15</b><br/>
-          (다음 업데이트 시 이 날짜 이후의 작업 기록만 확인해 FAQ에 추가하면 됩니다)
+          Guide written against version: <b>v53</b> · FAQ current as of: <b>2026-09-11</b><br/>
+          (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
         </p>
 
       </div>
@@ -1807,7 +1807,7 @@ function lg(k,fb){
   catch(e){
     console.error("Corrupted data for",k,e);
     try{localStorage.setItem(k+"_corrupt",raw);}catch{} // preserve for manual recovery
-    setTimeout(()=>alert(`⚠️ 저장된 데이터 일부(${k})가 손상되어 읽을 수 없습니다.\n\n손상된 원본은 '${k}_corrupt'에 보관했습니다.\n백업 파일이 있다면 Settings → Backup → Import로 복원하세요.`),100);
+    setTimeout(()=>alert(`⚠️ Part of your saved data (${k}) is corrupted and could not be read.\n\nThe corrupted original was kept as '${k}_corrupt'.\nIf you have a backup file, restore it via Settings → Backup → Import.`),100);
     return fb;
   }
   // Type guard: if the fallback is an array, the stored value must be one too. A mismatch means
@@ -1833,8 +1833,8 @@ function ls(k,v){
     if(!_storageAlertShown){
       _storageAlertShown=true;
       alert(isQuota
-        ? "⚠️ 저장 공간이 가득 차서 데이터를 저장하지 못했습니다!\n\n지금 하신 변경사항이 저장되지 않았어요.\n\n해결 방법:\n1) Settings → Backup → Export로 백업 먼저 받으세요\n2) 업로드한 표지 이미지가 용량의 대부분입니다 — 몇 개를 지우거나 Google Books 표지(URL)로 교체하세요\n\n이 문제를 해결하기 전까지는 새 데이터가 저장되지 않습니다."
-        : "⚠️ 데이터 저장에 실패했습니다.\n\n브라우저의 시크릿/프라이빗 모드이거나 저장소 접근이 차단된 상태일 수 있어요.\n일반 창에서 다시 열어주세요.");
+        ? "⚠️ Storage is full — your data could not be saved!\n\nThe change you just made was NOT saved.\n\nHow to fix:\n1) First take a backup via Settings → Backup → Export\n2) Uploaded cover images use most of the space — delete a few or replace them with Google Books covers (URLs)\n\nNo new data will be saved until this is resolved."
+        : "⚠️ Failed to save your data.\n\nYou may be in the browser's incognito/private mode, or storage access is blocked.\nPlease reopen the app in a normal window.");
       // Let them retry the alert later if they fix it
       setTimeout(()=>{_storageAlertShown=false;},60000);
     }
@@ -1897,8 +1897,8 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v52";
-const APP_BUILT="2026-08-01";
+const APP_VERSION="v53";
+const APP_BUILT="2026-09-11";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -1922,15 +1922,15 @@ function gcseCx(){return localStorage.getItem("gcse_cx")||GCSE_CX;}
 // being offline (fetch rejects with a useless "Failed to fetch"), and a request that hangs
 // forever on a flaky connection (no native fetch timeout — AbortController supplies one).
 async function fetchJsonWithTimeout(url,ms=15000){
-  if(navigator.onLine===false)throw new Error("인터넷에 연결되어 있지 않습니다. 연결을 확인한 뒤 다시 시도해주세요.");
+  if(navigator.onLine===false)throw new Error("You are not connected to the internet. Check your connection and try again.");
   const ctrl=new AbortController();
   const timer=setTimeout(()=>ctrl.abort(),ms);
   let res;
   try{
     res=await fetch(url,{signal:ctrl.signal});
   }catch(e){
-    if(e.name==="AbortError")throw new Error("요청 시간이 초과되었습니다 (15초). 네트워크가 느리거나 응답이 없어요.");
-    throw new Error("네트워크 요청에 실패했습니다. 인터넷 연결을 확인해주세요.");
+    if(e.name==="AbortError")throw new Error("The request timed out (15s). The network is slow or not responding.");
+    throw new Error("Network request failed. Please check your internet connection.");
   }finally{
     clearTimeout(timer);
   }
@@ -1939,11 +1939,11 @@ async function fetchJsonWithTimeout(url,ms=15000){
   if(!res.ok){
     const apiMsg=data?.error?.message||data?.error?.errors?.[0]?.message;
     // Translate the codes we actually hit in practice into actionable advice
-    if(res.status===429)throw new Error("Google 검색 일일 한도를 초과했습니다. 내일 다시 시도하거나 수동으로 입력해주세요.");
-    if(res.status===403)throw new Error("API 키가 거부되었습니다 ("+(apiMsg||"403")+"). Settings → API Keys에서 키와 도메인 제한 설정을 확인해주세요.");
+    if(res.status===429)throw new Error("Google search daily quota exceeded. Try again tomorrow or enter the value manually.");
+    if(res.status===403)throw new Error("The API key was rejected ("+(apiMsg||"403")+"). Check the key and its domain restrictions in Settings → API Keys.");
     throw new Error(apiMsg||res.statusText||`HTTP ${res.status}`);
   }
-  if(!data)throw new Error("서버에서 올바른 응답을 받지 못했습니다.");
+  if(!data)throw new Error("Did not receive a valid response from the server.");
   return data;
 }
 async function gcseFetchJson(url){
@@ -2275,15 +2275,15 @@ let editSid=null;
 // ── Schedule day/time pickers ──
 // The stored format stays "Wed 19:30" (parseSchedKey and everything downstream rely on it), but
 // the UI is now two dropdowns instead of free text, so nobody has to remember the syntax.
-const SCHED_DAYS=[["Mon","월"],["Tue","화"],["Wed","수"],["Thu","목"],["Fri","금"],["Sat","토"],["Sun","일"]];
+const SCHED_DAYS=[["Mon","Monday"],["Tue","Tuesday"],["Wed","Wednesday"],["Thu","Thursday"],["Fri","Friday"],["Sat","Saturday"],["Sun","Sunday"]];
 function schedDayOptions(sel){
-  return `<option value="">요일</option>`+SCHED_DAYS.map(([v,k])=>
-    `<option value="${v}"${v===sel?" selected":""}>${k} (${v})</option>`).join("");
+  return `<option value="">Day</option>`+SCHED_DAYS.map(([v,k])=>
+    `<option value="${v}"${v===sel?" selected":""}>${k}</option>`).join("");
 }
-// 15-minute steps from 07:00 to 22:00, labelled in Korean am/pm for readability.
+// 15-minute steps from 07:00 to 22:00, labelled with AM/PM for readability.
 function schedTimeOptions(sel){
-  let out=`<option value="">시간</option>`;
-  const fmt=(hh,mm)=>{const ap=hh<12?"오전":"오후";const h12=hh%12===0?12:hh%12;return `${ap} ${h12}:${String(mm).padStart(2,"0")}`;};
+  let out=`<option value="">Time</option>`;
+  const fmt=(hh,mm)=>{const ap=hh<12?"AM":"PM";const h12=hh%12===0?12:hh%12;return `${h12}:${String(mm).padStart(2,"0")} ${ap}`;};
   let hasSel=false;
   for(let m=7*60;m<=22*60;m+=15){
     const hh=Math.floor(m/60),mm=m%60;
@@ -2371,7 +2371,7 @@ function addSlotRow(slot){
     +'<div style="display:flex;gap:6px;align-items:center">'
     +  '<select class="slot-day" style="flex:0 0 96px" onchange="slotSyncSched(this)">'+schedDayOptions(day)+'</select>'
     +  '<input class="slot-time" type="time" step="300" style="flex:1" value="'+time+'" onchange="slotSyncSched(this)" oninput="slotSyncSched(this)"/>'
-    +  '<label style="display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px;color:var(--txt2);cursor:pointer" title="Every two weeks"><input type="checkbox" class="slot-biweekly"'+(slot?.freq==="biweekly"?" checked":"")+'/> 격주</label>'
+    +  '<label style="display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px;color:var(--txt2);cursor:pointer" title="Every two weeks"><input type="checkbox" class="slot-biweekly"'+(slot?.freq==="biweekly"?" checked":"")+'/> Biweekly</label>'
     +'</div>'
     +'<input type="number" min="0.5" max="4" step="0.5" placeholder="hr" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/>'
     +'<input type="number" step="5000" placeholder="rate ₩" value="'+(slot?.rate??40000)+'"/>'
@@ -2407,10 +2407,10 @@ function pickScheduleFromDate(){
 }
 function renderSchedFromCal(){
   const y=_sfMonth.getUTCFullYear(),m=_sfMonth.getUTCMonth();
-  document.getElementById("sf-mlbl").textContent=`${y}년 ${m+1}월`;
+  document.getElementById("sf-mlbl").textContent=`${["January","February","March","April","May","June","July","August","September","October","November","December"][m]} ${y}`;
   const grid=document.getElementById("sf-grid");
   const today=td();
-  let html=["일","월","화","수","목","금","토"].map(d=>`<div style="color:var(--txt3);font-weight:700;padding:4px 0">${d}</div>`).join("");
+  let html=["Su","Mo","Tu","We","Th","Fr","Sa"].map(d=>`<div style="color:var(--txt3);font-weight:700;padding:4px 0">${d}</div>`).join("");
   const first=new Date(Date.UTC(y,m,1)),startDow=first.getUTCDay(),days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
   for(let i=0;i<startDow;i++)html+="<div></div>";
   for(let d=1;d<=days;d++){
@@ -3167,17 +3167,17 @@ function showOnboarding(){
   ov.className="mo show";ov.id="onboard-ov";
   ov.innerHTML=`
     <div class="mb" style="width:460px">
-      <div class="mt">👋 ClassDesk에 오신 것을 환영합니다</div>
-      <p style="font-size:13px;line-height:1.6;margin-bottom:10px">영어 리딩 수업·공부방을 위한 올인원 관리 도구입니다.</p>
+      <div class="mt">👋 Welcome to ClassDesk</div>
+      <p style="font-size:13px;line-height:1.6;margin-bottom:10px">An all-in-one management tool for English reading classes and home libraries.</p>
       <ul style="font-size:13px;line-height:1.8;padding-left:18px;margin-bottom:6px">
-        <li><b>Students</b>에 학생을 등록하고 <b>Classes</b>에서 수업을 기록하세요</li>
-        <li><b>Books</b>에서 원서를 검색·등록하고 레벨 라벨을 인쇄할 수 있어요</li>
-        <li>모든 데이터는 이 브라우저에만 저장됩니다 — <b>정기 백업(Export)이 필수예요</b></li>
+        <li>Register students in <b>Students</b> and log lessons in <b>Classes</b></li>
+        <li>Search &amp; register books in <b>Books</b> and print level labels</li>
+        <li>All data is stored only in this browser — <b>regular backups (Export) are essential</b></li>
       </ul>
-      <p class="u-hint" style="margin-bottom:14px">자세한 사용법은 Settings → Guide 탭에 있어요.</p>
+      <p class="u-hint" style="margin-bottom:14px">The full guide is in the Settings → Guide tab.</p>
       <div style="display:flex;justify-content:flex-end;gap:8px">
-        <button class="btn" id="onboard-guide-btn">📖 사용 설명서 보기</button>
-        <button class="btn btn-p" id="onboard-start-btn">시작하기</button>
+        <button class="btn" id="onboard-guide-btn">📖 Open the guide</button>
+        <button class="btn btn-p" id="onboard-start-btn">Get started</button>
       </div>
     </div>`;
   document.body.appendChild(ov);
@@ -3202,10 +3202,10 @@ function checkBackupReminder(){
   b.id="backup-banner";
   b.style.cssText="position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#fef3c7;border-bottom:1px solid #fcd34d;color:#78350f;font-size:12.5px;line-height:1.4";
   const mob=window.matchMedia("(max-width:640px)").matches;
-  b.innerHTML=`<span style="font-weight:600;flex:1 1 auto;min-width:0">⚠️ ${last?`백업이 ${days}일 전`:"백업한 적 없음"}${mob?"":" — 브라우저 데이터가 지워지면 복구할 수 없어요"}</span>
+  b.innerHTML=`<span style="font-weight:600;flex:1 1 auto;min-width:0">⚠️ ${last?`Last backup ${days} days ago`:"Never backed up"}${mob?"":" — if the browser's data is cleared, it cannot be recovered"}</span>
     <span style="display:flex;gap:6px;flex-shrink:0">
-      <button class="btn btn-p" style="height:28px;font-size:12px;padding:0 10px" onclick="exportBackup()">지금 백업</button>
-      <button class="btn" style="height:28px;font-size:12px;padding:0 10px" onclick="localStorage.setItem('mc_backup_snooze',Date.now()+7*86400000);document.getElementById('backup-banner').remove()">7일 뒤</button>
+      <button class="btn btn-p" style="height:28px;font-size:12px;padding:0 10px" onclick="exportBackup()">Back up now</button>
+      <button class="btn" style="height:28px;font-size:12px;padding:0 10px" onclick="localStorage.setItem('mc_backup_snooze',Date.now()+7*86400000);document.getElementById('backup-banner').remove()">In 7 days</button>
     </span>`;
   document.querySelector(".main")?.prepend(b);
 }
@@ -3215,12 +3215,12 @@ async function migrateCoversToStorage(){
   const status=document.getElementById("compress-status");
   const say=(m,c)=>{if(status){status.textContent=m;status.style.color=c||"var(--txt2)";}};
   if(!syncUser||!window.__uploadAsset){
-    say("로그인이 필요합니다. Settings → Account에서 Google Account으로 로그인해주세요.","#dc2626");
+    say("Sign-in required. Please sign in with your Google Account in Settings → Account.","#dc2626");
     return;
   }
   const jobs=[
-    ...bookLib.filter(b=>b.thumb&&b.thumb.startsWith("data:")).map(b=>({rec:b,field:"thumb",path:`covers/${b.id}.jpg`,label:"표지"})),
-    ...books.filter(b=>b.thumb&&b.thumb.startsWith("data:")).map(b=>({rec:b,field:"thumb",path:`covers/${b.id}.jpg`,label:"표지"})),
+    ...bookLib.filter(b=>b.thumb&&b.thumb.startsWith("data:")).map(b=>({rec:b,field:"thumb",path:`covers/${b.id}.jpg`,label:"cover"})),
+    ...books.filter(b=>b.thumb&&b.thumb.startsWith("data:")).map(b=>({rec:b,field:"thumb",path:`covers/${b.id}.jpg`,label:"cover"})),
     ...books.filter(b=>b.pdf&&b.pdf.startsWith("data:")).map(b=>({rec:b,field:"pdf",path:`pdfs/${b.id}.pdf`,label:"PDF"})),
   ];
   if(!jobs.length){say("Nothing to move. (All covers & PDFs are already links.)");return;}
@@ -3228,7 +3228,7 @@ async function migrateCoversToStorage(){
   const before=sizeOf();
   const nCovers=jobs.filter(j=>j.field==="thumb").length;
   const nPdfs=jobs.filter(j=>j.field==="pdf").length;
-  if(!confirm(`표지 ${nCovers}개${nPdfs?`, PDF ${nPdfs}개`:""}를 클라우드로 옮깁니다.\n\n브라우저에는 링크만 남고, 파일은 Firebase Storage에 안전하게 보관됩니다.\n\n계속하시겠습니까?`))return;
+  if(!confirm(`This will move ${nCovers} cover${nCovers===1?"":"s"}${nPdfs?` and ${nPdfs} PDF${nPdfs===1?"":"s"}`:""} to the cloud.\n\nOnly links stay in the browser; the files are stored safely in Firebase Storage.\n\nContinue?`))return;
 
   let done=0,ok=0,fail=0;
   for(const j of jobs){
@@ -3249,7 +3249,7 @@ async function migrateCoversToStorage(){
   save();
   const after=sizeOf();
   const mb=b=>(b/1048576).toFixed(2)+" MB";
-  say(`✓ Done — ${ok}개 이전됨${fail?`, ${fail}개 실패`:""}. ${mb(before)} → ${mb(after)} (${before>after?mb(before-after)+" 확보":"변화 없음"})`,
+  say(`✓ Done — ${ok} moved${fail?`, ${fail} failed`:""}. ${mb(before)} → ${mb(after)} (${before>after?mb(before-after)+" freed":"no change"})`,
       fail?"#d97706":"#16a34a");
   renderStorageGauge();
   renderBookLib();
@@ -3269,7 +3269,7 @@ async function compressAllCovers(){
   if(!targets.length){say("No uploaded images to compress. (All covers are already URLs.)");return;}
   const sizeOf=()=>{let t=0;for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);t+=(k.length+(localStorage.getItem(k)||"").length)*2;}return t;};
   const before=sizeOf();
-  if(!confirm(`업로드된 표지 이미지 ${targets.length}개를 압축합니다.\n\n원본 화질로는 되돌릴 수 없어요. 백업을 받아두셨나요?\n\n계속하시겠습니까?`))return;
+  if(!confirm(`This will compress ${targets.length} uploaded cover image${targets.length===1?"":"s"}.\n\nThe original quality cannot be restored. Have you taken a backup?\n\nContinue?`))return;
 
   let done=0,shrunk=0;
   for(const t of targets){
@@ -3290,7 +3290,7 @@ async function compressAllCovers(){
   const after=sizeOf();
   const mb=b=>(b/1048576).toFixed(2)+" MB";
   const saved=before-after;
-  say(`✓ Done — ${shrunk}개 압축됨. ${mb(before)} → ${mb(after)} (${saved>0?mb(saved)+" 확보":"변화 없음"})`);
+  say(`✓ Done — ${shrunk} compressed. ${mb(before)} → ${mb(after)} (${saved>0?mb(saved)+" freed":"no change"})`);
   renderStorageGauge();
   renderBookLib();
 }
@@ -3421,7 +3421,7 @@ function importBackupFile(inp){
         wipeMc();
         Object.keys(snapshot).forEach(k=>localStorage.setItem(k,snapshot[k]));
       }catch(re){console.error("Rollback also failed:",re);}
-      alert("⚠️ 복원에 실패했습니다.\n\n저장 공간이 부족하거나 브라우저가 저장을 차단했어요.\n기존 데이터는 원래대로 되돌렸습니다.\n\n"+(e.message||""));
+      alert("⚠️ Restore failed.\n\nStorage may be full, or the browser blocked saving.\nYour existing data was restored to how it was.\n\n"+(e.message||""));
       return;
     }
     alert("Backup imported. The app will now reload.");
@@ -3540,7 +3540,7 @@ function markAllPaid(sid,month){
   const targets=occs.filter(OWED);
   if(!targets.length){alert("No unpaid lessons to collect this month.");return;}
   const total=targets.reduce((t,o)=>t+(o.amt||0),0);
-  if(!confirm(`${s.name} — ${month} 미납 수업 ${targets.length}건(${won(total)})을 모두 결제완료로 표시할까요?`))return;
+  if(!confirm(`${s.name} — mark all ${targets.length} unpaid lesson${targets.length===1?"":"s"} in ${month} (${won(total)}) as paid?`))return;
   targets.forEach(o=>{
     const real=materializeOccurrence(o);   // no-op if already a real record
     real.status="paid";
@@ -3738,9 +3738,9 @@ function renderStudents(){
   const archived=students.filter(s=>s.archived);
   const visible=showArchived?students:active;
   const cnt=document.getElementById("std-cnt");
-  if(cnt)cnt.textContent=archived.length?`(활성 ${active.length} · 보관 ${archived.length})`:`(${active.length})`;
+  if(cnt)cnt.textContent=archived.length?`(${active.length} active · ${archived.length} archived)`:`(${active.length})`;
   const el=document.getElementById("std-list");
-  if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(showArchived?"No students yet":"활성 학생이 없습니다")+'</p></div>';return;}
+  if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(showArchived?"No students yet":"No active students")+'</p></div>';return;}
   const sortedStudents=[...visible].sort((a,b)=>studentSortKey(a)-studentSortKey(b));
   el.innerHTML=sortedStudents.map((s,idx)=>{
     const extras=s.extraSlots||[];
@@ -3754,7 +3754,7 @@ function renderStudents(){
       :"";
     return `<div class="std-row${s.archived?" std-archived":""}" ondblclick="openStudentModal('${s.id}')" title="Double-click to edit">
     <div style="font-size:12px;color:var(--txt3);font-family:var(--mono)">${idx+1}</div>
-    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">보관</span>':''}</div></div></div>
+    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div></div></div>
     <div style="font-size:13px;color:var(--txt2)">${s.k}</div>
     <div><div style="font-size:12px;font-weight:500">${s.parent}</div><div class="cell-muted">${s.contact}</div></div>
     <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}</div>
@@ -3873,7 +3873,7 @@ function renderCalendar(){
     const moved=!!occ.movedFrom;
     const bw=occIsBiweekly(occ);
     const label=(time?time+" ":"")+name+(occ.topic?" · "+occ.topic:"")+(moved?" (moved)":"");
-    const safeLabel=escAttr(label+(bw?" · 격주":"")+(conflicted&&conflicted.has(occ.id)?" · 시간 겹침":""));
+    const safeLabel=escAttr(label+(bw?" · biweekly":"")+(conflicted&&conflicted.has(occ.id)?" · time conflict":""));
     const isCancelled=occ.status==="cancelled"||occ.status==="cancelpaid";
     const isCompleted=!!occ.completed&&!isCancelled;
     const hasConflict=conflicted&&conflicted.has(occ.id);
@@ -3881,7 +3881,7 @@ function renderCalendar(){
     const dragPayload=escAttr(JSON.stringify({sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,isVirtual:!!occ.isVirtual,lessonId:occ.isVirtual?null:occ.id}));
     return "<div class=\""+chipCls+"\" draggable=\"true\" data-payload=\""+dragPayload+"\" ondragstart=\"calDragStart(event,this)\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
       +(hasConflict?"<span class=\"cal-conflict-dot\" title=\"Times overlap\">⚠</span>":"")
-      +"<span class=\"cal-event-label\">"+label+(bw?" <span class='cal-bw-badge'>격주</span>":"")+"</span>"
+      +"<span class=\"cal-event-label\">"+label+(bw?" <span class='cal-bw-badge'>2W</span>":"")+"</span>"
       +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/>"
       +"</div>";
   }
@@ -3994,7 +3994,7 @@ function renderPayments(){
     <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}">${c.diff>0?won(c.diff):"—"}</div>
     <div style="display:flex;align-items:center;gap:8px">
       ${bdg(c.ov)}
-      ${c.diff>0?`<button class="btn btn-xs" style="background:var(--grn);color:#fff;border-color:var(--grn)" onclick="markAllPaid('${s.id}','${mon}')" title="Mark all unpaid lessons this month as paid"><i class="ti ti-check"></i> 전액 수령</button>`:""}
+      ${c.diff>0?`<button class="btn btn-xs" style="background:var(--grn);color:#fff;border-color:var(--grn)" onclick="markAllPaid('${s.id}','${mon}')" title="Mark all unpaid lessons this month as paid"><i class="ti ti-check"></i> All paid</button>`:""}
       <button class="btn btn-xs" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>
     </div>
   </div>`).join("");
@@ -4349,7 +4349,7 @@ function showCoverPicker(items, onPick){
   overlay.innerHTML=`
     <div style="background:var(--bg);border-radius:var(--r);padding:20px;width:520px;max-width:95vw;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.3)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span style="font-weight:700;font-size:13px;color:var(--txt)">표지 이미지 선택</span>
+        <span style="font-weight:700;font-size:13px;color:var(--txt)">Choose a cover image</span>
         <button onclick="document.getElementById('cover-picker-overlay').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--txt3);line-height:1">&times;</button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
@@ -4929,12 +4929,12 @@ function openBulkEditBooks(){
     <div class="mb" style="width:420px">
       <div class="mt">Edit ${sel.length} books <span style="cursor:pointer;font-size:18px" onclick="document.getElementById('bulk-edit-overlay').remove()">×</span></div>
       <div class="fg"><label>Category</label>
-        <select id="bulk-cat"><option value="">(keep — 변경 안 함)</option>${optsFor("cat")}</select>
+        <select id="bulk-cat"><option value="">(keep — no change)</option>${optsFor("cat")}</select>
       </div>
       <div class="fg"><label>Genre</label>
-        <select id="bulk-genre"><option value="">(keep — 변경 안 함)</option>${optsFor("genre")}</select>
+        <select id="bulk-genre"><option value="">(keep — no change)</option>${optsFor("genre")}</select>
       </div>
-      <p class="u-hint" style="margin:4px 0 14px">선택한 ${sel.length}권 모두에 적용됩니다. "(keep)"으로 두면 그 항목은 건드리지 않아요.</p>
+      <p class="u-hint" style="margin:4px 0 14px">Applies to all ${sel.length} selected book${sel.length===1?"":"s"}. Fields left as "(keep)" are not touched.</p>
       <div style="display:flex;justify-content:flex-end;gap:8px">
         <button class="btn" onclick="document.getElementById('bulk-edit-overlay').remove()">Cancel</button>
         <button class="btn btn-p" onclick="applyBulkEditBooks()">Apply to ${sel.length} books</button>
@@ -4987,8 +4987,8 @@ async function printBookLabels(kind){
   if(!labelBooks.length){alert("None of the selected books have cover images.");return;}
   // Partially-used sheet? Ask which cell the first label should land on.
   const perSheet=kind==="cover"?78:40;
-  const dirHint=kind==="cover"?"세로(위→아래) 순서":"가로(왼쪽→오른쪽) 순서";
-  const ans=prompt(`시작 칸 번호 (1–${perSheet})\n\n라벨지 앞부분을 이미 사용했다면, 첫 라벨을 붙일 칸 번호를 입력하세요.\n번호는 ${dirHint}입니다. 새 라벨지면 그냥 확인을 누르세요.`,"1");
+  const dirHint=kind==="cover"?"vertically (top→bottom)":"horizontally (left→right)";
+  const ans=prompt(`Starting cell number (1–${perSheet})\n\nIf the first part of the label sheet is already used, enter the cell number where the first label should go.\nCells are counted ${dirHint}. For a fresh sheet, just press OK.`,"1");
   if(ans===null)return; // cancelled
   const skip=Math.min(perSheet-1,Math.max(0,(parseInt(ans,10)||1)-1));
   // Open the window synchronously (inside the click) so popup blockers don't kill it,
@@ -6108,7 +6108,7 @@ function openArBookFind(){
 async function searchArLevel(silent=false){
   const statusEl=document.getElementById('blm-reading-status');
   const btn=document.getElementById('blm-ar-search-btn');
-  const originalHTML=btn?.innerHTML||'AR 자동 검색';
+  const originalHTML=btn?.innerHTML||'Search AR level';
   const setStatus=(txt,color)=>{if(!silent && statusEl){statusEl.textContent=txt;statusEl.style.color=color;}};
   const currentValue=document.getElementById('blm-arlevel')?.value?.trim();
   if(currentValue){return true;}
@@ -6122,34 +6122,34 @@ async function searchArLevel(silent=false){
   const q=(isbn||title);
   if(!q){if(!silent)alert('Please enter an ISBN or title.');return false;}
   try{
-    if(btn && !silent){btn.disabled=true;btn.innerHTML='<i class="ti ti-search"></i> 검색 중...';}
-    setStatus('검색 중...', 'var(--txt3)');
+    if(btn && !silent){btn.disabled=true;btn.innerHTML='<i class="ti ti-search"></i> Searching…';}
+    setStatus('Searching…', 'var(--txt3)');
     const query=encodeURIComponent(`${q} AR ATOS BL level arbookfind`);
     const data=await gcseFetchJson(`https://www.googleapis.com/customsearch/v1?key=${k}&cx=${cx}&q=${query}&num=8`);
     const items=data.items||[];
-    if(!items.length){setStatus('AR 정보를 찾지 못했어요.', 'var(--red)');if(btn && !silent){btn.disabled=false;btn.innerHTML=originalHTML;}return false;}
+    if(!items.length){setStatus('AR info not found.', 'var(--red)');if(btn && !silent){btn.disabled=false;btn.innerHTML=originalHTML;}return false;}
     const combined=items.map(it=>((it.title||'')+' '+(it.snippet||'')).trim()).join(' ');
-    // arbookfind 표기: "IL: LG - BL: 1.6 - AR Pts: 0.5"
-    //   BL = ATOS Book Level (이게 AR 레벨), IL = Interest Level(연령대), AR Pts = 포인트
-    // 긴 표현을 먼저 매칭하고, 축약형 \bBL\b 도 잡는다. AR 레벨은 항상 소수점 형식(1.6, 3.5).
+    // arbookfind format: "IL: LG - BL: 1.6 - AR Pts: 0.5"
+    //   BL = ATOS Book Level (this is the AR level), IL = Interest Level (age band), AR Pts = points
+    // Match the long forms first, then also catch the short \bBL\b. AR levels are always decimal (1.6, 3.5).
     const arRegex=/(?:ATOS\s*Book\s*Level|ATOS\s*Level|AR\s*ATOS\s*Level|AR\s*Level|Reading\s*Level|Book\s*Level|\bBL\b|ATOS)\s*:?\s*(\d{1,2}\.\d{1,2})\b/i;
     let foundLevel=null;
     const s=combined;
     const m = s.match(arRegex);
     if(m) foundLevel = m[1];
-    // 부가 정보도 함께 추출해 상태 메시지에 표시 (IL: LG/MG/MG+/UG, AR Pts)
+    // Also pull extra info into the status message (IL: LG/MG/MG+/UG, AR Pts)
     const ilM=s.match(/\bIL\s*:?\s*(MG\+|LG|MG|UG)(?![\w+])/i);
     const ptsM=s.match(/\bAR\s*(?:Pts|Points?)\s*:?\s*(\d+(?:\.\d+)?)\b/i);
     if(foundLevel){document.getElementById('blm-arlevel').value = foundLevel;updateReadingLevelBadge();}
     if(foundLevel){
       const extras=[ilM?`IL ${ilM[1].toUpperCase()}`:null,ptsM?`Pts ${ptsM[1]}`:null].filter(Boolean);
-      setStatus('✓ AR Level 자동 입력됨 (BL '+foundLevel+(extras.length?' · '+extras.join(' · '):'')+')', 'var(--grn)');
+      setStatus('✓ AR Level filled in (BL '+foundLevel+(extras.length?' · '+extras.join(' · '):'')+')', 'var(--grn)');
       return true;
     }
-    else{setStatus('AR 정보를 찾지 못했어요.', 'var(--red)');return false;}
+    else{setStatus('AR info not found.', 'var(--red)');return false;}
   }catch(err){
     console.error('AR search failed',err);
-    setStatus(`AR 정보를 찾지 못했어요. (${err.message})`, 'var(--red)');
+    setStatus(`AR info not found. (${err.message})`, 'var(--red)');
     return false;
   }finally{
     if(btn && !silent){btn.disabled=false;btn.innerHTML=originalHTML;}
@@ -6159,7 +6159,7 @@ async function searchArLevel(silent=false){
 async function searchLexile(silent=false){
   const statusEl=document.getElementById('blm-reading-status');
   const btn=document.getElementById('blm-lexile-search-btn');
-  const originalHTML=btn?.innerHTML||'Lexile 자동 검색';
+  const originalHTML=btn?.innerHTML||'Search Lexile';
   const setStatus=(txt,color)=>{if(!silent && statusEl){statusEl.textContent=txt;statusEl.style.color=color;}};
   const currentValue=document.getElementById('blm-lexile')?.value?.trim();
   if(currentValue){return true;}
@@ -6173,34 +6173,34 @@ async function searchLexile(silent=false){
   const q=(isbn||title);
   if(!q){if(!silent)alert('Please enter an ISBN or title.');return false;}
   try{
-    if(btn && !silent){btn.disabled=true;btn.innerHTML='<i class="ti ti-search"></i> 검색 중...';}
-    setStatus('검색 중...', 'var(--txt3)');
+    if(btn && !silent){btn.disabled=true;btn.innerHTML='<i class="ti ti-search"></i> Searching…';}
+    setStatus('Searching…', 'var(--txt3)');
     const query=encodeURIComponent(`${q} Lexile measure`);
     const data=await gcseFetchJson(`https://www.googleapis.com/customsearch/v1?key=${k}&cx=${cx}&q=${query}&num=8`);
     const items=data.items||[];
-    if(!items.length){setStatus('Lexile 정보를 찾지 못했어요.', 'var(--red)');if(btn && !silent){btn.disabled=false;btn.innerHTML=originalHTML;}return false;}
+    if(!items.length){setStatus('Lexile info not found.', 'var(--red)');if(btn && !silent){btn.disabled=false;btn.innerHTML=originalHTML;}return false;}
     const combined=items.map(it=>((it.title||'')+' '+(it.snippet||'')).trim()).join(' ');
-    // 1순위: 정식 Lexile 표기 (450L, AD450L, HL500L, BR100L 등 — 접두사 최대 2글자 + 숫자 + L)
+    // 1st choice: official Lexile notation (450L, AD450L, HL500L, BR100L, … — up to 2 prefix letters + digits + L)
     const lexRegex=/\b([A-Z]{0,2}\d{2,4}L)\b/i;
     let lex=null,isEstimate=false;
     const m=combined.match(lexRegex);
     if(m&&m[1]){lex=m[1].toUpperCase();}
     else{
-      // 2순위: L 없이 "Lexile: 450" 형태 — arbookfind 문서상 ATOS 기반 추정치(비인증)
+      // 2nd choice: "Lexile: 450" without the L — per arbookfind docs, an ATOS-based estimate (uncertified)
       const em=combined.match(/\bLexile(?:®)?(?:\s*measure)?\s*:?\s*(\d{2,4})\b/i);
       if(em&&em[1]){lex=em[1]+'L';isEstimate=true;}
     }
     if(lex){
       document.getElementById('blm-lexile').value=lex;
-      setStatus('✓ Lexile 자동 입력됨 ('+lex+(isEstimate?' · ATOS 기반 추정치':'')+')', 'var(--grn)');
+      setStatus('✓ Lexile filled in ('+lex+(isEstimate?' · ATOS-based estimate':'')+')', 'var(--grn)');
       return true;
     } else {
-      setStatus('Lexile 정보를 찾지 못했어요.', 'var(--red)');
+      setStatus('Lexile info not found.', 'var(--red)');
       return false;
     }
   }catch(err){
     console.error('Lexile search failed',err);
-    setStatus(`Lexile 정보를 찾지 못했어요. (${err.message})`, 'var(--red)');
+    setStatus(`Lexile info not found. (${err.message})`, 'var(--red)');
     return false;
   }finally{if(btn && !silent){btn.disabled=false;btn.innerHTML=originalHTML;}}
 }
@@ -6246,7 +6246,7 @@ function saveBookLib(){
 }
 
 // ── Delete with undo ──
-// Deleted records are held in memory for 6 seconds with an "실행 취소" toast; restoring
+// Deleted records are held in memory for 6 seconds with an "Undo" toast; restoring
 // splices the item back at its original position. Works for students/workbooks/books/materials.
 let _undoTimer=null;
 function showUndoToast(msg,restoreFn){
@@ -6259,7 +6259,7 @@ function showUndoToast(msg,restoreFn){
   span.textContent=msg;
   span.style.cssText="overflow:hidden;text-overflow:ellipsis;white-space:nowrap";
   const btn=document.createElement("button");
-  btn.textContent="실행 취소";
+  btn.textContent="Undo";
   btn.style.cssText="background:none;border:none;color:#4ade80;font-weight:700;cursor:pointer;font-size:13px;flex-shrink:0;font-family:inherit";
   btn.onclick=()=>{restoreFn();t.remove();clearTimeout(_undoTimer);};
   t.append(span,btn);
@@ -6283,7 +6283,7 @@ function deleteWithUndo(arrName,id,rerender){
   // ls() already warns the user loudly if storage itself is broken.
   save();
   rerender();
-  showUndoToast(`"${item.title||item.name||"항목"}" 삭제됨`,()=>{
+  showUndoToast(`"${item.title||item.name||"Item"}" deleted`,()=>{
     arr.splice(Math.min(idx,arr.length),0,item);
     save();rerender();
   });
@@ -6292,7 +6292,7 @@ function deleteWithUndo(arrName,id,rerender){
 
 function delBookLib(id){
   const b=bookLib.find(x=>x.id===id);
-  if(!confirm(`"${b?.title||"이 책"}"을(를) 삭제할까요?`))return;
+  if(!confirm(`Delete "${b?.title||"this book"}"?`))return;
   deleteWithUndo("bookLib",id,renderBookLib);
 }
 
@@ -6300,7 +6300,7 @@ function delBookLibFromModal(){
   if(!editBlid)return;
   const id=editBlid;                      // closeModal() clears editBlid — capture it first
   const b=bookLib.find(x=>x.id===id);
-  if(!confirm(`"${b?.title||"이 책"}"을(를) 삭제할까요?`))return;
+  if(!confirm(`Delete "${b?.title||"this book"}"?`))return;
   closeModal("mo-booklib");
   deleteWithUndo("bookLib",id,renderBookLib);
 }
@@ -6533,7 +6533,7 @@ async function startCloudSync(user){
   if(!remoteHas){
     // Cloud is empty → this browser's data becomes the starting point.
     if(localCount>0){
-      if(!confirm(`Cloud is empty.\n\n이 브라우저의 데이터(책 ${bookLib.length}권, 학생 ${students.length}명)를 클라우드에 업로드할까요?\n\n확인 = 업로드 / 취소 = Not syncing`)){
+      if(!confirm(`Cloud is empty.\n\nUpload this browser's data (${bookLib.length} books, ${students.length} students) to the cloud?\n\nOK = upload / Cancel = not syncing`)){
         syncUser=null;setSyncStatus("Not syncing");return;
       }
       setSyncStatus("Uploading… (first time only, may take a moment)");
@@ -6550,13 +6550,13 @@ async function startCloudSync(user){
     // Cloud has data AND this is a new device. If it also has local data, the two may differ —
     // this is the ONE moment where we must ask, because either choice discards something.
     if(localCount>0){
-      const useCloud=confirm(`클라우드에 저장된 데이터가 있습니다.\n\n확인 = 클라우드 데이터를 내려받아 이 브라우저를 덮어씁니다 (권장)\n취소 = 이 브라우저의 데이터를 클라우드에 올려 덮어씁니다\n\n⚠️ 어느 쪽이든 한쪽이 사라집니다. 확실하지 않으면 먼저 백업(Export)하세요.\n\n(이 질문은 이 기기에서 처음 한 번만 나옵니다)`);
+      const useCloud=confirm(`There is data saved in the cloud.\n\nOK = download the cloud data and overwrite this browser (recommended)\nCancel = upload this browser's data and overwrite the cloud\n\n⚠️ Either way, one side will be replaced. If unsure, take a backup (Export) first.\n\n(You'll only be asked this once on this device)`);
       if(useCloud){
         setSyncStatus("Downloading…");
         await pullAllFromCloud();
         setSyncStatus("✓ Loaded from cloud","ok");
       }else{
-        setSyncStatus("업로드 중…");
+        setSyncStatus("Uploading…");
         try{
           for(const k of SYNC_KEYS)await window.__cloudWrite(user.uid,k,SYNC_VARS[k]());
           setSyncStatus("✓ Overwrote the cloud with this browser's data","ok");
@@ -6709,8 +6709,8 @@ document.addEventListener("dblclick",e=>{
     if(shown)return;
     shown=true;
     setTimeout(()=>{
-      const ok=confirm("⚠️ 예상치 못한 오류가 발생했습니다.\n\n"+(err?.message||err||"Unknown error")+
-        "\n\n데이터는 아직 브라우저에 남아 있을 가능성이 높습니다.\n지금 백업(Export)을 받으시겠어요?\n\n확인 = 백업 받기 / 취소 = 무시하고 계속");
+      const ok=confirm("⚠️ An unexpected error occurred.\n\n"+(err?.message||err||"Unknown error")+
+        "\n\nYour data is most likely still in the browser.\nWould you like to take a backup (Export) now?\n\nOK = back up / Cancel = ignore and continue");
       if(ok&&typeof exportBackup==="function"){try{exportBackup();}catch(e){console.error(e);}}
       setTimeout(()=>{shown=false;},30000); // allow a fresh report later
     },50);
@@ -6741,13 +6741,13 @@ function renderAccountPane(user){
 }
 async function signInWithGoogle(){
   try{
-    if(!window.__signInGoogle){alert("Firebase가 아직 로드되지 않았어요. 잠시 후 다시 시도해주세요.");return;}
+    if(!window.__signInGoogle){alert("Firebase hasn't loaded yet. Please try again in a moment.");return;}
     await window.__signInGoogle();
   }catch(e){
     // popup-closed-by-user and cancelled-popup-request aren't errors worth alerting on
     if(e.code==="auth/popup-closed-by-user"||e.code==="auth/cancelled-popup-request")return;
     console.error(e);
-    alert("로그인 실패: "+(e.message||e.code||"unknown"));
+    alert("Sign-in failed: "+(e.message||e.code||"unknown"));
   }
 }
 async function signOutAccount(){
@@ -6790,9 +6790,9 @@ document.addEventListener("DOMContentLoaded",()=>{
      the NEW schedule applies. Everything before that day keeps the old schedule. -->
 <div class="mo" id="mo-schedfrom" style="z-index:2600">
   <div class="mb" style="max-width:340px">
-    <div class="mt"><span>새 스케줄 적용 시작일</span><button class="bic" onclick="schedFromCancel()"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span>New schedule start date</span><button class="bic" onclick="schedFromCancel()"><i class="ti ti-x"></i></button></div>
     <div style="padding:14px 16px 16px">
-      <p class="u-hint" style="margin-bottom:10px">클릭한 날짜<b>부터</b> 새 스케줄·요금이 적용됩니다. 그 전날까지는 기존 스케줄이 유지돼요.</p>
+      <p class="u-hint" style="margin-bottom:10px">The new schedule &amp; rate apply <b>from</b> the date you click. Up to the day before, the old schedule stays in effect.</p>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <button class="bic" onclick="schedFromNav(-1)"><i class="ti ti-chevron-left"></i></button>
         <b id="sf-mlbl" style="font-size:13px"></b>
@@ -6800,10 +6800,10 @@ document.addEventListener("DOMContentLoaded",()=>{
       </div>
       <div id="sf-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px"></div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
-        <button class="btn btn-p" style="width:100%" onclick="schedFromPick(td())">저장 — 오늘부터 새 스케줄 적용</button>
-        <button class="btn" style="width:100%" onclick="schedFromAll()">과거 포함 전체 적용 (소급 수정)</button>
+        <button class="btn btn-p" style="width:100%" onclick="schedFromPick(td())">Save — apply new schedule from today</button>
+        <button class="btn" style="width:100%" onclick="schedFromAll()">Apply to everything incl. the past (retroactive)</button>
       </div>
-      <p class="u-hint" style="margin-top:8px;font-size:10px">특정 날짜부터 적용하려면 위 달력에서 그 날짜를 클릭하세요.</p>
+      <p class="u-hint" style="margin-top:8px;font-size:10px">To apply from a specific date, click that date on the calendar above.</p>
     </div>
   </div>
 </div>
