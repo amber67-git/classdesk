@@ -408,6 +408,13 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .fbar input[type=text]{width:280px!important;flex:none!important;min-width:0!important;max-width:none!important}
 .fbar .btn{height:34px;min-height:0;padding:0 12px;font-size:12px;line-height:1.2}
 .fbar .btn-p{width:150px!important;max-width:none!important;padding:0 8px}
+/* Above phone width the toolbar stays on ONE line on every page: the search box gives way
+   (280px → min 140px) instead of the count + button dropping to a second row (Workbooks at 960px). */
+@media(min-width:641px){
+  .fbar,.fbar-row{flex-wrap:nowrap}
+  .fbar input[type=text]{flex:0 1 280px!important;min-width:140px!important}
+  .fbar-right{white-space:nowrap;flex-shrink:0}
+}
 @media(max-width:640px){
   .fbar select{width:auto!important;flex:1 1 46%}
   .fbar input[type=text]{width:auto!important;flex:1 1 100%!important}
@@ -578,8 +585,17 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-conflict-dot{color:#d97706;font-size:10px;flex-shrink:0}
 .cal-bw-badge{display:inline-block;font-size:8px;font-weight:700;background:#ede9fe;color:#6d28d9;padding:0 3px;border-radius:3px;margin-left:2px;vertical-align:middle;letter-spacing:.02em}
 .cal-event-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-.pay-chip-main{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.cal-event .cal-name{font-weight:500}
+.cal-event .cal-amt::before{content:"· "}
 .pay-chip-sub{display:none}
+/* Narrow calendars (half-screen PC, tablet portrait, phones): a day cell is ~100px, so "3:20pm Young Seo"
+   was cut to "3:20pm …". Stack the two parts instead — every chip on both calendars, same rule. */
+@media(max-width:1100px){
+  .cal-event-label{white-space:normal;display:flex;flex-direction:column;line-height:1.3}
+  .cal-event-label>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cal-event .cal-time,.cal-event .cal-amt{font-weight:400;opacity:.85;font-size:.92em}
+  .cal-event .cal-amt::before{content:none}
+}
 .cal-event-check{cursor:pointer;width:15px;height:15px;flex-shrink:0;accent-color:var(--ok);margin:0}
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
 .cal-more-btn:hover{color:var(--grn);text-decoration:underline}
@@ -787,9 +803,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <div class="fbar" style="position:relative">
     <select id="sf-sid" onchange="renderCalendar()" class="u-w-180"></select>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-      <button class="bic" onclick="calChangeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
+      <button class="bic" onclick="calChangeMonth(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
       <span id="cal-month-label" class="mn-label"></span>
-      <button class="bic" onclick="calChangeMonth(1)"><i class="ti ti-chevron-right"></i></button>
+      <button class="bic" onclick="calChangeMonth(1)" title="Next month"><i class="ti ti-chevron-right"></i></button>
     </div>
     <input type="month" id="sf-mon" onchange="calSetMonth(this.value)" style="width:0;opacity:0;position:absolute;pointer-events:none"/>
     <div style="margin-left:auto"><button class="btn btn-p" onclick="openLessonModal()"><i class="ti ti-plus"></i> Add lesson</button></div>
@@ -812,9 +828,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="seg-btn pm-tab-btn" data-tab="summary" onclick="pmSwitchTab('summary')"><i class="ti ti-table"></i> Summary</button>
     </div>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-      <button class="bic" onclick="pmChangeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
+      <button class="bic" onclick="pmChangeMonth(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
       <span id="pm-mlbl" class="mn-label"></span>
-      <button class="bic" onclick="pmChangeMonth(1)"><i class="ti ti-chevron-right"></i></button>
+      <button class="bic" onclick="pmChangeMonth(1)" title="Next month"><i class="ti ti-chevron-right"></i></button>
     </div>
     <input type="month" id="pm-mon" onchange="renderPayments()" style="width:0;opacity:0;position:absolute;pointer-events:none"/>
     <span id="pm-lock-hint" class="cell-muted2" style="margin-left:auto;display:inline-flex;align-items:center;gap:4px"></span>
@@ -1353,7 +1369,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- ═══ WORKBOOK MODAL ═════════════════════════════════════════════ -->
 <div class="mo book-modal" id="mo-book">
   <div class="mb wide">
-    <div class="mt"><span id="bm-title">Edit Workbook</span><button class="bic" onclick="closeModal('mo-book')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="bm-title">Edit Workbook</span><button class="bic" onclick="closeModal('mo-book')" title="Close"><i class="ti ti-x"></i></button></div>
 
     <div class="fg blm-search-fg">
       <div class="blm-search-row">
@@ -1427,7 +1443,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- ═══ BOOK LIBRARY (real books) ═══════════════════════════════════ -->
 <div id="page-booklib" class="page">
   <div class="fbar" style="flex-direction:column;align-items:stretch;gap:10px">
-   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+   <div class="fbar-row" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <input type="text" id="bl-search" placeholder="Search title, author, ISBN…" oninput="renderBookLib()"/>
     <button class="btn" id="bl-filter-btn" onclick="toggleBookFilters()" title="Show / hide filters"><i class="ti ti-adjustments-horizontal"></i> Filters<span id="bl-filter-n" class="u-badge" style="display:none;margin-left:6px;background:var(--grn-l);color:var(--grn-t);border-color:transparent"></span></button>
     <div class="fbar-right">
@@ -1514,7 +1530,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- ═══ BOOK LIBRARY MODAL ══════════════════════════════════════════ -->
 <div class="mo book-modal" id="mo-booklib">
   <div class="mb wide">
-    <div class="mt"><span id="blm-title">Add Book</span><button class="bic" onclick="closeModal('mo-booklib')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="blm-title">Add Book</span><button class="bic" onclick="closeModal('mo-booklib')" title="Close"><i class="ti ti-x"></i></button></div>
 
     <div class="fg blm-search-fg">
       <div class="blm-search-row">
@@ -1635,7 +1651,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- ═══ MATERIAL MODAL ══════════════════════════════════════════════ -->
 <div class="mo" id="mo-material">
   <div class="mb">
-    <div class="mt"><span id="mm-title">Add Material</span><button class="bic" onclick="closeModal('mo-material')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="mm-title">Add Material</span><button class="bic" onclick="closeModal('mo-material')" title="Close"><i class="ti ti-x"></i></button></div>
     <div class="fr c2">
       <div class="fg"><label data-col="name" data-required="true">Name *</label><input id="mm-name" type="text" list="mm-name-list" autocomplete="off"/><datalist id="mm-name-list"></datalist></div>
       <div class="fg"><label data-col="cat">Category</label>
@@ -1662,7 +1678,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- STUDENT MODAL -->
 <div class="mo" id="mo-student">
   <div class="mb">
-    <div class="mt"><span id="sm-title">Add Student</span><button class="bic" onclick="closeModal('mo-student')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="sm-title">Add Student</span><button class="bic" onclick="closeModal('mo-student')" title="Close"><i class="ti ti-x"></i></button></div>
     <div class="fr c2">
       <div class="fg"><label data-col="name" data-required="true">English name *</label><input id="sm-name" type="text"/></div>
       <div class="fg"><label data-col="korean" data-required="true">Korean name *</label><input id="sm-korean" type="text"/></div>
@@ -1714,7 +1730,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- LESSON MODAL -->
 <div class="mo" id="mo-lesson">
   <div class="mb wide">
-    <div class="mt"><span id="lm-title">Add Lesson</span><button class="bic" onclick="closeModal('mo-lesson')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="lm-title">Add Lesson</span><button class="bic" onclick="closeModal('mo-lesson')" title="Close"><i class="ti ti-x"></i></button></div>
     <!-- Basic info -->
     <div style="display:grid;grid-template-columns:1fr 1fr 0.8fr 0.7fr 1fr 1fr;gap:10px;margin-bottom:10px">
       <div class="fg" style="margin:0"><label data-col="student" data-required="true">Student *</label><select id="lm-sid" onchange="lessonAutoFill()"></select></div>
@@ -1854,7 +1870,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- CURRICULUM MODAL -->
 <div class="mo" id="mo-curr">
   <div class="mb">
-    <div class="mt"><span id="cm-title">Add Topic</span><button class="bic" onclick="closeModal('mo-curr')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="cm-title">Add Topic</span><button class="bic" onclick="closeModal('mo-curr')" title="Close"><i class="ti ti-x"></i></button></div>
     <div class="fr c3">
       <div class="fg"><label data-col="month">Month</label><select id="cm-month"><option>JAN</option><option>FEB</option><option>MAR</option><option>APR</option><option selected>MAY</option><option>JUN</option><option>JUL</option><option>AUG</option><option>SEP</option><option>OCT</option><option>NOV</option><option>DEC</option></select></div>
       <div class="fg"><label data-col="week">Week</label><input id="cm-week" type="number" min="1" max="5" value="1"/></div>
@@ -1879,7 +1895,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- ═══ MESSAGE PREVIEW (parent note / payment message) ═══════════ -->
 <div class="mo" id="mo-msgpreview">
   <div class="mb" style="max-width:480px">
-    <div class="mt"><span id="msgpreview-title">Copied to clipboard</span><button class="bic" onclick="closeModal('mo-msgpreview')"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="msgpreview-title">Copied to clipboard</span><button class="bic" onclick="closeModal('mo-msgpreview')" title="Close"><i class="ti ti-x"></i></button></div>
     <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Already copied — paste it wherever you send messages. Shown here so you can double-check it.</p>
     <pre id="msgpreview-text" style="white-space:pre-wrap;word-break:break-word;font-family:var(--font);font-size:13px;line-height:1.6;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;max-height:50vh;overflow-y:auto;margin:0"></pre>
     <div class="mf"><button class="btn btn-p" onclick="closeModal('mo-msgpreview')">Done</button></div>
@@ -2176,8 +2192,8 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v77";
-const APP_BUILT="2026-09-12";
+const APP_VERSION="v78";
+const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -2318,7 +2334,7 @@ function pinDialog({title,hint,confirm=false,error=""}){
     };
     ov.querySelector("#pin-cancel").onclick=()=>done(null);
     ov.querySelector("#pin-ok").onclick=submit;
-    ov.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();submit();}else if(e.key==="Escape")done(null);});
+    ov.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();submit();}else if(e.key==="Escape"){e.preventDefault();done(null);}});
     setTimeout(()=>inp.focus(),50);
   });
 }
@@ -3052,7 +3068,7 @@ function addWbRow(w){
       <div style="font-size:10px;font-weight:700;color:var(--grn);margin-bottom:2px;letter-spacing:.05em">HW</div>
       <input type="text" value="${w?.hw||""}" class="hw-input" style="height:34px"/>
     </div>
-    <button class="bic" onclick="this.closest('.wb-row').remove()" class="u-txt3" style="margin-top:0"><i class="ti ti-trash"></i></button>`;
+    <button class="bic u-txt3" onclick="this.closest('.wb-row').remove()" style="margin-top:0" title="Remove"><i class="ti ti-trash"></i></button>`;
   document.getElementById("lm-wb-rows").appendChild(div);
 }
 function wbSearchInput(inp){
@@ -3080,7 +3096,7 @@ function wbSearchKey(e,inp){
   if(e.key==="Enter"){e.preventDefault();if(cur)wbSelectItem(cur);else if(items[0])wbSelectItem(items[0]);return;}
   if(e.key==="ArrowDown"){e.preventDefault();const i=items.indexOf(cur);const next=items[(i+1)%items.length];if(cur)cur.classList.remove("wb-drop-active");if(next)next.classList.add("wb-drop-active");return;}
   if(e.key==="ArrowUp"){e.preventDefault();const i=items.indexOf(cur);const prev=items[(i-1+items.length)%items.length];if(cur)cur.classList.remove("wb-drop-active");if(prev)prev.classList.add("wb-drop-active");return;}
-  if(e.key==="Escape"){drop.style.display="none";}
+  if(e.key==="Escape"){if(drop.offsetParent)e.preventDefault();drop.style.display="none";}
 }
 function wbSelectItem(item){
   const name=item.dataset.name;
@@ -3151,7 +3167,7 @@ function makeCatalogRow(containerId,rowClass,placeholder,catalogFn,subLabelFn,va
         onblur="setTimeout(()=>wbHideDrop(this),250)"/>
       <div class="${rowClass}-drop" style="display:none;position:absolute;top:38px;left:0;right:0;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);box-shadow:var(--shm);z-index:200;max-height:180px;overflow-y:auto"></div>
     </div>
-    <button class="bic" onclick="this.closest('.${rowClass}').remove()" class="u-txt3" style="margin-top:0"><i class="ti ti-trash"></i></button>`;
+    <button class="bic u-txt3" onclick="this.closest('.${rowClass}').remove()" style="margin-top:0" title="Remove"><i class="ti ti-trash"></i></button>`;
   document.getElementById(containerId).appendChild(div);
   // Stash the catalog + sublabel functions on the row class the first time, so catSearchInput can look them up
   CAT_REGISTRY[rowClass]={catalogFn,subLabelFn,createType};
@@ -3182,7 +3198,7 @@ function catSearchKey(e,inp,rowClass){
   if(e.key==="Enter"){e.preventDefault();if(cur)catSelectItem(cur,rowClass);else if(items[0])catSelectItem(items[0],rowClass);return;}
   if(e.key==="ArrowDown"){e.preventDefault();const i=items.indexOf(cur);const next=items[(i+1)%items.length];if(cur)cur.classList.remove("cat-drop-active");if(next)next.classList.add("cat-drop-active");return;}
   if(e.key==="ArrowUp"){e.preventDefault();const i=items.indexOf(cur);const prev=items[(i-1+items.length)%items.length];if(cur)cur.classList.remove("cat-drop-active");if(prev)prev.classList.add("cat-drop-active");return;}
-  if(e.key==="Escape"){drop.style.display="none";}
+  if(e.key==="Escape"){if(drop.offsetParent)e.preventDefault();drop.style.display="none";}
 }
 function catSelectItem(item,rowClass){
   const name=item.dataset.name;
@@ -3207,7 +3223,7 @@ function addShwRow(name){
   div.style.cssText="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;margin-bottom:6px";
   div.innerHTML=`
     <input type="text" value="${(name||"").replace(/"/g,"&quot;")}" placeholder="School / academy homework…" class="shw-row-inp" style="height:34px"/>
-    <button class="bic" onclick="this.closest('.shw-row').remove()" class="u-txt3" style="margin-top:0"><i class="ti ti-trash"></i></button>`;
+    <button class="bic u-txt3" onclick="this.closest('.shw-row').remove()" style="margin-top:0" title="Remove"><i class="ti ti-trash"></i></button>`;
   document.getElementById("lm-schoolhw-rows").appendChild(div);
 }
 function getAllSlots(s){
@@ -4167,7 +4183,7 @@ function renderTodos(){
     <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr)">
       <input type="checkbox" ${t.done?"checked":""} onchange="toggleTodo('${t.id}')" style="width:16px;height:16px;cursor:pointer;accent-color:var(--grn);flex-shrink:0"/>
       <span style="flex:1;font-size:13px;${t.done?"color:var(--txt3);text-decoration:line-through":"color:var(--txt)"}">${escAttrTodo(t.text)}</span>
-      <button class="bic text-red" onclick="delTodo('${t.id}')"><i class="ti ti-trash"></i></button>
+      <button class="bic text-red" onclick="delTodo('${t.id}')" title="Delete"><i class="ti ti-trash"></i></button>
     </div>`).join("");
 }
 function escAttrTodo(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -4504,6 +4520,7 @@ function renderCalendar(){
     const moved=!!occ.movedFrom;
     const bw=occIsBiweekly(occ);
     const label=(time?time+" ":"")+name+(occ.topic?" · "+occ.topic:"")+(moved?" (moved)":"");
+    const labelHtml=(time?"<span class=\"cal-time\">"+time+"</span> ":"")+"<span class=\"cal-name\">"+escAttr(name+(occ.topic?" · "+occ.topic:"")+(moved?" (moved)":""))+(bw?" <span class='cal-bw-badge'>2W</span>":"")+"</span>";
     const safeLabel=escAttr(label+(bw?" · biweekly":"")+(conflicted&&conflicted.has(occ.id)?" · time conflict":""));
     const isCancelled=occ.status==="cancelled"||occ.status==="cancelpaid";
     const isCompleted=!!occ.completed&&!isCancelled;
@@ -4512,7 +4529,7 @@ function renderCalendar(){
     const dragPayload=escAttr(JSON.stringify({sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,isVirtual:!!occ.isVirtual,lessonId:occ.isVirtual?null:occ.id}));
     return "<div class=\""+chipCls+"\" draggable=\"true\" data-payload=\""+dragPayload+"\" ondragstart=\"calDragStart(event,this)\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
       +(hasConflict?"<span class=\"cal-conflict-dot\" title=\"Times overlap\">⚠</span>":"")
-      +"<span class=\"cal-event-label\">"+label+(bw?" <span class='cal-bw-badge'>2W</span>":"")+"</span>"
+      +"<span class=\"cal-event-label\">"+labelHtml+"</span>"
       +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/>"
       +"</div>";
   }
@@ -4717,7 +4734,7 @@ function renderPaymentCalendar(mon){
     const disabled=occ.status==="cancelled";
     return "<div class=\""+chipCls+"\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
       +"<span class=\"cal-event-label\">"
-      +"<span class=\"pay-chip-main\">"+mainLine+"</span>"
+      +"<span class=\"cal-name\">"+escAttr(name)+"</span> <span class=\"cal-amt\">"+won(occ.amt)+"</span>"
       +(subLine?"<span class=\"pay-chip-sub\">"+escAttr(subLine)+"</span>":"")
       +"</span>"
       +"<input type=\"checkbox\" class=\"cal-event-check\""+(checked?" checked":"")+(disabled?" disabled":"")+" onclick=\"event.stopPropagation();togglePaymentPaid('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\"/>"
@@ -4779,7 +4796,7 @@ function renderCurriculum(){
   const mf=document.getElementById("curr-mf")?.value||"";
   const sf=(document.getElementById("curr-sf")?.value||"").toLowerCase();
   const fl=curriculum.filter(c=>{if(mf&&c.month!==mf)return false;if(sf&&![c.topic,c.cat,c.books,c.wb].join(" ").toLowerCase().includes(sf))return false;return true;}).sort((a,b)=>{const mo=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];return(mo.indexOf(a.month)-mo.indexOf(b.month))||a.week-b.week;});
-  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td><td class="cell-sub2">${c.wb||"—"}</td><td class="cell-sub2">${c.writing||"—"}</td><td class="cell-sub2">${c.books||"—"}</td><td class="cell-sub2">${c.acts||"—"}</td><td class="cell-sub2">${c.grammar||"—"}</td><td class="cell-muted">${c.note||""}</td><td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>No curriculum items found</p></div></td></tr>`;
+  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td><td class="cell-sub2">${c.wb||"—"}</td><td class="cell-sub2">${c.writing||"—"}</td><td class="cell-sub2">${c.books||"—"}</td><td class="cell-sub2">${c.acts||"—"}</td><td class="cell-sub2">${c.grammar||"—"}</td><td class="cell-muted">${c.note||""}</td><td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="Edit"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="Delete"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>No curriculum items found</p></div></td></tr>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -4908,8 +4925,8 @@ function renderBooks(){
               style="width:16px;height:16px;cursor:pointer;accent-color:var(--grn)"/>
           </div>
           <div class="row-actions" ondblclick="event.stopPropagation()">
-            <button class="bic" onclick="openBookModal('${b.id}')"><i class="ti ti-pencil"></i></button>
-            <button class="bic text-red" onclick="delBook('${b.id}')"><i class="ti ti-trash"></i></button>
+            <button class="bic" onclick="openBookModal('${b.id}')" title="Edit"><i class="ti ti-pencil"></i></button>
+            <button class="bic text-red" onclick="delBook('${b.id}')" title="Delete"><i class="ti ti-trash"></i></button>
           </div>
         </div>`).join("")}
     </div>`).join("");
@@ -6359,8 +6376,8 @@ function renderBookLib(){
       </div>
       ${cols.map(c=>c.render(b)).join("")}
       <div class="row-actions" ondblclick="event.stopPropagation()">
-        <button class="bic" onclick="openBookLibModal('${b.id}')"><i class="ti ti-pencil"></i></button>
-        <button class="bic text-red" onclick="delBookLib('${b.id}')"><i class="ti ti-trash"></i></button>
+        <button class="bic" onclick="openBookLibModal('${b.id}')" title="Edit"><i class="ti ti-pencil"></i></button>
+        <button class="bic text-red" onclick="delBookLib('${b.id}')" title="Delete"><i class="ti ti-trash"></i></button>
       </div>
       <div></div>
     </div>`).join("");
@@ -6998,8 +7015,8 @@ function renderMaterial(){
       <div>${m.difficulty?`<span style="font-size:11px;background:var(--surf2);border-radius:99px;padding:2px 8px;color:var(--txt2)">${m.difficulty}</span>`:"—"}</div>
       <div class="cell-sub" title="${m.comment||""}">${m.comment||"—"}</div>
       <div class="row-actions" ondblclick="event.stopPropagation()">
-        <button class="bic" onclick="openMaterialModal('${m.id}')"><i class="ti ti-pencil"></i></button>
-        <button class="bic text-red" onclick="delMaterial('${m.id}')"><i class="ti ti-trash"></i></button>
+        <button class="bic" onclick="openMaterialModal('${m.id}')" title="Edit"><i class="ti ti-pencil"></i></button>
+        <button class="bic text-red" onclick="delMaterial('${m.id}')" title="Delete"><i class="ti ti-trash"></i></button>
       </div>
     </div>`).join("");
 }
@@ -7184,15 +7201,35 @@ function afterRemoteApplied(key){
 // row (fixed px tracks can exceed the card). Measure after every render and give header + rows one
 // shared min-width. A MutationObserver triggers it, so renderers don't have to remember to.
 function syncListWidths(){
+  const narrow=window.innerWidth<=1280;
   document.querySelectorAll(".page.active .card").forEach(card=>{
     const head=card.querySelector(":scope > .grid-head");if(!head)return;
     const els=[head,...card.querySelectorAll(".grid-row,.std-row,.pr")];
-    els.forEach(e=>{e.style.minWidth="";});
-    if(window.innerWidth>1280)return;
-    let w=0;els.forEach(e=>{w=Math.max(w,e.scrollWidth);});
+    els.forEach(e=>{
+      e.style.minWidth="";
+      // A flexible (fr) column collapses to 0px once the fixed columns overflow a narrow card — the
+      // Reading page's Book column vanished on phones. While narrow, every fr track gets a 160px floor.
+      const tpl=e.dataset.gtc??(e.dataset.gtc=e.style.gridTemplateColumns||"");
+      if(tpl.includes("fr"))e.style.gridTemplateColumns=narrow
+        ?tpl.replace(/minmax\(0(?:px)?,\s*1fr\)/g,"minmax(160px,1fr)").replace(/(^|\s)1fr(?=\s|$)/g,"$1minmax(160px,1fr)")
+        :tpl;
+    });
+    if(!narrow)return;
+    // scrollWidth stops at the last column's edge (no right padding) once content overflows
+    let w=0;els.forEach(e=>{const over=e.scrollWidth>e.clientWidth;w=Math.max(w,e.scrollWidth+(over?(parseFloat(getComputedStyle(e).paddingRight)||0):0));});
     if(w>card.clientWidth+1)els.forEach(e=>{e.style.minWidth=w+"px";});
   });
 }
+// Esc closes the topmost open dialog by pressing its own Close/Cancel button, so promise-based
+// dialogs (schedule start date, PIN) still resolve. Dropdowns that consumed the key call preventDefault.
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape"||e.defaultPrevented)return;
+  if(document.activeElement&&document.activeElement.tagName==="SELECT")return;
+  const open=[...document.querySelectorAll(".mo.show")];if(!open.length)return;
+  const top=open.reduce((a,b)=>(parseInt(b.style.zIndex)||0)>=(parseInt(a.style.zIndex)||0)?b:a);
+  const btn=top.querySelector('.bic[onclick^="closeModal"],.bic[onclick^="schedFromCancel"],#pin-cancel');
+  if(btn){e.preventDefault();btn.click();}
+});
 let _slwTimer=null;
 // setTimeout, not requestAnimationFrame: rAF never fires in a hidden tab, and a list rendered while
 // the app was in the background must still be measured once it is shown.
@@ -7518,13 +7555,13 @@ document.addEventListener("DOMContentLoaded",()=>{
      the NEW schedule applies. Everything before that day keeps the old schedule. -->
 <div class="mo" id="mo-schedfrom" style="z-index:2600">
   <div class="mb" style="max-width:340px">
-    <div class="mt"><span>New schedule start date</span><button class="bic" onclick="schedFromCancel()"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span>New schedule start date</span><button class="bic" onclick="schedFromCancel()" title="Close"><i class="ti ti-x"></i></button></div>
     <div style="padding:14px 16px 16px">
       <p class="u-hint" style="margin-bottom:10px">The new schedule &amp; rate apply <b>from</b> the date you click. Up to the day before, the old schedule stays in effect.</p>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <button class="bic" onclick="schedFromNav(-1)"><i class="ti ti-chevron-left"></i></button>
+        <button class="bic" onclick="schedFromNav(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
         <b id="sf-mlbl" style="font-size:13px"></b>
-        <button class="bic" onclick="schedFromNav(1)"><i class="ti ti-chevron-right"></i></button>
+        <button class="bic" onclick="schedFromNav(1)" title="Next month"><i class="ti ti-chevron-right"></i></button>
       </div>
       <div id="sf-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px"></div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
