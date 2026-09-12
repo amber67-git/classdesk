@@ -258,7 +258,9 @@ input:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l);outline:no
 
 ## 7. Behaviour patterns
 
-- **편집**: 행 더블클릭 또는 연필 아이콘 → 모달. 저장은 즉시 localStorage + 클라우드 동기화. "저장됨" 문구 대신 화면이 바로 바뀐다.
+- **편집**: 행 더블클릭 또는 연필 아이콘 → 모달. 저장은 즉시 localStorage + 클라우드 동기화. 목록이 바로 바뀌므로 별도 문구 없음.
+- **설정 저장**: 화면이 바뀌지 않는 저장(템플릿·API 키·로고·라이브러리 이름)은 아래 가운데 2초 토스트 `✓ Saved`
+  (`showToast()`, Undo 토스트와 같은 모양, 버튼 없음). `alert()`는 쓰지 않는다.
 - **삭제**: 확인창 → 즉시 삭제 → 6초 Undo 토스트.
 - **모달 닫기**: X 버튼, 배경 클릭, **Esc** 세 가지가 항상 같이 동작한다. Esc는 맨 위 모달의 자체 Close/Cancel 버튼을
   누르는 방식으로 구현한다 (Promise 기반 다이얼로그도 정상 종료되도록). 자동완성 드롭다운이 Esc를 먹으면
