@@ -972,7 +972,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="cb p">
         <p class="u-hint" style="margin-bottom:10px">Ownership mark printed at the bottom-right of info labels (e.g. AMBER LIBRARY). Leave blank to omit it.</p>
         <input id="library-name-inp" type="text" style="max-width:320px" placeholder="e.g. AMBER LIBRARY"
-          oninput="localStorage.setItem('mc_library_name',this.value)"/>
+          oninput="localStorage.setItem('mc_library_name',this.value)" onchange="showToast('Library name saved')"/>
       </div>
     </div>
     <!-- App logo (sidebar + favicon + iOS home-screen icon) -->
@@ -2192,7 +2192,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v78";
+const APP_VERSION="v79";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2231,7 +2231,7 @@ function setBrandLogo(inp){
     let data=c.toDataURL("image/png");
     if(data.length>80000)data=c.toDataURL("image/jpeg",0.9); // photos compress far better as JPEG
     settings.brandLogo=data;
-    save();applyBranding();
+    save();applyBranding();showToast("Logo saved");
   };
   img.onerror=()=>{URL.revokeObjectURL(url);alert("Couldn't read that image. Please try a PNG or JPG file.");};
   img.src=url;
@@ -2425,8 +2425,8 @@ function saveGcseKeys(){
   if(!k||!cx){alert("Please enter both the API Key and Search Engine ID.");return;}
   localStorage.setItem("gcse_api_key",k);
   localStorage.setItem("gcse_cx",cx);
-  const st=document.getElementById("gcse-status");
-  if(st){st.textContent="✓ Saved.";st.style.color="var(--grn)";}
+  const st=document.getElementById("gcse-status");if(st)st.textContent="";
+  showToast("API keys saved");
 }
 async function testGcseKeys(){
   const st=document.getElementById("gcse-status");
@@ -3953,13 +3953,13 @@ function addWorkbookTag(){
 function removeWb(i){settings.workbooks.splice(i,1);save();renderSettings();}
 function addActivityTag(){const inp=document.getElementById("act-new");const v=inp?.value.trim();if(!v)return;if(!settings.activities.includes(v)){settings.activities.push(v);save();}inp.value="";renderSettings();}
 function removeAct(i){settings.activities.splice(i,1);save();renderSettings();}
-function saveParentTmpl(){const ta=document.getElementById("pt-tmpl");settings.parentTmpl=ta?.value??"";save();alert("Parent note template saved!");}
+function saveParentTmpl(){const ta=document.getElementById("pt-tmpl");settings.parentTmpl=ta?.value??"";save();showToast("Parent note template saved");}
 function savePayTmpl(type){
   const map={unpaid:"tmpl-unpaid",partial:"tmpl-partial"};
   const ta=document.getElementById(map[type]);if(!ta)return;
   if(type==="unpaid")settings.payUnpaid=ta.value;
   else settings.payPartial=ta.value;
-  save();alert("Payment template saved!");
+  save();showToast("Payment template saved");
 }
 function insertPh(id,ph){
   const ta=document.getElementById(id);if(!ta)return;
@@ -6141,8 +6141,7 @@ function saveCustomFieldsEditor(){
   reorderModalFields(CF_CURRENT_PAGE);
   // Re-render the list view so headers pick up the changes
   triggerPageRerender(CF_CURRENT_PAGE);
-  const status=document.getElementById("cf-status");
-  if(status){status.textContent="✓ Saved";status.style.color="var(--grn)";setTimeout(()=>{if(status.textContent==="✓ Saved")status.textContent="";},2000);}
+  showToast("Custom fields saved");
 }
 
 // Reorder actual form fields in a page's edit modal to match the saved field order.
@@ -6931,6 +6930,19 @@ function saveBookLib(){
 // Deleted records are held in memory for 6 seconds with an "Undo" toast; restoring
 // splices the item back at its original position. Works for students/workbooks/books/materials.
 let _undoTimer=null;
+// Quiet "Saved" confirmation (Settings saves): same look as the Undo toast, no button, 2 seconds.
+let _toastTimer=null;
+function showToast(msg){
+  document.getElementById("app-toast")?.remove();
+  clearTimeout(_toastTimer);
+  const t=document.createElement("div");
+  t.id="app-toast";t.setAttribute("role","status");
+  t.style.cssText="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:3000;background:#1e293b;color:#fff;padding:10px 16px;border-radius:10px;display:flex;gap:8px;align-items:center;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:calc(100vw - 32px)";
+  t.innerHTML='<i class="ti ti-check" style="color:#4ade80"></i>';
+  const span=document.createElement("span");span.textContent=msg;t.appendChild(span);
+  document.body.appendChild(t);
+  _toastTimer=setTimeout(()=>t.remove(),2000);
+}
 function showUndoToast(msg,restoreFn){
   document.getElementById("undo-toast")?.remove();
   clearTimeout(_undoTimer);
