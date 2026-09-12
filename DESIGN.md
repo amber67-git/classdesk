@@ -229,6 +229,8 @@ input:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l);outline:no
 폰에서는 입력창 글자 16px (iOS 자동 확대 방지), 높이 42px.
 
 ### Modal
+- 폰(≤640px)에서는 버튼 줄(`.mf`)이 모달 바닥에 **sticky** — 긴 폼을 끝까지 내리지 않아도 Save/Cancel이 보인다.
+- PC에서는 열리자마자 첫 입력칸에 포커스(`openModal`). 터치 기기는 키보드가 튀어나오므로 포커스하지 않는다.
 ```css
 .mo{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:999}
 .mo.show{display:flex}

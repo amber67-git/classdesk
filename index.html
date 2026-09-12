@@ -196,7 +196,7 @@ tbody tr:hover td{background:#fafbfc}
 /* READING REPORT — print only this page, with a heading the screen never shows */
 .rd-print-head{display:none}
 @media print{
-  body.print-reading .sb,body.print-reading .topbar,body.print-reading .fbar,body.print-reading .mob-overlay{display:none!important}
+  body.print-reading .sb,body.print-reading .topbar,body.print-reading .fbar,body.print-reading .mob-overlay,body.print-reading #backup-banner,body.print-reading #app-toast,body.print-reading #undo-toast{display:none!important}
   body.print-reading .main{margin-left:0}
   body.print-reading .page{display:none}
   body.print-reading #page-reading{display:block}
@@ -521,6 +521,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 @media(max-width:640px){
   .pc{padding:12px}
   .mb{padding:16px;max-height:88vh}
+  /* Save / Cancel stay reachable while a long form (lesson, student, book) scrolls */
+  .mf,.book-modal .blm-actions{position:sticky;bottom:-16px;background:var(--surf);margin:18px -16px -16px;padding:12px 16px 16px;z-index:2}
   .mt{margin-bottom:14px}
   /* 16px inputs prevent iOS auto-zoom on focus; taller controls for touch */
   input,select,textarea{font-size:16px;height:42px}
@@ -1275,6 +1277,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>A student drops one of two weekly classes (e.g. keeps Saturday, stops Sunday)</dt><dd>Students → edit the student → remove that slot with its trash icon → Save. You're asked <b>from which date</b> the change applies: pick the first day without that class. Everything before that date keeps the old schedule (and its billing); from that date on only the remaining class is generated.</dd>
           <dt>A student's day or time changes</dt><dd>Same flow — change the day/time, Save, pick the effective date. Choose "Apply to everything" only for a correction of a typo, never for a real change.</dd>
+          <dt>Moving one class to another day (make-up class)</dt><dd>On a PC, drag the class chip onto the new day in Classes. On a tablet or phone, tap the class → change the <b>Date</b> (and time if needed) → Save. The class then shows "(moved)" and its usual day stays empty for that week; "Reset to usual time" in the same dialog undoes the move.</dd>
         </dl>
 
         <h3>Working with the lists</h3>
@@ -1697,7 +1700,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </div>
       <input id="sm-sched" type="hidden"/>
     </div>
-    <div class="fg"><label data-col="startdate">Start date <span style="font-weight:400;color:var(--txt3)">(recurring classes start on this date — blank means no limit)</span></label><input id="sm-startdate" type="date"/></div>
+    <div class="fg"><label data-col="startdate">Start date <span style="font-weight:400;color:var(--txt3)">(no recurring classes before this date; new students default to today)</span></label><input id="sm-startdate" type="date"/></div>
     <div class="fg"><label data-col="enddate">End date <span style="font-weight:400;color:var(--txt3)">(recurring classes end on this date — later dates skipped, past records kept)</span></label><input id="sm-enddate" type="date"/></div>
     <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600"><input id="sm-archived" type="checkbox"/> Archive <span style="font-weight:400;color:var(--txt3);font-size:12px">(hidden from the active list & calendar — records and stats are kept)</span></label></div>
     <div class="fr c3">
@@ -2192,7 +2195,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v79";
+const APP_VERSION="v80";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2534,7 +2537,7 @@ function getOccurrencesForDate(dateStr,sidFilter){
   // this, they'd fail the slot match below and get silently replaced by a fresh "unpaid" virtual.
   const cancelledOnDate=lessons.filter(l=>
     l.date===dateStr && (l.status==="cancelled"||l.status==="cancelpaid")
-    && (!sidFilter||l.sid===sidFilter)
+    && gs(l.sid) && (!sidFilter||l.sid===sidFilter)
   );
   students.forEach(s=>{
     if(sidFilter&&s.id!==sidFilter)return;
@@ -2577,6 +2580,7 @@ function getOccurrencesForDate(dateStr,sidFilter){
   // cancelled lessons whose slot/duration no longer matches the student's current schedule).
   lessons.forEach(l=>{
     if(l.date!==dateStr)return;
+    if(!gs(l.sid))return;   // the student was deleted — leftover records stay out of every view and total
     if(sidFilter&&l.sid!==sidFilter)return;
     if(usedRealIds[l.id])return;
     if(l.status==="deleted")return;   // tombstoned ad-hoc record — hidden everywhere
@@ -2711,6 +2715,14 @@ function toggleMobileSidebar(){
 }
 
 function showPage(p){
+  if(p==="payments"&&pinRequired()){
+    // Ask for the PIN before touching the page. Cancel must leave the current page as it is —
+    // until v80 the Payments page had already been switched in and stayed visible after Cancel.
+    document.querySelector(".sb")?.classList.remove("mob-open");
+    document.getElementById("mob-overlay")?.classList.remove("show");
+    verifyPin().then(ok=>{if(ok)showPage("payments");});
+    return;
+  }
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll(".ni").forEach(x=>x.classList.remove("active"));
   document.querySelector(".sb")?.classList.remove("mob-open");
@@ -2719,11 +2731,6 @@ function showPage(p){
   document.querySelectorAll(".ni").forEach(n=>{if(n.dataset.page===p)n.classList.add("active");});
   // Untrusted device: leaving Payments locks it again — coming back asks for the PIN every time.
   if(curPage==="payments"&&p!=="payments"&&!deviceTrusted())payUnlocked=false;
-  if(p==="payments"&&pinRequired()){
-    // Unlock first; showPage runs again once the PIN checks out.
-    verifyPin().then(ok=>{if(ok)showPage("payments");});
-    return;
-  }
   document.getElementById("tb-title").textContent=PT[p]||p;
   curPage=p;
   renderTopbarActions(p);
@@ -2747,7 +2754,13 @@ function showPage(p){
 // ═══════════════════════════════════════════════
 function closeModal(id){document.getElementById(id)?.classList.remove("show");if(id==="mo-lesson")swResetAll();}
 let topModalZ=999;
-function openModal(id){const m=document.getElementById(id);if(!m)return;topModalZ++;m.style.zIndex=topModalZ;m.classList.add("show");}
+function openModal(id){
+  const m=document.getElementById(id);if(!m)return;topModalZ++;m.style.zIndex=topModalZ;m.classList.add("show");
+  if(!window.matchMedia("(pointer:coarse)").matches)setTimeout(()=>{
+    if(!m.classList.contains("show")||m.contains(document.activeElement))return;
+    m.querySelector("input:not([type=hidden]):not([type=file]):not([type=checkbox]):not([disabled]):not([readonly]),select:not([disabled]),textarea:not([disabled])")?.focus();
+  },30);
+}
 
 // ── Student ──
 let editSid=null;
@@ -2923,6 +2936,7 @@ async function saveStudent(){
   const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
   if(!obj.name){alert("Name required");return;}
   const isNew=!editSid;
+  if(isNew&&!obj.startDate)obj.startDate=td();   // blank used to mean "since forever" → phantom unpaid months
   const prevStudents=students.slice(); // for rollback if the write fails
   if(editSid){
     const i=students.findIndex(s=>s.id===editSid);
@@ -3684,7 +3698,9 @@ function checkBackupReminder(){
   b.id="backup-banner";
   b.style.cssText="position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#fef3c7;border-bottom:1px solid #fcd34d;color:#78350f;font-size:12.5px;line-height:1.4";
   const mob=window.matchMedia("(max-width:640px)").matches;
-  b.innerHTML=`<span style="font-weight:600;flex:1 1 auto;min-width:0">⚠️ ${last?`Last backup ${days} days ago`:"Never backed up"}${mob?"":" — if the browser's data is cleared, it cannot be recovered"}</span>
+  const synced=!!(window.__auth&&window.__auth.currentUser);
+  const why=mob?"":synced?" — cloud sync is on, but deletions sync too; a file backup is the safety net":" — if the browser's data is cleared, it cannot be recovered";
+  b.innerHTML=`<span style="font-weight:600;flex:1 1 auto;min-width:0">⚠️ ${last?`Last backup ${days} days ago`:"Never backed up"}${why}</span>
     <span style="display:flex;gap:6px;flex-shrink:0">
       <button class="btn btn-p" style="height:28px;font-size:12px;padding:0 10px" onclick="exportBackup()">Back up now</button>
       <button class="btn" style="height:28px;font-size:12px;padding:0 10px" onclick="localStorage.setItem('mc_backup_snooze',Date.now()+7*86400000);document.getElementById('backup-banner').remove()">In 7 days</button>
@@ -4645,13 +4661,13 @@ function renderPayments(){
     <div class="tm">${won(c.paidT)}</div>
     <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}">${c.diff>0?won(c.diff):"—"}</div>
     <div class="pr-status">
-      ${bdg(c.ov)}
+      ${c.count===0&&!c.cancelled?'<span class="badge bc">No lessons</span>':bdg(c.ov)}
       ${c.diff>0
         ?`<button class="btn btn-xs btn-p pm-act" onclick="markAllPaid('${s.id}','${mon}')" title="Mark every unpaid lesson this month as paid"><i class="ti ti-check"></i> All paid</button>`
         :c.paidT>0
           ?`<button class="btn btn-xs pm-act" onclick="markAllUnpaid('${s.id}','${mon}')" title="Undo — mark this month's paid lessons as unpaid again"><i class="ti ti-arrow-back-up"></i> Undo paid</button>`
           :`<span class="pm-act"></span>`}
-      <button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>
+      ${c.exp>0?`<button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>`:'<span class="pm-req"></span>'}
     </div>
   </div>`).join("");
   renderPaymentCalendar(mon);
@@ -7535,6 +7551,8 @@ function initAuthListener(){
   if(!window.__onAuthChange)return;
   window.__onAuthChange(user=>{
     renderAccountPane(user);
+    // The backup reminder words itself differently once we know the cloud has a copy
+    document.getElementById("backup-banner")?.remove();checkBackupReminder();
     const dot=document.getElementById("auth-dot");
     if(dot)dot.style.background=user?"#16a34a":"transparent";
     // Start mirroring to Firestore on login; tear it down on logout.
