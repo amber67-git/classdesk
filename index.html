@@ -600,6 +600,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 }
 .cal-event-check{cursor:pointer;width:15px;height:15px;flex-shrink:0;accent-color:var(--ok);margin:0}
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
+/* GOOGLE CALENDAR COMPARE (v82) */
+.cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
+.gc-row{grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
+.gc-cell{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}
+.gc-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.gc-act{display:flex;justify-content:flex-end}
+.gc-act select{width:160px;height:30px;font-size:12px}
+.gc-dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.gc-color-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.gc-color-row:last-child{border-bottom:none}
+.gc-color-row select{width:190px;height:30px;font-size:12px}
+.gc-unknown{background:var(--amb-l)}
+.gc-match{opacity:.7}
+@media(max-width:640px){.mf{flex-wrap:wrap}.gc-color-row{flex-wrap:wrap}.gc-row{grid-template-columns:90px minmax(0,1fr)}.gc-row>:nth-child(3){grid-column:2}.gc-act{grid-column:1/-1;justify-content:flex-start}}
 .cal-more-btn:hover{color:var(--grn);text-decoration:underline}
 @media(max-width:900px){.cal-day{min-height:70px}.cal-event{font-size:10px}}
 
@@ -804,6 +818,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-sessions" class="page">
   <div class="fbar" style="position:relative">
     <select id="sf-sid" onchange="renderCalendar()" class="u-w-180"></select>
+    <button class="btn" id="cal-gcal-btn" onclick="openGcalCompare()" title="Compare this month with Google Calendar"><i class="ti ti-calendar-search"></i> Google</button>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
       <button class="bic" onclick="calChangeMonth(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
       <span id="cal-month-label" class="mn-label"></span>
@@ -1131,6 +1146,33 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p id="gcse-status" style="font-size:11px;color:var(--txt3);margin-top:8px"></p>
       </div>
     </div>
+    <div class="card">
+      <div class="ch"><div class="ct"><i class="ti ti-calendar-search"></i>Google Calendar <span style="font-size:11px;font-weight:400;color:var(--txt3)">(schedule compare — read only)</span></div></div>
+      <div class="cb p">
+        <p class="u-hint" style="margin-bottom:16px">
+          Classes → <b>Google</b> reads your Google Calendar for the month shown and lists what differs from the app; nothing changes until you press a row's button, and Google itself is never written.
+          Needs an OAuth client ID (type "Web application") from <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--grn)">console.cloud.google.com</a> with this app's address as an authorised JavaScript origin, and the Google Calendar API enabled in the same project.
+        </p>
+        <div class="fr c2">
+          <div class="fg">
+            <label>OAuth client ID</label>
+            <input type="text" id="gcal-client-id" placeholder="…apps.googleusercontent.com" autocomplete="off" style="font-family:var(--mono);font-size:12px"/>
+          </div>
+          <div class="fg">
+            <label>Calendar ID <span style="font-weight:400;color:var(--txt3)">(blank = your main calendar)</span></label>
+            <input type="text" id="gcal-cal-id" placeholder="primary" autocomplete="off" style="font-family:var(--mono);font-size:12px"/>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-p btn-sm" onclick="saveGcalSettings()"><i class="ti ti-check"></i> Save</button>
+          <button class="btn btn-sm" onclick="gcalDisconnect()"><i class="ti ti-plug-connected-x"></i> Disconnect</button>
+        </div>
+        <p id="gcal-conn" style="font-size:11px;color:var(--txt3);margin-top:8px"></p>
+        <div style="margin-top:14px;font-size:12px;font-weight:600">Event colours</div>
+        <p class="u-hint">Yellow for your own lessons, green for platform lessons, etc. The compare window asks once per colour; the answers are kept here.</p>
+        <div id="gcal-rules"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Account tab: Google login/logout. Today's build only IDENTIFIES the user; cloud sync
@@ -1278,6 +1320,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>A student drops one of two weekly classes (e.g. keeps Saturday, stops Sunday)</dt><dd>Students → edit the student → remove that slot with its trash icon → Save. You're asked <b>from which date</b> the change applies: pick the first day without that class. Everything before that date keeps the old schedule (and its billing); from that date on only the remaining class is generated.</dd>
           <dt>A student's day or time changes</dt><dd>Same flow — change the day/time, Save, pick the effective date. Choose "Apply to everything" only for a correction of a typo, never for a real change.</dd>
           <dt>Moving one class to another day (make-up class)</dt><dd>On a PC, drag the class chip onto the new day in Classes. On a tablet or phone, tap the class → change the <b>Date</b> (and time if needed) → Save. The class then shows "(moved)" and its usual day stays empty for that week; "Reset to usual time" in the same dialog undoes the move.</dd>
+          <dt>Comparing with Google Calendar</dt><dd>Classes → <b>Google</b> reads your Google Calendar for the month on screen and shows only the differences: a lesson only in Google ("Add lesson"), only in the app ("Cancel in app"), or at a different time ("Use Google time"). Students are recognised by their name, Korean name, or the aliases on their card — when a title isn't recognised, pick the student once and that title is remembered. The first time a calendar colour appears you say what it is (your own lesson, a flat ₩/hour lesson, or not a lesson). Nothing is written to Google, and nothing changes in the app until you press a button. Set-up lives in Settings → API Keys → Google Calendar.</dd>
         </dl>
 
         <h3>Working with the lists</h3>
@@ -1967,6 +2010,7 @@ const DMATERIAL=[
   {id:"m01",name:"Osmo Coding Awbie",cat:"Tech / App",price:89000,players:"1",time:"15-20",difficulty:"Easy",comment:"코딩 교육 게임. iPad 필요."},
 ];
 const DSET={
+  gcalClientId:"",gcalCalendarId:"",gcalColors:{},
   activities:["Board game","Card game","Show & Tell","Drawing","Free talk","Reading for fun","Spelling game"],
   parentTmpl:"안녕하세요, [korean_name] 어머님!\n오늘 [date][(day)] 수업 내용 전달드립니다.\n\n📖 Topic: [topic]\n\n[workbook]\n[books_read]\n[school_hw]\n[break_activity]\n\n[note_to_parent]\n\n감사합니다! 😊",
   payUnpaid:"안녕하세요, [korean_name] 어머님!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours], [expected_amount] 입금 부탁드립니다~\n\n감사합니다!",
@@ -2195,7 +2239,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v81";
+const APP_VERSION="v82";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -3595,6 +3639,7 @@ function switchSettingsTab(t){
     const k=localStorage.getItem("gcse_api_key")||"";
     const cx=localStorage.getItem("gcse_cx")||"";
     const ki=document.getElementById("gcse-api-key");if(ki)ki.value=k;
+    renderGcalSettings();
     const cxi=document.getElementById("gcse-cx");if(cxi)cxi.value=cx;
     const st=document.getElementById("gcse-status");
     if(st)st.textContent=k&&cx?"✓ Keys are saved.":"Enter your keys and save.";
@@ -4544,6 +4589,7 @@ function renderCalendar(){
     const dragPayload=escAttr(JSON.stringify({sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,isVirtual:!!occ.isVirtual,lessonId:occ.isVirtual?null:occ.id}));
     return "<div class=\""+chipCls+"\" draggable=\"true\" data-payload=\""+dragPayload+"\" ondragstart=\"calDragStart(event,this)\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
       +(hasConflict?"<span class=\"cal-conflict-dot\" title=\"Times overlap\">⚠</span>":"")
+      +(gcalDiffKeys.has(occ.date+"|"+occ.sid)?"<span class=\"cal-gdot\" title=\"Differs from Google Calendar\"></span>":"")
       +"<span class=\"cal-event-label\">"+labelHtml+"</span>"
       +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/>"
       +"</div>";
@@ -7183,7 +7229,7 @@ function applyRemoteRecord(key,id,data){
     let obj;try{obj=JSON.parse(data.j);}catch(e){console.error("Bad settings doc",e);return false;}
     // Keep text the incoming copy lacks: a settings doc written by a device that never had the
     // templates (or the logo) must not erase them here. Everything else is replaced wholesale.
-    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin"];
+    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalColors"];
     KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k])obj[k]=settings[k];});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
@@ -7227,6 +7273,256 @@ function afterRemoteApplied(key){
 // Narrow windows: a list card scrolls sideways, and its header band must be as wide as the widest
 // row (fixed px tracks can exceed the card). Measure after every render and give header + rows one
 // shared min-width. A MutationObserver triggers it, so renderers don't have to remember to.
+
+// ═══════════════════════════════════════════════
+// GOOGLE CALENDAR COMPARE (v82) — read-only. Reads the owner's primary calendar for the month shown
+// in Classes, matches events to students by keyword (name / Korean name / aliases), and lists only
+// the differences. Nothing changes in the app until a row's button is pressed; Google is never written.
+// Colours decide what an event is: settings.gcalColors[colorId] = {mode:"student"|"hourly"|"ignore",hourly}
+// ("student" = the student's own rate, "hourly" = a flat ₩/h such as the 째깍 platform, "ignore" = not a lesson).
+// ═══════════════════════════════════════════════
+const GCAL_SCOPE="https://www.googleapis.com/auth/calendar.readonly";
+const GCAL_COLORS={"0":{name:"Calendar default",hex:"#4285f4"},"1":{name:"Lavender",hex:"#7986cb"},"2":{name:"Sage",hex:"#33b679"},"3":{name:"Grape",hex:"#8e24aa"},"4":{name:"Flamingo",hex:"#e67c73"},"5":{name:"Banana",hex:"#f6bf26"},"6":{name:"Tangerine",hex:"#f4511e"},"7":{name:"Peacock",hex:"#039be5"},"8":{name:"Graphite",hex:"#616161"},"9":{name:"Blueberry",hex:"#3f51b5"},"10":{name:"Basil",hex:"#0b8043"},"11":{name:"Tomato",hex:"#d50000"}};
+let gcalTokenClient=null,gcalEvents=null,gcalMonth="",gcalResult=null,gcalShowMatches=false,gcalBusy=false;
+const gcalDiffKeys=new Set();   // "date|sid" of unresolved differences → blue dot on the Classes chip
+function gcalRules(){return settings.gcalColors||{};}
+function gcalRule(colorId){return gcalRules()[colorId||"0"]||null;}
+function gcalTokenGet(){try{const t=JSON.parse(sessionStorage.getItem("cd_gcal_tok")||"null");return t&&t.exp>Date.now()+60000?t.token:null;}catch(e){return null;}}
+function gcalTokenSet(token,ttlSec){try{sessionStorage.setItem("cd_gcal_tok",JSON.stringify({token,exp:Date.now()+(ttlSec||3600)*1000}));}catch(e){}}
+function gcalTokenClear(){try{sessionStorage.removeItem("cd_gcal_tok");}catch(e){}}
+function gcalLoadGsi(){
+  if(window.google&&google.accounts&&google.accounts.oauth2)return Promise.resolve();
+  return new Promise((res,rej)=>{
+    if(document.getElementById("gsi-script")){const t=setInterval(()=>{if(window.google?.accounts?.oauth2){clearInterval(t);res();}},100);setTimeout(()=>{clearInterval(t);rej(new Error("Google sign-in library did not load"));},10000);return;}
+    const s=document.createElement("script");s.id="gsi-script";s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;
+    s.onload=()=>res();s.onerror=()=>rej(new Error("Google sign-in library did not load (offline?)"));
+    document.head.appendChild(s);
+  });
+}
+async function gcalGetToken(){
+  const cached=gcalTokenGet();if(cached)return cached;
+  const cid=(settings.gcalClientId||"").trim();
+  if(!cid)throw new Error("NO_CLIENT_ID");
+  await gcalLoadGsi();
+  return new Promise((res,rej)=>{
+    gcalTokenClient=google.accounts.oauth2.initTokenClient({
+      client_id:cid,scope:GCAL_SCOPE,
+      login_hint:window.__auth?.currentUser?.email||undefined,
+      callback:r=>{if(r&&r.access_token){gcalTokenSet(r.access_token,r.expires_in);res(r.access_token);}else rej(new Error(r?.error||"Access was not granted"));},
+      error_callback:e=>rej(new Error(e?.type==="popup_closed"?"The Google sign-in window was closed":(e?.message||e?.type||"Sign-in failed")))
+    });
+    gcalTokenClient.requestAccessToken({prompt:""});
+  });
+}
+async function gcalFetchEvents(month,retry=true){
+  const token=await gcalGetToken();
+  const [y,m]=month.split("-").map(Number);
+  const tmin=new Date(y,m-1,1).toISOString(),tmax=new Date(y,m,1).toISOString();
+  const calId=encodeURIComponent((settings.gcalCalendarId||"primary").trim()||"primary");
+  const url=`https://www.googleapis.com/calendar/v3/calendars/${calId}/events?singleEvents=true&orderBy=startTime&maxResults=2500&timeMin=${encodeURIComponent(tmin)}&timeMax=${encodeURIComponent(tmax)}`;
+  const r=await fetch(url,{headers:{Authorization:"Bearer "+token}});
+  if(r.status===401&&retry){gcalTokenClear();return gcalFetchEvents(month,false);}
+  if(!r.ok){let msg="HTTP "+r.status;try{msg=(await r.json()).error?.message||msg;}catch(e){}throw new Error(r.status===403?msg+" — is the Google Calendar API enabled for this project?":msg);}
+  const data=await r.json();
+  return (data.items||[]).filter(ev=>ev.status!=="cancelled"&&ev.start?.dateTime&&ev.end?.dateTime).map(ev=>{
+    const st=new Date(ev.start.dateTime),en=new Date(ev.end.dateTime);
+    const mins=st.getHours()*60+st.getMinutes();
+    return {id:ev.id,date:fmtDate(st),mins,time:String(st.getHours()).padStart(2,"0")+":"+String(st.getMinutes()).padStart(2,"0"),
+      dur:Math.round((en-st)/900000)/4,title:(ev.summary||"(no title)").trim(),colorId:ev.colorId||"0",link:ev.htmlLink||""};
+  });
+}
+// ── matching ──
+function gcalKeywords(s){return [s.name,s.k,...(s.aliases||[])].map(x=>String(x||"").trim().toLowerCase()).filter(x=>x.length>=2);}
+function gcalMatchStudent(title){
+  const t=title.toLowerCase();let best=null,bestLen=0;
+  const pool=[...students.filter(s=>!s.archived),...students.filter(s=>s.archived)];
+  for(const s of pool)for(const kw of gcalKeywords(s)){if(t.includes(kw)&&kw.length>bestLen){best=s;bestLen=kw.length;}}
+  return best;
+}
+function gcalStudentHourly(s){const r=s&&s.rate>0&&s.dur>0?s.rate/s.dur:0;return r>0&&isFinite(r)?r:HR;}
+function gcalAmountFor(s,colorId,dur){const rule=gcalRule(colorId);const h=rule&&rule.mode==="hourly"&&rule.hourly>0?rule.hourly:gcalStudentHourly(s);return Math.round(h*dur);}
+function gcalDayLabel(d){return d.slice(5).replace("-","/")+" ("+["일","월","화","수","목","금","토"][new Date(d+"T00:00:00").getDay()]+")";}
+function gcalTimeLbl(mins){if(mins>=1440)return "?";const h=Math.floor(mins/60),m=mins%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
+// Build the comparison for one month. Google events → (date, student); app occurrences → (date, student).
+function gcalBuildDiff(month,events){
+  const res={matched:[],diffs:[],unknown:[],needColor:{},ignored:0,colorsSeen:{}};
+  const rules=gcalRules();
+  const lessonEvents=[];
+  for(const ev of events){
+    res.colorsSeen[ev.colorId]=(res.colorsSeen[ev.colorId]||0)+1;
+    const rule=rules[ev.colorId];
+    const s=gcalMatchStudent(ev.title);
+    if(!rule){ // colour not decided yet — only bother the owner when the title looks like a lesson
+      if(s){(res.needColor[ev.colorId]=res.needColor[ev.colorId]||[]).push(ev.title);}
+      continue;
+    }
+    if(rule.mode==="ignore"){res.ignored++;continue;}
+    if(!s){res.unknown.push(ev);continue;}
+    lessonEvents.push(Object.assign({sid:s.id},ev));
+  }
+  // app side: every occurrence of the month (cancelled ones included — they matter for the compare)
+  const appByKey={};
+  for(const occ of getOccurrencesForMonth(null,month)){
+    if(occ.status==="deleted")continue;
+    (appByKey[occ.date+"|"+occ.sid]=appByKey[occ.date+"|"+occ.sid]||[]).push(occ);
+  }
+  const gByKey={};
+  for(const ev of lessonEvents)(gByKey[ev.date+"|"+ev.sid]=gByKey[ev.date+"|"+ev.sid]||[]).push(ev);
+  const keys=new Set([...Object.keys(appByKey),...Object.keys(gByKey)]);
+  for(const key of [...keys].sort()){
+    const [date,sid]=key.split("|");const s=gs(sid);if(!s)continue;
+    const g=(gByKey[key]||[]).slice().sort((a,b)=>a.mins-b.mins);
+    const a=(appByKey[key]||[]).slice().sort((x,y)=>getLessonTimeKey(x)-getLessonTimeKey(y));
+    // pair each Google event with the nearest-in-time app occurrence
+    const used=new Set();
+    for(const ev of g){
+      let best=null,bd=1e9;
+      a.forEach((occ,i)=>{if(used.has(i))return;const d=Math.abs(getLessonTimeKey(occ)-ev.mins);if(d<bd){bd=d;best=i;}});
+      if(best===null){res.diffs.push({type:"add",date,sid,s,ev});continue;}
+      used.add(best);const occ=a[best];
+      const cancelled=occ.status==="cancelled"||occ.status==="cancelpaid";
+      const timeDiff=Math.abs(getLessonTimeKey(occ)-ev.mins)>=5,durDiff=Math.abs((occ.dur||0)-ev.dur)>=0.25;
+      if(cancelled)res.diffs.push({type:"uncancel",date,sid,s,ev,occ});
+      else if(timeDiff||durDiff)res.diffs.push({type:"time",date,sid,s,ev,occ,timeDiff,durDiff});
+      else res.matched.push({date,sid,s,ev,occ});
+    }
+    a.forEach((occ,i)=>{if(used.has(i))return;if(occ.status==="cancelled"||occ.status==="cancelpaid")return;res.diffs.push({type:"cancel",date,sid,s,occ});});
+  }
+  return res;
+}
+// ── UI ──
+function openGcalCompare(){
+  openModal("mo-gcal");
+  gcalShowMatches=false;
+  if(!(settings.gcalClientId||"").trim()){
+    gcalSetBody(`<div class="empty"><i class="ti ti-plug-connected-x"></i><p>No Google client ID yet. Paste it in <a href="#" onclick="event.preventDefault();closeModal('mo-gcal');showPage('settings');document.querySelector('.stab-btn[onclick*=api-keys]')?.click()">Settings → API Keys → Google Calendar</a>.</p></div>`);
+    return;
+  }
+  gcalRun(false);
+}
+function gcalSetBody(html){const b=document.getElementById("gc-body");if(b)b.innerHTML=html;}
+async function gcalRun(refetch){
+  if(gcalBusy)return;gcalBusy=true;
+  const month=calMonth;
+  const lbl=document.getElementById("gc-month");if(lbl)lbl.textContent=new Date(month+"-01T00:00:00").toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+  try{
+    if(refetch||!gcalEvents||gcalMonth!==month){
+      gcalSetBody(`<div class="empty"><i class="ti ti-loader-2"></i><p>Reading Google Calendar…</p></div>`);
+      gcalEvents=await gcalFetchEvents(month);gcalMonth=month;
+    }
+    gcalResult=gcalBuildDiff(month,gcalEvents);
+    gcalDiffKeys.clear();gcalResult.diffs.forEach(d=>gcalDiffKeys.add(d.date+"|"+d.sid));
+    renderGcal();
+    if(curPage==="sessions")renderCalendar();
+  }catch(e){
+    console.error(e);
+    const msg=e.message==="NO_CLIENT_ID"?"No Google client ID in Settings.":(e.message||String(e));
+    gcalSetBody(`<div class="empty"><i class="ti ti-alert-triangle"></i><p>${escapeHTMLBasic(msg)}</p><p><button class="btn btn-sm" onclick="gcalTokenClear();gcalRun(true)"><i class="ti ti-refresh"></i> Try again</button></p></div>`);
+  }finally{gcalBusy=false;}
+}
+function gcalColorDot(colorId){const c=GCAL_COLORS[colorId]||GCAL_COLORS["0"];return `<span class="gc-dot" style="background:${c.hex}" title="${c.name}"></span>`;}
+function renderGcal(){
+  const r=gcalResult;if(!r)return;
+  const sel=(id,cur)=>`<select onchange="gcalAssignStudent('${id}',this.value)"><option value="">Choose student…</option>${students.filter(s=>!s.archived).map(s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}</option>`).join("")}</select>`;
+  let html=`<div class="stats cols-4" style="margin-bottom:14px">
+    <div class="sc ok"><div class="sc-lbl">Matching</div><div class="sc-val">${r.matched.length}</div></div>
+    <div class="sc amb"><div class="sc-lbl">Differences</div><div class="sc-val">${r.diffs.length}</div></div>
+    <div class="sc ${r.unknown.length?"red":"gry"}"><div class="sc-lbl">Student not found</div><div class="sc-val">${r.unknown.length}</div></div>
+    <div class="sc gry"><div class="sc-lbl">Google events</div><div class="sc-val">${gcalEvents.length}</div></div></div>`;
+  // colours that still need a decision
+  const nc=Object.keys(r.needColor);
+  if(nc.length){
+    html+=`<div class="card" style="margin-bottom:14px"><div class="ch"><div class="ct"><i class="ti ti-palette"></i>New colours — what are they?</div></div><div class="cb p">`;
+    for(const cid of nc){
+      const c=GCAL_COLORS[cid]||GCAL_COLORS["0"];const ex=r.needColor[cid].slice(0,3).map(escapeHTMLBasic).join(" · ");
+      html+=`<div class="gc-color-row">${gcalColorDot(cid)}<div style="flex:1 1 auto;min-width:0"><div style="font-weight:600;font-size:13px">${c.name} <span class="cell-muted2">(${r.needColor[cid].length} events)</span></div><div class="cell-muted2" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ex}</div></div>
+        <select id="gc-mode-${cid}" onchange="document.getElementById('gc-hr-${cid}').style.display=this.value==='hourly'?'':'none'"><option value="student">Lesson — student's rate</option><option value="hourly">Lesson — flat ₩/hour</option><option value="ignore">Not a lesson</option></select>
+        <input type="number" id="gc-hr-${cid}" placeholder="₩ per hour" step="1000" style="display:none;width:120px"/>
+        <button class="btn btn-sm" onclick="gcalSetColor('${cid}')"><i class="ti ti-check"></i> Set</button></div>`;
+    }
+    html+=`</div></div>`;
+  }
+  const nCancel=r.diffs.filter(d=>d.type==="cancel").length;
+  if(nCancel&&nCancel>r.matched.length)html+=`<p class="u-hint" style="margin:0 0 10px"><i class="ti ti-info-circle"></i> ${nCancel} app lessons have no Google event this month — if you don't put every lesson in Google Calendar, ignore the "not in Google" rows (they are not applied by the button below).</p>`;
+  const rows=[];
+  const gLbl=ev=>`${gcalColorDot(ev.colorId)}<span class="cell-main">${ev.time}</span> <span class="cell-muted2">${ev.dur}h</span> <span class="gc-title" title="${escapeAttr(ev.title)}">${escapeHTMLBasic(ev.title)}</span>`;
+  const aLbl=occ=>`<span class="cell-main">${gcalTimeLbl(getLessonTimeKey(occ))}</span> <span class="cell-muted2">${occ.dur}h</span>${occ.status==="cancelled"||occ.status==="cancelpaid"?' <span class="badge bc">Cancelled</span>':""}`;
+  r.diffs.forEach((d,i)=>{
+    let g="",a="",act="";
+    if(d.type==="add"){g=gLbl(d.ev);a=`<span class="cell-muted2">not in app</span>`;act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Create this lesson in the app"><i class="ti ti-plus"></i> Add lesson</button>`;}
+    else if(d.type==="cancel"){g=`<span class="cell-muted2">not in Google</span>`;a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Mark the app lesson as cancelled"><i class="ti ti-ban"></i> Cancel in app</button>`;}
+    else if(d.type==="uncancel"){g=gLbl(d.ev);a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="The app says cancelled but Google still has it — restore"><i class="ti ti-arrow-back-up"></i> Restore</button>`;}
+    else{g=gLbl(d.ev);a=aLbl(d.occ);act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Use Google's time and length in the app"><i class="ti ti-clock-edit"></i> Use Google time</button>`;}
+    rows.push(`<div class="grid-row gc-row"><div><div class="cell-main">${gcalDayLabel(d.date)}</div><div class="cell-muted2">${escapeHTMLBasic(d.s.name)}</div></div><div class="gc-cell">${g}</div><div class="gc-cell">${a}</div><div class="gc-act">${act}</div></div>`);
+  });
+  r.unknown.forEach((ev,i)=>{
+    rows.push(`<div class="grid-row gc-row gc-unknown"><div><div class="cell-main">${gcalDayLabel(ev.date)}</div><div class="cell-muted2">student?</div></div><div class="gc-cell">${gLbl(ev)}</div><div class="gc-cell cell-muted2">no student matches this title</div><div class="gc-act">${sel(ev.id)}</div></div>`);
+  });
+  if(gcalShowMatches)r.matched.forEach(m=>{
+    rows.push(`<div class="grid-row gc-row gc-match"><div><div class="cell-main">${gcalDayLabel(m.date)}</div><div class="cell-muted2">${escapeHTMLBasic(m.s.name)}</div></div><div class="gc-cell">${gLbl(m.ev)}</div><div class="gc-cell">${aLbl(m.occ)}</div><div class="gc-act"><span class="badge bp">✓ same</span></div></div>`);
+  });
+  html+=`<div class="card" style="padding:0"><div class="grid-head gc-row"><div>Date</div><div>Google Calendar</div><div>ClassDesk</div><div></div></div>`;
+  html+=rows.length?rows.join(""):`<div class="empty"><i class="ti ti-circle-check"></i><p>${r.matched.length?"Everything matches Google Calendar this month":"No lessons found in Google Calendar this month"}${r.ignored?` · ${r.ignored} non-lesson events skipped`:""}</p></div>`;
+  html+=`</div>`;
+  gcalSetBody(html);
+  const sw=document.getElementById("gc-show-matches");if(sw)sw.checked=gcalShowMatches;
+  const safe=gcalSafeDiffs().length;
+  const ab=document.getElementById("gc-apply-all");if(ab){ab.style.display=safe?"":"none";ab.innerHTML=`<i class="ti ti-checks"></i> Apply ${safe} (add / time)`;}
+}
+function gcalSetColor(cid){
+  const mode=document.getElementById("gc-mode-"+cid)?.value||"student";
+  const hourly=parseInt(document.getElementById("gc-hr-"+cid)?.value||"0",10)||0;
+  if(mode==="hourly"&&!hourly){alert("Enter the ₩ per hour for this colour.");return;}
+  settings.gcalColors=Object.assign({},gcalRules(),{[cid]:{mode,hourly}});
+  save();gcalRun(false);
+}
+function gcalAssignStudent(evId,sid){
+  if(!sid)return;const s=gs(sid);const ev=(gcalEvents||[]).find(e=>e.id===evId);if(!s||!ev)return;
+  const alias=ev.title.trim();
+  s.aliases=s.aliases||[];if(!s.aliases.some(a=>a.toLowerCase()===alias.toLowerCase()))s.aliases.push(alias);
+  save();showToast(`"${alias}" now means ${s.name}`);gcalRun(false);
+}
+function gcalApplyOne(d){
+  if(d.type==="add"){
+    lessons.push({id:uid(),sid:d.sid,date:d.date,dur:d.ev.dur,amt:gcalAmountFor(d.s,d.ev.colorId,d.ev.dur),status:"unpaid",topic:"",
+      workbooks:[],wbTime:20,books:[],bTime:20,schoolHW:[],shwTime:20,bract:[],brTime:20,note:"",cancel:"",time:d.ev.time,movedFrom:""});
+  }else if(d.type==="cancel"){
+    const real=materializeOccurrence(d.occ);real.status="cancelled";
+  }else if(d.type==="uncancel"){
+    const real=materializeOccurrence(d.occ);real.status="unpaid";
+  }else{
+    const real=materializeOccurrence(d.occ);real.time=d.ev.time;
+    if(d.durDiff){real.dur=d.ev.dur;real.amt=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);}
+  }
+}
+function gcalApply(i){const d=gcalResult?.diffs[i];if(!d)return;gcalApplyOne(d);save();showToast("Applied to the app");gcalRun(false);}
+function gcalSafeDiffs(){return (gcalResult?.diffs||[]).filter(d=>d.type!=="cancel");}
+function gcalApplyAll(){const list=gcalSafeDiffs();if(!list.length)return;if(!confirm(`Apply ${list.length} additions / time changes to the app? (Lessons missing from Google are left alone — cancel those one by one.)`))return;list.forEach(gcalApplyOne);save();showToast(`${list.length} changes applied`);gcalRun(false);}
+function gcalToggleMatches(on){gcalShowMatches=!!on;renderGcal();}
+// ── Settings card ──
+function renderGcalSettings(){
+  const inp=document.getElementById("gcal-client-id");if(inp)inp.value=settings.gcalClientId||"";
+  const cal=document.getElementById("gcal-cal-id");if(cal)cal.value=settings.gcalCalendarId||"";
+  const box=document.getElementById("gcal-rules");if(!box)return;
+  const rules=gcalRules();const ids=Object.keys(rules);
+  box.innerHTML=ids.length?ids.map(cid=>{const c=GCAL_COLORS[cid]||GCAL_COLORS["0"];const r=rules[cid];
+    const lbl=r.mode==="ignore"?"Not a lesson":r.mode==="hourly"?`Lesson · ${won(r.hourly)}/h`:"Lesson · student's rate";
+    return `<div class="gc-color-row">${gcalColorDot(cid)}<span style="flex:1 1 auto;font-size:13px">${c.name} <span class="cell-muted2">— ${lbl}</span></span><button class="bic" onclick="gcalForgetColor('${cid}')" title="Forget this colour (you'll be asked again)"><i class="ti ti-x"></i></button></div>`;}).join("")
+    :`<p class="u-hint">No colours decided yet — the compare window asks the first time each colour appears.</p>`;
+  const st=document.getElementById("gcal-conn");if(st)st.textContent=gcalTokenGet()?"Connected for this session":"Not connected (you'll be asked to sign in on first use)";
+}
+function saveGcalSettings(){
+  settings.gcalClientId=(document.getElementById("gcal-client-id")?.value||"").trim();
+  settings.gcalCalendarId=(document.getElementById("gcal-cal-id")?.value||"").trim();
+  gcalTokenClear();gcalEvents=null;save();showToast("Google Calendar settings saved");renderGcalSettings();
+}
+function gcalForgetColor(cid){const r=Object.assign({},gcalRules());delete r[cid];settings.gcalColors=r;save();renderGcalSettings();}
+function gcalDisconnect(){
+  const t=gcalTokenGet();gcalTokenClear();gcalEvents=null;gcalDiffKeys.clear();
+  if(t&&window.google?.accounts?.oauth2)try{google.accounts.oauth2.revoke(t,()=>{});}catch(e){}
+  showToast("Google Calendar disconnected");renderGcalSettings();
+}
+
 function syncListWidths(){
   const narrow=window.innerWidth<=1280;
   document.querySelectorAll(".page.active .card").forEach(card=>{
@@ -7582,6 +7878,17 @@ document.addEventListener("DOMContentLoaded",()=>{
 </script>
 <!-- Effective-date picker: shown when a fixed schedule changes; the user clicks the first day
      the NEW schedule applies. Everything before that day keeps the old schedule. -->
+<!-- Google Calendar compare (v82): differences between the owner's Google Calendar and the app for the month shown -->
+<div class="mo" id="mo-gcal">
+  <div class="mb wide">
+    <div class="mt"><span><i class="ti ti-calendar-search"></i> Google Calendar · <span id="gc-month"></span></span><button class="bic" onclick="closeModal('mo-gcal')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div id="gc-body"></div>
+    <div class="mf">
+      <label class="sw"><input type="checkbox" id="gc-show-matches" onchange="gcalToggleMatches(this.checked)"/><span class="sw-track"></span> Show matching lessons too</label>
+      <div style="display:flex;gap:8px"><button class="btn" onclick="gcalRun(true)" title="Read Google Calendar again"><i class="ti ti-refresh"></i> Refresh</button><button class="btn btn-p" id="gc-apply-all" onclick="gcalApplyAll()" style="display:none"><i class="ti ti-checks"></i> Apply all</button></div>
+    </div>
+  </div>
+</div>
 <div class="mo" id="mo-schedfrom" style="z-index:2600">
   <div class="mb" style="max-width:340px">
     <div class="mt"><span>New schedule start date</span><button class="bic" onclick="schedFromCancel()" title="Close"><i class="ti ti-x"></i></button></div>
