@@ -602,7 +602,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
 /* GOOGLE CALENDAR COMPARE (v82) */
 .cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
-.gc-row{grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
+.gc-row{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
 .gc-cell{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}
 .gc-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .gc-act{display:flex;justify-content:flex-end}
@@ -2239,7 +2239,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v83";
+const APP_VERSION="v84";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7423,11 +7423,11 @@ async function gcalRun(refetch){
 function gcalColorDot(colorId){const c=GCAL_COLORS[colorId]||GCAL_COLORS["0"];return `<span class="gc-dot" style="background:${c.hex}" title="${c.name}"></span>`;}
 function renderGcal(){
   const r=gcalResult;if(!r)return;
-  const sel=(id,cur)=>`<select onchange="gcalAssignStudent('${id}',this.value)"><option value="">Choose student…</option>${students.filter(s=>!s.archived).map(s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}</option>`).join("")}</select>`;
+  const sel=(id,cur)=>`<select onchange="gcalAssignStudent(this.dataset.t,this.value)" data-t="${escapeAttr(id)}"><option value="">Choose student…</option>${students.filter(s=>!s.archived).map(s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}</option>`).join("")}</select>`;
   let html=`<div class="stats cols-4" style="margin-bottom:14px">
     <div class="sc ok"><div class="sc-lbl">Matching</div><div class="sc-val">${r.matched.length}</div></div>
     <div class="sc amb"><div class="sc-lbl">Differences</div><div class="sc-val">${r.diffs.length}</div></div>
-    <div class="sc ${r.unknown.length?"red":"gry"}"><div class="sc-lbl">Student not found</div><div class="sc-val">${r.unknown.length}</div></div>
+    <div class="sc ${r.unknown.length?"amb":"gry"}"><div class="sc-lbl">Student not found</div><div class="sc-val">${new Set(r.unknown.map(e=>e.title)).size}<span class="cell-muted2" style="font-size:12px;font-family:var(--font);font-weight:400"> titles · ${r.unknown.length} events</span></div></div>
     <div class="sc gry"><div class="sc-lbl">Google events</div><div class="sc-val">${gcalEvents.length}</div></div></div>`;
   // colours that still need a decision
   const nc=Object.keys(r.needColor);
@@ -7436,7 +7436,7 @@ function renderGcal(){
     for(const cid of nc){
       const c=GCAL_COLORS[cid]||GCAL_COLORS["0"];const ex=r.needColor[cid].slice(0,3).map(escapeHTMLBasic).join(" · ");
       html+=`<div class="gc-color-row">${gcalColorDot(cid)}<div style="flex:1 1 auto;min-width:0"><div style="font-weight:600;font-size:13px">${c.name} <span class="cell-muted2">(${r.needColor[cid].length} events)</span></div><div class="cell-muted2" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ex}</div></div>
-        <select id="gc-mode-${cid}" onchange="document.getElementById('gc-hr-${cid}').style.display=this.value==='hourly'?'':'none'"><option value="student">Lesson — student's rate</option><option value="hourly">Lesson — flat ₩/hour</option><option value="ignore">Not a lesson</option></select>
+        <select id="gc-mode-${cid}" onchange="document.getElementById('gc-hr-${cid}').style.display=this.value==='hourly'?'':'none'"><option value="ignore">Not a lesson</option><option value="student">Lesson — student's rate</option><option value="hourly">Lesson — flat ₩/hour</option></select>
         <input type="number" id="gc-hr-${cid}" placeholder="₩ per hour" step="1000" style="display:none;width:120px"/>
         <button class="btn btn-sm btn-p" onclick="gcalSetColor('${cid}')"><i class="ti ti-check"></i> Save</button></div>`;
     }
@@ -7455,8 +7455,10 @@ function renderGcal(){
     else{g=gLbl(d.ev);a=aLbl(d.occ);act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Use Google's time and length in the app"><i class="ti ti-clock-edit"></i> Use Google time</button>`;}
     rows.push(`<div class="grid-row gc-row"><div><div class="cell-main">${gcalDayLabel(d.date)}</div><div class="cell-muted2">${escapeHTMLBasic(d.s.name)}</div></div><div class="gc-cell">${g}</div><div class="gc-cell">${a}</div><div class="gc-act">${act}</div></div>`);
   });
-  r.unknown.forEach((ev,i)=>{
-    rows.push(`<div class="grid-row gc-row gc-unknown"><div><div class="cell-main">${gcalDayLabel(ev.date)}</div><div class="cell-muted2">student?</div></div><div class="gc-cell">${gLbl(ev)}</div><div class="gc-cell cell-muted2">no student matches this title</div><div class="gc-act">${sel(ev.id)}</div></div>`);
+  const byTitle={};r.unknown.forEach(ev=>{(byTitle[ev.title]=byTitle[ev.title]||[]).push(ev);});
+  Object.keys(byTitle).sort().forEach(t=>{
+    const evs=byTitle[t];const ev=evs[0];const dates=evs.map(e=>gcalDayLabel(e.date).slice(0,5)).join(", ");
+    rows.push(`<div class="grid-row gc-row gc-unknown"><div><div class="cell-main">${evs.length}×</div><div class="cell-muted2" title="${escapeAttr(dates)}">${dates.length>22?dates.slice(0,22)+"…":dates}</div></div><div class="gc-cell">${gLbl(ev)}</div><div class="gc-cell cell-muted2">which student is this?</div><div class="gc-act">${sel(t)}</div></div>`);
   });
   if(gcalShowMatches)r.matched.forEach(m=>{
     rows.push(`<div class="grid-row gc-row gc-match"><div><div class="cell-main">${gcalDayLabel(m.date)}</div><div class="cell-muted2">${escapeHTMLBasic(m.s.name)}</div></div><div class="gc-cell">${gLbl(m.ev)}</div><div class="gc-cell">${aLbl(m.occ)}</div><div class="gc-act"><span class="badge bp">✓ same</span></div></div>`);
@@ -7470,15 +7472,15 @@ function renderGcal(){
   const ab=document.getElementById("gc-apply-all");if(ab){ab.style.display=safe?"":"none";ab.innerHTML=`<i class="ti ti-checks"></i> Apply ${safe} (add / time)`;}
 }
 function gcalSetColor(cid){
-  const mode=document.getElementById("gc-mode-"+cid)?.value||"student";
+  const mode=document.getElementById("gc-mode-"+cid)?.value||"ignore";
   const hourly=parseInt(document.getElementById("gc-hr-"+cid)?.value||"0",10)||0;
   if(mode==="hourly"&&!hourly){alert("Enter the ₩ per hour for this colour.");return;}
   settings.gcalColors=Object.assign({},gcalRules(),{[cid]:{mode,hourly}});
   save();gcalRun(false);
 }
-function gcalAssignStudent(evId,sid){
-  if(!sid)return;const s=gs(sid);const ev=(gcalEvents||[]).find(e=>e.id===evId);if(!s||!ev)return;
-  const alias=ev.title.trim();
+function gcalAssignStudent(title,sid){
+  if(!sid)return;const s=gs(sid);if(!s||!title)return;
+  const alias=title.trim();
   s.aliases=s.aliases||[];if(!s.aliases.some(a=>a.toLowerCase()===alias.toLowerCase()))s.aliases.push(alias);
   save();showToast(`"${alias}" now means ${s.name}`);gcalRun(false);
 }
