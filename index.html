@@ -1169,7 +1169,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </div>
         <p id="gcal-conn" style="font-size:11px;color:var(--txt3);margin-top:8px"></p>
         <div style="margin-top:14px;font-size:12px;font-weight:600">Event colours</div>
-        <p class="u-hint">Yellow for your own lessons, green for platform lessons, etc. The compare window asks once per colour; the answers are kept here.</p>
+        <p class="u-hint">Yellow (Banana) events are your own lessons at the student's rate. Green (Sage / Basil) events are platform lessons — enter their flat rate below (blank = student's rate). Every other colour is ignored.</p>
+        <div class="fg" style="max-width:260px"><label>Green lessons · ₩ per hour</label><input type="number" id="gcal-green-hourly" step="1000" placeholder="e.g. 30000" onchange="settings.gcalGreenHourly=parseInt(this.value,10)||0;save();showToast('Green rate saved')"/></div>
         <div id="gcal-rules"></div>
       </div>
     </div>
@@ -1320,7 +1321,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>A student drops one of two weekly classes (e.g. keeps Saturday, stops Sunday)</dt><dd>Students → edit the student → remove that slot with its trash icon → Save. You're asked <b>from which date</b> the change applies: pick the first day without that class. Everything before that date keeps the old schedule (and its billing); from that date on only the remaining class is generated.</dd>
           <dt>A student's day or time changes</dt><dd>Same flow — change the day/time, Save, pick the effective date. Choose "Apply to everything" only for a correction of a typo, never for a real change.</dd>
           <dt>Moving one class to another day (make-up class)</dt><dd>On a PC, drag the class chip onto the new day in Classes. On a tablet or phone, tap the class → change the <b>Date</b> (and time if needed) → Save. The class then shows "(moved)" and its usual day stays empty for that week; "Reset to usual time" in the same dialog undoes the move.</dd>
-          <dt>Comparing with Google Calendar</dt><dd>Classes → <b>Google</b> reads your Google Calendar for the month on screen and shows only the differences: a lesson only in Google ("Add lesson"), only in the app ("Cancel in app"), or at a different time ("Use Google time"). Students are recognised by their name, Korean name, or the aliases on their card — when a title isn't recognised, pick the student once and that title is remembered. The first time a calendar colour appears you say what it is (your own lesson, a flat ₩/hour lesson, or not a lesson). Nothing is written to Google, and nothing changes in the app until you press a button. Set-up lives in Settings → API Keys → Google Calendar.</dd>
+          <dt>Comparing with Google Calendar</dt><dd>Classes → <b>Google</b> reads your Google Calendar for the month on screen and shows only the differences: a lesson only in Google ("Add lesson"), only in the app ("Cancel in app"), or at a different time ("Use Google time"). Students are recognised by their name, Korean name, or the aliases on their card — when a title isn't recognised, pick the student once and that title is remembered. Only yellow (your own lessons) and green (platform lessons) events count; every other colour is ignored. Nothing is written to Google, and nothing changes in the app until you press a button. Set-up lives in Settings → API Keys → Google Calendar.</dd>
         </dl>
 
         <h3>Working with the lists</h3>
@@ -2010,7 +2011,7 @@ const DMATERIAL=[
   {id:"m01",name:"Osmo Coding Awbie",cat:"Tech / App",price:89000,players:"1",time:"15-20",difficulty:"Easy",comment:"코딩 교육 게임. iPad 필요."},
 ];
 const DSET={
-  gcalClientId:"",gcalCalendarId:"",gcalColors:{},
+  gcalClientId:"",gcalCalendarId:"",gcalGreenHourly:0,
   activities:["Board game","Card game","Show & Tell","Drawing","Free talk","Reading for fun","Spelling game"],
   parentTmpl:"안녕하세요, [korean_name] 어머님!\n오늘 [date][(day)] 수업 내용 전달드립니다.\n\n📖 Topic: [topic]\n\n[workbook]\n[books_read]\n[school_hw]\n[break_activity]\n\n[note_to_parent]\n\n감사합니다! 😊",
   payUnpaid:"안녕하세요, [korean_name] 어머님!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours], [expected_amount] 입금 부탁드립니다~\n\n감사합니다!",
@@ -2239,7 +2240,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v84";
+const APP_VERSION="v85";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7229,7 +7230,7 @@ function applyRemoteRecord(key,id,data){
     let obj;try{obj=JSON.parse(data.j);}catch(e){console.error("Bad settings doc",e);return false;}
     // Keep text the incoming copy lacks: a settings doc written by a device that never had the
     // templates (or the logo) must not erase them here. Everything else is replaced wholesale.
-    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalColors"];
+    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalGreenHourly"];
     KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k])obj[k]=settings[k];});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
@@ -7285,8 +7286,11 @@ const GCAL_SCOPE="https://www.googleapis.com/auth/calendar.readonly";
 const GCAL_COLORS={"0":{name:"Calendar default",hex:"#4285f4"},"1":{name:"Lavender",hex:"#7986cb"},"2":{name:"Sage",hex:"#33b679"},"3":{name:"Grape",hex:"#8e24aa"},"4":{name:"Flamingo",hex:"#e67c73"},"5":{name:"Banana",hex:"#f6bf26"},"6":{name:"Tangerine",hex:"#f4511e"},"7":{name:"Peacock",hex:"#039be5"},"8":{name:"Graphite",hex:"#616161"},"9":{name:"Blueberry",hex:"#3f51b5"},"10":{name:"Basil",hex:"#0b8043"},"11":{name:"Tomato",hex:"#d50000"}};
 let gcalTokenClient=null,gcalEvents=null,gcalMonth="",gcalResult=null,gcalShowMatches=false,gcalBusy=false;
 const gcalDiffKeys=new Set();   // "date|sid" of unresolved differences → blue dot on the Classes chip
-function gcalRules(){return settings.gcalColors||{};}
-function gcalRule(colorId){return gcalRules()[colorId||"0"]||null;}
+// Yellow (Banana) = the owner's own lessons at the student's rate; greens (Sage, Basil) = platform (째깍)
+// lessons at a flat ₩/h (settings.gcalGreenHourly, blank → student's rate). Every other colour is not a lesson.
+const GCAL_LESSON_COLORS={"5":"student","2":"hourly","10":"hourly"};
+function gcalRules(){const o={};for(const k in GCAL_LESSON_COLORS)o[k]={mode:GCAL_LESSON_COLORS[k],hourly:+settings.gcalGreenHourly||0};return o;}
+function gcalRule(colorId){return gcalRules()[colorId||"0"]||{mode:"ignore",hourly:0};}
 function gcalTokenGet(){try{const t=JSON.parse(sessionStorage.getItem("cd_gcal_tok")||"null");return t&&t.exp>Date.now()+60000?t.token:null;}catch(e){return null;}}
 function gcalTokenSet(token,ttlSec){try{sessionStorage.setItem("cd_gcal_tok",JSON.stringify({token,exp:Date.now()+(ttlSec||3600)*1000}));}catch(e){}}
 function gcalTokenClear(){try{sessionStorage.removeItem("cd_gcal_tok");}catch(e){}}
@@ -7350,12 +7354,8 @@ function gcalBuildDiff(month,events){
   const lessonEvents=[];
   for(const ev of events){
     res.colorsSeen[ev.colorId]=(res.colorsSeen[ev.colorId]||0)+1;
-    const rule=rules[ev.colorId];
+    const rule=gcalRule(ev.colorId);
     const s=gcalMatchStudent(ev.title);
-    if(!rule){ // colour not decided yet — only bother the owner when the title looks like a lesson
-      if(s){(res.needColor[ev.colorId]=res.needColor[ev.colorId]||[]).push(ev.title);}
-      continue;
-    }
     if(rule.mode==="ignore"){res.ignored++;continue;}
     if(!s){res.unknown.push(ev);continue;}
     lessonEvents.push(Object.assign({sid:s.id},ev));
@@ -7429,8 +7429,7 @@ function renderGcal(){
     <div class="sc amb"><div class="sc-lbl">Differences</div><div class="sc-val">${r.diffs.length}</div></div>
     <div class="sc ${r.unknown.length?"amb":"gry"}"><div class="sc-lbl">Student not found</div><div class="sc-val">${new Set(r.unknown.map(e=>e.title)).size}<span class="cell-muted2" style="font-size:12px;font-family:var(--font);font-weight:400"> titles · ${r.unknown.length} events</span></div></div>
     <div class="sc gry"><div class="sc-lbl">Google events</div><div class="sc-val">${gcalEvents.length}</div></div></div>`;
-  // colours that still need a decision
-  const nc=Object.keys(r.needColor);
+  const nc=[];
   if(nc.length){
     html+=`<div class="card" style="margin-bottom:14px"><div class="ch"><div class="ct"><i class="ti ti-palette"></i>New colours — what are they?</div></div><div class="cb p">`;
     for(const cid of nc){
@@ -7505,12 +7504,12 @@ function gcalToggleMatches(on){gcalShowMatches=!!on;renderGcal();}
 function renderGcalSettings(){
   const inp=document.getElementById("gcal-client-id");if(inp)inp.value=settings.gcalClientId||"";
   const cal=document.getElementById("gcal-cal-id");if(cal)cal.value=settings.gcalCalendarId||"";
+  const gh=document.getElementById("gcal-green-hourly");if(gh)gh.value=settings.gcalGreenHourly||"";
   const box=document.getElementById("gcal-rules");if(!box)return;
-  const rules=gcalRules();const ids=Object.keys(rules);
-  box.innerHTML=ids.length?ids.map(cid=>{const c=GCAL_COLORS[cid]||GCAL_COLORS["0"];const r=rules[cid];
-    const lbl=r.mode==="ignore"?"Not a lesson":r.mode==="hourly"?`Lesson · ${won(r.hourly)}/h`:"Lesson · student's rate";
-    return `<div class="gc-color-row">${gcalColorDot(cid)}<span style="flex:1 1 auto;font-size:13px">${c.name} <span class="cell-muted2">— ${lbl}</span></span><button class="bic" onclick="gcalForgetColor('${cid}')" title="Forget this colour (you'll be asked again)"><i class="ti ti-x"></i></button></div>`;}).join("")
-    :`<p class="u-hint">No colours decided yet — the compare window asks the first time each colour appears.</p>`;
+  const rules=gcalRules();
+  box.innerHTML=Object.keys(rules).map(cid=>{const c=GCAL_COLORS[cid];const r=rules[cid];
+    const lbl=r.mode==="hourly"?(r.hourly?`Platform lesson · ${won(r.hourly)}/h`:"Platform lesson · student's rate"):"Own lesson · student's rate";
+    return `<div class="gc-color-row">${gcalColorDot(cid)}<span style="flex:1 1 auto;font-size:13px">${c.name} <span class="cell-muted2">— ${lbl}</span></span></div>`;}).join("");
   const st=document.getElementById("gcal-conn");if(st)st.textContent=gcalTokenGet()?"Connected for this session":"Not connected (you'll be asked to sign in on first use)";
 }
 function saveGcalSettings(){
