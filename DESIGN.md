@@ -228,6 +228,10 @@ input:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l);outline:no
 ```
 폰에서는 입력창 글자 16px (iOS 자동 확대 방지), 높이 42px.
 
+### 비교/동기화 창 (Google Calendar)
+외부 데이터와의 차이는 **차이만** 목록으로, 행마다 하나의 동작 버튼(추가 / 취소 / 시간 맞추기). 자동 반영 없음.
+같은 목록 규격(`.grid-head/.grid-row`)을 쓰고, 알 수 없는 항목은 `--amb-l` 배경 + 선택 상자. 통계 카드 4개로 요약.
+
 ### Modal
 - 폰(≤640px)에서는 버튼 줄(`.mf`)이 모달 바닥에 **sticky** — 긴 폼을 끝까지 내리지 않아도 Save/Cancel이 보인다.
 - PC에서는 열리자마자 첫 입력칸에 포커스(`openModal`). 터치 기기는 키보드가 튀어나오므로 포커스하지 않는다.
