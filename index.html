@@ -612,6 +612,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .gc-color-row:last-child{border-bottom:none}
 .gc-color-row select{width:190px;height:30px;font-size:12px}
 .gc-unknown{background:var(--amb-l)}
+.gc-combined{background:var(--surf2)}
+.gc-money{font-family:var(--mono);font-size:11px;color:var(--red);white-space:nowrap}
 .gc-match{opacity:.7}
 @media(max-width:640px){.mf{flex-wrap:wrap}.gc-color-row{flex-wrap:wrap}.gc-row{grid-template-columns:90px minmax(0,1fr)}.gc-row>:nth-child(3){grid-column:2}.gc-act{grid-column:1/-1;justify-content:flex-start}}
 .cal-more-btn:hover{color:var(--grn);text-decoration:underline}
@@ -2240,7 +2242,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v85";
+const APP_VERSION="v86";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7337,11 +7339,27 @@ async function gcalFetchEvents(month,retry=true){
 }
 // ── matching ──
 function gcalKeywords(s){return [s.name,s.k,...(s.aliases||[])].map(x=>String(x||"").trim().toLowerCase()).filter(x=>x.length>=2);}
-function gcalMatchStudent(title){
-  const t=title.toLowerCase();let best=null,bestLen=0;
+function gcalHits(title){
+  const t=title.toLowerCase();const hits=[];
   const pool=[...students.filter(s=>!s.archived),...students.filter(s=>s.archived)];
-  for(const s of pool)for(const kw of gcalKeywords(s)){if(t.includes(kw)&&kw.length>bestLen){best=s;bestLen=kw.length;}}
-  return best;
+  for(const s of pool)for(const kw of gcalKeywords(s)){
+    let i=t.indexOf(kw);
+    while(i>=0){hits.push({s,kw,at:i,end:i+kw.length});i=t.indexOf(kw,i+1);}
+  }
+  // Drop a hit that sits inside a longer one: "Bella" would otherwise also count as Ella.
+  return hits.filter(h=>!hits.some(o=>o!==h&&o.at<=h.at&&o.end>=h.end&&(o.end-o.at)>(h.end-h.at)));
+}
+function gcalMatchStudent(title){
+  const hits=gcalHits(title);if(!hits.length)return null;
+  return hits.reduce((a,b)=>(b.end-b.at)>(a.end-a.at)?b:a).s;
+}
+// Students named in one title, in the order they appear. Two or more = a combined block
+// ("Bella 1hr /Ella 1.5hr"), whose length covers several lessons and must never be copied
+// onto one student.
+function gcalMatchAll(title){
+  const seen=new Set(),out=[];
+  for(const h of gcalHits(title).sort((a,b)=>a.at-b.at))if(!seen.has(h.s.id)){seen.add(h.s.id);out.push(h.s);}
+  return out;
 }
 function gcalStudentHourly(s){const r=s&&s.rate>0&&s.dur>0?s.rate/s.dur:0;return r>0&&isFinite(r)?r:HR;}
 function gcalAmountFor(s,colorId,dur){const rule=gcalRule(colorId);const h=rule&&rule.mode==="hourly"&&rule.hourly>0?rule.hourly:gcalStudentHourly(s);return Math.round(h*dur);}
@@ -7349,7 +7367,8 @@ function gcalDayLabel(d){return d.slice(5).replace("-","/")+" ("+["일","월","�
 function gcalTimeLbl(mins){if(mins>=1440)return "?";const h=Math.floor(mins/60),m=mins%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
 // Build the comparison for one month. Google events → (date, student); app occurrences → (date, student).
 function gcalBuildDiff(month,events){
-  const res={matched:[],diffs:[],unknown:[],needColor:{},ignored:0,colorsSeen:{}};
+  const res={matched:[],diffs:[],unknown:[],combined:[],needColor:{},ignored:0,colorsSeen:{}};
+  const covered=new Set();   // "date|sid" handled by a combined block — skipped below
   const rules=gcalRules();
   const lessonEvents=[];
   for(const ev of events){
@@ -7358,6 +7377,12 @@ function gcalBuildDiff(month,events){
     const s=gcalMatchStudent(ev.title);
     if(rule.mode==="ignore"){res.ignored++;continue;}
     if(!s){res.unknown.push(ev);continue;}
+    const all=gcalMatchAll(ev.title);
+    if(all.length>1){
+      res.combined.push(Object.assign({students:all},ev));
+      all.forEach(x=>covered.add(ev.date+"|"+x.id));
+      continue;
+    }
     lessonEvents.push(Object.assign({sid:s.id},ev));
   }
   // app side: every occurrence of the month (cancelled ones included — they matter for the compare)
@@ -7370,6 +7395,7 @@ function gcalBuildDiff(month,events){
   for(const ev of lessonEvents)(gByKey[ev.date+"|"+ev.sid]=gByKey[ev.date+"|"+ev.sid]||[]).push(ev);
   const keys=new Set([...Object.keys(appByKey),...Object.keys(gByKey)]);
   for(const key of [...keys].sort()){
+    if(covered.has(key))continue;
     const [date,sid]=key.split("|");const s=gs(sid);if(!s)continue;
     const g=(gByKey[key]||[]).slice().sort((a,b)=>a.mins-b.mins);
     const a=(appByKey[key]||[]).slice().sort((x,y)=>getLessonTimeKey(x)-getLessonTimeKey(y));
@@ -7428,7 +7454,7 @@ function renderGcal(){
     <div class="sc ok"><div class="sc-lbl">Matching</div><div class="sc-val">${r.matched.length}</div></div>
     <div class="sc amb"><div class="sc-lbl">Differences</div><div class="sc-val">${r.diffs.length}</div></div>
     <div class="sc ${r.unknown.length?"amb":"gry"}"><div class="sc-lbl">Student not found</div><div class="sc-val">${new Set(r.unknown.map(e=>e.title)).size}<span class="cell-muted2" style="font-size:12px;font-family:var(--font);font-weight:400"> titles · ${r.unknown.length} events</span></div></div>
-    <div class="sc gry"><div class="sc-lbl">Google events</div><div class="sc-val">${gcalEvents.length}</div></div></div>`;
+    <div class="sc gry"><div class="sc-lbl">Google events</div><div class="sc-val">${gcalEvents.length}${(r.combined||[]).length?`<span class="cell-muted2" style="font-size:12px;font-family:var(--font);font-weight:400"> · ${r.combined.length} combined</span>`:""}</div></div></div>`;
   const nc=[];
   if(nc.length){
     html+=`<div class="card" style="margin-bottom:14px"><div class="ch"><div class="ct"><i class="ti ti-palette"></i>New colours — what are they?</div></div><div class="cb p">`;
@@ -7451,8 +7477,18 @@ function renderGcal(){
     if(d.type==="add"){g=gLbl(d.ev);a=`<span class="cell-muted2">not in app</span>`;act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Create this lesson in the app"><i class="ti ti-plus"></i> Add lesson</button>`;}
     else if(d.type==="cancel"){g=`<span class="cell-muted2">not in Google</span>`;a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Mark the app lesson as cancelled"><i class="ti ti-ban"></i> Cancel in app</button>`;}
     else if(d.type==="uncancel"){g=gLbl(d.ev);a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="The app says cancelled but Google still has it — restore"><i class="ti ti-arrow-back-up"></i> Restore</button>`;}
-    else{g=gLbl(d.ev);a=aLbl(d.occ);act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Use Google's time and length in the app"><i class="ti ti-clock-edit"></i> Use Google time</button>`;}
+    else{
+      g=gLbl(d.ev);a=aLbl(d.occ);
+      if(d.durDiff){
+        const now=d.occ.amt||0,next=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);
+        a+=` <span class="gc-money">${won(now)} → ${won(next)}</span>`;
+        act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Google's length is ${d.ev.dur}h — this changes the fee"><i class="ti ti-clock-edit"></i> Use Google time</button>`;
+      }else act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Move the app lesson to Google's start time"><i class="ti ti-clock-edit"></i> Use Google time</button>`;
+    }
     rows.push(`<div class="grid-row gc-row"><div><div class="cell-main">${gcalDayLabel(d.date)}</div><div class="cell-muted2">${escapeHTMLBasic(d.s.name)}</div></div><div class="gc-cell">${g}</div><div class="gc-cell">${a}</div><div class="gc-act">${act}</div></div>`);
+  });
+  (r.combined||[]).forEach(ev=>{
+    rows.push(`<div class="grid-row gc-row gc-combined"><div><div class="cell-main">${gcalDayLabel(ev.date)}</div><div class="cell-muted2">${ev.students.map(s=>escapeHTMLBasic(s.name)).join(" + ")}</div></div><div class="gc-cell">${gLbl(ev)}</div><div class="gc-cell cell-muted2">one block for ${ev.students.length} students — the app keeps its own times</div><div class="gc-act"><span class="badge bc">left alone</span></div></div>`);
   });
   const byTitle={};r.unknown.forEach(ev=>{(byTitle[ev.title]=byTitle[ev.title]||[]).push(ev);});
   Object.keys(byTitle).sort().forEach(t=>{
@@ -7497,7 +7533,9 @@ function gcalApplyOne(d){
   }
 }
 function gcalApply(i){const d=gcalResult?.diffs[i];if(!d)return;gcalApplyOne(d);save();showToast("Applied to the app");gcalRun(false);}
-function gcalSafeDiffs(){return (gcalResult?.diffs||[]).filter(d=>d.type!=="cancel");}
+// "Apply all" only covers changes that either add a missing lesson or move a start time.
+// A different length (and the fee that follows it) or a cancellation is always one deliberate click.
+function gcalSafeDiffs(){return (gcalResult?.diffs||[]).filter(d=>d.type==="add"||(d.type==="time"&&!d.durDiff));}
 function gcalApplyAll(){const list=gcalSafeDiffs();if(!list.length)return;if(!confirm(`Apply ${list.length} additions / time changes to the app? (Lessons missing from Google are left alone — cancel those one by one.)`))return;list.forEach(gcalApplyOne);save();showToast(`${list.length} changes applied`);gcalRun(false);}
 function gcalToggleMatches(on){gcalShowMatches=!!on;renderGcal();}
 // ── Settings card ──
