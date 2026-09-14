@@ -1788,7 +1788,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="fg" style="margin:0"><label data-col="dur">Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
       <div class="fg" style="margin:0"><label>Amount (₩)</label><input id="lm-amt" type="number" step="5000" oninput="lmAmtTyped()"/></div>
       <div class="fg" style="margin:0"><label>Status</label>
-        <select id="lm-status"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
+        <select id="lm-status" onchange="lmStatusChanged()"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
       </div>
     </div>
     <div class="fg" id="lm-moved-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--amb-l);border-radius:var(--r);font-size:12px;color:#92400e">
@@ -2242,7 +2242,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v88";
+const APP_VERSION="v89";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -3461,6 +3461,17 @@ function lessonHourlyRate(){
     if(r>0&&isFinite(r))return r;
   }
   return HR;
+}
+// Same thing by hand: switching a cancelled lesson back to Unpaid/Paid leaves the fee field at 0,
+// which would be saved as a free class. Refill it from the student's rate; it can still be typed over.
+function lmStatusChanged(){
+  const st=document.getElementById("lm-status")?.value;
+  const amtEl=document.getElementById("lm-amt");
+  if(!amtEl||st==="cancelled")return;
+  if(amtEl.dataset.touched)return;          // a fee typed by hand (including a deliberate 0) stands
+  if((parseInt(amtEl.value)||0)>0)return;
+  const d=parseFloat(document.getElementById("lm-dur")?.value)||parseFloat(document.getElementById("lm-dur-hidden")?.value)||0;
+  if(d>0){amtEl.value=Math.round(d*lessonHourlyRate());delete amtEl.dataset.touched;}
 }
 function lmDurTyped(){
   const de=document.getElementById("lm-dur");
@@ -7612,6 +7623,7 @@ function gcalApplyOne(d){
     const real=materializeOccurrence(d.occ);real.status="cancelled";
   }else if(d.type==="uncancel"){
     const real=materializeOccurrence(d.occ);real.status="unpaid";
+    if(!(real.amt>0))real.amt=gcalAmountFor(d.s,d.ev.colorId,real.dur||d.ev.dur);
   }else{
     const real=materializeOccurrence(d.occ);real.time=d.ev.time;
     if(d.durDiff){real.dur=d.ev.dur;real.amt=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);}
