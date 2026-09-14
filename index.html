@@ -2242,7 +2242,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v86";
+const APP_VERSION="v87";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2660,6 +2660,11 @@ function pickSlotForDate(slots,dateStr,dur){
   if(sameDay.length===1)return sameDay[0];
   if(sameDay.length>1)return sameDay.find(sl=>Math.abs((sl.dur||0)-(dur||0))<0.01)||sameDay[0];
   return slots.find(sl=>Math.abs((sl.dur||0)-(dur||0))<0.01)||slots[0];
+}
+function occTimeLabel(occ){
+  const mins=getLessonTimeKey(occ);
+  if(mins>=1440)return"";
+  return String(Math.floor(mins/60)).padStart(2,"0")+":"+String(mins%60).padStart(2,"0");
 }
 function schedLabelForOcc(occ){
   if(occ.time)return occ.time;
@@ -4179,11 +4184,15 @@ function getOccurrencesForMonthAll(month){
 function renderDash(){
   const t=td(),m=tm();
   const todayOccs=getOccurrencesForDate(t,null);
+  // A cancelled class isn't happening today; listing it among the real ones only raised
+  // "is this on or not?". It stays in the count line under the table.
+  const todayActive=todayOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid");
+  const todayCancelled=todayOccs.length-todayActive.length;
   const monthOccs=getOccurrencesForMonthAll(m);
   let totE=0,totP=0;
   students.forEach(s=>{const cv=calcM(s.id,m);totE+=cv.exp;totP+=cv.paidT;});
   const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  setT("st-s",students.filter(s=>!s.archived).length);setT("st-t",todayOccs.length);
+  setT("st-s",students.filter(s=>!s.archived).length);setT("st-t",todayActive.length);
   const monthActive=monthOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid").length;
   setT("st-ml",monthActive+"/"+monthOccs.length);
   setT("st-ex",pwon(totE));setT("st-up",pwon(totE-totP));
@@ -4193,29 +4202,30 @@ function renderDash(){
 
   // ── TODAY SCHEDULE ──
   const sc=document.getElementById("dash-sched");
-  if(!todayOccs.length){
-    sc.innerHTML='<div class="empty"><i class="ti ti-calendar-off"></i><p>No lessons today</p></div>';
+  if(!todayActive.length){
+    sc.innerHTML='<div class="empty"><i class="ti ti-calendar-off"></i><p>No lessons today'+(todayCancelled?" ("+todayCancelled+" cancelled)":"")+'</p></div>';
   } else {
-    const show=dashExpanded.sched?todayOccs:todayOccs.slice(0,DASH_LIMIT);
+    const show=dashExpanded.sched?todayActive:todayActive.slice(0,DASH_LIMIT);
     let rows=show.map(l=>{
       const s=gs(l.sid);
       const wbStr=(l.workbooks||[]).map(w=>w.name).join(", ")||"";
       const bkStr=(l.books||[]).map(b=>b.name).join(", ")||"";
       const content=[wbStr,bkStr].filter(Boolean).join(" · ")||"—";
-      const cancelled=l.status==="cancelled"||l.status==="cancelpaid";
       return "<tr class='clickable' title='Double-click to edit' ondblclick=\"openLessonModal('"+l.id+"')\">"
         +"<td><button class='bic' onclick=\"openLessonModal('"+l.id+"')\" title='Edit'><i class='ti ti-pencil'></i></button></td>"
-        +"<td style='color:var(--txt3);font-family:var(--mono);font-size:11px'>"+schedLabelForOcc(l)+"</td>"
+        +"<td style='color:var(--txt3);font-family:var(--mono);font-size:11px'>"+occTimeLabel(l)+"</td>"
         +"<td><div style='display:flex;align-items:center;gap:7px'><div class='av'>"+ini(s?.name)+"</div>"
         +"<div><div class='tn'>"+(s?.name||"?")+"</div><div style='font-size:11px;color:var(--txt3)'>"+(s?.k||"")+"</div></div></div></td>"
-        +"<td>"+(cancelled?"<span style='color:var(--txt3)'>Cancelled"+(l.cancel?" — "+l.cancel:"")+"</span>":l.topic||"—")+"</td>"
+        +"<td>"+(l.topic||"—")+"</td>"
         +"<td style='font-size:11px;color:var(--txt2)'>"+content+"</td>"
         +"<td>"+(privacyHidden?"<span class='badge bc' title='Hidden — tap Show amounts'>•••</span>":bdg(l.status))+"</td>"
         +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'>"+(l.note||"")+"</td>"
         +"</tr>";
     }).join("");
     sc.innerHTML="<div class='tw'><table id='dash-sched-tbl'><thead><tr><th></th><th>Time</th><th>Student</th><th>Topic</th><th>Workbook / Books</th><th>Status</th><th>Notes</th></tr></thead><tbody>"
-      +rows+"</tbody></table></div>"+makeCollapseBtn("sched",todayOccs.length);
+      +rows+"</tbody></table></div>"
+      +(todayCancelled?"<div class='u-hint' style='padding:0 14px 10px'>"+todayCancelled+" cancelled "+(todayCancelled===1?"lesson":"lessons")+" hidden</div>":"")
+      +makeCollapseBtn("sched",todayActive.length);
   }
 
   // ── PROGRESS BAR ──
@@ -7416,6 +7426,64 @@ function gcalBuildDiff(month,events){
   }
   return res;
 }
+const SCHED_DAY_NAMES=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];   // matches SCHED_DAY_MAP
+let gcalSuggestions=[];
+// Three or more identical time differences on the same weekday mean the student's slot itself
+// moved, not that three single classes were shifted. Fixing the row only patches that date;
+// fixing the slot (with an effective date, exactly like editing the student) ends the difference
+// for good — which is the point of keeping Google, Classes and Payments identical.
+function gcalBuildSuggestions(res){
+  const groups={};
+  for(const d of res.diffs){
+    if(d.type!=="time"||d.occ.time)continue;          // a record with its own time is a one-off move
+    const wd=weekdayOfDateStr(d.date);
+    (groups[[d.sid,wd,d.ev.mins,d.ev.dur].join("|")]??=[]).push(d);
+  }
+  const out=[];
+  for(const g of Object.values(groups)){
+    if(g.length<3)continue;
+    g.sort((a,b)=>a.date<b.date?-1:1);
+    const d=g[0],s=d.s;
+    if(s.schedFrom&&d.date<s.schedFrom)continue;      // would rewrite an archived period
+    const wd=weekdayOfDateStr(d.date);
+    const slots=getSlotsForStudent(s,d.date);
+    const slot=pickSlotForDate(slots,d.date,d.occ.dur);
+    if(!slot||slotWeekday(slot.sched)!==wd)continue;  // no slot owns this weekday
+    const idx=slots.indexOf(slot);
+    if(idx<0)continue;
+    const durChanged=g.every(x=>x.durDiff);
+    const hourly=slot.dur>0?slot.rate/slot.dur:0;
+    out.push({
+      sid:s.id,s,count:g.length,from:d.date,
+      which:idx===0?"primary":idx-1,
+      oldSched:slot.sched,newSched:SCHED_DAY_NAMES[wd]+" "+d.ev.time,
+      durChanged,oldDur:slot.dur,newDur:d.ev.dur,
+      oldRate:slot.rate,newRate:durChanged&&hourly>0?Math.round(hourly*d.ev.dur):slot.rate,
+    });
+  }
+  return out;
+}
+function gcalApplySchedule(i){
+  const g=gcalSuggestions[i];if(!g)return;
+  const s=gs(g.sid);if(!s)return;
+  const lines=[s.name+": "+g.oldSched+" → "+g.newSched];
+  if(g.durChanged)lines.push(g.oldDur+"h → "+g.newDur+"h, "+won(g.oldRate)+" → "+won(g.newRate)+" per lesson");
+  lines.push("","Applies from "+g.from+". Earlier lessons keep the old schedule.");
+  if(!confirm(lines.join("\n")))return;
+  // Same archiving that editing the student does: the outgoing slots are frozen with an end date
+  // so every past lesson still renders and bills against the schedule in force back then.
+  const until=(d=>{const t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()-1);return t.toISOString().slice(0,10);})(g.from);
+  s.slotHistory=[...(s.slotHistory||[]),{until,slots:getSlotsForStudent(s)}];
+  s.schedFrom=g.from;
+  const target=g.which==="primary"?s:(s.extraSlots||[])[g.which];
+  if(!target){alert("That slot no longer exists — open the student and change it there.");return;}
+  target.sched=g.newSched;
+  if(g.durChanged){target.dur=g.newDur;target.rate=g.newRate;}
+  if(!save())return;
+  showToast(s.name+" — schedule updated");
+  renderStudents();
+  gcalRun(false);
+}
 // ── UI ──
 function openGcalCompare(){
   openModal("mo-gcal");
@@ -7455,6 +7523,17 @@ function renderGcal(){
     <div class="sc amb"><div class="sc-lbl">Differences</div><div class="sc-val">${r.diffs.length}</div></div>
     <div class="sc ${r.unknown.length?"amb":"gry"}"><div class="sc-lbl">Student not found</div><div class="sc-val">${new Set(r.unknown.map(e=>e.title)).size}<span class="cell-muted2" style="font-size:12px;font-family:var(--font);font-weight:400"> titles · ${r.unknown.length} events</span></div></div>
     <div class="sc gry"><div class="sc-lbl">Google events</div><div class="sc-val">${gcalEvents.length}${(r.combined||[]).length?`<span class="cell-muted2" style="font-size:12px;font-family:var(--font);font-weight:400"> · ${r.combined.length} combined</span>`:""}</div></div></div>`;
+  gcalSuggestions=gcalBuildSuggestions(r);
+  if(gcalSuggestions.length){
+    html+=`<div class="card" style="margin-bottom:14px"><div class="ch"><div class="ct"><i class="ti ti-repeat"></i>These look like schedule changes</div></div><div class="cb p">`;
+    gcalSuggestions.forEach((g,i)=>{
+      html+=`<div class="gc-color-row"><div style="flex:1 1 auto;min-width:0">
+        <div style="font-weight:600;font-size:13px">${escapeHTMLBasic(g.s.name)} — ${escapeHTMLBasic(g.oldSched)} → ${escapeHTMLBasic(g.newSched)}</div>
+        <div class="cell-muted2">Google has this time on ${g.count} dates this month${g.durChanged?` · ${g.oldDur}h → ${g.newDur}h <span class="gc-money">${won(g.oldRate)} → ${won(g.newRate)}</span>`:""}</div>
+      </div><button class="btn btn-sm btn-p" onclick="gcalApplySchedule(${i})" title="Change the student's slot from ${g.from}"><i class="ti ti-calendar-cog"></i> Update schedule</button></div>`;
+    });
+    html+=`</div></div>`;
+  }
   const nc=[];
   if(nc.length){
     html+=`<div class="card" style="margin-bottom:14px"><div class="ch"><div class="ct"><i class="ti ti-palette"></i>New colours — what are they?</div></div><div class="cb p">`;
