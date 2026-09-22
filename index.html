@@ -2253,7 +2253,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v92";
+const APP_VERSION="v93";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7466,7 +7466,10 @@ function gcalFirstFlags(r){
     const gap=gcalDaysBetween(first.date,second.date);
     if(gap>45)f.push(gap+" days until the next one");
   }
-  if(r.current&&r.current<first.date)f.push("the card already has an earlier date");
+  // A date already on the card was put there on purpose. "Use all clean" fills blanks only, so a
+  // correction can never be undone by a stray calendar entry (a former student of the same name,
+  // say — matching is by name text, which cannot tell two people apart).
+  if(r.current)f.push("the card already says "+r.current);
   return f;
 }
 function gcalFirstState(r){
