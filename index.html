@@ -1174,6 +1174,12 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p class="u-hint">Yellow (Banana) events are your own lessons at the student's rate. Green (Sage / Basil) events are platform lessons — enter their flat rate below (blank = student's rate). Every other colour is ignored.</p>
         <div class="fg" style="max-width:260px"><label>Green lessons · ₩ per hour</label><input type="number" id="gcal-green-hourly" step="1000" placeholder="e.g. 30000" onchange="settings.gcalGreenHourly=parseInt(this.value,10)||0;save();showToast('Green rate saved')"/></div>
         <div id="gcal-rules"></div>
+        <div style="margin-top:14px;font-size:12px;font-weight:600">First lessons</div>
+        <p class="u-hint">Reads the calendar back year by year and fills each student's <b>First lesson</b> date, which is what the Students list counts the months from. Only fills a blank or a later date.</p>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-sm" id="gcal-scan-btn" onclick="gcalScanFirstLessons()"><i class="ti ti-history"></i> Find first lessons</button>
+          <span id="gcal-scan-status" class="u-hint" style="margin:0"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -1746,6 +1752,10 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </div>
       <input id="sm-sched" type="hidden"/>
     </div>
+    <div class="fr c2">
+      <div class="fg"><label title="The Students list counts the months from this date">First lesson</label><input id="sm-firstlesson" type="date"/></div>
+      <div class="fg"><label>Birthday</label><input id="sm-birthday" type="date"/></div>
+    </div>
     <div class="fg"><label data-col="startdate">Start date <span style="font-weight:400;color:var(--txt3)">(recurring classes start on this date — blank means no limit)</span></label><input id="sm-startdate" type="date"/></div>
     <div class="fg"><label data-col="enddate">End date <span style="font-weight:400;color:var(--txt3)">(recurring classes end on this date — later dates skipped, past records kept)</span></label><input id="sm-enddate" type="date"/></div>
     <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600"><input id="sm-archived" type="checkbox"/> Archive <span style="font-weight:400;color:var(--txt3);font-size:12px">(hidden from the active list & calendar — records and stats are kept)</span></label></div>
@@ -2242,7 +2252,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v90";
+const APP_VERSION="v91";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2881,7 +2891,7 @@ function openStudentModal(id){
   document.getElementById("sm-title").textContent=id?"Edit Student":"Add Student";
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
   set("sm-name",s?.name);set("sm-korean",s?.k);set("sm-parent",s?.parent);
-  set("sm-contact",s?.contact);set("sm-sched",s?.sched);set("sm-startdate",s?.startDate||"");set("sm-enddate",s?.endDate||"");const _ar=document.getElementById("sm-archived");if(_ar)_ar.checked=!!s?.archived;
+  set("sm-contact",s?.contact);set("sm-sched",s?.sched);set("sm-startdate",s?.startDate||"");set("sm-firstlesson",s?.firstLesson||"");set("sm-birthday",s?.birthday||"");set("sm-enddate",s?.endDate||"");const _ar=document.getElementById("sm-archived");if(_ar)_ar.checked=!!s?.archived;
   initMainSchedPickers(s?.sched||"");
   const bw=document.getElementById("sm-sched-biweekly");if(bw)bw.checked=(s?.freq==="biweekly");
   set("sm-dur",s?.dur??1);set("sm-rate",s?.rate??40000);
@@ -2988,7 +2998,7 @@ async function saveStudent(){
   }).filter(sl=>sl.sched);
   const customFields=collectCustomFieldsFromModal("sm-custom-fields");
   const rawRate=document.getElementById("sm-rate")?.value;
-  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
+  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
   if(!obj.name){alert("Name required");return;}
   const isNew=!editSid;
   const prevStudents=students.slice(); // for rollback if the write fails
@@ -4322,6 +4332,31 @@ function studentSortKey(s){
   return Math.min(...slots.map(parseSchedKey));
 }
 
+// Whole months between two "YYYY-MM-DD" days, counted the way people do: the 14th to the 13th of
+// the next month is 0 months, to the 14th is 1.
+function monthsBetweenDates(a,b){
+  const [ay,am,ad]=a.split("-").map(Number),[by,bm,bd]=b.split("-").map(Number);
+  let n=(by-ay)*12+(bm-am);
+  if(bd<ad)n--;
+  return n;
+}
+function studentSince(s){return s.firstLesson||s.startDate||"";}
+// "3 mo" · "1 yr" · "2 yr 4 mo" — blank until we know when they started.
+function tenureLabel(s){
+  const from=studentSince(s);if(!from)return"";
+  const n=monthsBetweenDates(from,td());
+  if(n<0)return"";
+  if(n<1)return"new";
+  if(n<12)return n+" mo";
+  const y=Math.floor(n/12),r=n%12;
+  return r?y+" yr "+r+" mo":y+" yr";
+}
+function ageFromBirthday(b){
+  if(!b)return null;
+  const n=monthsBetweenDates(b,td());
+  return n<0?null:Math.floor(n/12);
+}
+function birthdayThisMonth(b){return !!b&&b.slice(5,7)===td().slice(5,7);}
 function renderStudents(){
   applyCustomLabelsToHeader("students");
   const showArchived=document.getElementById("std-show-archived")?.checked;
@@ -4345,10 +4380,10 @@ function renderStudents(){
       :"";
     return `<div class="std-row${s.archived?" std-archived":""}" ondblclick="openStudentModal('${s.id}')" title="Double-click to edit">
     <div style="font-size:12px;color:var(--txt3);font-family:var(--mono)">${idx+1}</div>
-    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div></div></div>
+    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div>${s.birthday?`<div class="cell-muted" title="Birthday ${s.birthday}${birthdayThisMonth(s.birthday)?" — this month":""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
     <div style="font-size:13px;color:var(--txt2)">${s.k}</div>
     <div><div style="font-size:12px;font-weight:500">${s.parent}</div><div class="cell-muted">${s.contact}</div></div>
-    <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}</div>
+    <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}${tenureLabel(s)?`<div class="cell-muted" title="First lesson ${studentSince(s)}">${tenureLabel(s)}</div>`:""}</div>
     <div class="tm" title="${tip}">${durDisp}</div>
     <div class="tm" title="${tip}">${rateDisp}</div>
     <div><span class="badge ${PTYPE_META[s.ptype]?.cls||"bpo"}">${PTYPE_META[s.ptype]?.lbl||"Post-pay"}</span></div>
@@ -7346,22 +7381,71 @@ async function gcalGetToken(){
     gcalTokenClient.requestAccessToken({prompt:""});
   });
 }
-async function gcalFetchEvents(month,retry=true){
-  const token=await gcalGetToken();
-  const [y,m]=month.split("-").map(Number);
-  const tmin=new Date(y,m-1,1).toISOString(),tmax=new Date(y,m,1).toISOString();
-  const calId=encodeURIComponent((settings.gcalCalendarId||"primary").trim()||"primary");
-  const url=`https://www.googleapis.com/calendar/v3/calendars/${calId}/events?singleEvents=true&orderBy=startTime&maxResults=2500&timeMin=${encodeURIComponent(tmin)}&timeMax=${encodeURIComponent(tmax)}`;
-  const r=await fetch(url,{headers:{Authorization:"Bearer "+token}});
-  if(r.status===401&&retry){gcalTokenClear();return gcalFetchEvents(month,false);}
-  if(!r.ok){let msg="HTTP "+r.status;try{msg=(await r.json()).error?.message||msg;}catch(e){}throw new Error(r.status===403?msg+" — is the Google Calendar API enabled for this project?":msg);}
-  const data=await r.json();
-  return (data.items||[]).filter(ev=>ev.status!=="cancelled"&&ev.start?.dateTime&&ev.end?.dateTime).map(ev=>{
+function gcalParseEvents(items){
+  return (items||[]).filter(ev=>ev.status!=="cancelled"&&ev.start?.dateTime&&ev.end?.dateTime).map(ev=>{
     const st=new Date(ev.start.dateTime),en=new Date(ev.end.dateTime);
     const mins=st.getHours()*60+st.getMinutes();
     return {id:ev.id,date:fmtDate(st),mins,time:String(st.getHours()).padStart(2,"0")+":"+String(st.getMinutes()).padStart(2,"0"),
       dur:Math.round((en-st)/900000)/4,title:(ev.summary||"(no title)").trim(),colorId:ev.colorId||"0",link:ev.htmlLink||""};
   });
+}
+// One window of the calendar, following nextPageToken — a whole year is well past the 2500 cap.
+async function gcalFetchWindow(tmin,tmax,retry=true){
+  const token=await gcalGetToken();
+  const calId=encodeURIComponent((settings.gcalCalendarId||"primary").trim()||"primary");
+  const base=`https://www.googleapis.com/calendar/v3/calendars/${calId}/events?singleEvents=true&orderBy=startTime&maxResults=2500&timeMin=${encodeURIComponent(tmin)}&timeMax=${encodeURIComponent(tmax)}`;
+  let out=[],page="";
+  for(let guard=0;guard<25;guard++){
+    const r=await fetch(base+(page?"&pageToken="+encodeURIComponent(page):""),{headers:{Authorization:"Bearer "+token}});
+    if(r.status===401&&retry){gcalTokenClear();return gcalFetchWindow(tmin,tmax,false);}
+    if(!r.ok){let msg="HTTP "+r.status;try{msg=(await r.json()).error?.message||msg;}catch(e){}throw new Error(r.status===403?msg+" — is the Google Calendar API enabled for this project?":msg);}
+    const data=await r.json();
+    out=out.concat(gcalParseEvents(data.items));
+    if(!data.nextPageToken)break;
+    page=data.nextPageToken;
+  }
+  return out;
+}
+async function gcalFetchEvents(month){
+  const [y,m]=month.split("-").map(Number);
+  return gcalFetchWindow(new Date(y,m-1,1).toISOString(),new Date(y,m,1).toISOString());
+}
+// Walk the calendar backwards a year at a time and remember the earliest lesson found for each
+// student, so "how long have they been coming" comes from the calendar rather than memory.
+async function gcalScanFirstLessons(){
+  if(!(settings.gcalClientId||"").trim()){alert("Add the OAuth client ID above first.");return;}
+  const btn=document.getElementById("gcal-scan-btn"),st=document.getElementById("gcal-scan-status");
+  const setSt=t=>{if(st)st.textContent=t;};
+  if(!confirm("Read your Google Calendar back to the first lesson of every student?\n\nThis only fills in each student's First lesson date (and only when the calendar shows an earlier one). Nothing else changes, and nothing is written to Google."))return;
+  if(btn)btn.disabled=true;
+  try{
+    const earliest={};
+    const thisYear=new Date().getFullYear();
+    for(let back=0;back<6;back++){
+      const y=thisYear-back;
+      setSt("Reading "+y+"…");
+      const evs=await gcalFetchWindow(new Date(y,0,1).toISOString(),new Date(y+1,0,1).toISOString());
+      let found=0;
+      for(const ev of evs){
+        if(gcalRule(ev.colorId).mode==="ignore")continue;
+        for(const s of gcalMatchAll(ev.title)){
+          found++;
+          if(!earliest[s.id]||ev.date<earliest[s.id])earliest[s.id]=ev.date;
+        }
+      }
+      if(!found&&back>0)break;      // a whole year with no lessons — nothing older to find
+    }
+    const changed=[];
+    for(const sid of Object.keys(earliest)){
+      const s=gs(sid);if(!s)continue;
+      if(!s.firstLesson||earliest[sid]<s.firstLesson){s.firstLesson=earliest[sid];changed.push(s.name+" "+earliest[sid]);}
+    }
+    if(changed.length){save();renderStudents();showToast(changed.length+" first "+(changed.length===1?"lesson":"lessons")+" filled in");}
+    setSt(changed.length?changed.join(" · "):"Nothing to add — every student already has an equal or earlier first lesson.");
+  }catch(e){
+    console.error(e);
+    setSt(e.message==="NO_CLIENT_ID"?"No Google client ID in Settings.":(e.message||String(e)));
+  }finally{if(btn)btn.disabled=false;}
 }
 // ── matching ──
 function gcalKeywords(s){return [s.name,s.k,...(s.aliases||[])].map(x=>String(x||"").trim().toLowerCase()).filter(x=>x.length>=2);}
