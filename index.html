@@ -603,6 +603,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 /* GOOGLE CALENDAR COMPARE (v82) */
 .cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
 .gc-row{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
+.gcf-row{display:grid;gap:8px;align-items:center;grid-template-columns:150px minmax(0,1fr) 150px 130px}
 .gc-cell{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}
 .gc-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .gc-act{display:flex;justify-content:flex-end}
@@ -615,7 +616,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .gc-combined{background:var(--surf2)}
 .gc-money{font-family:var(--mono);font-size:11px;color:var(--red);white-space:nowrap}
 .gc-match{opacity:.7}
-@media(max-width:640px){.mf{flex-wrap:wrap}.gc-color-row{flex-wrap:wrap}.gc-row{grid-template-columns:90px minmax(0,1fr)}.gc-row>:nth-child(3){grid-column:2}.gc-act{grid-column:1/-1;justify-content:flex-start}}
+@media(max-width:640px){.mf{flex-wrap:wrap}.gc-color-row{flex-wrap:wrap}.gcf-row{grid-template-columns:minmax(0,1fr) 120px}.gcf-row>:nth-child(2){grid-column:1/-1}.gcf-row>:nth-child(3){display:none}.gc-row{grid-template-columns:90px minmax(0,1fr)}.gc-row>:nth-child(3){grid-column:2}.gc-act{grid-column:1/-1;justify-content:flex-start}}
 .cal-more-btn:hover{color:var(--grn);text-decoration:underline}
 @media(max-width:900px){.cal-day{min-height:70px}.cal-event{font-size:10px}}
 
@@ -1175,9 +1176,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <div class="fg" style="max-width:260px"><label>Green lessons · ₩ per hour</label><input type="number" id="gcal-green-hourly" step="1000" placeholder="e.g. 30000" onchange="settings.gcalGreenHourly=parseInt(this.value,10)||0;save();showToast('Green rate saved')"/></div>
         <div id="gcal-rules"></div>
         <div style="margin-top:14px;font-size:12px;font-weight:600">First lessons</div>
-        <p class="u-hint">Reads the calendar back year by year and fills each student's <b>First lesson</b> date, which is what the Students list counts the months from. Only fills a blank or a later date.</p>
+        <p class="u-hint">Reads the calendar back year by year and shows, for every student, the earliest entry that mentions them — with the entry's own title, so you can see what the date is based on. Entries that read like a consultation, or that sit long before the next one, are flagged. Nothing is written until you press a button.</p>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <button class="btn btn-sm" id="gcal-scan-btn" onclick="gcalScanFirstLessons()"><i class="ti ti-history"></i> Find first lessons</button>
+          <button class="btn btn-sm btn-p" id="gcal-scan-btn" onclick="gcalScanFirstLessons()"><i class="ti ti-history"></i> Find first lessons</button>
           <span id="gcal-scan-status" class="u-hint" style="margin:0"></span>
         </div>
       </div>
@@ -2252,7 +2253,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v91";
+const APP_VERSION="v92";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7412,40 +7413,109 @@ async function gcalFetchEvents(month){
 }
 // Walk the calendar backwards a year at a time and remember the earliest lesson found for each
 // student, so "how long have they been coming" comes from the calendar rather than memory.
+// Titles that turn up before regular lessons start — a consultation, a trial, a level test.
+// Taking one of those as "first lesson" makes a student look years older than they are.
+const GCAL_NOT_LESSON=/상담|체험|미팅|면담|설명|문의|오리엔|레벨|테스트|평가|trial|consult|meeting|intro|test/i;
+let gcalFirstRows=[],gcalFirstMissing=[];
 async function gcalScanFirstLessons(){
   if(!(settings.gcalClientId||"").trim()){alert("Add the OAuth client ID above first.");return;}
   const btn=document.getElementById("gcal-scan-btn"),st=document.getElementById("gcal-scan-status");
   const setSt=t=>{if(st)st.textContent=t;};
-  if(!confirm("Read your Google Calendar back to the first lesson of every student?\n\nThis only fills in each student's First lesson date (and only when the calendar shows an earlier one). Nothing else changes, and nothing is written to Google."))return;
   if(btn)btn.disabled=true;
   try{
-    const earliest={};
+    const hits={};
     const thisYear=new Date().getFullYear();
+    let yearsRead=0;
     for(let back=0;back<6;back++){
       const y=thisYear-back;
       setSt("Reading "+y+"…");
       const evs=await gcalFetchWindow(new Date(y,0,1).toISOString(),new Date(y+1,0,1).toISOString());
+      yearsRead++;
       let found=0;
       for(const ev of evs){
         if(gcalRule(ev.colorId).mode==="ignore")continue;
         for(const s of gcalMatchAll(ev.title)){
           found++;
-          if(!earliest[s.id]||ev.date<earliest[s.id])earliest[s.id]=ev.date;
+          (hits[s.id]=hits[s.id]||[]).push({date:ev.date,title:ev.title});
         }
       }
       if(!found&&back>0)break;      // a whole year with no lessons — nothing older to find
     }
-    const changed=[];
-    for(const sid of Object.keys(earliest)){
-      const s=gs(sid);if(!s)continue;
-      if(!s.firstLesson||earliest[sid]<s.firstLesson){s.firstLesson=earliest[sid];changed.push(s.name+" "+earliest[sid]);}
+    gcalFirstRows=[];gcalFirstMissing=[];
+    for(const s of students){
+      const list=(hits[s.id]||[]).sort((a,b)=>a.date<b.date?-1:1);
+      if(!list.length){if(!s.archived)gcalFirstMissing.push(s.name);continue;}
+      gcalFirstRows.push({sid:s.id,name:s.name,current:s.firstLesson||"",list:list.slice(0,6),total:list.length});
     }
-    if(changed.length){save();renderStudents();showToast(changed.length+" first "+(changed.length===1?"lesson":"lessons")+" filled in");}
-    setSt(changed.length?changed.join(" · "):"Nothing to add — every student already has an equal or earlier first lesson.");
+    gcalFirstRows.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+    setSt(yearsRead+" year"+(yearsRead===1?"":"s")+" read.");
+    openModal("mo-gcal-first");
+    renderGcalFirst();
   }catch(e){
     console.error(e);
     setSt(e.message==="NO_CLIENT_ID"?"No Google client ID in Settings.":(e.message||String(e)));
   }finally{if(btn)btn.disabled=false;}
+}
+function gcalDaysBetween(a,b){return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000);}
+// Why this date might not be the real start of lessons. An empty list means it looks trustworthy.
+function gcalFirstFlags(r){
+  const f=[],first=r.list[0],second=r.list[1];
+  if(GCAL_NOT_LESSON.test(first.title))f.push("reads like a consultation or test");
+  if(!second)f.push("the only entry found");
+  else{
+    const gap=gcalDaysBetween(first.date,second.date);
+    if(gap>45)f.push(gap+" days until the next one");
+  }
+  if(r.current&&r.current<first.date)f.push("the card already has an earlier date");
+  return f;
+}
+function gcalFirstState(r){
+  if(r.current===r.list[0].date)return"same";
+  return gcalFirstFlags(r).length?"check":"clean";
+}
+function renderGcalFirst(){
+  const body=document.getElementById("gcf-body");if(!body)return;
+  const rows=gcalFirstRows.map((r,i)=>{
+    const first=r.list[0],second=r.list[1],state=gcalFirstState(r);
+    const flags=state==="same"?[]:gcalFirstFlags(r);   // nothing to decide on a row that already matches
+    const act=state==="same"
+      ?'<span class="badge bp">already set</span>'
+      :`<button class="btn btn-xs ${state==="clean"?"btn-p":""}" onclick="gcalFirstApply(${i})" title="Put ${first.date} in ${escapeAttr(r.name)}'s card"><i class="ti ti-check"></i> Use ${first.date.slice(2)}</button>`;
+    return `<div class="grid-row gcf-row${state==="check"?" gc-unknown":""}">
+      <div><div class="cell-main">${escapeHTMLBasic(r.name)}</div><div class="cell-muted2">${r.current?"card: "+r.current:"card: blank"} · ${r.total} entries</div></div>
+      <div><div class="cell-main">${first.date}</div><div class="cell-muted2 gc-title" title="${escapeAttr(first.title)}">${escapeHTMLBasic(first.title)}</div>${flags.length?`<div class="cell-muted2" style="color:var(--amb-t)"><i class="ti ti-alert-triangle"></i> ${flags.map(escapeHTMLBasic).join(" · ")}</div>`:""}</div>
+      <div class="cell-muted2">${second?second.date+'<div class="gc-title" title="'+escapeAttr(second.title)+'">'+escapeHTMLBasic(second.title)+"</div>":"—"}</div>
+      <div class="gc-act">${act}</div>
+    </div>`;
+  }).join("");
+  const nClean=gcalFirstRows.filter(r=>gcalFirstState(r)==="clean").length;
+  const nCheck=gcalFirstRows.filter(r=>gcalFirstState(r)==="check").length;
+  const nSame=gcalFirstRows.filter(r=>gcalFirstState(r)==="same").length;
+  body.innerHTML=`<div class="stats cols-4" style="margin-bottom:14px">
+      <div class="sc ok"><div class="sc-lbl">Ready to use</div><div class="sc-val">${nClean}</div></div>
+      <div class="sc amb"><div class="sc-lbl">Worth a look</div><div class="sc-val">${nCheck}</div></div>
+      <div class="sc gry"><div class="sc-lbl">Already set</div><div class="sc-val">${nSame}</div></div>
+      <div class="sc gry"><div class="sc-lbl">Not in calendar</div><div class="sc-val">${gcalFirstMissing.length}</div></div>
+    </div>
+    <p class="u-hint" style="margin:0 0 10px">Yellow rows are the ones to read: the entry found is far from the next one, or its title reads like a consultation. Nothing is written until you press a button.</p>
+    <div class="card" style="padding:0"><div class="grid-head gcf-row"><div>Student</div><div>Earliest entry found</div><div>Next entry</div><div></div></div>${rows||'<div class="empty"><i class="ti ti-calendar-off"></i><p>No matching entries in the calendar</p></div>'}</div>
+    ${gcalFirstMissing.length?`<p class="u-hint">No entries for: ${gcalFirstMissing.map(escapeHTMLBasic).join(", ")} — their months are counted from the Start date instead.</p>`:""}`;
+  const ab=document.getElementById("gcf-apply");
+  if(ab){ab.style.display=nClean?"":"none";ab.innerHTML=`<i class="ti ti-checks"></i> Use all ${nClean} clean`;}
+}
+function gcalFirstApply(i){
+  const r=gcalFirstRows[i];if(!r)return;
+  const s=gs(r.sid);if(!s)return;
+  s.firstLesson=r.list[0].date;r.current=s.firstLesson;
+  if(!save())return;
+  renderStudents();renderGcalFirst();showToast(s.name+" — first lesson "+s.firstLesson);
+}
+function gcalFirstApplyClean(){
+  const clean=gcalFirstRows.filter(r=>gcalFirstState(r)==="clean");
+  if(!clean.length)return;
+  clean.forEach(r=>{const s=gs(r.sid);if(s){s.firstLesson=r.list[0].date;r.current=s.firstLesson;}});
+  if(!save())return;
+  renderStudents();renderGcalFirst();showToast(clean.length+" first lessons set");
 }
 // ── matching ──
 function gcalKeywords(s){return [s.name,s.k,...(s.aliases||[])].map(x=>String(x||"").trim().toLowerCase()).filter(x=>x.length>=2);}
@@ -8109,6 +8179,17 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div class="mf">
       <label class="sw"><input type="checkbox" id="gc-show-matches" onchange="gcalToggleMatches(this.checked)"/><span class="sw-track"></span> Show matching lessons too</label>
       <div style="display:flex;gap:8px"><button class="btn" onclick="gcalRun(true)" title="Read Google Calendar again"><i class="ti ti-refresh"></i> Refresh</button><button class="btn btn-p" id="gc-apply-all" onclick="gcalApplyAll()" style="display:none"><i class="ti ti-checks"></i> Apply all</button></div>
+    </div>
+  </div>
+</div>
+<!-- First lessons found in Google Calendar (v92): every date shows the entry it came from -->
+<div class="mo" id="mo-gcal-first">
+  <div class="mb wide">
+    <div class="mt"><span><i class="ti ti-history"></i> First lesson in Google Calendar</span><button class="bic" onclick="closeModal('mo-gcal-first')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div id="gcf-body"></div>
+    <div class="mf">
+      <span class="u-hint" style="margin:0">Dates you type on the student card are never overwritten.</span>
+      <div style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-gcal-first')">Close</button><button class="btn btn-p" id="gcf-apply" onclick="gcalFirstApplyClean()" style="display:none"></button></div>
     </div>
   </div>
 </div>
