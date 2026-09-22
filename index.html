@@ -2255,7 +2255,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v94";
+const APP_VERSION="v95";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -3010,10 +3010,17 @@ async function saveStudent(){
     if(i>=0){
       const cur=students[i];
       // Did anything schedule-defining change? (day/time, duration, rate, frequency, extra slots)
+      // Compare what a slot MEANS, not how it happens to be stored. The rebuilt slots always carry
+      // freq and numeric dur/rate, while older saved ones may lack freq or hold strings, so a raw
+      // JSON compare reported a schedule change every time a student with extra slots was saved —
+      // and the effective-date dialog appeared after editing something as unrelated as a birthday.
+      const normSlot=sl=>({sched:String(sl?.sched||"").trim(),dur:+sl?.dur||0,rate:+sl?.rate||0,freq:sl?.freq||"weekly"});
+      const normSlots=a=>JSON.stringify((a||[]).map(normSlot));
       const schedChanged=
-        cur.sched!==obj.sched||cur.dur!==obj.dur||cur.rate!==obj.rate||
+        String(cur.sched||"").trim()!==String(obj.sched||"").trim()||
+        (+cur.dur||0)!==(+obj.dur||0)||(+cur.rate||0)!==(+obj.rate||0)||
         (cur.freq||"weekly")!==(obj.freq||"weekly")||
-        JSON.stringify(cur.extraSlots||[])!==JSON.stringify(obj.extraSlots||[]);
+        normSlots(cur.extraSlots)!==normSlots(obj.extraSlots);
       if(schedChanged){
         // Ask from when the new schedule applies. Archiving the outgoing slots means every date
         // BEFORE that day keeps rendering (and billing) against the schedule in force back then —
