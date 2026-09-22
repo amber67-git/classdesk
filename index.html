@@ -604,6 +604,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
 .gc-row{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
 .gcf-row{display:grid;gap:8px;align-items:center;grid-template-columns:150px minmax(0,1fr) 150px 130px}
+.gcf-other{margin-top:6px;padding:6px 8px;border-left:3px solid var(--bdr2);background:var(--surf2);border-radius:0 6px 6px 0}
+.gcf-other .btn{margin-top:4px}
 .gc-cell{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}
 .gc-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .gc-act{display:flex;justify-content:flex-end}
@@ -2253,7 +2255,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v93";
+const APP_VERSION="v94";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7431,21 +7433,26 @@ async function gcalScanFirstLessons(){
       setSt("Reading "+y+"…");
       const evs=await gcalFetchWindow(new Date(y,0,1).toISOString(),new Date(y+1,0,1).toISOString());
       yearsRead++;
-      let found=0;
+      let matched=0;
       for(const ev of evs){
-        if(gcalRule(ev.colorId).mode==="ignore")continue;
+        const lesson=gcalRule(ev.colorId).mode!=="ignore";
         for(const s of gcalMatchAll(ev.title)){
-          found++;
-          (hits[s.id]=hits[s.id]||[]).push({date:ev.date,title:ev.title});
+          matched++;
+          (hits[s.id]=hits[s.id]||[]).push({date:ev.date,title:ev.title,colorId:ev.colorId,lesson});
         }
       }
-      if(!found&&back>0)break;      // a whole year with no lessons — nothing older to find
+      // Keep going while ANY entry names a student, whatever its colour — otherwise a year of
+      // uncoloured lessons would end the search and hide everything older.
+      if(!matched&&back>0)break;
     }
     gcalFirstRows=[];gcalFirstMissing=[];
     for(const s of students){
-      const list=(hits[s.id]||[]).sort((a,b)=>a.date<b.date?-1:1);
-      if(!list.length){if(!s.archived)gcalFirstMissing.push(s.name);continue;}
-      gcalFirstRows.push({sid:s.id,name:s.name,current:s.firstLesson||"",list:list.slice(0,6),total:list.length});
+      const all=(hits[s.id]||[]).sort((a,b)=>a.date<b.date?-1:1);
+      if(!all.length){if(!s.archived)gcalFirstMissing.push(s.name);continue;}
+      const list=all.filter(h=>h.lesson),other=all.filter(h=>!h.lesson);
+      gcalFirstRows.push({sid:s.id,name:s.name,current:s.firstLesson||"",
+        list:list.slice(0,6),total:list.length,
+        other:other.slice(0,6),otherTotal:other.length});
     }
     gcalFirstRows.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
     setSt(yearsRead+" year"+(yearsRead===1?"":"s")+" read.");
@@ -7458,8 +7465,16 @@ async function gcalScanFirstLessons(){
 }
 function gcalDaysBetween(a,b){return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000);}
 // Why this date might not be the real start of lessons. An empty list means it looks trustworthy.
+function gcalFirstOlderOther(r){
+  const o=r.other&&r.other[0];
+  if(!o)return null;
+  return (!r.list.length||o.date<r.list[0].date)?o:null;
+}
 function gcalFirstFlags(r){
   const f=[],first=r.list[0],second=r.list[1];
+  const older=gcalFirstOlderOther(r);
+  if(older)f.push("an earlier entry sits in a colour that isn't counted");
+  if(!first){f.push("no entry in a lesson colour");return f;}
   if(GCAL_NOT_LESSON.test(first.title))f.push("reads like a consultation or test");
   if(!second)f.push("the only entry found");
   else{
@@ -7473,7 +7488,8 @@ function gcalFirstFlags(r){
   return f;
 }
 function gcalFirstState(r){
-  if(r.current===r.list[0].date)return"same";
+  if(!r.list.length)return"check";
+  if(r.current===r.list[0].date&&!gcalFirstOlderOther(r))return"same";
   return gcalFirstFlags(r).length?"check":"clean";
 }
 function renderGcalFirst(){
@@ -7481,12 +7497,23 @@ function renderGcalFirst(){
   const rows=gcalFirstRows.map((r,i)=>{
     const first=r.list[0],second=r.list[1],state=gcalFirstState(r);
     const flags=state==="same"?[]:gcalFirstFlags(r);   // nothing to decide on a row that already matches
+    const older=gcalFirstOlderOther(r);
     const act=state==="same"
       ?'<span class="badge bp">already set</span>'
-      :`<button class="btn btn-xs ${state==="clean"?"btn-p":""}" onclick="gcalFirstApply(${i})" title="Put ${first.date} in ${escapeAttr(r.name)}'s card"><i class="ti ti-check"></i> Use ${first.date.slice(2)}</button>`;
+      :first
+        ?`<button class="btn btn-xs ${state==="clean"?"btn-p":""}" onclick="gcalFirstApply(${i})" title="Put ${first.date} in ${escapeAttr(r.name)}'s card"><i class="ti ti-check"></i> Use ${first.date.slice(2)}</button>`
+        :"";
+    const mainCell=first
+      ?`<div class="cell-main">${first.date}</div><div class="cell-muted2 gc-title" title="${escapeAttr(first.title)}">${escapeHTMLBasic(first.title)}</div>`
+      :`<div class="cell-muted2">nothing in a lesson colour</div>`;
+    const olderCell=older
+      ?`<div class="gcf-other"><div class="cell-muted2"><i class="ti ti-eye-off"></i> not counted · ${escapeHTMLBasic((GCAL_COLORS[older.colorId]||GCAL_COLORS["0"]).name)} ${gcalColorDot(older.colorId)}</div>
+         <div class="cell-main">${older.date}</div><div class="cell-muted2 gc-title" title="${escapeAttr(older.title)}">${escapeHTMLBasic(older.title)}</div>
+         <button class="btn btn-xs" onclick="gcalFirstApplyOther(${i})" title="Use this date instead"><i class="ti ti-check"></i> Use ${older.date.slice(2)}</button></div>`
+      :"";
     return `<div class="grid-row gcf-row${state==="check"?" gc-unknown":""}">
-      <div><div class="cell-main">${escapeHTMLBasic(r.name)}</div><div class="cell-muted2">${r.current?"card: "+r.current:"card: blank"} · ${r.total} entries</div></div>
-      <div><div class="cell-main">${first.date}</div><div class="cell-muted2 gc-title" title="${escapeAttr(first.title)}">${escapeHTMLBasic(first.title)}</div>${flags.length?`<div class="cell-muted2" style="color:var(--amb-t)"><i class="ti ti-alert-triangle"></i> ${flags.map(escapeHTMLBasic).join(" · ")}</div>`:""}</div>
+      <div><div class="cell-main">${escapeHTMLBasic(r.name)}</div><div class="cell-muted2">${r.current?"card: "+r.current:"card: blank"} · ${r.total} entries${r.otherTotal?" (+"+r.otherTotal+" other colours)":""}</div></div>
+      <div>${mainCell}${flags.length?`<div class="cell-muted2" style="color:var(--amb-t)"><i class="ti ti-alert-triangle"></i> ${flags.map(escapeHTMLBasic).join(" · ")}</div>`:""}${olderCell}</div>
       <div class="cell-muted2">${second?second.date+'<div class="gc-title" title="'+escapeAttr(second.title)+'">'+escapeHTMLBasic(second.title)+"</div>":"—"}</div>
       <div class="gc-act">${act}</div>
     </div>`;
@@ -7500,21 +7527,29 @@ function renderGcalFirst(){
       <div class="sc gry"><div class="sc-lbl">Already set</div><div class="sc-val">${nSame}</div></div>
       <div class="sc gry"><div class="sc-lbl">Not in calendar</div><div class="sc-val">${gcalFirstMissing.length}</div></div>
     </div>
-    <p class="u-hint" style="margin:0 0 10px">Yellow rows are the ones to read: the entry found is far from the next one, or its title reads like a consultation. Nothing is written until you press a button.</p>
+    <p class="u-hint" style="margin:0 0 10px">Yellow rows are the ones to read: the entry is far from the next one, its title reads like a consultation, or an <b>older entry exists in a colour the app doesn't count as a lesson</b> — an entry with no colour of its own ("Calendar default") looks yellow in Google but isn't Banana. Nothing is written until you press a button.</p>
     <div class="card" style="padding:0"><div class="grid-head gcf-row"><div>Student</div><div>Earliest entry found</div><div>Next entry</div><div></div></div>${rows||'<div class="empty"><i class="ti ti-calendar-off"></i><p>No matching entries in the calendar</p></div>'}</div>
     ${gcalFirstMissing.length?`<p class="u-hint">No entries for: ${gcalFirstMissing.map(escapeHTMLBasic).join(", ")} — their months are counted from the Start date instead.</p>`:""}`;
   const ab=document.getElementById("gcf-apply");
   if(ab){ab.style.display=nClean?"":"none";ab.innerHTML=`<i class="ti ti-checks"></i> Use all ${nClean} clean`;}
 }
-function gcalFirstApply(i){
+function gcalFirstApplyOther(i){
   const r=gcalFirstRows[i];if(!r)return;
+  const o=gcalFirstOlderOther(r);if(!o)return;
+  const s=gs(r.sid);if(!s)return;
+  s.firstLesson=o.date;r.current=s.firstLesson;
+  if(!save())return;
+  renderStudents();renderGcalFirst();showToast(s.name+" — first lesson "+s.firstLesson);
+}
+function gcalFirstApply(i){
+  const r=gcalFirstRows[i];if(!r||!r.list.length)return;
   const s=gs(r.sid);if(!s)return;
   s.firstLesson=r.list[0].date;r.current=s.firstLesson;
   if(!save())return;
   renderStudents();renderGcalFirst();showToast(s.name+" — first lesson "+s.firstLesson);
 }
 function gcalFirstApplyClean(){
-  const clean=gcalFirstRows.filter(r=>gcalFirstState(r)==="clean");
+  const clean=gcalFirstRows.filter(r=>gcalFirstState(r)==="clean"&&r.list.length);
   if(!clean.length)return;
   clean.forEach(r=>{const s=gs(r.sid);if(s){s.firstLesson=r.list[0].date;r.current=s.firstLesson;}});
   if(!save())return;
