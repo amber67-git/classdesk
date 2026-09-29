@@ -1796,13 +1796,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <!-- Basic info -->
     <div style="display:grid;grid-template-columns:1fr 1fr 0.8fr 0.7fr 1fr 1fr;gap:10px;margin-bottom:10px">
       <div class="fg" style="margin:0"><label data-col="student" data-required="true">Student *</label><select id="lm-sid" onchange="lessonAutoFill()"></select></div>
-      <div class="fg" style="margin:0"><label data-col="date" data-required="true">Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged()"/></div>
+      <div class="fg" style="margin:0"><label data-col="date" data-required="true">Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow()"/></div>
       <div class="fg" style="margin:0"><label data-col="time">Start time</label><input id="lm-time" type="time" onchange="lessonTimeChanged()"/></div>
       <div class="fg" style="margin:0"><label data-col="dur">Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
       <div class="fg" style="margin:0"><label>Amount (₩)</label><input id="lm-amt" type="number" step="5000" oninput="lmAmtTyped()"/></div>
       <div class="fg" style="margin:0"><label>Status</label>
         <select id="lm-status" onchange="lmStatusChanged()"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
       </div>
+    </div>
+    <div class="fg" id="lm-credit-row" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--pri-l);border-radius:var(--r)">
+      <label class="sw"><input type="checkbox" id="lm-credit" checked/><span class="sw-track"></span> The fee was already paid — move it to the next class</label>
+      <div class="u-hint" id="lm-credit-hint" style="margin-top:4px"></div>
+    </div>
+    <div class="fg" id="lm-credit-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--pri-l);border-radius:var(--r);font-size:12px;color:var(--pri-t)">
+      <i class="ti ti-arrow-forward-up" style="margin-right:4px"></i><span id="lm-credit-note-text"></span>
     </div>
     <div class="fg" id="lm-moved-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--amb-l);border-radius:var(--r);font-size:12px;color:#92400e">
       <i class="ti ti-calendar-event" style="margin-right:4px"></i>
@@ -2255,7 +2262,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v95";
+const APP_VERSION="v96";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -3080,6 +3087,11 @@ function openLessonModal(id){
   set("lm-sid",l?.sid);set("lm-date",l?.date||td());set("lm-amt",l?.amt??40000);
   set("lm-time",l?.time||"");
   set("lm-status",l?.status??"unpaid");set("lm-topic",l?.topic);
+  lessonOpenStatus=l?.status??"unpaid";
+  const cc=document.getElementById("lm-credit");if(cc)cc.checked=true;   // the modal is reused — never inherit the last answer
+  lessonOpenAmt=+(l?.amt??0)||0;
+  showCreditNote(l);
+  lmStatusChanged();
   // Track the date/slot this lesson "naturally" belongs to (its recurring slot's date for this
   // week), so we can tell if the person has moved it elsewhere and show/save that accordingly.
   lessonNaturalDate=l?.movedFrom||l?.date||null;
@@ -3482,9 +3494,53 @@ function lessonHourlyRate(){
   }
   return HR;
 }
+// A class that was already paid for and then cancelled: the money stays with the student as credit
+// for their next class, rather than being billed twice or quietly disappearing from the month.
+let lessonOpenStatus="unpaid",lessonOpenAmt=0;
+const PAID_STATUSES=["paid","prepaid","cancelpaid"];
+// The next class that hasn't been settled yet — skipping cancelled ones and any already paid.
+function nextUnsettledOccurrence(sid,afterDate,limitDays=120){
+  const base=new Date(afterDate+"T00:00:00");
+  for(let i=1;i<=limitDays;i++){
+    const d=new Date(base);d.setDate(d.getDate()+i);
+    const ds=fmtDate(d);
+    for(const o of getOccurrencesForDate(ds,sid)){
+      if(o.status==="cancelled"||o.status==="cancelpaid"||o.status==="deleted")continue;
+      if(PAID_STATUSES.includes(o.status))continue;
+      return o;
+    }
+  }
+  return null;
+}
+function creditIsOffered(){
+  return document.getElementById("lm-status")?.value==="cancelled"
+    && PAID_STATUSES.includes(lessonOpenStatus)
+    && lessonOpenAmt>0;
+}
+// Says where the money would go, so the switch is never a leap of faith.
+function updateCreditRow(){
+  const row=document.getElementById("lm-credit-row");if(!row)return;
+  if(!creditIsOffered()){row.style.display="none";return;}
+  row.style.display="";
+  const sid=document.getElementById("lm-sid")?.value;
+  const date=document.getElementById("lm-date")?.value||td();
+  const nxt=sid?nextUnsettledOccurrence(sid,date):null;
+  const hint=document.getElementById("lm-credit-hint");
+  if(hint)hint.textContent=nxt
+    ?won(lessonOpenAmt)+" moves to "+nxt.date+(occTimeLabel(nxt)?" "+occTimeLabel(nxt):"")+", which will show as paid."
+    :"No unpaid class found in the next 4 months — the fee stays on this date instead (Cancelled, paid).";
+}
+function showCreditNote(l){
+  const note=document.getElementById("lm-credit-note"),txt=document.getElementById("lm-credit-note-text");
+  if(!note||!txt)return;
+  if(l&&l.creditFrom){note.style.display="";txt.textContent="Paid in advance for "+l.creditFrom+", which was cancelled.";}
+  else if(l&&l.creditTo){note.style.display="";txt.textContent="The fee for this class was moved to "+l.creditTo+".";}
+  else note.style.display="none";
+}
 // Same thing by hand: switching a cancelled lesson back to Unpaid/Paid leaves the fee field at 0,
 // which would be saved as a free class. Refill it from the student's rate; it can still be typed over.
 function lmStatusChanged(){
+  updateCreditRow();
   const st=document.getElementById("lm-status")?.value;
   const amtEl=document.getElementById("lm-amt");
   if(!amtEl||st==="cancelled")return;
@@ -3541,6 +3597,8 @@ function saveLesson(){
   shwRows.forEach(inp=>{const name=(inp.value||"").trim();if(name)schoolHwItems.push({name:name});});
   const newDate=g("lm-date")||td();
   const newTime=g("lm-time");
+  const carryCredit=creditIsOffered()&&!!document.getElementById("lm-credit")?.checked;
+  const carriedAmt=lessonOpenAmt;
   const obj={
     sid:sid,date:newDate,
     // The visible Hours field is authoritative: for standard lessons the ₩40,000/h sync keeps
@@ -3578,7 +3636,27 @@ function saveLesson(){
       }
     });
   }
+  // Cancelled after the fee was paid: hand the money to the next class instead of losing it here.
+  let creditMsg="";
+  if(carryCredit){
+    const nxt=nextUnsettledOccurrence(obj.sid,obj.date);
+    if(nxt){
+      const real=materializeOccurrence(nxt);
+      real.status="paid";
+      real.creditFrom=obj.date;
+      if(!(real.amt>0))real.amt=carriedAmt;
+      const mine=newLessonId?lessons.find(l=>l.id===newLessonId):lessons.find(l=>l.id===editLid);
+      if(mine)mine.creditTo=real.date;
+      creditMsg=won(carriedAmt)+" moved to "+real.date;
+    }else{
+      // Nowhere to put it — keep the money on this date rather than dropping it.
+      const mine=newLessonId?lessons.find(l=>l.id===newLessonId):lessons.find(l=>l.id===editLid);
+      if(mine){mine.status="cancelpaid";mine.amt=carriedAmt;}
+      creditMsg="No upcoming class — kept as Cancelled (paid)";
+    }
+  }
   save();closeModal("mo-lesson");rerender();
+  if(creditMsg)showToast(creditMsg);
 }
 
 // Delete a lesson the right way: records occupying a fixed-schedule slot become tombstones
