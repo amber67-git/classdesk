@@ -611,6 +611,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .gc-act{display:flex;justify-content:flex-end}
 .gc-act select{width:160px;height:30px;font-size:12px}
 .gc-dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.gc-owner{height:26px;font-size:11px;padding:0 6px;max-width:100%;margin-top:4px;flex:0 0 auto}
 .gc-color-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)}
 .gc-color-row:last-child{border-bottom:none}
 .gc-color-row select{width:190px;height:30px;font-size:12px}
@@ -2033,7 +2034,7 @@ const DMATERIAL=[
   {id:"m01",name:"Osmo Coding Awbie",cat:"Tech / App",price:89000,players:"1",time:"15-20",difficulty:"Easy",comment:"코딩 교육 게임. iPad 필요."},
 ];
 const DSET={
-  gcalClientId:"",gcalCalendarId:"",gcalGreenHourly:0,
+  gcalClientId:"",gcalCalendarId:"",gcalGreenHourly:0,gcalTitleMap:{},
   activities:["Board game","Card game","Show & Tell","Drawing","Free talk","Reading for fun","Spelling game"],
   parentTmpl:"안녕하세요, [korean_name] 어머님!\n오늘 [date][(day)] 수업 내용 전달드립니다.\n\n📖 Topic: [topic]\n\n[workbook]\n[books_read]\n[school_hw]\n[break_activity]\n\n[note_to_parent]\n\n감사합니다! 😊",
   payUnpaid:"안녕하세요, [korean_name] 어머님!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours], [expected_amount] 입금 부탁드립니다~\n\n감사합니다!",
@@ -2262,7 +2263,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v96";
+const APP_VERSION="v97";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -7381,7 +7382,7 @@ function applyRemoteRecord(key,id,data){
     let obj;try{obj=JSON.parse(data.j);}catch(e){console.error("Bad settings doc",e);return false;}
     // Keep text the incoming copy lacks: a settings doc written by a device that never had the
     // templates (or the logo) must not erase them here. Everything else is replaced wholesale.
-    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalGreenHourly"];
+    const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalGreenHourly","gcalTitleMap"];
     KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k])obj[k]=settings[k];});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
@@ -7653,16 +7654,48 @@ function gcalHits(title){
   return hits.filter(h=>!hits.some(o=>o!==h&&o.at<=h.at&&o.end>=h.end&&(o.end-o.at)>(h.end-h.at)));
 }
 function gcalMatchStudent(title){
+  const o=gcalTitleOwner(title);
+  if(o==="__ignore")return null;
+  if(o)return o;
   const hits=gcalHits(title);if(!hits.length)return null;
   return hits.reduce((a,b)=>(b.end-b.at)>(a.end-a.at)?b:a).s;
 }
 // Students named in one title, in the order they appear. Two or more = a combined block
 // ("Amy 1hr /Chloe 1.5hr"), whose length covers several lessons and must never be copied
 // onto one student.
+function gcalTitleKey(t){return String(t||"").trim().toLowerCase();}
+function gcalTitleOwner(title){
+  const v=(settings.gcalTitleMap||{})[gcalTitleKey(title)];
+  if(!v)return null;
+  if(v==="__ignore")return"__ignore";
+  return gs(v)||null;
+}
 function gcalMatchAll(title){
+  const o=gcalTitleOwner(title);
+  if(o==="__ignore")return[];
+  if(o)return[o];                       // pinned by hand — one student, never a combined block
   const seen=new Set(),out=[];
   for(const h of gcalHits(title).sort((a,b)=>a.at-b.at))if(!seen.has(h.s.id)){seen.add(h.s.id);out.push(h.s);}
   return out;
+}
+// Pin (or unpin) which student a calendar title belongs to. Also clears that exact title from any
+// student's aliases, since an alias left behind would keep pulling the old match back.
+function gcalSetTitleOwner(title,value){
+  const key=gcalTitleKey(title);if(!key)return;
+  const map=Object.assign({},settings.gcalTitleMap||{});
+  if(value==="__clear")delete map[key];
+  else if(value)map[key]=value;
+  else return;
+  settings.gcalTitleMap=map;
+  students.forEach(s=>{
+    if(!Array.isArray(s.aliases))return;
+    const keep=s.aliases.filter(a=>gcalTitleKey(a)!==key);
+    if(keep.length!==s.aliases.length)s.aliases=keep;
+  });
+  if(!save())return;
+  const label=value==="__ignore"?"ignored":value==="__clear"?"matched automatically again":(gs(value)?.name||"");
+  showToast('"'+String(title).slice(0,24)+'" → '+label);
+  gcalRun(false);
 }
 function gcalStudentHourly(s){const r=s&&s.rate>0&&s.dur>0?s.rate/s.dur:0;return r>0&&isFinite(r)?r:HR;}
 function gcalAmountFor(s,colorId,dur){const rule=gcalRule(colorId);const h=rule&&rule.mode==="hourly"&&rule.hourly>0?rule.hourly:gcalStudentHourly(s);return Math.round(h*dur);}
@@ -7678,7 +7711,7 @@ function gcalBuildDiff(month,events){
     res.colorsSeen[ev.colorId]=(res.colorsSeen[ev.colorId]||0)+1;
     const rule=gcalRule(ev.colorId);
     const s=gcalMatchStudent(ev.title);
-    if(rule.mode==="ignore"){res.ignored++;continue;}
+    if(rule.mode==="ignore"||gcalTitleOwner(ev.title)==="__ignore"){res.ignored++;continue;}
     if(!s){res.unknown.push(ev);continue;}
     const all=gcalMatchAll(ev.title);
     if(all.length>1){
@@ -7845,15 +7878,27 @@ function renderGcal(){
   const nCancel=r.diffs.filter(d=>d.type==="cancel").length;
   if(nCancel&&nCancel>r.matched.length)html+=`<p class="u-hint" style="margin:0 0 10px"><i class="ti ti-info-circle"></i> ${nCancel} app lessons have no Google event this month — if you don't put every lesson in Google Calendar, ignore the "not in Google" rows (they are not applied by the button below).</p>`;
   const rows=[];
+  // Whoever a title currently belongs to can always be changed from the row itself — including a
+  // combined block, where picking one student is what says "this is not two lessons".
+  const owner=title=>{
+    const t=escapeAttr(title);
+    const cur=(settings.gcalTitleMap||{})[gcalTitleKey(title)]||"";
+    return `<select class="gc-owner" data-t="${t}" title="Which student is this?" onchange="gcalSetTitleOwner(this.dataset.t,this.value)">
+      <option value="">Change student…</option>
+      ${students.filter(s=>!s.archived||s.id===cur).map(s=>`<option value="${s.id}"${cur===s.id?" selected":""}>${escapeHTMLBasic(s.name)}${s.k?" / "+escapeHTMLBasic(s.k):""}</option>`).join("")}
+      <option value="__ignore"${cur==="__ignore"?" selected":""}>Not a lesson</option>
+      ${cur?'<option value="__clear">Match by name again</option>':""}
+    </select>`;
+  };
   const gLbl=ev=>`${gcalColorDot(ev.colorId)}<span class="cell-main">${ev.time}</span> <span class="cell-muted2">${ev.dur}h</span> <span class="gc-title" title="${escapeAttr(ev.title)}">${escapeHTMLBasic(ev.title)}</span>`;
   const aLbl=occ=>`<span class="cell-main">${gcalTimeLbl(getLessonTimeKey(occ))}</span> <span class="cell-muted2">${occ.dur}h</span>${occ.status==="cancelled"||occ.status==="cancelpaid"?' <span class="badge bc">Cancelled</span>':""}`;
   r.diffs.forEach((d,i)=>{
     let g="",a="",act="";
-    if(d.type==="add"){g=gLbl(d.ev);a=`<span class="cell-muted2">not in app</span>`;act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Create this lesson in the app"><i class="ti ti-plus"></i> Add lesson</button>`;}
+    if(d.type==="add"){g=gLbl(d.ev)+owner(d.ev.title);a=`<span class="cell-muted2">not in app</span>`;act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Create this lesson in the app"><i class="ti ti-plus"></i> Add lesson</button>`;}
     else if(d.type==="cancel"){g=`<span class="cell-muted2">not in Google</span>`;a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Mark the app lesson as cancelled"><i class="ti ti-ban"></i> Cancel in app</button>`;}
-    else if(d.type==="uncancel"){g=gLbl(d.ev);a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="The app says cancelled but Google still has it — restore"><i class="ti ti-arrow-back-up"></i> Restore</button>`;}
+    else if(d.type==="uncancel"){g=gLbl(d.ev)+owner(d.ev.title);a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="The app says cancelled but Google still has it — restore"><i class="ti ti-arrow-back-up"></i> Restore</button>`;}
     else{
-      g=gLbl(d.ev);a=aLbl(d.occ);
+      g=gLbl(d.ev)+owner(d.ev.title);a=aLbl(d.occ);
       if(d.durDiff){
         const now=d.occ.amt||0,next=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);
         a+=` <span class="gc-money">${won(now)} → ${won(next)}</span>`;
@@ -7863,7 +7908,7 @@ function renderGcal(){
     rows.push(`<div class="grid-row gc-row"><div><div class="cell-main">${gcalDayLabel(d.date)}</div><div class="cell-muted2">${escapeHTMLBasic(d.s.name)}</div></div><div class="gc-cell">${g}</div><div class="gc-cell">${a}</div><div class="gc-act">${act}</div></div>`);
   });
   (r.combined||[]).forEach(ev=>{
-    rows.push(`<div class="grid-row gc-row gc-combined"><div><div class="cell-main">${gcalDayLabel(ev.date)}</div><div class="cell-muted2">${ev.students.map(s=>escapeHTMLBasic(s.name)).join(" + ")}</div></div><div class="gc-cell">${gLbl(ev)}</div><div class="gc-cell cell-muted2">one block for ${ev.students.length} students — the app keeps its own times</div><div class="gc-act"><span class="badge bc">left alone</span></div></div>`);
+    rows.push(`<div class="grid-row gc-row gc-combined"><div><div class="cell-main">${gcalDayLabel(ev.date)}</div><div class="cell-muted2">${ev.students.map(s=>escapeHTMLBasic(s.name)).join(" + ")}</div></div><div class="gc-cell">${gLbl(ev)}${owner(ev.title)}</div><div class="gc-cell cell-muted2">one block for ${ev.students.length} students — the app keeps its own times. Pick one student if it is really a single lesson.</div><div class="gc-act"><span class="badge bc">left alone</span></div></div>`);
   });
   const byTitle={};r.unknown.forEach(ev=>{(byTitle[ev.title]=byTitle[ev.title]||[]).push(ev);});
   Object.keys(byTitle).sort().forEach(t=>{
@@ -7888,12 +7933,7 @@ function gcalSetColor(cid){
   settings.gcalColors=Object.assign({},gcalRules(),{[cid]:{mode,hourly}});
   save();gcalRun(false);
 }
-function gcalAssignStudent(title,sid){
-  if(!sid)return;const s=gs(sid);if(!s||!title)return;
-  const alias=title.trim();
-  s.aliases=s.aliases||[];if(!s.aliases.some(a=>a.toLowerCase()===alias.toLowerCase()))s.aliases.push(alias);
-  save();showToast(`"${alias}" now means ${s.name}`);gcalRun(false);
-}
+function gcalAssignStudent(title,sid){if(sid)gcalSetTitleOwner(title,sid);}
 function gcalApplyOne(d){
   if(d.type==="add"){
     materialiseUnclaimedSlots(d.sid,d.date);   // the day's own class keeps its slot
