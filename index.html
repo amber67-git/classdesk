@@ -775,7 +775,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <div class="stats cols-4">
     <div class="sc grn"><div class="sc-lbl">Active students</div><div class="sc-val" id="st-s">—</div><div class="sc-sub">enrolled</div></div>
     <div class="sc blu"><div class="sc-lbl">Today's lessons</div><div class="sc-val" id="st-t">—</div><div class="sc-sub">scheduled</div></div>
-    <div class="sc gry"><div class="sc-lbl">Month lessons</div><div class="sc-val" id="st-ml">—</div><div class="sc-sub">held / scheduled</div></div>
+    <div class="sc gry"><div class="sc-lbl">Month lessons</div><div class="sc-val" id="st-ml">—</div><div class="sc-sub" id="st-ml-sub">held / scheduled</div></div>
     <div class="sc amb"><div class="sc-lbl">Expected (month)</div><div class="sc-val sm" id="st-ex">—</div><div class="sc-sub" id="st-up-sub"></div>
       <button class="sc-eye" id="st-eye" onclick="togglePrivacy()" title="Show / hide amounts"><i class="ti ti-eye"></i></button></div>
   </div>
@@ -2263,7 +2263,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v97";
+const APP_VERSION="v98";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -4307,8 +4307,13 @@ function renderDash(){
   students.forEach(s=>{const cv=calcM(s.id,m);totE+=cv.exp;totP+=cv.paidT;});
   const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   setT("st-s",students.filter(s=>!s.archived).length);setT("st-t",todayActive.length);
-  const monthActive=monthOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid").length;
-  setT("st-ml",monthActive+"/"+monthOccs.length);
+  // "Held" has to mean classes that have actually happened. This used to read
+  // not-cancelled / everything, so on the 13th of the month it already claimed 89 of 104 were held.
+  const monthPlanned=monthOccs.filter(o=>o.status!=="cancelled"&&o.status!=="cancelpaid");
+  const monthHeld=monthPlanned.filter(o=>o.date<=t).length;
+  const monthCancelled=monthOccs.length-monthPlanned.length;
+  setT("st-ml",monthHeld+"/"+monthPlanned.length);
+  setT("st-ml-sub","held / scheduled"+(monthCancelled?" · "+monthCancelled+" cancelled":""));
   setT("st-ex",pwon(totE));setT("st-up",pwon(totE-totP));
   setT("st-up-sub",privacyHidden?"amounts hidden":"unpaid "+won(totE-totP));
   const eye=document.getElementById("st-eye");
