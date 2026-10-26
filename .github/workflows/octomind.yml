@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ vars.OCTOMIND_TEST_TARGET_ID != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       # GitHub Pages serves this repository's branch directly, and that takes a minute or two.
       # Testing before it lands would test the previous release, so wait for the version in
@@ -51,7 +51,7 @@ jobs:
           echo "::warning::Pages did not serve $want within 10 minutes — testing whatever is live ($live)"
 
       - name: Execute tests
-        uses: OctoMind-dev/automagically-action-execute@v2
+        uses: OctoMind-dev/automagically-action-execute@6f1004a2670f022b1a9d677ed5401abbbc444403 # v2.9.2
         with:
           url: https://amber67-git.github.io/classdesk/
           token: ${{ secrets.OCTOMIND_API_KEY }}
