@@ -200,6 +200,8 @@ tbody tr:hover td{background:#fafbfc}
   body.print-reading .main{margin-left:0}
   body.print-reading .page{display:none}
   body.print-reading #page-reading{display:block}
+  body.print-reports #page-reading{display:none}
+  body.print-reports #page-reports{display:block}
   body.print-reading .pc{padding:0}
   body.print-reading .card{box-shadow:none;break-inside:avoid}
   body.print-reading .grid-row{break-inside:avoid}
@@ -604,6 +606,23 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
 .gc-row{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
 .gcf-row{display:grid;gap:8px;align-items:center;grid-template-columns:150px minmax(0,1fr) 150px 130px}
+/* REPORTS (v99) */
+.rp-row{display:grid;gap:8px;align-items:center;grid-template-columns:minmax(0,1.4fr) 90px 80px 120px 110px 110px minmax(0,1.3fr)}
+.rp-owe{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) 130px 160px}
+.rp-share{display:grid;gap:8px;align-items:center;grid-template-columns:minmax(0,1fr) 180px 120px 110px 100px}
+.rp-change{display:inline-flex;align-items:center;gap:4px;font-size:11px}
+.rp-change.up{color:var(--ok-t)}
+.rp-change.down{color:var(--amb-t)}
+.rp-bar{height:6px;border-radius:99px;background:var(--surf2);overflow:hidden}
+.rp-bar span{display:block;height:100%;background:var(--pri);border-radius:99px}
+@media(max-width:640px){
+  .rp-row{grid-template-columns:minmax(0,1fr) 80px 90px}
+  .rp-row>:nth-child(n+4){display:none}
+  .rp-owe{grid-template-columns:90px minmax(0,1fr) 110px}
+  .rp-owe>:nth-child(4){display:none}
+  .rp-share{grid-template-columns:minmax(0,1fr) 110px}
+  .rp-share>:nth-child(n+3){display:none}
+}
 .gcf-other{margin-top:6px;padding:6px 8px;border-left:3px solid var(--bdr2);background:var(--surf2);border-radius:0 6px 6px 0}
 .gcf-other .btn{margin-top:4px}
 .gc-cell{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}
@@ -751,6 +770,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <button class="ni" data-page="sessions" onclick="showPage('sessions')"><i class="ti ti-notebook"></i>Classes</button>
     <button class="ni" data-page="reading" onclick="showPage('reading')"><i class="ti ti-book"></i>Reading</button>
     <button class="ni" data-page="payments" onclick="showPage('payments')"><i class="ti ti-receipt"></i>Payments</button>
+    <button class="ni" data-page="reports" onclick="showPage('reports')"><i class="ti ti-report-analytics"></i>Reports</button>
     <button class="ni" data-page="curriculum" onclick="showPage('curriculum')"><i class="ti ti-calendar-month"></i>Curriculum</button>
     <button class="ni" data-page="books" onclick="showPage('books')"><i class="ti ti-notebook"></i>Workbooks</button>
     <button class="ni" data-page="booklib" onclick="showPage('booklib')"><i class="ti ti-books"></i>Books</button>
@@ -971,6 +991,31 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </div>
       <div id="rd-list"></div>
     </div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div id="page-reports" class="page">
+  <div class="fbar">
+    <div id="rp-tabs" class="seg">
+      <button class="seg-btn active" data-tab="students" onclick="rpSwitchTab('students')"><i class="ti ti-users"></i> Students</button>
+      <button class="seg-btn" data-tab="business" onclick="rpSwitchTab('business')"><i class="ti ti-coin"></i> Business</button>
+    </div>
+    <select id="rp-range" onchange="renderReports()">
+      <option value="3">Last 3 months</option>
+      <option value="1">This month</option>
+      <option value="6">Last 6 months</option>
+      <option value="12">Last 12 months</option>
+      <option value="0">All time</option>
+    </select>
+    <div class="fbar-right">
+      <span id="rp-count" class="cell-muted2"></span>
+      <button class="btn btn-p" onclick="printReports()"><i class="ti ti-printer"></i> Print report</button>
+    </div>
+  </div>
+  <div class="pc">
+    <div id="rp-print-head" class="rd-print-head"></div>
+    <div id="rp-body"></div>
   </div>
 </div>
 
@@ -2263,7 +2308,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v98";
+const APP_VERSION="v100";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2783,7 +2828,7 @@ function calcM(sid,month){
 // ═══════════════════════════════════════════════
 // NAV
 // ═══════════════════════════════════════════════
-const PT={"dashboard":"Dashboard","students":"Students","sessions":"Classes","reading":"Reading","payments":"Payments","curriculum":"Curriculum","books":"Workbooks","booklib":"Books","material":"Material","settings":"Settings"};
+const PT={"dashboard":"Dashboard","students":"Students","sessions":"Classes","reading":"Reading","payments":"Payments","reports":"Reports","curriculum":"Curriculum","books":"Workbooks","booklib":"Books","material":"Material","settings":"Settings"};
 let curPage="dashboard";
 function toggleMobileSidebar(){
   document.querySelector(".sb")?.classList.toggle("mob-open");
@@ -2820,6 +2865,7 @@ function showPage(p){
   else if(p==="booklib")renderBookLib();
   else if(p==="material")renderMaterial();
   else if(p==="reading")renderReading();
+  else if(p==="reports")renderReports();
   else if(p==="settings")renderSettings();
   // Attach/refresh column-resize handles after the page's list has rendered
   setTimeout(ensureColumnResizers,0);
@@ -4622,6 +4668,232 @@ function renderReadingChart(pts){
   el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="AR level over time">${g}${line}${dots}</svg>`;
   if(note)note.textContent=`${pts.length} books · dot = one book (colour = level) · line = monthly average`;
 }
+
+// ═══════════════════════════════════════════════
+// REPORTS (v99)
+// Built only on fields that are actually filled in day to day: the lessons themselves and their
+// payment status. Books, homework and workbook progress are left out on purpose — they are
+// usually empty, and a report of empty columns is worse than no report.
+// ═══════════════════════════════════════════════
+let rpTab="students";
+function rpSwitchTab(t){
+  rpTab=t;
+  document.querySelectorAll("#rp-tabs .seg-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+  renderReports();
+}
+// The months in the chosen period, oldest first. 0 = everything back to the earliest lesson.
+function rpMonths(){
+  const n=parseInt(document.getElementById("rp-range")?.value??"3",10);
+  const [cy,cm]=tm().split("-").map(Number);
+  let count=n;
+  if(!n){
+    const dates=lessons.map(l=>l.date).filter(Boolean).sort();
+    const first=dates[0]||tm()+"-01";
+    const [fy,fm]=first.split("-").map(Number);
+    count=Math.min(60,Math.max(1,(cy-fy)*12+(cm-fm)+1));
+  }
+  const out=[];
+  for(let i=count-1;i>=0;i--){
+    const d=new Date(cy,cm-1-i,1);
+    out.push(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"));
+  }
+  return out;
+}
+function rpMonthLabel(m){
+  const [y,mm]=m.split("-").map(Number);
+  return new Date(y,mm-1,1).toLocaleDateString("en-GB",{month:"short"})+(mm===1?" "+String(y).slice(2):"");
+}
+// How many lessons the timetable ALONE implies in a month — biweekly weeks and schedule history
+// included, records ignored. This is the yardstick a cancellation has to be measured against.
+function rpPlannedBySchedule(s,month){
+  if(s.archived)return 0;
+  const [y,m]=month.split("-").map(Number);
+  const days=new Date(y,m,0).getDate();
+  let n=0;
+  for(let d=1;d<=days;d++){
+    const ds=y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+    if(s.startDate&&ds<s.startDate)continue;
+    if(s.endDate&&ds>s.endDate)continue;
+    for(const sl of getSlotsForStudent(s,ds))if(slotMatchesDate(sl,ds))n++;
+  }
+  return n;
+}
+// Everything the report needs about one student over the period, from calcM month by month.
+//
+// Counting every cancelled record as a lost lesson was wrong twice over. Moving a class to
+// another day leaves a cancelled record behind even though the month still has its four lessons,
+// and a student who went to every other week carries a cancelled record on each off week.
+// So the period is judged on the total: lessons the timetable implies against lessons actually
+// held. The shortfall is what was really lost; the rest of the cancelled records moved.
+function rpStudentTotals(sid,months){
+  const s=gs(sid);
+  const t={exp:0,paid:0,due:0,count:0,hours:0,cancelled:0,cancAmt:0,oldestDue:"",planned:0,lost:0,moved:0,lostAmt:0};
+  for(const m of months){
+    const c=calcM(sid,m);
+    t.exp+=c.exp;t.paid+=c.paidT;t.count+=c.count;t.hours+=c.hours;
+    t.cancelled+=c.cancelled;t.cancAmt+=c.cancAmt;
+    t.planned+=s?rpPlannedBySchedule(s,m):0;
+    if(c.diff>0){t.due+=c.diff;if(!t.oldestDue)t.oldestDue=m;}
+  }
+  t.lost=Math.max(0,Math.min(t.cancelled,t.planned-t.count));
+  t.moved=Math.max(0,t.cancelled-t.lost);
+  // What the missing lessons would have earned, at this student's own average fee.
+  const avg=t.count>0?t.exp/t.count:0;
+  t.lostAmt=Math.round(avg*t.lost);
+  return t;
+}
+// A student taking longer or more frequent lessons than they used to is the one growth signal
+// these fields can honestly show (s.slotHistory keeps what the schedule used to be).
+function rpScheduleChange(s,fromDate){
+  const then=getSlotsForStudent(s,fromDate),now=getSlotsForStudent(s);
+  const sum=(sl)=>sl.reduce((a,x)=>a+(+x.dur||0),0);
+  const thenH=sum(then),nowH=sum(now);
+  if(then.length===now.length&&Math.abs(thenH-nowH)<0.01)return null;
+  const hh=(v)=>String(Math.round(v*100)/100);
+  return {from:then.length+"×/wk · "+hh(thenH)+"h",to:now.length+"×/wk · "+hh(nowH)+"h",up:nowH>thenH};
+}
+function rpActiveInPeriod(s,months){
+  return months.some(m=>getOccurrencesForMonth(s.id,m).length>0);
+}
+// ── bar chart: one month per bar, expected behind, collected in front ──────
+function rpTrendChart(rows){
+  if(!rows.length)return '<div class="empty"><i class="ti ti-chart-bar"></i><p>No months in this period</p></div>';
+  const W=Math.max(360,rows.length*74),H=170,pad={l:8,r:8,t:14,b:26};
+  const max=Math.max(1,...rows.map(r=>Math.max(r.exp,r.paid)));
+  const bw=(W-pad.l-pad.r)/rows.length;
+  const y=(v)=>pad.t+(H-pad.t-pad.b)*(1-v/max);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Monthly expected and collected">`;
+  svg+=`<line x1="${pad.l}" y1="${H-pad.b}" x2="${W-pad.r}" y2="${H-pad.b}" stroke="var(--bdr)"/>`;
+  rows.forEach((r,i)=>{
+    const cx=pad.l+bw*i+bw/2, w=Math.min(34,bw*0.5);
+    const yE=y(r.exp), yP=y(r.paid);
+    svg+=`<rect x="${cx-w/2}" y="${yE}" width="${w}" height="${H-pad.b-yE}" rx="3" fill="var(--bdr2)"><title>${rpMonthLabel(r.m)} expected ${won(r.exp)}</title></rect>`;
+    svg+=`<rect x="${cx-w/2}" y="${yP}" width="${w}" height="${H-pad.b-yP}" rx="3" fill="var(--pri)"><title>${rpMonthLabel(r.m)} collected ${won(r.paid)}</title></rect>`;
+    svg+=`<text x="${cx}" y="${H-pad.b+14}" text-anchor="middle" font-size="10" fill="var(--txt3)">${rpMonthLabel(r.m)}</text>`;
+  });
+  svg+=`</svg>`;
+  return svg;
+}
+// ── the page ───────────────────────────────────────────────────────────────
+function renderReports(){
+  const months=rpMonths();
+  const from=months[0]+"-01";
+  const lbl=months.length===1?rpMonthLabel(months[0]):rpMonthLabel(months[0])+" – "+rpMonthLabel(months[months.length-1]);
+  const ph=document.getElementById("rp-print-head");
+  if(ph)ph.innerHTML=`<div class="rd-ph-title">${rpTab==="students"?"Students":"Business"} report <span>${lbl}</span></div><div class="rd-ph-sub">printed ${td()}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`;
+
+  const people=students.filter(s=>!s.archived||rpActiveInPeriod(s,months));
+  const rows=people.map(s=>({s,t:rpStudentTotals(s.id,months)}))
+    .filter(r=>r.t.count||r.t.cancelled||r.t.exp||r.t.planned)
+    .sort((a,b)=>b.t.exp-a.t.exp);
+  const sum=rows.reduce((a,r)=>({exp:a.exp+r.t.exp,paid:a.paid+r.t.paid,due:a.due+r.t.due,count:a.count+r.t.count,
+    hours:a.hours+r.t.hours,cancelled:a.cancelled+r.t.cancelled,cancAmt:a.cancAmt+r.t.cancAmt,
+    planned:a.planned+r.t.planned,lost:a.lost+r.t.lost,moved:a.moved+r.t.moved,lostAmt:a.lostAmt+r.t.lostAmt}),
+    {exp:0,paid:0,due:0,count:0,hours:0,cancelled:0,cancAmt:0,planned:0,lost:0,moved:0,lostAmt:0});
+
+  const cnt=document.getElementById("rp-count");
+  if(cnt)cnt.textContent=months.length+" month"+(months.length===1?"":"s")+" · "+rows.length+" students";
+
+  const body=document.getElementById("rp-body");
+  if(!body)return;
+  if(!rows.length){
+    body.innerHTML='<div class="empty"><i class="ti ti-report"></i><p>No lessons in this period</p></div>';
+    return;
+  }
+  body.innerHTML=rpTab==="students"?rpStudentsView(rows,sum,months,from):rpBusinessView(rows,sum,months);
+}
+function rpStudentsView(rows,sum,months,from){
+  let h=`<div class="stats cols-4">
+    <div class="sc grn"><div class="sc-lbl">Students taught</div><div class="sc-val">${rows.length}</div><div class="sc-sub">in this period</div></div>
+    <div class="sc blu"><div class="sc-lbl">Lessons held</div><div class="sc-val">${sum.count}</div><div class="sc-sub">${fmtHours(sum.hours)} hrs</div></div>
+    <div class="sc amb"><div class="sc-lbl">Lessons lost</div><div class="sc-val">${sum.lost}</div><div class="sc-sub">${sum.moved?sum.moved+" more were moved":"none moved"}</div></div>
+    <div class="sc gry"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${privacyHidden?"amounts hidden":"of "+won(sum.exp)}</div></div>
+  </div>`;
+  h+=`<div class="card" style="padding:0"><div class="grid-head rp-row">
+    <div>Student</div><div>Lessons</div><div>Hours</div><div>Lost / moved</div><div>Collected</div><div>Outstanding</div><div>Schedule since ${rpMonthLabel(months[0])}</div></div>`;
+  h+=rows.map(({s,t})=>{
+    const ch=rpScheduleChange(s,from);
+    const planned=Math.max(t.planned,t.count);
+    return `<div class="grid-row rp-row">
+      <div><div class="cell-main">${escapeHTMLBasic(s.name)}${s.archived?' <span class="std-arch-badge">Archived</span>':""}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")}${tenureLabel(s)?" · "+tenureLabel(s):""}</div></div>
+      <div class="tm" title="${t.count} held of ${planned} on the timetable">${t.count}${planned?` <span class="cell-muted2">/ ${planned}</span>`:""}</div>
+      <div class="tm">${fmtHours(t.hours)}</div>
+      <div class="tm" title="${t.cancelled} cancelled record(s) in total">${t.lost?'<span style="color:var(--red)">'+t.lost+"</span> "+'<span class="cell-muted2">'+won(t.lostAmt)+"</span>":"—"}${t.moved?' <span class="cell-muted2">· '+t.moved+" moved</span>":""}</div>
+      <div class="tm">${pwon(t.paid)}</div>
+      <div class="tm" style="color:${t.due>0?"var(--red)":"var(--txt3)"}">${t.due>0?pwon(t.due):"—"}</div>
+      <div class="cell-muted2">${ch?`<span class="rp-change ${ch.up?"up":"down"}"><i class="ti ti-arrow-${ch.up?"up":"down"}-right"></i> ${escapeHTMLBasic(ch.from)} → ${escapeHTMLBasic(ch.to)}</span>`:"unchanged"}</div>
+    </div>`;
+  }).join("");
+  h+=`</div><p class="u-hint">Lessons held against what the timetable implies for the period, every-other-week schedules included.
+    A class moved to another day leaves a cancelled record behind but the month still has its lessons, so only the
+    shortfall counts as <b>lost</b> — the remaining cancelled records are shown as <b>moved</b>.
+    "Schedule" compares the timetable in force at the start of the period with today: a longer or more frequent week
+    is the clearest sign a student is stepping up.</p>`;
+  return h;
+}
+function rpBusinessView(rows,sum,months){
+  const trend=months.map(m=>{
+    let exp=0,paid=0;
+    for(const s of students){const c=calcM(s.id,m);exp+=c.exp;paid+=c.paidT;}
+    return {m,exp,paid};
+  });
+  const collectedPct=sum.exp>0?Math.round(sum.paid/sum.exp*100):0;
+  let h=`<div class="stats cols-4">
+    <div class="sc grn"><div class="sc-lbl">Expected</div><div class="sc-val sm">${pwon(sum.exp)}</div><div class="sc-sub">${sum.count} lessons · ${fmtHours(sum.hours)} hrs</div></div>
+    <div class="sc blu"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${collectedPct}% of expected</div></div>
+    <div class="sc red"><div class="sc-lbl">Outstanding</div><div class="sc-val sm">${pwon(sum.due)}</div><div class="sc-sub">${rows.filter(r=>r.t.due>0).length} students owe</div></div>
+    <div class="sc amb"><div class="sc-lbl">Lost to cancellations</div><div class="sc-val sm">${pwon(sum.lostAmt)}</div><div class="sc-sub">${sum.lost} classes${sum.moved?" · "+sum.moved+" moved, not lost":""}</div></div>
+  </div>`;
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-chart-bar"></i>Month by month</div><span class="cell-muted2">grey = expected · green = collected</span></div><div class="cb p">${privacyHidden?'<div class="empty"><i class="ti ti-eye-off"></i><p>Amounts are hidden — use the eye on the Dashboard to show them</p></div>':rpTrendChart(trend)}</div></div>`;
+
+  const owing=rows.filter(r=>r.t.due>0).sort((a,b)=>(a.t.oldestDue||"").localeCompare(b.t.oldestDue||"")||b.t.due-a.t.due);
+  h+=`<div class="card" style="padding:0"><div class="grid-head rp-owe"><div>Owes since</div><div>Student</div><div>Outstanding</div><div>Of which this period</div></div>`;
+  h+=owing.length?owing.map(({s,t})=>`<div class="grid-row rp-owe">
+      <div class="cell-main">${rpMonthLabel(t.oldestDue)}</div>
+      <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")} · ${PTYPE_META[s.ptype]?.lbl||"Post-pay"}</div></div>
+      <div class="tm" style="color:var(--red)">${pwon(t.due)}</div>
+      <div class="tm cell-muted2">${t.exp?Math.round(t.due/t.exp*100)+"% of "+pwon(t.exp):"—"}</div>
+    </div>`).join("")
+    :'<div class="empty"><i class="ti ti-circle-check"></i><p>Nothing outstanding in this period</p></div>';
+  h+=`</div>`;
+
+  const share=rows.filter(r=>r.t.exp>0);
+  h+=`<div class="card" style="padding:0"><div class="grid-head rp-share"><div>Student</div><div>Share of revenue</div><div>Expected</div><div>Per hour</div><div>Lost</div></div>`;
+  h+=share.map(({s,t})=>{
+    const pct=sum.exp?Math.round(t.exp/sum.exp*100):0;
+    const perH=t.hours>0?Math.round(t.exp/t.hours):0;
+    return `<div class="grid-row rp-share">
+      <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.sched||"")}</div></div>
+      <div><div class="rp-bar"><span style="width:${pct}%"></span></div><div class="cell-muted2">${pct}%</div></div>
+      <div class="tm">${pwon(t.exp)}</div>
+      <div class="tm">${perH?pwon(perH):"—"}</div>
+      <div class="tm cell-muted2">${t.lost||"—"}</div>
+    </div>`;
+  }).join("");
+  h+=`</div>`;
+
+  // Who joined and who stopped inside the period — from the dates on the student card.
+  const fromD=months[0]+"-01",toD=months[months.length-1]+"-31";
+  const started=students.filter(s=>{const d=s.firstLesson||s.startDate;return d&&d>=fromD&&d<=toD;});
+  const ended=students.filter(s=>s.endDate&&s.endDate>=fromD&&s.endDate<=toD);
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-users"></i>Joined and left</div></div><div class="cb p">
+    <div class="fr c2">
+      <div><div class="cell-muted2">Started in this period</div>${started.length?started.map(s=>`<div class="cell-main">${escapeHTMLBasic(s.name)} <span class="cell-muted2">${s.firstLesson||s.startDate}</span></div>`).join(""):'<div class="cell-muted2">none</div>'}</div>
+      <div><div class="cell-muted2">Stopped in this period</div>${ended.length?ended.map(s=>`<div class="cell-main">${escapeHTMLBasic(s.name)} <span class="cell-muted2">${s.endDate}</span></div>`).join(""):'<div class="cell-muted2">none</div>'}</div>
+    </div>
+    <p class="u-hint" style="margin-top:10px">Taken from the First lesson and End date fields on each student card, so it is only as complete as those.</p>
+  </div></div>`;
+  return h;
+}
+function printReports(){
+  document.body.classList.add("print-reading");
+  document.body.classList.add("print-reports");
+  const done=()=>{document.body.classList.remove("print-reading");document.body.classList.remove("print-reports");window.removeEventListener("afterprint",done);};
+  window.addEventListener("afterprint",done);
+  window.print();
+  setTimeout(done,2000);
+}
+
 function printReading(){
   document.body.classList.add("print-reading");
   const done=()=>{document.body.classList.remove("print-reading");window.removeEventListener("afterprint",done);};
