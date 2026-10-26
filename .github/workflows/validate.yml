@@ -3,6 +3,10 @@ name: Validate
 # GitHub Pages serves index.html straight from the branch, so a syntax error is live within a
 # minute of the push. This runs the same checks that were being done by hand before every deploy.
 
+# Read-only: these jobs only check out the code and call a service.
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

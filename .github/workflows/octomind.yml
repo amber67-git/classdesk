@@ -6,6 +6,10 @@ name: E2E tests (Octomind)
 #   Secrets and variables → Actions → Variables: OCTOMIND_TEST_TARGET_ID (Octomind → Settings → test target)
 # Until the variable exists the job is skipped, so pushes stay green while you set it up.
 
+# Read-only: these jobs only check out the code and call a service.
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

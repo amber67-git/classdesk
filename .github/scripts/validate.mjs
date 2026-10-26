@@ -52,23 +52,53 @@ if (!ver) fail('APP_VERSION="vNN" not found in index.html');
 else ok(`APP_VERSION ${ver[1]}`);
 
 // An unclosed <a> once wrapped half of the Settings page in a link. Only the real markup can be
-// counted — inside <script> the same characters are strings that build HTML at runtime.
+// examined — inside <script> the same characters are strings that build HTML at runtime — so
+// script and style bodies are blanked out, keeping the newlines so reported lines stay true.
+const blank = (s) => s.replace(/[^\n]/g, "");
 const markup = html
-  .replace(/<script(?:\s[^>]*)?>[\s\S]*?<\/script>/g, "")
-  .replace(/<style>[\s\S]*?<\/style>/g, "");
-let tagsOk = true;
-for (const tag of ["a", "select", "textarea", "div"]) {
-  const open = (markup.match(new RegExp("<" + tag + "(?:\\s[^>]*)?>", "gi")) || []).length;
-  const close = (markup.match(new RegExp("</" + tag + ">", "gi")) || []).length;
-  if (open !== close) {
-    tagsOk = false;
-    fail(`<${tag}> in the page markup: ${open} opened, ${close} closed`);
+  .replace(/<script(?:\s[^>]*)?>[\s\S]*?<\/script>/g, blank)
+  .replace(/<style>[\s\S]*?<\/style>/g, blank);
+const lineAt = (i) => markup.slice(0, i).split("\n").length;
+
+// Counting opens against closes is not enough: <a><div>x</a></div> balances but the browser
+// silently repairs it into something else. Walk them as a stack so the ORDER is checked too.
+const TRACKED = ["a", "select", "textarea", "div"];
+const stack = [];
+let nestingOk = true;
+for (const m of markup.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)(?:\s[^>]*?)?(\/?)>/g)) {
+  const closing = m[1] === "/";
+  const name = m[2].toLowerCase();
+  const selfClosing = m[3] === "/";
+  if (!TRACKED.includes(name) || selfClosing) continue;
+  if (!closing) {
+    stack.push({ name, at: m.index });
+    continue;
+  }
+  const top = stack.pop();
+  if (!top) {
+    fail(`line ${lineAt(m.index)}: </${name}> closes a tag that was never opened`);
+    nestingOk = false;
+    break;
+  }
+  if (top.name !== name) {
+    fail(`line ${lineAt(m.index)}: <${top.name}> opened on line ${lineAt(top.at)} is closed by </${name}>`);
+    nestingOk = false;
+    break;
   }
 }
-if (tagsOk) ok("page markup tags balanced");
+if (nestingOk && stack.length) {
+  const last = stack[stack.length - 1];
+  fail(`<${last.name}> opened on line ${lineAt(last.at)} is never closed (${stack.length} tag(s) left open)`);
+  nestingOk = false;
+}
+if (nestingOk) ok(`page markup nests correctly (${TRACKED.join(", ")})`);
 
-// ── sw.js ───────────────────────────────────────────────────────────────────
-if (existsSync("sw.js")) {
+// ── files index.html depends on ─────────────────────────────────────────────
+// These ship next to index.html and the page loads both. Missing is a broken deploy, not a
+// reason to skip the check.
+if (!existsSync("sw.js")) {
+  fail("sw.js is missing — index.html registers it as the service worker");
+} else {
   try {
     execFileSync(process.execPath, ["--check", "sw.js"], { stdio: "pipe" });
     ok("sw.js parses");
@@ -77,8 +107,9 @@ if (existsSync("sw.js")) {
   }
 }
 
-// ── manifest ────────────────────────────────────────────────────────────────
-if (existsSync("manifest.webmanifest")) {
+if (!existsSync("manifest.webmanifest")) {
+  fail('manifest.webmanifest is missing — index.html links it with <link rel="manifest">');
+} else {
   try {
     const mf = JSON.parse(readFileSync("manifest.webmanifest", "utf8"));
     for (const icon of mf.icons || []) {
