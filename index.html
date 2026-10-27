@@ -607,7 +607,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .gc-row{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
 .gcf-row{display:grid;gap:8px;align-items:center;grid-template-columns:150px minmax(0,1fr) 150px 130px}
 /* REPORTS (v99) */
-.rp-row{display:grid;gap:8px;align-items:center;grid-template-columns:minmax(0,1.4fr) 90px 80px 120px 110px 110px minmax(0,1.3fr)}
+.rp-row{display:grid;gap:8px;align-items:center;grid-template-columns:minmax(0,1.4fr) 90px 72px 118px 92px 108px 108px minmax(0,1.2fr)}
+.rp-bk{display:grid;gap:8px;align-items:center;grid-template-columns:100px minmax(0,1fr) 90px 120px}
+.rp-wb{display:grid;gap:8px;align-items:center;grid-template-columns:minmax(0,1fr) 80px 110px 160px}
+.rp-hw{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) 120px}
+.rp-hwbar,.rp-mix{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--surf2)}
+.rp-hwbar span,.rp-mix span{display:block;height:100%}
+.rp-hwbar .done{background:var(--ok)}
+.rp-hwbar .part{background:#EF9F27}
+.rp-hwbar .skip{background:var(--bdr2)}
+.lm-hw-check{margin-bottom:10px;padding:10px 12px;background:var(--surf2);border-radius:var(--r)}
+.lm-hw-item{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 0}
+.lm-hw-text{flex:1 1 auto;min-width:0;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lm-hw-seg{height:28px;flex:0 0 auto}
+.lm-hw-seg .seg-btn{height:22px;padding:0 8px;font-size:11px}
 .rp-owe{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) 130px 160px}
 .rp-share{display:grid;gap:8px;align-items:center;grid-template-columns:minmax(0,1fr) 180px 120px 110px 100px}
 .rp-change{display:inline-flex;align-items:center;gap:4px;font-size:11px}
@@ -616,6 +629,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .rp-bar{height:6px;border-radius:99px;background:var(--surf2);overflow:hidden}
 .rp-bar span{display:block;height:100%;background:var(--pri);border-radius:99px}
 @media(max-width:640px){
+  .rp-bk{grid-template-columns:86px minmax(0,1fr) 70px}
+  .rp-bk>:nth-child(4){display:none}
+  .rp-wb{grid-template-columns:minmax(0,1fr) 60px}
+  .rp-wb>:nth-child(n+3){display:none}
+  .rp-hw{grid-template-columns:90px minmax(0,1fr)}
+  .rp-hw>:nth-child(3){display:none}
+  .lm-hw-text{flex:1 1 100%}
   .rp-row{grid-template-columns:minmax(0,1fr) 80px 90px}
   .rp-row>:nth-child(n+4){display:none}
   .rp-owe{grid-template-columns:90px minmax(0,1fr) 110px}
@@ -999,6 +1019,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <div class="fbar">
     <div id="rp-tabs" class="seg">
       <button class="seg-btn active" data-tab="students" onclick="rpSwitchTab('students')"><i class="ti ti-users"></i> Students</button>
+      <button class="seg-btn" data-tab="learning" onclick="rpSwitchTab('learning')"><i class="ti ti-book"></i> Learning</button>
       <button class="seg-btn" data-tab="business" onclick="rpSwitchTab('business')"><i class="ti ti-coin"></i> Business</button>
     </div>
     <select id="rp-range" onchange="renderReports()">
@@ -1158,6 +1179,12 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <p class="u-hint" style="margin-bottom:10px">Recalculates every lesson's hours from its amount using each student's hourly rate (rate ÷ duration). Standard students (₩40,000/h): ₩60,000 → 1.5h. One-off students (₩24,000/h): ₩24,000 → 1h. Zero-amount and cancelled lessons are left untouched.</p>
           <button class="btn" onclick="recalcDurationsFromAmounts()"><i class="ti ti-clock-cog"></i> Recalculate hours from amounts</button>
           <p id="durfix-status" style="font-size:12px;color:var(--txt2);margin-top:8px"></p>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr)">
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px">Clean up stray cancelled lessons</div>
+          <p class="u-hint" style="margin-bottom:10px">Finds cancelled lessons sitting on days the timetable does not cover at all — the trail left behind when an every-other-week class was running on the wrong weeks, or when a schedule changed. Lists them first; nothing is removed until you confirm. Classes that were actually held are never touched.</p>
+          <button class="btn" onclick="cleanStrayCancelled()"><i class="ti ti-eraser"></i> Find stray cancelled lessons</button>
+          <p id="stray-status" style="font-size:12px;color:var(--txt2);margin-top:8px"></p>
         </div>
       </div>
     </div>
@@ -1796,8 +1823,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <select id="sm-sched-day" style="flex:0 0 130px" onchange="syncSchedText()"></select>
         <input id="sm-sched-time" type="time" step="300" style="flex:1" onchange="syncSchedText()" oninput="syncSchedText()"/>
         <label style="display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:12px;color:var(--txt2);cursor:pointer" title="Once every two weeks">
-          <input id="sm-sched-biweekly" type="checkbox"/> Bi-weekly
+          <input id="sm-sched-biweekly" type="checkbox" onchange="toggleBiweekFrom()"/> Bi-weekly
         </label>
+        <input id="sm-biweek-from" type="date" style="display:none;flex:0 0 150px" title="A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday."/>
       </div>
       <input id="sm-sched" type="hidden"/>
     </div>
@@ -1841,8 +1869,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="mt"><span id="lm-title">Add Lesson</span><button class="bic" onclick="closeModal('mo-lesson')" title="Close"><i class="ti ti-x"></i></button></div>
     <!-- Basic info -->
     <div style="display:grid;grid-template-columns:1fr 1fr 0.8fr 0.7fr 1fr 1fr;gap:10px;margin-bottom:10px">
-      <div class="fg" style="margin:0"><label data-col="student" data-required="true">Student *</label><select id="lm-sid" onchange="lessonAutoFill()"></select></div>
-      <div class="fg" style="margin:0"><label data-col="date" data-required="true">Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow()"/></div>
+      <div class="fg" style="margin:0"><label data-col="student" data-required="true">Student *</label><select id="lm-sid" onchange="renderHomeworkCheck()" onchange="lessonAutoFill()"></select></div>
+      <div class="fg" style="margin:0"><label data-col="date" data-required="true">Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow();renderHomeworkCheck()"/></div>
       <div class="fg" style="margin:0"><label data-col="time">Start time</label><input id="lm-time" type="time" onchange="lessonTimeChanged()"/></div>
       <div class="fg" style="margin:0"><label data-col="dur">Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
       <div class="fg" style="margin:0"><label>Amount (₩)</label><input id="lm-amt" type="number" step="5000" oninput="lmAmtTyped()"/></div>
@@ -1891,6 +1919,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           </div>
         </div>
       </div>
+      <div id="lm-hw-check" class="lm-hw-check" style="display:none"></div>
       <div id="lm-wb-rows"></div>
       <button class="btn btn-sm" onclick="addWbRow()" style="margin-top:6px;border-style:dashed"><i class="ti ti-plus"></i> Add workbook</button>
     </div>
@@ -2308,7 +2337,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v100";
+const APP_VERSION="v103";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2594,7 +2623,26 @@ function getWeekNum(d){
   const diff=(dt-firstThu)/86400000;
   return 1+Math.round((diff-((firstThu.getDay()+6)%7-3))/7);
 }
-function isBiweeklyWeek(dateStr){
+// The Monday of the week a date falls in. Counting whole weeks between two Mondays survives the
+// turn of the year, where ISO week numbers restart and a year may hold 52 or 53 of them.
+function mondayOfWeek(dateStr){
+  const [y,m,d]=dateStr.split("-").map(Number);
+  const dt=new Date(y,m-1,d);
+  dt.setDate(dt.getDate()-((dt.getDay()+6)%7));
+  return dt;
+}
+// Which weeks an every-other-week class runs in.
+//
+// This used to be "the ISO week number is even", one global rhythm shared by every biweekly
+// student in the app. Two students who alternate on the same weekday — one Monday each — cannot
+// be expressed that way at all: both land on the same weeks, so one of them is generated on the
+// wrong ones and gets cancelled week after week. Each slot now carries the week it starts from
+// (biweekFrom) and alternates from there. Slots saved before this keep the old rhythm.
+function isBiweeklyWeek(dateStr,anchor){
+  if(anchor){
+    const weeks=Math.round((mondayOfWeek(dateStr)-mondayOfWeek(anchor))/604800000);
+    return ((weeks%2)+2)%2===0;
+  }
   const [y,m,day]=dateStr.split("-").map(Number);
   return getWeekNum(new Date(y,m-1,day))%2===0;
 }
@@ -2606,11 +2654,11 @@ function isBiweeklyWeek(dateStr){
 function getSlotsForStudent(s,dateStr){
   if(dateStr&&s.schedFrom&&dateStr<s.schedFrom&&Array.isArray(s.slotHistory)&&s.slotHistory.length){
     const period=s.slotHistory.find(h=>dateStr<=h.until)||s.slotHistory[s.slotHistory.length-1];
-    return period.slots.map(sl=>({sched:sl.sched,dur:sl.dur,rate:sl.rate,freq:sl.freq||"weekly"}));
+    return period.slots.map(sl=>({sched:sl.sched,dur:sl.dur,rate:sl.rate,freq:sl.freq||"weekly",biweekFrom:sl.biweekFrom||""}));
   }
   return [
-    {sched:s.sched,dur:s.dur,rate:s.rate,freq:s.freq||"weekly"},
-    ...(s.extraSlots||[]).map(sl=>({sched:sl.sched,dur:sl.dur,rate:sl.rate,freq:sl.freq||"weekly"})),
+    {sched:s.sched,dur:s.dur,rate:s.rate,freq:s.freq||"weekly",biweekFrom:s.biweekFrom||""},
+    ...(s.extraSlots||[]).map(sl=>({sched:sl.sched,dur:sl.dur,rate:sl.rate,freq:sl.freq||"weekly",biweekFrom:sl.biweekFrom||""})),
   ];
 }
 function slotWeekday(sched){
@@ -2632,7 +2680,7 @@ function weekdayOfDateStr(dateStr){
 function slotMatchesDate(slot,dateStr){
   const wd=weekdayOfDateStr(dateStr);
   if(slotWeekday(slot.sched)!==wd)return false;
-  if(slot.freq==="biweekly")return isBiweeklyWeek(dateStr);
+  if(slot.freq==="biweekly")return isBiweeklyWeek(dateStr,slot.biweekFrom);
   return true;
 }
 function defaultStatusForPtype(ptype){
@@ -2951,6 +2999,8 @@ function openStudentModal(id){
   set("sm-contact",s?.contact);set("sm-sched",s?.sched);set("sm-startdate",s?.startDate||"");set("sm-firstlesson",s?.firstLesson||"");set("sm-birthday",s?.birthday||"");set("sm-enddate",s?.endDate||"");const _ar=document.getElementById("sm-archived");if(_ar)_ar.checked=!!s?.archived;
   initMainSchedPickers(s?.sched||"");
   const bw=document.getElementById("sm-sched-biweekly");if(bw)bw.checked=(s?.freq==="biweekly");
+  const bwf=document.getElementById("sm-biweek-from");if(bwf)bwf.value=s?.biweekFrom||"";
+  toggleBiweekFrom(true);
   set("sm-dur",s?.dur??1);set("sm-rate",s?.rate??40000);
   set("sm-ptype",s?.ptype??"postpay");set("sm-notes",s?.notes);
   set("sm-aliases",(s?.aliases??[]).join(", "));
@@ -2972,6 +3022,20 @@ async function delStudentFromModal(){
   closeModal("mo-student");
   deleteWithUndo("students",id,()=>{popSelects();renderStudents();});
 }
+// The date only means anything for a biweekly slot, so it appears with the tick and fills itself
+// with this week the first time it is needed.
+function toggleBiweekFrom(keep){
+  const cb=document.getElementById("sm-sched-biweekly"),d=document.getElementById("sm-biweek-from");
+  if(!cb||!d)return;
+  d.style.display=cb.checked?"":"none";
+  if(cb.checked&&!d.value&&!keep)d.value=td();
+}
+function slotToggleBiweek(cb){
+  const row=cb.closest(".slot-row");if(!row)return;
+  const d=row.querySelector(".slot-biweek-from");if(!d)return;
+  d.style.display=cb.checked?"":"none";
+  if(cb.checked&&!d.value)d.value=td();
+}
 function addSlotRow(slot){
   const list=document.getElementById("sm-slots-list");
   if(!list)return;
@@ -2985,7 +3049,8 @@ function addSlotRow(slot){
     +'<div style="display:flex;gap:6px;align-items:center">'
     +  '<select class="slot-day" style="flex:0 0 96px" onchange="slotSyncSched(this)">'+schedDayOptions(day)+'</select>'
     +  '<input class="slot-time" type="time" step="300" style="flex:1" value="'+time+'" onchange="slotSyncSched(this)" oninput="slotSyncSched(this)"/>'
-    +  '<label style="display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px;color:var(--txt2);cursor:pointer" title="Every two weeks"><input type="checkbox" class="slot-biweekly"'+(slot?.freq==="biweekly"?" checked":"")+'/> Biweekly</label>'
+    +  '<label style="display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px;color:var(--txt2);cursor:pointer" title="Every two weeks"><input type="checkbox" class="slot-biweekly" onchange="slotToggleBiweek(this)"'+(slot?.freq==="biweekly"?" checked":"")+'/> Biweekly</label>'
+    +  '<input type="date" class="slot-biweek-from" title="A week this class really happens" value="'+(slot?.biweekFrom||"")+'" style="flex:0 0 140px;'+(slot?.freq==="biweekly"?"":"display:none")+'"/>'
     +'</div>'
     +'<input type="number" min="0.5" max="4" step="0.5" placeholder="hr" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/>'
     +'<input type="number" step="5000" placeholder="rate ₩" value="'+(slot?.rate??40000)+'"/>'
@@ -3051,11 +3116,12 @@ async function saveStudent(){
     const sched=(row.querySelector(".slot-sched")?.value||"").trim();
     const nums=row.querySelectorAll("input[type=number]");
     const biweekly=row.querySelector(".slot-biweekly")?.checked;
-    return{sched,dur:clampDur(nums[0]?.value),rate:clampRate(nums[1]?.value)||40000,freq:biweekly?"biweekly":"weekly"};
+    const biweekFrom=biweekly?(row.querySelector(".slot-biweek-from")?.value||""):"";
+    return{sched,dur:clampDur(nums[0]?.value),rate:clampRate(nums[1]?.value)||40000,freq:biweekly?"biweekly":"weekly",biweekFrom};
   }).filter(sl=>sl.sched);
   const customFields=collectCustomFieldsFromModal("sm-custom-fields");
   const rawRate=document.getElementById("sm-rate")?.value;
-  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
+  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
   if(!obj.name){alert("Name required");return;}
   const isNew=!editSid;
   const prevStudents=students.slice(); // for rollback if the write fails
@@ -3068,12 +3134,13 @@ async function saveStudent(){
       // freq and numeric dur/rate, while older saved ones may lack freq or hold strings, so a raw
       // JSON compare reported a schedule change every time a student with extra slots was saved —
       // and the effective-date dialog appeared after editing something as unrelated as a birthday.
-      const normSlot=sl=>({sched:String(sl?.sched||"").trim(),dur:+sl?.dur||0,rate:+sl?.rate||0,freq:sl?.freq||"weekly"});
+      const normSlot=sl=>({sched:String(sl?.sched||"").trim(),dur:+sl?.dur||0,rate:+sl?.rate||0,freq:sl?.freq||"weekly",biweekFrom:sl?.biweekFrom||""});
       const normSlots=a=>JSON.stringify((a||[]).map(normSlot));
       const schedChanged=
         String(cur.sched||"").trim()!==String(obj.sched||"").trim()||
         (+cur.dur||0)!==(+obj.dur||0)||(+cur.rate||0)!==(+obj.rate||0)||
         (cur.freq||"weekly")!==(obj.freq||"weekly")||
+        (cur.biweekFrom||"")!==(obj.biweekFrom||"")||
         normSlots(cur.extraSlots)!==normSlots(obj.extraSlots);
       if(schedChanged){
         // Ask from when the new schedule applies. Archiving the outgoing slots means every date
@@ -3143,6 +3210,7 @@ function openLessonModal(id){
   // week), so we can tell if the person has moved it elsewhere and show/save that accordingly.
   lessonNaturalDate=l?.movedFrom||l?.date||null;
   updateMovedNotice(gs(l?.sid),l);
+  renderHomeworkCheck();
   setupSlotPickerForEdit(gs(l?.sid),l);
   setTime("lm-wbtime",l?.wbTime??20);setTime("lm-btime",l?.bTime??20);setTime("lm-shwtime",l?.shwTime??20);setTime("lm-brtime",l?.brTime??20);
   set("lm-note",l?.note);set("lm-cancel",l?.cancel);
@@ -4227,6 +4295,39 @@ function genParentNote(lid){
 // ═══════════════════════════════════════════════
 // One-time correction: recompute every lesson's duration from its amount at the flat hourly
 // rate (HR = ₩40,000/h). Fixes records entered with the right amount but a default 1h duration.
+// A cancelled lesson on a day no slot covers is a leftover, not a cancellation: the student's
+// timetable says there was never a class to cancel. These piled up while every-other-week classes
+// shared one global rhythm and half of them were generated on the wrong weeks.
+function strayCancelledLessons(){
+  return lessons.filter(l=>{
+    if(l.status!=="cancelled"&&l.status!=="cancelpaid")return false;
+    if(l.movedFrom)return false;              // a class moved here on purpose
+    if(l.creditFrom||l.creditTo)return false; // money was carried across it
+    const s=gs(l.sid);if(!s)return false;
+    return !getSlotsForStudent(s,l.date).some(sl=>slotMatchesDate(sl,l.date));
+  });
+}
+function cleanStrayCancelled(){
+  const st=document.getElementById("stray-status");
+  const list=strayCancelledLessons();
+  if(!list.length){
+    if(st)st.textContent="Nothing to clean — every cancelled lesson sits on a day the timetable covers.";
+    return;
+  }
+  const byStudent={};
+  list.forEach(l=>{const n=gs(l.sid)?.name||"?";(byStudent[n]=byStudent[n]||[]).push(l.date);});
+  const lines=Object.entries(byStudent).map(([n,ds])=>n+": "+ds.length+" ("+ds.sort().slice(0,4).join(", ")+(ds.length>4?", …":"")+")");
+  if(!confirm(list.length+" cancelled lesson(s) sit on days the timetable does not cover:\n\n"+lines.join("\n")+"\n\nRemove them?")) {
+    if(st)st.textContent=list.length+" found, nothing removed.";
+    return;
+  }
+  // splice in place: other references hold this array
+  list.forEach(l=>{const i=lessons.findIndex(x=>x.id===l.id);if(i>=0)lessons.splice(i,1);});
+  if(!save())return;
+  if(st)st.textContent=list.length+" removed.";
+  showToast(list.length+" stray cancelled lessons removed");
+  rerenderCurrentPage();
+}
 function recalcDurationsFromAmounts(){
   const el=document.getElementById("durfix-status");
   const say=m=>{if(el)el.textContent=m;};
@@ -4796,11 +4897,13 @@ function renderReports(){
 
   const body=document.getElementById("rp-body");
   if(!body)return;
-  if(!rows.length){
+  if(!rows.length&&rpTab!=="learning"){
     body.innerHTML='<div class="empty"><i class="ti ti-report"></i><p>No lessons in this period</p></div>';
     return;
   }
-  body.innerHTML=rpTab==="students"?rpStudentsView(rows,sum,months,from):rpBusinessView(rows,sum,months);
+  body.innerHTML=rpTab==="students"?rpStudentsView(rows,sum,months,from)
+    :rpTab==="learning"?rpLearningView(months)
+    :rpBusinessView(rows,sum,months);
 }
 function rpStudentsView(rows,sum,months,from){
   let h=`<div class="stats cols-4">
@@ -4810,15 +4913,17 @@ function rpStudentsView(rows,sum,months,from){
     <div class="sc gry"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${privacyHidden?"amounts hidden":"of "+won(sum.exp)}</div></div>
   </div>`;
   h+=`<div class="card" style="padding:0"><div class="grid-head rp-row">
-    <div>Student</div><div>Lessons</div><div>Hours</div><div>Lost / moved</div><div>Collected</div><div>Outstanding</div><div>Schedule since ${rpMonthLabel(months[0])}</div></div>`;
+    <div>Student</div><div>Lessons</div><div>Hours</div><div>Lost / moved</div><div>Books · HW</div><div>Collected</div><div>Outstanding</div><div>Schedule since ${rpMonthLabel(months[0])}</div></div>`;
   h+=rows.map(({s,t})=>{
     const ch=rpScheduleChange(s,from);
     const planned=Math.max(t.planned,t.count);
+    const lr=rpLearningTotals(s.id,months);
     return `<div class="grid-row rp-row">
       <div><div class="cell-main">${escapeHTMLBasic(s.name)}${s.archived?' <span class="std-arch-badge">Archived</span>':""}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")}${tenureLabel(s)?" · "+tenureLabel(s):""}</div></div>
       <div class="tm" title="${t.count} held of ${planned} on the timetable">${t.count}${planned?` <span class="cell-muted2">/ ${planned}</span>`:""}</div>
       <div class="tm">${fmtHours(t.hours)}</div>
       <div class="tm" title="${t.cancelled} cancelled record(s) in total">${t.lost?'<span style="color:var(--red)">'+t.lost+"</span> "+'<span class="cell-muted2">'+won(t.lostAmt)+"</span>":"—"}${t.moved?' <span class="cell-muted2">· '+t.moved+" moved</span>":""}</div>
+      <div class="cell-muted2" title="${lr.books.length} books · ${lr.hw.assigned} homework set">${lr.books.length||lr.hw.assigned?`${lr.books.length||"—"} · ${lr.hw.rate!=null?lr.hw.rate+"%":lr.hw.assigned?lr.hw.assigned+" set":"—"}`:"—"}</div>
       <div class="tm">${pwon(t.paid)}</div>
       <div class="tm" style="color:${t.due>0?"var(--red)":"var(--txt3)"}">${t.due>0?pwon(t.due):"—"}</div>
       <div class="cell-muted2">${ch?`<span class="rp-change ${ch.up?"up":"down"}"><i class="ti ti-arrow-${ch.up?"up":"down"}-right"></i> ${escapeHTMLBasic(ch.from)} → ${escapeHTMLBasic(ch.to)}</span>`:"unchanged"}</div>
@@ -4892,6 +4997,177 @@ function printReports(){
   window.addEventListener("afterprint",done);
   window.print();
   setTimeout(done,2000);
+}
+
+
+// ── Homework from last time, checked off at the next lesson ─────────────────
+// The homework records have existed since the beginning but nothing could ever mark them done,
+// so every one of them sat at "not started" and no completion figure could be trusted. This is
+// the moment it actually gets asked: the lesson modal, open in front of the student.
+function homeworkBefore(sid,date){
+  const prior=homework.filter(h=>h.sid===sid&&h.assigned&&(!date||h.assigned<date));
+  if(!prior.length)return[];
+  const last=prior.map(h=>h.assigned).sort().pop();
+  return prior.filter(h=>h.assigned===last);
+}
+function renderHomeworkCheck(){
+  const box=document.getElementById("lm-hw-check");if(!box)return;
+  const sid=document.getElementById("lm-sid")?.value;
+  const date=document.getElementById("lm-date")?.value||td();
+  const items=sid?homeworkBefore(sid,date):[];
+  if(!items.length){box.style.display="none";box.innerHTML="";return;}
+  box.style.display="";
+  box.innerHTML=`<div class="cell-muted2" style="margin-bottom:6px"><i class="ti ti-checkbox"></i> Homework set on ${items[0].assigned}</div>`
+    +items.map(h=>`<div class="lm-hw-item">
+        <span class="lm-hw-text" title="${escapeAttr(h.content||"")}">${escapeHTMLBasic(h.content||"")}</span>
+        <span class="seg lm-hw-seg">
+          ${[["done","Done"],["in_progress","Partly"],["not_started","Not yet"],["skipped","Skipped"]]
+            .map(([v,lbl])=>`<button type="button" class="seg-btn${h.status===v?" active":""}" onclick="setHomeworkStatus('${h.id}','${v}')">${lbl}</button>`).join("")}
+        </span>
+      </div>`).join("");
+}
+function setHomeworkStatus(hid,status){
+  const h=homework.find(x=>x.id===hid);if(!h)return;
+  h.status=status;
+  if(!save())return;
+  renderHomeworkCheck();
+}
+
+// ═══════════════════════════════════════════════
+// REPORTS — learning (v101)
+// Books, workbooks and homework come from fields that are often still empty. Every section says
+// so plainly rather than showing a confident zero.
+// ═══════════════════════════════════════════════
+function rpRange(months){
+  const from=months[0]+"-01";
+  const [ly,lm]=months[months.length-1].split("-").map(Number);
+  const to=months[months.length-1]+"-"+String(new Date(ly,lm,0).getDate());
+  return {from,to};
+}
+function rpLessonsIn(sid,months){
+  const {from,to}=rpRange(months);
+  return lessons.filter(l=>(!sid||l.sid===sid)&&l.date>=from&&l.date<=to
+    &&!["cancelled","cancelpaid","deleted"].includes(l.status));
+}
+function rpLearningTotals(sid,months){
+  const {from,to}=rpRange(months);
+  const ls=rpLessonsIn(sid,months);
+  const idx=bookLibIndex();
+  const books=[];
+  ls.forEach(l=>(l.books||[]).forEach(e=>{
+    if(!e||!e.name)return;
+    const b=findLibBook(e,idx);
+    const ar=b?parseFloat(b.arLevel):NaN;
+    books.push({date:l.date,name:e.name,book:b,ar:isNaN(ar)?NaN:ar});
+  }));
+  books.sort((a,b)=>b.date.localeCompare(a.date));
+  const wb={};
+  ls.forEach(l=>(l.workbooks||[]).forEach(w=>{
+    if(!w||!w.name)return;
+    const k=w.name.trim();
+    (wb[k]=wb[k]||{name:k,n:0,last:"",pd:""}).n++;
+    if(l.date>=wb[k].last){wb[k].last=l.date;if(w.pd)wb[k].pd=w.pd;}
+  }));
+  const hwAll=homework.filter(h=>(!sid||h.sid===sid)&&h.assigned>=from&&h.assigned<=to);
+  const hw={assigned:hwAll.length,done:0,partly:0,pending:0,skipped:0,items:hwAll.slice().sort((a,b)=>b.assigned.localeCompare(a.assigned))};
+  hwAll.forEach(h=>{
+    if(h.status==="done")hw.done++;
+    else if(h.status==="in_progress")hw.partly++;
+    else if(h.status==="skipped")hw.skipped++;
+    else hw.pending++;
+  });
+  const answered=hw.done+hw.partly+hw.skipped;
+  hw.rate=answered?Math.round(hw.done/answered*100):null;   // null = never checked off yet
+  const topics=[...new Set(ls.map(l=>(l.topic||"").trim()).filter(Boolean))];
+  const breaks=[];ls.forEach(l=>(l.bract||[]).forEach(x=>x&&x.name&&breaks.push(x.name.trim())));
+  const school=[];ls.forEach(l=>(l.schoolHW||[]).forEach(x=>x&&x.name&&school.push(x.name.trim())));
+  const mix={wb:0,books:0,school:0,brk:0};
+  ls.forEach(l=>{mix.wb+=+l.wbTime||0;mix.books+=+l.bTime||0;mix.school+=+l.shwTime||0;mix.brk+=+l.brTime||0;});
+  const withAr=books.filter(b=>!isNaN(b.ar));
+  const avgAr=withAr.length?withAr.reduce((a,b)=>a+b.ar,0)/withAr.length:null;
+  const recent=withAr.slice(0,5);
+  const curAr=recent.length?recent.reduce((a,b)=>a+b.ar,0)/recent.length:null;
+  return {lessons:ls.length,books,titles:[...new Set(books.map(b=>b.name.toLowerCase()))].length,
+    avgAr,curAr,noAr:books.length-withAr.length,
+    wb:Object.values(wb).sort((a,b)=>b.n-a.n),hw,topics,
+    breaks:rpTally(breaks),school:rpTally(school),mix};
+}
+function rpTally(arr){
+  const m={};arr.forEach(x=>{m[x]=(m[x]||0)+1;});
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([name,n])=>({name,n}));
+}
+function rpEmpty(icon,msg){return `<div class="empty"><i class="ti ti-${icon}"></i><p>${msg}</p></div>`;}
+function rpLearningView(months){
+  const sid=document.getElementById("rp-lsid")?.value||"";
+  const t=rpLearningTotals(sid||null,months);
+  const who=sid?gs(sid):null;
+  const opts=`<option value="">All students</option>`+students.filter(s=>!s.archived||s.id===sid)
+    .map(s=>`<option value="${s.id}"${sid===s.id?" selected":""}>${escapeHTMLBasic(s.name)}${s.k?" / "+escapeHTMLBasic(s.k):""}</option>`).join("");
+  let h=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-user"></i>${who?escapeHTMLBasic(who.name):"All students"}</div>
+    <select id="rp-lsid" onchange="renderReports()" style="width:200px;height:30px;font-size:12px">${opts}</select></div></div>`;
+  h+=`<div class="stats cols-4">
+    <div class="sc grn"><div class="sc-lbl">Books read</div><div class="sc-val">${t.books.length}</div><div class="sc-sub">${t.titles} different titles</div></div>
+    <div class="sc blu"><div class="sc-lbl">Average AR</div><div class="sc-val">${t.avgAr!=null?t.avgAr.toFixed(1):"—"}</div><div class="sc-sub">${t.noAr?t.noAr+" without AR data":"from the Books library"}</div></div>
+    <div class="sc amb"><div class="sc-lbl">Homework done</div><div class="sc-val">${t.hw.rate!=null?t.hw.rate+"%":"—"}</div><div class="sc-sub">${t.hw.assigned?t.hw.assigned+" set · "+t.hw.pending+" never checked":"none set"}</div></div>
+    <div class="sc gry"><div class="sc-lbl">Workbooks</div><div class="sc-val">${t.wb.length}</div><div class="sc-sub">${t.lessons} lessons in period</div></div>
+  </div>`;
+
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-book"></i>Books read</div><span class="cell-muted2">${t.curAr!=null?"last 5 average AR "+t.curAr.toFixed(1):""}</span></div>`;
+  h+=t.books.length?`<div class="grid-head rp-bk"><div>Date</div><div>Title</div><div>AR</div><div>Level</div></div>`
+    +t.books.slice(0,40).map(b=>`<div class="grid-row rp-bk">
+      <div class="cell-muted2">${b.date}</div>
+      <div class="cell-main">${escapeHTMLBasic(b.name)}${!b.book?' <span class="cell-muted2">not in library</span>':""}</div>
+      <div>${b.book?arLevelBadgeHTML(b.book.arLevel):"—"}</div>
+      <div class="cell-muted2">${b.book?escapeHTMLBasic(b.book.level||"—"):"—"}</div></div>`).join("")
+    +(t.books.length>40?`<div class="u-hint" style="padding:8px 14px">showing the 40 most recent of ${t.books.length}</div>`:"")
+    :rpEmpty("book-off","No books logged yet — add them in a lesson's Books read box");
+  h+=`</div>`;
+
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-notebook"></i>Workbooks</div></div>`;
+  h+=t.wb.length?`<div class="grid-head rp-wb"><div>Workbook</div><div>Lessons</div><div>Last used</div><div>Latest page</div></div>`
+    +t.wb.map(w=>`<div class="grid-row rp-wb">
+      <div class="cell-main">${escapeHTMLBasic(w.name)}</div>
+      <div class="tm">${w.n}</div>
+      <div class="cell-muted2">${w.last}</div>
+      <div class="cell-muted2">${escapeHTMLBasic(w.pd||"—")}</div></div>`).join("")
+    :rpEmpty("notebook-off","No workbooks logged yet");
+  h+=`</div>`;
+
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-checkbox"></i>Homework</div>
+    <span class="cell-muted2">${t.hw.rate==null&&t.hw.assigned?"never checked off — open a lesson to mark them":""}</span></div>`;
+  h+=t.hw.assigned?`<div class="cb p"><div class="rp-hwbar">
+      <span class="done" style="width:${t.hw.assigned?t.hw.done/t.hw.assigned*100:0}%"></span>
+      <span class="part" style="width:${t.hw.assigned?t.hw.partly/t.hw.assigned*100:0}%"></span>
+      <span class="skip" style="width:${t.hw.assigned?t.hw.skipped/t.hw.assigned*100:0}%"></span>
+    </div><div class="cell-muted2" style="margin-top:6px">${t.hw.done} done · ${t.hw.partly} partly · ${t.hw.skipped} skipped · ${t.hw.pending} not checked</div></div>`
+    +`<div class="grid-head rp-hw"><div>Set on</div><div>Homework</div><div>Status</div></div>`
+    +t.hw.items.slice(0,25).map(x=>`<div class="grid-row rp-hw">
+      <div class="cell-muted2">${x.assigned}</div>
+      <div class="cell-main">${escapeHTMLBasic(x.content||"")}</div>
+      <div>${hwbdg(x.status)}</div></div>`).join("")
+    :rpEmpty("checkbox","No homework set yet — type it in the HW box of a workbook row");
+  h+=`</div>`;
+
+  const mixTotal=t.mix.wb+t.mix.books+t.mix.school+t.mix.brk;
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-clock"></i>Where lesson time goes</div><span class="cell-muted2">${t.lessons?"average per lesson":""}</span></div><div class="cb p">`;
+  h+=mixTotal&&t.lessons?`<div class="rp-mix">
+      ${[["Workbook",t.mix.wb,"var(--pri)"],["Books",t.mix.books,"#378ADD"],["School HW",t.mix.school,"#BA7517"],["Break",t.mix.brk,"var(--bdr2)"]]
+        .map(([lbl,v,col])=>`<span style="width:${v/mixTotal*100}%;background:${col}" title="${lbl} ${Math.round(v/t.lessons)} min"></span>`).join("")}
+    </div>
+    <div class="cell-muted2" style="margin-top:8px">${[["Workbook",t.mix.wb],["Books",t.mix.books],["School HW",t.mix.school],["Break",t.mix.brk]]
+      .map(([lbl,v])=>lbl+" "+Math.round(v/t.lessons)+" min").join(" · ")}</div>`
+    :`<div class="cell-muted2">No lessons in this period</div>`;
+  h+=`</div></div>`;
+
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-bulb"></i>Topics and activities</div></div><div class="cb p">
+    <div class="cell-muted2">Topics covered</div>
+    <div style="margin:4px 0 12px">${t.topics.length?t.topics.map(x=>`<span class="tag">${escapeHTMLBasic(x)}</span>`).join(" "):'<span class="cell-muted2">none recorded</span>'}</div>
+    <div class="cell-muted2">Break activities</div>
+    <div style="margin:4px 0 12px">${t.breaks.length?t.breaks.map(x=>`<span class="tag">${escapeHTMLBasic(x.name)}${x.n>1?" ×"+x.n:""}</span>`).join(" "):'<span class="cell-muted2">none recorded</span>'}</div>
+    <div class="cell-muted2">School / academy homework seen</div>
+    <div style="margin:4px 0 0">${t.school.length?t.school.map(x=>`<span class="tag">${escapeHTMLBasic(x.name)}${x.n>1?" ×"+x.n:""}</span>`).join(" "):'<span class="cell-muted2">none recorded</span>'}</div>
+  </div></div>`;
+  return h;
 }
 
 function printReading(){
