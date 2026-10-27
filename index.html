@@ -601,6 +601,15 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   .cal-event .cal-amt::before{content:none}
 }
 .cal-event-check{cursor:pointer;width:15px;height:15px;flex-shrink:0;accent-color:var(--ok);margin:0}
+/* The tick sits inside a ~100px calendar cell; 15px is a mouse target, not a finger one, and a
+   miss opens the lesson instead. Must stay AFTER the base rule to win. */
+.cal-chk{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+@media(pointer:coarse){
+  .cal-event-check{width:18px;height:18px}
+  /* Negative margins keep the chip the same size while the tappable label spills over it. */
+  .cal-chk{padding:8px 6px;margin:-8px -4px -8px -2px}
+  .cal-event{padding-top:4px;padding-bottom:4px}
+}
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
 /* GOOGLE CALENDAR COMPARE (v82) */
 .cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
@@ -864,7 +873,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-sessions" class="page">
   <div class="fbar" style="position:relative">
     <select id="sf-sid" onchange="renderCalendar()" class="u-w-180"></select>
-    <button class="btn" id="cal-gcal-btn" onclick="openGcalCompare()" title="Compare this month with Google Calendar"><i class="ti ti-calendar-search"></i> Google</button>
+    <button class="btn" id="cal-gcal-btn" onclick="openGcalCompare()" title="Compare this month with Google Calendar"><i class="ti ti-calendar-search"></i> Google<span id="cal-gcal-n" class="u-badge" style="display:none;margin-left:6px;background:var(--amb-l);color:var(--amb);border-color:transparent"></span></button>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
       <button class="bic" onclick="calChangeMonth(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
       <span id="cal-month-label" class="mn-label"></span>
@@ -2337,7 +2346,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v103";
+const APP_VERSION="v106";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -3030,6 +3039,22 @@ function toggleBiweekFrom(keep){
   d.style.display=cb.checked?"":"none";
   if(cb.checked&&!d.value&&!keep)d.value=td();
 }
+// Drop one slot and save straight away: saveStudent sees the schedule change and asks from which
+// date it applies, archiving the old timetable so past months keep billing what they billed.
+async function slotStopFromDate(btn){
+  const row=btn.closest(".slot-row");if(!row)return;
+  const sched=row.querySelector(".slot-sched")?.value||"this class";
+  if(!confirm("Stop "+sched+" from a date you pick next?\n\nThe student's other days carry on unchanged, and lessons already recorded keep the schedule they were booked under."))return;
+  // Put the row back if the save does not go through — cancelling the date picker would otherwise
+  // leave the slot missing from the open dialog, and the next save would drop it for real.
+  const list=row.parentNode,next=row.nextSibling;
+  row.remove();
+  schedStopOnly=true;
+  try{ await saveStudent(); }
+  finally{ schedStopOnly=false; }
+  const stillOpen=document.getElementById("mo-student")?.classList.contains("show");
+  if(stillOpen&&list)list.insertBefore(row,next);
+}
 function slotToggleBiweek(cb){
   const row=cb.closest(".slot-row");if(!row)return;
   const d=row.querySelector(".slot-biweek-from");if(!d)return;
@@ -3054,7 +3079,8 @@ function addSlotRow(slot){
     +'</div>'
     +'<input type="number" min="0.5" max="4" step="0.5" placeholder="hr" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/>'
     +'<input type="number" step="5000" placeholder="rate ₩" value="'+(slot?.rate??40000)+'"/>'
-    +'<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" style="color:var(--txt3)"><i class="ti ti-trash"></i></button>';
+    +'<button type="button" class="bic" onclick="slotStopFromDate(this)" style="color:var(--txt3)" title="Stop this class from a date — the other days carry on, and past lessons keep their own schedule"><i class="ti ti-calendar-off"></i></button>'
+    +'<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" style="color:var(--txt3)" title="Remove this line"><i class="ti ti-trash"></i></button>';
   list.appendChild(div);
 }
 // Recombine a slot row's day+time dropdowns into its hidden sched input.
@@ -3076,10 +3102,14 @@ function autoRate(){const d=parseFloat(document.getElementById("sm-dur")?.value)
 // Replaces the typed prompt: a small month calendar where clicking a day chooses when the new
 // schedule starts. Resolves a promise with "YYYY-MM-DD", "" (apply to everything), or null (abort).
 let _sfResolve=null,_sfMonth=null;
-function pickScheduleFromDate(){
+// `noRetro` hides the retroactive button: wiping slotHistory would contradict the promise that
+// past lessons keep the schedule they were booked under.
+function pickScheduleFromDate(noRetro){
   return new Promise(res=>{
     _sfResolve=res;
     const t=nowKST();_sfMonth=new Date(Date.UTC(t.getFullYear(),t.getMonth(),1));
+    const all=document.getElementById("sf-apply-all");
+    if(all)all.style.display=noRetro?"none":"";
     renderSchedFromCal();
     openModal("mo-schedfrom");
   });
@@ -3105,6 +3135,9 @@ function schedFromPick(ds){document.getElementById("mo-schedfrom").classList.rem
 function schedFromAll(){document.getElementById("mo-schedfrom").classList.remove("show");const r=_sfResolve;_sfResolve=null;if(r)r("");}
 function schedFromCancel(){document.getElementById("mo-schedfrom").classList.remove("show");const r=_sfResolve;_sfResolve=null;if(r)r(null);}
 
+// Set while "stop this day from a date" is running, so the dialog cannot offer a retroactive
+// apply that would rewrite the past it just promised to leave alone.
+let schedStopOnly=false;
 async function saveStudent(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
   // Clamp numbers to sane ranges. Without this a typo ("-3" hours, or a rate with an extra zero)
@@ -3146,7 +3179,7 @@ async function saveStudent(){
         // Ask from when the new schedule applies. Archiving the outgoing slots means every date
         // BEFORE that day keeps rendering (and billing) against the schedule in force back then —
         // exactly what was missing when a September change rewrote all of July.
-        const ans=await pickScheduleFromDate();   // calendar click: date / "" (all) / null (abort)
+        const ans=await pickScheduleFromDate(schedStopOnly);   // calendar click: date / "" (all) / null (abort)
         if(ans===null)return;               // cancelled — keep editing, save nothing
         const from=ans;
         if(from){
@@ -5216,8 +5249,20 @@ function calTimeLabel(l){
   return hh12+":"+String(mm).padStart(2,"0")+ap;
 }
 
+// After a compare, the button carries the number of rows still unresolved for the month that was
+// compared, so the calendar says at a glance whether it agrees with Google.
+let gcalDiffMonth="";
+function renderGcalDiffBadge(){
+  const b=document.getElementById("cal-gcal-n");if(!b)return;
+  const n=(gcalDiffMonth&&gcalDiffMonth===calMonth)?(gcalResult?.diffs?.length||0):0;
+  b.textContent=n;
+  b.style.display=n?"":"none";
+  const btn=document.getElementById("cal-gcal-btn");
+  if(btn)btn.title=n?n+" differences from Google Calendar in this month":"Compare this month with Google Calendar";
+}
 function renderCalendar(){
   const sid=document.getElementById("sf-sid")?.value||"";
+  renderGcalDiffBadge();
   const sfMon=document.getElementById("sf-mon");if(sfMon)sfMon.value=calMonth;
   const lbl=document.getElementById("cal-month-label");
   const parts=calMonth.split("-").map(Number);
@@ -5296,7 +5341,8 @@ function renderCalendar(){
       +(hasConflict?"<span class=\"cal-conflict-dot\" title=\"Times overlap\">⚠</span>":"")
       +(gcalDiffKeys.has(occ.date+"|"+occ.sid)?"<span class=\"cal-gdot\" title=\"Differs from Google Calendar\"></span>":"")
       +"<span class=\"cal-event-label\">"+labelHtml+"</span>"
-      +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/>"
+      +"<label class=\"cal-chk\" title=\"Mark this class done\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\">"
+      +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/></label>"
       +"</div>";
   }
   function buildMoreBtn(dateStr,extra){
@@ -5504,7 +5550,8 @@ function renderPaymentCalendar(mon){
       +"<span class=\"cal-name\">"+escAttr(name)+"</span> <span class=\"cal-amt\">"+won(occ.amt)+"</span>"
       +(subLine?"<span class=\"pay-chip-sub\">"+escAttr(subLine)+"</span>":"")
       +"</span>"
-      +"<input type=\"checkbox\" class=\"cal-event-check\""+(checked?" checked":"")+(disabled?" disabled":"")+" onclick=\"event.stopPropagation();togglePaymentPaid('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\"/>"
+      +"<label class=\"cal-chk\" title=\"Mark this lesson paid\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\">"
+      +"<input type=\"checkbox\" class=\"cal-event-check\""+(checked?" checked":"")+(disabled?" disabled":"")+" onclick=\"event.stopPropagation();togglePaymentPaid('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\"/></label>"
       +"</div>";
   }
   function buildMoreBtn(dateStr,extra){
@@ -8388,6 +8435,7 @@ async function gcalRun(refetch){
     }
     gcalResult=gcalBuildDiff(month,gcalEvents);
     gcalDiffKeys.clear();gcalResult.diffs.forEach(d=>gcalDiffKeys.add(d.date+"|"+d.sid));
+    gcalDiffMonth=month;
     renderGcal();
     if(curPage==="sessions")renderCalendar();
   }catch(e){
@@ -8922,7 +8970,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       <div id="sf-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px"></div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
         <button class="btn btn-p" style="width:100%" onclick="schedFromPick(td())">Save — apply new schedule from today</button>
-        <button class="btn" style="width:100%" onclick="schedFromAll()">Apply to everything incl. the past (retroactive)</button>
+        <button class="btn" id="sf-apply-all" style="width:100%" onclick="schedFromAll()">Apply to everything incl. the past (retroactive)</button>
       </div>
       <p class="u-hint" style="margin-top:8px;font-size:10px">To apply from a specific date, click that date on the calendar above.</p>
     </div>
