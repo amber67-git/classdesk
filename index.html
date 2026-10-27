@@ -603,9 +603,12 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-event-check{cursor:pointer;width:15px;height:15px;flex-shrink:0;accent-color:var(--ok);margin:0}
 /* The tick sits inside a ~100px calendar cell; 15px is a mouse target, not a finger one, and a
    miss opens the lesson instead. Must stay AFTER the base rule to win. */
+.cal-chk{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
 @media(pointer:coarse){
   .cal-event-check{width:18px;height:18px}
-  .cal-event{padding-top:3px;padding-bottom:3px}
+  /* Negative margins keep the chip the same size while the tappable label spills over it. */
+  .cal-chk{padding:8px 6px;margin:-8px -4px -8px -2px}
+  .cal-event{padding-top:4px;padding-bottom:4px}
 }
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
 /* GOOGLE CALENDAR COMPARE (v82) */
@@ -2343,7 +2346,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v105";
+const APP_VERSION="v106";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -5338,7 +5341,8 @@ function renderCalendar(){
       +(hasConflict?"<span class=\"cal-conflict-dot\" title=\"Times overlap\">⚠</span>":"")
       +(gcalDiffKeys.has(occ.date+"|"+occ.sid)?"<span class=\"cal-gdot\" title=\"Differs from Google Calendar\"></span>":"")
       +"<span class=\"cal-event-label\">"+labelHtml+"</span>"
-      +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/>"
+      +"<label class=\"cal-chk\" title=\"Mark this class done\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\">"
+      +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/></label>"
       +"</div>";
   }
   function buildMoreBtn(dateStr,extra){
@@ -5546,7 +5550,8 @@ function renderPaymentCalendar(mon){
       +"<span class=\"cal-name\">"+escAttr(name)+"</span> <span class=\"cal-amt\">"+won(occ.amt)+"</span>"
       +(subLine?"<span class=\"pay-chip-sub\">"+escAttr(subLine)+"</span>":"")
       +"</span>"
-      +"<input type=\"checkbox\" class=\"cal-event-check\""+(checked?" checked":"")+(disabled?" disabled":"")+" onclick=\"event.stopPropagation();togglePaymentPaid('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\"/>"
+      +"<label class=\"cal-chk\" title=\"Mark this lesson paid\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\">"
+      +"<input type=\"checkbox\" class=\"cal-event-check\""+(checked?" checked":"")+(disabled?" disabled":"")+" onclick=\"event.stopPropagation();togglePaymentPaid('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\"/></label>"
       +"</div>";
   }
   function buildMoreBtn(dateStr,extra){
