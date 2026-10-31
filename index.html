@@ -638,6 +638,21 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .rp-bar{height:6px;border-radius:99px;background:var(--surf2);overflow:hidden}
 .rp-bar span{display:block;height:100%;background:var(--pri);border-radius:99px}
 @media(max-width:640px){
+  /* Hiding the later columns left the phone with name, count and hours — the money and the
+     schedule change, the reasons to open the page at all, were gone. Each row becomes a small
+     block instead, every figure beside the name of what it is. */
+  .rp-row,.rp-owe,.rp-share{display:block;padding:12px 14px}
+  /* flex-end plus an auto margin on the label keeps a value made of several nodes
+     ("26" + "/ 26") together on the right instead of splitting it across the row. */
+  .rp-row>div,.rp-owe>div,.rp-share>div{display:flex;align-items:baseline;justify-content:flex-end;gap:6px;padding:2px 0}
+  .rp-row>div[data-l]::before,.rp-owe>div[data-l]::before,.rp-share>div[data-l]::before{
+    content:attr(data-l);font-size:11px;color:var(--txt3);flex:0 0 auto;margin-right:auto}
+  .rp-row>div:first-child,.rp-owe>div:nth-child(2),.rp-share>div:first-child{
+    display:block;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--bdr)}
+  .rp-row .tm,.rp-owe .tm,.rp-share .tm{text-align:right}
+  .rp-share>div[data-l="Share"]{display:block}
+  .rp-share>div[data-l="Share"]::before{display:block;margin-bottom:4px}
+  .grid-head.rp-row,.grid-head.rp-owe,.grid-head.rp-share{display:none}
   .rp-bk{grid-template-columns:86px minmax(0,1fr) 70px}
   .rp-bk>:nth-child(4){display:none}
   .rp-wb{grid-template-columns:minmax(0,1fr) 60px}
@@ -645,12 +660,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   .rp-hw{grid-template-columns:90px minmax(0,1fr)}
   .rp-hw>:nth-child(3){display:none}
   .lm-hw-text{flex:1 1 100%}
-  .rp-row{grid-template-columns:minmax(0,1fr) 80px 90px}
-  .rp-row>:nth-child(n+4){display:none}
-  .rp-owe{grid-template-columns:90px minmax(0,1fr) 110px}
-  .rp-owe>:nth-child(4){display:none}
-  .rp-share{grid-template-columns:minmax(0,1fr) 110px}
-  .rp-share>:nth-child(n+3){display:none}
 }
 .gcf-other{margin-top:6px;padding:6px 8px;border-left:3px solid var(--bdr2);background:var(--surf2);border-radius:0 6px 6px 0}
 .gcf-other .btn{margin-top:4px}
@@ -2346,7 +2355,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v107";
+const APP_VERSION="v108";
 const APP_BUILT="2026-09-13";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -4953,13 +4962,13 @@ function rpStudentsView(rows,sum,months,from){
     const lr=rpLearningTotals(s.id,months);
     return `<div class="grid-row rp-row">
       <div><div class="cell-main">${escapeHTMLBasic(s.name)}${s.archived?' <span class="std-arch-badge">Archived</span>':""}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")}${tenureLabel(s)?" · "+tenureLabel(s):""}</div></div>
-      <div class="tm" title="${t.count} held of ${planned} on the timetable">${t.count}${planned?` <span class="cell-muted2">/ ${planned}</span>`:""}</div>
-      <div class="tm">${fmtHours(t.hours)}</div>
-      <div class="tm" title="${t.cancelled} cancelled record(s) in total">${t.lost?'<span style="color:var(--red)">'+t.lost+"</span> "+'<span class="cell-muted2">'+won(t.lostAmt)+"</span>":"—"}${t.moved?' <span class="cell-muted2">· '+t.moved+" moved</span>":""}</div>
-      <div class="cell-muted2" title="${lr.books.length} books · ${lr.hw.assigned} homework set">${lr.books.length||lr.hw.assigned?`${lr.books.length||"—"} · ${lr.hw.rate!=null?lr.hw.rate+"%":lr.hw.assigned?lr.hw.assigned+" set":"—"}`:"—"}</div>
-      <div class="tm">${pwon(t.paid)}</div>
-      <div class="tm" style="color:${t.due>0?"var(--red)":"var(--txt3)"}">${t.due>0?pwon(t.due):"—"}</div>
-      <div class="cell-muted2">${ch?`<span class="rp-change ${ch.up?"up":"down"}"><i class="ti ti-arrow-${ch.up?"up":"down"}-right"></i> ${escapeHTMLBasic(ch.from)} → ${escapeHTMLBasic(ch.to)}</span>`:"unchanged"}</div>
+      <div class="tm" data-l="Lessons" title="${t.count} held of ${planned} on the timetable">${t.count}${planned?` <span class="cell-muted2">/ ${planned}</span>`:""}</div>
+      <div class="tm" data-l="Hours">${fmtHours(t.hours)}</div>
+      <div class="tm" data-l="Lost / moved" title="${t.cancelled} cancelled record(s) in total">${t.lost?'<span style="color:var(--red)">'+t.lost+"</span> "+'<span class="cell-muted2">'+won(t.lostAmt)+"</span>":"—"}${t.moved?' <span class="cell-muted2">· '+t.moved+" moved</span>":""}</div>
+      <div class="cell-muted2" data-l="Books · HW" title="${lr.books.length} books · ${lr.hw.assigned} homework set">${lr.books.length||lr.hw.assigned?`${lr.books.length||"—"} · ${lr.hw.rate!=null?lr.hw.rate+"%":lr.hw.assigned?lr.hw.assigned+" set":"—"}`:"—"}</div>
+      <div class="tm" data-l="Collected">${pwon(t.paid)}</div>
+      <div class="tm" data-l="Outstanding" style="color:${t.due>0?"var(--red)":"var(--txt3)"}">${t.due>0?pwon(t.due):"—"}</div>
+      <div class="cell-muted2" data-l="Schedule">${ch?`<span class="rp-change ${ch.up?"up":"down"}"><i class="ti ti-arrow-${ch.up?"up":"down"}-right"></i> ${escapeHTMLBasic(ch.from)} → ${escapeHTMLBasic(ch.to)}</span>`:"unchanged"}</div>
     </div>`;
   }).join("");
   h+=`</div><p class="u-hint">Lessons held against what the timetable implies for the period, every-other-week schedules included.
@@ -4989,8 +4998,8 @@ function rpBusinessView(rows,sum,months){
   h+=owing.length?owing.map(({s,t})=>`<div class="grid-row rp-owe">
       <div class="cell-main">${rpMonthLabel(t.oldestDue)}</div>
       <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")} · ${PTYPE_META[s.ptype]?.lbl||"Post-pay"}</div></div>
-      <div class="tm" style="color:var(--red)">${pwon(t.due)}</div>
-      <div class="tm cell-muted2">${t.exp?Math.round(t.due/t.exp*100)+"% of "+pwon(t.exp):"—"}</div>
+      <div class="tm" data-l="Outstanding" style="color:var(--red)">${pwon(t.due)}</div>
+      <div class="tm cell-muted2" data-l="Of this period">${t.exp?Math.round(t.due/t.exp*100)+"% of "+pwon(t.exp):"—"}</div>
     </div>`).join("")
     :'<div class="empty"><i class="ti ti-circle-check"></i><p>Nothing outstanding in this period</p></div>';
   h+=`</div>`;
@@ -5002,10 +5011,10 @@ function rpBusinessView(rows,sum,months){
     const perH=t.hours>0?Math.round(t.exp/t.hours):0;
     return `<div class="grid-row rp-share">
       <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.sched||"")}</div></div>
-      <div><div class="rp-bar"><span style="width:${pct}%"></span></div><div class="cell-muted2">${pct}%</div></div>
-      <div class="tm">${pwon(t.exp)}</div>
-      <div class="tm">${perH?pwon(perH):"—"}</div>
-      <div class="tm cell-muted2">${t.lost||"—"}</div>
+      <div data-l="Share"><div class="rp-bar"><span style="width:${pct}%"></span></div><div class="cell-muted2">${pct}%</div></div>
+      <div class="tm" data-l="Expected">${pwon(t.exp)}</div>
+      <div class="tm" data-l="Per hour">${perH?pwon(perH):"—"}</div>
+      <div class="tm cell-muted2" data-l="Lost">${t.lost||"—"}</div>
     </div>`;
   }).join("");
   h+=`</div>`;
