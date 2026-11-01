@@ -1476,6 +1476,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
           <dt>I deleted something by mistake</dt><dd>Right after deleting, an <b>Undo</b> button appears at the bottom for 6 seconds. If you missed it, you can recover by Importing a backup file.</dd>
           <dt>How do I put ClassDesk on my phone/tablet home screen?</dt><dd>Open the ClassDesk address, then — <b>Android (Chrome):</b> menu ⋮ → <b>Add to home screen</b> (or <b>Install app</b>). <b>iPhone/iPad (Safari):</b> Share button → <b>Add to Home Screen</b>. It then opens full-screen like an app, and still opens without internet. The installed app may get its own storage, separate from the browser — if it shows the sample students (e.g. a Friday class for a student who moved to Thursday) and no payment marks, it simply isn't signed in yet: <b>sign in once inside it</b> (Settings → Account) and your cloud data replaces the samples.</dd>
+          <dt>Does anything remind me about fees that never arrived?</dt><dd>Yes. Last month's fees are expected by the <b>10th of this month</b>; from the <b>11th</b> on, if any of them are still outstanding, a popup lists who owes how much when you open the app, and it comes back <b>every 5 days</b> until you mark the money as received. Only the month immediately before the current one is checked, so it stops on its own when the month rolls over. On phones and tablets the names and amounts are left out of the popup — the same privacy rule the Dashboard and the Payments PIN follow — and "Open Payments" takes you straight to that month. The 5-day pause is remembered per device, so dismissing it on the PC doesn't silence the tablet.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
@@ -2371,7 +2372,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v109";
+const APP_VERSION="v110";
 const APP_BUILT="2026-11-02";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -4050,6 +4051,77 @@ function checkBackupReminder(){
     </span>`;
   document.querySelector(".main")?.prepend(b);
 }
+
+// ── Unpaid-fee reminder (v110) ────────────────────────────────────────────────
+// Last month's fees are expected by the 10th of this month. From the 11th on, if any of them are
+// still outstanding, a popup says so, and it comes back every 5 days until the money is marked as
+// received or the month rolls over. Only the month immediately before the current one is checked.
+//
+// The "last shown" stamp is device-local on purpose: the key carries no "mc_" prefix, so it is
+// neither synced nor part of Export, and writing it can never race the first cloud read of
+// settings. The cost is that each device reminds you separately.
+const FEE_ALERT_KEY="cd_fee_alert";
+const FEE_GRACE_DAY=10;    // the previous month's fees are expected by this day of the current month
+const FEE_REPEAT_DAYS=5;   // how long the popup stays quiet after being shown once
+
+// "YYYY-MM" of the month before the current one, in KST. Month −1 rolls the year back by itself.
+function feeTargetMonth(){
+  const n=nowKST();
+  const d=new Date(n.getFullYear(),n.getMonth()-1,1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+// Who still owes for `mon`, biggest debt first. Other income is deliberately left out — it is
+// always money already received, so it never belongs in an outstanding figure. Summing each
+// student's own diff (never negative) gives exactly the Payments summary's "Remaining".
+function feeOutstanding(mon){
+  const rows=students.map(s=>({s,c:calcM(s.id,mon)})).filter(r=>r.c.diff>0).sort((a,b)=>b.c.diff-a.c.diff);
+  return{rows,total:rows.reduce((a,r)=>a+r.c.diff,0)};
+}
+
+function checkFeeReminder(){
+  if(document.getElementById("mo-feealert")?.classList.contains("show"))return;
+  if(localIsSample())return;                                   // untouched browser: built-in samples only
+  if(syncUser&&!SYNC_KEYS.every(k=>syncReconciled[k]))return;   // signed in, first cloud read still pending
+  if(nowKST().getDate()<=FEE_GRACE_DAY)return;                 // still inside the grace period
+  const mon=feeTargetMonth();
+  const{rows,total}=feeOutstanding(mon);
+  if(total<=0)return;
+  let st=null;try{st=JSON.parse(localStorage.getItem(FEE_ALERT_KEY)||"null");}catch(e){}
+  if(st&&st.m===mon&&Date.now()-st.at<FEE_REPEAT_DAYS*86400000)return;
+  // Stamped when shown, not when dismissed, so closing it any way (button, X, backdrop) is a snooze.
+  try{localStorage.setItem(FEE_ALERT_KEY,JSON.stringify({m:mon,at:Date.now()}));}catch(e){}
+  openFeeAlert(mon,rows,total);
+}
+
+let feeAlertMonth="";
+function openFeeAlert(mon,rows,total){
+  feeAlertMonth=mon;
+  const body=document.getElementById("fa-body");if(!body)return;
+  const lbl=new Date(mon+"-01").toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+  const t=document.getElementById("fa-month");if(t)t.textContent=lbl;
+  // A phone or tablet can be sitting in front of a student, and this popup appears unprompted.
+  // Names and amounts therefore stay hidden wherever Dashboard amounts are hidden or the
+  // Payments PIN is still locked — the same rule those two already follow.
+  if(privacyHidden||pinRequired()){
+    body.innerHTML=`<p style="font-size:13px;line-height:1.6;margin:0 0 6px">Some of <b>${lbl}</b>'s fees have not come in yet.</p>
+      <p class="u-hint" style="margin:0">Amounts are hidden on this device — open <b>Payments</b> to see who still owes.</p>`;
+  }else{
+    body.innerHTML=`<p style="font-size:13px;line-height:1.6;margin:0 0 10px"><b>${lbl}</b> fees were expected by the ${FEE_GRACE_DAY}th of this month. <b style="color:var(--red)">${won(total)}</b> is still outstanding from ${rows.length} student${rows.length===1?"":"s"}.</p>`
+      +rows.map(r=>`<div class="inc-row"><div class="cell-main">${escapeHTMLBasic(r.s.name)}${r.s.archived?' <span class="std-arch-badge">Archived</span>':''}</div><div class="tm" style="color:var(--red)">${won(r.c.diff)}</div><span></span></div>`).join("")
+      +`<div class="inc-row inc-tot"><div class="cell-main">Total</div><div class="tm" style="color:var(--red)">${won(total)}</div><span></span></div>`;
+  }
+  openModal("mo-feealert");
+}
+
+// "Open Payments" — jump straight to the month the reminder is about.
+function feeAlertOpenPayments(){
+  const mon=feeAlertMonth;
+  closeModal("mo-feealert");
+  const inp=document.getElementById("pm-mon");if(inp&&mon)inp.value=mon;
+  showPage("payments");
+}
+
 // One-time migration: move every base64 cover already in localStorage up to Cloud Storage.
 // Saves incrementally so a failure partway through still frees the space reclaimed so far.
 async function migrateCoversToStorage(){
@@ -8809,6 +8881,8 @@ async function reconcileKey(key){
   if(SYNC_KEYS.every(k=>syncReconciled[k])){
     localStorage.removeItem("cd_restore_pending");
     localStorage.removeItem(TOMB_KEY);
+    // Last month's figures are only trustworthy once every collection has been read from the cloud.
+    checkFeeReminder();
   }
 }
 // An unused browser still shows the built-in sample data (14 students, no lessons). That must
@@ -9030,6 +9104,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   showPage("dashboard");
   showOnboarding();
   checkBackupReminder();
+  // Give Firebase auth a moment to resolve: once signed in, checkFeeReminder() waits for the first
+  // cloud read by itself rather than judging last month from possibly stale local data.
+  setTimeout(checkFeeReminder,3000);
+  // The app is often left open for days as an installed PWA, where startup alone would never
+  // reach the 5-day repeat. Six hours is far finer than that interval and costs nothing.
+  setInterval(checkFeeReminder,6*3600000);
 });
 
 </script>
@@ -9067,6 +9147,18 @@ document.addEventListener("DOMContentLoaded",()=>{
       <div class="fg"><label>What for</label><input id="im-note" type="text" maxlength="60" placeholder="Platform bonus"/></div>
     </div>
     <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()"><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')">Cancel</button><button class="btn btn-p" onclick="saveIncome()">Save</button></div>
+  </div>
+</div>
+
+<!-- Unpaid-fee reminder (v110): from the 11th on, while the previous month is still short -->
+<div class="mo" id="mo-feealert">
+  <div class="mb" style="max-width:440px">
+    <div class="mt"><span>⚠️ Unpaid fees · <span id="fa-month"></span></span><button class="bic" onclick="closeModal('mo-feealert')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div id="fa-body" style="padding:14px 16px 0"></div>
+    <div class="mf mf-right">
+      <button class="btn" onclick="closeModal('mo-feealert')">Remind me in 5 days</button>
+      <button class="btn btn-p" onclick="feeAlertOpenPayments()"><i class="ti ti-cash"></i> Open Payments</button>
+    </div>
   </div>
 </div>
 
