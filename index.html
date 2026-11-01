@@ -636,6 +636,10 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .rp-change.up{color:var(--ok-t)}
 .rp-change.down{color:var(--amb-t)}
 .rp-bar{height:6px;border-radius:99px;background:var(--surf2);overflow:hidden}
+.inc-row{display:grid;grid-template-columns:minmax(0,1fr) 120px 30px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bdr)}
+.inc-row:last-child{border-bottom:none}
+.inc-tot{font-weight:700}
+@media(max-width:640px){.inc-row{grid-template-columns:minmax(0,1fr) 90px 30px;gap:6px}}
 .rp-bar span{display:block;height:100%;background:var(--pri);border-radius:99px}
 @media(max-width:640px){
   /* Hiding the later columns left the phone with name, count and hours — the money and the
@@ -930,6 +934,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <div class="prog-track" style="height:10px;margin-bottom:6px"><div class="prog-fill" id="pm-bar" style="width:0%"></div></div>
           <div class="prog-lbl" id="pm-lbl"></div>
         </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch">
+          <div class="ct"><i class="ti ti-coins"></i>Other income</div>
+          <button class="btn btn-xs btn-p" onclick="openIncomeModal()" title="Add an amount that is not a lesson fee"><i class="ti ti-plus"></i> Add</button>
+        </div>
+        <div class="cb p" id="pm-income-body"></div>
       </div>
     </div>
     <div class="card" style="padding:0" id="pm-tab-calendar">
@@ -2245,6 +2256,10 @@ let books=lg("mc_books",DBOOKS);
 let bookLib=lg("mc_booklib",DBOOKLIB);
 let materials=lg("mc_materials",DMATERIAL);
 let todos=lg("mc_todos",[]);
+// Money that is not a lesson fee — the platform's volume/bonus payment, which changes every month
+// and is only known once it arrives. There is no formula to derive it from, so the owner types it.
+// Always money already received: it adds to Expected AND Collected, never to Outstanding (v109).
+let income=lg("mc_income",[]);
 let settings=lg("mc_settings",DSET);
 // Persist all app state. Returns false if ANY key failed to write (ls() already alerted the
 // user), so future callers can react — e.g. skip closing a modal on a failed save.
@@ -2256,10 +2271,11 @@ let settings=lg("mc_settings",DSET);
 // The maps are built from the loaded data at startup so a plain reload never re-stamps anything.
 const _lastSaved={};
 const uid=()=>"id"+Date.now()+Math.random().toString(36).slice(2,5);
-const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","settings"];
+const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","income","settings"];
 const SYNC_VARS={
   students:()=>students, lessons:()=>lessons, homework:()=>homework, curriculum:()=>curriculum,
-  books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, settings:()=>settings,
+  books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, income:()=>income,
+  settings:()=>settings,
 };
 // JSON without the sync stamp — what "did this record change?" is judged on.
 const cmpJson=rec=>JSON.stringify(rec,(k,v)=>k==="_u"?undefined:v);
@@ -2349,14 +2365,14 @@ function cloudJson(rec){
 initLastSaved();
 // Did this browser start on the untouched built-in samples? (See localIsSample() in the sync code.)
 const startedWithSamples=JSON.stringify(students)===JSON.stringify(DS)&&lessons.length===0;
-async function resetData(){if(!confirm("Reset to sample data?"))return;["mc_students","mc_lessons","mc_homework","mc_curriculum","mc_books","mc_booklib","mc_materials","mc_todos","mc_settings"].forEach(k=>localStorage.removeItem(k));location.reload();}
+async function resetData(){if(!confirm("Reset to sample data?"))return;["mc_students","mc_lessons","mc_homework","mc_curriculum","mc_books","mc_booklib","mc_materials","mc_todos","mc_income","mc_settings"].forEach(k=>localStorage.removeItem(k));location.reload();}
 const gs=id=>students.find(s=>s.id===id);
 // "Today" and "this month" are always computed in Korea Standard Time (UTC+9), regardless of
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v108";
-const APP_BUILT="2026-09-13";
+const APP_VERSION="v109";
+const APP_BUILT="2026-11-02";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -2890,6 +2906,11 @@ function calcM(sid,month){
   const cancAmt=cancOccs.reduce((acc,o)=>acc+(o.amt||o.dur*stdHr||0),0); // fee the slot would have earned
   return{exp,paidT,diff,count:act.length,hours,cancelled,cancHours,cancAmt,ov};
 }
+
+// Other income for a month. Deliberately NOT part of calcM(): it belongs to no student, so the
+// per-student rows and the revenue share stay lesson fees only. The month totals add it on top.
+function incomeFor(month){return income.filter(r=>r.month===month);}
+function otherIncome(month){return incomeFor(month).reduce((a,r)=>a+(+r.amt||0),0);}
 
 // ═══════════════════════════════════════════════
 // NAV
@@ -4494,6 +4515,9 @@ function renderDash(){
   const monthOccs=getOccurrencesForMonthAll(m);
   let totE=0,totP=0;
   students.forEach(s=>{const cv=calcM(s.id,m);totE+=cv.exp;totP+=cv.paidT;});
+  // Already received, so it lands on both sides and leaves "unpaid" untouched. The Payments
+  // summary adds the same figure the same way — the two totals have to keep agreeing.
+  const oiM=otherIncome(m);totE+=oiM;totP+=oiM;
   const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   setT("st-s",students.filter(s=>!s.archived).length);setT("st-t",todayActive.length);
   // "Held" has to mean classes that have actually happened. This used to read
@@ -4950,7 +4974,7 @@ function renderReports(){
 function rpStudentsView(rows,sum,months,from){
   let h=`<div class="stats cols-4">
     <div class="sc grn"><div class="sc-lbl">Students taught</div><div class="sc-val">${rows.length}</div><div class="sc-sub">in this period</div></div>
-    <div class="sc blu"><div class="sc-lbl">Lessons held</div><div class="sc-val">${sum.count}</div><div class="sc-sub">${fmtHours(sum.hours)} hrs</div></div>
+    <div class="sc blu"><div class="sc-lbl">Lessons held</div><div class="sc-val">${sum.count}</div><div class="sc-sub">${fmtHoursPlain(sum.hours)} hrs</div></div>
     <div class="sc amb"><div class="sc-lbl">Lessons lost</div><div class="sc-val">${sum.lost}</div><div class="sc-sub">${sum.moved?sum.moved+" more were moved":"none moved"}</div></div>
     <div class="sc gry"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${privacyHidden?"amounts hidden":"of "+won(sum.exp)}</div></div>
   </div>`;
@@ -4982,12 +5006,17 @@ function rpBusinessView(rows,sum,months){
   const trend=months.map(m=>{
     let exp=0,paid=0;
     for(const s of students){const c=calcM(s.id,m);exp+=c.exp;paid+=c.paidT;}
+    const oi=otherIncome(m);exp+=oi;paid+=oi;
     return {m,exp,paid};
   });
-  const collectedPct=sum.exp>0?Math.round(sum.paid/sum.exp*100):0;
+  // Other income belongs to the business, not to any student, so it is added to the headline
+  // figures here and left out of the per-student rows and the revenue share below.
+  const oiTotal=months.reduce((a,m)=>a+otherIncome(m),0);
+  const bExp=sum.exp+oiTotal,bPaid=sum.paid+oiTotal;
+  const collectedPct=bExp>0?Math.round(bPaid/bExp*100):0;
   let h=`<div class="stats cols-4">
-    <div class="sc grn"><div class="sc-lbl">Expected</div><div class="sc-val sm">${pwon(sum.exp)}</div><div class="sc-sub">${sum.count} lessons · ${fmtHours(sum.hours)} hrs</div></div>
-    <div class="sc blu"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${collectedPct}% of expected</div></div>
+    <div class="sc grn"><div class="sc-lbl">Expected</div><div class="sc-val sm">${pwon(bExp)}</div><div class="sc-sub">${sum.count} lessons · ${fmtHoursPlain(sum.hours)} hrs${oiTotal?" · incl. "+pwon(oiTotal)+" other":""}</div></div>
+    <div class="sc blu"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(bPaid)}</div><div class="sc-sub">${collectedPct}% of expected</div></div>
     <div class="sc red"><div class="sc-lbl">Outstanding</div><div class="sc-val sm">${pwon(sum.due)}</div><div class="sc-sub">${rows.filter(r=>r.t.due>0).length} students owe</div></div>
     <div class="sc amb"><div class="sc-lbl">Lost to cancellations</div><div class="sc-val sm">${pwon(sum.lostAmt)}</div><div class="sc-sub">${sum.lost} classes${sum.moved?" · "+sum.moved+" moved, not lost":""}</div></div>
   </div>`;
@@ -5005,7 +5034,7 @@ function rpBusinessView(rows,sum,months){
   h+=`</div>`;
 
   const share=rows.filter(r=>r.t.exp>0);
-  h+=`<div class="card" style="padding:0"><div class="grid-head rp-share"><div>Student</div><div>Share of revenue</div><div>Expected</div><div>Per hour</div><div>Lost</div></div>`;
+  h+=`<div class="card" style="padding:0"><div class="ch"><div class="ct"><i class="ti ti-chart-pie"></i>Revenue by student</div><span class="cell-muted2">lesson fees only${oiTotal?" — "+pwon(oiTotal)+" other income is not split between students":""}</span></div><div class="grid-head rp-share"><div>Student</div><div>Share of revenue</div><div>Expected</div><div>Per hour</div><div>Lost</div></div>`;
   h+=share.map(({s,t})=>{
     const pct=sum.exp?Math.round(t.exp/sum.exp*100):0;
     const perH=t.hours>0?Math.round(t.exp/t.hours):0;
@@ -5445,12 +5474,13 @@ function renderPayments(){
   // before they left) — those lessons are real money and the Dashboard counts them, so the
   // Summary must too, or the two totals disagree.
   const ss=students.filter(s=>!s.archived||getOccurrencesForMonth(s.id,mon).length>0).map(s=>{const c=calcM(s.id,mon);totE+=c.exp;totP+=c.paidT;totC+=c.cancelled;totH+=c.hours;totCH+=c.cancHours;totCA+=c.cancAmt;return{s,c};}).sort((a,b)=>{const o={unpaid:0,partial:1,paid:2,cancelled:3};return(o[a.c.ov]??4)-(o[b.c.ov]??4);});
+  const oi=otherIncome(mon);totE+=oi;totP+=oi;
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   renderPinState();
-  set("pm-ex",won(totE));set("pm-pd",won(totP));set("pm-rm",won(Math.max(0,totE-totP)));set("pm-hr",fmtHours(totH)+" hrs");
+  set("pm-ex",won(totE));set("pm-pd",won(totP));set("pm-rm",won(Math.max(0,totE-totP)));set("pm-hr",fmtHoursPlain(totH)+" hrs");
   const cnEl=document.getElementById("pm-cn");
   if(cnEl)cnEl.innerHTML=totC
-    ?`${totC} lessons<div style="font-size:11px;font-weight:500;color:var(--txt3);margin-top:2px">${fmtHours(totCH)}h · ${won(totCA)}</div>`
+    ?`${totC} lessons<div style="font-size:11px;font-weight:500;color:var(--txt3);margin-top:2px">${fmtHours(totCH)} · ${won(totCA)}</div>`
     :"0 lessons";
   const pct=totE>0?Math.round(totP/totE*100):0;
   const pb=document.getElementById("pm-bar");if(pb)pb.style.width=pct+"%";
@@ -5461,7 +5491,7 @@ function renderPayments(){
       <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div>
       <div class="cell-muted">${s.k} · ${s.sched}</div>
     </div>
-    <div class="tm" style="text-align:center" title="lessons · hours">${c.count}${c.hours?` · ${fmtHours(c.hours)}h`:""}</div>
+    <div class="tm" style="text-align:center" title="lessons · hours">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
     <div class="tm" style="text-align:center;color:var(--txt3)">${c.cancelled||"—"}</div>
     <div class="tm">${won(c.exp)}</div>
     <div class="tm">${won(c.paidT)}</div>
@@ -5476,7 +5506,68 @@ function renderPayments(){
       ${c.exp>0?`<button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>`:'<span class="pm-req"></span>'}
     </div>
   </div>`).join("");
+  renderIncomeCard(mon);
   renderPaymentCalendar(mon);
+}
+
+// ── Other income (v109) ───────────────────────────────────────────────────────
+let editIncomeId=null;
+function renderIncomeCard(mon){
+  const box=document.getElementById("pm-income-body");if(!box)return;
+  const list=incomeFor(mon);
+  if(!list.length){
+    box.innerHTML='<div class="u-hint">Nothing for this month yet. Anything you were paid that is not a lesson fee — a platform bonus, for instance — goes here, and counts towards Expected and Collected above.</div>';
+    return;
+  }
+  box.innerHTML=list.map(r=>`<div class="inc-row">
+      <div class="cell-main">${escapeHTMLBasic(r.note||"Other income")}</div>
+      <div class="tm">${won(+r.amt||0)}</div>
+      <button class="bic" onclick="openIncomeModal('${r.id}')" title="Edit this entry"><i class="ti ti-pencil"></i></button>
+    </div>`).join("")
+    +`<div class="inc-row inc-tot"><div class="cell-main">Total</div><div class="tm">${won(otherIncome(mon))}</div><span></span></div>`;
+}
+function openIncomeModal(id){
+  editIncomeId=id||null;
+  const rec=id?income.find(r=>r.id===id):null;
+  const mon=document.getElementById("pm-mon")?.value||tm();
+  const set=(i,v)=>{const e=document.getElementById(i);if(e)e.value=v;};
+  const t=document.getElementById("im-title");if(t)t.textContent=rec?"Edit other income":"Add other income";
+  set("im-month",rec?rec.month:mon);
+  set("im-amt",rec?(rec.amt||""):"");
+  set("im-note",rec?(rec.note||""):"");
+  const del=document.getElementById("im-delete");if(del)del.style.display=rec?"":"none";
+  openModal("mo-income");
+}
+function saveIncome(){
+  const month=document.getElementById("im-month")?.value||"";
+  const amt=Math.round(+document.getElementById("im-amt")?.value||0);
+  const note=(document.getElementById("im-note")?.value||"").trim();
+  if(!month){alert("Pick a month.");return;}
+  if(!(amt>0)){alert("Enter an amount greater than 0.");return;}
+  if(editIncomeId){
+    const rec=income.find(r=>r.id===editIncomeId);
+    if(rec){rec.month=month;rec.amt=amt;rec.note=note;}
+  }else{
+    income.push({id:uid(),month,amt,note});
+  }
+  if(!save())return;
+  closeModal("mo-income");
+  // Show the month that was just edited, or the figure appears to have gone nowhere.
+  const inp=document.getElementById("pm-mon");
+  if(inp&&inp.value!==month)inp.value=month;
+  renderPayments();renderDash();
+  showToast("Saved");
+}
+function deleteIncome(){
+  if(!editIncomeId)return;
+  const idx=income.findIndex(r=>r.id===editIncomeId);
+  if(idx<0)return;
+  if(!confirm("Delete this entry?"))return;
+  income.splice(idx,1);        // splice in place — the sync layer holds this very array
+  if(!save())return;
+  closeModal("mo-income");
+  renderPayments();renderDash();
+  showToast("Deleted");
 }
 
 function pmChangeMonth(delta){
@@ -8966,6 +9057,19 @@ document.addEventListener("DOMContentLoaded",()=>{
     </div>
   </div>
 </div>
+<div class="mo" id="mo-income">
+  <div class="mb" style="max-width:420px">
+    <div class="mt"><span id="im-title">Other income</span><button class="bic" onclick="closeModal('mo-income')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div style="padding:14px 16px 0">
+      <p class="u-hint" style="margin-bottom:12px">Money you were paid that is not a lesson fee — a platform bonus, for example. It is treated as already received, so it adds to both Expected and Collected and never appears as outstanding.</p>
+      <div class="fg"><label>Month</label><input id="im-month" type="month"/></div>
+      <div class="fg"><label>Amount (₩)</label><input id="im-amt" type="number" step="1000" min="0" placeholder="30000"/></div>
+      <div class="fg"><label>What for</label><input id="im-note" type="text" maxlength="60" placeholder="Platform bonus"/></div>
+    </div>
+    <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()"><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')">Cancel</button><button class="btn btn-p" onclick="saveIncome()">Save</button></div>
+  </div>
+</div>
+
 <div class="mo" id="mo-schedfrom" style="z-index:2600">
   <div class="mb" style="max-width:340px">
     <div class="mt"><span>New schedule start date</span><button class="bic" onclick="schedFromCancel()" title="Close"><i class="ti ti-x"></i></button></div>
