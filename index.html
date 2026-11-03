@@ -474,6 +474,29 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .pr-status{display:grid;grid-template-columns:62px 86px 122px;gap:8px;align-items:center}
 .pr-status .badge{justify-content:center}
 .pr-status .pm-act,.pr-status .pm-req{width:100%;justify-content:center;height:24px}
+/* Split-screen PC windows and tablets: at full width the row needs ~1030px, so in a half-screen
+   window the Status buttons fell off the right edge and could only be reached by scrolling the
+   card sideways. Everything tightens instead, and the two action buttons drop to their icons —
+   both keep their tooltips. The header's column template is written inline, hence !important. */
+@media(max-width:1280px){
+  .pr,.grid-head[data-header-page="payments"]{grid-template-columns:minmax(90px,1fr) 70px 50px 80px 80px 80px 158px!important;gap:6px!important}
+  .pr-status{grid-template-columns:62px 42px 42px;gap:6px}
+  .pr-status .btn-lbl{display:none}
+  /* Without this the student cell refuses to shrink below its text and pushes the row wide again */
+  .pr>:first-child{min-width:0}
+  .pr>:first-child>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+/* Below ~1000px the sidebar is still on screen but the window is narrower again — a 1366-wide
+   laptop split down the middle, or a quarter-screen window. One more notch tighter. */
+@media(max-width:1000px){
+  .pr,.grid-head[data-header-page="payments"]{grid-template-columns:minmax(72px,1fr) 62px 50px 70px 70px 70px 150px!important;padding-left:10px!important;padding-right:10px!important}
+  .pr-status{grid-template-columns:58px 40px 40px;gap:6px}
+}
+/* Belt and braces: a column heading that outgrows its track clips instead of running into its
+   neighbour, which is how "Cancel" and "Expected" ended up reading as one word. */
+@media(max-width:1280px){
+  .grid-head[data-header-page="payments"]>*{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
 .pr:hover{background:#fafbfc}
 .pr:last-child{border-bottom:none}
 .pr:hover{background:#fafbfc}
@@ -2372,8 +2395,8 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v110";
-const APP_BUILT="2026-11-02";
+const APP_VERSION="v111";
+const APP_BUILT="2026-11-03";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -5571,11 +5594,11 @@ function renderPayments(){
     <div class="pr-status">
       ${c.count===0&&!c.cancelled?'<span class="badge bc">No lessons</span>':bdg(c.ov)}
       ${c.diff>0
-        ?`<button class="btn btn-xs btn-p pm-act" onclick="markAllPaid('${s.id}','${mon}')" title="Mark every unpaid lesson this month as paid"><i class="ti ti-check"></i> All paid</button>`
+        ?`<button class="btn btn-xs btn-p pm-act" onclick="markAllPaid('${s.id}','${mon}')" title="Mark every unpaid lesson this month as paid"><i class="ti ti-check"></i><span class="btn-lbl"> All paid</span></button>`
         :c.paidT>0
-          ?`<button class="btn btn-xs pm-act" onclick="markAllUnpaid('${s.id}','${mon}')" title="Undo — mark this month's paid lessons as unpaid again"><i class="ti ti-arrow-back-up"></i> Undo paid</button>`
+          ?`<button class="btn btn-xs pm-act" onclick="markAllUnpaid('${s.id}','${mon}')" title="Undo — mark this month's paid lessons as unpaid again"><i class="ti ti-arrow-back-up"></i><span class="btn-lbl"> Undo paid</span></button>`
           :`<span class="pm-act"></span>`}
-      ${c.exp>0?`<button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')"><i class="ti ti-copy"></i> Request payment</button>`:'<span class="pm-req"></span>'}
+      ${c.exp>0?`<button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')" title="Copy a payment-request message for this student"><i class="ti ti-copy"></i><span class="btn-lbl"> Request payment</span></button>`:'<span class="pm-req"></span>'}
     </div>
   </div>`).join("");
   renderIncomeCard(mon);
