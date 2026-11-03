@@ -1174,16 +1174,16 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
             <span class="ph-chip" onclick="insertPhPay('[remaining_amount]')">[remaining_amount]</span>
           </div>
         </div>
-        <div class="g2">
-          <div class="card">
-            <div class="ch"><div class="ct text-red"><i class="ti ti-x"></i>Unpaid template</div>
-              <button class="btn btn-sm btn-p" onclick="savePayTmpl('unpaid')"><i class="ti ti-check"></i> Save</button></div>
-            <div class="cb p"><textarea class="tmpl-textarea" id="tmpl-unpaid"></textarea></div>
-          </div>
-          <div class="card">
-            <div class="ch"><div class="ct" style="color:var(--amb)"><i class="ti ti-minus"></i>Partial template</div>
-              <button class="btn btn-sm btn-p" onclick="savePayTmpl('partial')"><i class="ti ti-check"></i> Save</button></div>
-            <div class="cb p"><textarea class="tmpl-textarea" id="tmpl-partial"></textarea></div>
+        <!-- One template for every request (v112). There used to be a second "Partial" template,
+             picked whenever part of the month was already paid, so the same button produced two
+             different-looking messages. The message only ever lists what is still owed, so one
+             format covers both cases. -->
+        <div class="card">
+          <div class="ch"><div class="ct"><i class="ti ti-message"></i>Payment request template</div>
+            <button class="btn btn-sm btn-p" onclick="savePayTmpl()"><i class="ti ti-check"></i> Save</button></div>
+          <div class="cb p">
+            <p class="u-hint" style="margin-bottom:8px">Used by every <b>Request payment</b> button, whether nothing or part of the month has been paid — the message lists only the lessons still owed. <b>[total_hours]</b> always comes out as e.g. "6시간".</p>
+            <textarea class="tmpl-textarea" id="tmpl-unpaid"></textarea>
           </div>
         </div>
       </div>
@@ -2165,6 +2165,7 @@ const DSET={
   activities:["Board game","Card game","Show & Tell","Drawing","Free talk","Reading for fun","Spelling game"],
   parentTmpl:"안녕하세요, [korean_name] 어머님!\n오늘 [date][(day)] 수업 내용 전달드립니다.\n\n📖 Topic: [topic]\n\n[workbook]\n[books_read]\n[school_hw]\n[break_activity]\n\n[note_to_parent]\n\n감사합니다! 😊",
   payUnpaid:"안녕하세요, [korean_name] 어머님!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours], [expected_amount] 입금 부탁드립니다~\n\n감사합니다!",
+  // No longer used (v112: one template for every request). Kept so older settings still load.
   payPartial:"안녕하세요,\n[month]월 수업료 관련해서 연락드렸습니다.\n[lesson_dates] [total_hours]시간, [expected_amount] 입금 부탁드립니다.\n감사합니다~",
 };
 
@@ -2395,7 +2396,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v111";
+const APP_VERSION="v112";
 const APP_BUILT="2026-11-03";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -4393,7 +4394,6 @@ function renderSettings(){
   // built-in text rather than the string "undefined". Nothing is written until the user saves.
   const pt=document.getElementById("pt-tmpl");if(pt)pt.value=settings.parentTmpl??DSET.parentTmpl;
   const tu=document.getElementById("tmpl-unpaid");if(tu)tu.value=settings.payUnpaid??DSET.payUnpaid;
-  const tpa=document.getElementById("tmpl-partial");if(tpa)tpa.value=settings.payPartial??DSET.payPartial;
 }
 function addWorkbookTag(){
   const inp=document.getElementById("wb-new");
@@ -4408,11 +4408,9 @@ function removeWb(i){settings.workbooks.splice(i,1);save();renderSettings();}
 function addActivityTag(){const inp=document.getElementById("act-new");const v=inp?.value.trim();if(!v)return;if(!settings.activities.includes(v)){settings.activities.push(v);save();}inp.value="";renderSettings();}
 function removeAct(i){settings.activities.splice(i,1);save();renderSettings();}
 function saveParentTmpl(){const ta=document.getElementById("pt-tmpl");settings.parentTmpl=ta?.value??"";save();showToast("Parent note template saved");}
-function savePayTmpl(type){
-  const map={unpaid:"tmpl-unpaid",partial:"tmpl-partial"};
-  const ta=document.getElementById(map[type]);if(!ta)return;
-  if(type==="unpaid")settings.payUnpaid=ta.value;
-  else settings.payPartial=ta.value;
+function savePayTmpl(){
+  const ta=document.getElementById("tmpl-unpaid");if(!ta)return;
+  settings.payUnpaid=ta.value;
   save();showToast("Payment template saved");
 }
 function insertPh(id,ph){
@@ -4421,11 +4419,9 @@ function insertPh(id,ph){
   ta.value=ta.value.slice(0,s)+ph+ta.value.slice(e);
   ta.selectionStart=ta.selectionEnd=s+ph.length;ta.focus();
 }
-function insertPhPay(ph){
-  const focused=document.querySelector("#st-pay-tmpl textarea:focus");
-  if(focused)insertPh(focused.id,ph);
-  else{const first=document.querySelector("#st-pay-tmpl textarea");if(first)insertPh(first.id,ph);}
-}
+// There is one payment template now. This used to look inside "#st-pay-tmpl", an element that does
+// not exist, so clicking a payment placeholder chip silently did nothing.
+function insertPhPay(ph){insertPh("tmpl-unpaid",ph);}
 
 // ═══════════════════════════════════════════════
 // GENERATE PARENT NOTE
@@ -4541,7 +4537,6 @@ function copyPayMsg(sid,month){
   const m=parseInt(month.split("-")[1]);
   const occ=getOccurrencesForMonth(sid,month);
   const c=calcM(sid,month);
-  const usePartial=c.ov==="partial"; // matches the Status badge shown in the Summary table
   // Only lessons that are genuinely unchecked/unpaid (no money received for them at all) —
   // excludes cancelled, fully-paid, and partially-paid lessons.
   // Treat anything that isn't a known "money received" or "cancelled" status as unpaid.
@@ -4564,11 +4559,17 @@ function copyPayMsg(sid,month){
   const datesStr=datesSorted
     .map(o=>{const [,mo,da]=o.date.split("-");return parseInt(mo)+"/"+parseInt(da)+"("+fmtHours(o.dur)+")";})
     .join(", ");
-  const tmpl0=usePartial?settings.payPartial:settings.payUnpaid;
+  // ONE template for every request (v112). Until v111 a student whose month was partly paid got
+  // the separate "Partial" template, so the same button produced two different-looking messages.
+  // The text below only ever lists what is still owed, which is right in both cases. Falls back
+  // to the built-in text on a device whose settings predate the template, instead of crashing.
+  const tmpl0=settings.payUnpaid??DSET.payUnpaid;
   const tmpl=tmpl0.replace(/\[student_name\]/g,s.name).replace(/\[korean_name\]/g,s.k).replace(/\[month\]/g,m)
     .replace(/\[lesson_count\]/g,unpaidOccs.length)
     .replace(/\[lesson_dates\]/g,datesStr||"—")
-    .replace(/\[total_hours\]/g,fmtHoursPlain(totalHours))
+    // Always "6시간". The old templates disagreed — one wrote "[total_hours]시간", the other a bare
+    // "[total_hours]", which printed "총 4회 6," — so a "시간" already written after it is absorbed.
+    .replace(/\[total_hours\](\s*시간)?/g,fmtHoursPlain(totalHours)+"시간")
     .replace(/\[expected_amount\]/g,won(totalOwed))
     .replace(/\[paid_amount\]/g,won(c.paidT))
     .replace(/\[remaining_amount\]/g,won(totalOwed));
@@ -4579,8 +4580,7 @@ function fmtHours(h){
   const n=Math.round(h*10)/10;
   return (n%1===0?n.toFixed(0):n.toFixed(1))+"hr";
 }
-// Same rounding as fmtHours, but without the "hr" suffix — for [total_hours], since the
-// template text usually already says "시간" in Korean right after the number.
+// Same rounding as fmtHours, but without the "hr" suffix — copyPayMsg() adds "시간" itself.
 function fmtHoursPlain(h){
   const n=Math.round(h*10)/10;
   return n%1===0?n.toFixed(0):n.toFixed(1);
