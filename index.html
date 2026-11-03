@@ -258,6 +258,14 @@ tbody tr:hover td{background:#fafbfc}
   /* Books: the first column is the checkbox — sticking it would be pointless */
   #page-booklib .grid-head>:first-child,#page-booklib .grid-row>:first-child{position:static;margin-left:0;padding-left:0;box-shadow:none}
 }
+/* Any width: a list wider than its card (syncListWidths sets .list-scroll above 1280px) scrolls
+   sideways with its first column pinned — the same treatment the narrow layout above gives. */
+.card.list-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;background-image:linear-gradient(to right,transparent 92%,rgba(15,23,42,.08) 100%);background-attachment:local}
+.card.list-scroll .grid-head{position:static}
+.card.list-scroll .grid-head>:first-child,.card.list-scroll .grid-row>:first-child{position:sticky;left:0;z-index:2;background:var(--surf);margin-left:-14px;padding-left:14px;box-shadow:6px 0 8px -6px rgba(15,23,42,.14)}
+.card.list-scroll .grid-head>:first-child{background:var(--surf2)}
+.card.list-scroll .grid-row:hover>:first-child{background:#fafbfc}
+#page-booklib .card.list-scroll .grid-head>:first-child,#page-booklib .card.list-scroll .grid-row>:first-child{position:static;margin-left:0;padding-left:0;box-shadow:none}
 /* ── Draggable column widths ──
    A thin handle sits on the right edge of every list-header cell. Dragging it resizes that
    column; widths persist per page in localStorage. Double-click a handle to reset the page. */
@@ -508,7 +516,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
    window the Status buttons fell off the right edge and could only be reached by scrolling the
    card sideways. Everything tightens instead, and the two action buttons drop to their icons —
    both keep their tooltips. The header's column template is written inline, hence !important. */
-@media(max-width:1280px){
+@media(max-width:1320px){ /* the full row needs the card to be ~1045px — a 1308px window */
   .pr,.grid-head[data-header-page="payments"]{grid-template-columns:minmax(90px,1fr) 70px 50px 80px 80px 80px 158px!important;gap:6px!important}
   .pr-status{grid-template-columns:62px 42px 42px;gap:6px}
   .pr-status .btn-lbl{display:none}
@@ -524,7 +532,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 }
 /* Belt and braces: a column heading that outgrows its track clips instead of running into its
    neighbour, which is how "Cancel" and "Expected" ended up reading as one word. */
-@media(max-width:1280px){
+@media(max-width:1320px){
   .grid-head[data-header-page="payments"]>*{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
 .pr:hover{background:#fafbfc}
@@ -1612,7 +1620,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   </div>
   <div class="pc">
     <div class="card">
-      <div class="grid-head" style="display:grid;grid-template-columns:216px 140px 110px 92px 56px 196px 110px 74px 76px;gap:8px" data-header-page="workbooks">
+      <div class="grid-head" style="display:grid;grid-template-columns:minmax(160px,216px) minmax(110px,140px) 110px 92px 56px minmax(140px,196px) 110px 74px 76px;gap:8px" data-header-page="workbooks">
         <div class="col-hdr" data-col="name">Title</div>
         <div class="col-hdr" data-col="brand">Publisher</div>
         <div class="col-hdr" data-col="cat">Category</div>
@@ -6041,7 +6049,7 @@ function renderBooks(){
         <span class="cell-muted">(${items.length})</span>
       </div>
       ${items.map(b=>`
-        <div class="grid-row clickable" style="grid-template-columns:216px 140px 110px 92px 56px 196px 110px 74px 76px;min-height:62px;align-items:center" title="Double-click to edit" ondblclick="openBookModal('${b.id}')">
+        <div class="grid-row clickable" style="grid-template-columns:minmax(160px,216px) minmax(110px,140px) 110px 92px 56px minmax(140px,196px) 110px 74px 76px;min-height:62px;align-items:center" title="Double-click to edit" ondblclick="openBookModal('${b.id}')">
           <div style="display:flex;align-items:center;gap:8px;overflow:hidden">
             ${b.thumb?`<img src="${b.thumb}" style="width:40px;height:54px;object-fit:cover;object-position:center;border-radius:3px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.15)" onerror="this.style.display='none'"/>`:"<div class='cover-ph' title='No cover yet'><i class='ti ti-book-2'></i></div>"}
             <span class="cell-main" title="${b.name}">${b.name}</span>
@@ -8917,10 +8925,14 @@ function syncListWidths(){
         ?tpl.replace(/minmax\(0(?:px)?,\s*1fr\)/g,"minmax(160px,1fr)").replace(/(^|\s)1fr(?=\s|$)/g,"$1minmax(160px,1fr)")
         :tpl;
     });
-    if(!narrow)return;
     // scrollWidth stops at the last column's edge (no right padding) once content overflows
     let w=0;els.forEach(e=>{const over=e.scrollWidth>e.clientWidth;w=Math.max(w,e.scrollWidth+(over?(parseFloat(getComputedStyle(e).paddingRight)||0):0));});
-    if(w>card.clientWidth+1)els.forEach(e=>{e.style.minWidth=w+"px";});
+    const overflows=w>card.clientWidth+1;
+    if(overflows)els.forEach(e=>{e.style.minWidth=w+"px";});
+    // Above 1280px a list that still doesn't fit (Books at 1366–1440, a Galaxy Tab S8+ held sideways)
+    // used to spill past its card. It now scrolls sideways like the narrow layout does; a list that
+    // fits is untouched and keeps its sticky heading.
+    card.classList.toggle("list-scroll",!narrow&&overflows);
   });
 }
 // Esc closes the topmost open dialog by pressing its own Close/Cancel button, so promise-based
