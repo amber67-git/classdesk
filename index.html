@@ -2164,7 +2164,9 @@ const DSET={
   gcalClientId:"",gcalCalendarId:"",gcalGreenHourly:0,gcalTitleMap:{},
   activities:["Board game","Card game","Show & Tell","Drawing","Free talk","Reading for fun","Spelling game"],
   parentTmpl:"안녕하세요, [korean_name] 어머님!\n오늘 [date][(day)] 수업 내용 전달드립니다.\n\n📖 Topic: [topic]\n\n[workbook]\n[books_read]\n[school_hw]\n[break_activity]\n\n[note_to_parent]\n\n감사합니다! 😊",
-  payUnpaid:"안녕하세요, [korean_name] 어머님!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours], [expected_amount] 입금 부탁드립니다~\n\n감사합니다!",
+  // v112: no "[korean_name] 어머님" in the greeting — the owner asked for it out. A device still
+  // holding the old default unedited gets this one too; see payTemplate().
+  payUnpaid:"안녕하세요!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours]시간, [expected_amount] 입금 부탁드립니다~\n\n감사합니다!",
   // No longer used (v112: one template for every request). Kept so older settings still load.
   payPartial:"안녕하세요,\n[month]월 수업료 관련해서 연락드렸습니다.\n[lesson_dates] [total_hours]시간, [expected_amount] 입금 부탁드립니다.\n감사합니다~",
 };
@@ -2396,7 +2398,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v112";
+const APP_VERSION="v113";
 const APP_BUILT="2026-11-03";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -2479,6 +2481,8 @@ document.addEventListener("visibilitychange",()=>{
     if(curPage==="payments"&&settings.payPin)showPage("dashboard");
   }
   if(isTouchDevice()&&!privacyHidden){privacyHidden=true;if(curPage==="dashboard")renderDash();}
+  // An unpaid-fee popup left open with names on it must be masked before the app is seen again
+  if(typeof refreshFeeAlert==="function")refreshFeeAlert();
 });
 function renderTopbarActions(p){
   const el=document.getElementById("tb-actions");if(el)el.innerHTML="";
@@ -4103,10 +4107,18 @@ function feeOutstanding(mon){
   return{rows,total:rows.reduce((a,r)=>a+r.c.diff,0)};
 }
 
+// Set once Firebase has said whether anyone is signed in (or after a fallback delay, for when
+// Firebase never loads). Until then local data may be a stale mirror of the cloud.
+let feeAuthKnown=false;
+// Judged on the data as it is NOW, not as it was at page load: a fresh device that starts on the
+// samples and then signs in must start reminding as soon as the real data has arrived.
+function dataIsSample(){return lessons.length===0&&JSON.stringify(students)===JSON.stringify(DS);}
+
 function checkFeeReminder(){
   if(document.getElementById("mo-feealert")?.classList.contains("show"))return;
-  if(localIsSample())return;                                   // untouched browser: built-in samples only
-  if(syncUser&&!SYNC_KEYS.every(k=>syncReconciled[k]))return;   // signed in, first cloud read still pending
+  if(!feeAuthKnown)return;                                      // sign-in state not known yet
+  if(syncUser&&!SYNC_KEYS.every(k=>syncSettled[k]))return;      // signed in, cloud read not finished
+  if(dataIsSample())return;                                     // untouched browser: built-in samples only
   if(nowKST().getDate()<=FEE_GRACE_DAY)return;                 // still inside the grace period
   const mon=feeTargetMonth();
   const{rows,total}=feeOutstanding(mon);
@@ -4118,11 +4130,21 @@ function checkFeeReminder(){
   openFeeAlert(mon,rows,total);
 }
 
-let feeAlertMonth="";
+let feeAlertMonth="",feeAlertData=null;
 function openFeeAlert(mon,rows,total){
-  feeAlertMonth=mon;
-  const body=document.getElementById("fa-body");if(!body)return;
-  const lbl=new Date(mon+"-01").toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+  feeAlertMonth=mon;feeAlertData={rows,total};
+  renderFeeAlert();
+  openModal("mo-feealert");
+}
+// Re-drawn, not just opened: when the app is left on a phone or tablet the privacy mask comes back
+// on, and a popup that was already showing names must lose them before the app is reopened.
+function renderFeeAlert(){
+  const body=document.getElementById("fa-body");if(!body||!feeAlertData)return;
+  const mon=feeAlertMonth,{rows,total}=feeAlertData;
+  // Built from the year and month directly — "2026-10-01" parses as UTC midnight, which is still
+  // 30 September anywhere west of Greenwich.
+  const[yy,mm]=mon.split("-").map(Number);
+  const lbl=new Date(yy,mm-1,1).toLocaleDateString("en-GB",{month:"long",year:"numeric"});
   const t=document.getElementById("fa-month");if(t)t.textContent=lbl;
   // A phone or tablet can be sitting in front of a student, and this popup appears unprompted.
   // Names and amounts therefore stay hidden wherever Dashboard amounts are hidden or the
@@ -4135,7 +4157,9 @@ function openFeeAlert(mon,rows,total){
       +rows.map(r=>`<div class="inc-row"><div class="cell-main">${escapeHTMLBasic(r.s.name)}${r.s.archived?' <span class="std-arch-badge">Archived</span>':''}</div><div class="tm" style="color:var(--red)">${won(r.c.diff)}</div><span></span></div>`).join("")
       +`<div class="inc-row inc-tot"><div class="cell-main">Total</div><div class="tm" style="color:var(--red)">${won(total)}</div><span></span></div>`;
   }
-  openModal("mo-feealert");
+}
+function refreshFeeAlert(){
+  if(document.getElementById("mo-feealert")?.classList.contains("show"))renderFeeAlert();
 }
 
 // "Open Payments" — jump straight to the month the reminder is about.
@@ -4393,7 +4417,7 @@ function renderSettings(){
   // A template can be missing on a device whose settings came from an older cloud copy — show the
   // built-in text rather than the string "undefined". Nothing is written until the user saves.
   const pt=document.getElementById("pt-tmpl");if(pt)pt.value=settings.parentTmpl??DSET.parentTmpl;
-  const tu=document.getElementById("tmpl-unpaid");if(tu)tu.value=settings.payUnpaid??DSET.payUnpaid;
+  const tu=document.getElementById("tmpl-unpaid");if(tu)tu.value=payTemplate();
 }
 function addWorkbookTag(){
   const inp=document.getElementById("wb-new");
@@ -4532,6 +4556,16 @@ function markAllPaid(sid,month){
   renderPayments();
 }
 
+// The template in force. The default used to greet "[korean_name] 어머님"; the owner asked for that
+// out (v112). Settings that still hold that old default word for word were never edited by hand, so
+// they get the new default — worked out here on every read rather than written back, because a
+// write to settings at startup could beat the first cloud read and overwrite the synced copy.
+// A template the owner did edit is left exactly as it is.
+const LEGACY_PAY_UNPAID="안녕하세요, [korean_name] 어머님!\n[month]월 수업료 안내드립니다.\n\n[lesson_dates]\n\n총 [lesson_count]회 [total_hours], [expected_amount] 입금 부탁드립니다~\n\n감사합니다!";
+function payTemplate(){
+  const t=settings.payUnpaid;
+  return(t==null||t===LEGACY_PAY_UNPAID)?DSET.payUnpaid:t;
+}
 function copyPayMsg(sid,month){
   const s=gs(sid);if(!s)return;
   const m=parseInt(month.split("-")[1]);
@@ -4557,19 +4591,22 @@ function copyPayMsg(sid,month){
   const totalHours=unpaidOccs.reduce((sum,o)=>sum+(o.dur||0),0);
   const datesSorted=[...unpaidOccs].sort((a,b)=>a.date.localeCompare(b.date));
   const datesStr=datesSorted
-    .map(o=>{const [,mo,da]=o.date.split("-");return parseInt(mo)+"/"+parseInt(da)+"("+fmtHours(o.dur)+")";})
+    // "10/12(1.5시간)" — the same unit as the total line below, not an English "hr" in a Korean message
+    .map(o=>{const [,mo,da]=o.date.split("-");return parseInt(mo)+"/"+parseInt(da)+"("+fmtHoursPlain(o.dur)+"시간)";})
     .join(", ");
   // ONE template for every request (v112). Until v111 a student whose month was partly paid got
   // the separate "Partial" template, so the same button produced two different-looking messages.
   // The text below only ever lists what is still owed, which is right in both cases. Falls back
   // to the built-in text on a device whose settings predate the template, instead of crashing.
-  const tmpl0=settings.payUnpaid??DSET.payUnpaid;
+  const tmpl0=payTemplate();
   const tmpl=tmpl0.replace(/\[student_name\]/g,s.name).replace(/\[korean_name\]/g,s.k).replace(/\[month\]/g,m)
     .replace(/\[lesson_count\]/g,unpaidOccs.length)
     .replace(/\[lesson_dates\]/g,datesStr||"—")
     // Always "6시간". The old templates disagreed — one wrote "[total_hours]시간", the other a bare
     // "[total_hours]", which printed "총 4회 6," — so a "시간" already written after it is absorbed.
-    .replace(/\[total_hours\](\s*시간)?/g,fmtHoursPlain(totalHours)+"시간")
+    // Only a standalone "시간" on the same line: never across a line break, never the start of a
+    // longer word like "시간표" (no partial replacement inside Korean words).
+    .replace(/\[total_hours\](?:[ \t]*시간(?![가-힣]))?/g,fmtHoursPlain(totalHours)+"시간")
     .replace(/\[expected_amount\]/g,won(totalOwed))
     .replace(/\[paid_amount\]/g,won(c.paidT))
     .replace(/\[remaining_amount\]/g,won(totalOwed));
@@ -8135,6 +8172,7 @@ let syncUnwatchers=[];        // detach functions for the per-collection listene
 let syncApplyingRemote=false; // true while remote changes are being written into local state
 const cloudSeen={};           // key → Map id → {u,d}: every record the cloud has told us about
 const syncReconciled={};      // key → true once this device has reconciled with the server
+const syncSettled={};         // key → true once that reconcile has actually finished
 let _syncRerenderTimer=null;
 let _syncInFlight=0;
 
@@ -8837,6 +8875,11 @@ async function onSyncSnapshot(key,ev){
     syncReconciled[key]=true;
     try{await reconcileKey(key);}
     catch(e){console.error("Reconcile failed:",key,e);setSyncStatus("Sync error: "+(e.message||e.code),"err");return;}
+    // syncReconciled flips BEFORE the reconcile runs (it guards against running it twice), so it
+    // can't say "finished". This one is only set once the reconcile has actually completed.
+    syncSettled[key]=true;
+    // Last month's figures are only trustworthy once every collection has really been reconciled.
+    if(SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
   }
   if(!ev.fromCache&&_syncInFlight<=0)syncStatusIdle();
 }
@@ -8904,8 +8947,6 @@ async function reconcileKey(key){
   if(SYNC_KEYS.every(k=>syncReconciled[k])){
     localStorage.removeItem("cd_restore_pending");
     localStorage.removeItem(TOMB_KEY);
-    // Last month's figures are only trustworthy once every collection has been read from the cloud.
-    checkFeeReminder();
   }
 }
 // An unused browser still shows the built-in sample data (14 students, no lessons). That must
@@ -8924,7 +8965,7 @@ function stopCloudSync(){
   syncUnwatchers.forEach(u=>{try{u();}catch(e){}});
   syncUnwatchers=[];
   syncUser=null;
-  SYNC_KEYS.forEach(k=>{delete cloudSeen[k];delete syncReconciled[k];});
+  SYNC_KEYS.forEach(k=>{delete cloudSeen[k];delete syncReconciled[k];delete syncSettled[k];});
   setSyncStatus("");
 }
 
@@ -9109,6 +9150,10 @@ function initAuthListener(){
       if(user)startCloudSync(user);
       else stopCloudSync();
     }catch(e){console.error(e);setSyncStatus("Sync error: "+(e.message||e.code),"err");}
+    // Now it's known whether this device is signed in. Signed out: local data is the truth, so
+    // check straight away. Signed in: onSyncSnapshot checks once every collection has settled.
+    feeAuthKnown=true;
+    if(!user)checkFeeReminder();
   });
 }
 window.addEventListener("firebase-ready",initAuthListener);
@@ -9127,9 +9172,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   showPage("dashboard");
   showOnboarding();
   checkBackupReminder();
-  // Give Firebase auth a moment to resolve: once signed in, checkFeeReminder() waits for the first
-  // cloud read by itself rather than judging last month from possibly stale local data.
-  setTimeout(checkFeeReminder,3000);
+  // The first check normally comes from the auth callback (signed out) or the end of the first
+  // cloud read (signed in). This is only the fallback for when Firebase never loads at all.
+  setTimeout(()=>{if(!feeAuthKnown){feeAuthKnown=true;checkFeeReminder();}},20000);
   // The app is often left open for days as an installed PWA, where startup alone would never
   // reach the 5-day repeat. Six hours is far finer than that interval and costs nothing.
   setInterval(checkFeeReminder,6*3600000);
