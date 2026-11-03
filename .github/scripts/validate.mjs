@@ -113,7 +113,9 @@ if (!existsSync("manifest.webmanifest")) {
   try {
     const mf = JSON.parse(readFileSync("manifest.webmanifest", "utf8"));
     for (const icon of mf.icons || []) {
-      if (icon.src && !existsSync(icon.src)) fail(`manifest icon missing from the repo: ${icon.src}`);
+      // "?v=NN" is a cache-buster (a changed URL makes Android re-fetch the installed icon), not part of the file name
+      const file = (icon.src || "").split(/[?#]/)[0];
+      if (file && !existsSync(file)) fail(`manifest icon missing from the repo: ${icon.src}`);
     }
     ok(`manifest.webmanifest is valid JSON (${(mf.icons || []).length} icons)`);
   } catch (e) {
