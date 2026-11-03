@@ -21,6 +21,8 @@
   /* Colors */
   --bg:#f8fafc;--surf:#fff;--surf2:#f1f5f9;--surf3:#e2e8f0;
   --bdr:#e2e8f0;--bdr2:#cbd5e1;
+  /* Lists that scroll sideways: row hover, the pinned first column's shadow, the right-edge fade */
+  --row-hover:#fafbfc;--pin-shade:rgba(15,23,42,.14);--edge-fade:rgba(15,23,42,.08);
   --txt:#0f172a;--txt2:#475569;--txt3:#94a3b8;
   /* Brand / primary — change these four to re-theme the whole app (nav, buttons, focus, switch…) */
   --pri:#16a34a;--pri-h:#15803d;--pri-l:#dcfce7;--pri-t:#14532d;
@@ -260,11 +262,11 @@ tbody tr:hover td{background:#fafbfc}
 }
 /* Any width: a list wider than its card (syncListWidths sets .list-scroll above 1280px) scrolls
    sideways with its first column pinned — the same treatment the narrow layout above gives. */
-.card.list-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;background-image:linear-gradient(to right,transparent 92%,rgba(15,23,42,.08) 100%);background-attachment:local}
+.card.list-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;background-image:linear-gradient(to right,transparent 92%,var(--edge-fade) 100%);background-attachment:local}
 .card.list-scroll .grid-head{position:static}
-.card.list-scroll .grid-head>:first-child,.card.list-scroll .grid-row>:first-child{position:sticky;left:0;z-index:2;background:var(--surf);margin-left:-14px;padding-left:14px;box-shadow:6px 0 8px -6px rgba(15,23,42,.14)}
+.card.list-scroll .grid-head>:first-child,.card.list-scroll .grid-row>:first-child{position:sticky;left:0;z-index:2;background:var(--surf);margin-left:-14px;padding-left:14px;box-shadow:6px 0 8px -6px var(--pin-shade)}
 .card.list-scroll .grid-head>:first-child{background:var(--surf2)}
-.card.list-scroll .grid-row:hover>:first-child{background:#fafbfc}
+.card.list-scroll .grid-row:hover>:first-child{background:var(--row-hover)}
 #page-booklib .card.list-scroll .grid-head>:first-child,#page-booklib .card.list-scroll .grid-row>:first-child{position:static;margin-left:0;padding-left:0;box-shadow:none}
 /* ── Draggable column widths ──
    A thin handle sits on the right edge of every list-header cell. Dragging it resizes that
@@ -555,7 +557,9 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 @media(max-width:640px){
   #page-students .grid-head{display:none!important} /* the band's display:grid is written inline */
   #page-students .card{overflow:visible}
-  .std-row{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 14px;min-width:0!important}
+  /* #page-students + !important outranks a saved column template ([data-colw] .std-row … !important),
+     which otherwise put a ten-column desktop grid back on the phone */
+  #page-students .std-row{grid-template-columns:minmax(0,1fr) auto!important;gap:4px 12px;padding:12px 14px;min-width:0!important}
   .std-row>:nth-child(1){display:none}
   .std-row>:nth-child(2){grid-area:1/1}
   .std-row>:nth-child(10){grid-area:1/2;align-self:start}
