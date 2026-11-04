@@ -49,7 +49,7 @@
 
 ## 백업
 
-설정 → **Backup** → **Export**가 JSON 파일 하나를 내려받는다: `{ "app": "classdesk", "version": 1, "exportedAt": …, "data": { mc_* …, gcse_api_key, gcse_cx } }`. **Import**는 기존 `mc_*` 키를 지운 뒤 파일의 `mc_*`·`gcse_api_key`·`gcse_cx`만 써 넣는다. 그 밖의 키(다른 앱의 데이터)는 건드리지 않는다. 파일에 `gcse_api_key`·`gcse_cx`(표지 검색 키)가 들어 있으니 남에게 보내기 전에 지운다.
+설정 → **Backup** → **Export**가 JSON 파일 하나를 내려받는다: `{ "app": "classdesk", "version": 1, "exportedAt": …, "data": { mc_* …, gcse_api_key, gcse_cx } }`. **Import**는 기존 `mc_*` 키를 지운 뒤 파일의 `mc_*`·`gcse_api_key`·`gcse_cx`만 써 넣는다. 그 밖의 키(다른 앱의 데이터)는 건드리지 않는다. **백업 파일은 남에게 보내지 않는다.** 학생 이름·연락처, 수업, 수업료 기록이 모두 들어 있고, 표지 검색 키(`gcse_api_key`·`gcse_cx`)도 들어 있다. 문제를 보여 주려고 꼭 보내야 하면 학생 정보와 금액을 지우거나 가짜 값으로 바꾸고, 두 키도 지운 사본을 보낸다.
 
 ## 로그인(Firebase)
 
