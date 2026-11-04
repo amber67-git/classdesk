@@ -141,7 +141,7 @@ th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--t
 #dash-sched tbody tr:hover{background:var(--surf2)}
 td{padding:10px 14px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--txt2);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:#fafbfc}
+tbody tr:hover td{background:var(--row-hover)}
 .tn{font-weight:500;color:var(--txt);font-size:13px}
 .tm{font-family:var(--mono);font-size:11px}
 /* UTILITY — extracted from repeated inline styles across pages, for consistency */
@@ -156,7 +156,7 @@ tbody tr:hover td{background:#fafbfc}
 .row-actions{display:flex;gap:4px}
 .text-red{color:var(--red)}
 .grid-row{display:grid;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr);transition:background .1s}
-.grid-row:hover{background:#fafbfc}
+.grid-row:hover{background:var(--row-hover)}
 .grid-row.clickable{cursor:pointer}
 .grid-head{padding:9px 14px;background:var(--surf2);border-bottom:1px solid var(--bdr);position:sticky;top:52px;z-index:5}
 .fbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
@@ -244,7 +244,7 @@ tbody tr:hover td{background:#fafbfc}
    sideways INSIDE their card instead of spilling past its edge. Sticky headers are given up
    inside the scroll container; a right-edge shadow hints that the table continues. */
 @media(max-width:1280px){
-  .card:has(.grid-head),.tw{position:relative;background-image:linear-gradient(to right,transparent 92%,rgba(15,23,42,.08) 100%);background-attachment:local}
+  .card:has(.grid-head),.tw{position:relative;background-image:linear-gradient(to right,transparent 92%,var(--edge-fade) 100%);background-attachment:local}
   .card:has(.grid-head){overflow-x:auto;-webkit-overflow-scrolling:touch}
   /* Header band and rows get one shared min-width from syncListWidths(), so the band never ends mid-scroll */
   .card:has(.grid-head) .grid-head,.card:has(.grid-head) .grid-row,.card:has(.grid-head) .std-row,.card:has(.grid-head) .pr{min-width:100%}
@@ -260,10 +260,10 @@ tbody tr:hover td{background:#fafbfc}
   /* First column stays put while the rest scrolls, so you always know which row you're on */
   .card:has(.grid-head) .grid-head>:first-child,
   .card:has(.grid-head) .grid-row>:first-child,
-  .card:has(.grid-head) .pr>:first-child{position:sticky;left:0;z-index:2;background:var(--surf);margin-left:-14px;padding-left:14px;box-shadow:6px 0 8px -6px rgba(15,23,42,.14)}
+  .card:has(.grid-head) .pr>:first-child{position:sticky;left:0;z-index:2;background:var(--surf);margin-left:-14px;padding-left:14px;box-shadow:6px 0 8px -6px var(--pin-shade)}
   .card:has(.grid-head) .grid-head>:first-child{background:var(--surf2)}
   .card:has(.grid-head) .grid-row:hover>:first-child,
-  .card:has(.grid-head) .pr:hover>:first-child{background:#fafbfc}
+  .card:has(.grid-head) .pr:hover>:first-child{background:var(--row-hover)}
   /* Books: the first column is the checkbox — sticking it would be pointless */
   #page-booklib .grid-head>:first-child,#page-booklib .grid-row>:first-child{position:static;margin-left:0;padding-left:0;box-shadow:none}
 }
@@ -544,19 +544,18 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 @media(max-width:1320px){
   .grid-head[data-header-page="payments"]>*{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
-.pr:hover{background:#fafbfc}
+.pr:hover{background:var(--row-hover)}
 .pr:last-child{border-bottom:none}
-.pr:hover{background:#fafbfc}
 .plr{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid var(--bdr);font-size:12px}
 .plr:last-child{border-bottom:none}
-.plr:hover{background:#fafbfc}
+.plr:hover{background:var(--row-hover)}
 .sb2{width:4px;height:28px;border-radius:2px;flex-shrink:0}
 /* STUDENT GRID */
 .std-archived{opacity:.55}
 .std-arch-badge{display:inline-block;font-size:9px;font-weight:700;background:#e2e8f0;color:#475569;padding:1px 5px;border-radius:4px;margin-left:6px;vertical-align:middle}
 .std-row{display:grid;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr);gap:8px;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 76px;transition:background .1s;cursor:pointer}
 .std-row:last-child{border-bottom:none}
-.std-row:hover{background:#fafbfc}
+.std-row:hover{background:var(--row-hover)}
 .std-row:hover .av{box-shadow:0 0 0 2px var(--grn-l)}
 /* Phones: each student becomes a small card instead of a ten-column row that had to be scrolled
    sideways to reach the schedule. The cells are always the same ten, in this order:
@@ -1600,6 +1599,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
+          <dt>Removing another app from the phone (StudyDesk etc.)</dt><dd>ClassDesk shares its web address (amber67-git.github.io) with older copies of the other apps, and everything stored under one address is wiped together. To remove one of those older apps: phone <b>Settings → Apps</b> → that app → <b>Uninstall</b> only. <b>Never tap "Clear storage" / "Clear site data"</b> — it would erase ClassDesk's data on this phone too (signing back in brings the cloud copy back, but anything not yet synced is lost). Afterwards, typing <b>chrome://webapks</b> in Chrome should still list ClassDesk, with the Manifest Id https://amber67-git.github.io/classdesk/app (a copy installed before v116 shows https://amber67-git.github.io/ — see "How do I put ClassDesk on my phone/tablet home screen?" above).</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
@@ -2494,7 +2494,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v116";
+const APP_VERSION="v117";
 const APP_BUILT="2026-11-04";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
