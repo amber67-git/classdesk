@@ -19,7 +19,10 @@
 1. 폰에 설치해서 쓰는 앱은 **앱마다 자기 origin**을 가진다.
 2. **ClassDesk만 `https://amber67-git.github.io/classdesk/`에 남는다.** 수업료 데이터와 Firebase 승인 도메인이 이 주소에 묶여 있기 때문이다.
 3. **이 origin에는 다른 설치형 앱을 새로 올리지 않는다.**
-4. 그 밖의 앱은 저장소마다 **Cloudflare Pages 프로젝트**를 하나씩 만들어 `https://<프로젝트명>.pages.dev`로 배포한다.
+4. 그 밖의 앱은 저장소마다 **Cloudflare Pages 프로젝트**를 하나씩 만들어 `https://<프로젝트명>.pages.dev`로 배포한다. 브라우저 데이터는 주소마다 따로라서 새 주소는 빈 상태로 시작한다. 그래서 기기마다:
+   - 옛 주소의 앱에서 백업(내보내기)을 받는다. 내보내기 기능이 없는 앱은 옮기기 전에 먼저 만든다.
+   - 새 주소에서 그 파일을 불러오고, 주요 기록이 그대로 보이는지 확인한다.
+   - 확인이 끝나기 전에는 옛 주소의 앱을 지우지 않는다. 지울 때도 아래처럼 **앱만** 지운다.
 5. 앱은 한 번에 하나씩 옮긴다. 안드로이드 설치 문제는 추측으로 고치지 말고 `chrome://webapks` 화면과 설치 창 스크린샷으로 먼저 확인한다.
 
 ### 다른 앱을 옮길 때 ClassDesk 데이터 지키기
@@ -46,7 +49,7 @@
 
 ## 백업
 
-설정 → **Backup** → **Export**가 JSON 파일 하나를 내려받는다: `{ "app": "classdesk", "version": 1, "exportedAt": …, "data": { mc_* … } }`. **Import**는 이 파일을 받아 `mc_*` 키만 바꿔 쓴다(다른 앱의 키는 건드리지 않는다). 파일에는 `gcse_api_key`가 들어 있으니 남에게 보내기 전에 지운다.
+설정 → **Backup** → **Export**가 JSON 파일 하나를 내려받는다: `{ "app": "classdesk", "version": 1, "exportedAt": …, "data": { mc_* …, gcse_api_key, gcse_cx } }`. **Import**는 기존 `mc_*` 키를 지운 뒤 파일의 `mc_*`·`gcse_api_key`·`gcse_cx`만 써 넣는다. 그 밖의 키(다른 앱의 데이터)는 건드리지 않는다. 파일에 `gcse_api_key`·`gcse_cx`(표지 검색 키)가 들어 있으니 남에게 보내기 전에 지운다.
 
 ## 로그인(Firebase)
 

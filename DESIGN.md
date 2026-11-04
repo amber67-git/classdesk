@@ -35,6 +35,9 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
   --surf3:#e2e8f0;    /* 진행 막대 트랙 등 */
   --bdr:#e2e8f0;      /* 기본 선 */
   --bdr2:#cbd5e1;     /* 입력창·버튼 테두리 (조금 진함) */
+  --row-hover:#fafbfc;              /* 목록·표 행 hover 배경 */
+  --pin-shade:rgba(15,23,42,.14);   /* 가로 스크롤 목록에서 고정된 첫 열의 그림자 */
+  --edge-fade:rgba(15,23,42,.08);   /* 가로 스크롤 목록 오른쪽 끝 "더 있음" 그림자 */
 
   /* Text */
   --txt:#0f172a;      /* 본문 */
@@ -152,13 +155,13 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
   font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;position:sticky;top:52px}
 /* 행 */
 .grid-row, td{padding:10px 14px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--txt2)}
-.grid-row:hover, tbody tr:hover td{background:#fafbfc}
+.grid-row:hover, tbody tr:hover td{background:var(--row-hover)}
 .cell-main{font-weight:600;font-size:13px;color:var(--txt)}   /* 첫 열(이름/제목) */
 ```
 - 헤더에 세로 구분선을 그리지 않는다. 열 너비 조절 손잡이는 평소 투명, hover 때만 `--pri` 선.
 - 행마다 오른쪽 끝에 연필(편집) 아이콘 버튼(`.bic`). 더블클릭도 편집. 안내 문구("더블클릭하세요")는 넣지 않는다.
 - 숫자·금액·시간은 `--mono`.
-- 넓이 ≤1280px(화면 반 분할, 태블릿)에서는 목록이 **카드 안에서 가로 스크롤**된다. 카드 밖으로 삐져나가면 안 된다. 오른쪽 끝에 옅은 그림자로 "더 있음"을 표시.
+- 목록이 카드보다 넓으면 **카드 안에서 가로 스크롤**된다 — 넓이 ≤1280px(화면 반 분할, 태블릿)에서는 항상, 그보다 넓은 화면에서도 넘칠 때(`.list-scroll`, v115). 카드 밖으로 삐져나가면 안 된다. 첫 열은 고정되고(`--pin-shade` 그림자), 오른쪽 끝에 옅은 그림자(`--edge-fade`)로 "더 있음"을 표시.
 
 ### Buttons
 ```css
