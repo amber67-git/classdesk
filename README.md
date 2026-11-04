@@ -19,7 +19,7 @@
 1. 폰에 설치해서 쓰는 앱은 **앱마다 자기 origin**을 가진다.
 2. **ClassDesk만 `https://amber67-git.github.io/classdesk/`에 남는다.** 수업료 데이터와 Firebase 승인 도메인이 이 주소에 묶여 있기 때문이다.
 3. **이 origin에는 다른 설치형 앱을 새로 올리지 않는다.**
-4. 그 밖의 앱은 저장소마다 **Cloudflare Pages 프로젝트**를 하나씩 만들어 `https://<프로젝트명>.pages.dev`로 배포한다. 브라우저 데이터는 주소마다 따로라서 새 주소는 빈 상태로 시작한다. 그래서 기기마다:
+4. 그 밖의 앱은 저장소마다 **Netlify 사이트**를 하나씩 만들어 `https://<사이트명>.netlify.app`으로 배포한다(소유자의 Netlify 계정은 GitHub 로그인. Add new site → Import from GitHub → 저장소 선택, 빌드 없는 앱은 Build command·Publish directory 비움, 만든 뒤 Make public). 첫 사례: StudyDesk → https://amber-studydesk.netlify.app/ (2026-11-04). 브라우저 데이터는 주소마다 따로라서 새 주소는 빈 상태로 시작한다. 그래서 기기마다:
    - 옛 주소의 앱에서 백업(내보내기)을 받는다. 내보내기 기능이 없는 앱은 옮기기 전에 먼저 만든다.
    - 새 주소에서 그 파일을 불러오고, 주요 기록이 그대로 보이는지 확인한다.
    - 확인이 끝나기 전에는 옛 주소의 앱을 지우지 않는다. 지울 때도 아래처럼 **앱만** 지운다.
@@ -34,7 +34,7 @@
 | 항목 | 값 | 바꾸면 |
 |---|---|---|
 | 주소 | `https://amber67-git.github.io/classdesk/` | 기기에 저장된 데이터와 Firebase 로그인이 새 주소에서 보이지 않는다 |
-| manifest `id` | `"/classdesk/app"` (= `https://amber67-git.github.io/classdesk/app`). v116(2026-11-04, PR #4)에서 `"./"`를 바꾼 값이다. `id`는 폴더가 아니라 origin 기준으로 풀리므로 `"./"`는 사이트 전체(`https://amber67-git.github.io/`)를 뜻했고, 그 때문에 같은 주소의 다른 앱(StudyDesk)이 "이미 설치됨"으로 막혔다 | 설치된 앱이 또 다른 앱으로 취급되어 모든 기기에서 다시 설치해야 한다 |
+| manifest `id` | `"/classdesk/app"` (= `https://amber67-git.github.io/classdesk/app`). v116(2026-11-04, PR #4)에서 `"./"`를 바꾼 값이다. `id`는 폴더가 아니라 origin 기준으로 풀리므로 `"./"`는 사이트 전체(`https://amber67-git.github.io/`)를 뜻했다. 당시엔 이것이 StudyDesk 설치 충돌의 원인이라고 봤지만 **아니었다**: 고친 뒤에도 StudyDesk를 깔자 이번엔 ClassDesk가 "이미 설치됨"으로 막혔다. 진짜 원인은 위의 "한 origin에 앱 하나" 규칙이다. 경로 기준 id 자체는 올바른 값이라 그대로 둔다 | 설치된 앱이 또 다른 앱으로 취급되어 모든 기기에서 다시 설치해야 한다 |
 | manifest `start_url`, `scope` | `"./"` | 앱이 이 폴더 밖을 열거나 설치 범위가 바뀐다 |
 | localStorage 키 이름 | `mc_*`(데이터), `cd_*`(기기 전용), `gcse_*` | 저장된 데이터를 못 읽는다 |
 | 서비스 워커 캐시 이름 | `classdesk-shell` | — (자기 캐시만 쓰고 다른 캐시는 지우지 않는다) |
