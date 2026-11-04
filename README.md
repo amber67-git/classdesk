@@ -11,7 +11,7 @@
 
 `amber67-git.github.io` 아래의 GitHub Pages 사이트들(`/classdesk/`, `/studydesk/` …)은 폴더만 다를 뿐 **사이트 주소(origin)가 하나**다. 2026-11-04에 실제로 확인한 문제:
 
-- Android Chrome은 **한 origin에 웹앱(PWA)을 하나만** 설치한다. ClassDesk가 깔려 있으면 StudyDesk가 "This app is already installed"로 막히고, 반대도 마찬가지였다. manifest의 `id`·`scope`를 폴더별로 줘도 풀리지 않았다(`chrome://webapks`로 확인).
+- **현재 Android Chrome**은 같은 origin에 웹앱(PWA)을 **하나만** 설치한다(경로가 다른 PWA 설치가 막히는 것은 Chromium에 버그로 보고돼 있다: issues.chromium.org/issues/572287931, 중복 568841400. 고쳐질 수 있지만 그때까지는 이 전제로 간다). ClassDesk가 깔려 있으면 StudyDesk가 "This app is already installed"로 막히고, 반대도 마찬가지였다. manifest의 `id`·`scope`를 폴더별로 줘도 풀리지 않았다(`chrome://webapks`로 확인).
 - 같은 origin의 앱들은 localStorage·IndexedDB·서비스 워커 캐시·저장 용량(localStorage 약 5MB)을 **같이 쓴다.** 어느 한 앱에서 **"사이트 데이터 삭제"를 누르면 모든 앱의 데이터가 같이 지워진다.**
 
 그래서:
@@ -34,7 +34,7 @@
 | 항목 | 값 | 바꾸면 |
 |---|---|---|
 | 주소 | `https://amber67-git.github.io/classdesk/` | 기기에 저장된 데이터와 Firebase 로그인이 새 주소에서 보이지 않는다 |
-| manifest `id` | `"/classdesk/app"` (= `https://amber67-git.github.io/classdesk/app`). v116(2026-11-04, PR #4)에서 `"./"`를 바꾼 값이다. `id`는 폴더가 아니라 origin 기준으로 풀리므로 `"./"`는 사이트 전체(`https://amber67-git.github.io/`)를 뜻했다. 당시엔 이것이 StudyDesk 설치 충돌의 원인이라고 봤지만 **아니었다**: 고친 뒤에도 StudyDesk를 깔자 이번엔 ClassDesk가 "이미 설치됨"으로 막혔다. 진짜 원인은 위의 "한 origin에 앱 하나" 규칙이다. 경로 기준 id 자체는 올바른 값이라 그대로 둔다 | 설치된 앱이 또 다른 앱으로 취급되어 모든 기기에서 다시 설치해야 한다 |
+| manifest `id` | `"/classdesk/app"` (= `https://amber67-git.github.io/classdesk/app`). v116(2026-11-04, PR #4)에서 `"./"`를 바꾼 값이다. `id`는 폴더가 아니라 origin 기준으로 풀리므로 `"./"`는 사이트 전체(`https://amber67-git.github.io/`)를 뜻했다. 당시엔 이것이 StudyDesk 설치 충돌의 원인이라고 봤지만 **아니었다**: 고친 뒤에도 StudyDesk를 깔자 이번엔 ClassDesk가 "이미 설치됨"으로 막혔다. 진짜 원인은 위의 "현재 Android Chrome의 같은 origin 설치 제한(Chromium 버그 572287931)"이다. 경로 기준 id 자체는 올바른 값이라 그대로 둔다 | 설치된 앱이 또 다른 앱으로 취급되어 모든 기기에서 다시 설치해야 한다 |
 | manifest `start_url`, `scope` | `"./"` | 앱이 이 폴더 밖을 열거나 설치 범위가 바뀐다 |
 | localStorage 키 이름 | `mc_*`(데이터), `cd_*`(기기 전용), `gcse_*` | 저장된 데이터를 못 읽는다 |
 | 서비스 워커 캐시 이름 | `classdesk-shell` | — (자기 캐시만 쓰고 다른 캐시는 지우지 않는다) |
