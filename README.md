@@ -19,7 +19,12 @@
 1. 폰에 설치해서 쓰는 앱은 **앱마다 자기 origin**을 가진다.
 2. **ClassDesk만 `https://amber67-git.github.io/classdesk/`에 남는다.** 수업료 데이터와 Firebase 승인 도메인이 이 주소에 묶여 있기 때문이다.
 3. **이 origin에는 다른 설치형 앱을 새로 올리지 않는다.**
-4. 그 밖의 앱은 저장소마다 **Cloudflare Pages 프로젝트**를 하나씩 만들어 `https://<프로젝트명>.pages.dev`로 배포한다. 브라우저 데이터는 주소마다 따로라서 새 주소는 빈 상태로 시작한다. 그래서 기기마다:
+4. 그 밖의 앱은 저장소마다 **Netlify 사이트**를 하나씩 만들어 `https://amber-<앱이름>.netlify.app`로 배포한다. 첫 사례: StudyDesk → https://amber-studydesk.netlify.app/ (studydesk 저장소 PR #10).
+   - 소유자의 Netlify 계정(GitHub 로그인) → **Add new site → Import an existing project → GitHub** → 그 저장소만 선택한다.
+   - 빌드가 없는 앱은 Base directory·Build command·Publish directory를 **모두 비운다.**
+   - 만든 뒤 반드시 **Make public**을 누른다(기본이 비공개라 로그인 없이는 열리지 않는다). 그리고 Project configuration → **Change project name**으로 `amber-<앱이름>`을 준다.
+
+   브라우저 데이터는 주소마다 따로라서 새 주소는 빈 상태로 시작한다. 그래서 기기마다:
    - 옛 주소의 앱에서 백업(내보내기)을 받는다. 내보내기 기능이 없는 앱은 옮기기 전에 먼저 만든다.
    - 새 주소에서 그 파일을 불러오고, 주요 기록이 그대로 보이는지 확인한다.
    - 확인이 끝나기 전에는 옛 주소의 앱을 지우지 않는다. 지울 때도 아래처럼 **앱만** 지운다.
