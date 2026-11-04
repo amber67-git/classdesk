@@ -22,7 +22,8 @@
 4. 그 밖의 앱은 저장소마다 **Netlify 사이트**를 하나씩 만들어 `https://amber-<앱이름>.netlify.app`로 배포한다. 첫 사례: StudyDesk → https://amber-studydesk.netlify.app/ (studydesk 저장소 PR #10).
    - 소유자의 Netlify 계정(GitHub 로그인) → **Add new site → Import an existing project → GitHub** → 그 저장소만 선택한다.
    - 빌드가 없는 앱은 Base directory·Build command·Publish directory를 **모두 비운다.**
-   - 만든 뒤 반드시 **Make public**을 누른다(기본이 비공개라 로그인 없이는 열리지 않는다). 그리고 Project configuration → **Change project name**으로 `amber-<앱이름>`을 준다.
+   - 첫 배포가 성공하면 공개 상태를 확인하고, 비공개면 **Make public**을 누른다(새 사이트는 보통 비공개로 시작해서 로그인 없이는 열리지 않는다). 그리고 Project configuration → **Change project name**으로 `amber-<앱이름>`을 준다.
+   - 마지막으로 로그인하지 않은 시크릿 창에서 새 주소가 열리는지 확인한다. 안 열리면 아직 비공개다.
 
    브라우저 데이터는 주소마다 따로라서 새 주소는 빈 상태로 시작한다. 그래서 기기마다:
    - 옛 주소의 앱에서 백업(내보내기)을 받는다. 내보내기 기능이 없는 앱은 옮기기 전에 먼저 만든다.
