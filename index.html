@@ -1608,9 +1608,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
+        <h3>What's new</h3>
+        <p>User-visible changes only, newest first. The running version shows at the bottom of the sidebar.</p>
+        <ul>
+          <li><b>v120</b> (2026-11-08) — This "What's new" list; the guide footer now shows the real version.</li>
+          <li><b>v119</b> (2026-11-08) — A search box on the Students page (English or Korean name, parent, contact, notes, aliases; archived students are found too). On phones, toolbar inputs are 16px/42px, so iOS no longer zooms in on them.</li>
+          <li><b>v118</b> (2026-11-05) — FAQ corrected: "This app is already installed" happens because current Android Chrome installs one web app per address, not because of the manifest id. StudyDesk moved to its own address (amber-studydesk.netlify.app), so it no longer blocks ClassDesk.</li>
+          <li><b>v117</b> (2026-11-04) — Documentation only (README: one address per installable app, where data lives, backup; DESIGN.md colour tokens).</li>
+          <li><b>v116</b> (2026-11-04) — Manifest id set to /classdesk/app. If you installed ClassDesk before this, see the home-screen FAQ above.</li>
+          <li><b>v115</b> (2026-11-03) — Payments: the student column stays pinned when the list scrolls sideways.</li>
+        </ul>
+
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v77</b> · FAQ current as of: <b>2026-11-04</b><br/>
-          (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
+          Guide written against version: <b>v120</b> · FAQ and What's new current as of: <b>2026-11-08</b><br/>
+          (For the next update, only work done after this date needs to be reviewed for new FAQ or What's new entries)
         </p>
 
       </div>
@@ -2499,7 +2510,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v119";
+const APP_VERSION="v120";
 const APP_BUILT="2026-11-08";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
