@@ -132,7 +132,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 - 개수 표기는 항상 `N items` 형식 (괄호 없음).
 - 월 이동이 있는 페이지(달력)는 툴바 정중앙에 `‹ September 2026 ›`.
 - **폰보다 넓으면(≥641px) 툴바는 절대 두 줄로 접히지 않는다.** 자리가 모자라면 검색창이 280→최소 140px로
-  줄어든다 (`@media(min-width:641px){.fbar{flex-wrap:nowrap}.fbar input[type=text]{flex:0 1 280px;min-width:140px}}`).
+  줄어든다 (`@media(min-width:641px){.fbar{flex-wrap:nowrap}.fbar input[type=text],.fbar input[type=search]{flex:0 1 280px;min-width:140px}}`).
+  폰(≤640px)에서는 같은 두 선택자가 `flex:1 1 100%`로 한 줄을 다 쓴다.
   개수 + 주 버튼(`.fbar-right`)은 `flex-shrink:0;white-space:nowrap`. 반화면 PC(960px)에서 "14 workbooks"가 길어
   Workbooks만 두 줄이 되던 문제를 이 규칙으로 막았다.
 

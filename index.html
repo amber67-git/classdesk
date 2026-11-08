@@ -623,7 +623,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   textarea{height:auto;min-height:84px}
   .btn{min-height:40px}
   .fbar{padding:10px 12px;gap:8px}
-  .fbar select,.fbar input[type=text],.fbar input[type=search],.fbar input[type=month]{flex:1 1 46%;min-width:0;width:auto}
+  /* The generic 16px/42px phone rule above loses to .fbar's fixed desktop sizes on specificity, which
+     left toolbar controls at 12px/34px on phones (iOS zooms into a <16px field on focus). */
+  .fbar select,.fbar input[type=text],.fbar input[type=search],.fbar input[type=month]{flex:1 1 46%;min-width:0;width:auto;font-size:16px;height:42px}
   .fbar .u-w-145{width:auto}
   /* Calendar: keep 7 readable columns, scroll sideways */
   .card:has(.cal-grid){overflow-x:auto;-webkit-overflow-scrolling:touch}
