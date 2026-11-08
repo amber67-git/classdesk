@@ -1558,7 +1558,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>A student drops one of two weekly classes (e.g. keeps Saturday, stops Sunday)</dt><dd>Students → edit the student → remove that slot with its trash icon → Save. You're asked <b>from which date</b> the change applies: pick the first day without that class. Everything before that date keeps the old schedule (and its billing); from that date on only the remaining class is generated.</dd>
           <dt>A student's day or time changes</dt><dd>Same flow — change the day/time, Save, pick the effective date. Choose "Apply to everything" only for a correction of a typo, never for a real change.</dd>
           <dt>Moving one class to another day (make-up class)</dt><dd>On a PC, drag the class chip onto the new day in Classes. On a tablet or phone, tap the class → change the <b>Date</b> (and time if needed) → Save. The class then shows "(moved)" and its usual day stays empty for that week; "Reset to usual time" in the same dialog undoes the move.</dd>
-          <dt>Comparing with Google Calendar</dt><dd>Classes → <b>Google</b> reads your Google Calendar for the month on screen and shows only the differences: a lesson only in Google ("Add lesson"), only in the app ("Cancel in app"), or at a different time ("Use Google time"). Students are recognised by their name, Korean name, or the aliases on their card — when a title isn't recognised, pick the student once and that title is remembered. Only yellow (your own lessons) and green (platform lessons) events count; every other colour is ignored. Nothing is written to Google, and nothing changes in the app until you press a button. Set-up lives in Settings → API Keys → Google Calendar.</dd>
+          <dt>Comparing with Google Calendar</dt><dd>Classes → <b>Google</b> reads your Google Calendar for the month on screen and shows only the differences: a lesson only in Google ("Add lesson"), only in the app ("Cancel in app"), at a different time ("Use Google time"), or on a different day within the same week ("Move in app" — recorded as a moved class, not as a cancellation plus a new lesson, so the Payments summary does not count it as cancelled). Students are recognised by their name, Korean name, or the aliases on their card — when a title isn't recognised, pick the student once and that title is remembered. Only yellow (your own lessons) and green (platform lessons) events count; every other colour is ignored. Nothing is written to Google, and nothing changes in the app until you press a button. Set-up lives in Settings → API Keys → Google Calendar.</dd>
         </dl>
 
         <h3>Working with the lists</h3>
@@ -2499,7 +2499,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v119";
+const APP_VERSION="v120";
 const APP_BUILT="2026-11-08";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -8698,7 +8698,45 @@ function gcalBuildDiff(month,events){
     }
     a.forEach((occ,i)=>{if(used.has(i))return;if(occ.status==="cancelled"||occ.status==="cancelpaid")return;res.diffs.push({type:"cancel",date,sid,s,occ});});
   }
+  gcalPairMoves(res);
   return res;
+}
+// A class that simply moved to another day shows up as one "not in Google" and one "not in app" for
+// the same student. Applied as cancel + add, that leaves a cancelled lesson behind that the Payments
+// summary counts as a cancellation — which it was not. So the two are paired into one "move", the
+// same record a drag in Classes makes. Within a week of each other, equal length preferred.
+// A class whose weekday never appears in Google (a slot the owner does not keep there, e.g. Felix's
+// Thursdays) is not a move candidate: that slot is missing every week, not moved once.
+function gcalPairMoves(res){
+  const diffs=res.diffs;
+  const gone=diffs.filter(d=>d.type==="cancel"),extra=diffs.filter(d=>d.type==="add");
+  const wk=(sid,date)=>sid+"|"+weekdayOfDateStr(date);
+  const inGoogle={};res.matched.forEach(m=>{inGoogle[wk(m.sid,m.date)]=1;});diffs.forEach(d=>{if(d.type==="time")inGoogle[wk(d.sid,d.date)]=1;});
+  const lostN={};gone.forEach(c=>{const k=wk(c.sid,c.date);lostN[k]=(lostN[k]||0)+1;});
+  const pairs=[];
+  for(const c of gone)for(const a of extra){
+    if(a.sid!==c.sid)continue;
+    const k=wk(c.sid,c.date);
+    if(!inGoogle[k]&&lostN[k]!==1)continue;   // that weekday is simply not in Google
+    const days=Math.abs(gcalDaysBetween(c.date,a.date));
+    if(days<1||days>7)continue;
+    const durDiff=Math.abs((c.occ.dur||0)-a.ev.dur)>=0.25;
+    pairs.push({c,a,durDiff,score:(durDiff?100:0)+days});
+  }
+  pairs.sort((x,y)=>x.score-y.score);
+  const taken=new Set();
+  for(const p of pairs){
+    if(taken.has(p.c)||taken.has(p.a))continue;
+    taken.add(p.c);taken.add(p.a);
+    p.c.move={type:"move",date:p.c.date,toDate:p.a.date,sid:p.c.sid,s:p.c.s,ev:p.a.ev,occ:p.c.occ,durDiff:p.durDiff};
+  }
+  if(!taken.size)return;
+  const out=[];
+  for(const d of diffs){
+    if(d.type==="add"&&taken.has(d))continue;   // folded into the move below
+    out.push(d.move||d);                         // the move sits where the lost class was
+  }
+  diffs.length=0;diffs.push(...out);
 }
 const SCHED_DAY_NAMES=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];   // matches SCHED_DAY_MAP
 let gcalSuggestions=[];
@@ -8782,7 +8820,7 @@ async function gcalRun(refetch){
       gcalEvents=await gcalFetchEvents(month);gcalMonth=month;
     }
     gcalResult=gcalBuildDiff(month,gcalEvents);
-    gcalDiffKeys.clear();gcalResult.diffs.forEach(d=>gcalDiffKeys.add(d.date+"|"+d.sid));
+    gcalDiffKeys.clear();gcalResult.diffs.forEach(d=>{gcalDiffKeys.add(d.date+"|"+d.sid);if(d.toDate)gcalDiffKeys.add(d.toDate+"|"+d.sid);});
     gcalDiffMonth=month;
     renderGcal();
     if(curPage==="sessions")renderCalendar();
@@ -8846,6 +8884,14 @@ function renderGcal(){
     if(d.type==="add"){g=gLbl(d.ev)+owner(d.ev.title);a=`<span class="cell-muted2">not in app</span>`;act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Create this lesson in the app"><i class="ti ti-plus"></i> Add lesson</button>`;}
     else if(d.type==="cancel"){g=`<span class="cell-muted2">not in Google</span>`;a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Mark the app lesson as cancelled"><i class="ti ti-ban"></i> Cancel in app</button>`;}
     else if(d.type==="uncancel"){g=gLbl(d.ev)+owner(d.ev.title);a=aLbl(d.occ);act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="The app says cancelled but Google still has it — restore"><i class="ti ti-arrow-back-up"></i> Restore</button>`;}
+    else if(d.type==="move"){
+      g=gLbl(d.ev)+owner(d.ev.title);a=aLbl(d.occ)+` <span class="cell-muted2">on ${gcalDayLabel(d.date)}</span>`;
+      if(d.durDiff){
+        const now=d.occ.amt||0,next=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);
+        a+=` <span class="gc-money">${won(now)} → ${won(next)}</span>`;
+        act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Move the app lesson to ${d.toDate} with Google's length — this changes the fee"><i class="ti ti-arrow-right"></i> Move in app</button>`;
+      }else act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Move the app lesson to Google's day and time — recorded as a move, not a cancellation"><i class="ti ti-arrow-right"></i> Move in app</button>`;
+    }
     else{
       g=gLbl(d.ev)+owner(d.ev.title);a=aLbl(d.occ);
       if(d.durDiff){
@@ -8854,7 +8900,8 @@ function renderGcal(){
         act=`<button class="btn btn-xs" onclick="gcalApply(${i})" title="Google's length is ${d.ev.dur}h — this changes the fee"><i class="ti ti-clock-edit"></i> Use Google time</button>`;
       }else act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Move the app lesson to Google's start time"><i class="ti ti-clock-edit"></i> Use Google time</button>`;
     }
-    rows.push(`<div class="grid-row gc-row"><div><div class="cell-main">${gcalDayLabel(d.date)}</div><div class="cell-muted2">${escapeHTMLBasic(d.s.name)}</div></div><div class="gc-cell">${g}</div><div class="gc-cell">${a}</div><div class="gc-act">${act}</div></div>`);
+    const when=`<div class="cell-main">${gcalDayLabel(d.date)}</div>`+(d.type==="move"?`<div class="cell-main">→ ${gcalDayLabel(d.toDate)}</div>`:"");
+    rows.push(`<div class="grid-row gc-row"><div>${when}<div class="cell-muted2">${escapeHTMLBasic(d.s.name)}</div></div><div class="gc-cell">${g}</div><div class="gc-cell">${a}</div><div class="gc-act">${act}</div></div>`);
   });
   (r.combined||[]).forEach(ev=>{
     rows.push(`<div class="grid-row gc-row gc-combined"><div><div class="cell-main">${gcalDayLabel(ev.date)}</div><div class="cell-muted2">${ev.students.map(s=>escapeHTMLBasic(s.name)).join(" + ")}</div></div><div class="gc-cell">${gLbl(ev)}${owner(ev.title)}</div><div class="gc-cell cell-muted2">one block for ${ev.students.length} students — the app keeps its own times. Pick one student if it is really a single lesson.</div><div class="gc-act"><span class="badge bc">left alone</span></div></div>`);
@@ -8873,7 +8920,7 @@ function renderGcal(){
   gcalSetBody(html);
   const sw=document.getElementById("gc-show-matches");if(sw)sw.checked=gcalShowMatches;
   const safe=gcalSafeDiffs().length;
-  const ab=document.getElementById("gc-apply-all");if(ab){ab.style.display=safe?"":"none";ab.innerHTML=`<i class="ti ti-checks"></i> Apply ${safe} (add / time)`;}
+  const ab=document.getElementById("gc-apply-all");if(ab){ab.style.display=safe?"":"none";ab.innerHTML=`<i class="ti ti-checks"></i> Apply ${safe} (add / time / move)`;}
 }
 function gcalSetColor(cid){
   const mode=document.getElementById("gc-mode-"+cid)?.value||"ignore";
@@ -8893,16 +8940,29 @@ function gcalApplyOne(d){
   }else if(d.type==="uncancel"){
     const real=materializeOccurrence(d.occ);real.status="unpaid";
     if(!(real.amt>0))real.amt=gcalAmountFor(d.s,d.ev.colorId,real.dur||d.ev.dur);
+  }else if(d.type==="move"){
+    // Same record a drag in Classes makes: the lesson sits on the new day and remembers where it
+    // came from, so its usual day stays empty for that week and nothing is counted as cancelled.
+    materialiseUnclaimedSlots(d.sid,d.toDate);   // the new day's own class keeps its slot
+    const real=materializeOccurrence(d.occ);
+    if(!real.movedFrom)real.movedFrom=d.date;
+    real.date=d.toDate;real.time=d.ev.time;
+    if(d.durDiff){real.dur=d.ev.dur;real.amt=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);}
+    // The usual day hides a moved class only while the lengths agree. If Google's length differs,
+    // a tombstone keeps that day empty the way deleting the class would.
+    const left=getOccurrencesForDate(d.date,d.sid).find(o=>o.isVirtual&&Math.abs((o.dur||0)-(d.occ.dur||0))<0.01);
+    if(left){const t=materializeOccurrence(left);t.status="deleted";t.amt=0;}
   }else{
     const real=materializeOccurrence(d.occ);real.time=d.ev.time;
     if(d.durDiff){real.dur=d.ev.dur;real.amt=gcalAmountFor(d.s,d.ev.colorId,d.ev.dur);}
   }
 }
 function gcalApply(i){const d=gcalResult?.diffs[i];if(!d)return;gcalApplyOne(d);save();showToast("Applied to the app");gcalRun(false);}
-// "Apply all" only covers changes that either add a missing lesson or move a start time.
-// A different length (and the fee that follows it) or a cancellation is always one deliberate click.
-function gcalSafeDiffs(){return (gcalResult?.diffs||[]).filter(d=>!d.inSuggestion&&(d.type==="add"||(d.type==="time"&&!d.durDiff)));}
-function gcalApplyAll(){const list=gcalSafeDiffs();if(!list.length)return;if(!confirm(`Apply ${list.length} additions / time changes to the app? (Lessons missing from Google are left alone — cancel those one by one.)`))return;list.forEach(gcalApplyOne);save();showToast(`${list.length} changes applied`);gcalRun(false);}
+// "Apply all" only covers changes that add a missing lesson, move a start time, or move a class to
+// another day. A different length (and the fee that follows it) or a cancellation is always one
+// deliberate click.
+function gcalSafeDiffs(){return (gcalResult?.diffs||[]).filter(d=>!d.inSuggestion&&(d.type==="add"||((d.type==="time"||d.type==="move")&&!d.durDiff)));}
+function gcalApplyAll(){const list=gcalSafeDiffs();if(!list.length)return;if(!confirm(`Apply ${list.length} additions / time changes / moves to the app? (Lessons missing from Google are left alone — cancel those one by one.)`))return;list.forEach(gcalApplyOne);save();showToast(`${list.length} changes applied`);gcalRun(false);}
 function gcalToggleMatches(on){gcalShowMatches=!!on;renderGcal();}
 // ── Settings card ──
 function renderGcalSettings(){
