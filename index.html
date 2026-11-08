@@ -449,26 +449,26 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 /* Toolbar controls have FIXED sizes so every page's toolbar reads the same:
    dropdown 160px · search 280px · primary (green) button 150px · height 34px · gap 10px.
    Per-page width classes/inline styles are deliberately overridden here. */
-.fbar select,.fbar input[type=month],.fbar input[type=text]{height:34px;font-size:12px;padding:0 10px}
+.fbar select,.fbar input[type=month],.fbar input[type=text],.fbar input[type=search]{height:34px;font-size:12px;padding:0 10px}
 .fbar select{width:160px!important;min-width:0!important;max-width:none!important}
 /* Reports' period picker is the only thing on that bar that gives way, and it was crushed to 41px
    with its text gone. It keeps room for "Last 3 months"; in a narrow window the count beside the
    Print button goes instead — it only repeats the picker and the cards below. */
 #rp-range{min-width:128px!important}
 @media(min-width:641px) and (max-width:1100px){#rp-count{display:none}}
-.fbar input[type=text]{width:280px!important;flex:none!important;min-width:0!important;max-width:none!important}
+.fbar input[type=text],.fbar input[type=search]{width:280px!important;flex:none!important;min-width:0!important;max-width:none!important}
 .fbar .btn{height:34px;min-height:0;padding:0 12px;font-size:12px;line-height:1.2}
 .fbar .btn-p{width:150px!important;max-width:none!important;padding:0 8px}
 /* Above phone width the toolbar stays on ONE line on every page: the search box gives way
    (280px → min 140px) instead of the count + button dropping to a second row (Workbooks at 960px). */
 @media(min-width:641px){
   .fbar,.fbar-row{flex-wrap:nowrap}
-  .fbar input[type=text]{flex:0 1 280px!important;min-width:140px!important}
+  .fbar input[type=text],.fbar input[type=search]{flex:0 1 280px!important;min-width:140px!important}
   .fbar-right{white-space:nowrap;flex-shrink:0}
 }
 @media(max-width:640px){
   .fbar select{width:auto!important;flex:1 1 46%}
-  .fbar input[type=text]{width:auto!important;flex:1 1 100%!important}
+  .fbar input[type=text],.fbar input[type=search]{width:auto!important;flex:1 1 100%!important}
   .fbar .btn-p{width:auto!important;flex:1 1 auto}
 }
 /* QUICK STATUS */
@@ -606,7 +606,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   .ni{font-size:14px;padding:10px 12px}
   .btn{font-size:13px;min-height:36px}
   .bic{font-size:18px;padding:6px}
-  .fbar select,.fbar input[type=text],.fbar input[type=month]{font-size:13px;height:38px}
+  .fbar select,.fbar input[type=text],.fbar input[type=search],.fbar input[type=month]{font-size:13px;height:38px}
   .fbar .btn{height:38px}
   .sc-val{font-size:min(24px,15cqi)}.sc-val.sm{font-size:min(19px,15cqi)}
   .ch{padding:16px 18px}.ct{font-size:14px}
@@ -623,7 +623,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   textarea{height:auto;min-height:84px}
   .btn{min-height:40px}
   .fbar{padding:10px 12px;gap:8px}
-  .fbar select,.fbar input[type=text],.fbar input[type=month]{flex:1 1 46%;min-width:0;width:auto}
+  .fbar select,.fbar input[type=text],.fbar input[type=search],.fbar input[type=month]{flex:1 1 46%;min-width:0;width:auto}
   .fbar .u-w-145{width:auto}
   /* Calendar: keep 7 readable columns, scroll sideways */
   .card:has(.cal-grid){overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -978,6 +978,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- STUDENTS -->
 <div id="page-students" class="page">
   <div class="fbar">
+    <input type="search" id="std-search" placeholder="Search name, Korean name, parent…" oninput="renderStudents()" autocomplete="off" enterkeyhint="search"/>
     <label class="sw" title="Include retired (archived) students"><input id="std-show-archived" type="checkbox" onchange="renderStudents()"/><span class="sw-track"></span><span>Show archived</span></label>
     <div class="fbar-right">
       <span id="std-cnt" class="cell-muted2"></span>
@@ -2496,8 +2497,8 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v118";
-const APP_BUILT="2026-11-04";
+const APP_VERSION="v119";
+const APP_BUILT="2026-11-08";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -4907,11 +4908,15 @@ function renderStudents(){
   const showArchived=document.getElementById("std-show-archived")?.checked;
   const active=students.filter(s=>!s.archived);
   const archived=students.filter(s=>s.archived);
-  const visible=showArchived?students:active;
+  // A search looks through archived students too — on a phone the switch is the next thing to
+  // hunt for, and a retired student still shows the Archived badge on the card.
+  const q=(document.getElementById("std-search")?.value||"").trim().toLowerCase();
+  const matches=s=>[s.name,s.k,s.parent,s.contact,s.notes,...(s.aliases||[])].some(v=>String(v||"").toLowerCase().includes(q));
+  const visible=q?students.filter(matches):(showArchived?students:active);
   const cnt=document.getElementById("std-cnt");
-  if(cnt)cnt.textContent=showArchived&&archived.length?`${active.length} active · ${archived.length} archived`:`${active.length} students`;
+  if(cnt)cnt.textContent=q?`${visible.length} of ${students.length} match`:showArchived&&archived.length?`${active.length} active · ${archived.length} archived`:`${active.length} students`;
   const el=document.getElementById("std-list");
-  if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(showArchived?"No students yet":"No active students")+'</p></div>';return;}
+  if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(q?`No students match “${escapeHTMLBasic(q)}”`:showArchived?"No students yet":"No active students")+'</p></div>';return;}
   const sortedStudents=[...visible].sort((a,b)=>studentSortKey(a)-studentSortKey(b));
   el.innerHTML=sortedStudents.map((s,idx)=>{
     const extras=s.extraSlots||[];
