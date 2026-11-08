@@ -8730,17 +8730,19 @@ function gcalBuildDiff(month,events){
 // same record a drag in Classes makes. Within a week of each other, equal length preferred.
 // A class whose slot never appears in Google (one the owner does not keep there, e.g. Felix's
 // Thursdays) is not a move candidate: that slot is missing every week, not moved once. A slot is
-// weekday + length, the same key pickSlotForDate uses, so two classes on one weekday stay apart.
+// weekday + start time, which keeps two classes on one weekday apart as far as the app itself can:
+// two SAME-length classes on one weekday already share one identity everywhere (one virtual id,
+// one computed time from pickSlotForDate), so the compare cannot tell those apart either.
 function gcalPairMoves(res){
   const diffs=res.diffs;
   const gone=diffs.filter(d=>d.type==="cancel"),extra=diffs.filter(d=>d.type==="add");
-  const slotKey=(sid,date,dur)=>sid+"|"+weekdayOfDateStr(date)+"|"+Math.round((dur||0)*4);
-  const inGoogle={};res.matched.forEach(m=>{inGoogle[slotKey(m.sid,m.date,m.occ.dur)]=1;});diffs.forEach(d=>{if(d.type==="time")inGoogle[slotKey(d.sid,d.date,d.occ.dur)]=1;});
-  const lostN={};gone.forEach(c=>{const k=slotKey(c.sid,c.date,c.occ.dur);lostN[k]=(lostN[k]||0)+1;});
+  const slotKey=(sid,date,occ)=>sid+"|"+weekdayOfDateStr(date)+"|"+getLessonTimeKey(occ);
+  const inGoogle={};res.matched.forEach(m=>{inGoogle[slotKey(m.sid,m.date,m.occ)]=1;});diffs.forEach(d=>{if(d.type==="time")inGoogle[slotKey(d.sid,d.date,d.occ)]=1;});
+  const lostN={};gone.forEach(c=>{const k=slotKey(c.sid,c.date,c.occ);lostN[k]=(lostN[k]||0)+1;});
   const pairs=[];
   for(const c of gone)for(const a of extra){
     if(a.sid!==c.sid)continue;
-    const k=slotKey(c.sid,c.date,c.occ.dur);
+    const k=slotKey(c.sid,c.date,c.occ);
     if(!inGoogle[k]&&lostN[k]!==1)continue;   // that slot is simply not in Google
     const days=Math.abs(gcalDaysBetween(c.date,a.date));
     if(days<1||days>7)continue;
