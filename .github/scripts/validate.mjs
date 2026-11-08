@@ -51,6 +51,14 @@ const ver = html.match(/APP_VERSION\s*=\s*"(v\d+)"/);
 if (!ver) fail('APP_VERSION="vNN" not found in index.html');
 else ok(`APP_VERSION ${ver[1]}`);
 
+// Settings → Guide ends with the version it was reviewed against. The owner wants every release
+// that changes how the app is used to add a "What's new" line there, so the footer must keep up:
+// a release bumps it (after adding the line, or deciding none is needed).
+const guideVer = html.match(/Guide written against version:\s*<b>(v\d+)<\/b>/);
+if (!guideVer) fail('Settings → Guide footer "Guide written against version: <b>vNN</b>" not found');
+else if (ver && guideVer[1] !== ver[1]) fail(`Settings → Guide footer says ${guideVer[1]} but APP_VERSION is ${ver[1]} — add a "What's new" line if the release changes how the app is used, then update the footer`);
+else ok(`Guide footer matches APP_VERSION (${guideVer[1]})`);
+
 // An unclosed <a> once wrapped half of the Settings page in a link. Only the real markup can be
 // examined — inside <script> the same characters are strings that build HTML at runtime — so
 // script and style bodies are blanked out, keeping the newlines so reported lines stay true.

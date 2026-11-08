@@ -1478,8 +1478,10 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>Dashboard</dt><dd>Your starting screen — today's classes and to-dos at a glance.</dd>
           <dt>Students</dt><dd>Student profiles — name, class days &amp; times, contact info, notes. The base data every other page builds on.</dd>
-          <dt>Classes</dt><dd>The heart of lesson records. Log each session's content, homework, and books read, and <b>auto-generate a parent report message</b> from your Settings template, ready to copy.</dd>
-          <dt>Payments</dt><dd>Tuition management — payment records and a payment-notice message template.</dd>
+          <dt>Classes</dt><dd>The heart of lesson records. Log each session's content, homework, and books read, and <b>auto-generate a parent report message</b> from your Settings template, ready to copy. The <b>Google</b> button compares the month with your Google Calendar (see "Schedule changes" below).</dd>
+          <dt>Reading</dt><dd>Books read per student, drawn from the lesson records — AR trend and a printable parent report.</dd>
+          <dt>Payments</dt><dd>Tuition management — a payment calendar and a monthly summary per student, the payment-request message, other income that is not a lesson fee, and the unpaid-fee reminder.</dd>
+          <dt>Reports</dt><dd>Monthly figures per student: lessons held, hours, fees, cancellations counted against the timetable, plus a Learning report and homework checking.</dd>
           <dt>Curriculum</dt><dd>A curriculum board for laying out lesson plans on a monthly calendar.</dd>
           <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
           <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
@@ -1608,9 +1610,28 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
         </dl>
 
+        <h3>What's new — recent changes</h3>
+        <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
+        <dl>
+          <dt>v120 · 2026-11-08</dt><dd><b>Google compare:</b> a class moved to another day in the same week now appears as one row ("11/02 (월) → 11/04 (수)") with <b>Move in app</b>. It is recorded as a moved class — not as a cancellation plus a new lesson — so the Payments summary no longer counts it as cancelled. Equal-length moves are included in Apply all; a move that also changes the length shows the fee change and is a separate click.</dd>
+          <dt>v119 · 2026-11-08</dt><dd><b>Students:</b> a search box at the top filters the list as you type — English name, Korean name, parent, contact, notes and aliases, archived students included. On phones the toolbar controls (search, dropdowns, month picker) are larger.</dd>
+          <dt>v116–v118 · 2026-11-04</dt><dd><b>Phone install:</b> ClassDesk has its own app identity. Android Chrome currently installs only one web app per site address, so the owner's other apps moved off amber67-git.github.io (StudyDesk → amber-studydesk.netlify.app). If Android says "already installed" or "Could not open app", see the FAQ above.</dd>
+          <dt>v115 · 2026-11-03</dt><dd><b>Every screen size:</b> split-screen PC windows, Galaxy Tab and phones. On phones Students become cards and Classes a day list; dialogs keep Save/Cancel in view; lists that don't fit scroll sideways with the first column pinned.</dd>
+          <dt>v114 · 2026-11-03</dt><dd>A chalkboard <b>app icon</b> replaces the letters "CD". Android keeps the icon it installed with until the app is reinstalled.</dd>
+          <dt>v111–v113 · 2026-11-03</dt><dd><b>Payment request message:</b> one format for every student — greeting without "어머님", dates written as 10/12(1.5시간), [total_hours] as "1.5시간". A template you edited yourself is kept as written. Payments buttons stay on screen in a split-screen window.</dd>
+          <dt>v110 · 2026-11-01</dt><dd><b>Unpaid-fee reminder:</b> from the 11th, a popup lists last month's outstanding fees and comes back every 5 days until they are marked received (FAQ: "Does anything remind me about fees that never arrived?").</dd>
+          <dt>v109 · 2026-11-02</dt><dd><b>Other income:</b> Payments can record money that is not a lesson fee (e.g. a platform bonus). It counts in Expected and Collected but belongs to no student.</dd>
+          <dt>v100–v107 · 2026-10-27 → 2026-11-01</dt><dd><b>Reports</b> page: monthly figures per student with cancellations counted against the timetable, a Learning report and homework checking. <b>Bi-weekly</b> classes carry their own starting week, so two students can alternate on one weekday. The built-in sample data no longer contains real contact details.</dd>
+          <dt>v91–v98 · September–October 2026</dt><dd>First-lesson date and birthday on the student card, "months with us" in the list, and a Google scan to fill them. Cancelling a class that was already paid carries the fee to the next class. The effective-date dialog appears only when the schedule really changed. Any Google compare row can be reassigned to the right student.</dd>
+          <dt>v82–v90 · September 2026</dt><dd><b>Google Calendar compare</b> introduced (Classes → Google): yellow = your own lessons, green = platform lessons, everything else ignored; combined blocks recognised; repeating time differences offer a schedule fix; rows covered by a schedule change stay out of Apply all.</dd>
+          <dt>v78–v81 · September 2026</dt><dd>UI audit: one-line toolbars, two-line calendar chips, Esc closes dialogs, "Saved" toasts, a cloud-aware backup banner, deleted-student leftovers hidden.</dd>
+        </dl>
+
+        <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
+             and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v77</b> · FAQ current as of: <b>2026-11-04</b><br/>
-          (For the next update, only work done after this date needs to be reviewed for new FAQ entries)
+          Guide written against version: <b>v120</b> · FAQ current as of: <b>2026-11-08</b><br/>
+          (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
       </div>
