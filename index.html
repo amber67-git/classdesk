@@ -2911,7 +2911,9 @@ function getOccurrencesForDate(dateStr,sidFilter){
       else{
         // If this week's lesson for this slot was moved to a different date, don't show
         // a phantom empty class on its original day.
-        const movedAway=lessons.some(l=>l.sid===s.id&&l.movedFrom===dateStr&&Math.abs((l.dur||0)-slot.dur)<0.01);
+        // A moved class is matched to the slot it left by its length at the time (movedDur, kept when
+        // the move also changed the length), so a longer make-up never hides a different slot's class.
+        const movedAway=lessons.some(l=>l.sid===s.id&&l.movedFrom===dateStr&&Math.abs(((l.movedDur??l.dur)||0)-slot.dur)<0.01);
         if(movedAway)return;
         out.push({
           id:"v_"+s.id+"_"+dateStr+"_"+Math.round(slot.dur*10),
@@ -8903,7 +8905,7 @@ function renderGcal(){
   const aLbl=occ=>`<span class="cell-main">${gcalTimeLbl(getLessonTimeKey(occ))}</span> <span class="cell-muted2">${occ.dur}h</span>${occ.status==="cancelled"||occ.status==="cancelpaid"?' <span class="badge bc">Cancelled</span>':""}`;
   // What a different length does to the fee: shown as old → new, or, for a lesson already paid, a
   // note that the money received is left alone (see gcalSetLength).
-  const feeNote=d=>gcalPaid(d.occ)?` <span class="cell-muted2">(paid — fee kept)</span>`:` <span class="gc-money">${won(d.occ.amt||0)} → ${won(gcalAmountFor(d.s,d.ev.colorId,d.ev.dur))}</span>`;
+  const feeNote=d=>gcalPaid(d.occ)?` <span class="cell-muted2">(${d.occ.status==="partial"?"partly paid":"paid"} — fee kept)</span>`:` <span class="gc-money">${won(d.occ.amt||0)} → ${won(gcalAmountFor(d.s,d.ev.colorId,d.ev.dur))}</span>`;
   r.diffs.forEach((d,i)=>{
     let g="",a="",act="";
     if(d.type==="add"){g=gLbl(d.ev)+owner(d.ev.title);a=`<span class="cell-muted2">not in app</span>`;act=`<button class="btn btn-xs btn-p" onclick="gcalApply(${i})" title="Create this lesson in the app"><i class="ti ti-plus"></i> Add lesson</button>`;}
@@ -8970,20 +8972,22 @@ function gcalApplyOne(d){
     const real=materializeOccurrence(d.occ);
     if(!real.movedFrom)real.movedFrom=d.date;
     real.date=d.toDate;real.time=d.ev.time;
+    // The usual day matches a moved class to its slot by length, so when Google's length differs the
+    // length it left with is kept on the record (movedDur) and only that slot stays empty.
+    const dur0=real.dur;
     if(d.durDiff)gcalSetLength(real,d);
-    // The usual day hides a moved class only while the lengths agree. If Google's length differs,
-    // a tombstone keeps that day empty the way deleting the class would.
-    const left=getOccurrencesForDate(d.date,d.sid).find(o=>o.isVirtual&&Math.abs((o.dur||0)-(d.occ.dur||0))<0.01);
-    if(left){const t=materializeOccurrence(left);t.status="deleted";t.amt=0;}
+    if(real.dur!==dur0)real.movedDur=real.movedDur??dur0;
   }else{
     const real=materializeOccurrence(d.occ);real.time=d.ev.time;
     if(d.durDiff)gcalSetLength(real,d);
   }
 }
-function gcalPaid(occ){return occ.status==="paid"||occ.status==="cancelpaid";}
-// Google's length becomes the lesson's length and fee — unless the lesson is already paid. A paid
-// lesson's amount IS the money received (Payments sums it as collected), so rewriting it would show
-// money that never arrived. Such a lesson keeps its length and fee; the compare keeps showing the
+// Every status under which money has been received for the lesson (calcM counts these as collected,
+// partial at half).
+function gcalPaid(occ){return ["paid","prepaid","partial","cancelpaid"].includes(occ.status);}
+// Google's length becomes the lesson's length and fee — unless money has been received for the
+// lesson. Its amount then IS (or halves to) the money received, so rewriting it would show money
+// that never arrived. Such a lesson keeps its length and fee; the compare keeps showing the
 // difference until the owner settles it by hand.
 function gcalSetLength(real,d){
   if(gcalPaid(real))return;
