@@ -119,7 +119,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 .fbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
 /* 크기는 고정 — 글자 길이에 따라 늘었다 줄었다 하지 않는다 */
 .fbar select{width:160px!important;height:34px;font-size:12px;padding:0 10px}
-.fbar input[type=text]{width:280px!important;height:34px;font-size:12px;padding:0 10px}
+.fbar input[type=text],.fbar input[type=search]{width:280px!important;height:34px;font-size:12px;padding:0 10px}
+/* type=search = 같은 모양 + 브라우저의 지우기(×) 버튼. 폰에서 쓰는 검색 칸(Students)에 쓴다 */
 .fbar .btn{height:34px;padding:0 12px;font-size:12px}
 .fbar .btn-p{width:150px!important;padding:0 8px}   /* 짧은 라벨이면 양옆 여백만 넓어짐 */
 ```
