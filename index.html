@@ -614,7 +614,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
   #dash-sched td:nth-child(3){grid-area:1/2;min-width:0}
   #dash-sched td:nth-child(6){grid-area:1/3}
   #dash-sched td:nth-child(4),#dash-sched td:nth-child(5),#dash-sched td:nth-child(7){grid-column:1/-1;padding-left:2px}
-  #dash-sched td.empty{display:none}
+  #dash-sched td.sched-empty{display:none}
 }
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -4856,11 +4856,12 @@ function renderDash(){
         +"<td style='color:var(--txt3);font-family:var(--mono);font-size:11px'>"+occTimeLabel(l)+"</td>"
         +"<td><div style='display:flex;align-items:center;gap:7px'><div class='av'>"+ini(s?.name)+"</div>"
         +"<div><div class='tn'>"+(s?.name||"?")+"</div><div style='font-size:11px;color:var(--txt3)'>"+(s?.k||"")+"</div></div></div></td>"
-        // "empty" marks a cell with nothing to say, so the phone card can leave it out instead of printing "—"
-        +"<td"+(l.topic?"":" class='empty'")+">"+(l.topic||"—")+"</td>"
-        +"<td style='font-size:11px;color:var(--txt2)'"+(content==="—"?" class='empty'":"")+">"+content+"</td>"
+        // "sched-empty" marks a cell with nothing to say, so the phone card can leave it out instead of
+        // printing "—". (Not ".empty" — that is the page-wide empty-state block style.)
+        +"<td"+(l.topic?"":" class='sched-empty'")+">"+(l.topic||"—")+"</td>"
+        +"<td style='font-size:11px;color:var(--txt2)'"+(content==="—"?" class='sched-empty'":"")+">"+content+"</td>"
         +"<td>"+(privacyHidden?"<span class='badge bc' title='Hidden — tap Show amounts'>•••</span>":bdg(l.status))+"</td>"
-        +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'"+(l.note?"":" class='empty'")+">"+(l.note||"")+"</td>"
+        +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'"+(l.note?"":" class='sched-empty'")+">"+(l.note||"")+"</td>"
         +"</tr>";
     }).join("");
     sc.innerHTML="<div class='tw'><table id='dash-sched-tbl'><thead><tr><th></th><th>Time</th><th>Student</th><th>Topic</th><th>Workbook / Books</th><th>Status</th><th>Notes</th></tr></thead><tbody>"
