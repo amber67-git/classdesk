@@ -582,6 +582,39 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
   .std-row>:nth-child(7){grid-area:4/2;justify-self:end;align-self:start}
   .std-row>:nth-child(9){grid-area:5/1/6/3;padding-left:37px}
   .std-row>.std-notes-empty{display:none}
+  /* Payments → Summary by student: the seven-column row needed ~1030px and on a phone its money and
+     both buttons sat off the right edge. Each student becomes a card: name and status on top, the
+     five figures as labelled pairs, and the two actions as full-width buttons at the bottom. */
+  #pm-tab-summary .grid-head{display:none!important}
+  #pm-tab-summary .card{overflow:visible}
+  .pr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:4px 12px!important;padding:12px 14px!important;min-width:0!important}
+  .pr>:first-child{grid-area:1/1;position:static!important;margin-left:0!important;padding-left:0!important;box-shadow:none!important;background:transparent!important}
+  .pr>.tm{display:flex;align-items:baseline;gap:6px;text-align:left!important;font-size:12px}
+  .pr>.tm::before{content:attr(data-l);font-family:var(--font);font-size:11px;color:var(--txt3);flex:0 0 auto}
+  .pr>:nth-child(2){grid-area:2/1}.pr>:nth-child(4){grid-area:2/2;justify-content:flex-end}
+  .pr>:nth-child(3){grid-area:3/1}.pr>:nth-child(5){grid-area:3/2;justify-content:flex-end}
+  .pr>:nth-child(6){grid-area:4/2;justify-content:flex-end}
+  .pr-status{display:contents}
+  .pr-status>.badge{grid-area:1/2;justify-self:end;align-self:start}
+  .pr-status>.pm-act{grid-area:5/1}.pr-status>.pm-req{grid-area:5/2}
+  .pr-status>.pm-act,.pr-status>.pm-req{width:100%;height:40px;margin-top:6px}   /* the phone button height */
+  .pr-status .btn-lbl{display:inline}
+  .pr-status>span.pm-act,.pr-status>span.pm-req{display:none}
+  /* Dashboard → Today's Schedule: the seven-column table scrolled sideways and hid Status. Each
+     lesson is one card: time, student and status on the first line, then only the details a lesson
+     actually has (topic, workbooks / books, note). The pencil stays as the tap target. */
+  #dash-sched thead{display:none}
+  #dash-sched table,#dash-sched tbody{display:block;min-width:0!important;width:100%}   /* the narrow-mode .tw table{min-width:900px} is for real tables */
+  #dash-sched .tw{overflow:visible;background-image:none}
+  #dash-sched tr{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:3px 10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr)}
+  #dash-sched tr:last-child{border-bottom:none}
+  #dash-sched td{display:block;padding:0;border:0;max-width:none!important}
+  #dash-sched td:nth-child(1){grid-area:1/4}
+  #dash-sched td:nth-child(2){grid-area:1/1}
+  #dash-sched td:nth-child(3){grid-area:1/2;min-width:0}
+  #dash-sched td:nth-child(6){grid-area:1/3}
+  #dash-sched td:nth-child(4),#dash-sched td:nth-child(5),#dash-sched td:nth-child(7){grid-column:1/-1;padding-left:2px}
+  #dash-sched td.empty{display:none}
 }
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -1470,7 +1503,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="cb p guide-body">
 
         <h3>What is ClassDesk?</h3>
-        <p>An <b>all-in-one class management tool</b> for English reading tutors and home-library owners. Manage students, lessons, tuition, curriculum, workbooks, and your English book library in one place — and print <b>library-style level labels</b> for your books yourself.</p>
+        <p>An <b>all-in-one class management tool for private tutors</b>: students, timetable, lesson records, tuition, reports, curriculum and teaching materials in one place, on PC, tablet and phone, with the repetitive parts automated — parent messages, payment requests, fee reminders, Google Calendar comparison. It was first built for an English reading class with its own home library, so it also keeps a <b>book library</b> with AR/Lexile levels and prints <b>library-style level labels</b>.</p>
+        <p><b>Where it is going.</b> ClassDesk is being shaped into a product that <b>any tutor, in any subject</b>, can run their classes with and shape to their own way of teaching: choose or build a <b>curriculum style</b> (which sections a lesson record has, how the curriculum board is laid out, what the parent report says), set up the workspace (name, currency, time zone, default fee, categories), and keep the English-reading features — Reading, AR levels, book labels — as optional presets rather than built-ins. The settings that exist today (Custom Fields, message templates, logo, backup, cloud sync) are the first pieces of that; the rest is listed under "What's new" as it lands.</p>
         <ul>
           <li><b>No installation</b> — open the app's web address in a browser (Chrome recommended). Works on PC, phone, and tablet.</li>
           <li><b>Your data, your account</b> — everything is saved in this browser first, so the app keeps working offline. Sign in with Google (Settings → Account) to sync across your devices; synced data is stored privately under your own account and no one else can see it.</li>
@@ -1616,6 +1650,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v122 · 2026-11-09</dt><dd><b>Phone:</b> Payments → Summary by student and the Dashboard's Today's Schedule are cards instead of sideways-scrolling tables — every figure, the status and both action buttons are on screen. <b>Guide:</b> "What is ClassDesk?" now states where the app is going: a tool any tutor, in any subject, can shape to their own curriculum style.</dd>
           <dt>v121 · 2026-11-09</dt><dd><b>Student card:</b> the rows added with "Add another time" now look like the main Regular schedule row — the same Bi-weekly switch and start-week box, Duration and Rate with labels, and nothing cut off on a narrow dialog.</dd>
           <dt>v120 · 2026-11-08</dt><dd><b>Google compare:</b> a class moved to another day in the same week now appears as one row ("11/02 (월) → 11/04 (수)") with <b>Move in app</b>. It is recorded as a moved class — not as a cancellation plus a new lesson — so the Payments summary no longer counts it as cancelled. Equal-length moves are included in Apply all; a move that also changes the length shows the fee change and is a separate click.</dd>
           <dt>v119 · 2026-11-08</dt><dd><b>Students:</b> a search box at the top filters the list as you type — English name, Korean name, parent, contact, notes and aliases, archived students included. On phones the toolbar controls (search, dropdowns, month picker) are larger.</dd>
@@ -1634,7 +1669,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v121</b> · FAQ current as of: <b>2026-11-09</b><br/>
+          Guide written against version: <b>v122</b> · FAQ current as of: <b>2026-11-09</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2524,7 +2559,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v121";
+const APP_VERSION="v122";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
@@ -4821,10 +4856,11 @@ function renderDash(){
         +"<td style='color:var(--txt3);font-family:var(--mono);font-size:11px'>"+occTimeLabel(l)+"</td>"
         +"<td><div style='display:flex;align-items:center;gap:7px'><div class='av'>"+ini(s?.name)+"</div>"
         +"<div><div class='tn'>"+(s?.name||"?")+"</div><div style='font-size:11px;color:var(--txt3)'>"+(s?.k||"")+"</div></div></div></td>"
-        +"<td>"+(l.topic||"—")+"</td>"
-        +"<td style='font-size:11px;color:var(--txt2)'>"+content+"</td>"
+        // "empty" marks a cell with nothing to say, so the phone card can leave it out instead of printing "—"
+        +"<td"+(l.topic?"":" class='empty'")+">"+(l.topic||"—")+"</td>"
+        +"<td style='font-size:11px;color:var(--txt2)'"+(content==="—"?" class='empty'":"")+">"+content+"</td>"
         +"<td>"+(privacyHidden?"<span class='badge bc' title='Hidden — tap Show amounts'>•••</span>":bdg(l.status))+"</td>"
-        +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'>"+(l.note||"")+"</td>"
+        +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'"+(l.note?"":" class='empty'")+">"+(l.note||"")+"</td>"
         +"</tr>";
     }).join("");
     sc.innerHTML="<div class='tw'><table id='dash-sched-tbl'><thead><tr><th></th><th>Time</th><th>Student</th><th>Topic</th><th>Workbook / Books</th><th>Status</th><th>Notes</th></tr></thead><tbody>"
@@ -5770,11 +5806,11 @@ function renderPayments(){
       <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div>
       <div class="cell-muted">${s.k} · ${s.sched}</div>
     </div>
-    <div class="tm" style="text-align:center" title="lessons · hours">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
-    <div class="tm" style="text-align:center;color:var(--txt3)">${c.cancelled||"—"}</div>
-    <div class="tm">${won(c.exp)}</div>
-    <div class="tm">${won(c.paidT)}</div>
-    <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}">${c.diff>0?won(c.diff):"—"}</div>
+    <div class="tm" style="text-align:center" title="lessons · hours" data-l="Lessons">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
+    <div class="tm" style="text-align:center;color:var(--txt3)" data-l="Cancelled">${c.cancelled||"—"}</div>
+    <div class="tm" data-l="Expected">${won(c.exp)}</div>
+    <div class="tm" data-l="Paid">${won(c.paidT)}</div>
+    <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}" data-l="Remaining">${c.diff>0?won(c.diff):"—"}</div>
     <div class="pr-status">
       ${c.count===0&&!c.cancelled?'<span class="badge bc">No lessons</span>':bdg(c.ov)}
       ${c.diff>0
