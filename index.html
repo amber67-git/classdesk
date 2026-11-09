@@ -395,9 +395,12 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .lf-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .lf-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em}
 .wb-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:6px}
-.slot-row{display:grid;grid-template-columns:1fr 76px 100px auto;gap:8px;align-items:center;margin-bottom:6px;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:6px}
-.slot-row select{height:32px;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);font-size:12px}
-.slot-row input{height:32px;background:var(--surf)}
+/* An extra class row repeats the main schedule row: the same day/time/Bi-weekly line on top, then
+   Duration and Rate with labels, and its controls at the same size as the rest of the form. */
+.slot-row{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:10px}
+.slot-row2{display:flex;gap:8px;align-items:flex-end}
+.slot-row2 .fg{flex:1 1 0;min-width:0;margin:0}
+.slot-acts{display:flex;gap:2px;padding-bottom:3px}
 .wb-row input{height:34px}
 .hw-input{border:none!important;border-bottom:2px solid var(--grn)!important;border-radius:0!important;background:transparent!important;padding-left:6px!important;box-shadow:none!important;font-weight:500;color:var(--grn-t)!important}
 .hw-input:focus{box-shadow:none!important;border-color:var(--grn)!important}
@@ -1613,6 +1616,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v121 · 2026-11-09</dt><dd><b>Student card:</b> the rows added with "Add another time" now look like the main Regular schedule row — the same Bi-weekly switch and start-week box, Duration and Rate with labels, and nothing cut off on a narrow dialog.</dd>
           <dt>v120 · 2026-11-08</dt><dd><b>Google compare:</b> a class moved to another day in the same week now appears as one row ("11/02 (월) → 11/04 (수)") with <b>Move in app</b>. It is recorded as a moved class — not as a cancellation plus a new lesson — so the Payments summary no longer counts it as cancelled. Equal-length moves are included in Apply all; a move that also changes the length shows the fee change and is a separate click.</dd>
           <dt>v119 · 2026-11-08</dt><dd><b>Students:</b> a search box at the top filters the list as you type — English name, Korean name, parent, contact, notes and aliases, archived students included. On phones the toolbar controls (search, dropdowns, month picker) are larger.</dd>
           <dt>v116–v118 · 2026-11-04</dt><dd><b>Phone install:</b> ClassDesk has its own app identity. Android Chrome currently installs only one web app per site address, so the owner's other apps moved off amber67-git.github.io (StudyDesk → amber-studydesk.netlify.app). If Android says "already installed" or "Could not open app", see the FAQ above.</dd>
@@ -1630,7 +1634,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v120</b> · FAQ current as of: <b>2026-11-08</b><br/>
+          Guide written against version: <b>v121</b> · FAQ current as of: <b>2026-11-09</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2520,8 +2524,8 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v120";
-const APP_BUILT="2026-11-08";
+const APP_VERSION="v121";
+const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
@@ -3253,18 +3257,23 @@ function addSlotRow(slot){
   const {day,time}=splitSched(slot?.sched||"");
   // First control is a hidden input holding "Wed 19:30" — the save reader takes inputs[0].value,
   // so this stays compatible while the visible UI is two dropdowns.
+  // Same shape as the main "Regular schedule" row above it, so the two read as one form.
   div.innerHTML=
      '<input type="hidden" class="slot-sched" value="'+(slot?.sched||"")+'"/>'
-    +'<div style="display:flex;gap:6px;align-items:center">'
-    +  '<select class="slot-day" style="flex:0 0 96px" onchange="slotSyncSched(this)">'+schedDayOptions(day)+'</select>'
-    +  '<input class="slot-time" type="time" step="300" style="flex:1" value="'+time+'" onchange="slotSyncSched(this)" oninput="slotSyncSched(this)"/>'
-    +  '<label style="display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px;color:var(--txt2);cursor:pointer" title="Every two weeks"><input type="checkbox" class="slot-biweekly" onchange="slotToggleBiweek(this)"'+(slot?.freq==="biweekly"?" checked":"")+'/> Biweekly</label>'
-    +  '<input type="date" class="slot-biweek-from" title="A week this class really happens" value="'+(slot?.biweekFrom||"")+'" style="flex:0 0 140px;'+(slot?.freq==="biweekly"?"":"display:none")+'"/>'
+    +'<div class="sm-sched-row">'
+    +  '<select class="slot-day" style="flex:0 0 130px" onchange="slotSyncSched(this)">'+schedDayOptions(day)+'</select>'
+    +  '<input class="slot-time" type="time" step="300" style="flex:1 1 120px;min-width:0" value="'+time+'" onchange="slotSyncSched(this)" oninput="slotSyncSched(this)"/>'
+    +  '<label class="sw" title="Once every two weeks"><input type="checkbox" class="slot-biweekly" onchange="slotToggleBiweek(this)"'+(slot?.freq==="biweekly"?" checked":"")+'/><span class="sw-track"></span> Bi-weekly</label>'
+    +  '<input type="date" class="slot-biweek-from" title="A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday." value="'+(slot?.biweekFrom||"")+'" style="flex:0 0 150px;'+(slot?.freq==="biweekly"?"":"display:none")+'"/>'
     +'</div>'
-    +'<input type="number" min="0.5" max="4" step="0.5" placeholder="hr" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/>'
-    +'<input type="number" step="5000" placeholder="rate ₩" value="'+(slot?.rate??40000)+'"/>'
-    +'<button type="button" class="bic" onclick="slotStopFromDate(this)" style="color:var(--txt3)" title="Stop this class from a date — the other days carry on, and past lessons keep their own schedule"><i class="ti ti-calendar-off"></i></button>'
-    +'<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" style="color:var(--txt3)" title="Remove this line"><i class="ti ti-trash"></i></button>';
+    +'<div class="slot-row2">'
+    +  '<div class="fg"><label>Duration</label><input type="number" min="0.5" max="4" step="0.5" placeholder="hr" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/></div>'
+    +  '<div class="fg"><label>Rate</label><input type="number" step="5000" placeholder="rate ₩" value="'+(slot?.rate??40000)+'"/></div>'
+    +  '<div class="slot-acts">'
+    +    '<button type="button" class="bic" onclick="slotStopFromDate(this)" title="Stop this class from a date — the other days carry on, and past lessons keep their own schedule"><i class="ti ti-calendar-off"></i></button>'
+    +    '<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" title="Remove this line"><i class="ti ti-trash"></i></button>'
+    +  '</div>'
+    +'</div>';
   list.appendChild(div);
 }
 // Recombine a slot row's day+time dropdowns into its hidden sched input.
