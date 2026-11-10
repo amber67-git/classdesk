@@ -116,6 +116,14 @@
 - 데이터는 지우지 않는다. 숨긴 항목에 이미 있는 값은 저장해도 그대로 남는다.
 - 새 선택 기능을 만들면 `FEATURE_PAGES` / `FEATURE_SECTIONS`에 한 줄 더하고, 마크업에 `data-feature`를 붙인다.
 
+## 열 구성 동기화 — v132부터
+
+설정 → 사용자 항목의 열 구성(추가 항목·이름·순서·숨김)은 `settings.fields[페이지] = {custom, labels, order, hidden}`에 저장되어 계정과 함께 동기화된다. 열 **너비**(`mc_colwidths`)는 화면에 따라 다르므로 기기마다 둔다.
+
+- 읽기·쓰기는 항상 `getCustomFields / getCustomLabels / getFieldOrder / getHiddenFields`와 짝이 되는 `save…` 함수로만 한다. 쓰기는 네 부분을 한꺼번에 `settings.fields`에 옮기고 `save()`한다.
+- v132 전의 기기별 키(`mc_customfields_<page>` 등)는 그 페이지가 `settings.fields`에 없을 때만 읽는다. 시작할 때 메모리로 옮기고(`moveLocalFieldSetups`), 클라우드와 처음 맞춘 뒤(`reconcileKey`)에 올린다 — 더 일찍 올리면 다른 기기의 새 설정을 덮어쓸 수 있다.
+- 다른 기기의 설정에 어떤 페이지가 없으면 우리 것을 남기고 다시 올린다(옛 버전 기기 대비).
+
 ## 기타
 
 - 프로젝트 인수인계 메모 `CLAUDE.md`는 실제 학생 정보가 들어 있어 저장소에 올리지 않는다(`.gitignore`). `validate.mjs`가 이 파일이 저장소에 들어오면 실패시킨다.
