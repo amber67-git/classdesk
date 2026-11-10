@@ -137,6 +137,11 @@ if (!dictM) {
   }
   if (I18N) {
     const ko = I18N.ko || {};
+    // A key written twice silently keeps the last Korean — find repeats in the source text.
+    const keysInSrc = [...dictM[1].matchAll(/(?:^|[{,])\s*"((?:\\.|[^"\\])*)"\s*:/g)].map((x) => x[1]);
+    const dupKeys = [...new Set(keysInSrc.filter((k, i) => keysInSrc.indexOf(k) !== i))];
+    if (dupKeys.length) fail(`${dupKeys.length} Korean key(s) written twice in I18N.ko: ${dupKeys.slice(0, 5).map((k) => JSON.stringify(k)).join(", ")}`);
+    else ok(`no Korean key written twice (${keysInSrc.length} keys)`);
     const used = new Map(); // key → first place it is used
     const use = (k, where) => { if (!used.has(k)) used.set(k, where); };
     const decode = (s) => s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, " ");

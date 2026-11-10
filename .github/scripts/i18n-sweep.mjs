@@ -69,7 +69,10 @@ async function scan(page, lang) {
     document.querySelectorAll(UI.join(",")).forEach((el) => {
       const inOpenModal = el.closest(".mo") ? el.closest(".mo").classList.contains("show") : true;
       if (!inOpenModal) return;
-      if (el.tagName === "OPTION" ? !vis(el.closest("select")) : !vis(el)) return;
+      // <datalist> options are suggestions built from the user's data, not UI words.
+      if (el.tagName === "OPTION" ? !el.closest("select") || !vis(el.closest("select")) : !vis(el)) return;
+      // Lists of international ids (currency codes, time zone names) are the same in every language.
+      if (el.closest("[data-sweep-ids]")) return;
       if (el.closest(ROW) && !el.matches(".badge,button,[title]")) return;
       // Own text only (children are checked on their own)
       const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.nodeValue).join(" ");

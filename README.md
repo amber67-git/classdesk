@@ -99,6 +99,15 @@
 - 앱이 언어를 정하기 전에 뜰 수 있는 메시지(저장 데이터 손상, 예기치 못한 오류)는 `tx` 대신 `txSafe`를 쓴다 — 키는 같고, 실패하면 영어로 보여 준다.
 - 진행 상황: v124–v126 = 앱 화면 전체, v129 = 설명서 한국어판과 남아 있던 메시지(라벨 인쇄 창, 알림·확인 창). 이것으로 한국어 / 영어 작업 완료.
 
+## 작업 공간 설정 — v130부터
+
+설정 → 템플릿 → **작업 공간**: 기본 시간당 수업료(`settings.hourlyRate`, 기본 40000), 통화(`settings.currency`, 기본 KRW), 시간대(`settings.timeZone`, 기본 Asia/Seoul), 도서관 이름(`settings.libraryName` — 예전에는 기기마다 `localStorage.mc_library_name`, 처음 열 때 한 번 옮김), 커리큘럼 카테고리(`settings.currCats`). 모두 `settings`라 기기 간에 동기화된다.
+
+- 금액은 반드시 `won(n)`(= `fmtMoney`)으로 표시한다. `₩`를 직접 쓰지 않는다. 정적 라벨에는 `{cur}` 자리표시자를 쓴다(`"Amount ({cur})"` — `applyI18n`이 `I18N_VARS`로 채움). 금액 입력칸은 `step` 대신 `data-money`(배수는 `data-money="5"`).
+- 기본 수업료는 `hourlyRate()`로 읽는다(고정값 `HR`은 없어졌다).
+- "오늘"은 `nowKST()` / `td()` / `tm()` — 이름은 남았지만 작업 공간 시간대를 따른다. 임의 시각을 그 시간대의 벽시계로 바꾸려면 `wallTZ(date)`, 그 시간대의 자정 시각은 `tzMidnightISO(y,m,d)`. Google 캘린더 일정도 이것으로 읽는다.
+- 통화·시간대·언어는 시작할 때 한 번 읽는다. 바꾸면 앱을 다시 열고, 다른 기기에서 바뀌면 "다시 열기" 알림을 띄운다.
+
 ## 기타
 
 - 프로젝트 인수인계 메모 `CLAUDE.md`는 실제 학생 정보가 들어 있어 저장소에 올리지 않는다(`.gitignore`). `validate.mjs`가 이 파일이 저장소에 들어오면 실패시킨다.

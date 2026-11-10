@@ -334,6 +334,12 @@ thead[data-header-page] th:not(:last-child):hover::after{
 /* Korean copy: wrap between words, not inside them (long URLs may still break) */
 .guide-body[lang="ko"]{word-break:keep-all;overflow-wrap:break-word}
 .guide-body[hidden]{display:none!important}
+/* Settings → Workspace (v130) */
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 18px}
+.ws-grid .fg .u-hint{margin-top:4px;font-size:11.5px}
+.ws-money{display:flex;align-items:center;gap:6px}
+.ws-money span{font-weight:700;color:var(--txt2);min-width:14px}
+.ws-money input{flex:1 1 auto;min-width:0}
 .fg label{display:block;font-size:11px;font-weight:600;color:var(--txt2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
 /* A switch inside a form group keeps the switch look (Archive, Bi-weekly), not the uppercase field label */
 .fg label.sw{display:inline-flex;font-size:12px;font-weight:500;margin:0;text-transform:none;letter-spacing:0}
@@ -1341,13 +1347,29 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </select>
       </div>
     </div>
-    <!-- Library branding -->
-    <div class="card" style="margin-bottom:16px">
-      <div class="ch"><div class="ct" data-i18n><i class="ti ti-building-bank"></i>Library name</div></div>
+    <!-- Workspace (v130): values that used to be fixed for one Korean classroom. All synced settings. -->
+    <div class="card" style="margin-bottom:16px" id="ws-card">
+      <div class="ch"><div class="ct" data-i18n><i class="ti ti-building-bank"></i>Workspace</div></div>
       <div class="cb p">
-        <p class="u-hint" style="margin-bottom:10px" data-i18n>Ownership mark printed at the bottom-right of info labels (e.g. AMBER LIBRARY). Leave blank to omit it.</p>
-        <input id="library-name-inp" type="text" style="max-width:320px" placeholder="e.g. AMBER LIBRARY" data-i18n-ph
-          oninput="localStorage.setItem('mc_library_name',this.value)" onchange="showToast(tx('Library name saved'))"/>
+        <p class="u-hint" style="margin-bottom:12px" data-i18n>How your classes are run. Saved with your account, so every signed-in device uses the same values.</p>
+        <div class="ws-grid">
+          <div class="fg"><label for="ws-rate" data-i18n>Default hourly fee</label>
+            <div class="ws-money"><span id="ws-cur-sym"></span><input id="ws-rate" type="number" min="0" data-money="5" onchange="wsSetRate(this.value)"/></div>
+            <div class="u-hint" data-i18n>Filled in for a new student or lesson; each student's own rate still wins.</div></div>
+          <div class="fg"><label for="ws-cur" data-i18n>Currency</label>
+            <select id="ws-cur" data-sweep-ids onchange="wsSetReload('currency',this.value)"></select>
+            <div class="u-hint" data-i18n>Only how amounts are shown — stored numbers are not converted. The app reloads.</div></div>
+          <div class="fg"><label for="ws-tz" data-i18n>Time zone</label>
+            <select id="ws-tz" data-sweep-ids onchange="wsSetReload('timeZone',this.value)"></select>
+            <div class="u-hint" data-i18n>Decides what "today" is and the times read from Google Calendar. The app reloads.</div></div>
+          <div class="fg"><label for="library-name-inp" data-i18n>Library name</label>
+            <input id="library-name-inp" type="text" placeholder="e.g. AMBER LIBRARY" data-i18n-ph onchange="wsSetLibrary(this.value)"/>
+            <div class="u-hint" data-i18n>Printed at the bottom-right of info labels and at the top of printed reports. Leave blank to omit it.</div></div>
+        </div>
+        <div class="fg" style="margin-top:6px"><label for="ws-cats" data-i18n>Curriculum categories</label>
+          <textarea id="ws-cats" rows="3" placeholder="e.g. 과학, 역사, Phonics" data-i18n-ph onchange="wsSetCats(this.value)"></textarea>
+          <div class="u-hint" data-i18n>Comma or one per line. Offered when you type a category on a curriculum topic, before the ones your curriculum already uses.</div></div>
+        <p class="u-hint" style="margin:10px 0 0"><i class="ti ti-calendar"></i> <span data-i18n>Which Google Calendar colours count as lessons is set in Settings → API Keys → Google Calendar.</span></p>
       </div>
     </div>
     <!-- App logo (sidebar + favicon + iOS home-screen icon) -->
@@ -1462,7 +1484,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </div>
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr)">
           <div style="font-size:12px;font-weight:700;margin-bottom:6px" data-i18n>Recalculate lesson hours</div>
-          <p class="u-hint" style="margin-bottom:10px" data-i18n>Recalculates every lesson's hours from its amount using each student's hourly rate (rate ÷ duration). Standard students (₩40,000/h): ₩60,000 → 1.5h. One-off students (₩24,000/h): ₩24,000 → 1h. Zero-amount and cancelled lessons are left untouched.</p>
+          <p class="u-hint" style="margin-bottom:10px" data-i18n>Recalculates every lesson's hours from its amount using each student's hourly rate (rate ÷ duration): a lesson that cost one and a half times the student's hourly rate becomes 1.5h. Zero-amount and cancelled lessons are left untouched.</p>
           <button class="btn" onclick="recalcDurationsFromAmounts()" data-i18n><i class="ti ti-clock-cog"></i> Recalculate hours from amounts</button>
           <p id="durfix-status" style="font-size:12px;color:var(--txt2);margin-top:8px"></p>
         </div>
@@ -1533,7 +1555,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p id="gcal-conn" style="font-size:11px;color:var(--txt3);margin-top:8px"></p>
         <div style="margin-top:14px;font-size:12px;font-weight:600" data-i18n>Event colours</div>
         <p class="u-hint" data-i18n>Yellow (Banana) events are your own lessons at the student's rate. Green (Sage / Basil) events are platform lessons — enter their flat rate below (blank = student's rate). Every other colour is ignored.</p>
-        <div class="fg" style="max-width:260px"><label data-i18n>Green lessons · ₩ per hour</label><input type="number" id="gcal-green-hourly" step="1000" placeholder="e.g. 30000" data-i18n-ph onchange="settings.gcalGreenHourly=parseInt(this.value,10)||0;save();showToast(tx('Green rate saved'))"/></div>
+        <div class="fg" style="max-width:260px"><label data-i18n>Green lessons · {cur} per hour</label><input type="number" id="gcal-green-hourly" data-money placeholder="e.g. 30000" data-i18n-ph onchange="settings.gcalGreenHourly=parseInt(this.value,10)||0;save();showToast(tx('Green rate saved'))"/></div>
         <div id="gcal-rules"></div>
         <div style="margin-top:14px;font-size:12px;font-weight:600" data-i18n>First lessons</div>
         <p class="u-hint" data-i18n>Reads the calendar back year by year and shows, for every student, the earliest entry that mentions them — with the entry's own title, so you can see what the date is based on. Entries that read like a consultation, or that sit long before the next one, are flagged. Nothing is written until you press a button.</p>
@@ -1622,7 +1644,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
           <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
           <dt>Material</dt><dd>Teaching materials, aids, and printouts.</dd>
-          <dt>Settings</dt><dd>Report &amp; payment templates, custom fields (hide/reorder/rename columns), backup, API keys, and this guide.</dd>
+          <dt>Settings</dt><dd>Workspace (default fee, currency, time zone, library name, curriculum categories), language, report &amp; payment templates, custom fields (hide/reorder/rename columns), backup, API keys, and this guide.</dd>
         </dl>
 
         <h3>Books in depth — the book library</h3>
@@ -1639,7 +1661,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p><b>Supplies (two Glorytech label sheets):</b></p>
         <ul>
           <li><b>SC9178</b> — for cover labels. 30×21mm, 78 cells per A4 sheet (6 columns × 13 rows). A mini cover to stick on the front of the book.</li>
-          <li><b>WP9140</b> — for info labels. 47×26.9mm, 40 cells per A4 sheet (4 columns × 10 rows). Color band (level) + title + author + AR/Lexile + category + ownership mark (library name — change it in Settings → Templates).</li>
+          <li><b>WP9140</b> — for info labels. 47×26.9mm, 40 cells per A4 sheet (4 columns × 10 rows). Color band (level) + title + author + AR/Lexile + category + ownership mark (library name — change it in Settings → Templates → Workspace).</li>
         </ul>
         <p><b>Printing steps:</b></p>
         <ol>
@@ -1732,7 +1754,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
-          <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk's "today" is always Korea Standard Time (KST). Even if you open it abroad or your computer uses a different timezone, class schedules are computed in Korean time.</dd>
+          <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
+          <dt>Can I use another currency or change the default fee?</dt><dd>Settings → Templates → <b>Workspace</b>. The <b>default hourly fee</b> is filled in for a new student or lesson (each student's own rate still wins). <b>Currency</b> only changes how amounts are shown (₩, $, £, €, ¥ …) — numbers already saved are not converted. Changing the currency or time zone reloads the app.</dd>
           <dt>A field is missing in the edit dialog</dt><dd>The edit dialog always shows every field. Custom Fields hiding only applies to list columns. If it's still missing, check whether the file is an old version.</dd>
           <dt>What happens to my data when I replace the file with a new version?</dt><dd>It stays, as long as it's the same computer and browser — data lives in the browser, not in the file. With cloud sync on, there's a copy in the cloud too. To be safe, Export before replacing.</dd>
           <dt>I deleted something and it came back moments later</dt><dd>An old-version bug, fixed in the current version. If it still happens, check whether another device has an old version of the file open — every device should use the same up-to-date address (amber67-git.github.io/classdesk).</dd>
@@ -1752,6 +1775,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v130 · 2026-11-10</dt><dd><b>Workspace settings</b> (Settings → Templates → Workspace): the default hourly fee (was fixed at ₩40,000), the currency amounts are shown in, the time zone "today" and Google Calendar times are read in (was always Korea), the library name — now saved with your account so every device prints the same one — and a list of curriculum categories offered when you type a topic's category. Everything stays as before until you change it.</dd>
           <dt>v129 · 2026-11-10</dt><dd><b>Guide in Korean:</b> with the language set to 한국어 (or a Korean device on "Match the device language") this whole Guide — every section, the FAQ and this list — is in Korean. That completes the Korean / English work: every screen of the app now follows the language setting.</dd>
           <dt>v128 · 2026-11-10</dt><dd><b>Curriculum on a tablet or PC reads like a spreadsheet:</b> gridlines, text aligned to the top of each cell, and the heading row stays at the top while you scroll. <b>Drag the line between two column headings</b> to make a column wider or narrower (works with a finger on a tablet too); the table scrolls sideways when it gets wider. <b>Double-click</b> that line to fit the column to its text, and the ↔ button at the right end of the heading puts every width back. On a wide screen Month, Wk, Category and Topic stay frozen on the left. Widths are remembered on each device.</dd>
           <dt>v127 · 2026-11-10</dt><dd><b>Curriculum:</b> topics now have a <b>year</b> (a Year box on the topic card and a year filter on the page; the list shows the newest year first). <b>Import</b> brings in a whole curriculum from a spreadsheet: copy the rows in Google Sheets or Excel, heading row included, and paste them — or choose a CSV / JSON file. A topic already in the app is never duplicated or overwritten; only its empty boxes are filled in, and Undo is offered for a few seconds. Long texts keep their line breaks and web links open.</dd>
@@ -1778,7 +1802,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v129</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v130</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -1806,7 +1830,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>교재</dt><dd>교재 관리 — 표지, 진도, 학생별 배정.</dd>
           <dt>도서</dt><dd>영어 도서 목록 — 아래 "도서 자세히 보기" 참고. 이 앱의 핵심 화면입니다.</dd>
           <dt>교구</dt><dd>수업 자료, 교구, 인쇄물.</dd>
-          <dt>설정</dt><dd>보고·수업료 템플릿, 사용자 항목(열 숨기기·순서·이름 바꾸기), 백업, API 키, 그리고 이 설명서.</dd>
+          <dt>설정</dt><dd>작업 공간(기본 수업료, 통화, 시간대, 도서관 이름, 커리큘럼 카테고리), 언어, 보고·수업료 템플릿, 사용자 항목(열 숨기기·순서·이름 바꾸기), 백업, API 키, 그리고 이 설명서.</dd>
         </dl>
 
         <h3>도서 자세히 보기 — 도서 목록</h3>
@@ -1823,7 +1847,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p><b>준비물 (글로리텍 라벨지 두 종류):</b></p>
         <ul>
           <li><b>SC9178</b> — 표지 라벨용. 30×21mm, A4 한 장에 78칸(6열 × 13행). 책 앞표지에 붙이는 작은 표지입니다.</li>
-          <li><b>WP9140</b> — 정보 라벨용. 47×26.9mm, A4 한 장에 40칸(4열 × 10행). 색상 띠(레벨) + 제목 + 저자 + AR/Lexile + 카테고리 + 소유 표시(도서관 이름 — 설정 → 템플릿에서 바꿉니다).</li>
+          <li><b>WP9140</b> — 정보 라벨용. 47×26.9mm, A4 한 장에 40칸(4열 × 10행). 색상 띠(레벨) + 제목 + 저자 + AR/Lexile + 카테고리 + 소유 표시(도서관 이름 — 설정 → 템플릿 → 작업 공간에서 바꿉니다).</li>
         </ul>
         <p><b>인쇄 순서:</b></p>
         <ol>
@@ -1916,7 +1940,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </dl>
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
-          <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk의 "오늘"은 항상 한국 표준시(KST)입니다. 해외에서 열거나 컴퓨터 시간대가 달라도 수업 일정은 한국 시간으로 계산됩니다.</dd>
+          <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
+          <dt>다른 통화를 쓰거나 기본 수업료를 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>작업 공간</b>. <b>기본 시간당 수업료</b>는 새 학생이나 새 수업에 미리 채워집니다(학생마다 정한 수업료가 있으면 그것이 우선). <b>통화</b>는 금액을 보여 주는 방식(₩, $, £, €, ¥ …)만 바꾸고, 이미 저장된 숫자는 환산하지 않습니다. 통화나 시간대를 바꾸면 앱이 다시 열립니다.</dd>
           <dt>편집 창에 항목이 없어요</dt><dd>편집 창에는 항상 모든 항목이 나옵니다. 사용자 항목의 숨기기는 목록의 열에만 적용됩니다. 그래도 없다면 파일이 옛 버전인지 확인하세요.</dd>
           <dt>파일을 새 버전으로 바꾸면 데이터는 어떻게 되나요?</dt><dd>같은 컴퓨터, 같은 브라우저라면 그대로 남습니다 — 데이터는 파일이 아니라 브라우저에 있습니다. 클라우드 동기화를 켜 두었다면 클라우드에도 사본이 있습니다. 안전하게 바꾸기 전에 내보내기를 해 두세요.</dd>
           <dt>지운 것이 잠시 뒤에 다시 나타나요</dt><dd>옛 버전의 버그로, 지금 버전에서는 고쳐졌습니다. 그래도 생긴다면 다른 기기에서 옛 버전 파일이 열려 있는지 확인하세요 — 모든 기기가 같은 최신 주소(amber67-git.github.io/classdesk)를 써야 합니다.</dd>
@@ -1936,6 +1961,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v130 · 2026-11-10</dt><dd><b>작업 공간 설정</b>(설정 → 템플릿 → 작업 공간): 기본 시간당 수업료(전에는 ₩40,000 고정), 금액을 보여 줄 통화, "오늘"과 Google 캘린더 시간을 읽는 시간대(전에는 항상 한국), 도서관 이름 — 이제 계정에 저장되어 모든 기기가 같은 이름을 인쇄합니다 — 그리고 주제의 카테고리를 입력할 때 추천할 커리큘럼 카테고리 목록. 바꾸기 전까지는 모두 예전과 같습니다.</dd>
           <dt>v129 · 2026-11-10</dt><dd><b>한국어 설명서:</b> 언어를 한국어로 두면(또는 "기기 언어에 맞춤"인 한국어 기기라면) 이 설명서 전체 — 모든 항목, 자주 묻는 질문, 이 목록까지 — 가 한국어로 나옵니다. 이것으로 한국어 / 영어 작업이 끝났습니다: 앱의 모든 화면이 언어 설정을 따릅니다.</dd>
           <dt>v128 · 2026-11-10</dt><dd><b>태블릿·PC의 커리큘럼이 스프레드시트처럼 보입니다:</b> 칸 구분선, 칸 위쪽에 맞춘 글, 아래로 스크롤해도 맨 위에 남는 제목 줄. <b>두 열 제목 사이의 선을 끌어</b> 열을 넓히거나 좁힐 수 있습니다(태블릿에서는 손가락으로도 됩니다). 표가 넓어지면 옆으로 스크롤됩니다. 그 선을 <b>두 번 누르면</b> 글에 맞게 너비가 맞춰지고, 제목 줄 오른쪽 끝의 ↔ 버튼은 모든 너비를 처음으로 되돌립니다. 넓은 화면에서는 월, 주, 카테고리, 주제가 왼쪽에 고정됩니다. 너비는 기기마다 기억합니다.</dd>
           <dt>v127 · 2026-11-10</dt><dd><b>커리큘럼:</b> 주제에 <b>연도</b>가 생겼습니다(주제 카드의 연도 칸과 화면의 연도 필터, 목록은 최신 연도부터). <b>가져오기</b>로 스프레드시트의 커리큘럼 전체를 불러옵니다: Google 스프레드시트나 엑셀에서 제목 줄까지 포함해 행을 복사해 붙여 넣거나, CSV / JSON 파일을 고르세요. 앱에 이미 있는 주제는 중복되거나 덮어쓰이지 않고 빈 칸만 채워지며, 몇 초 동안 되돌리기를 할 수 있습니다. 긴 글은 줄바꿈이 유지되고 웹 링크는 눌러서 열립니다.</dd>
@@ -1961,7 +1987,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v129</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
+          설명서 기준 버전: <b>v130</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2044,7 +2070,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <div class="fg"><label data-col="cat" data-i18n>Category</label>
             <select id="bm-cat" onchange="this.dataset.touched=1" data-i18n-opts><option value="Reading">Reading</option><option value="Writing">Writing</option><option value="Speaking">Speaking</option><option value="Listening">Listening</option><option value="Vocabulary">Vocabulary</option><option value="Grammar">Grammar</option><option value="Other">Other</option></select>
           </div>
-          <div class="fg"><label data-col="price" data-i18n>Price</label><input id="bm-price" type="number" step="1000" min="0" placeholder="₩"/></div>
+          <div class="fg"><label data-col="price" data-i18n>Price</label><input id="bm-price" type="number" data-money min="0" placeholder="{cur}" data-i18n-ph/></div>
         </div>
         <div class="blm-grid">
           <div class="fg"><label data-col="wb" data-i18n>Has workbook</label>
@@ -2303,7 +2329,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <select id="mm-difficulty" data-i18n-opts><option value="">—</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select>
       </div>
     </div>
-    <div class="fg"><label data-col="price" data-i18n>Price</label><input id="mm-price" type="number" step="1000" min="0" placeholder="₩"/></div>
+    <div class="fg"><label data-col="price" data-i18n>Price</label><input id="mm-price" type="number" data-money min="0" placeholder="{cur}" data-i18n-ph/></div>
     <div class="fg"><label data-col="comment" data-i18n>Notes</label><textarea id="mm-comment" rows="2"></textarea></div>
     <div id="mm-custom-fields"></div>
     <div class="mf"><button id="mm-delete" class="btn btn-d modal-delete-btn" onclick="delMaterialFromModal()" data-i18n><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-material')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveMaterial()" data-i18n>Save material</button></div>
@@ -2343,7 +2369,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="fg"><label class="sw" data-i18n><input id="sm-archived" type="checkbox"/><span class="sw-track"></span> Archive</label></div>
     <div class="fr c3">
       <div class="fg"><label data-col="dur" data-i18n>Duration</label><input id="sm-dur" type="number" min="0.5" max="4" step="0.5" value="1" oninput="autoRate()"/></div>
-      <div class="fg"><label data-col="rate" data-i18n>Rate</label><input id="sm-rate" type="number" step="5000" value="40000"/></div>
+      <div class="fg"><label data-col="rate" data-i18n>Rate</label><input id="sm-rate" type="number" data-money="5"/></div>
       <div class="fg"><label data-col="ptype" data-i18n>Payment type</label><select id="sm-ptype" data-i18n-opts><option value="postpay">Post-pay</option><option value="prepay">Prepay</option><option value="apppay">App Payment</option></select></div>
     </div>
 
@@ -2378,7 +2404,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="fg" style="margin:0"><label data-col="date" data-required="true" data-i18n>Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow();renderHomeworkCheck()"/></div>
       <div class="fg" style="margin:0"><label data-col="time" data-i18n>Start time</label><input id="lm-time" type="time" onchange="lessonTimeChanged()"/></div>
       <div class="fg" style="margin:0"><label data-col="dur" data-i18n>Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
-      <div class="fg" style="margin:0"><label data-i18n>Amount (₩)</label><input id="lm-amt" type="number" step="5000" oninput="lmAmtTyped()"/></div>
+      <div class="fg" style="margin:0"><label data-i18n>Amount ({cur})</label><input id="lm-amt" type="number" data-money="5" oninput="lmAmtTyped()"/></div>
       <div class="fg" style="margin:0"><label data-i18n>Status</label>
         <select id="lm-status" onchange="lmStatusChanged()" data-i18n-opts><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
       </div>
@@ -2524,7 +2550,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="fr c3">
       <div class="fg"><label data-col="month" data-i18n>Month</label><select id="cm-month" data-i18n-opts><option value="JAN">JAN</option><option value="FEB">FEB</option><option value="MAR">MAR</option><option value="APR">APR</option><option value="MAY" selected>MAY</option><option value="JUN">JUN</option><option value="JUL">JUL</option><option value="AUG">AUG</option><option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option></select></div>
       <div class="fg"><label data-col="week" data-i18n>Week</label><input id="cm-week" type="number" min="1" max="5" value="1"/></div>
-      <div class="fg"><label data-col="cat" data-i18n>Category</label><input id="cm-cat" type="text"/></div>
+      <div class="fg"><label data-col="cat" data-i18n>Category</label><input id="cm-cat" type="text" list="cm-cat-list" autocomplete="off"/><datalist id="cm-cat-list"></datalist></div>
     </div>
     <div class="fg"><label data-col="topic" data-required="true" data-i18n>Topic *</label><input id="cm-topic" type="text"/></div>
     <div class="fr c2">
@@ -2574,7 +2600,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 // ═══════════════════════════════════════════════
 // DATA
 // ═══════════════════════════════════════════════
-const HR=40000;
 const DS=[
   {id:"s1",name:"Amy",k:"지우",parent:"지우맘",contact:"010-0000-0007",sched:"Mon 15:45",dur:1,rate:40000,ptype:"prepay",notes:"Same house as Chloe",aliases:["지우","amy"]},
   {id:"s2",name:"Chloe",k:"지유",parent:"지우맘",contact:"010-0000-0007",sched:"Mon 16:45",dur:1.5,rate:60000,ptype:"prepay",notes:"Same house as Amy",aliases:["지유","chloe"]},
@@ -2822,7 +2847,7 @@ const I18N={ko:{
   "Delete student":"학생 삭제","Save student":"학생 저장","Name required":"이름을 입력하세요",
   "Delete this student? This cannot be undone.":"이 학생을 삭제할까요? 되돌릴 수 없습니다.",
   "Stop {sched} from a date you pick next?\n\nThe student's other days carry on unchanged, and lessons already recorded keep the schedule they were booked under.":"{sched} 수업을 다음에 고르는 날짜부터 중단할까요?\n\n이 학생의 다른 요일 수업은 그대로 이어지고, 이미 기록된 수업은 예약 당시의 시간표를 유지합니다.",
-  "this class":"이 수업","hr":"시간","rate ₩":"수업료 ₩",
+  "this class":"이 수업","hr":"시간","rate {cur}":"수업료 {cur}",
   "Stop this class from a date — the other days carry on, and past lessons keep their own schedule":"특정 날짜부터 이 수업 중단 — 다른 요일은 계속되고, 지난 수업은 자기 시간표를 유지합니다",
   "Remove this line":"이 줄 삭제",
   "New schedule start date":"새 시간표 시작일",
@@ -2851,7 +2876,7 @@ const I18N={ko:{
   "This student already has a class on that date. Move skipped.":"이 학생은 그 날짜에 이미 수업이 있습니다. 이동하지 않았습니다.",
   "Click any event chip in the calendar to edit it.":"달력의 수업 칩을 클릭하면 수정할 수 있습니다.",
   // lesson dialog
-  "Add Lesson":"수업 추가","Edit Lesson":"수업 수정","Student *":"학생 *","Date *":"날짜 *","Start time":"시작 시간","Amount (₩)":"금액 (₩)",
+  "Add Lesson":"수업 추가","Edit Lesson":"수업 수정","Student *":"학생 *","Date *":"날짜 *","Start time":"시작 시간","Amount ({cur})":"금액 ({cur})","{cur}":"{cur}",
   "The fee was already paid — move it to the next class":"수업료를 이미 받았음 — 다음 수업으로 넘기기","Reset to usual time":"원래 시간으로 되돌리기",
   "Schedule (this student has multiple) — pick to auto-fill duration and amount":"시간표 (이 학생은 여러 개) — 고르면 시간과 금액이 채워집니다",
   "20 min":"20분","▶ Start":"▶ 시작","⏸ Pause":"⏸ 일시정지","■ Stop":"■ 정지","Add workbook":"교재 추가","Add book":"책 추가","School / Academy HW":"학교 / 학원 숙제",
@@ -2948,7 +2973,7 @@ const I18N={ko:{
   // material
   "{n} items":"교구 {n}개","No material found":"교구가 없습니다","Edit Material":"교구 수정","Add Material":"교구 추가","Material name required":"교구 이름을 입력하세요","Delete this item?":"이 항목을 삭제할까요?","Save material":"교구 저장",
   // settings: templates
-  "Library name":"도서관 이름","Ownership mark printed at the bottom-right of info labels (e.g. AMBER LIBRARY). Leave blank to omit it.":"정보 라벨 오른쪽 아래에 인쇄되는 소유 표시입니다(예: AMBER LIBRARY). 비워 두면 인쇄하지 않습니다.",
+  "Library name":"도서관 이름",
   "e.g. AMBER LIBRARY":"예: AMBER LIBRARY","Library name saved":"도서관 이름을 저장했습니다","App logo":"앱 로고",
   "Shown in the sidebar and as the browser-tab icon (favicon). A square image works best — others are cropped to the center. On iPhone/iPad it also becomes the home-screen icon if you add ClassDesk to the home screen after setting it.":"사이드바와 브라우저 탭 아이콘(파비콘)에 쓰입니다. 정사각형 이미지가 가장 좋고, 아니면 가운데를 잘라 씁니다. iPhone/iPad에서는 설정한 뒤 홈 화면에 추가하면 홈 화면 아이콘도 됩니다.",
   "Choose image":"이미지 선택","Use default":"기본값 사용","Parent note template":"학부모 알림 템플릿","Sent to parents after each lesson. Click a placeholder to insert it at the cursor position. You can type in any language.":"수업 후 학부모에게 보내는 알림입니다. 자리표시자를 클릭하면 커서 위치에 들어갑니다. 어떤 언어로든 쓸 수 있습니다.",
@@ -2971,7 +2996,7 @@ const I18N={ko:{
   "Move covers and PDFs to cloud":"표지와 PDF를 클라우드로","Sign-in required. Please sign in with your Google Account in Settings → Account.":"로그인이 필요합니다. 설정 → 계정에서 Google 계정으로 로그인하세요.",
   "Nothing to move. (All covers and PDFs are already links.)":"옮길 것이 없습니다. (표지와 PDF가 모두 이미 링크입니다.)","This will move {c} cover(s){pdf} to the cloud.\n\nOnly links stay in the browser; the files are stored safely in Firebase Storage.\n\nContinue?":"표지 {c}개{pdf}를 클라우드로 옮깁니다.\n\n브라우저에는 링크만 남고 파일은 Firebase Storage에 안전하게 저장됩니다.\n\n계속할까요?",
   "and {n} PDF(s)":"와 PDF {n}개","Moving… {a} / {b} ({kind})":"옮기는 중… {a} / {b} ({kind})",
-  "Recalculate lesson hours":"수업 시간 다시 계산","Recalculates every lesson's hours from its amount using each student's hourly rate (rate ÷ duration). Standard students (₩40,000/h): ₩60,000 → 1.5h. One-off students (₩24,000/h): ₩24,000 → 1h. Zero-amount and cancelled lessons are left untouched.":"각 학생의 시간당 수업료(수업료 ÷ 시간)로 모든 수업의 시간을 금액에서 다시 계산합니다. 기본 학생(₩40,000/시간): ₩60,000 → 1.5시간. 단발 학생(₩24,000/시간): ₩24,000 → 1시간. 금액이 0이거나 취소된 수업은 그대로 둡니다.",
+  "Recalculate lesson hours":"수업 시간 다시 계산","Recalculates every lesson's hours from its amount using each student's hourly rate (rate ÷ duration): a lesson that cost one and a half times the student's hourly rate becomes 1.5h. Zero-amount and cancelled lessons are left untouched.":"각 학생의 시간당 수업료(수업료 ÷ 시간)로 모든 수업의 시간을 금액에서 다시 계산합니다: 시간당 수업료의 1.5배였던 수업은 1.5시간이 됩니다. 금액이 0이거나 취소된 수업은 그대로 둡니다.",
   "Recalculate hours from amounts":"금액으로 시간 다시 계산","✓ {n} lesson(s) had their hours corrected from amounts.":"✓ 수업 {n}회의 시간을 금액 기준으로 고쳤습니다.","Nothing to correct — all lessons already match.":"고칠 것이 없습니다 — 모든 수업이 이미 맞습니다.",
   "Clean up stray cancelled lessons":"남은 취소 기록 정리","Finds cancelled lessons sitting on days the timetable does not cover at all — the trail left behind when an every-other-week class was running on the wrong weeks, or when a schedule changed. Lists them first; nothing is removed until you confirm. Classes that were actually held are never touched.":"시간표에 없는 날에 남아 있는 취소 기록을 찾습니다. 격주 수업이 잘못된 주에 돌아갔거나 시간표가 바뀌었을 때 남는 흔적입니다. 먼저 목록을 보여 주고, 확인하기 전에는 아무것도 지우지 않습니다. 실제로 진행한 수업은 건드리지 않습니다.",
   "Find stray cancelled lessons":"남은 취소 기록 찾기","Nothing to clean — every cancelled lesson sits on a day the timetable covers.":"정리할 것이 없습니다 — 모든 취소 기록이 시간표에 있는 날에 있습니다.",
@@ -2989,7 +3014,7 @@ const I18N={ko:{
   "with this app's address as an authorised JavaScript origin, and the Google Calendar API enabled in the same project.":"에서 발급, 승인된 JavaScript 원본에 이 앱 주소를 넣고 같은 프로젝트에서 Google Calendar API를 켜세요).",
   "OAuth client ID":"OAuth 클라이언트 ID","Calendar ID":"캘린더 ID","(blank = your main calendar)":"(비우면 기본 캘린더)","Disconnect":"연결 해제","Event colours":"일정 색",
   "Yellow (Banana) events are your own lessons at the student's rate. Green (Sage / Basil) events are platform lessons — enter their flat rate below (blank = student's rate). Every other colour is ignored.":"노랑(바나나) 일정은 학생 수업료가 적용되는 내 수업입니다. 초록(세이지 / 바질) 일정은 플랫폼 수업으로, 아래에 고정 시간당 요금을 넣으세요(비우면 학생 수업료). 다른 색은 모두 무시합니다.",
-  "Green lessons · ₩ per hour":"초록 수업 · 시간당 ₩","e.g. 30000":"예: 30000","Green rate saved":"초록 수업 요금을 저장했습니다","First lessons":"첫 수업",
+  "Green lessons · {cur} per hour":"초록 수업 · 시간당 {cur}","e.g. 30000":"예: 30000","Green rate saved":"초록 수업 요금을 저장했습니다","First lessons":"첫 수업",
   "Reads the calendar back year by year and shows, for every student, the earliest entry that mentions them — with the entry's own title, so you can see what the date is based on. Entries that read like a consultation, or that sit long before the next one, are flagged. Nothing is written until you press a button.":"캘린더를 해마다 거슬러 읽어 학생마다 그 이름이 처음 나오는 일정을 제목과 함께 보여 줍니다. 상담처럼 읽히거나 다음 일정과 멀리 떨어진 일정은 표시됩니다. 버튼을 누르기 전에는 아무것도 쓰지 않습니다.",
   "Find first lessons":"첫 수업 찾기","Platform lesson · {rate}/h":"플랫폼 수업 · {rate}/시간","Platform lesson · student's rate":"플랫폼 수업 · 학생 수업료","Own lesson · student's rate":"내 수업 · 학생 수업료",
   "Connected for this session":"이번 세션 동안 연결됨","Not connected (you'll be asked to sign in on first use)":"연결 안 됨 (처음 사용할 때 로그인을 요청합니다)","Google Calendar settings saved":"Google 캘린더 설정을 저장했습니다","Google Calendar disconnected":"Google 캘린더 연결을 해제했습니다",
@@ -3028,7 +3053,7 @@ const I18N={ko:{
   "Move to Google's start time; the lesson is already paid, so its length and fee stay":"Google의 시작 시간으로 옮깁니다. 이미 납부되어 길이와 수업료는 그대로입니다","Google's length is {h}h — this changes the fee":"Google의 길이는 {h}시간입니다 — 수업료가 바뀝니다",
   "Use Google time":"Google 시간 사용","Move the app lesson to Google's start time":"앱 수업을 Google의 시작 시간으로 옮기기","one block for {n} students — the app keeps its own times. Pick one student if it is really a single lesson.":"학생 {n}명이 한 일정에 묶여 있습니다 — 앱은 자기 시간을 유지합니다. 실제로 한 수업이라면 학생 한 명을 고르세요.",
   "left alone":"그대로 둠","which student is this?":"어느 학생인가요?","same":"같음","Everything matches Google Calendar this month":"이달은 모두 Google 캘린더와 일치합니다","No lessons found in Google Calendar this month":"이달 Google 캘린더에서 수업을 찾지 못했습니다",
-  "{n} non-lesson events skipped":"수업이 아닌 일정 {n}개 건너뜀","Apply {n} (add / time / move)":"{n}건 적용 (추가 / 시간 / 이동)","Enter the ₩ per hour for this colour.":"이 색의 시간당 ₩을 입력하세요.","Applied to the app":"앱에 적용했습니다",
+  "{n} non-lesson events skipped":"수업이 아닌 일정 {n}개 건너뜀","Apply {n} (add / time / move)":"{n}건 적용 (추가 / 시간 / 이동)","Enter the {cur} per hour for this colour.":"이 색의 시간당 금액({cur})을 입력하세요.","Lesson — student's rate":"수업 — 학생 수업료","Lesson — flat {cur}/hour":"수업 — 시간당 고정 {cur}","{cur} per hour":"시간당 {cur}","Applied to the app":"앱에 적용했습니다",
   "Apply {n} additions / time changes / moves to the app? (Lessons missing from Google are left alone — cancel those one by one.)":"추가 / 시간 변경 / 이동 {n}건을 앱에 적용할까요? (Google에 없는 수업은 그대로 두니 하나씩 취소하세요.)","{n} changes applied":"{n}건을 적용했습니다",
   "Add the OAuth client ID above first.":"먼저 위에 OAuth 클라이언트 ID를 넣으세요.","Reading {year}…":"{year}년 읽는 중…","{n} year(s) read.":"{n}년치 읽음.",
   "an earlier entry sits in a colour that isn't counted":"세지 않는 색에 더 이른 일정이 있음","no entry in a lesson colour":"수업 색 일정 없음","reads like a consultation or test":"상담이나 테스트로 읽힘","the only entry found":"찾은 일정이 하나뿐","{n} days until the next one":"다음 일정까지 {n}일",
@@ -3068,6 +3093,18 @@ const I18N={ko:{
   "{a}h → {b}h, {c} → {d} per lesson":"{a}시간 → {b}시간, 수업당 {c} → {d}","Applies from {date}. Earlier lessons keep the old schedule.":"{date}부터 적용됩니다. 그 전 수업은 예전 시간표를 유지합니다.",
   "That slot no longer exists — open the student and change it there.":"그 시간이 더 이상 없습니다 — 학생을 열어 거기서 바꾸세요.","{name} — schedule updated":"{name} — 시간표를 바꿨습니다",
   "⚠️ An unexpected error occurred.\n\n{msg}\n\nYour data is most likely still in the browser.\nWould you like to take a backup (Export) now?\n\nOK = back up / Cancel = ignore and continue":"⚠️ 예상하지 못한 오류가 생겼습니다.\n\n{msg}\n\n데이터는 대부분 브라우저에 그대로 있습니다.\n지금 백업(내보내기)할까요?\n\n확인 = 백업 / 취소 = 무시하고 계속",
+  // ── v130: Settings → Workspace
+  "Workspace":"작업 공간","How your classes are run. Saved with your account, so every signed-in device uses the same values.":"수업을 운영하는 기본값입니다. 계정에 저장되므로 로그인한 모든 기기가 같은 값을 씁니다.",
+  "Default hourly fee":"기본 시간당 수업료","Filled in for a new student or lesson; each student's own rate still wins.":"새 학생이나 새 수업에 미리 채워집니다. 학생마다 정한 수업료가 있으면 그것이 우선입니다.",
+  "Currency":"통화","Only how amounts are shown — stored numbers are not converted. The app reloads.":"금액을 보여 주는 방식만 바뀌고, 저장된 숫자는 환산하지 않습니다. 앱이 다시 열립니다.",
+  "Time zone":"시간대","Decides what \"today\" is and the times read from Google Calendar. The app reloads.":"\"오늘\"이 언제인지와 Google 캘린더에서 읽는 시간을 정합니다. 앱이 다시 열립니다.",
+  "Printed at the bottom-right of info labels and at the top of printed reports. Leave blank to omit it.":"정보 라벨 오른쪽 아래와 인쇄한 보고서 위쪽에 들어갑니다. 비워 두면 넣지 않습니다.",
+  "Curriculum categories":"커리큘럼 카테고리","e.g. 과학, 역사, Phonics":"예: 과학, 역사, Phonics",
+  "Comma or one per line. Offered when you type a category on a curriculum topic, before the ones your curriculum already uses.":"쉼표나 줄바꿈으로 나눕니다. 커리큘럼 주제에 카테고리를 입력할 때, 커리큘럼에 이미 쓰인 카테고리보다 먼저 추천됩니다.",
+  "Which Google Calendar colours count as lessons is set in Settings → API Keys → Google Calendar.":"어떤 Google 캘린더 색을 수업으로 셀지는 설정 → API 키 → Google 캘린더에서 정합니다.",
+  "this device":"이 기기","Enter an amount above 0":"0보다 큰 금액을 입력하세요","Default fee saved: {amt} per hour":"기본 수업료를 저장했습니다: 시간당 {amt}",
+  "Saved — reloading":"저장했습니다 — 다시 여는 중","Categories saved":"카테고리를 저장했습니다",
+  "Language or workspace settings changed on another device":"다른 기기에서 언어나 작업 공간 설정을 바꿨습니다","Reload":"다시 열기",
 }};
 /* i18n-dict-end */
 function pickLang(){
@@ -3088,6 +3125,59 @@ function txSafe(k,vars){
   try{return tx(k,vars);}
   catch{let s2=k.split("|")[0];if(vars)s2=s2.replace(/\{(\w+)\}/g,(m,n)=>vars[n]!==undefined?vars[n]:m);return s2;}
 }
+
+// ═══════════════════════════════════════════════
+// WORKSPACE (v130) — Settings → Templates → Workspace
+// ═══════════════════════════════════════════════
+// Values that used to be fixed for one Korean classroom: the default hourly fee, the currency, the
+// time zone "today" is counted in, the name printed on labels and reports, and the curriculum
+// categories offered as suggestions. All live in settings, so they sync between devices.
+// Currency and time zone are read once at start-up (formatters below); changing either reloads the
+// app, like the language. The fee and the rest are read every time they are used.
+const WS_DEFAULTS={hourlyRate:40000,currency:"KRW",timeZone:"Asia/Seoul",libraryName:"AMBER LIBRARY"};
+const WS_CURRENCIES=["KRW","USD","GBP","EUR","JPY","CNY","AUD","CAD","NZD","SGD","HKD"];
+const WS_TIMEZONES=["Asia/Seoul","Asia/Tokyo","Asia/Shanghai","Asia/Hong_Kong","Asia/Singapore","Australia/Sydney","Pacific/Auckland",
+  "Europe/London","Europe/Paris","Europe/Berlin","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Toronto","America/Vancouver"];
+const WS_CUR=(()=>{const c=String(settings.currency||WS_DEFAULTS.currency).toUpperCase();
+  try{new Intl.NumberFormat("en",{style:"currency",currency:c});return c;}catch{return WS_DEFAULTS.currency;}})();
+const WS_TZ=(()=>{const z=String(settings.timeZone||WS_DEFAULTS.timeZone);
+  try{new Intl.DateTimeFormat("en",{timeZone:z});return z;}catch{return WS_DEFAULTS.timeZone;}})();
+// KRW and JPY have no minor unit; others show cents only when there are any (₩40,000 · $45 · $45.50).
+const CUR_DIGITS=new Intl.NumberFormat("en",{style:"currency",currency:WS_CUR}).resolvedOptions().maximumFractionDigits;
+const _mkMoney=d=>{const o={style:"currency",currency:WS_CUR,minimumFractionDigits:d,maximumFractionDigits:d};
+  try{return new Intl.NumberFormat(LOCALE,{...o,currencyDisplay:"narrowSymbol"});}catch{return new Intl.NumberFormat(LOCALE,o);}};
+const _moneyFmt=_mkMoney(0),_moneyFmtC=CUR_DIGITS?_mkMoney(CUR_DIGITS):_moneyFmt;
+function fmtMoney(n){n=Number(n)||0;return (Number.isInteger(n)?_moneyFmt:_moneyFmtC).format(n);}
+const CUR_SYM=(_moneyFmt.formatToParts(0).find(x=>x.type==="currency")||{}).value||WS_CUR;
+// Step for money inputs: ₩/¥ amounts move in thousands/hundreds, others in whole units.
+const CUR_STEP=WS_CUR==="KRW"?1000:WS_CUR==="JPY"?100:1;
+// Placeholders every static label may use: "Amount ({cur})".
+const I18N_VARS={cur:CUR_SYM};
+function hourlyRate(){const v=Number(settings.hourlyRate);return v>0&&isFinite(v)?v:WS_DEFAULTS.hourlyRate;}
+// Name printed on info labels and report headers. Before v130 it was kept on each device only
+// (localStorage mc_library_name); that value is carried into settings once, then synced.
+if(settings.libraryName===undefined){const old=localStorage.getItem("mc_library_name");settings.libraryName=old!==null?old:WS_DEFAULTS.libraryName;}
+function libraryName(){return String(settings.libraryName??"").trim();}
+// Curriculum categories: the workspace list first, then any other category the curriculum already uses.
+function currCategories(){
+  const own=(Array.isArray(settings.currCats)?settings.currCats:[]).map(x=>String(x).trim()).filter(Boolean);
+  const used=(typeof curriculum!=="undefined"?curriculum:[]).map(c=>String(c.cat||"").trim()).filter(Boolean);
+  return [...new Set([...own,...used.sort((a,b)=>a.localeCompare(b,LOCALE))])];
+}
+// Time zone. wallTZ(d) is a Date whose local fields (getFullYear … getMinutes) read the workspace
+// clock at the instant d — what nowKST() always returned for Korea; now for any zone.
+const _tzFmt=new Intl.DateTimeFormat("en-US",{timeZone:WS_TZ,hourCycle:"h23",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric",second:"numeric"});
+function wallTZ(d){
+  const p={};for(const x of _tzFmt.formatToParts(d))p[x.type]=+x.value;
+  return new Date(p.year,p.month-1,p.day,p.hour%24,p.minute,p.second,d.getMilliseconds());
+}
+// The instant (ISO string) of 00:00 on y-m-d (m 0-based, may overflow) in the workspace zone.
+function tzMidnightISO(y,m,d){
+  const guess=Date.UTC(y,m,d);
+  const off=t=>{const w=wallTZ(new Date(t));return Date.UTC(w.getFullYear(),w.getMonth(),w.getDate(),w.getHours(),w.getMinutes(),w.getSeconds())-Math.floor(t/1000)*1000;};
+  let t=guess-off(guess);t=guess-off(t); // second pass settles a DST change between guess and t
+  return new Date(t).toISOString();
+}
 // Static markup. Each translated text node remembers the English it was written with (_src), so the
 // source is still there for custom-label code that needs the original wording.
 function applyI18n(root){
@@ -3097,13 +3187,15 @@ function applyI18n(root){
       if(n.nodeType!==3||!n.nodeValue.trim())return;
       if(n._src===undefined)n._src=n.nodeValue;
       const m=n._src.match(/^(\s*)([\s\S]*?)(\s*)$/);
-      n.nodeValue=m[1]+tx(m[2])+m[3];
+      n.nodeValue=m[1]+tx(m[2],I18N_VARS)+m[3];
     });
   });
-  root.querySelectorAll("[data-i18n-ph]").forEach(el=>{if(!el.dataset.phSrc)el.dataset.phSrc=el.placeholder;el.placeholder=tx(el.dataset.phSrc);});
-  root.querySelectorAll("[data-i18n-title]").forEach(el=>{if(!el.dataset.titleSrc)el.dataset.titleSrc=el.title;el.title=tx(el.dataset.titleSrc);});
+  root.querySelectorAll("[data-i18n-ph]").forEach(el=>{if(!el.dataset.phSrc)el.dataset.phSrc=el.placeholder;el.placeholder=tx(el.dataset.phSrc,I18N_VARS);});
+  root.querySelectorAll("[data-i18n-title]").forEach(el=>{if(!el.dataset.titleSrc)el.dataset.titleSrc=el.title;el.title=tx(el.dataset.titleSrc,I18N_VARS);});
   root.querySelectorAll("select[data-i18n-opts] option").forEach(o=>{if(!o.dataset.src)o.dataset.src=o.textContent;o.textContent=tx(o.dataset.src);});
   document.querySelectorAll(".guide-body[lang]").forEach(g=>{g.hidden=g.lang!==LANG;});
+  // Money inputs step in the workspace currency's usual unit (data-money="5" → five of them).
+  root.querySelectorAll("input[data-money]").forEach(el=>{el.step=CUR_STEP*(+el.dataset.money||1);});
   document.documentElement.lang=LANG;
 }
 // The English source of an element whose text applyI18n may already have translated.
@@ -3117,6 +3209,48 @@ function setLang(v){
   // Every label, option and constant was built for the old language; a fresh load is the one way
   // to be sure nothing is left half-translated. The write to localStorage is synchronous.
   setTimeout(()=>location.reload(),300);
+}
+// Settings → Workspace (v130)
+function renderWorkspace(){
+  const el=id=>document.getElementById(id);if(!el("ws-card"))return;
+  el("ws-cur-sym").textContent=CUR_SYM;
+  el("ws-rate").value=hourlyRate();
+  const curName=c=>{try{return new Intl.DisplayNames([LOCALE],{type:"currency"}).of(c);}catch{return c;}};
+  const symOf=c=>{try{return (new Intl.NumberFormat(LOCALE,{style:"currency",currency:c,currencyDisplay:"narrowSymbol"}).formatToParts(0).find(x=>x.type==="currency")||{}).value||c;}catch{return c;}};
+  const curs=[...new Set([...WS_CURRENCIES,WS_CUR])];
+  el("ws-cur").innerHTML=curs.map(c=>`<option value="${c}">${escapeHTMLBasic(symOf(c)+" "+c+" — "+curName(c))}</option>`).join("");
+  el("ws-cur").value=WS_CUR;
+  let dev="";try{dev=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch{}
+  const zones=[...new Set([WS_TZ,...WS_TIMEZONES,...(dev?[dev]:[])])];
+  const clock=z=>{try{return new Intl.DateTimeFormat(LOCALE,{timeZone:z,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date());}catch{return "";}};
+  // "Korean Standard Time — Asia/Seoul · 09:41": the zone's name in the app language, then its id
+  const zName=z=>{for(const k of ["longGeneric","long"]){try{const n=new Intl.DateTimeFormat(LOCALE,{timeZone:z,timeZoneName:k}).formatToParts(new Date()).find(x=>x.type==="timeZoneName")?.value;if(n&&!/^GMT|^UTC/.test(n))return n+" — ";}catch{}}return "";};
+  el("ws-tz").innerHTML=zones.map(z=>`<option value="${escapeAttr(z)}">${escapeHTMLBasic(zName(z)+z.replace(/_/g," ")+" · "+clock(z)+(z===dev?" · "+tx("this device"):""))}</option>`).join("");
+  el("ws-tz").value=WS_TZ;
+  el("library-name-inp").value=settings.libraryName??"";
+  el("ws-cats").value=(Array.isArray(settings.currCats)?settings.currCats:[]).join(", ");
+}
+function wsSetRate(v){
+  const n=Number(v);
+  if(!(n>0&&isFinite(n))){showToast(tx("Enter an amount above 0"));renderWorkspace();return;}
+  settings.hourlyRate=Math.round(n*100)/100;
+  if(save()!==false)showToast(tx("Default fee saved: {amt} per hour",{amt:won(settings.hourlyRate)}));
+}
+function wsSetReload(key,v){
+  if(!v||settings[key]===v)return;
+  settings[key]=v;
+  if(save()===false)return;
+  showToast(tx("Saved — reloading"));
+  setTimeout(()=>location.reload(),400);
+}
+function wsSetLibrary(v){
+  settings.libraryName=String(v||"").trim();
+  try{localStorage.removeItem("mc_library_name");}catch{}
+  if(save()!==false)showToast(tx("Library name saved"));
+}
+function wsSetCats(v){
+  settings.currCats=[...new Set(String(v||"").split(/[,\n]/).map(x=>x.trim()).filter(Boolean))];
+  if(save()!==false){showToast(tx("Categories saved"));renderWorkspace();}
 }
 // Persist all app state. Returns false if ANY key failed to write (ls() already alerted the
 // user), so future callers can react — e.g. skip closing a modal on a failed save.
@@ -3228,7 +3362,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v129";
+const APP_VERSION="v130";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   applyI18n();   // before any render: labels that code reads back (custom column names) must already carry their English source
@@ -3279,13 +3413,12 @@ function clearBrandLogo(){
   delete settings.brandLogo;
   save();applyBranding();
 }
-function nowKST(){
-  const utcMs=Date.now()+new Date().getTimezoneOffset()*60000; // current moment, as UTC ms
-  return new Date(utcMs+9*3600000); // shift to UTC+9
-}
+// "Now" on the workspace clock (Settings → Workspace → Time zone; Korea unless changed). The name
+// stayed from when it was always KST.
+function nowKST(){return wallTZ(new Date());}
 const td=()=>{const n=nowKST();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;};
 const tm=()=>{const n=nowKST();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}`;};
-const won=n=>`₩${(n||0).toLocaleString("ko-KR")}`;
+const won=n=>fmtMoney(n); // name kept from when it was always ₩
 // Dashboard privacy: amounts and Paid/Unpaid badges are masked until the 👁 button is tapped.
 // Phones/tablets (students may see the screen) ALWAYS start masked and re-mask whenever the app is
 // left and reopened; PCs start visible and remember the choice. Device-only — the key has no "mc_"
@@ -3293,7 +3426,7 @@ const won=n=>`₩${(n||0).toLocaleString("ko-KR")}`;
 const PRIV_KEY="cd_privacy_hidden";
 const isTouchDevice=()=>window.matchMedia("(pointer:coarse)").matches;
 let privacyHidden=isTouchDevice()?true:(()=>{try{return localStorage.getItem(PRIV_KEY)==="1";}catch(e){return false;}})();
-const MASK_AMT="₩ •••••"; // non-breaking space: keeps the mask on one line in narrow stat cards
+const MASK_AMT=CUR_SYM+" •••••"; // non-breaking space: keeps the mask on one line in narrow stat cards
 const pwon=n=>privacyHidden?MASK_AMT:won(n);
 async function togglePrivacy(){
   if(privacyHidden&&pinRequired()){
@@ -3765,7 +3898,7 @@ function calcM(sid,month){
   const cancOccs=occ.filter(o=>o.status==="cancelled"||o.status==="cancelpaid");
   const cancHours=cancOccs.reduce((s,o)=>s+(o.dur||0),0);
   const stdForRate=gs(sid);
-  const stdHr=(stdForRate&&stdForRate.rate>0&&stdForRate.dur>0)?stdForRate.rate/stdForRate.dur:HR;
+  const stdHr=(stdForRate&&stdForRate.rate>0&&stdForRate.dur>0)?stdForRate.rate/stdForRate.dur:hourlyRate();
   const cancAmt=cancOccs.reduce((acc,o)=>acc+(o.amt||o.dur*stdHr||0),0); // fee the slot would have earned
   return{exp,paidT,diff,count:act.length,hours,cancelled,cancHours,cancAmt,ov};
 }
@@ -3913,7 +4046,7 @@ function openStudentModal(id){
   const bw=document.getElementById("sm-sched-biweekly");if(bw)bw.checked=(s?.freq==="biweekly");
   const bwf=document.getElementById("sm-biweek-from");if(bwf)bwf.value=s?.biweekFrom||"";
   toggleBiweekFrom(true);
-  set("sm-dur",s?.dur??1);set("sm-rate",s?.rate??40000);
+  set("sm-dur",s?.dur??1);set("sm-rate",s?.rate??Math.round((s?.dur??1)*hourlyRate()));
   set("sm-ptype",s?.ptype??"postpay");set("sm-notes",s?.notes);
   set("sm-aliases",(s?.aliases??[]).join(", "));
   // Extra schedule slots
@@ -3983,7 +4116,7 @@ function addSlotRow(slot){
     +'</div>'
     +'<div class="slot-row2">'
     +  '<div class="fg"><label>'+tx("Duration")+'</label><input type="number" min="0.5" max="4" step="0.5" placeholder="'+tx("hr")+'" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/></div>'
-    +  '<div class="fg"><label>'+tx("Rate")+'</label><input type="number" step="5000" placeholder="'+tx("rate ₩")+'" value="'+(slot?.rate??40000)+'"/></div>'
+    +  '<div class="fg"><label>'+tx("Rate")+'</label><input type="number" step="'+CUR_STEP*5+'" placeholder="'+tx("rate {cur}",I18N_VARS)+'" value="'+(slot?.rate??hourlyRate())+'"/></div>'
     +  '<div class="slot-acts">'
     +    '<button type="button" class="bic" onclick="slotStopFromDate(this)" title="'+tx("Stop this class from a date — the other days carry on, and past lessons keep their own schedule")+'"><i class="ti ti-calendar-off"></i></button>'
     +    '<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" title="'+tx("Remove this line")+'"><i class="ti ti-trash"></i></button>'
@@ -4003,9 +4136,9 @@ function slotAutoRate(durInput){
   const row=durInput.closest(".slot-row");
   const rateInput=row?.querySelector("input[step=\"5000\"]");
   const d=parseFloat(durInput.value)||1;
-  if(rateInput)rateInput.value=Math.round(d*HR);
+  if(rateInput)rateInput.value=Math.round(d*hourlyRate());
 }
-function autoRate(){const d=parseFloat(document.getElementById("sm-dur")?.value)||1;const r=document.getElementById("sm-rate");if(r)r.value=Math.round(d*HR);}
+function autoRate(){const d=parseFloat(document.getElementById("sm-dur")?.value)||1;const r=document.getElementById("sm-rate");if(r)r.value=Math.round(d*hourlyRate());}
 // ── Effective-date picker for schedule changes ──
 // Replaces the typed prompt: a small month calendar where clicking a day chooses when the new
 // schedule starts. Resolves a promise with "YYYY-MM-DD", "" (apply to everything), or null (abort).
@@ -4058,11 +4191,11 @@ async function saveStudent(){
     const nums=row.querySelectorAll("input[type=number]");
     const biweekly=row.querySelector(".slot-biweekly")?.checked;
     const biweekFrom=biweekly?(row.querySelector(".slot-biweek-from")?.value||""):"";
-    return{sched,dur:clampDur(nums[0]?.value),rate:clampRate(nums[1]?.value)||40000,freq:biweekly?"biweekly":"weekly",biweekFrom};
+    return{sched,dur:clampDur(nums[0]?.value),rate:clampRate(nums[1]?.value)||hourlyRate(),freq:biweekly?"biweekly":"weekly",biweekFrom};
   }).filter(sl=>sl.sched);
   const customFields=collectCustomFieldsFromModal("sm-custom-fields");
   const rawRate=document.getElementById("sm-rate")?.value;
-  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
+  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*hourlyRate()),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
   if(!obj.name){alert(tx("Name required"));return;}
   const isNew=!editSid;
   const prevStudents=students.slice(); // for rollback if the write fails
@@ -4139,7 +4272,7 @@ function openLessonModal(id){
   }
   document.getElementById("lm-title").textContent=l?tx("Edit Lesson"):tx("Add Lesson");
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
-  set("lm-sid",l?.sid);set("lm-date",l?.date||td());set("lm-amt",l?.amt??40000);
+  set("lm-sid",l?.sid);set("lm-date",l?.date||td());set("lm-amt",l?.amt??hourlyRate());
   set("lm-time",l?.time||"");
   set("lm-status",l?.status??"unpaid");set("lm-topic",l?.topic);
   lessonOpenStatus=l?.status??"unpaid";
@@ -4548,7 +4681,7 @@ function lessonHourlyRate(){
     const r=s.rate/s.dur;
     if(r>0&&isFinite(r))return r;
   }
-  return HR;
+  return hourlyRate();
 }
 // A class that was already paid for and then cancelled: the money stays with the student as credit
 // for their next class, rather than being billed twice or quietly disappearing from the month.
@@ -4788,6 +4921,7 @@ function openCurrModal(id){
   document.getElementById("cm-title").textContent=id?tx("Edit Topic"):tx("Add Topic");
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
   set("cm-year",c?c.year||"":(document.getElementById("curr-yf")?.value||"").replace(/\D/g,"")||new Date().getFullYear());
+  {const dl=document.getElementById("cm-cat-list");if(dl)dl.innerHTML=currCategories().map(x=>`<option value="${escapeAttr(x)}"></option>`).join("");}
   set("cm-month",c?.month||"MAY");set("cm-week",c?.week||1);set("cm-cat",c?.cat);
   set("cm-topic",c?.topic);set("cm-wb",c?.wb);set("cm-books",c?.books);
   set("cm-writing",c?.writing);set("cm-grammar",c?.grammar);set("cm-acts",c?.acts);set("cm-note",c?.note);
@@ -5245,8 +5379,7 @@ function importBackupFile(inp){
 }
 function renderSettings(){
   const langSel=document.getElementById("lang-sel");if(langSel)langSel.value=settings.lang||"auto";
-  const libInp=document.getElementById("library-name-inp");
-  if(libInp)libInp.value=localStorage.getItem("mc_library_name")??"AMBER LIBRARY";
+  renderWorkspace();
   applyBranding();
   renderPinState();
   // Workbook tags grouped by category
@@ -5367,7 +5500,7 @@ function recalcDurationsFromAmounts(){
     // Use the lesson's own student hourly rate (rate÷dur), not a fixed ₩40,000 — this correctly
     // handles one-off students billed at ₩24,000/h as well as standard ones.
     const s=gs(l.sid);
-    const hr=(s&&s.rate>0&&s.dur>0)?s.rate/s.dur:HR;
+    const hr=(s&&s.rate>0&&s.dur>0)?s.rate/s.dur:hourlyRate();
     if(!hr||!isFinite(hr))return;
     const want=Math.round(l.amt/hr*4)/4;      // quarter-hour precision
     if(want>0&&want!==l.dur){l.dur=want;changed++;}
@@ -5786,7 +5919,7 @@ function renderReading(){
   set("rd-count",s?(entries.length===1?tx("1 book"):tx("{n} books",{n:entries.length})):"");
   const rangeLabel=document.getElementById("rd-range")?.selectedOptions?.[0]?.textContent||"";
   const ph=document.getElementById("rd-print-head");
-  if(ph)ph.innerHTML=s?`<div class="rd-ph-title">${escapeHTMLBasic(s.name)} <span>${escapeHTMLBasic(s.k||"")}</span> — ${tx("Reading report")}</div><div class="rd-ph-sub">${rangeLabel} · ${tx("printed {date}",{date:td()})}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`:"";
+  if(ph)ph.innerHTML=s?`<div class="rd-ph-title">${escapeHTMLBasic(s.name)} <span>${escapeHTMLBasic(s.k||"")}</span> — ${tx("Reading report")}</div><div class="rd-ph-sub">${rangeLabel} · ${tx("printed {date}",{date:td()})}${libraryName()?" · "+escapeHTMLBasic(libraryName()):""}</div>`:"";
   renderReadingChart(withAr.slice().reverse());
   const list=document.getElementById("rd-list");if(!list)return;
   if(!entries.length){list.innerHTML='<div class="empty"><i class="ti ti-book-off"></i><p>'+tx("No books recorded for this period")+'</p></div>';return;}
@@ -5945,7 +6078,7 @@ function renderReports(){
   const from=months[0]+"-01";
   const lbl=months.length===1?rpMonthLabel(months[0]):rpMonthLabel(months[0])+" – "+rpMonthLabel(months[months.length-1]);
   const ph=document.getElementById("rp-print-head");
-  if(ph)ph.innerHTML=`<div class="rd-ph-title">${rpTab==="students"?tx("Students report"):rpTab==="learning"?tx("Learning report"):tx("Business report")} <span>${lbl}</span></div><div class="rd-ph-sub">${tx("printed {date}",{date:td()})}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`;
+  if(ph)ph.innerHTML=`<div class="rd-ph-title">${rpTab==="students"?tx("Students report"):rpTab==="learning"?tx("Learning report"):tx("Business report")} <span>${lbl}</span></div><div class="rd-ph-sub">${tx("printed {date}",{date:td()})}${libraryName()?" · "+escapeHTMLBasic(libraryName()):""}</div>`;
 
   const people=students.filter(s=>!s.archived||rpActiveInPeriod(s,months));
   const rows=people.map(s=>({s,t:rpStudentTotals(s.id,months)}))
@@ -7823,7 +7956,7 @@ function applyBulkEditBooks(){
 // date on each book so the list can show/filter what's already been printed.
 function markLabelsPrinted(ids,kind){
   const key=kind==="cover"?"printedCover":"printedInfo";
-  const today=new Date().toISOString().slice(0,10);
+  const today=td();
   const idSet=new Set(ids);
   bookLib.forEach(b=>{if(idSet.has(b.id))b[key]=today;});
   save();renderBookLib();
@@ -7834,7 +7967,7 @@ function toggleLabelPrinted(ev,id,kind){
   ev.stopPropagation();
   const b=bookLib.find(x=>x.id===id);if(!b)return;
   const key=kind==="cover"?"printedCover":"printedInfo";
-  b[key]=b[key]?"":new Date().toISOString().slice(0,10);
+  b[key]=b[key]?"":td();
   save();renderBookLib();
 }
 
@@ -7913,7 +8046,7 @@ function markDone(btn){
 // WP9140: 47×26.9mm, 40 per A4 (4 cols × 10 rows). Color band on top, book info below.
 function buildInfoLabelHTML(books,skip=0){
   // Ownership mark, configurable in Settings → Templates → Library name
-  const libName=(localStorage.getItem("mc_library_name")??"AMBER LIBRARY").trim();
+  const libName=libraryName();
   // 4 cols × 47mm = 188mm labels wide, so 11mm left/right. 10 rows × 26.9mm = 269mm, so 14mm top/bottom.
   const cellHtml=b=>{
     const band=arLevelBand(b.arLevel);
@@ -9168,7 +9301,8 @@ function showToast(msg){
   document.body.appendChild(t);
   _toastTimer=setTimeout(()=>t.remove(),2000);
 }
-function showUndoToast(msg,restoreFn){
+// opts (optional): {label, ms} — a different button text and how long the toast stays.
+function showUndoToast(msg,restoreFn,opts){
   document.getElementById("undo-toast")?.remove();
   clearTimeout(_undoTimer);
   const t=document.createElement("div");
@@ -9178,12 +9312,12 @@ function showUndoToast(msg,restoreFn){
   span.textContent=msg;
   span.style.cssText="overflow:hidden;text-overflow:ellipsis;white-space:nowrap";
   const btn=document.createElement("button");
-  btn.textContent=tx("Undo");
+  btn.textContent=opts?.label||tx("Undo");
   btn.style.cssText="background:none;border:none;color:#4ade80;font-weight:700;cursor:pointer;font-size:13px;flex-shrink:0;font-family:inherit";
   btn.onclick=()=>{restoreFn();t.remove();clearTimeout(_undoTimer);};
   t.append(span,btn);
   document.body.appendChild(t);
-  _undoTimer=setTimeout(()=>t.remove(),6000);
+  _undoTimer=setTimeout(()=>t.remove(),opts?.ms||6000);
 }
 // Remove a record and offer a 6-second undo.
 // IMPORTANT: mutate the array in place with splice() rather than reassigning it via filter().
@@ -9432,6 +9566,10 @@ function afterRemoteApplied(key){
     if(key==="settings")_lastSaved.settings=cmpJson(val);
     else{const m=new Map();val.forEach(r=>m.set(r.id,cmpJson(r)));_lastSaved[key]=m;}
   }finally{syncApplyingRemote=false;}
+  // Language, currency and time zone are read once at start-up. When another device changes one,
+  // offer a reload rather than reloading under the user's hands.
+  if(key==="settings"&&(pickLang()!==LANG||String(settings.currency||WS_DEFAULTS.currency).toUpperCase()!==WS_CUR||String(settings.timeZone||WS_DEFAULTS.timeZone)!==WS_TZ))
+    setTimeout(()=>showUndoToast(tx("Language or workspace settings changed on another device"),()=>location.reload(),{label:tx("Reload"),ms:20000}),400);
   clearTimeout(_syncRerenderTimer);
   _syncRerenderTimer=setTimeout(()=>{rerenderCurrentPage();renderStorageGauge?.();},250);
 }
@@ -9484,10 +9622,10 @@ async function gcalGetToken(){
 }
 function gcalParseEvents(items){
   return (items||[]).filter(ev=>ev.status!=="cancelled"&&ev.start?.dateTime&&ev.end?.dateTime).map(ev=>{
-    const st=new Date(ev.start.dateTime),en=new Date(ev.end.dateTime);
+    const en=new Date(ev.end.dateTime),stI=new Date(ev.start.dateTime),st=wallTZ(stI);
     const mins=st.getHours()*60+st.getMinutes();
     return {id:ev.id,date:fmtDate(st),mins,time:String(st.getHours()).padStart(2,"0")+":"+String(st.getMinutes()).padStart(2,"0"),
-      dur:Math.round((en-st)/900000)/4,title:(ev.summary||"(no title)").trim(),colorId:ev.colorId||"0",link:ev.htmlLink||""};
+      dur:Math.round((en-stI)/900000)/4,title:(ev.summary||"(no title)").trim(),colorId:ev.colorId||"0",link:ev.htmlLink||""};
   });
 }
 // One window of the calendar, following nextPageToken — a whole year is well past the 2500 cap.
@@ -9509,7 +9647,7 @@ async function gcalFetchWindow(tmin,tmax,retry=true){
 }
 async function gcalFetchEvents(month){
   const [y,m]=month.split("-").map(Number);
-  return gcalFetchWindow(new Date(y,m-1,1).toISOString(),new Date(y,m,1).toISOString());
+  return gcalFetchWindow(tzMidnightISO(y,m-1,1),tzMidnightISO(y,m,1));
 }
 // Walk the calendar backwards a year at a time and remember the earliest lesson found for each
 // student, so "how long have they been coming" comes from the calendar rather than memory.
@@ -9529,7 +9667,7 @@ async function gcalScanFirstLessons(){
     for(let back=0;back<6;back++){
       const y=thisYear-back;
       setSt(tx("Reading {year}…",{year:y}));
-      const evs=await gcalFetchWindow(new Date(y,0,1).toISOString(),new Date(y+1,0,1).toISOString());
+      const evs=await gcalFetchWindow(tzMidnightISO(y,0,1),tzMidnightISO(y+1,0,1));
       yearsRead++;
       let matched=0;
       for(const ev of evs){
@@ -9709,7 +9847,7 @@ function gcalSetTitleOwner(title,value){
   showToast('"'+String(title).slice(0,24)+'" → '+label);
   gcalRun(false);
 }
-function gcalStudentHourly(s){const r=s&&s.rate>0&&s.dur>0?s.rate/s.dur:0;return r>0&&isFinite(r)?r:HR;}
+function gcalStudentHourly(s){const r=s&&s.rate>0&&s.dur>0?s.rate/s.dur:0;return r>0&&isFinite(r)?r:hourlyRate();}
 function gcalAmountFor(s,colorId,dur){const rule=gcalRule(colorId);const h=rule&&rule.mode==="hourly"&&rule.hourly>0?rule.hourly:gcalStudentHourly(s);return Math.round(h*dur);}
 function gcalDayLabel(d){return d.slice(5).replace("-","/")+" ("+DAY_SHORT[["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(d+"T00:00:00").getDay()]]+")";}
 function gcalTimeLbl(mins){if(mins>=1440)return "?";const h=Math.floor(mins/60),m=mins%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
@@ -9923,8 +10061,8 @@ function renderGcal(){
     for(const cid of nc){
       const c=GCAL_COLORS[cid]||GCAL_COLORS["0"];const ex=r.needColor[cid].slice(0,3).map(escapeHTMLBasic).join(" · ");
       html+=`<div class="gc-color-row">${gcalColorDot(cid)}<div style="flex:1 1 auto;min-width:0"><div style="font-weight:600;font-size:13px">${c.name} <span class="cell-muted2">(${r.needColor[cid].length} events)</span></div><div class="cell-muted2" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ex}</div></div>
-        <select id="gc-mode-${cid}" onchange="document.getElementById('gc-hr-${cid}').style.display=this.value==='hourly'?'':'none'"><option value="ignore">Not a lesson</option><option value="student">Lesson — student's rate</option><option value="hourly">Lesson — flat ₩/hour</option></select>
-        <input type="number" id="gc-hr-${cid}" placeholder="₩ per hour" step="1000" style="display:none;width:120px"/>
+        <select id="gc-mode-${cid}" onchange="document.getElementById('gc-hr-${cid}').style.display=this.value==='hourly'?'':'none'"><option value="ignore">${tx("Not a lesson")}</option><option value="student">${tx("Lesson — student's rate")}</option><option value="hourly">${tx("Lesson — flat {cur}/hour",I18N_VARS)}</option></select>
+        <input type="number" id="gc-hr-${cid}" placeholder="${escapeAttr(tx("{cur} per hour",I18N_VARS))}" step="${CUR_STEP}" style="display:none;width:120px"/>
         <button class="btn btn-sm btn-p" onclick="gcalSetColor('${cid}')"><i class="ti ti-check"></i> Save</button></div>`;
     }
     html+=`</div></div>`;
@@ -9993,7 +10131,7 @@ function renderGcal(){
 function gcalSetColor(cid){
   const mode=document.getElementById("gc-mode-"+cid)?.value||"ignore";
   const hourly=parseInt(document.getElementById("gc-hr-"+cid)?.value||"0",10)||0;
-  if(mode==="hourly"&&!hourly){alert(tx("Enter the ₩ per hour for this colour."));return;}
+  if(mode==="hourly"&&!hourly){alert(tx("Enter the {cur} per hour for this colour.",I18N_VARS));return;}
   settings.gcalColors=Object.assign({},gcalRules(),{[cid]:{mode,hourly}});
   save();gcalRun(false);
 }
@@ -10472,7 +10610,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div style="padding:14px 16px 0">
       <p class="u-hint" style="margin-bottom:12px" data-i18n>Money you were paid that is not a lesson fee — a platform bonus, for example. It is treated as already received, so it adds to both Expected and Collected and never appears as outstanding.</p>
       <div class="fg"><label data-i18n>Month</label><input id="im-month" type="month"/></div>
-      <div class="fg"><label data-i18n>Amount (₩)</label><input id="im-amt" type="number" step="1000" min="0" placeholder="30000"/></div>
+      <div class="fg"><label data-i18n>Amount ({cur})</label><input id="im-amt" type="number" data-money min="0" placeholder="30000"/></div>
       <div class="fg"><label data-i18n>What for</label><input id="im-note" type="text" maxlength="60" placeholder="Platform bonus" data-i18n-ph/></div>
     </div>
     <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()" data-i18n><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveIncome()" data-i18n>Save</button></div>
