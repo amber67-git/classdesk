@@ -61,19 +61,31 @@ else if (ver && guideVer[1] !== ver[1]) fail(`Settings → Guide footer says ${g
 else ok(`Guide footer matches APP_VERSION (${guideVer[1]})`);
 
 // Since v129 the Guide has a Korean copy too (lang="ko"); the app shows the one that matches the
-// language. Both footers and both newest "What's new" entries must carry APP_VERSION, so a release
-// cannot update one copy and forget the other.
+// language. Both footers must carry APP_VERSION, and the two copies must start their "What's new"
+// with the same version — so a release cannot update one copy and forget the other. That newest
+// entry may be older than APP_VERSION (a docs-only release adds no line, see README) but never newer.
 const guideKoVer = html.match(/설명서 기준 버전:\s*<b>(v\d+)<\/b>/);
 if (!guideKoVer) fail('Korean Guide footer "설명서 기준 버전: <b>vNN</b>" not found');
 else if (ver && guideKoVer[1] !== ver[1]) fail(`Korean Guide footer says ${guideKoVer[1]} but APP_VERSION is ${ver[1]} — update the Korean copy of the Guide as well`);
 else ok(`Korean Guide footer matches APP_VERSION (${guideKoVer[1]})`);
-for (const lang of ["en", "ko"]) {
-  const at = html.indexOf(`guide-body" lang="${lang}"`);
-  const top = at < 0 ? null : html.slice(at).match(/<dt>(v\d+)(?:–v\d+)? · /);
-  if (at < 0) fail(`Guide copy lang="${lang}" not found`);
-  else if (!top) fail(`Guide copy lang="${lang}" has no "What's new" entries`);
-  else if (ver && top[1] !== ver[1]) fail(`newest "What's new" entry in the ${lang} Guide is ${top[1]} but APP_VERSION is ${ver[1]}`);
-  else ok(`newest "What's new" entry in the ${lang} Guide is ${top[1]}`);
+{
+  const atEn = html.indexOf('guide-body" lang="en"'), atKo = html.indexOf('guide-body" lang="ko"');
+  const endKo = atKo < 0 ? -1 : html.indexOf("설명서 기준 버전", atKo);
+  // Each copy is searched only inside itself: [en start, ko start) and [ko start, ko footer).
+  const range = { en: atEn >= 0 && atKo > atEn ? html.slice(atEn, atKo) : null, ko: atKo >= 0 && endKo > atKo ? html.slice(atKo, endKo) : null };
+  const num = (v) => parseInt(v.slice(1), 10);
+  const tops = {};
+  for (const lang of ["en", "ko"]) {
+    const top = range[lang] && range[lang].match(/<dt>(v\d+)(?:–v\d+)? · /);
+    if (!range[lang]) fail(`Guide copy lang="${lang}" not found (the English copy must come first, then the Korean one)`);
+    else if (!top) fail(`Guide copy lang="${lang}" has no "What's new" entries`);
+    else if (ver && num(top[1]) > num(ver[1])) fail(`newest "What's new" entry in the ${lang} Guide is ${top[1]}, newer than APP_VERSION ${ver[1]}`);
+    else tops[lang] = top[1];
+  }
+  if (tops.en && tops.ko) {
+    if (tops.en !== tops.ko) fail(`the English Guide's newest "What's new" entry is ${tops.en} but the Korean one's is ${tops.ko} — add the line to both copies`);
+    else ok(`both Guide copies start "What's new" with ${tops.en}`);
+  }
 }
 
 // An unclosed <a> once wrapped half of the Settings page in a link. Only the real markup can be
@@ -138,7 +150,8 @@ if (!dictM) {
   if (I18N) {
     const ko = I18N.ko || {};
     // A key written twice silently keeps the last Korean — find repeats in the source text.
-    const keysInSrc = [...dictM[1].matchAll(/(?:^|[{,])\s*"((?:\\.|[^"\\])*)"\s*:/g)].map((x) => x[1]);
+    // Comment lines are blanked first: the key right after a "// ── v129" line follows no comma.
+    const keysInSrc = [...dictM[1].replace(/^[ \t]*\/\/[^\n]*$/gm, "").matchAll(/(?:^|[{,])\s*"((?:\\.|[^"\\])*)"\s*:/g)].map((x) => x[1]);
     const dupKeys = [...new Set(keysInSrc.filter((k, i) => keysInSrc.indexOf(k) !== i))];
     if (dupKeys.length) fail(`${dupKeys.length} Korean key(s) written twice in I18N.ko: ${dupKeys.slice(0, 5).map((k) => JSON.stringify(k)).join(", ")}`);
     else ok(`no Korean key written twice (${keysInSrc.length} keys)`);

@@ -71,8 +71,6 @@ async function scan(page, lang) {
       if (!inOpenModal) return;
       // <datalist> options are suggestions built from the user's data, not UI words.
       if (el.tagName === "OPTION" ? !el.closest("select") || !vis(el.closest("select")) : !vis(el)) return;
-      // Lists of international ids (currency codes, time zone names) are the same in every language.
-      if (el.closest("[data-sweep-ids]")) return;
       if (el.closest(ROW) && !el.matches(".badge,button,[title]")) return;
       // Own text only (children are checked on their own)
       const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.nodeValue).join(" ");
@@ -80,6 +78,9 @@ async function scan(page, lang) {
       if (el.placeholder) texts.push(el.placeholder);
       if (el.title) texts.push(el.title);
       if (el.tagName === "OPTION") texts.push(el.textContent);
+      // Lists of international ids: the ids themselves (time zones such as "America/Los Angeles", currency
+      // codes such as USD, UTC) are the same in every language, so only the words around them are checked.
+      if (el.closest("[data-sweep-ids]")) for (let i = 0; i < texts.length; i++) texts[i] = texts[i].replace(/\b[A-Z][A-Za-z_]*(?:\/[A-Za-z_ ]+)+/g, " ").replace(/\b[A-Z]{3}\b/g, " ");
       texts.forEach((tx) => { if (bad(tx) && !isData(tx)) { const k = where(el) + "|" + tx.trim(); if (!seen.has(k)) { seen.add(k); hits.push({ where: where(el), text: tx.replace(/\s+/g, " ").trim() }); } } });
     });
     const openOnly = (el) => (el.closest(".mo") ? el.closest(".mo").classList.contains("show") : true);
