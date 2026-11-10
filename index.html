@@ -10674,16 +10674,22 @@ function splitTracks(tpl){
   if(cur)out.push(cur);
   return out;
 }
+// Positions of the hidden columns in a grid list's header (required fields never hide); [] for
+// any other header.
+function gridHiddenIdx(head){
+  const pk=head&&head.dataset.headerPage;
+  if(!pk||!GRID_HIDE_PAGES[pk])return [];
+  const req=new Set(((CF_PAGES_BY_KEY[pk]||{}).fields||[]).filter(f=>f.required).map(f=>f.id));
+  const hidden=new Set(getHiddenFields(pk).filter(id=>!req.has(id)));
+  return [...head.children].map((el,i)=>el.dataset.col&&hidden.has(el.dataset.col)?i:-1).filter(i=>i>=0);
+}
 function applyGridHidden(){
   let css="";
   const widths=lg(COLW_KEY,{});
   for(const pk in GRID_HIDE_PAGES){
     const {scope,row}=GRID_HIDE_PAGES[pk];
     const head=document.querySelector(`${scope} .grid-head[data-header-page="${pk}"]`);if(!head)continue;
-    const req=new Set(((CF_PAGES_BY_KEY[pk]||{}).fields||[]).filter(f=>f.required).map(f=>f.id));
-    const hidden=new Set(getHiddenFields(pk).filter(id=>!req.has(id)));
-    if(!hidden.size)continue;
-    const idx=[...head.children].map((el,i)=>el.dataset.col&&hidden.has(el.dataset.col)?i:-1).filter(i=>i>=0);
+    const idx=gridHiddenIdx(head);
     if(!idx.length)continue;
     const tracks=splitTracks((widths[colwListKey(head)]||{}).tpl||head.style.gridTemplateColumns);
     if(tracks.length!==head.children.length)continue;   // unexpected template: leave the list as it is
@@ -10750,6 +10756,10 @@ document.addEventListener("mousedown",e=>{
     // Freeze every track to px first: dragging one column can't then collapse a neighbouring
     // 1fr/auto track.
     const cols=getComputedStyle(head).gridTemplateColumns.split(" ").map(v=>Math.round(parseFloat(v))+"px");
+    // A hidden column (v134) shows as 0px here: keep its own width — the saved one, or the list's
+    // default — so it comes back at its old size when it is shown again.
+    const base=splitTracks((lg(COLW_KEY,{})[key]||{}).tpl||head.style.gridTemplateColumns);
+    if(base.length===cols.length)gridHiddenIdx(head).forEach(h=>{cols[h]=base[h];});
     const startW=parseFloat(cols[i]);
     const move=ev=>{
       cols[i]=Math.max(44,Math.round(startW+(ev.clientX-startX)))+"px";

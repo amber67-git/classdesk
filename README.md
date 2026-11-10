@@ -123,7 +123,7 @@
 - 읽기·쓰기는 항상 `getCustomFields / getCustomLabels / getFieldOrder / getHiddenFields`와 짝이 되는 `save…` 함수로만 한다. 쓰기는 네 부분을 한꺼번에 `settings.fields`에 옮기고 `save()`한다.
 - v132 전의 기기별 키(`mc_customfields_<page>` 등)는 그 페이지가 `settings.fields`에 없을 때만 읽는다. 시작할 때 메모리로 옮기고(`moveLocalFieldSetups`), 클라우드와 처음 맞춘 뒤(`reconcileKey`)에 올린다 — 더 일찍 올리면 다른 기기의 새 설정을 덮어쓸 수 있다.
 - 다른 기기의 설정에 어떤 페이지가 없으면 우리 것을 남기고 다시 올린다(옛 버전 기기 대비).
-- 숨긴 열(v134): 도서·커리큘럼 표는 각자 처리하고, 학생·교재·교구 그리드는 `applyGridHidden()`이 숨긴 열의 트랙을 0px로 만들고 그 칸을 감춘다(행은 위치 기준 그리드라 칸을 빼면 안 된다). 휴대폰 카드에서는 그 칸을 뺀다. 새 그리드 목록을 숨기기 대상으로 만들려면 `GRID_HIDE_PAGES`에 한 줄 더하고 머리 칸에 `data-col`을 붙인다. 열이 따로 없는 항목(학생의 Contact 등)은 Custom Fields에서 체크 상자가 꺼진다.
+- 숨긴 열(v134): 도서·커리큘럼 표는 각자 처리하고, 학생·교재·교구 그리드는 `applyGridHidden()`이 숨긴 열의 트랙을 0px로 만들고 그 칸을 감춘다(행은 위치 기준 그리드라 칸을 빼면 안 된다). 휴대폰 카드에서는 그 칸을 뺀다. 새 그리드 목록을 숨기기 대상으로 만들려면 `GRID_HIDE_PAGES`에 한 줄, `CF_HIDE_WORKS`에 `페이지: "grid"`를 더하고 머리 칸에 `data-col`을 붙인다. 열 너비를 끌어 저장할 때 숨긴 열은 0px가 아니라 원래 너비로 저장된다(`gridHiddenIdx`). 열이 따로 없는 항목(학생의 Contact 등)은 Custom Fields에서 체크 상자가 꺼진다.
 
 ## 기타
 
