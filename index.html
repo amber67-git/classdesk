@@ -1108,19 +1108,19 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-sessions" class="page">
   <div class="fbar" style="position:relative">
     <select id="sf-sid" onchange="renderCalendar()" class="u-w-180"></select>
-    <button class="btn" id="cal-gcal-btn" onclick="openGcalCompare()" title="Compare this month with Google Calendar"><i class="ti ti-calendar-search"></i> Google<span id="cal-gcal-n" class="u-badge" style="display:none;margin-left:6px;background:var(--amb-l);color:var(--amb);border-color:transparent"></span></button>
+    <button class="btn" id="cal-gcal-btn" onclick="openGcalCompare()" title="Compare this month with Google Calendar" data-i18n-title><i class="ti ti-calendar-search"></i> Google<span id="cal-gcal-n" class="u-badge" style="display:none;margin-left:6px;background:var(--amb-l);color:var(--amb);border-color:transparent"></span></button>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-      <button class="bic" onclick="calChangeMonth(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
+      <button class="bic" onclick="calChangeMonth(-1)" title="Previous month" data-i18n-title><i class="ti ti-chevron-left"></i></button>
       <span id="cal-month-label" class="mn-label"></span>
-      <button class="bic" onclick="calChangeMonth(1)" title="Next month"><i class="ti ti-chevron-right"></i></button>
+      <button class="bic" onclick="calChangeMonth(1)" title="Next month" data-i18n-title><i class="ti ti-chevron-right"></i></button>
     </div>
     <input type="month" id="sf-mon" onchange="calSetMonth(this.value)" style="width:0;opacity:0;position:absolute;pointer-events:none"/>
-    <div style="margin-left:auto"><button class="btn btn-p" onclick="openLessonModal()"><i class="ti ti-plus"></i> Add lesson</button></div>
+    <div style="margin-left:auto"><button class="btn btn-p" onclick="openLessonModal()" data-i18n><i class="ti ti-plus"></i> Add lesson</button></div>
   </div>
   <div class="pc">
     <div class="card" style="padding:0">
       <div class="cal-weekdays">
-        <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+        <div data-i18n>Mon</div><div data-i18n>Tue</div><div data-i18n>Wed</div><div data-i18n>Thu</div><div data-i18n>Fri</div><div data-i18n>Sat</div><div data-i18n>Sun</div>
       </div>
       <div id="cal-grid" class="cal-grid"></div>
     </div>
@@ -1131,13 +1131,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-payments" class="page">
   <div class="fbar" style="position:relative">
     <div id="pm-tabs" class="seg">
-      <button class="seg-btn pm-tab-btn active" data-tab="calendar" onclick="pmSwitchTab('calendar')"><i class="ti ti-calendar-event"></i> Calendar</button>
-      <button class="seg-btn pm-tab-btn" data-tab="summary" onclick="pmSwitchTab('summary')"><i class="ti ti-table"></i> Summary</button>
+      <button class="seg-btn pm-tab-btn active" data-tab="calendar" onclick="pmSwitchTab('calendar')" data-i18n><i class="ti ti-calendar-event"></i> Calendar</button>
+      <button class="seg-btn pm-tab-btn" data-tab="summary" onclick="pmSwitchTab('summary')" data-i18n><i class="ti ti-table"></i> Summary</button>
     </div>
     <div class="month-nav" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-      <button class="bic" onclick="pmChangeMonth(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
+      <button class="bic" onclick="pmChangeMonth(-1)" title="Previous month" data-i18n-title><i class="ti ti-chevron-left"></i></button>
       <span id="pm-mlbl" class="mn-label"></span>
-      <button class="bic" onclick="pmChangeMonth(1)" title="Next month"><i class="ti ti-chevron-right"></i></button>
+      <button class="bic" onclick="pmChangeMonth(1)" title="Next month" data-i18n-title><i class="ti ti-chevron-right"></i></button>
     </div>
     <input type="month" id="pm-mon" onchange="renderPayments()" style="width:0;opacity:0;position:absolute;pointer-events:none"/>
     <span id="pm-lock-hint" class="cell-muted2" style="margin-left:auto;display:inline-flex;align-items:center;gap:4px"></span>
@@ -1145,11 +1145,11 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <div class="pc">
     <div id="pm-summary-stats" style="display:none">
       <div class="stats cols-5">
-        <div class="sc amb"><div class="sc-lbl">Expected</div><div class="sc-val sm" id="pm-ex">—</div></div>
-        <div class="sc grn"><div class="sc-lbl">Collected</div><div class="sc-val sm" id="pm-pd">—</div></div>
-        <div class="sc red"><div class="sc-lbl">Remaining</div><div class="sc-val sm text-red" id="pm-rm">—</div></div>
-        <div class="sc gry"><div class="sc-lbl">Cancelled</div><div class="sc-val" id="pm-cn">—</div></div>
-        <div class="sc blu"><div class="sc-lbl">Hours taught</div><div class="sc-val" id="pm-hr">—</div></div>
+        <div class="sc amb"><div class="sc-lbl" data-i18n>Expected</div><div class="sc-val sm" id="pm-ex">—</div></div>
+        <div class="sc grn"><div class="sc-lbl" data-i18n>Collected</div><div class="sc-val sm" id="pm-pd">—</div></div>
+        <div class="sc red"><div class="sc-lbl" data-i18n>Remaining</div><div class="sc-val sm text-red" id="pm-rm">—</div></div>
+        <div class="sc gry"><div class="sc-lbl" data-i18n>Cancelled</div><div class="sc-val" id="pm-cn">—</div></div>
+        <div class="sc blu"><div class="sc-lbl" data-i18n>Hours taught</div><div class="sc-val" id="pm-hr">—</div></div>
       </div>
       <div class="card" style="margin-bottom:14px">
         <div class="cb p">
@@ -1159,41 +1159,41 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </div>
       <div class="card" style="margin-bottom:14px">
         <div class="ch">
-          <div class="ct"><i class="ti ti-coins"></i>Other income</div>
-          <button class="btn btn-xs btn-p" onclick="openIncomeModal()" title="Add an amount that is not a lesson fee"><i class="ti ti-plus"></i> Add</button>
+          <div class="ct" data-i18n><i class="ti ti-coins"></i>Other income</div>
+          <button class="btn btn-xs btn-p" onclick="openIncomeModal()" title="Add an amount that is not a lesson fee" data-i18n data-i18n-title><i class="ti ti-plus"></i> Add</button>
         </div>
         <div class="cb p" id="pm-income-body"></div>
       </div>
     </div>
     <div class="card" style="padding:0" id="pm-tab-calendar">
       <div class="ch">
-        <div class="ct"><i class="ti ti-calendar-event"></i>Payment calendar</div>
+        <div class="ct" data-i18n><i class="ti ti-calendar-event"></i>Payment calendar</div>
         <div class="bg" style="font-size:10px">
-          <span class="badge bu">Unpaid</span>
-          <span class="badge bp">Paid</span><span class="badge bc">Cancelled</span>
+          <span class="badge bu" data-i18n>Unpaid</span>
+          <span class="badge bp" data-i18n>Paid</span><span class="badge bc" data-i18n>Cancelled</span>
         </div>
       </div>
       <div class="cal-weekdays">
-        <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+        <div data-i18n>Mon</div><div data-i18n>Tue</div><div data-i18n>Wed</div><div data-i18n>Thu</div><div data-i18n>Fri</div><div data-i18n>Sat</div><div data-i18n>Sun</div>
       </div>
       <div id="pm-calendar-grid" class="cal-grid"></div>
     </div>
     <div class="card" style="margin-bottom:14px;display:none" id="pm-tab-summary">
       <div class="ch">
-        <div class="ct"><i class="ti ti-table"></i>Summary by student</div>
+        <div class="ct" data-i18n><i class="ti ti-table"></i>Summary by student</div>
         <div class="bg" style="font-size:10px">
-          <span class="badge bp">Paid</span><span class="badge bpa">Partial</span><span class="badge bu">Unpaid</span>
-          <span class="badge bc">Cancelled</span>
+          <span class="badge bp" data-i18n>Paid</span><span class="badge bpa" data-i18n>Partial</span><span class="badge bu" data-i18n>Unpaid</span>
+          <span class="badge bc" data-i18n>Cancelled</span>
         </div>
       </div>
       <div class="grid-head" style="display:grid;grid-template-columns:200px 64px 64px 116px 116px 116px 280px;gap:8px" data-header-page="payments">
-        <div class="col-hdr">Student</div>
-        <div class="col-hdr center">Lessons</div>
-        <div class="col-hdr center">Cancel</div>
-        <div class="col-hdr">Expected</div>
-        <div class="col-hdr">Paid</div>
-        <div class="col-hdr">Remaining</div>
-        <div class="col-hdr">Status</div>
+        <div class="col-hdr" data-i18n>Student</div>
+        <div class="col-hdr center" data-i18n>Lessons</div>
+        <div class="col-hdr center" data-i18n>Cancel</div>
+        <div class="col-hdr" data-i18n>Expected</div>
+        <div class="col-hdr" data-i18n>Paid</div>
+        <div class="col-hdr" data-i18n>Remaining</div>
+        <div class="col-hdr" data-i18n>Status</div>
       </div>
       <div id="pm-rows"></div>
     </div>
@@ -1203,20 +1203,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- CURRICULUM -->
 <div id="page-curriculum" class="page">
   <div class="fbar">
-    <select id="curr-mf" onchange="renderCurriculum()" class="u-w-120">
+    <select id="curr-mf" onchange="renderCurriculum()" class="u-w-120" data-i18n-opts>
       <option value="">All months</option>
-      <option>JAN</option><option>FEB</option><option>MAR</option><option>APR</option>
-      <option>MAY</option><option>JUN</option><option>JUL</option><option>AUG</option>
-      <option>SEP</option><option>OCT</option><option>NOV</option><option>DEC</option>
+      <option value="JAN">JAN</option><option value="FEB">FEB</option><option value="MAR">MAR</option><option value="APR">APR</option>
+      <option value="MAY">MAY</option><option value="JUN">JUN</option><option value="JUL">JUL</option><option value="AUG">AUG</option>
+      <option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option>
     </select>
-    <input type="text" id="curr-sf" placeholder="Search…" oninput="renderCurriculum()" style="width:200px"/>
-    <div style="margin-left:auto"><button class="btn btn-p" onclick="openCurrModal()"><i class="ti ti-plus"></i> Add topic</button></div>
+    <input type="text" id="curr-sf" placeholder="Search…" data-i18n-ph oninput="renderCurriculum()" style="width:200px"/>
+    <div style="margin-left:auto"><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
   </div>
   <div class="pc">
     <div class="card">
       <div class="tw">
         <table>
-          <thead data-header-page="curriculum"><tr><th>Month</th><th>Wk</th><th data-col="cat">Category</th><th data-col="topic">Topic</th><th data-col="wb">Workbook</th><th data-col="writing">Writing</th><th data-col="books">Books</th><th data-col="acts">Activities</th><th data-col="grammar">Grammar</th><th data-col="note">Notes</th><th></th></tr></thead>
+          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th></th></tr></thead>
           <tbody id="curr-body"></tbody>
         </table>
       </div>
@@ -1228,7 +1228,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-reading" class="page">
   <div class="fbar">
     <select id="rd-sid" onchange="renderReading()"></select>
-    <select id="rd-range" onchange="renderReading()">
+    <select id="rd-range" onchange="renderReading()" data-i18n-opts>
       <option value="3">Last 3 months</option>
       <option value="1">This month</option>
       <option value="6">Last 6 months</option>
@@ -1237,27 +1237,27 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     </select>
     <div class="fbar-right">
       <span id="rd-count" class="cell-muted2"></span>
-      <button class="btn btn-p" onclick="printReading()"><i class="ti ti-printer"></i> Print report</button>
+      <button class="btn btn-p" onclick="printReading()" data-i18n><i class="ti ti-printer"></i> Print report</button>
     </div>
   </div>
   <div class="pc">
     <div id="rd-print-head" class="rd-print-head"></div>
     <div class="stats cols-4">
-      <div class="sc grn"><div class="sc-lbl">Books read</div><div class="sc-val" id="rd-n">—</div><div class="sc-sub" id="rd-n-sub"></div></div>
-      <div class="sc blu"><div class="sc-lbl">Average AR</div><div class="sc-val" id="rd-avg">—</div><div class="sc-sub" id="rd-avg-sub"></div></div>
-      <div class="sc amb"><div class="sc-lbl">Current level</div><div class="sc-val sm" id="rd-lvl">—</div><div class="sc-sub" id="rd-lvl-sub"></div></div>
-      <div class="sc gry"><div class="sc-lbl">Not in library</div><div class="sc-val" id="rd-miss">—</div><div class="sc-sub">titles without AR data</div></div>
+      <div class="sc grn"><div class="sc-lbl" data-i18n>Books read</div><div class="sc-val" id="rd-n">—</div><div class="sc-sub" id="rd-n-sub"></div></div>
+      <div class="sc blu"><div class="sc-lbl" data-i18n>Average AR</div><div class="sc-val" id="rd-avg">—</div><div class="sc-sub" id="rd-avg-sub"></div></div>
+      <div class="sc amb"><div class="sc-lbl" data-i18n>Current level</div><div class="sc-val sm" id="rd-lvl">—</div><div class="sc-sub" id="rd-lvl-sub"></div></div>
+      <div class="sc gry"><div class="sc-lbl" data-i18n>Not in library</div><div class="sc-val" id="rd-miss">—</div><div class="sc-sub" data-i18n>titles without AR data</div></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct"><i class="ti ti-chart-line"></i>AR level over time</div><span class="cell-muted2" id="rd-chart-note"></span></div>
+      <div class="ch"><div class="ct" data-i18n><i class="ti ti-chart-line"></i>AR level over time</div><span class="cell-muted2" id="rd-chart-note"></span></div>
       <div class="cb p" id="rd-chart"></div>
     </div>
     <div class="card">
       <div class="grid-head" style="display:grid;grid-template-columns:100px minmax(0,1fr) 90px 120px 90px;gap:8px" data-header-page="reading">
-        <div class="col-hdr">Date</div>
-        <div class="col-hdr">Book</div>
+        <div class="col-hdr" data-i18n>Date</div>
+        <div class="col-hdr" data-i18n>Book</div>
         <div class="col-hdr">AR</div>
-        <div class="col-hdr">Level</div>
+        <div class="col-hdr" data-i18n>Level</div>
         <div class="col-hdr">Lexile</div>
       </div>
       <div id="rd-list"></div>
@@ -1269,11 +1269,11 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-reports" class="page">
   <div class="fbar">
     <div id="rp-tabs" class="seg">
-      <button class="seg-btn active" data-tab="students" onclick="rpSwitchTab('students')"><i class="ti ti-users"></i> Students</button>
-      <button class="seg-btn" data-tab="learning" onclick="rpSwitchTab('learning')"><i class="ti ti-book"></i> Learning</button>
-      <button class="seg-btn" data-tab="business" onclick="rpSwitchTab('business')"><i class="ti ti-coin"></i> Business</button>
+      <button class="seg-btn active" data-tab="students" onclick="rpSwitchTab('students')" data-i18n><i class="ti ti-users"></i> Students</button>
+      <button class="seg-btn" data-tab="learning" onclick="rpSwitchTab('learning')" data-i18n><i class="ti ti-book"></i> Learning</button>
+      <button class="seg-btn" data-tab="business" onclick="rpSwitchTab('business')" data-i18n><i class="ti ti-coin"></i> Business</button>
     </div>
-    <select id="rp-range" onchange="renderReports()">
+    <select id="rp-range" onchange="renderReports()" data-i18n-opts>
       <option value="3">Last 3 months</option>
       <option value="1">This month</option>
       <option value="6">Last 6 months</option>
@@ -1282,7 +1282,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     </select>
     <div class="fbar-right">
       <span id="rp-count" class="cell-muted2"></span>
-      <button class="btn btn-p" onclick="printReports()"><i class="ti ti-printer"></i> Print report</button>
+      <button class="btn btn-p" onclick="printReports()" data-i18n><i class="ti ti-printer"></i> Print report</button>
     </div>
   </div>
   <div class="pc">
@@ -1716,7 +1716,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Does anything remind me about fees that never arrived?</dt><dd>Yes. Last month's fees are expected by the <b>10th of this month</b>; from the <b>11th</b> on, if any of them are still outstanding, a popup lists who owes how much when you open the app, and it comes back <b>every 5 days</b> until you mark the money as received. Only the month immediately before the current one is checked, so it stops on its own when the month rolls over. On phones and tablets the names and amounts are left out of the popup — the same privacy rule the Dashboard and the Payments PIN follow — and "Open Payments" takes you straight to that month. The 5-day pause is remembered per device, so dismissing it on the PC doesn't silence the tablet.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
-          <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. As of v124 the sidebar, Dashboard, Students and the student card are translated; the remaining pages follow release by release.</dd>
+          <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. As of v125 every page except Workbooks, Books, Material, the Settings panes, Google compare and this Guide is translated; those follow in the next releases.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>Removing another app from the phone (StudyDesk etc.)</dt><dd>ClassDesk shares its web address (amber67-git.github.io) with older copies of the other apps, and everything stored under one address is wiped together. To remove one of those older apps: phone <b>Settings → Apps</b> → that app → <b>Uninstall</b> only. <b>Never tap "Clear storage" / "Clear site data"</b> — it would erase ClassDesk's data on this phone too (signing back in brings the cloud copy back, but anything not yet synced is lost). Afterwards, typing <b>chrome://webapks</b> in Chrome should still list ClassDesk, with the Manifest Id https://amber67-git.github.io/classdesk/app (a copy installed before v116 shows https://amber67-git.github.io/ — see "How do I put ClassDesk on my phone/tablet home screen?" above).</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
@@ -1725,6 +1725,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v125 · 2026-11-10</dt><dd><b>Korean / English (part 2):</b> Classes (calendar and the lesson card), Payments (calendar, summary, other income), Reports (all three tabs), Reading and Curriculum now follow the language setting. Month names and weekday heads use the chosen language; schedules are still stored as before. Left for part 3: Workbooks, Books, Material, the rest of Settings, Google compare and this Guide.</dd>
           <dt>v124 · 2026-11-10</dt><dd><b>Korean / English (part 1):</b> Settings → Templates → <b>Language</b> switches the app's menus, buttons and messages. By default it follows the device language. This first part covers the sidebar, Dashboard, Students and the student card; the other pages and this Guide follow in the next releases. Your own entries — names, notes, templates — are never translated.</dd>
           <dt>v123 · 2026-11-09</dt><dd><b>Phone:</b> Curriculum, Books library, Reading and Material are cards too. A curriculum card shows the month, week and category on top, the topic, then only the columns that topic has (Workbook, Writing, Books…). A book card keeps the cover and title and lists author, publisher, category, AR level and Lexile as small chips. Nothing scrolls sideways; double-tap and the pencil/trash buttons work as before.</dd>
           <dt>v122 · 2026-11-09</dt><dd><b>Phone:</b> Payments → Summary by student and the Dashboard's Today's Schedule are cards instead of sideways-scrolling tables — every figure, the status and both action buttons are on screen. <b>Guide:</b> "What is ClassDesk?" now states where the app is going: a tool any tutor, in any subject, can shape to their own curriculum style.</dd>
@@ -1746,7 +1747,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v124</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v125</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2156,20 +2157,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- LESSON MODAL -->
 <div class="mo" id="mo-lesson">
   <div class="mb wide">
-    <div class="mt"><span id="lm-title">Add Lesson</span><button class="bic" onclick="closeModal('mo-lesson')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="lm-title">Add Lesson</span><button class="bic" onclick="closeModal('mo-lesson')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <!-- Basic info -->
     <div class="lm-basic">
-      <div class="fg" style="margin:0"><label data-col="student" data-required="true">Student *</label><select id="lm-sid" onchange="renderHomeworkCheck()" onchange="lessonAutoFill()"></select></div>
-      <div class="fg" style="margin:0"><label data-col="date" data-required="true">Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow();renderHomeworkCheck()"/></div>
-      <div class="fg" style="margin:0"><label data-col="time">Start time</label><input id="lm-time" type="time" onchange="lessonTimeChanged()"/></div>
-      <div class="fg" style="margin:0"><label data-col="dur">Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
-      <div class="fg" style="margin:0"><label>Amount (₩)</label><input id="lm-amt" type="number" step="5000" oninput="lmAmtTyped()"/></div>
-      <div class="fg" style="margin:0"><label>Status</label>
-        <select id="lm-status" onchange="lmStatusChanged()"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
+      <div class="fg" style="margin:0"><label data-col="student" data-required="true" data-i18n>Student *</label><select id="lm-sid" onchange="renderHomeworkCheck()" onchange="lessonAutoFill()"></select></div>
+      <div class="fg" style="margin:0"><label data-col="date" data-required="true" data-i18n>Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow();renderHomeworkCheck()"/></div>
+      <div class="fg" style="margin:0"><label data-col="time" data-i18n>Start time</label><input id="lm-time" type="time" onchange="lessonTimeChanged()"/></div>
+      <div class="fg" style="margin:0"><label data-col="dur" data-i18n>Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
+      <div class="fg" style="margin:0"><label data-i18n>Amount (₩)</label><input id="lm-amt" type="number" step="5000" oninput="lmAmtTyped()"/></div>
+      <div class="fg" style="margin:0"><label data-i18n>Status</label>
+        <select id="lm-status" onchange="lmStatusChanged()" data-i18n-opts><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
       </div>
     </div>
     <div class="fg" id="lm-credit-row" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--pri-l);border-radius:var(--r)">
-      <label class="sw"><input type="checkbox" id="lm-credit" checked/><span class="sw-track"></span> The fee was already paid — move it to the next class</label>
+      <label class="sw" data-i18n><input type="checkbox" id="lm-credit" checked/><span class="sw-track"></span> The fee was already paid — move it to the next class</label>
       <div class="u-hint" id="lm-credit-hint" style="margin-top:4px"></div>
     </div>
     <div class="fg" id="lm-credit-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--pri-l);border-radius:var(--r);font-size:12px;color:var(--pri-t)">
@@ -2178,124 +2179,124 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="fg" id="lm-moved-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--amb-l);border-radius:var(--r);font-size:12px;color:#92400e">
       <i class="ti ti-calendar-event" style="margin-right:4px"></i>
       <span id="lm-moved-text"></span>
-      <button class="btn btn-xs" style="margin-left:8px" onclick="revertLessonMove()">Reset to usual time</button>
+      <button class="btn btn-xs" style="margin-left:8px" onclick="revertLessonMove()" data-i18n>Reset to usual time</button>
     </div>
     <div class="fg" id="lm-slot-wrap" style="display:none;margin-bottom:10px">
-      <label>Schedule (this student has multiple) — pick to auto-fill duration & amount</label>
+      <label data-i18n>Schedule (this student has multiple) — pick to auto-fill duration and amount</label>
       <select id="lm-slot" onchange="lessonSlotPicked()"></select>
     </div>
     <input type="hidden" id="lm-dur-hidden" value="1"/>
     <!-- Topic -->
     <div class="lf-section" data-field="topic">
-      <div class="lf-lbl" data-col="topic" style="margin-bottom:8px">Topic</div>
+      <div class="lf-lbl" data-col="topic" style="margin-bottom:8px" data-i18n>Topic</div>
       <input id="lm-topic" type="text"/>
     </div>
     <!-- Workbook -->
     <div class="lf-section">
       <div class="lf-hdr">
-        <div class="lf-lbl">Workbook</div>
+        <div class="lf-lbl" data-i18n>Workbook</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <div class="stepper">
             <button class="step-btn" onclick="stepTime('lm-wbtime',-5)">−</button>
-            <span class="step-val" id="lm-wbtime-disp">20 min</span>
+            <span class="step-val" id="lm-wbtime-disp" data-i18n>20 min</span>
             <input type="hidden" id="lm-wbtime" value="20"/>
             <button class="step-btn" onclick="stepTime('lm-wbtime',5)">+</button>
           </div>
           <div class="sw-wrap" id="sw-lm-wbtime-wrap">
             <span class="sw-display" id="sw-lm-wbtime-disp">0:00</span>
-            <button class="sw-btn start" id="sw-lm-wbtime-start" onclick="swStart('lm-wbtime')">▶ Start</button>
-            <button class="sw-btn pause" id="sw-lm-wbtime-pause" onclick="swPause('lm-wbtime')" style="display:none">⏸ Pause</button>
-            <button class="sw-btn stop" id="sw-lm-wbtime-stop" onclick="swStop('lm-wbtime')" style="display:none">■ Stop</button>
+            <button class="sw-btn start" id="sw-lm-wbtime-start" onclick="swStart('lm-wbtime')" data-i18n>▶ Start</button>
+            <button class="sw-btn pause" id="sw-lm-wbtime-pause" onclick="swPause('lm-wbtime')" style="display:none" data-i18n>⏸ Pause</button>
+            <button class="sw-btn stop" id="sw-lm-wbtime-stop" onclick="swStop('lm-wbtime')" style="display:none" data-i18n>■ Stop</button>
           </div>
         </div>
       </div>
       <div id="lm-hw-check" class="lm-hw-check" style="display:none"></div>
       <div id="lm-wb-rows"></div>
-      <button class="btn btn-sm" onclick="addWbRow()" style="margin-top:6px;border-style:dashed"><i class="ti ti-plus"></i> Add workbook</button>
+      <button class="btn btn-sm" onclick="addWbRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add workbook</button>
     </div>
     <!-- Books read -->
     <div class="lf-section">
       <div class="lf-hdr">
-        <div class="lf-lbl">Books read</div>
+        <div class="lf-lbl" data-i18n>Books read</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <div class="stepper">
             <button class="step-btn" onclick="stepTime('lm-btime',-5)">−</button>
-            <span class="step-val" id="lm-btime-disp">20 min</span>
+            <span class="step-val" id="lm-btime-disp" data-i18n>20 min</span>
             <input type="hidden" id="lm-btime" value="20"/>
             <button class="step-btn" onclick="stepTime('lm-btime',5)">+</button>
           </div>
           <div class="sw-wrap" id="sw-lm-btime-wrap">
             <span class="sw-display" id="sw-lm-btime-disp">0:00</span>
-            <button class="sw-btn start" id="sw-lm-btime-start" onclick="swStart('lm-btime')">▶ Start</button>
-            <button class="sw-btn pause" id="sw-lm-btime-pause" onclick="swPause('lm-btime')" style="display:none">⏸ Pause</button>
-            <button class="sw-btn stop" id="sw-lm-btime-stop" onclick="swStop('lm-btime')" style="display:none">■ Stop</button>
+            <button class="sw-btn start" id="sw-lm-btime-start" onclick="swStart('lm-btime')" data-i18n>▶ Start</button>
+            <button class="sw-btn pause" id="sw-lm-btime-pause" onclick="swPause('lm-btime')" style="display:none" data-i18n>⏸ Pause</button>
+            <button class="sw-btn stop" id="sw-lm-btime-stop" onclick="swStop('lm-btime')" style="display:none" data-i18n>■ Stop</button>
           </div>
         </div>
       </div>
       <div id="lm-books-rows"></div>
-      <button class="btn btn-sm" onclick="addBkRow()" style="margin-top:6px;border-style:dashed"><i class="ti ti-plus"></i> Add book</button>
+      <button class="btn btn-sm" onclick="addBkRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add book</button>
     </div>
     <!-- School HW -->
     <div class="lf-section">
       <div class="lf-hdr">
-        <div class="lf-lbl">School / Academy HW</div>
+        <div class="lf-lbl" data-i18n>School / Academy HW</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <div class="stepper">
             <button class="step-btn" onclick="stepTime('lm-shwtime',-5)">−</button>
-            <span class="step-val" id="lm-shwtime-disp">20 min</span>
+            <span class="step-val" id="lm-shwtime-disp" data-i18n>20 min</span>
             <input type="hidden" id="lm-shwtime" value="20"/>
             <button class="step-btn" onclick="stepTime('lm-shwtime',5)">+</button>
           </div>
           <div class="sw-wrap" id="sw-lm-shwtime-wrap">
             <span class="sw-display" id="sw-lm-shwtime-disp">0:00</span>
-            <button class="sw-btn start" id="sw-lm-shwtime-start" onclick="swStart('lm-shwtime')">▶ Start</button>
-            <button class="sw-btn pause" id="sw-lm-shwtime-pause" onclick="swPause('lm-shwtime')" style="display:none">⏸ Pause</button>
-            <button class="sw-btn stop" id="sw-lm-shwtime-stop" onclick="swStop('lm-shwtime')" style="display:none">■ Stop</button>
+            <button class="sw-btn start" id="sw-lm-shwtime-start" onclick="swStart('lm-shwtime')" data-i18n>▶ Start</button>
+            <button class="sw-btn pause" id="sw-lm-shwtime-pause" onclick="swPause('lm-shwtime')" style="display:none" data-i18n>⏸ Pause</button>
+            <button class="sw-btn stop" id="sw-lm-shwtime-stop" onclick="swStop('lm-shwtime')" style="display:none" data-i18n>■ Stop</button>
           </div>
         </div>
       </div>
       <div id="lm-schoolhw-rows"></div>
-      <button class="btn btn-sm" onclick="addShwRow()" style="margin-top:6px;border-style:dashed"><i class="ti ti-plus"></i> Add HW</button>
+      <button class="btn btn-sm" onclick="addShwRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add HW</button>
     </div>
     <!-- Break time -->
     <div class="lf-section">
       <div class="lf-hdr">
-        <div class="lf-lbl">Break time</div>
+        <div class="lf-lbl" data-i18n>Break time</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <div class="stepper">
             <button class="step-btn" onclick="stepTime('lm-brtime',-5)">−</button>
-            <span class="step-val" id="lm-brtime-disp">20 min</span>
+            <span class="step-val" id="lm-brtime-disp" data-i18n>20 min</span>
             <input type="hidden" id="lm-brtime" value="20"/>
             <button class="step-btn" onclick="stepTime('lm-brtime',5)">+</button>
           </div>
           <div class="sw-wrap" id="sw-lm-brtime-wrap">
             <span class="sw-display" id="sw-lm-brtime-disp">0:00</span>
-            <button class="sw-btn start" id="sw-lm-brtime-start" onclick="swStart('lm-brtime')">▶ Start</button>
-            <button class="sw-btn pause" id="sw-lm-brtime-pause" onclick="swPause('lm-brtime')" style="display:none">⏸ Pause</button>
-            <button class="sw-btn stop" id="sw-lm-brtime-stop" onclick="swStop('lm-brtime')" style="display:none">■ Stop</button>
+            <button class="sw-btn start" id="sw-lm-brtime-start" onclick="swStart('lm-brtime')" data-i18n>▶ Start</button>
+            <button class="sw-btn pause" id="sw-lm-brtime-pause" onclick="swPause('lm-brtime')" style="display:none" data-i18n>⏸ Pause</button>
+            <button class="sw-btn stop" id="sw-lm-brtime-stop" onclick="swStop('lm-brtime')" style="display:none" data-i18n>■ Stop</button>
           </div>
         </div>
       </div>
       <div id="lm-bract-rows"></div>
-      <button class="btn btn-sm" onclick="addBrRow()" style="margin-top:6px;border-style:dashed"><i class="ti ti-plus"></i> Add material</button>
+      <button class="btn btn-sm" onclick="addBrRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add material</button>
     </div>
     <!-- Note to parent -->
     <div class="lf-section" data-field="note" style="border-bottom:none">
-      <div class="lf-lbl" data-col="note" style="margin-bottom:3px">Note to parent</div>
-      <div style="font-size:11px;color:var(--txt3);margin-bottom:7px">parent note added at the end</div>
+      <div class="lf-lbl" data-col="note" style="margin-bottom:3px" data-i18n>Note to parent</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:7px" data-i18n>parent note added at the end</div>
       <textarea id="lm-note" rows="3"></textarea>
     </div>
     <div id="lm-custom-fields" style="padding:0 16px"></div>
-    <div class="fg" style="padding:14px 16px 0;margin:0"><label>Cancel reason (if cancelled)</label><input id="lm-cancel" type="text"/></div>
+    <div class="fg" style="padding:14px 16px 0;margin:0"><label data-i18n>Cancel reason (if cancelled)</label><input id="lm-cancel" type="text"/></div>
     <div class="mf" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" id="lm-parentnote-btn" onclick="genParentNoteFromModal()" style="display:none"><i class="ti ti-copy"></i> Parent note</button>
+        <button class="btn" id="lm-parentnote-btn" onclick="genParentNoteFromModal()" style="display:none" data-i18n><i class="ti ti-copy"></i> Parent note</button>
         <button class="btn" id="lm-cancelclass-btn" onclick="toggleCancelLesson()" style="display:none;color:#92400e;border-color:#d97706"><i class="ti ti-calendar-off"></i> Cancel class</button>
-        <button class="btn btn-d" id="lm-delete-btn" onclick="deleteLessonFromModal()" style="display:none"><i class="ti ti-trash"></i> Delete</button>
+        <button class="btn btn-d" id="lm-delete-btn" onclick="deleteLessonFromModal()" style="display:none" data-i18n><i class="ti ti-trash"></i> Delete</button>
       </div>
       <div style="display:flex;gap:8px;margin-left:auto">
-        <button class="btn" onclick="closeModal('mo-lesson')">Cancel</button>
-        <button class="btn btn-p" onclick="saveLesson()">Save lesson</button>
+        <button class="btn" onclick="closeModal('mo-lesson')" data-i18n>Cancel</button>
+        <button class="btn btn-p" onclick="saveLesson()" data-i18n>Save lesson</button>
       </div>
     </div>
   </div>
@@ -2304,35 +2305,35 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- CURRICULUM MODAL -->
 <div class="mo" id="mo-curr">
   <div class="mb">
-    <div class="mt"><span id="cm-title">Add Topic</span><button class="bic" onclick="closeModal('mo-curr')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="cm-title">Add Topic</span><button class="bic" onclick="closeModal('mo-curr')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <div class="fr c3">
-      <div class="fg"><label data-col="month">Month</label><select id="cm-month"><option>JAN</option><option>FEB</option><option>MAR</option><option>APR</option><option selected>MAY</option><option>JUN</option><option>JUL</option><option>AUG</option><option>SEP</option><option>OCT</option><option>NOV</option><option>DEC</option></select></div>
-      <div class="fg"><label data-col="week">Week</label><input id="cm-week" type="number" min="1" max="5" value="1"/></div>
-      <div class="fg"><label data-col="cat">Category</label><input id="cm-cat" type="text"/></div>
+      <div class="fg"><label data-col="month" data-i18n>Month</label><select id="cm-month" data-i18n-opts><option value="JAN">JAN</option><option value="FEB">FEB</option><option value="MAR">MAR</option><option value="APR">APR</option><option value="MAY" selected>MAY</option><option value="JUN">JUN</option><option value="JUL">JUL</option><option value="AUG">AUG</option><option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option></select></div>
+      <div class="fg"><label data-col="week" data-i18n>Week</label><input id="cm-week" type="number" min="1" max="5" value="1"/></div>
+      <div class="fg"><label data-col="cat" data-i18n>Category</label><input id="cm-cat" type="text"/></div>
     </div>
-    <div class="fg"><label data-col="topic" data-required="true">Topic *</label><input id="cm-topic" type="text"/></div>
+    <div class="fg"><label data-col="topic" data-required="true" data-i18n>Topic *</label><input id="cm-topic" type="text"/></div>
     <div class="fr c2">
-      <div class="fg"><label data-col="wb">Workbook</label><input id="cm-wb" type="text"/></div>
-      <div class="fg"><label data-col="books">Books</label><input id="cm-books" type="text"/></div>
+      <div class="fg"><label data-col="wb" data-i18n>Workbook</label><input id="cm-wb" type="text"/></div>
+      <div class="fg"><label data-col="books" data-i18n>Books</label><input id="cm-books" type="text"/></div>
     </div>
-    <div class="fg"><label data-col="writing">Writing</label><input id="cm-writing" type="text"/></div>
+    <div class="fg"><label data-col="writing" data-i18n>Writing</label><input id="cm-writing" type="text"/></div>
     <div class="fr c2">
-      <div class="fg"><label data-col="grammar">Grammar</label><input id="cm-grammar" type="text"/></div>
-      <div class="fg"><label data-col="acts">Activities</label><input id="cm-acts" type="text"/></div>
+      <div class="fg"><label data-col="grammar" data-i18n>Grammar</label><input id="cm-grammar" type="text"/></div>
+      <div class="fg"><label data-col="acts" data-i18n>Activities</label><input id="cm-acts" type="text"/></div>
     </div>
-    <div class="fg"><label data-col="note">Notes</label><input id="cm-note" type="text"/></div>
+    <div class="fg"><label data-col="note" data-i18n>Notes</label><input id="cm-note" type="text"/></div>
     <div id="cm-custom-fields"></div>
-    <div class="mf"><button class="btn" onclick="closeModal('mo-curr')">Cancel</button><button class="btn btn-p" onclick="saveCurr()">Save topic</button></div>
+    <div class="mf"><button class="btn" onclick="closeModal('mo-curr')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveCurr()" data-i18n>Save topic</button></div>
   </div>
 </div>
 
 <!-- ═══ MESSAGE PREVIEW (parent note / payment message) ═══════════ -->
 <div class="mo" id="mo-msgpreview">
   <div class="mb" style="max-width:480px">
-    <div class="mt"><span id="msgpreview-title">Copied to clipboard</span><button class="bic" onclick="closeModal('mo-msgpreview')" title="Close"><i class="ti ti-x"></i></button></div>
-    <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Already copied — paste it wherever you send messages. Shown here so you can double-check it.</p>
+    <div class="mt"><span id="msgpreview-title" data-i18n>Copied to clipboard</span><button class="bic" onclick="closeModal('mo-msgpreview')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p style="font-size:12px;color:var(--txt3);margin-bottom:10px" data-i18n>Already copied — paste it wherever you send messages. Shown here so you can double-check it.</p>
     <pre id="msgpreview-text" style="white-space:pre-wrap;word-break:break-word;font-family:var(--font);font-size:13px;line-height:1.6;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;max-height:50vh;overflow-y:auto;margin:0"></pre>
-    <div class="mf"><button class="btn btn-p" onclick="closeModal('mo-msgpreview')">Done</button></div>
+    <div class="mf"><button class="btn btn-p" onclick="closeModal('mo-msgpreview')" data-i18n>Done</button></div>
   </div>
 </div>
 
@@ -2599,6 +2600,83 @@ const I18N={ko:{
   "Templates":"템플릿","Custom Fields":"사용자 항목","Backup":"백업","API Keys":"API 키","Account":"계정","Guide":"설명서",
   "Language":"언어","Menus, buttons and messages. Your own entries — names, notes, templates — are never translated. The app reloads when you change this.":"메뉴·버튼·안내문의 언어입니다. 직접 입력한 내용(이름, 메모, 템플릿)은 번역하지 않습니다. 바꾸면 앱이 다시 열립니다.",
   "Match the device language":"기기 언어에 맞춤","English":"English","한국어":"한국어",
+  // ── v125: Classes, Payments, Reports, Reading, Curriculum
+  // shared
+  "Lessons":"수업 수","Hours":"시간","Collected":"수납","Expected":"예상","Remaining":"미수금","Outstanding":"미납액","Total":"합계",
+  "Date":"날짜","Title":"제목","Level":"레벨","Book":"도서","Month":"월","Week":"주차","Wk":"주차","Category":"카테고리","Writing":"쓰기",
+  "Activities":"활동","Grammar":"문법","Workbook":"교재","Books read":"읽은 책","Homework":"숙제","Break":"쉬는 시간","School HW":"학교 숙제",
+  "Save":"저장","Saved":"저장했습니다","Deleted":"삭제했습니다","Remove":"삭제","none":"없음","Search…":"검색…","Summary":"요약","Calendar":"달력",
+  "Learning":"학습","Business":"운영","Print report":"보고서 인쇄","All months":"모든 달","All time":"전체 기간","This month":"이번 달",
+  "Last 3 months":"최근 3개월","Last 6 months":"최근 6개월","Last 12 months":"최근 12개월",
+  "JAN":"1월","FEB":"2월","MAR":"3월","APR":"4월","MAY":"5월","JUN":"6월","JUL":"7월","AUG":"8월","SEP":"9월","OCT":"10월","NOV":"11월","DEC":"12월",
+  "{n} min":"{n}분","{h} hrs":"{h}시간","{n} lessons":"수업 {n}회","{n} months":"{n}개월","1 month":"1개월","{n} books":"책 {n}권","1 book":"책 1권",
+  "1 different title":"서로 다른 책 1권","{n} different titles":"서로 다른 책 {n}권","archived|adj":"보관됨","printed {date}":"{date} 인쇄",
+  // classes (calendar)
+  "Compare this month with Google Calendar":"이달을 Google 캘린더와 비교","{n} differences from Google Calendar in this month":"이달 Google 캘린더와 다른 항목 {n}개",
+  "moved|tag":"이동","biweekly|tag":"격주","time conflict":"시간 겹침","Times overlap":"시간이 겹칩니다","Differs from Google Calendar":"Google 캘린더와 다름",
+  "Mark this class done":"이 수업을 완료로 표시","+{n} more":"+{n}개 더","Double-click to add · drag a class here to move it":"두 번 클릭하면 추가 · 수업을 끌어다 놓으면 이동",
+  "This student already has a class on that date. Move skipped.":"이 학생은 그 날짜에 이미 수업이 있습니다. 이동하지 않았습니다.",
+  "Click any event chip in the calendar to edit it.":"달력의 수업 칩을 클릭하면 수정할 수 있습니다.",
+  // lesson dialog
+  "Add Lesson":"수업 추가","Edit Lesson":"수업 수정","Student *":"학생 *","Date *":"날짜 *","Start time":"시작 시간","Amount (₩)":"금액 (₩)",
+  "The fee was already paid — move it to the next class":"수업료를 이미 받았음 — 다음 수업으로 넘기기","Reset to usual time":"원래 시간으로 되돌리기",
+  "Schedule (this student has multiple) — pick to auto-fill duration and amount":"시간표 (이 학생은 여러 개) — 고르면 시간과 금액이 채워집니다",
+  "20 min":"20분","▶ Start":"▶ 시작","⏸ Pause":"⏸ 일시정지","■ Stop":"■ 정지","Add workbook":"교재 추가","Add book":"책 추가","School / Academy HW":"학교 / 학원 숙제",
+  "Add HW":"숙제 추가","Break time":"쉬는 시간","Add material":"교구 추가","Note to parent":"학부모 전달 메모","parent note added at the end":"학부모 알림의 끝에 붙습니다",
+  "Cancel reason (if cancelled)":"취소 사유 (취소한 경우)","Parent note":"학부모 알림","Restore class":"수업 복구","Cancel class":"수업 취소","Save lesson":"수업 저장",
+  "Search workbook…":"교재 검색…","page done":"진행한 페이지","HW":"숙제","Search books…":"책 검색…","Search material…":"교구 검색…","School / academy homework…":"학교 / 학원 숙제…",
+  "workbook|noun":"교재","book|noun":"책","material|noun":"교구","Create new {kind} \"{name}\"":"새 {kind} \"{name}\" 만들기",
+  "Moved from this student's usual time ({when}) — only this class is affected.":"이 학생의 원래 시간({when})에서 옮긴 수업입니다 — 이 수업만 바뀝니다.",
+  "{amt} moves to {when}, which will show as paid.":"{amt}이(가) {when} 수업으로 넘어가 납부로 표시됩니다.",
+  "No unpaid class found in the next 4 months — the fee stays on this date instead (Cancelled, paid).":"앞으로 4개월 안에 미납 수업이 없어 수업료가 이 날짜에 남습니다(취소·납부됨).",
+  "Paid in advance for {date}, which was cancelled.":"취소된 {date} 수업의 수업료로 미리 납부되었습니다.","The fee for this class was moved to {date}.":"이 수업의 수업료는 {date}로 넘어갔습니다.",
+  "Select a student":"학생을 선택하세요","{amt} moved to {date}":"{amt}이(가) {date}로 넘어갔습니다","No upcoming class — kept as Cancelled (paid)":"다음 수업이 없어 취소(납부됨)로 남겼습니다",
+  "Delete this lesson permanently? It disappears from the calendar and won't be regenerated.":"이 수업을 완전히 삭제할까요? 달력에서 사라지고 다시 생성되지 않습니다.",
+  "Homework set on {date}":"{date}에 낸 숙제","Partly":"일부","Not yet":"아직",
+  "Workbook:|msg":"교재:","Reading:|msg":"읽기:","School HW:|msg":"학교 숙제:","Break time:|msg":"쉬는 시간:",
+  "Parent note copied!":"학부모 알림을 복사했습니다!","Parent note (copy manually)":"학부모 알림 (직접 복사하세요)",
+  "Copied to clipboard":"클립보드에 복사됨","Already copied — paste it wherever you send messages. Shown here so you can double-check it.":"이미 복사되었습니다 — 메시지를 보내는 곳에 붙여 넣으세요. 확인할 수 있도록 여기에 보여 드립니다.",
+  // payments
+  "Hours taught":"수업 시간 합계","Other income":"기타 수입","Add an amount that is not a lesson fee":"수업료가 아닌 금액 추가","Payment calendar":"납부 달력","Summary by student":"학생별 요약",
+  "No lessons":"수업 없음","lessons · hours":"수업 수 · 시간","Mark every unpaid lesson this month as paid":"이달의 미납 수업을 모두 납부로 표시","All paid":"모두 납부",
+  "Undo — mark this month's paid lessons as unpaid again":"되돌리기 — 이달의 납부 수업을 다시 미납으로","Undo paid":"납부 취소","Copy a payment-request message for this student":"이 학생의 수업료 안내 메시지 복사",
+  "Request payment":"수업료 안내","{paid} collected of {exp}":"{exp} 중 {paid} 수납","Mark this lesson paid":"이 수업을 납부로 표시",
+  "Nothing for this month yet. Anything you were paid that is not a lesson fee — a platform bonus, for instance — goes here, and counts towards Expected and Collected above.":"이달에는 아직 없습니다. 수업료가 아닌 수입(예: 플랫폼 보너스)을 여기에 적으면 위의 예상·수납에 포함됩니다.",
+  "Edit this entry":"이 항목 수정","Edit other income":"기타 수입 수정","Add other income":"기타 수입 추가","Pick a month.":"달을 고르세요.","Enter an amount greater than 0.":"0보다 큰 금액을 입력하세요.",
+  "Delete this entry?":"이 항목을 삭제할까요?","Money you were paid that is not a lesson fee — a platform bonus, for example. It is treated as already received, so it adds to both Expected and Collected and never appears as outstanding.":"수업료가 아닌 수입입니다(예: 플랫폼 보너스). 이미 받은 돈으로 처리되어 예상과 수납에 모두 더해지고 미납으로는 잡히지 않습니다.",
+  "What for":"내용","Platform bonus":"플랫폼 보너스",
+  "{name} — mark {n} paid lesson(s) in {month} as unpaid again?":"{name} — {month}의 납부 수업 {n}회를 다시 미납으로 바꿀까요?",
+  "No unpaid lessons to collect this month.":"이달에 받을 미납 수업이 없습니다.","{name} — mark all {n} unpaid lesson(s) in {month} ({amt}) as paid?":"{name} — {month}의 미납 수업 {n}회({amt})를 모두 납부로 표시할까요?",
+  "Payment message copied!":"수업료 안내 메시지를 복사했습니다!","Payment message (copy manually)":"수업료 안내 메시지 (직접 복사하세요)",
+  // curriculum
+  "Add topic":"주제 추가","Add Topic":"주제 추가","Edit Topic":"주제 수정","Topic *":"주제 *","Save topic":"주제 저장","Topic required":"주제를 입력하세요","Delete this topic?":"이 주제를 삭제할까요?",
+  "No curriculum items found":"커리큘럼 항목이 없습니다",
+  // reading
+  "Average AR":"평균 AR","Current level":"현재 레벨","Not in library":"도서관에 없음","titles without AR data":"AR 정보가 없는 책","AR level over time":"AR 레벨 추이",
+  "vs the period before":"이전 기간 대비","from 1 book with AR data":"AR 정보가 있는 책 1권 기준","from {n} books with AR data":"AR 정보가 있는 책 {n}권 기준","no AR data in this period":"이 기간에 AR 정보 없음",
+  "last {n} books average AR {ar}":"최근 {n}권 평균 AR {ar}","no AR data yet":"아직 AR 정보 없음","Reading report":"독서 보고서","No books recorded for this period":"이 기간에 기록된 책이 없습니다",
+  "Double-click to open the lesson":"두 번 클릭하면 수업 열기","not in the Books library":"도서 목록에 없음","Two or more books with AR levels are needed to draw the trend":"추이를 그리려면 AR 레벨이 있는 책이 2권 이상 필요합니다",
+  "{n} books · dot = one book (colour = level) · line = monthly average":"책 {n}권 · 점 = 책 한 권(색 = 레벨) · 선 = 월평균",
+  // reports
+  "{n}×/wk · {h}h":"주 {n}회 · {h}시간","No months in this period":"이 기간에 달이 없습니다","expected|lower":"예상","collected|lower":"수납",
+  "Students report":"학생 보고서","Learning report":"학습 보고서","Business report":"운영 보고서","No lessons in this period":"이 기간에 수업이 없습니다",
+  "Students taught":"가르친 학생","in this period":"이 기간","Lessons held":"진행한 수업","Lessons lost":"놓친 수업","{n} more were moved":"그 외 {n}회는 이동","none moved":"이동 없음","of {amt}":"{amt} 중",
+  "Lost / moved":"놓침 / 이동","Books · HW":"책 · 숙제","Schedule since {month}":"{month} 이후 시간표","{n} held of {m} on the timetable":"시간표 {m}회 중 {n}회 진행","{n} cancelled record(s) in total":"취소 기록 총 {n}건",
+  "{n} moved":"{n}회 이동","{b} books · {h} homework set":"책 {b}권 · 숙제 {h}건","{n} set":"{n}건","unchanged":"변동 없음",
+  "Lessons held against what the timetable implies for the period, every-other-week schedules included. A class moved to another day leaves a cancelled record behind but the month still has its lessons, so only the shortfall counts as lost — the remaining cancelled records are shown as moved. \"Schedule\" compares the timetable in force at the start of the period with today: a longer or more frequent week is the clearest sign a student is stepping up.":"시간표가 예정한 수업 수(격주 포함)와 실제 진행한 수업을 비교합니다. 다른 날로 옮긴 수업은 취소 기록을 남기지만 그달의 수업 수는 그대로이므로, 부족분만 \"놓침\"으로 세고 나머지 취소 기록은 \"이동\"으로 표시합니다. \"시간표\"는 기간 시작 시점의 시간표와 오늘을 비교합니다. 수업이 길어지거나 잦아졌다면 학생이 한 단계 올라선 가장 뚜렷한 신호입니다.",
+  "{n} lessons · {h} hrs":"수업 {n}회 · {h}시간","incl. {amt} other":"기타 {amt} 포함","{p}% of expected":"예상의 {p}%","{n} students owe":"미납 학생 {n}명","Lost to cancellations":"취소로 놓친 금액",
+  "{n} classes":"수업 {n}회","{n} moved, not lost":"{n}회는 이동(놓침 아님)","Month by month":"월별","grey = expected · green = collected":"회색 = 예상 · 초록 = 수납",
+  "Amounts are hidden — use the eye on the Dashboard to show them":"금액이 숨겨져 있습니다 — 대시보드의 눈 아이콘으로 보이게 하세요",
+  "Owes since":"미납 시작","Of which this period":"그중 이 기간","Of this period":"이 기간분","{p}% of {amt}":"{amt}의 {p}%","Nothing outstanding in this period":"이 기간에 미납이 없습니다",
+  "Revenue by student":"학생별 매출","lesson fees only":"수업료만","{amt} other income is not split between students":"기타 수입 {amt}은(는) 학생별로 나누지 않습니다",
+  "Share of revenue":"매출 비중","Per hour":"시간당","Lost":"놓침","Share":"비중","Joined and left":"시작과 종료","Started in this period":"이 기간에 시작","Stopped in this period":"이 기간에 종료",
+  "Taken from the First lesson and End date fields on each student card, so it is only as complete as those.":"학생 카드의 첫 수업·종료일 항목을 기준으로 하므로 그 항목이 채워진 만큼만 정확합니다.",
+  "{n} without AR data":"AR 정보 없는 책 {n}권","from the Books library":"도서 목록 기준","Homework done":"숙제 완료율","{n} set · {m} never checked":"{n}건 냄 · {m}건 미확인","none set":"낸 숙제 없음",
+  "{n} lessons in period":"기간 내 수업 {n}회","last 5 average AR {ar}":"최근 5권 평균 AR {ar}","not in library":"도서 목록에 없음","showing the 40 most recent of {n}":"{n}권 중 최근 40권 표시",
+  "No books logged yet — add them in a lesson's Books read box":"아직 기록된 책이 없습니다 — 수업 기록의 \"읽은 책\"에 추가하세요","Last used":"마지막 사용","Latest page":"최근 페이지","No workbooks logged yet":"아직 기록된 교재가 없습니다",
+  "never checked off — open a lesson to mark them":"아직 확인하지 않음 — 수업을 열어 표시하세요","{a} done · {b} partly · {c} skipped · {d} not checked":"완료 {a} · 일부 {b} · 건너뜀 {c} · 미확인 {d}","Set on":"낸 날짜",
+  "No homework set yet — type it in the HW box of a workbook row":"아직 낸 숙제가 없습니다 — 교재 줄의 숙제 칸에 적으세요","Where lesson time goes":"수업 시간 배분","average per lesson":"수업당 평균",
+  "Topics and activities":"주제와 활동","Topics covered":"다룬 주제","none recorded":"기록 없음","Break activities":"쉬는 시간 활동","School / academy homework seen":"확인한 학교 / 학원 숙제",
 }};
 /* i18n-dict-end */
 function pickLang(){
@@ -2752,7 +2830,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v124";
+const APP_VERSION="v125";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   applyI18n();   // before any render: labels that code reads back (custom column names) must already carry their English source
@@ -3656,7 +3734,7 @@ function openLessonModal(id){
       l={sid:sidPart,date:datePart,dur:matchSlot.dur,amt:matchSlot.rate,status:defaultStatusForPtype(s.ptype),topic:"",workbooks:[],wbTime:20,books:[],bTime:20,schoolHW:[],shwTime:20,bract:[],brTime:20,note:"",cancel:""};
     }
   }
-  document.getElementById("lm-title").textContent=l?"Edit Lesson":"Add Lesson";
+  document.getElementById("lm-title").textContent=l?tx("Edit Lesson"):tx("Add Lesson");
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
   set("lm-sid",l?.sid);set("lm-date",l?.date||td());set("lm-amt",l?.amt??40000);
   set("lm-time",l?.time||"");
@@ -3713,7 +3791,7 @@ function openLessonModal(id){
     if(l&&l.sid&&l.date){
       cancelBtn.style.display="";
       const isCancelled=l.status==="cancelled"||l.status==="cancelpaid";
-      cancelBtn.innerHTML=isCancelled?'<i class="ti ti-rotate"></i> Restore class':'<i class="ti ti-calendar-off"></i> Cancel class';
+      cancelBtn.innerHTML=isCancelled?'<i class="ti ti-rotate"></i> '+tx("Restore class"):'<i class="ti ti-calendar-off"></i> '+tx("Cancel class");
     } else { cancelBtn.style.display="none"; }
   }
   const delBtn=document.getElementById("lm-delete-btn");
@@ -3730,7 +3808,7 @@ function addWbRow(w){
   const div=document.createElement("div");div.className="wb-row";div.style.cssText="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:start;margin-bottom:6px";
   div.innerHTML=`
     <div style="position:relative">
-      <input type="text" value="${w?.name||""}" placeholder="Search workbook…" class="wb-search-inp" autocomplete="off"
+      <input type="text" value="${w?.name||""}" placeholder="${tx("Search workbook…")}" class="wb-search-inp" autocomplete="off"
         style="height:34px"
         oninput="wbSearchInput(this)"
         onkeydown="wbSearchKey(event,this)"
@@ -3738,12 +3816,12 @@ function addWbRow(w){
         onblur="setTimeout(()=>wbHideDrop(this),250)"/>
       <div class="wb-drop" style="display:none;position:absolute;top:38px;left:0;right:0;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);box-shadow:var(--shm);z-index:200;max-height:180px;overflow-y:auto"></div>
     </div>
-    <input type="text" value="${w?.pd||""}" placeholder="page done" style="height:34px"/>
+    <input type="text" value="${w?.pd||""}" placeholder="${tx("page done")}" style="height:34px"/>
     <div>
-      <div style="font-size:10px;font-weight:700;color:var(--grn);margin-bottom:2px;letter-spacing:.05em">HW</div>
+      <div style="font-size:10px;font-weight:700;color:var(--grn);margin-bottom:2px;letter-spacing:.05em">${tx("HW")}</div>
       <input type="text" value="${w?.hw||""}" class="hw-input" style="height:34px"/>
     </div>
-    <button class="bic u-txt3" onclick="this.closest('.wb-row').remove()" style="margin-top:0" title="Remove"><i class="ti ti-trash"></i></button>`;
+    <button class="bic u-txt3" onclick="this.closest('.wb-row').remove()" style="margin-top:0" title="${tx("Remove")}"><i class="ti ti-trash"></i></button>`;
   document.getElementById("lm-wb-rows").appendChild(div);
 }
 function wbSearchInput(inp){
@@ -3786,9 +3864,9 @@ function wbHideDrop(inp){const drop=inp.nextElementSibling;if(drop&&!drop.matche
 // type: "workbook" | "book" | "material". Clicking opens that catalog's Add modal (on top of
 // the still-open lesson modal) pre-filled with the typed name; saving fills the waiting input.
 const CREATE_NEW_META={
-  workbook:{label:"workbook",icon:"ti-notebook"},
-  book:{label:"book",icon:"ti-books"},
-  material:{label:"material",icon:"ti-puzzle"},
+  workbook:{label:tx("workbook|noun"),icon:"ti-notebook"},
+  book:{label:tx("book|noun"),icon:"ti-books"},
+  material:{label:tx("material|noun"),icon:"ti-puzzle"},
 };
 function createNewRowHtml(query,type){
   if(!query)return"";
@@ -3797,7 +3875,7 @@ function createNewRowHtml(query,type){
   const safe=query.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
   return `<div style="padding:9px 11px;font-size:13px;cursor:pointer;color:var(--grn);display:flex;align-items:center;gap:6px;font-weight:500"
     onmousedown="triggerCreateNew(this,'${type}','${safe}')">
-    <i class="ti ${meta.icon}"></i> Create new ${meta.label} "${display}"
+    <i class="ti ${meta.icon}"></i> ${tx('Create new {kind} "{name}"',{kind:meta.label,name:display})}
   </div>`;
 }
 let pendingCreateInput=null;
@@ -3842,7 +3920,7 @@ function makeCatalogRow(containerId,rowClass,placeholder,catalogFn,subLabelFn,va
         onblur="setTimeout(()=>wbHideDrop(this),250)"/>
       <div class="${rowClass}-drop" style="display:none;position:absolute;top:38px;left:0;right:0;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);box-shadow:var(--shm);z-index:200;max-height:180px;overflow-y:auto"></div>
     </div>
-    <button class="bic u-txt3" onclick="this.closest('.${rowClass}').remove()" style="margin-top:0" title="Remove"><i class="ti ti-trash"></i></button>`;
+    <button class="bic u-txt3" onclick="this.closest('.${rowClass}').remove()" style="margin-top:0" title="${tx("Remove")}"><i class="ti ti-trash"></i></button>`;
   document.getElementById(containerId).appendChild(div);
   // Stash the catalog + sublabel functions on the row class the first time, so catSearchInput can look them up
   CAT_REGISTRY[rowClass]={catalogFn,subLabelFn,createType};
@@ -3885,11 +3963,11 @@ function catSelectItem(item,rowClass){
 
 // Books read — searches the Books catalog (bookLib)
 function addBkRow(name){
-  makeCatalogRow("lm-books-rows","bk-row","Search books…",()=>bookLib.map(b=>({name:b.title,author:b.author,cat:b.cat})),b=>b.author||b.cat||"",name,"book");
+  makeCatalogRow("lm-books-rows","bk-row",tx("Search books…"),()=>bookLib.map(b=>({name:b.title,author:b.author,cat:b.cat})),b=>b.author||b.cat||"",name,"book");
 }
 // Break time — searches the Material catalog
 function addBrRow(name){
-  makeCatalogRow("lm-bract-rows","br-row","Search material…",()=>materials,m=>m.cat||"",name,"material");
+  makeCatalogRow("lm-bract-rows","br-row",tx("Search material…"),()=>materials,m=>m.cat||"",name,"material");
 }
 // School / Academy HW — plain free-text rows (not tied to a catalog), supports multiple HW items
 function addShwRow(name){
@@ -3897,8 +3975,8 @@ function addShwRow(name){
   div.className="shw-row";
   div.style.cssText="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;margin-bottom:6px";
   div.innerHTML=`
-    <input type="text" value="${(name||"").replace(/"/g,"&quot;")}" placeholder="School / academy homework…" class="shw-row-inp" style="height:34px"/>
-    <button class="bic u-txt3" onclick="this.closest('.shw-row').remove()" style="margin-top:0" title="Remove"><i class="ti ti-trash"></i></button>`;
+    <input type="text" value="${(name||"").replace(/"/g,"&quot;")}" placeholder="${tx("School / academy homework…")}" class="shw-row-inp" style="height:34px"/>
+    <button class="bic u-txt3" onclick="this.closest('.shw-row').remove()" style="margin-top:0" title="${tx("Remove")}"><i class="ti ti-trash"></i></button>`;
   document.getElementById("lm-schoolhw-rows").appendChild(div);
 }
 function getAllSlots(s){
@@ -3921,7 +3999,7 @@ function lessonAutoFill(){
   if(!s){if(wrap)wrap.style.display="none";return;}
   const allSlots=getAllSlots(s);
   if(allSlots.length>1&&wrap&&sel){
-    sel.innerHTML=allSlots.map((sl,i)=>'<option value="'+i+'">'+sl.sched+' — '+sl.dur+'hr, '+won(sl.rate)+'</option>').join("");
+    sel.innerHTML=allSlots.map((sl,i)=>'<option value="'+i+'">'+schedLabel(sl.sched)+' — '+tx("{n}hr",{n:sl.dur})+', '+won(sl.rate)+'</option>').join("");
     wrap.style.display="";
     sel.value="0";
     applySlot(allSlots[0]);
@@ -3977,7 +4055,7 @@ function setupSlotPickerForEdit(s,l){
   const dv=document.getElementById("lm-dur");if(dv){dv.value=l?.dur??s.dur??"";delete dv.dataset.touched;}
   const av=document.getElementById("lm-amt");if(av)delete av.dataset.touched;
   if(allSlots.length>1&&wrap&&sel){
-    sel.innerHTML=allSlots.map((sl,i)=>'<option value="'+i+'">'+sl.sched+' — '+sl.dur+'hr, '+won(sl.rate)+'</option>').join("");
+    sel.innerHTML=allSlots.map((sl,i)=>'<option value="'+i+'">'+schedLabel(sl.sched)+' — '+tx("{n}hr",{n:sl.dur})+', '+won(sl.rate)+'</option>').join("");
     wrap.style.display="";
     // Best-effort match to lesson\'s saved amount, else default to first
     let matchIdx=allSlots.findIndex(sl=>sl.rate===(l?.amt??-1));
@@ -4025,8 +4103,8 @@ function updateMovedNotice(s,l){
   const dateMoved=lessonNaturalDate&&dateVal&&dateVal!==lessonNaturalDate;
   const timeMoved=!!timeVal&&slot&&timeVal!==schedToHHMM(slot.sched);
   if(!s||!slot||(!dateMoved&&!timeMoved)){notice.style.display="none";return;}
-  const naturalDateLabel=lessonNaturalDate?new Date(lessonNaturalDate+"T00:00:00").toLocaleDateString("en-GB",{weekday:"short",month:"short",day:"numeric"}):"";
-  text.textContent="Moved from this student's usual time"+(naturalDateLabel?` (${naturalDateLabel}, ${naturalTimeLabel(slot)})`:` (${naturalTimeLabel(slot)})`)+" — only this class is affected.";
+  const naturalDateLabel=lessonNaturalDate?new Date(lessonNaturalDate+"T00:00:00").toLocaleDateString(LOCALE,{weekday:"short",month:"short",day:"numeric"}):"";
+  text.textContent=tx("Moved from this student's usual time ({when}) — only this class is affected.",{when:(naturalDateLabel?naturalDateLabel+", ":"")+naturalTimeLabel(slot)});
   notice.style.display="";
 }
 // Converts a schedule string like "Mon 4pm" / "Tue 17:30" into "HH:MM" for comparing against
@@ -4048,11 +4126,11 @@ function revertLessonMove(){
 function stepTime(fid,delta){
   const inp=document.getElementById(fid);const disp=document.getElementById(fid+"-disp");
   let v=(parseInt(inp?.value)||0)+delta;v=Math.max(0,v);
-  if(inp)inp.value=v;if(disp)disp.textContent=v+" min";
+  if(inp)inp.value=v;if(disp)disp.textContent=tx("{n} min",{n:v});
 }
 function setTime(fid,val){
   const inp=document.getElementById(fid);const disp=document.getElementById(fid+"-disp");
-  if(inp)inp.value=val;if(disp)disp.textContent=val+" min";
+  if(inp)inp.value=val;if(disp)disp.textContent=tx("{n} min",{n:val});
 }
 // Hours ↔ Amount stay in lockstep at the flat rate (HR = ₩40,000/h): typing 1.5 fills ₩60,000,
 // typing ₩80,000 fills 2. The legacy hidden dur field is kept in sync because slot-picking code
@@ -4102,14 +4180,14 @@ function updateCreditRow(){
   const nxt=sid?nextUnsettledOccurrence(sid,date):null;
   const hint=document.getElementById("lm-credit-hint");
   if(hint)hint.textContent=nxt
-    ?won(lessonOpenAmt)+" moves to "+nxt.date+(occTimeLabel(nxt)?" "+occTimeLabel(nxt):"")+", which will show as paid."
-    :"No unpaid class found in the next 4 months — the fee stays on this date instead (Cancelled, paid).";
+    ?tx("{amt} moves to {when}, which will show as paid.",{amt:won(lessonOpenAmt),when:nxt.date+(occTimeLabel(nxt)?" "+occTimeLabel(nxt):"")})
+    :tx("No unpaid class found in the next 4 months — the fee stays on this date instead (Cancelled, paid).");
 }
 function showCreditNote(l){
   const note=document.getElementById("lm-credit-note"),txt=document.getElementById("lm-credit-note-text");
   if(!note||!txt)return;
-  if(l&&l.creditFrom){note.style.display="";txt.textContent="Paid in advance for "+l.creditFrom+", which was cancelled.";}
-  else if(l&&l.creditTo){note.style.display="";txt.textContent="The fee for this class was moved to "+l.creditTo+".";}
+  if(l&&l.creditFrom){note.style.display="";txt.textContent=tx("Paid in advance for {date}, which was cancelled.",{date:l.creditFrom});}
+  else if(l&&l.creditTo){note.style.display="";txt.textContent=tx("The fee for this class was moved to {date}.",{date:l.creditTo});}
   else note.style.display="none";
 }
 // Same thing by hand: switching a cancelled lesson back to Unpaid/Paid leaves the fee field at 0,
@@ -4147,7 +4225,7 @@ function lmAmtTyped(){
 }
 function saveLesson(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
-  const sid=g("lm-sid");if(!sid){alert("Select a student");return;}
+  const sid=g("lm-sid");if(!sid){alert(tx("Select a student"));return;}
   const status=g("lm-status");
   const wbRows=document.querySelectorAll("#lm-wb-rows .wb-row");
   const workbooks=[];
@@ -4222,12 +4300,12 @@ function saveLesson(){
       if(!(real.amt>0))real.amt=carriedAmt;
       const mine=newLessonId?lessons.find(l=>l.id===newLessonId):lessons.find(l=>l.id===editLid);
       if(mine)mine.creditTo=real.date;
-      creditMsg=won(carriedAmt)+" moved to "+real.date;
+      creditMsg=tx("{amt} moved to {date}",{amt:won(carriedAmt),date:real.date});
     }else{
       // Nowhere to put it — keep the money on this date rather than dropping it.
       const mine=newLessonId?lessons.find(l=>l.id===newLessonId):lessons.find(l=>l.id===editLid);
       if(mine){mine.status="cancelpaid";mine.amt=carriedAmt;}
-      creditMsg="No upcoming class — kept as Cancelled (paid)";
+      creditMsg=tx("No upcoming class — kept as Cancelled (paid)");
     }
   }
   save();closeModal("mo-lesson");rerender();
@@ -4250,7 +4328,7 @@ function removeLessonRecord(id){
   save();
 }
 
-async function delLesson(id){if(!confirm("Delete this lesson permanently? It disappears from the calendar and won't be regenerated."))return;removeLessonRecord(id);rerender();}
+async function delLesson(id){if(!confirm(tx("Delete this lesson permanently? It disappears from the calendar and won't be regenerated.")))return;removeLessonRecord(id);rerender();}
 
 // Cancel / restore a class occurrence from within the lesson modal.
 // Post-pay students: cancelling zeroes the amount (status="cancelled").
@@ -4291,7 +4369,7 @@ function toggleCancelLesson(){
 
 async function deleteLessonFromModal(){
   if(!editLid||isVirtualLesson)return;
-  if(!confirm("Delete this lesson permanently? It disappears from the calendar and won't be regenerated."))return;
+  if(!confirm(tx("Delete this lesson permanently? It disappears from the calendar and won't be regenerated.")))return;
   removeLessonRecord(editLid);
   closeModal("mo-lesson");
   rerender();
@@ -4304,7 +4382,7 @@ function rerender(){if(curPage==="dashboard")renderDash();else if(curPage==="ses
 let editCid=null;
 function openCurrModal(id){
   editCid=id||null;const c=id?curriculum.find(x=>x.id===id):null;
-  document.getElementById("cm-title").textContent=id?"Edit Topic":"Add Topic";
+  document.getElementById("cm-title").textContent=id?tx("Edit Topic"):tx("Add Topic");
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
   set("cm-month",c?.month||"MAY");set("cm-week",c?.week||1);set("cm-cat",c?.cat);
   set("cm-topic",c?.topic);set("cm-wb",c?.wb);set("cm-books",c?.books);
@@ -4317,12 +4395,12 @@ function saveCurr(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
   const customFields=collectCustomFieldsFromModal("cm-custom-fields");
   const obj={month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),writing:g("cm-writing"),grammar:g("cm-grammar"),acts:g("cm-acts"),note:g("cm-note"),customFields};
-  if(!obj.topic){alert("Topic required");return;}
+  if(!obj.topic){alert(tx("Topic required"));return;}
   if(editCid){const i=curriculum.findIndex(c=>c.id===editCid);if(i>=0)curriculum[i]={...curriculum[i],...obj};}
   else curriculum.push({id:uid(),...obj});
   save();closeModal("mo-curr");renderCurriculum();
 }
-async function delCurr(id){if(!confirm("Delete?"))return;const i=curriculum.findIndex(c=>c.id===id);if(i>=0)curriculum.splice(i,1);save();renderCurriculum();}
+async function delCurr(id){if(!confirm(tx("Delete this topic?")))return;const i=curriculum.findIndex(c=>c.id===id);if(i>=0)curriculum.splice(i,1);save();renderCurriculum();}
 
 // ── Settings ──
 function switchSettingsTab(t){
@@ -4825,16 +4903,16 @@ function genParentNote(lid){
   let tmpl=parentTemplate()||"[topic]\n[workbook]\n[books_read]\n[note_to_parent]";
   // Workbook summary
   const wbSum=l.workbooks.map(w=>{let t=w.name;if(w.pd)t+=` ${w.pd} 진행`;if(w.hw)t+=`, 숙제: ${w.hw}`;return t;}).join("\n");
-  const wbBlock=wbSum?`Workbook:\n${wbSum}`:"";
-  const bkBlock=(l.books&&l.books.length)?`Reading:\n${l.books.map(b=>"- "+b.name).join("\n")}`:"";
-  const shwBlock=(l.schoolHW&&l.schoolHW.length)?`School HW:\n${l.schoolHW.map(h=>"- "+h.name).join("\n")}`:"";
-  const brBlock=(l.bract&&l.bract.length)?`Break time:\n${l.bract.map(b=>"- "+b.name).join("\n")}`:"";
+  const wbBlock=wbSum?`${tx("Workbook:|msg")}\n${wbSum}`:"";
+  const bkBlock=(l.books&&l.books.length)?`${tx("Reading:|msg")}\n${l.books.map(b=>"- "+b.name).join("\n")}`:"";
+  const shwBlock=(l.schoolHW&&l.schoolHW.length)?`${tx("School HW:|msg")}\n${l.schoolHW.map(h=>"- "+h.name).join("\n")}`:"";
+  const brBlock=(l.bract&&l.bract.length)?`${tx("Break time:|msg")}\n${l.bract.map(b=>"- "+b.name).join("\n")}`:"";
   const dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const dayStr=l.date?dayNames[new Date(l.date+"T00:00:00").getDay()]:"";
+  const dayStr=l.date?DAY_SHORT[dayNames[new Date(l.date+"T00:00:00").getDay()]]:"";
   tmpl=tmpl.replace("[student_name]",s.name).replace("[korean_name]",s.k).replace("[date]",l.date).replace("[(day)]",dayStr?`(${dayStr})`:"").replace("[topic]",l.topic||"").replace("[workbook]",wbBlock).replace("[hw_page]",l.workbooks.map(w=>w.hw).filter(Boolean).join(", ")||"").replace("[books_read]",bkBlock).replace("[school_hw]",shwBlock).replace("[break_activity]",brBlock).replace("[note_to_parent]",l.note||"");
   // Clean up empty lines
   tmpl=tmpl.replace(/\n\n\n+/g,"\n\n").trim();
-  navigator.clipboard.writeText(tmpl).then(()=>showMsgPreview("Parent note copied!",tmpl)).catch(()=>showMsgPreview("Parent note (copy manually)",tmpl));
+  navigator.clipboard.writeText(tmpl).then(()=>showMsgPreview(tx("Parent note copied!"),tmpl)).catch(()=>showMsgPreview(tx("Parent note (copy manually)"),tmpl));
 }
 
 // ═══════════════════════════════════════════════
@@ -4899,7 +4977,7 @@ function markAllUnpaid(sid,month){
   const s=gs(sid);if(!s)return;
   const targets=getOccurrencesForMonth(sid,month).filter(o=>["paid","prepaid","partial"].includes(o.status));
   if(!targets.length)return;
-  if(!confirm(`${s.name} — mark ${targets.length} paid lesson${targets.length===1?"":"s"} in ${month} as unpaid again?`))return;
+  if(!confirm(tx("{name} — mark {n} paid lesson(s) in {month} as unpaid again?",{name:s.name,n:targets.length,month})))return;
   targets.forEach(o=>{const real=materializeOccurrence(o);real.status="unpaid";});
   save();
   renderPayments();
@@ -4914,9 +4992,9 @@ function markAllPaid(sid,month){
   // otherwise their remaining half kept the student showing as owing after the button was used.
   const OWED=o=>!["paid","prepaid","cancelpaid","cancelled","deleted"].includes(o.status);
   const targets=occs.filter(OWED);
-  if(!targets.length){alert("No unpaid lessons to collect this month.");return;}
+  if(!targets.length){alert(tx("No unpaid lessons to collect this month."));return;}
   const total=targets.reduce((t,o)=>t+(o.status==="partial"?Math.ceil((o.amt||0)/2):(o.amt||0)),0);
-  if(!confirm(`${s.name} — mark all ${targets.length} unpaid lesson${targets.length===1?"":"s"} in ${month} (${won(total)}) as paid?`))return;
+  if(!confirm(tx("{name} — mark all {n} unpaid lesson(s) in {month} ({amt}) as paid?",{name:s.name,n:targets.length,month,amt:won(total)})))return;
   targets.forEach(o=>{
     const real=materializeOccurrence(o);   // no-op if already a real record
     real.status="paid";
@@ -4986,12 +5064,12 @@ function copyPayMsg(sid,month){
     .replace(/\[expected_amount\]/g,won(totalOwed))
     .replace(/\[paid_amount\]/g,won(c.paidT))
     .replace(/\[remaining_amount\]/g,won(totalOwed));
-  navigator.clipboard.writeText(tmpl).then(()=>showMsgPreview("Payment message copied!",tmpl)).catch(()=>showMsgPreview("Payment message (copy manually)",tmpl));
+  navigator.clipboard.writeText(tmpl).then(()=>showMsgPreview(tx("Payment message copied!"),tmpl)).catch(()=>showMsgPreview(tx("Payment message (copy manually)"),tmpl));
 }
 // Formats a duration in hours, dropping a trailing ".0" (e.g. 1 -> "1hr", 1.5 -> "1.5hr").
 function fmtHours(h){
   const n=Math.round(h*10)/10;
-  return (n%1===0?n.toFixed(0):n.toFixed(1))+"hr";
+  return tx("{n}hr",{n:n%1===0?n.toFixed(0):n.toFixed(1)});
 }
 // Same rounding as fmtHours, but without the "hr" suffix — copyPayMsg() adds "시간" itself.
 function fmtHoursPlain(h){
@@ -5267,7 +5345,7 @@ function renderReading(){
   const wanted=[...active,...archived].map(s=>s.id).join("|");
   if(sel.dataset.ids!==wanted){
     const cur=sel.value;
-    const opt=s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}${s.archived?" · archived":""}</option>`;
+    const opt=s=>`<option value="${s.id}">${escapeHTMLBasic(s.name)} / ${escapeHTMLBasic(s.k||"")}${s.archived?" · "+tx("archived|adj"):""}</option>`;
     sel.innerHTML=active.map(opt).join("")+(archived.length?`<option disabled>──────────</option>`+archived.map(opt).join(""):"");
     sel.dataset.ids=wanted;
     if(cur&&students.some(s=>s.id===cur))sel.value=cur;
@@ -5283,7 +5361,7 @@ function renderReading(){
   let trend="";
   if(months&&s&&!isNaN(avg)){
     const prev=readingEntries(sid,readingRangeStart(months*2)).filter(e=>e.date<from&&!isNaN(e.ar));
-    if(prev.length){const d=avg-mean(prev);trend=(d>=0?"▲ +":"▼ ")+d.toFixed(1)+" vs the period before";}
+    if(prev.length){const d=avg-mean(prev);trend=(d>=0?"▲ +":"▼ ")+d.toFixed(1)+" "+tx("vs the period before");}
   }
   // "Current level": the band of the average of the last five books with AR data
   const recent=withAr.slice(0,5);
@@ -5293,27 +5371,27 @@ function renderReading(){
   const missing=entries.filter(e=>!e.book).length;
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   set("rd-n",entries.length);
-  set("rd-n-sub",`${uniq} different title${uniq===1?"":"s"}`);
+  set("rd-n-sub",uniq===1?tx("1 different title"):tx("{n} different titles",{n:uniq}));
   set("rd-avg",isNaN(avg)?"—":avg.toFixed(1));
-  set("rd-avg-sub",trend||(withAr.length?`from ${withAr.length} book${withAr.length===1?"":"s"} with AR data`:"no AR data in this period"));
+  set("rd-avg-sub",trend||(withAr.length?(withAr.length===1?tx("from 1 book with AR data"):tx("from {n} books with AR data",{n:withAr.length})):tx("no AR data in this period")));
   const lvl=document.getElementById("rd-lvl");
   if(lvl)lvl.innerHTML=band?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:${band.color};display:inline-block"></span>L${band.level} ${band.colorName}</span>`:"—";
-  set("rd-lvl-sub",band?`last ${recent.length} book${recent.length===1?"":"s"} average AR ${recentAvg.toFixed(1)}`:"no AR data yet");
+  set("rd-lvl-sub",band?tx("last {n} books average AR {ar}",{n:recent.length,ar:recentAvg.toFixed(1)}):tx("no AR data yet"));
   set("rd-miss",missing);
-  set("rd-count",s?`${entries.length} book${entries.length===1?"":"s"}`:"");
+  set("rd-count",s?(entries.length===1?tx("1 book"):tx("{n} books",{n:entries.length})):"");
   const rangeLabel=document.getElementById("rd-range")?.selectedOptions?.[0]?.textContent||"";
   const ph=document.getElementById("rd-print-head");
-  if(ph)ph.innerHTML=s?`<div class="rd-ph-title">${escapeHTMLBasic(s.name)} <span>${escapeHTMLBasic(s.k||"")}</span> — Reading report</div><div class="rd-ph-sub">${rangeLabel} · printed ${td()}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`:"";
+  if(ph)ph.innerHTML=s?`<div class="rd-ph-title">${escapeHTMLBasic(s.name)} <span>${escapeHTMLBasic(s.k||"")}</span> — ${tx("Reading report")}</div><div class="rd-ph-sub">${rangeLabel} · ${tx("printed {date}",{date:td()})}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`:"";
   renderReadingChart(withAr.slice().reverse());
   const list=document.getElementById("rd-list");if(!list)return;
-  if(!entries.length){list.innerHTML='<div class="empty"><i class="ti ti-book-off"></i><p>No books recorded for this period</p></div>';return;}
+  if(!entries.length){list.innerHTML='<div class="empty"><i class="ti ti-book-off"></i><p>'+tx("No books recorded for this period")+'</p></div>';return;}
   list.innerHTML=entries.map(e=>{
     const b=e.book,bd=b?arLevelBand(b.arLevel):null;
-    return `<div class="grid-row clickable" style="grid-template-columns:100px minmax(0,1fr) 90px 120px 90px" ondblclick="openLessonModal('${e.lessonId}')" title="Double-click to open the lesson">
+    return `<div class="grid-row clickable" style="grid-template-columns:100px minmax(0,1fr) 90px 120px 90px" ondblclick="openLessonModal('${e.lessonId}')" title="${tx("Double-click to open the lesson")}">
       <div class="cell-mono">${e.date.slice(5).replace("-","/")}<div class="cell-muted">${e.date.slice(0,4)}</div></div>
       <div style="display:flex;align-items:center;gap:8px;min-width:0">
         ${b&&b.thumb?`<img src="${b.thumb}" alt="" style="width:28px;height:38px;object-fit:cover;border-radius:3px;flex-shrink:0" onerror="this.style.display='none'"/>`:`<div style="width:28px;height:38px;border-radius:3px;background:var(--surf2);flex-shrink:0"></div>`}
-        <div style="min-width:0"><div class="cell-main">${escapeHTMLBasic(b?b.title:e.name)}</div><div class="cell-sub">${b?escapeHTMLBasic(b.author||""):'<span style="color:var(--amb)">not in the Books library</span>'}</div></div>
+        <div style="min-width:0"><div class="cell-main">${escapeHTMLBasic(b?b.title:e.name)}</div><div class="cell-sub">${b?escapeHTMLBasic(b.author||""):'<span style="color:var(--amb)">'+tx("not in the Books library")+'</span>'}</div></div>
       </div>
       <div>${b?arLevelBadgeHTML(b.arLevel):"—"}</div>
       <div>${bd?`<span class="badge" style="background:${bd.color}22;border:1px solid ${bd.color};color:var(--txt)">L${bd.level} ${bd.colorName}</span>`:"—"}</div>
@@ -5326,7 +5404,7 @@ function renderReadingChart(pts){
   const el=document.getElementById("rd-chart");if(!el)return;
   const note=document.getElementById("rd-chart-note");
   if(pts.length<2){
-    el.innerHTML='<div class="empty" style="padding:22px"><p>Two or more books with AR levels are needed to draw the trend</p></div>';
+    el.innerHTML='<div class="empty" style="padding:22px"><p>'+tx("Two or more books with AR levels are needed to draw the trend")+'</p></div>';
     if(note)note.textContent="";
     return;
   }
@@ -5348,7 +5426,7 @@ function renderReadingChart(pts){
   const line=mpts.length>1?`<path d="${mpts.map((p,i)=>(i?"L":"M")+x(p.date).toFixed(1)+" "+y(p.ar).toFixed(1)).join(" ")}" fill="none" stroke="var(--pri)" stroke-width="2" stroke-linejoin="round" opacity=".85"/>`:"";
   const dots=pts.map(p=>{const bd=arLevelBand(p.ar.toFixed(1));return `<circle cx="${x(p.date).toFixed(1)}" cy="${y(p.ar).toFixed(1)}" r="4.5" fill="${bd?bd.color:"#94a3b8"}" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${escapeHTMLBasic(p.book?p.book.title:p.name)} · AR ${p.ar}</title></circle>`;}).join("");
   el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="AR level over time">${g}${line}${dots}</svg>`;
-  if(note)note.textContent=`${pts.length} books · dot = one book (colour = level) · line = monthly average`;
+  if(note)note.textContent=tx("{n} books · dot = one book (colour = level) · line = monthly average",{n:pts.length});
 }
 
 // ═══════════════════════════════════════════════
@@ -5383,7 +5461,7 @@ function rpMonths(){
 }
 function rpMonthLabel(m){
   const [y,mm]=m.split("-").map(Number);
-  return new Date(y,mm-1,1).toLocaleDateString("en-GB",{month:"short"})+(mm===1?" "+String(y).slice(2):"");
+  return new Date(y,mm-1,1).toLocaleDateString(LOCALE,{month:"short"})+(mm===1?" "+String(y).slice(2):"");
 }
 // How many lessons the timetable ALONE implies in a month — biweekly weeks and schedule history
 // included, records ignored. This is the yardstick a cancellation has to be measured against.
@@ -5432,14 +5510,14 @@ function rpScheduleChange(s,fromDate){
   const thenH=sum(then),nowH=sum(now);
   if(then.length===now.length&&Math.abs(thenH-nowH)<0.01)return null;
   const hh=(v)=>String(Math.round(v*100)/100);
-  return {from:then.length+"×/wk · "+hh(thenH)+"h",to:now.length+"×/wk · "+hh(nowH)+"h",up:nowH>thenH};
+  return {from:tx("{n}×/wk · {h}h",{n:then.length,h:hh(thenH)}),to:tx("{n}×/wk · {h}h",{n:now.length,h:hh(nowH)}),up:nowH>thenH};
 }
 function rpActiveInPeriod(s,months){
   return months.some(m=>getOccurrencesForMonth(s.id,m).length>0);
 }
 // ── bar chart: one month per bar, expected behind, collected in front ──────
 function rpTrendChart(rows){
-  if(!rows.length)return '<div class="empty"><i class="ti ti-chart-bar"></i><p>No months in this period</p></div>';
+  if(!rows.length)return '<div class="empty"><i class="ti ti-chart-bar"></i><p>'+tx("No months in this period")+'</p></div>';
   const W=Math.max(360,rows.length*74),H=170,pad={l:8,r:8,t:14,b:26};
   const max=Math.max(1,...rows.map(r=>Math.max(r.exp,r.paid)));
   const bw=(W-pad.l-pad.r)/rows.length;
@@ -5449,8 +5527,8 @@ function rpTrendChart(rows){
   rows.forEach((r,i)=>{
     const cx=pad.l+bw*i+bw/2, w=Math.min(34,bw*0.5);
     const yE=y(r.exp), yP=y(r.paid);
-    svg+=`<rect x="${cx-w/2}" y="${yE}" width="${w}" height="${H-pad.b-yE}" rx="3" fill="var(--bdr2)"><title>${rpMonthLabel(r.m)} expected ${won(r.exp)}</title></rect>`;
-    svg+=`<rect x="${cx-w/2}" y="${yP}" width="${w}" height="${H-pad.b-yP}" rx="3" fill="var(--pri)"><title>${rpMonthLabel(r.m)} collected ${won(r.paid)}</title></rect>`;
+    svg+=`<rect x="${cx-w/2}" y="${yE}" width="${w}" height="${H-pad.b-yE}" rx="3" fill="var(--bdr2)"><title>${rpMonthLabel(r.m)} ${tx("expected|lower")} ${won(r.exp)}</title></rect>`;
+    svg+=`<rect x="${cx-w/2}" y="${yP}" width="${w}" height="${H-pad.b-yP}" rx="3" fill="var(--pri)"><title>${rpMonthLabel(r.m)} ${tx("collected|lower")} ${won(r.paid)}</title></rect>`;
     svg+=`<text x="${cx}" y="${H-pad.b+14}" text-anchor="middle" font-size="10" fill="var(--txt3)">${rpMonthLabel(r.m)}</text>`;
   });
   svg+=`</svg>`;
@@ -5462,7 +5540,7 @@ function renderReports(){
   const from=months[0]+"-01";
   const lbl=months.length===1?rpMonthLabel(months[0]):rpMonthLabel(months[0])+" – "+rpMonthLabel(months[months.length-1]);
   const ph=document.getElementById("rp-print-head");
-  if(ph)ph.innerHTML=`<div class="rd-ph-title">${rpTab==="students"?"Students":"Business"} report <span>${lbl}</span></div><div class="rd-ph-sub">printed ${td()}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`;
+  if(ph)ph.innerHTML=`<div class="rd-ph-title">${rpTab==="students"?tx("Students report"):rpTab==="learning"?tx("Learning report"):tx("Business report")} <span>${lbl}</span></div><div class="rd-ph-sub">${tx("printed {date}",{date:td()})}${(localStorage.getItem("mc_library_name")||"").trim()?" · "+escapeHTMLBasic(localStorage.getItem("mc_library_name").trim()):""}</div>`;
 
   const people=students.filter(s=>!s.archived||rpActiveInPeriod(s,months));
   const rows=people.map(s=>({s,t:rpStudentTotals(s.id,months)}))
@@ -5474,12 +5552,12 @@ function renderReports(){
     {exp:0,paid:0,due:0,count:0,hours:0,cancelled:0,cancAmt:0,planned:0,lost:0,moved:0,lostAmt:0});
 
   const cnt=document.getElementById("rp-count");
-  if(cnt)cnt.textContent=months.length+" month"+(months.length===1?"":"s")+" · "+rows.length+" students";
+  if(cnt)cnt.textContent=(months.length===1?tx("1 month"):tx("{n} months",{n:months.length}))+" · "+tx("{n} students",{n:rows.length});
 
   const body=document.getElementById("rp-body");
   if(!body)return;
   if(!rows.length&&rpTab!=="learning"){
-    body.innerHTML='<div class="empty"><i class="ti ti-report"></i><p>No lessons in this period</p></div>';
+    body.innerHTML='<div class="empty"><i class="ti ti-report"></i><p>'+tx("No lessons in this period")+'</p></div>';
     return;
   }
   body.innerHTML=rpTab==="students"?rpStudentsView(rows,sum,months,from)
@@ -5488,33 +5566,29 @@ function renderReports(){
 }
 function rpStudentsView(rows,sum,months,from){
   let h=`<div class="stats cols-4">
-    <div class="sc grn"><div class="sc-lbl">Students taught</div><div class="sc-val">${rows.length}</div><div class="sc-sub">in this period</div></div>
-    <div class="sc blu"><div class="sc-lbl">Lessons held</div><div class="sc-val">${sum.count}</div><div class="sc-sub">${fmtHoursPlain(sum.hours)} hrs</div></div>
-    <div class="sc amb"><div class="sc-lbl">Lessons lost</div><div class="sc-val">${sum.lost}</div><div class="sc-sub">${sum.moved?sum.moved+" more were moved":"none moved"}</div></div>
-    <div class="sc gry"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${privacyHidden?"amounts hidden":"of "+won(sum.exp)}</div></div>
+    <div class="sc grn"><div class="sc-lbl">${tx("Students taught")}</div><div class="sc-val">${rows.length}</div><div class="sc-sub">${tx("in this period")}</div></div>
+    <div class="sc blu"><div class="sc-lbl">${tx("Lessons held")}</div><div class="sc-val">${sum.count}</div><div class="sc-sub">${tx("{h} hrs",{h:fmtHoursPlain(sum.hours)})}</div></div>
+    <div class="sc amb"><div class="sc-lbl">${tx("Lessons lost")}</div><div class="sc-val">${sum.lost}</div><div class="sc-sub">${sum.moved?tx("{n} more were moved",{n:sum.moved}):tx("none moved")}</div></div>
+    <div class="sc gry"><div class="sc-lbl">${tx("Collected")}</div><div class="sc-val sm">${pwon(sum.paid)}</div><div class="sc-sub">${privacyHidden?tx("amounts hidden"):tx("of {amt}",{amt:won(sum.exp)})}</div></div>
   </div>`;
   h+=`<div class="card" style="padding:0"><div class="grid-head rp-row">
-    <div>Student</div><div>Lessons</div><div>Hours</div><div>Lost / moved</div><div>Books · HW</div><div>Collected</div><div>Outstanding</div><div>Schedule since ${rpMonthLabel(months[0])}</div></div>`;
+    <div>${tx("Student")}</div><div>${tx("Lessons")}</div><div>${tx("Hours")}</div><div>${tx("Lost / moved")}</div><div>${tx("Books · HW")}</div><div>${tx("Collected")}</div><div>${tx("Outstanding")}</div><div>${tx("Schedule since {month}",{month:rpMonthLabel(months[0])})}</div></div>`;
   h+=rows.map(({s,t})=>{
     const ch=rpScheduleChange(s,from);
     const planned=Math.max(t.planned,t.count);
     const lr=rpLearningTotals(s.id,months);
     return `<div class="grid-row rp-row">
-      <div><div class="cell-main">${escapeHTMLBasic(s.name)}${s.archived?' <span class="std-arch-badge">Archived</span>':""}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")}${tenureLabel(s)?" · "+tenureLabel(s):""}</div></div>
-      <div class="tm" data-l="Lessons" title="${t.count} held of ${planned} on the timetable">${t.count}${planned?` <span class="cell-muted2">/ ${planned}</span>`:""}</div>
-      <div class="tm" data-l="Hours">${fmtHours(t.hours)}</div>
-      <div class="tm" data-l="Lost / moved" title="${t.cancelled} cancelled record(s) in total">${t.lost?'<span style="color:var(--red)">'+t.lost+"</span> "+'<span class="cell-muted2">'+won(t.lostAmt)+"</span>":"—"}${t.moved?' <span class="cell-muted2">· '+t.moved+" moved</span>":""}</div>
-      <div class="cell-muted2" data-l="Books · HW" title="${lr.books.length} books · ${lr.hw.assigned} homework set">${lr.books.length||lr.hw.assigned?`${lr.books.length||"—"} · ${lr.hw.rate!=null?lr.hw.rate+"%":lr.hw.assigned?lr.hw.assigned+" set":"—"}`:"—"}</div>
-      <div class="tm" data-l="Collected">${pwon(t.paid)}</div>
-      <div class="tm" data-l="Outstanding" style="color:${t.due>0?"var(--red)":"var(--txt3)"}">${t.due>0?pwon(t.due):"—"}</div>
-      <div class="cell-muted2" data-l="Schedule">${ch?`<span class="rp-change ${ch.up?"up":"down"}"><i class="ti ti-arrow-${ch.up?"up":"down"}-right"></i> ${escapeHTMLBasic(ch.from)} → ${escapeHTMLBasic(ch.to)}</span>`:"unchanged"}</div>
+      <div><div class="cell-main">${escapeHTMLBasic(s.name)}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':""}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")}${tenureLabel(s)?" · "+tenureLabel(s):""}</div></div>
+      <div class="tm" data-l="${tx("Lessons")}" title="${tx("{n} held of {m} on the timetable",{n:t.count,m:planned})}">${t.count}${planned?` <span class="cell-muted2">/ ${planned}</span>`:""}</div>
+      <div class="tm" data-l="${tx("Hours")}">${fmtHours(t.hours)}</div>
+      <div class="tm" data-l="${tx("Lost / moved")}" title="${tx("{n} cancelled record(s) in total",{n:t.cancelled})}">${t.lost?'<span style="color:var(--red)">'+t.lost+"</span> "+'<span class="cell-muted2">'+won(t.lostAmt)+"</span>":"—"}${t.moved?' <span class="cell-muted2">· '+tx("{n} moved",{n:t.moved})+"</span>":""}</div>
+      <div class="cell-muted2" data-l="${tx("Books · HW")}" title="${tx("{b} books · {h} homework set",{b:lr.books.length,h:lr.hw.assigned})}">${lr.books.length||lr.hw.assigned?`${lr.books.length||"—"} · ${lr.hw.rate!=null?lr.hw.rate+"%":lr.hw.assigned?tx("{n} set",{n:lr.hw.assigned}):"—"}`:"—"}</div>
+      <div class="tm" data-l="${tx("Collected")}">${pwon(t.paid)}</div>
+      <div class="tm" data-l="${tx("Outstanding")}" style="color:${t.due>0?"var(--red)":"var(--txt3)"}">${t.due>0?pwon(t.due):"—"}</div>
+      <div class="cell-muted2" data-l="${tx("Schedule")}">${ch?`<span class="rp-change ${ch.up?"up":"down"}"><i class="ti ti-arrow-${ch.up?"up":"down"}-right"></i> ${escapeHTMLBasic(ch.from)} → ${escapeHTMLBasic(ch.to)}</span>`:tx("unchanged")}</div>
     </div>`;
   }).join("");
-  h+=`</div><p class="u-hint">Lessons held against what the timetable implies for the period, every-other-week schedules included.
-    A class moved to another day leaves a cancelled record behind but the month still has its lessons, so only the
-    shortfall counts as <b>lost</b> — the remaining cancelled records are shown as <b>moved</b>.
-    "Schedule" compares the timetable in force at the start of the period with today: a longer or more frequent week
-    is the clearest sign a student is stepping up.</p>`;
+  h+=`</div><p class="u-hint">${tx("Lessons held against what the timetable implies for the period, every-other-week schedules included. A class moved to another day leaves a cancelled record behind but the month still has its lessons, so only the shortfall counts as lost — the remaining cancelled records are shown as moved. \"Schedule\" compares the timetable in force at the start of the period with today: a longer or more frequent week is the clearest sign a student is stepping up.")}</p>`;
   return h;
 }
 function rpBusinessView(rows,sum,months){
@@ -5530,35 +5604,35 @@ function rpBusinessView(rows,sum,months){
   const bExp=sum.exp+oiTotal,bPaid=sum.paid+oiTotal;
   const collectedPct=bExp>0?Math.round(bPaid/bExp*100):0;
   let h=`<div class="stats cols-4">
-    <div class="sc grn"><div class="sc-lbl">Expected</div><div class="sc-val sm">${pwon(bExp)}</div><div class="sc-sub">${sum.count} lessons · ${fmtHoursPlain(sum.hours)} hrs${oiTotal?" · incl. "+pwon(oiTotal)+" other":""}</div></div>
-    <div class="sc blu"><div class="sc-lbl">Collected</div><div class="sc-val sm">${pwon(bPaid)}</div><div class="sc-sub">${collectedPct}% of expected</div></div>
-    <div class="sc red"><div class="sc-lbl">Outstanding</div><div class="sc-val sm">${pwon(sum.due)}</div><div class="sc-sub">${rows.filter(r=>r.t.due>0).length} students owe</div></div>
-    <div class="sc amb"><div class="sc-lbl">Lost to cancellations</div><div class="sc-val sm">${pwon(sum.lostAmt)}</div><div class="sc-sub">${sum.lost} classes${sum.moved?" · "+sum.moved+" moved, not lost":""}</div></div>
+    <div class="sc grn"><div class="sc-lbl">${tx("Expected")}</div><div class="sc-val sm">${pwon(bExp)}</div><div class="sc-sub">${tx("{n} lessons · {h} hrs",{n:sum.count,h:fmtHoursPlain(sum.hours)})}${oiTotal?" · "+tx("incl. {amt} other",{amt:pwon(oiTotal)}):""}</div></div>
+    <div class="sc blu"><div class="sc-lbl">${tx("Collected")}</div><div class="sc-val sm">${pwon(bPaid)}</div><div class="sc-sub">${tx("{p}% of expected",{p:collectedPct})}</div></div>
+    <div class="sc red"><div class="sc-lbl">${tx("Outstanding")}</div><div class="sc-val sm">${pwon(sum.due)}</div><div class="sc-sub">${tx("{n} students owe",{n:rows.filter(r=>r.t.due>0).length})}</div></div>
+    <div class="sc amb"><div class="sc-lbl">${tx("Lost to cancellations")}</div><div class="sc-val sm">${pwon(sum.lostAmt)}</div><div class="sc-sub">${tx("{n} classes",{n:sum.lost})}${sum.moved?" · "+tx("{n} moved, not lost",{n:sum.moved}):""}</div></div>
   </div>`;
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-chart-bar"></i>Month by month</div><span class="cell-muted2">grey = expected · green = collected</span></div><div class="cb p">${privacyHidden?'<div class="empty"><i class="ti ti-eye-off"></i><p>Amounts are hidden — use the eye on the Dashboard to show them</p></div>':rpTrendChart(trend)}</div></div>`;
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-chart-bar"></i>${tx("Month by month")}</div><span class="cell-muted2">${tx("grey = expected · green = collected")}</span></div><div class="cb p">${privacyHidden?'<div class="empty"><i class="ti ti-eye-off"></i><p>'+tx("Amounts are hidden — use the eye on the Dashboard to show them")+'</p></div>':rpTrendChart(trend)}</div></div>`;
 
   const owing=rows.filter(r=>r.t.due>0).sort((a,b)=>(a.t.oldestDue||"").localeCompare(b.t.oldestDue||"")||b.t.due-a.t.due);
-  h+=`<div class="card" style="padding:0"><div class="grid-head rp-owe"><div>Owes since</div><div>Student</div><div>Outstanding</div><div>Of which this period</div></div>`;
+  h+=`<div class="card" style="padding:0"><div class="grid-head rp-owe"><div>${tx("Owes since")}</div><div>${tx("Student")}</div><div>${tx("Outstanding")}</div><div>${tx("Of which this period")}</div></div>`;
   h+=owing.length?owing.map(({s,t})=>`<div class="grid-row rp-owe">
       <div class="cell-main">${rpMonthLabel(t.oldestDue)}</div>
-      <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")} · ${PTYPE_META[s.ptype]?.lbl||"Post-pay"}</div></div>
-      <div class="tm" data-l="Outstanding" style="color:var(--red)">${pwon(t.due)}</div>
-      <div class="tm cell-muted2" data-l="Of this period">${t.exp?Math.round(t.due/t.exp*100)+"% of "+pwon(t.exp):"—"}</div>
+      <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.k||"")} · ${PTYPE_META[s.ptype]?.lbl||tx("Post-pay")}</div></div>
+      <div class="tm" data-l="${tx("Outstanding")}" style="color:var(--red)">${pwon(t.due)}</div>
+      <div class="tm cell-muted2" data-l="${tx("Of this period")}">${t.exp?tx("{p}% of {amt}",{p:Math.round(t.due/t.exp*100),amt:pwon(t.exp)}):"—"}</div>
     </div>`).join("")
-    :'<div class="empty"><i class="ti ti-circle-check"></i><p>Nothing outstanding in this period</p></div>';
+    :'<div class="empty"><i class="ti ti-circle-check"></i><p>'+tx("Nothing outstanding in this period")+'</p></div>';
   h+=`</div>`;
 
   const share=rows.filter(r=>r.t.exp>0);
-  h+=`<div class="card" style="padding:0"><div class="ch"><div class="ct"><i class="ti ti-chart-pie"></i>Revenue by student</div><span class="cell-muted2">lesson fees only${oiTotal?" — "+pwon(oiTotal)+" other income is not split between students":""}</span></div><div class="grid-head rp-share"><div>Student</div><div>Share of revenue</div><div>Expected</div><div>Per hour</div><div>Lost</div></div>`;
+  h+=`<div class="card" style="padding:0"><div class="ch"><div class="ct"><i class="ti ti-chart-pie"></i>${tx("Revenue by student")}</div><span class="cell-muted2">${tx("lesson fees only")}${oiTotal?" — "+tx("{amt} other income is not split between students",{amt:pwon(oiTotal)}):""}</span></div><div class="grid-head rp-share"><div>${tx("Student")}</div><div>${tx("Share of revenue")}</div><div>${tx("Expected")}</div><div>${tx("Per hour")}</div><div>${tx("Lost")}</div></div>`;
   h+=share.map(({s,t})=>{
     const pct=sum.exp?Math.round(t.exp/sum.exp*100):0;
     const perH=t.hours>0?Math.round(t.exp/t.hours):0;
     return `<div class="grid-row rp-share">
-      <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(s.sched||"")}</div></div>
-      <div data-l="Share"><div class="rp-bar"><span style="width:${pct}%"></span></div><div class="cell-muted2">${pct}%</div></div>
-      <div class="tm" data-l="Expected">${pwon(t.exp)}</div>
-      <div class="tm" data-l="Per hour">${perH?pwon(perH):"—"}</div>
-      <div class="tm cell-muted2" data-l="Lost">${t.lost||"—"}</div>
+      <div><div class="cell-main">${escapeHTMLBasic(s.name)}</div><div class="cell-muted2">${escapeHTMLBasic(schedLabel(s.sched||""))}</div></div>
+      <div data-l="${tx("Share")}"><div class="rp-bar"><span style="width:${pct}%"></span></div><div class="cell-muted2">${pct}%</div></div>
+      <div class="tm" data-l="${tx("Expected")}">${pwon(t.exp)}</div>
+      <div class="tm" data-l="${tx("Per hour")}">${perH?pwon(perH):"—"}</div>
+      <div class="tm cell-muted2" data-l="${tx("Lost")}">${t.lost||"—"}</div>
     </div>`;
   }).join("");
   h+=`</div>`;
@@ -5567,12 +5641,12 @@ function rpBusinessView(rows,sum,months){
   const fromD=months[0]+"-01",toD=months[months.length-1]+"-31";
   const started=students.filter(s=>{const d=s.firstLesson||s.startDate;return d&&d>=fromD&&d<=toD;});
   const ended=students.filter(s=>s.endDate&&s.endDate>=fromD&&s.endDate<=toD);
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-users"></i>Joined and left</div></div><div class="cb p">
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-users"></i>${tx("Joined and left")}</div></div><div class="cb p">
     <div class="fr c2">
-      <div><div class="cell-muted2">Started in this period</div>${started.length?started.map(s=>`<div class="cell-main">${escapeHTMLBasic(s.name)} <span class="cell-muted2">${s.firstLesson||s.startDate}</span></div>`).join(""):'<div class="cell-muted2">none</div>'}</div>
-      <div><div class="cell-muted2">Stopped in this period</div>${ended.length?ended.map(s=>`<div class="cell-main">${escapeHTMLBasic(s.name)} <span class="cell-muted2">${s.endDate}</span></div>`).join(""):'<div class="cell-muted2">none</div>'}</div>
+      <div><div class="cell-muted2">${tx("Started in this period")}</div>${started.length?started.map(s=>`<div class="cell-main">${escapeHTMLBasic(s.name)} <span class="cell-muted2">${s.firstLesson||s.startDate}</span></div>`).join(""):'<div class="cell-muted2">'+tx("none")+'</div>'}</div>
+      <div><div class="cell-muted2">${tx("Stopped in this period")}</div>${ended.length?ended.map(s=>`<div class="cell-main">${escapeHTMLBasic(s.name)} <span class="cell-muted2">${s.endDate}</span></div>`).join(""):'<div class="cell-muted2">'+tx("none")+'</div>'}</div>
     </div>
-    <p class="u-hint" style="margin-top:10px">Taken from the First lesson and End date fields on each student card, so it is only as complete as those.</p>
+    <p class="u-hint" style="margin-top:10px">${tx("Taken from the First lesson and End date fields on each student card, so it is only as complete as those.")}</p>
   </div></div>`;
   return h;
 }
@@ -5603,11 +5677,11 @@ function renderHomeworkCheck(){
   const items=sid?homeworkBefore(sid,date):[];
   if(!items.length){box.style.display="none";box.innerHTML="";return;}
   box.style.display="";
-  box.innerHTML=`<div class="cell-muted2" style="margin-bottom:6px"><i class="ti ti-checkbox"></i> Homework set on ${items[0].assigned}</div>`
+  box.innerHTML=`<div class="cell-muted2" style="margin-bottom:6px"><i class="ti ti-checkbox"></i> ${tx("Homework set on {date}",{date:items[0].assigned})}</div>`
     +items.map(h=>`<div class="lm-hw-item">
         <span class="lm-hw-text" title="${escapeAttr(h.content||"")}">${escapeHTMLBasic(h.content||"")}</span>
         <span class="seg lm-hw-seg">
-          ${[["done","Done"],["in_progress","Partly"],["not_started","Not yet"],["skipped","Skipped"]]
+          ${[["done",tx("Done")],["in_progress",tx("Partly")],["not_started",tx("Not yet")],["skipped",tx("Skipped")]]
             .map(([v,lbl])=>`<button type="button" class="seg-btn${h.status===v?" active":""}" onclick="setHomeworkStatus('${h.id}','${v}')">${lbl}</button>`).join("")}
         </span>
       </div>`).join("");
@@ -5687,71 +5761,70 @@ function rpLearningView(months){
   const sid=document.getElementById("rp-lsid")?.value||"";
   const t=rpLearningTotals(sid||null,months);
   const who=sid?gs(sid):null;
-  const opts=`<option value="">All students</option>`+students.filter(s=>!s.archived||s.id===sid)
+  const opts=`<option value="">${tx("All students")}</option>`+students.filter(s=>!s.archived||s.id===sid)
     .map(s=>`<option value="${s.id}"${sid===s.id?" selected":""}>${escapeHTMLBasic(s.name)}${s.k?" / "+escapeHTMLBasic(s.k):""}</option>`).join("");
-  let h=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-user"></i>${who?escapeHTMLBasic(who.name):"All students"}</div>
+  let h=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-user"></i>${who?escapeHTMLBasic(who.name):tx("All students")}</div>
     <select id="rp-lsid" onchange="renderReports()" style="width:200px;height:30px;font-size:12px">${opts}</select></div></div>`;
   h+=`<div class="stats cols-4">
-    <div class="sc grn"><div class="sc-lbl">Books read</div><div class="sc-val">${t.books.length}</div><div class="sc-sub">${t.titles} different titles</div></div>
-    <div class="sc blu"><div class="sc-lbl">Average AR</div><div class="sc-val">${t.avgAr!=null?t.avgAr.toFixed(1):"—"}</div><div class="sc-sub">${t.noAr?t.noAr+" without AR data":"from the Books library"}</div></div>
-    <div class="sc amb"><div class="sc-lbl">Homework done</div><div class="sc-val">${t.hw.rate!=null?t.hw.rate+"%":"—"}</div><div class="sc-sub">${t.hw.assigned?t.hw.assigned+" set · "+t.hw.pending+" never checked":"none set"}</div></div>
-    <div class="sc gry"><div class="sc-lbl">Workbooks</div><div class="sc-val">${t.wb.length}</div><div class="sc-sub">${t.lessons} lessons in period</div></div>
+    <div class="sc grn"><div class="sc-lbl">${tx("Books read")}</div><div class="sc-val">${t.books.length}</div><div class="sc-sub">${tx("{n} different titles",{n:t.titles})}</div></div>
+    <div class="sc blu"><div class="sc-lbl">${tx("Average AR")}</div><div class="sc-val">${t.avgAr!=null?t.avgAr.toFixed(1):"—"}</div><div class="sc-sub">${t.noAr?tx("{n} without AR data",{n:t.noAr}):tx("from the Books library")}</div></div>
+    <div class="sc amb"><div class="sc-lbl">${tx("Homework done")}</div><div class="sc-val">${t.hw.rate!=null?t.hw.rate+"%":"—"}</div><div class="sc-sub">${t.hw.assigned?tx("{n} set · {m} never checked",{n:t.hw.assigned,m:t.hw.pending}):tx("none set")}</div></div>
+    <div class="sc gry"><div class="sc-lbl">${tx("Workbooks")}</div><div class="sc-val">${t.wb.length}</div><div class="sc-sub">${tx("{n} lessons in period",{n:t.lessons})}</div></div>
   </div>`;
 
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-book"></i>Books read</div><span class="cell-muted2">${t.curAr!=null?"last 5 average AR "+t.curAr.toFixed(1):""}</span></div>`;
-  h+=t.books.length?`<div class="grid-head rp-bk"><div>Date</div><div>Title</div><div>AR</div><div>Level</div></div>`
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-book"></i>${tx("Books read")}</div><span class="cell-muted2">${t.curAr!=null?tx("last 5 average AR {ar}",{ar:t.curAr.toFixed(1)}):""}</span></div>`;
+  h+=t.books.length?`<div class="grid-head rp-bk"><div>${tx("Date")}</div><div>${tx("Title")}</div><div>AR</div><div>${tx("Level")}</div></div>`
     +t.books.slice(0,40).map(b=>`<div class="grid-row rp-bk">
       <div class="cell-muted2">${b.date}</div>
-      <div class="cell-main">${escapeHTMLBasic(b.name)}${!b.book?' <span class="cell-muted2">not in library</span>':""}</div>
+      <div class="cell-main">${escapeHTMLBasic(b.name)}${!b.book?' <span class="cell-muted2">'+tx("not in library")+'</span>':""}</div>
       <div>${b.book?arLevelBadgeHTML(b.book.arLevel):"—"}</div>
       <div class="cell-muted2">${b.book?escapeHTMLBasic(b.book.level||"—"):"—"}</div></div>`).join("")
-    +(t.books.length>40?`<div class="u-hint" style="padding:8px 14px">showing the 40 most recent of ${t.books.length}</div>`:"")
-    :rpEmpty("book-off","No books logged yet — add them in a lesson's Books read box");
+    +(t.books.length>40?`<div class="u-hint" style="padding:8px 14px">${tx("showing the 40 most recent of {n}",{n:t.books.length})}</div>`:"")
+    :rpEmpty("book-off",tx("No books logged yet — add them in a lesson's Books read box"));
   h+=`</div>`;
 
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-notebook"></i>Workbooks</div></div>`;
-  h+=t.wb.length?`<div class="grid-head rp-wb"><div>Workbook</div><div>Lessons</div><div>Last used</div><div>Latest page</div></div>`
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-notebook"></i>${tx("Workbooks")}</div></div>`;
+  h+=t.wb.length?`<div class="grid-head rp-wb"><div>${tx("Workbook")}</div><div>${tx("Lessons")}</div><div>${tx("Last used")}</div><div>${tx("Latest page")}</div></div>`
     +t.wb.map(w=>`<div class="grid-row rp-wb">
       <div class="cell-main">${escapeHTMLBasic(w.name)}</div>
       <div class="tm">${w.n}</div>
       <div class="cell-muted2">${w.last}</div>
       <div class="cell-muted2">${escapeHTMLBasic(w.pd||"—")}</div></div>`).join("")
-    :rpEmpty("notebook-off","No workbooks logged yet");
+    :rpEmpty("notebook-off",tx("No workbooks logged yet"));
   h+=`</div>`;
 
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-checkbox"></i>Homework</div>
-    <span class="cell-muted2">${t.hw.rate==null&&t.hw.assigned?"never checked off — open a lesson to mark them":""}</span></div>`;
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-checkbox"></i>${tx("Homework")}</div>
+    <span class="cell-muted2">${t.hw.rate==null&&t.hw.assigned?tx("never checked off — open a lesson to mark them"):""}</span></div>`;
   h+=t.hw.assigned?`<div class="cb p"><div class="rp-hwbar">
       <span class="done" style="width:${t.hw.assigned?t.hw.done/t.hw.assigned*100:0}%"></span>
       <span class="part" style="width:${t.hw.assigned?t.hw.partly/t.hw.assigned*100:0}%"></span>
       <span class="skip" style="width:${t.hw.assigned?t.hw.skipped/t.hw.assigned*100:0}%"></span>
-    </div><div class="cell-muted2" style="margin-top:6px">${t.hw.done} done · ${t.hw.partly} partly · ${t.hw.skipped} skipped · ${t.hw.pending} not checked</div></div>`
-    +`<div class="grid-head rp-hw"><div>Set on</div><div>Homework</div><div>Status</div></div>`
+    </div><div class="cell-muted2" style="margin-top:6px">${tx("{a} done · {b} partly · {c} skipped · {d} not checked",{a:t.hw.done,b:t.hw.partly,c:t.hw.skipped,d:t.hw.pending})}</div></div>`
+    +`<div class="grid-head rp-hw"><div>${tx("Set on")}</div><div>${tx("Homework")}</div><div>${tx("Status")}</div></div>`
     +t.hw.items.slice(0,25).map(x=>`<div class="grid-row rp-hw">
       <div class="cell-muted2">${x.assigned}</div>
       <div class="cell-main">${escapeHTMLBasic(x.content||"")}</div>
       <div>${hwbdg(x.status)}</div></div>`).join("")
-    :rpEmpty("checkbox","No homework set yet — type it in the HW box of a workbook row");
+    :rpEmpty("checkbox",tx("No homework set yet — type it in the HW box of a workbook row"));
   h+=`</div>`;
 
   const mixTotal=t.mix.wb+t.mix.books+t.mix.school+t.mix.brk;
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-clock"></i>Where lesson time goes</div><span class="cell-muted2">${t.lessons?"average per lesson":""}</span></div><div class="cb p">`;
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-clock"></i>${tx("Where lesson time goes")}</div><span class="cell-muted2">${t.lessons?tx("average per lesson"):""}</span></div><div class="cb p">`;
+  const MIX=[[tx("Workbook"),t.mix.wb,"var(--pri)"],[tx("Books"),t.mix.books,"#378ADD"],[tx("School HW"),t.mix.school,"#BA7517"],[tx("Break"),t.mix.brk,"var(--bdr2)"]];
   h+=mixTotal&&t.lessons?`<div class="rp-mix">
-      ${[["Workbook",t.mix.wb,"var(--pri)"],["Books",t.mix.books,"#378ADD"],["School HW",t.mix.school,"#BA7517"],["Break",t.mix.brk,"var(--bdr2)"]]
-        .map(([lbl,v,col])=>`<span style="width:${v/mixTotal*100}%;background:${col}" title="${lbl} ${Math.round(v/t.lessons)} min"></span>`).join("")}
+      ${MIX.map(([lbl,v,col])=>`<span style="width:${v/mixTotal*100}%;background:${col}" title="${lbl} ${tx("{n} min",{n:Math.round(v/t.lessons)})}"></span>`).join("")}
     </div>
-    <div class="cell-muted2" style="margin-top:8px">${[["Workbook",t.mix.wb],["Books",t.mix.books],["School HW",t.mix.school],["Break",t.mix.brk]]
-      .map(([lbl,v])=>lbl+" "+Math.round(v/t.lessons)+" min").join(" · ")}</div>`
-    :`<div class="cell-muted2">No lessons in this period</div>`;
+    <div class="cell-muted2" style="margin-top:8px">${MIX.map(([lbl,v])=>lbl+" "+tx("{n} min",{n:Math.round(v/t.lessons)})).join(" · ")}</div>`
+    :`<div class="cell-muted2">${tx("No lessons in this period")}</div>`;
   h+=`</div></div>`;
 
-  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-bulb"></i>Topics and activities</div></div><div class="cb p">
-    <div class="cell-muted2">Topics covered</div>
-    <div style="margin:4px 0 12px">${t.topics.length?t.topics.map(x=>`<span class="tag">${escapeHTMLBasic(x)}</span>`).join(" "):'<span class="cell-muted2">none recorded</span>'}</div>
-    <div class="cell-muted2">Break activities</div>
-    <div style="margin:4px 0 12px">${t.breaks.length?t.breaks.map(x=>`<span class="tag">${escapeHTMLBasic(x.name)}${x.n>1?" ×"+x.n:""}</span>`).join(" "):'<span class="cell-muted2">none recorded</span>'}</div>
-    <div class="cell-muted2">School / academy homework seen</div>
-    <div style="margin:4px 0 0">${t.school.length?t.school.map(x=>`<span class="tag">${escapeHTMLBasic(x.name)}${x.n>1?" ×"+x.n:""}</span>`).join(" "):'<span class="cell-muted2">none recorded</span>'}</div>
+  h+=`<div class="card"><div class="ch"><div class="ct"><i class="ti ti-bulb"></i>${tx("Topics and activities")}</div></div><div class="cb p">
+    <div class="cell-muted2">${tx("Topics covered")}</div>
+    <div style="margin:4px 0 12px">${t.topics.length?t.topics.map(x=>`<span class="tag">${escapeHTMLBasic(x)}</span>`).join(" "):'<span class="cell-muted2">'+tx("none recorded")+'</span>'}</div>
+    <div class="cell-muted2">${tx("Break activities")}</div>
+    <div style="margin:4px 0 12px">${t.breaks.length?t.breaks.map(x=>`<span class="tag">${escapeHTMLBasic(x.name)}${x.n>1?" ×"+x.n:""}</span>`).join(" "):'<span class="cell-muted2">'+tx("none recorded")+'</span>'}</div>
+    <div class="cell-muted2">${tx("School / academy homework seen")}</div>
+    <div style="margin:4px 0 0">${t.school.length?t.school.map(x=>`<span class="tag">${escapeHTMLBasic(x.name)}${x.n>1?" ×"+x.n:""}</span>`).join(" "):'<span class="cell-muted2">'+tx("none recorded")+'</span>'}</div>
   </div></div>`;
   return h;
 }
@@ -5811,7 +5884,7 @@ function renderGcalDiffBadge(){
   b.textContent=n;
   b.style.display=n?"":"none";
   const btn=document.getElementById("cal-gcal-btn");
-  if(btn)btn.title=n?n+" differences from Google Calendar in this month":"Compare this month with Google Calendar";
+  if(btn)btn.title=n?tx("{n} differences from Google Calendar in this month",{n}):tx("Compare this month with Google Calendar");
 }
 function renderCalendar(){
   const sid=document.getElementById("sf-sid")?.value||"";
@@ -5820,7 +5893,7 @@ function renderCalendar(){
   const lbl=document.getElementById("cal-month-label");
   const parts=calMonth.split("-").map(Number);
   const year=parts[0],monthNum=parts[1];
-  if(lbl)lbl.textContent=new Date(year,monthNum-1,1).toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+  if(lbl)lbl.textContent=new Date(year,monthNum-1,1).toLocaleDateString(LOCALE,{month:"long",year:"numeric"});
 
   const firstOfMonth=new Date(year,monthNum-1,1);
   const leadOffset=(firstOfMonth.getDay()+6)%7;
@@ -5882,24 +5955,25 @@ function renderCalendar(){
     const name=s?s.name:"?";
     const moved=!!occ.movedFrom;
     const bw=occIsBiweekly(occ);
-    const label=(time?time+" ":"")+name+(occ.topic?" · "+occ.topic:"")+(moved?" (moved)":"");
-    const labelHtml=(time?"<span class=\"cal-time\">"+time+"</span> ":"")+"<span class=\"cal-name\">"+escAttr(name+(occ.topic?" · "+occ.topic:"")+(moved?" (moved)":""))+(bw?" <span class='cal-bw-badge'>2W</span>":"")+"</span>";
-    const safeLabel=escAttr(label+(bw?" · biweekly":"")+(conflicted&&conflicted.has(occ.id)?" · time conflict":""));
+    const movedTag=moved?" ("+tx("moved|tag")+")":"";
+    const label=(time?time+" ":"")+name+(occ.topic?" · "+occ.topic:"")+movedTag;
+    const labelHtml=(time?"<span class=\"cal-time\">"+time+"</span> ":"")+"<span class=\"cal-name\">"+escAttr(name+(occ.topic?" · "+occ.topic:"")+movedTag)+(bw?" <span class='cal-bw-badge'>2W</span>":"")+"</span>";
+    const safeLabel=escAttr(label+(bw?" · "+tx("biweekly|tag"):"")+(conflicted&&conflicted.has(occ.id)?" · "+tx("time conflict"):""));
     const isCancelled=occ.status==="cancelled"||occ.status==="cancelpaid";
     const isCompleted=!!occ.completed&&!isCancelled;
     const hasConflict=conflicted&&conflicted.has(occ.id);
     const chipCls="cal-event"+(isCancelled?" cancelled-chip":isCompleted?" completed":"")+(hasConflict?" conflict-chip":"");
     const dragPayload=escAttr(JSON.stringify({sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,isVirtual:!!occ.isVirtual,lessonId:occ.isVirtual?null:occ.id}));
     return "<div class=\""+chipCls+"\" draggable=\"true\" data-payload=\""+dragPayload+"\" ondragstart=\"calDragStart(event,this)\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
-      +(hasConflict?"<span class=\"cal-conflict-dot\" title=\"Times overlap\">⚠</span>":"")
-      +(gcalDiffKeys.has(occ.date+"|"+occ.sid)?"<span class=\"cal-gdot\" title=\"Differs from Google Calendar\"></span>":"")
+      +(hasConflict?"<span class=\"cal-conflict-dot\" title=\""+tx("Times overlap")+"\">⚠</span>":"")
+      +(gcalDiffKeys.has(occ.date+"|"+occ.sid)?"<span class=\"cal-gdot\" title=\""+tx("Differs from Google Calendar")+"\"></span>":"")
       +"<span class=\"cal-event-label\">"+labelHtml+"</span>"
-      +"<label class=\"cal-chk\" title=\"Mark this class done\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\">"
+      +"<label class=\"cal-chk\" title=\""+tx("Mark this class done")+"\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\">"
       +"<input type=\"checkbox\" class=\"cal-event-check\""+(occ.completed?" checked":"")+" onclick=\"event.stopPropagation();toggleOccCompleted('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\" ondragstart=\"event.preventDefault();event.stopPropagation()\"/></label>"
       +"</div>";
   }
   function buildMoreBtn(dateStr,extra){
-    return "<button class=\"cal-more-btn\" onclick=\"event.stopPropagation();calShowDayList('"+dateStr+"')\">+"+extra+" more</button>";
+    return "<button class=\"cal-more-btn\" onclick=\"event.stopPropagation();calShowDayList('"+dateStr+"')\">"+tx("+{n} more",{n:extra})+"</button>";
   }
   function buildDayCell(cell){
     const dayOccs=cell.otherMonth?[]:getOccurrencesForDate(cell.date,sid||null);
@@ -5910,8 +5984,8 @@ function renderCalendar(){
     const cls="cal-day"+(cell.otherMonth?" other-month":"");
     const numCls="cal-daynum"+(isToday?" today":"");
     // Weekday name: hidden in the month grid (the header row says it), shown in the phone list.
-    const dow=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(cell.date+"T00:00").getDay()];
-    return "<div class=\""+cls+"\" data-date=\""+cell.date+"\" ondragover=\"event.preventDefault()\" ondrop=\"calDayDrop(event,'"+cell.date+"')\" ondblclick=\"calAddLessonOnDate('"+cell.date+"')\" title=\"Double-click to add · drag a class here to move it\">"
+    const dow=DAY_SHORT[["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(cell.date+"T00:00").getDay()]];
+    return "<div class=\""+cls+"\" data-date=\""+cell.date+"\" ondragover=\"event.preventDefault()\" ondrop=\"calDayDrop(event,'"+cell.date+"')\" ondblclick=\"calAddLessonOnDate('"+cell.date+"')\" title=\""+tx("Double-click to add · drag a class here to move it")+"\">"
       +"<div class=\""+numCls+"\">"+cell.dnum+"</div><span class=\"cal-dow\">"+dow+"</span>"
       +eventsHtml+moreHtml
       +"</div>";
@@ -5939,7 +6013,7 @@ function calDayDrop(ev,targetDate){
   if(!data||!data.sid)return;
   if(data.date===targetDate)return;
   const conflict=lessons.find(l=>l.sid===data.sid&&l.date===targetDate&&Math.abs((l.dur||0)-data.dur)<0.01);
-  if(conflict){alert("This student already has a class on that date. Move skipped.");return;}
+  if(conflict){alert(tx("This student already has a class on that date. Move skipped."));return;}
   materialiseUnclaimedSlots(data.sid,targetDate);   // the day's own class keeps its slot
   if(data.isVirtual){
     const s=gs(data.sid);
@@ -5976,7 +6050,7 @@ function calShowDayList(dateStr){
     const time=calTimeLabel(occ);
     return (time?time+" — ":"")+(s?s.name+" / "+s.k:"?")+(occ.topic?" ("+occ.topic+")":"");
   });
-  alert(dateStr+"\n\n"+lines.join("\n")+"\n\nClick any event chip in the calendar to edit it.");
+  alert(dateStr+"\n\n"+lines.join("\n")+"\n\n"+tx("Click any event chip in the calendar to edit it."));
 }
 
 // ═══════════════════════════════════════════════
@@ -5985,7 +6059,7 @@ function calShowDayList(dateStr){
 function renderPayments(){
   const mon=document.getElementById("pm-mon")?.value||tm();
   const mlbl=document.getElementById("pm-mlbl");
-  if(mlbl)mlbl.textContent=new Date(mon+"-01").toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+  if(mlbl)mlbl.textContent=new Date(mon+"-01").toLocaleDateString(LOCALE,{month:"long",year:"numeric"});
   let totE=0,totP=0,totC=0,totH=0,totCH=0,totCA=0;
   // Archived students are listed only when they have lessons this month (e.g. a one-off class
   // before they left) — those lessons are real money and the Dashboard counts them, so the
@@ -5994,33 +6068,33 @@ function renderPayments(){
   const oi=otherIncome(mon);totE+=oi;totP+=oi;
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   renderPinState();
-  set("pm-ex",won(totE));set("pm-pd",won(totP));set("pm-rm",won(Math.max(0,totE-totP)));set("pm-hr",fmtHoursPlain(totH)+" hrs");
+  set("pm-ex",won(totE));set("pm-pd",won(totP));set("pm-rm",won(Math.max(0,totE-totP)));set("pm-hr",tx("{h} hrs",{h:fmtHoursPlain(totH)}));
   const cnEl=document.getElementById("pm-cn");
   if(cnEl)cnEl.innerHTML=totC
-    ?`${totC} lessons<div style="font-size:11px;font-weight:500;color:var(--txt3);margin-top:2px">${fmtHours(totCH)} · ${won(totCA)}</div>`
-    :"0 lessons";
+    ?`${tx("{n} lessons",{n:totC})}<div style="font-size:11px;font-weight:500;color:var(--txt3);margin-top:2px">${fmtHours(totCH)} · ${won(totCA)}</div>`
+    :tx("{n} lessons",{n:0});
   const pct=totE>0?Math.round(totP/totE*100):0;
   const pb=document.getElementById("pm-bar");if(pb)pb.style.width=pct+"%";
-  const pl=document.getElementById("pm-lbl");if(pl)pl.textContent=`${won(totP)} collected of ${won(totE)} (${pct}%)`;
+  const pl=document.getElementById("pm-lbl");if(pl)pl.textContent=tx("{paid} collected of {exp}",{paid:won(totP),exp:won(totE)})+` (${pct}%)`;
   // Student rows
   document.getElementById("pm-rows").innerHTML=ss.map(({s,c})=>`<div class="pr">
     <div>
-      <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div>
-      <div class="cell-muted">${s.k} · ${s.sched}</div>
+      <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>
+      <div class="cell-muted">${s.k} · ${schedLabel(s.sched)}</div>
     </div>
-    <div class="tm" style="text-align:center" title="lessons · hours" data-l="Lessons">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
-    <div class="tm" style="text-align:center;color:var(--txt3)" data-l="Cancelled">${c.cancelled||"—"}</div>
-    <div class="tm" data-l="Expected">${won(c.exp)}</div>
-    <div class="tm" data-l="Paid">${won(c.paidT)}</div>
-    <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}" data-l="Remaining">${c.diff>0?won(c.diff):"—"}</div>
+    <div class="tm" style="text-align:center" title="${tx("lessons · hours")}" data-l="${tx("Lessons")}">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
+    <div class="tm" style="text-align:center;color:var(--txt3)" data-l="${tx("Cancelled")}">${c.cancelled||"—"}</div>
+    <div class="tm" data-l="${tx("Expected")}">${won(c.exp)}</div>
+    <div class="tm" data-l="${tx("Paid")}">${won(c.paidT)}</div>
+    <div class="tm" style="color:${c.diff>0?"var(--red)":"var(--txt3)"}" data-l="${tx("Remaining")}">${c.diff>0?won(c.diff):"—"}</div>
     <div class="pr-status">
-      ${c.count===0&&!c.cancelled?'<span class="badge bc">No lessons</span>':bdg(c.ov)}
+      ${c.count===0&&!c.cancelled?'<span class="badge bc">'+tx("No lessons")+'</span>':bdg(c.ov)}
       ${c.diff>0
-        ?`<button class="btn btn-xs btn-p pm-act" onclick="markAllPaid('${s.id}','${mon}')" title="Mark every unpaid lesson this month as paid"><i class="ti ti-check"></i><span class="btn-lbl"> All paid</span></button>`
+        ?`<button class="btn btn-xs btn-p pm-act" onclick="markAllPaid('${s.id}','${mon}')" title="${tx("Mark every unpaid lesson this month as paid")}"><i class="ti ti-check"></i><span class="btn-lbl"> ${tx("All paid")}</span></button>`
         :c.paidT>0
-          ?`<button class="btn btn-xs pm-act" onclick="markAllUnpaid('${s.id}','${mon}')" title="Undo — mark this month's paid lessons as unpaid again"><i class="ti ti-arrow-back-up"></i><span class="btn-lbl"> Undo paid</span></button>`
+          ?`<button class="btn btn-xs pm-act" onclick="markAllUnpaid('${s.id}','${mon}')" title="${tx("Undo — mark this month's paid lessons as unpaid again")}"><i class="ti ti-arrow-back-up"></i><span class="btn-lbl"> ${tx("Undo paid")}</span></button>`
           :`<span class="pm-act"></span>`}
-      ${c.exp>0?`<button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')" title="Copy a payment-request message for this student"><i class="ti ti-copy"></i><span class="btn-lbl"> Request payment</span></button>`:'<span class="pm-req"></span>'}
+      ${c.exp>0?`<button class="btn btn-xs pm-req" onclick="copyPayMsg('${s.id}','${mon}')" title="${tx("Copy a payment-request message for this student")}"><i class="ti ti-copy"></i><span class="btn-lbl"> ${tx("Request payment")}</span></button>`:'<span class="pm-req"></span>'}
     </div>
   </div>`).join("");
   renderIncomeCard(mon);
@@ -6033,22 +6107,22 @@ function renderIncomeCard(mon){
   const box=document.getElementById("pm-income-body");if(!box)return;
   const list=incomeFor(mon);
   if(!list.length){
-    box.innerHTML='<div class="u-hint">Nothing for this month yet. Anything you were paid that is not a lesson fee — a platform bonus, for instance — goes here, and counts towards Expected and Collected above.</div>';
+    box.innerHTML='<div class="u-hint">'+tx("Nothing for this month yet. Anything you were paid that is not a lesson fee — a platform bonus, for instance — goes here, and counts towards Expected and Collected above.")+'</div>';
     return;
   }
   box.innerHTML=list.map(r=>`<div class="inc-row">
-      <div class="cell-main">${escapeHTMLBasic(r.note||"Other income")}</div>
+      <div class="cell-main">${escapeHTMLBasic(r.note||tx("Other income"))}</div>
       <div class="tm">${won(+r.amt||0)}</div>
-      <button class="bic" onclick="openIncomeModal('${r.id}')" title="Edit this entry"><i class="ti ti-pencil"></i></button>
+      <button class="bic" onclick="openIncomeModal('${r.id}')" title="${tx("Edit this entry")}"><i class="ti ti-pencil"></i></button>
     </div>`).join("")
-    +`<div class="inc-row inc-tot"><div class="cell-main">Total</div><div class="tm">${won(otherIncome(mon))}</div><span></span></div>`;
+    +`<div class="inc-row inc-tot"><div class="cell-main">${tx("Total")}</div><div class="tm">${won(otherIncome(mon))}</div><span></span></div>`;
 }
 function openIncomeModal(id){
   editIncomeId=id||null;
   const rec=id?income.find(r=>r.id===id):null;
   const mon=document.getElementById("pm-mon")?.value||tm();
   const set=(i,v)=>{const e=document.getElementById(i);if(e)e.value=v;};
-  const t=document.getElementById("im-title");if(t)t.textContent=rec?"Edit other income":"Add other income";
+  const t=document.getElementById("im-title");if(t)t.textContent=rec?tx("Edit other income"):tx("Add other income");
   set("im-month",rec?rec.month:mon);
   set("im-amt",rec?(rec.amt||""):"");
   set("im-note",rec?(rec.note||""):"");
@@ -6059,8 +6133,8 @@ function saveIncome(){
   const month=document.getElementById("im-month")?.value||"";
   const amt=Math.round(+document.getElementById("im-amt")?.value||0);
   const note=(document.getElementById("im-note")?.value||"").trim();
-  if(!month){alert("Pick a month.");return;}
-  if(!(amt>0)){alert("Enter an amount greater than 0.");return;}
+  if(!month){alert(tx("Pick a month."));return;}
+  if(!(amt>0)){alert(tx("Enter an amount greater than 0."));return;}
   if(editIncomeId){
     const rec=income.find(r=>r.id===editIncomeId);
     if(rec){rec.month=month;rec.amt=amt;rec.note=note;}
@@ -6073,18 +6147,18 @@ function saveIncome(){
   const inp=document.getElementById("pm-mon");
   if(inp&&inp.value!==month)inp.value=month;
   renderPayments();renderDash();
-  showToast("Saved");
+  showToast(tx("Saved"));
 }
 function deleteIncome(){
   if(!editIncomeId)return;
   const idx=income.findIndex(r=>r.id===editIncomeId);
   if(idx<0)return;
-  if(!confirm("Delete this entry?"))return;
+  if(!confirm(tx("Delete this entry?")))return;
   income.splice(idx,1);        // splice in place — the sync layer holds this very array
   if(!save())return;
   closeModal("mo-income");
   renderPayments();renderDash();
-  showToast("Deleted");
+  showToast(tx("Deleted"));
 }
 
 function pmChangeMonth(delta){
@@ -6167,12 +6241,12 @@ function renderPaymentCalendar(mon){
       +"<span class=\"cal-name\">"+escAttr(name)+"</span> <span class=\"cal-amt\">"+won(occ.amt)+"</span>"
       +(subLine?"<span class=\"pay-chip-sub\">"+escAttr(subLine)+"</span>":"")
       +"</span>"
-      +"<label class=\"cal-chk\" title=\"Mark this lesson paid\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\">"
+      +"<label class=\"cal-chk\" title=\""+tx("Mark this lesson paid")+"\" onclick=\"event.stopPropagation()\" onmousedown=\"event.stopPropagation()\">"
       +"<input type=\"checkbox\" class=\"cal-event-check\""+(checked?" checked":"")+(disabled?" disabled":"")+" onclick=\"event.stopPropagation();togglePaymentPaid('"+occ.id+"',this.checked)\" onmousedown=\"event.stopPropagation()\"/></label>"
       +"</div>";
   }
   function buildMoreBtn(dateStr,extra){
-    return "<button class=\"cal-more-btn\" onclick=\"event.stopPropagation();calShowDayList('"+dateStr+"')\">+"+extra+" more</button>";
+    return "<button class=\"cal-more-btn\" onclick=\"event.stopPropagation();calShowDayList('"+dateStr+"')\">"+tx("+{n} more",{n:extra})+"</button>";
   }
   function buildDayCell(cell){
     const dayOccs=cell.otherMonth?[]:getOccurrencesForDate(cell.date,null);
@@ -6230,8 +6304,8 @@ function renderCurriculum(){
   // The detail cells carry their column name (data-l) and a "cur-empty" mark when blank, so the
   // phone card can show "Workbook  Write Right 1" and leave out what a topic doesn't have.
   // The label is the column's name as the user sees it in the heading (a custom name wins).
-  const dcell=(colId,label,val,cls)=>`<td class="${cls}${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,label))}">${val||"—"}</td>`;
-  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="Edit"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="Delete"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>No curriculum items found</p></div></td></tr>`;
+  const dcell=(colId,label,val,cls)=>`<td class="${cls}${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,tx(label)))}">${val||"—"}</td>`;
+  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${tx(c.month)}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -9702,14 +9776,14 @@ document.addEventListener("DOMContentLoaded",()=>{
 </div>
 <div class="mo" id="mo-income">
   <div class="mb" style="max-width:420px">
-    <div class="mt"><span id="im-title">Other income</span><button class="bic" onclick="closeModal('mo-income')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="im-title" data-i18n>Other income</span><button class="bic" onclick="closeModal('mo-income')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <div style="padding:14px 16px 0">
-      <p class="u-hint" style="margin-bottom:12px">Money you were paid that is not a lesson fee — a platform bonus, for example. It is treated as already received, so it adds to both Expected and Collected and never appears as outstanding.</p>
-      <div class="fg"><label>Month</label><input id="im-month" type="month"/></div>
-      <div class="fg"><label>Amount (₩)</label><input id="im-amt" type="number" step="1000" min="0" placeholder="30000"/></div>
-      <div class="fg"><label>What for</label><input id="im-note" type="text" maxlength="60" placeholder="Platform bonus"/></div>
+      <p class="u-hint" style="margin-bottom:12px" data-i18n>Money you were paid that is not a lesson fee — a platform bonus, for example. It is treated as already received, so it adds to both Expected and Collected and never appears as outstanding.</p>
+      <div class="fg"><label data-i18n>Month</label><input id="im-month" type="month"/></div>
+      <div class="fg"><label data-i18n>Amount (₩)</label><input id="im-amt" type="number" step="1000" min="0" placeholder="30000"/></div>
+      <div class="fg"><label data-i18n>What for</label><input id="im-note" type="text" maxlength="60" placeholder="Platform bonus" data-i18n-ph/></div>
     </div>
-    <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()"><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')">Cancel</button><button class="btn btn-p" onclick="saveIncome()">Save</button></div>
+    <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()" data-i18n><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveIncome()" data-i18n>Save</button></div>
   </div>
 </div>
 

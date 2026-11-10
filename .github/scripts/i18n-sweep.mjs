@@ -29,7 +29,7 @@ const URL = arg("--url", "http://127.0.0.1:8777/index.html");
 const ALL_PAGES = ["dashboard", "students", "sessions", "reading", "payments", "reports", "curriculum", "books", "booklib", "material", "settings"];
 const PAGES = arg("--pages", "").split(",").filter(Boolean).length ? arg("--pages", "").split(",") : ALL_PAGES;
 // Dialogs opened on each page (the function that opens it, run in the page).
-const MODALS = { students: ["openStudentModal()"], sessions: ["openLessonModal()"], dashboard: [] };
+const MODALS = { students: ["openStudentModal()"], sessions: ["openLessonModal()"], curriculum: ["openCurrModal()"], payments: ["openIncomeModal()"], dashboard: [] };
 
 // Words that are the same in both languages and may stay as they are.
 const SAME = /^(AR|L\d+|Lexile|ISBN|PIN|API|OK|PDF|CSV|JSON|URL|ID|Google|Firebase|ClassDesk|CLASSDESK|English|한국어|KST|₩.*|[\d\s.,:%/()+\-–—·•…*→]*|v\d+.*|AM|PM|WB|AMBER LIBRARY|e\.g\..*)$/;
