@@ -16,6 +16,13 @@
      amber-studydesk.netlify.app on 2026-11-04). See README "주소(origin) 규칙". -->
 <link rel="manifest" href="manifest.webmanifest"/>
 <meta name="theme-color" content="#ffffff"/>
+<script>
+/* v137: apply the saved appearance before the page paints (no white flash in dark mode). Per device. */
+(function(){var t="light";try{t=localStorage.getItem("classdesk_theme")||"light";}catch(e){}
+  var dark=t==="dark"||(t==="auto"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-theme",dark?"dark":"light");
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#161e2e":"#ffffff");})();
+</script>
 <link id="fav-link" rel="icon" type="image/png" href="icons/favicon-32.png?v=114"/>
 <link id="apple-icon-link" rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=114"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -43,6 +50,13 @@
   --amb:#d97706;--amb-l:#fef3c7;
   --blu:#2563eb;--blu-l:#dbeafe;
   --pur:#7c3aed;--pur-l:#ede9fe;
+  /* v137: text on the tinted badges/chips, plus the few colours that used to be written out in full —
+     tokens now so dark mode can swap them (see :root[data-theme="dark"] below). Same values as before. */
+  --amb-t:#92400e;--amb-bdr:#fcd34d;--red-t:#991b1b;--red-h:#fca5a5;--blu-t:#1e40af;--blu-bdr:#bfdbfe;--blu-ll:#eff6ff;
+  --pur-t:#5b21b6;--pur-tt:#6d28d9;--cyn-l:#cffafe;--cyn-t:#0e7490;--ok-h:#bbf7d0;
+  --ind:#6366f1;--ind-l:#e0e7ff;--ind-t:#3730a3;--day-out:#fafafa;
+  --chip-red-t:#7f1d1d;--chip-amb-t:#78350f;--chip-off:#94a3b8;
+  color-scheme:light;
   /* Font sizes */
   --fs-xs:10px;--fs-sm:11px;--fs-base:12px;--fs-md:13px;--fs-lg:15px;--fs-xl:17px;--fs-2xl:22px;
   /* Spacing scale */
@@ -54,6 +68,27 @@
   /* Shadows */
   --sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 16px rgba(0,0,0,.08);--shl:0 10px 40px rgba(0,0,0,.12);
 }
+/* v137: dark mode. Settings → Templates → Appearance sets data-theme on <html> (per device, classdesk_theme);
+   "Match the device" follows prefers-color-scheme. Only tokens change here — any new colour belongs in
+   :root above with its dark value here. Text greys keep ≥4.5:1 on every surface (txt3 on surf3 4.35). */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0d1321;--surf:#161e2e;--surf2:#1d2738;--surf3:#283447;
+  --bdr:#283447;--bdr2:#3a475c;
+  --row-hover:#1b2436;--pin-shade:rgba(0,0,0,.55);--edge-fade:rgba(0,0,0,.35);
+  --txt:#e6ebf2;--txt2:#b6c0ce;--txt3:#8d99ab;
+  --pri:#16a34a;--pri-h:#1fb257;--pri-l:#12341f;--pri-t:#86efac;
+  --ok:#22c55e;--ok-l:#12341f;--ok-t:#86efac;--ok-h:#1a4d2e;
+  --red:#f87171;--red-l:#3d1a1a;--red-t:#fca5a5;--red-h:#5c2323;
+  --amb:#fbbf24;--amb-l:#3a2a0c;--amb-t:#fcd34d;--amb-bdr:#6b4e12;
+  --blu:#60a5fa;--blu-l:#172554;--blu-t:#93c5fd;--blu-bdr:#1e3a8a;--blu-ll:#14203d;
+  --pur:#a78bfa;--pur-l:#2e1f5e;--pur-t:#c4b5fd;--pur-tt:#c4b5fd;
+  --cyn-l:#0b3340;--cyn-t:#67e8f9;
+  --ind:#818cf8;--ind-l:#232a5c;--ind-t:#c7d2fe;--day-out:#111827;
+  --chip-red-t:#fca5a5;--chip-amb-t:#fcd34d;--chip-off:#5b6678;
+  --sh:0 1px 3px rgba(0,0,0,.4);--shm:0 4px 16px rgba(0,0,0,.45);--shl:0 10px 40px rgba(0,0,0,.6);
+}
+:root[data-theme="dark"] img{opacity:.92}   /* covers and logos a touch less glaring */
 /* ── UTILITY CLASSES ─────────────────────────────────────────── */
 .u-mb-0{margin-bottom:0!important}
 .u-mt-0{margin-top:0!important}
@@ -188,17 +223,17 @@ tbody tr:hover td{background:var(--row-hover)}
 /* BADGES */
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;letter-spacing:.02em}
 .bp{background:var(--ok-l);color:var(--ok-t)}
-.bpa{background:var(--amb-l);color:#92400e}
-.bu{background:var(--red-l);color:#991b1b}
-.bc{background:#f1f5f9;color:#64748b}
-.bpr{background:var(--blu-l);color:#1e40af}
-.bpo{background:var(--pur-l);color:#5b21b6}
-.bap{background:#cffafe;color:#0e7490}
-.bcp{background:#cffafe;color:#0e7490;text-decoration:line-through}
-.bns{background:#f1f5f9;color:#64748b}
-.bip{background:var(--blu-l);color:#1e40af}
+.bpa{background:var(--amb-l);color:var(--amb-t)}
+.bu{background:var(--red-l);color:var(--red-t)}
+.bc{background:var(--surf2);color:var(--txt3)}
+.bpr{background:var(--blu-l);color:var(--blu-t)}
+.bpo{background:var(--pur-l);color:var(--pur-t)}
+.bap{background:var(--cyn-l);color:var(--cyn-t)}
+.bcp{background:var(--cyn-l);color:var(--cyn-t);text-decoration:line-through}
+.bns{background:var(--surf2);color:var(--txt3)}
+.bip{background:var(--blu-l);color:var(--blu-t)}
 .bd{background:var(--ok-l);color:var(--ok-t)}
-.bsk{background:var(--red-l);color:#991b1b}
+.bsk{background:var(--red-l);color:var(--red-t)}
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 14px;border-radius:var(--r);font-size:var(--fs-base);font-weight:500;cursor:pointer;border:1px solid var(--bdr2);background:var(--surf);color:var(--txt);font-family:var(--font);transition:all .12s;white-space:nowrap}
 .btn:hover{background:var(--surf2)}
@@ -414,7 +449,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .book-modal .blm-reading-level p{font-size:11px;color:var(--txt3);margin-top:10px}
 /* Level badge — read-only display of the color/level auto-derived from AR Level */
 .book-modal .blm-level-badge{display:flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--surf2);font-size:12px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.book-modal .blm-level-badge.has-level{color:var(--txt);background:#fff}
+.book-modal .blm-level-badge.has-level{color:var(--txt);background:var(--surf)}
 .book-modal .blm-level-badge .dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
 .book-modal .blm-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--bdr)}
 .book-modal .blm-actions .btn{height:36px;font-size:var(--fs-base);font-weight:500;border-radius:var(--r);padding:0 14px;white-space:nowrap}
@@ -431,7 +466,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .book-modal .blm-cover-tools .btn{font-size:11px;padding:5px 10px}
 .book-modal .blm-cover-box img{transition:transform .2s ease}
 /* PDF upload: unified dropzone (click / paste / drag / drop) */
-.book-modal .blm-pdf-dropzone{display:flex;align-items:center;justify-content:space-between;gap:8px;height:36px;padding:0 12px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;cursor:pointer;transition:border-color .12s,background .12s;outline:none}
+.book-modal .blm-pdf-dropzone{display:flex;align-items:center;justify-content:space-between;gap:8px;height:36px;padding:0 12px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--surf);cursor:pointer;transition:border-color .12s,background .12s;outline:none}
 .book-modal .blm-pdf-dropzone:hover,.book-modal .blm-pdf-dropzone:focus{border-color:var(--bdr2);background:var(--surf2)}
 .book-modal .blm-pdf-dropzone.is-dragover{border-color:var(--grn);background:var(--grn-l);border-style:dashed}
 .book-modal .blm-pdf-fname{font-size:12px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1;pointer-events:none}
@@ -532,7 +567,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .stab-btn.active{color:var(--grn);border-bottom-color:var(--grn)}
 /* Column customization editor */
 .col-editor{display:flex;flex-direction:column;gap:4px;border:1px solid var(--bdr);border-radius:var(--r);padding:6px;background:var(--surf2);max-width:600px}
-.col-editor .col-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid var(--bdr);border-radius:var(--r);user-select:none;font-size:13px;transition:box-shadow .12s,transform .12s}
+.col-editor .col-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);user-select:none;font-size:13px;transition:box-shadow .12s,transform .12s}
 .col-editor .col-item:hover{border-color:var(--bdr2)}
 .col-editor .col-item.dragging{opacity:.4}
 .col-editor .col-item.drop-target-top{border-top:2px solid var(--grn)}
@@ -542,7 +577,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .col-editor .col-item input[type=checkbox]{cursor:pointer;width:16px;height:16px;flex-shrink:0}
 .col-editor .col-item .col-label-input{flex:1;border:1px solid transparent;background:transparent;padding:4px 6px;border-radius:4px;font-size:13px;color:var(--txt);font-family:var(--font);min-width:0}
 .col-editor .col-item .col-label-input:hover{background:var(--surf2)}
-.col-editor .col-item .col-label-input:focus{background:#fff;border-color:var(--grn);outline:none}
+.col-editor .col-item .col-label-input:focus{background:var(--surf);border-color:var(--grn);outline:none}
 .col-editor .col-item.hidden-col .col-label-input{color:var(--txt3);font-style:italic}
 .col-editor .col-item .col-type-tag{font-size:10px;background:var(--surf2);color:var(--txt3);padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;flex-shrink:0}
 .col-editor .col-item .col-item-btn{background:none;border:none;color:var(--txt3);cursor:pointer;padding:4px 6px;border-radius:4px;display:inline-flex;align-items:center}
@@ -607,7 +642,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .sb2{width:4px;height:28px;border-radius:2px;flex-shrink:0}
 /* STUDENT GRID */
 .std-archived{opacity:.55}
-.std-arch-badge{display:inline-block;font-size:9px;font-weight:700;background:#e2e8f0;color:#475569;padding:1px 5px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.std-arch-badge{display:inline-block;font-size:9px;font-weight:700;background:var(--surf3);color:var(--txt2);padding:1px 5px;border-radius:4px;margin-left:6px;vertical-align:middle}
 .std-row{display:grid;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr);gap:8px;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 76px;transition:background .1s;cursor:pointer}
 .std-row:last-child{border-bottom:none}
 .std-row:hover{background:var(--row-hover)}
@@ -805,10 +840,10 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .sw-btn{height:24px;padding:0 8px;border-radius:6px;border:1px solid var(--bdr2);background:var(--surf2);cursor:pointer;font-size:11px;font-weight:600;font-family:var(--font);color:var(--txt2);transition:all .12s;white-space:nowrap}
 .sw-btn:hover{background:var(--surf3)}
 .sw-btn.start{border-color:var(--grn);color:var(--grn);background:var(--grn-l)}
-.sw-btn.start:hover{background:#bbf7d0}
+.sw-btn.start:hover{background:var(--ok-h)}
 .sw-btn.pause{border-color:var(--amb);color:var(--amb);background:var(--amb-l)}
 .sw-btn.stop{border-color:var(--red);color:var(--red);background:var(--red-l)}
-.sw-btn.stop:hover{background:#fca5a5}
+.sw-btn.stop:hover{background:var(--red-h)}
 
 /* CALENDAR */
 .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surf2);border-bottom:1px solid var(--bdr)}
@@ -816,20 +851,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));width:100%}
 .cal-day{min-height:108px;min-width:0;overflow:hidden;border-right:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:6px;display:flex;flex-direction:column;gap:3px;position:relative;box-sizing:border-box}
 .cal-day:nth-child(7n){border-right:none}
-.cal-day.other-month{background:#fafafa}
+.cal-day.other-month{background:var(--day-out)}
 .cal-day.other-month .cal-daynum{color:var(--txt3);opacity:.5}
 .cal-daynum{font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:2px}
 .cal-daynum.today{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--grn);color:#fff}
 .cal-event{font-size:10.5px;padding:2px 4px 2px 6px;border-radius:5px;cursor:pointer;border-left:3px solid;transition:filter .1s;line-height:1.5;display:flex;align-items:center;gap:4px;width:100%;min-width:0;box-sizing:border-box}
 .cal-event:hover{filter:brightness(0.95)}
-.cal-event{background:#e0e7ff;border-color:#6366f1;color:#3730a3}
+.cal-event{background:var(--ind-l);border-color:var(--ind);color:var(--ind-t)}
 .cal-event.completed{background:var(--ok-l);border-color:var(--ok);color:var(--ok-t)}
-.cal-event.partial-chip{background:#fef3c7;border-color:#d97706;color:#78350f}
-.cal-event.pay-unpaid{background:#fee2e2;border-color:#dc2626;color:#7f1d1d}
-.cal-event.cancelled-chip{background:#f1f5f9;border-color:#94a3b8;color:#64748b;text-decoration:line-through}
+.cal-event.partial-chip{background:var(--amb-l);border-color:var(--amb);color:var(--chip-amb-t)}
+.cal-event.pay-unpaid{background:var(--red-l);border-color:var(--red);color:var(--chip-red-t)}
+.cal-event.cancelled-chip{background:var(--surf2);border-color:var(--chip-off);color:var(--txt3);text-decoration:line-through}
 .cal-event.conflict-chip{border-color:#f59e0b;box-shadow:inset 3px 0 0 #f59e0b}
-.cal-conflict-dot{color:#d97706;font-size:10px;flex-shrink:0}
-.cal-bw-badge{display:inline-block;font-size:8px;font-weight:700;background:#ede9fe;color:#6d28d9;padding:0 3px;border-radius:3px;margin-left:2px;vertical-align:middle;letter-spacing:.02em}
+.cal-conflict-dot{color:var(--amb);font-size:10px;flex-shrink:0}
+.cal-bw-badge{display:inline-block;font-size:8px;font-weight:700;background:var(--pur-l);color:var(--pur-tt);padding:0 3px;border-radius:3px;margin-left:2px;vertical-align:middle;letter-spacing:.02em}
 .cal-event-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 .cal-event .cal-name{font-weight:500}
 .cal-event .cal-amt::before{content:"· "}
@@ -871,7 +906,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 }
 .cal-more-btn{font-size:10px;color:var(--txt3);background:none;border:none;cursor:pointer;text-align:left;padding:1px 4px;font-family:var(--font)}
 /* GOOGLE CALENDAR COMPARE (v82) */
-.cal-gdot{width:6px;height:6px;border-radius:50%;background:#2563eb;flex-shrink:0}
+.cal-gdot{width:6px;height:6px;border-radius:50%;background:var(--blu);flex-shrink:0}
 .gc-row{display:grid;gap:8px;align-items:center;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 160px}
 .gcf-row{display:grid;gap:8px;align-items:center;grid-template-columns:150px minmax(0,1fr) 150px 130px}
 /* REPORTS (v99) */
@@ -1369,6 +1404,18 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </select>
       </div>
     </div>
+    <!-- Appearance (v137). Per device (classdesk_theme), not synced: a classroom PC and a phone at night differ. -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="ch"><div class="ct" data-i18n><i class="ti ti-moon"></i>Appearance</div></div>
+      <div class="cb p">
+        <p class="u-hint" style="margin-bottom:10px" data-i18n>Light or dark colours on this device. Printed labels and reports always stay light.</p>
+        <select id="theme-sel" style="max-width:320px" onchange="setTheme(this.value)" data-i18n-opts>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="auto">Match the device</option>
+        </select>
+      </div>
+    </div>
     <!-- Workspace (v130): values that used to be fixed for one Korean classroom. All synced settings. -->
     <div class="card" style="margin-bottom:16px" id="ws-card">
       <div class="ch"><div class="ct" data-i18n><i class="ti ti-building-bank"></i>Workspace</div></div>
@@ -1641,7 +1688,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
               <div id="account-email" style="font-size:12px;color:var(--txt2)"></div>
             </div>
           </div>
-          <div style="padding:10px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:12px;color:#1e40af;margin-bottom:14px;line-height:1.5">
+          <div style="padding:10px 12px;background:var(--blu-ll);border:1px solid var(--blu-bdr);border-radius:8px;font-size:12px;color:var(--blu-t);margin-bottom:14px;line-height:1.5">
             <span data-i18n>☁️ Cloud sync on — every device signed in with this account shares the same data.</span><br/>
             <span id="sync-status" style="font-size:11px;color:var(--txt3)"></span>
           </div>
@@ -1806,6 +1853,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>A curriculum column is too narrow to read</dt><dd>Drag the thin line on the right edge of that column's heading — like Google Sheets. Double-click the line to fit the column to its text; the ↔ button at the right end of the heading row resets all widths. Each device remembers its own widths.</dd>
           <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
           <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. Since v129 this Guide has a Korean version too and switches with the rest of the app.</dd>
+          <dt>Can I use a dark screen?</dt><dd>Settings → Templates → <b>Appearance</b>: Light (default), Dark, or "Match the device" (dark when the phone or computer is set to dark, and it changes along with it). It is set per device, so the classroom PC can stay light while your phone is dark. It is not part of a backup, and printed labels and reports always come out light.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>Removing another app from the phone (StudyDesk etc.)</dt><dd>ClassDesk shares its web address (amber67-git.github.io) with older copies of the other apps, and everything stored under one address is wiped together. To remove one of those older apps: phone <b>Settings → Apps</b> → that app → <b>Uninstall</b> only. <b>Never tap "Clear storage" / "Clear site data"</b> — it would erase ClassDesk's data on this phone too (signing back in brings the cloud copy back, but anything not yet synced is lost). Afterwards, typing <b>chrome://webapks</b> in Chrome should still list ClassDesk, with the Manifest Id https://amber67-git.github.io/classdesk/app (a copy installed before v116 shows https://amber67-git.github.io/ — see "How do I put ClassDesk on my phone/tablet home screen?" above).</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
@@ -1814,6 +1862,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v137 · 2026-11-11</dt><dd><b>Dark mode:</b> Settings → Templates → <b>Appearance</b> offers Light, Dark or Match the device. It switches straight away, is kept per device (not synced, not in backups), and printing still uses light colours. Light mode looks exactly as before.</dd>
           <dt>v136 · 2026-11-10</dt><dd><b>Easier to read, easier by keyboard:</b> the light grey hint text (dates under names, column notes, empty-list hints) is darker so it reads clearly on every background, and when you move around with the <kbd>Tab</kbd> key the button, menu item or checkbox you are on now has a green ring. Clicking or tapping shows no ring, so nothing changes for mouse and touch use.</dd>
           <dt>v135 · 2026-11-10</dt><dd><b>Tidier small screens:</b> on a tablet, split screen or phone the Payments figures sit 2 + 2 + 1 — the fifth card (Hours taught) now spans the row instead of leaving a blank half — and an empty To-Do list on the Dashboard is a one-line hint instead of a large empty box. Also fixed: when typing Korean, the Enter that finishes a syllable no longer saves a To-Do or starts a search before you are done.</dd>
           <dt>v134 · 2026-11-10</dt><dd><b>Hide columns in more lists:</b> unticking a column in Settings → Custom Fields now hides it on the <b>Students</b>, <b>Workbooks</b> and <b>Material</b> lists too (on phones it leaves the cards), on top of any column widths you set. The student's English and Korean names can't be hidden. Payments columns can be renamed but not hidden yet.</dd>
@@ -1847,7 +1896,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v136</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v137</b> · FAQ current as of: <b>2026-11-11</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -1999,6 +2048,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>커리큘럼 열이 좁아서 잘 안 보여요</dt><dd>그 열 제목 오른쪽 끝의 가는 선을 끌어 넓히세요 — Google 스프레드시트처럼요. 선을 두 번 누르면 글에 맞게 너비가 맞춰지고, 제목 줄 오른쪽 끝의 ↔ 버튼은 모든 너비를 처음으로 되돌립니다. 너비는 기기마다 따로 기억합니다.</dd>
           <dt>스프레드시트에 있는 커리큘럼을 가져오려면요?</dt><dd>커리큘럼 → <b>가져오기</b>. Google 스프레드시트에서 제목 줄까지 포함해 행을 선택하고 복사(Ctrl+C)한 뒤 상자에 붙여 넣거나, 파일 → 다운로드 → CSV로 받은 파일을 고르세요. 열은 제목으로 찾습니다: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note. 연도만 있는 행(2025)이 그 연도의 시작이 되고, 주제 칸 맨 앞의 "[과학]" 같은 표시는 카테고리가 됩니다. 바꾸기 전에 찾은 내용을 창에서 먼저 보여 주고, 앱에 이미 있는 주제는 빈 칸만 채우며(중복으로 만들지 않음), 가져온 직후에는 되돌리기도 할 수 있습니다.</dd>
           <dt>앱을 한국어로 쓸 수 있나요?</dt><dd>설정 → 템플릿 → <b>언어</b>: "기기 언어에 맞춤"(기본), English, 한국어 중에서 고릅니다. 고르면 앱이 새 언어로 다시 열립니다. 앱의 말만 바뀌고, 학생 이름·메모·메시지 템플릿은 입력한 그대로 남습니다. v129부터는 이 설명서도 한국어로 바뀝니다.</dd>
+          <dt>어두운 화면으로 쓸 수 있나요?</dt><dd>설정 → 템플릿 → <b>화면 모드</b>: 밝게(기본), 어둡게, "기기 설정에 맞춤"(휴대폰이나 컴퓨터가 어두운 모드면 어둡게, 기기 설정이 바뀌면 함께 바뀝니다). 기기마다 따로 정하므로 교실 PC는 밝게, 휴대폰은 어둡게 둘 수 있습니다. 백업 파일에는 들어가지 않고, 인쇄하는 라벨과 보고서는 항상 밝게 나옵니다.</dd>
           <dt>앱 아이콘을 내 로고로 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>앱 로고</b>. 로그인한 모든 기기에서 사이드바 로고와 브라우저 탭 아이콘이 바뀝니다. 아이폰/아이패드에서는 로고를 정한 <i>뒤에</i> 앱을 홈 화면에 추가하면 홈 화면 아이콘도 바뀝니다. 안드로이드 홈 화면 아이콘은 설치할 때 정해집니다.</dd>
           <dt>휴대폰에서 다른 앱(StudyDesk 등)을 지울 때</dt><dd>ClassDesk는 다른 앱들의 옛 사본과 웹 주소(amber67-git.github.io)를 함께 쓰고, 한 주소에 저장된 것은 한꺼번에 지워집니다. 그런 옛 앱을 지우려면 휴대폰 <b>설정 → 애플리케이션</b> → 그 앱 → <b>삭제</b>만 하세요. <b>"저장공간 지우기" / "사이트 데이터 삭제"는 절대 누르지 마세요</b> — 이 휴대폰의 ClassDesk 데이터도 지워집니다(다시 로그인하면 클라우드 사본이 돌아오지만, 아직 동기화되지 않은 것은 사라집니다). 그 뒤 Chrome에 <b>chrome://webapks</b>를 입력했을 때 ClassDesk가 Manifest Id https://amber67-git.github.io/classdesk/app 으로 그대로 보여야 합니다(v116 전에 설치한 사본은 https://amber67-git.github.io/ 로 보입니다 — 위의 "휴대폰·태블릿 홈 화면에 ClassDesk를 두려면요?" 참고).</dd>
           <dt>휴대폰에서 앱이 깨져 보이거나 옛날 모습이에요</dt><dd>브라우저가 옛 파일을 기억(캐시)하고 있는 것입니다. 주소 뒤에 <b>?v=숫자</b>를 붙여 열거나, Chrome 설정에서 "캐시된 이미지 및 파일"만 지우세요. <b>"쿠키 및 사이트 데이터"는 절대 지우지 마세요</b> — 앱의 데이터가 지워집니다(클라우드 동기화를 켜 두었다면 다시 로그인해서 되살릴 수 있습니다).</dd>
@@ -2007,6 +2057,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v137 · 2026-11-11</dt><dd><b>다크 모드:</b> 설정 → 템플릿 → <b>화면 모드</b>에서 밝게, 어둡게, 기기 설정에 맞춤을 고를 수 있습니다. 바로 바뀌고, 기기마다 따로 저장되며(동기화·백업 안 됨), 인쇄는 그대로 밝게 나옵니다. 밝은 화면은 전과 똑같습니다.</dd>
           <dt>v136 · 2026-11-10</dt><dd><b>더 잘 보이고, 키보드로 쓰기 쉽게:</b> 연한 회색 안내 글씨(이름 아래 날짜, 열 설명, 빈 목록 안내)를 더 진하게 바꿔 어떤 배경에서도 잘 읽힙니다. <kbd>Tab</kbd> 키로 이동하면 지금 선택된 버튼·메뉴·체크박스에 초록 테두리가 보입니다. 마우스로 누르거나 손가락으로 탭할 때는 테두리가 나오지 않아 평소 사용은 그대로입니다.</dd>
           <dt>v135 · 2026-11-10</dt><dd><b>작은 화면 정리:</b> 태블릿·화면 분할·휴대폰에서 수업료 숫자 카드가 2 + 2 + 1로 놓이며, 다섯 번째 카드(수업 시간)가 빈 반쪽을 남기지 않고 한 줄을 다 씁니다. 대시보드의 빈 할 일 목록은 큰 빈 상자 대신 한 줄 안내로 보입니다. 함께 고친 점: 한글을 입력할 때 글자를 완성하려고 누른 Enter 때문에 할 일이 덜 쓴 채 저장되거나 검색이 먼저 시작되던 문제를 고쳤습니다.</dd>
           <dt>v134 · 2026-11-10</dt><dd><b>더 많은 목록에서 열 숨기기:</b> 설정 → 사용자 항목에서 체크를 해제한 열이 이제 <b>학생</b>, <b>교재</b>, <b>교구</b> 목록에서도 숨겨집니다(휴대폰에서는 카드에서 빠짐). 직접 맞춘 열 너비는 그대로입니다. 학생의 영어·한글 이름은 숨길 수 없습니다. 수업료 목록의 열은 이름만 바꿀 수 있고 아직 숨길 수는 없습니다.</dd>
@@ -2039,7 +2090,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v136</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
+          설명서 기준 버전: <b>v137</b> · 자주 묻는 질문 기준일: <b>2026-11-11</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2468,7 +2519,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="fg" id="lm-credit-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--pri-l);border-radius:var(--r);font-size:12px;color:var(--pri-t)">
       <i class="ti ti-arrow-forward-up" style="margin-right:4px"></i><span id="lm-credit-note-text"></span>
     </div>
-    <div class="fg" id="lm-moved-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--amb-l);border-radius:var(--r);font-size:12px;color:#92400e">
+    <div class="fg" id="lm-moved-note" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--amb-l);border-radius:var(--r);font-size:12px;color:var(--amb-t)">
       <i class="ti ti-calendar-event" style="margin-right:4px"></i>
       <span id="lm-moved-text"></span>
       <button class="btn btn-xs" style="margin-left:8px" onclick="revertLessonMove()" data-i18n>Reset to usual time</button>
@@ -2583,7 +2634,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="mf" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn" id="lm-parentnote-btn" onclick="genParentNoteFromModal()" style="display:none" data-i18n><i class="ti ti-copy"></i> Parent note</button>
-        <button class="btn" id="lm-cancelclass-btn" onclick="toggleCancelLesson()" style="display:none;color:#92400e;border-color:#d97706"><i class="ti ti-calendar-off"></i> Cancel class</button>
+        <button class="btn" id="lm-cancelclass-btn" onclick="toggleCancelLesson()" style="display:none;color:var(--amb-t);border-color:var(--amb)"><i class="ti ti-calendar-off"></i> Cancel class</button>
         <button class="btn btn-d" id="lm-delete-btn" onclick="deleteLessonFromModal()" style="display:none" data-i18n><i class="ti ti-trash"></i> Delete</button>
       </div>
       <div style="display:flex;gap:8px;margin-left:auto">
@@ -2909,7 +2960,9 @@ const I18N={ko:{
   // ── settings
   "Templates":"템플릿","Custom Fields":"사용자 항목","Backup":"백업","API Keys":"API 키","Account":"계정","Guide":"설명서",
   "Language":"언어","Menus, buttons and messages. Your own entries — names, notes, templates — are never translated. The app reloads when you change this.":"메뉴·버튼·안내문의 언어입니다. 직접 입력한 내용(이름, 메모, 템플릿)은 번역하지 않습니다. 바꾸면 앱이 다시 열립니다.",
-  "Match the device language":"기기 언어에 맞춤","English":"English","한국어":"한국어",
+  "Match the device language":"기기 언어에 맞춤",
+  "Appearance":"화면 모드","Light":"밝게","Dark":"어둡게","Match the device":"기기 설정에 맞춤",
+  "Light or dark colours on this device. Printed labels and reports always stay light.":"이 기기의 밝은 화면/어두운 화면입니다. 인쇄하는 라벨과 보고서는 항상 밝게 나옵니다.","English":"English","한국어":"한국어",
   // ── v125: Classes, Payments, Reports, Reading, Curriculum
   // shared
   "Lessons":"수업 수","Hours":"시간","Collected":"수납","Expected":"예상","Remaining":"미수금","Outstanding":"미납액","Total":"합계",
@@ -3279,6 +3332,28 @@ function i18nSrc(el){
   const n=[...el.childNodes].find(x=>x.nodeType===3&&x.nodeValue.trim());
   return (n&&n._src!==undefined?n._src:el.textContent).trim();
 }
+// v137: appearance. Per device, stored outside settings so it never syncs; applied without a reload.
+// The key deliberately does not start with "mc_": backups export every mc_ key and a restore wipes them,
+// and a device's light/dark choice should neither travel in a backup nor be reset by one.
+const THEMES=["light","dark","auto"];
+function themePref(){try{const t=localStorage.getItem("classdesk_theme");return THEMES.includes(t)?t:"light";}catch{return "light";}}
+const THEME_MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
+function applyTheme(){
+  const t=themePref(),dark=t==="dark"||(t==="auto"&&!!THEME_MQ&&THEME_MQ.matches);
+  document.documentElement.setAttribute("data-theme",dark?"dark":"light");
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#161e2e":"#ffffff");
+  const sel=document.getElementById("theme-sel");if(sel)sel.value=t;
+}
+function setTheme(v){
+  if(!THEMES.includes(v))return;
+  try{localStorage.setItem("classdesk_theme",v);}catch{}
+  applyTheme();
+}
+// Reports and lists print from this page: always on light colours, back to the chosen look afterwards.
+window.addEventListener("beforeprint",()=>document.documentElement.setAttribute("data-theme","light"));
+window.addEventListener("afterprint",applyTheme);
+if(THEME_MQ){const f=()=>{if(themePref()==="auto")applyTheme();};THEME_MQ.addEventListener?THEME_MQ.addEventListener("change",f):THEME_MQ.addListener(f);}
+applyTheme();   // the Settings menu shows the saved choice from the start (the <head> script already set the colours)
 function setLang(v){
   settings.lang=v;
   if(save()===false)return;
@@ -3545,7 +3620,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v136";
+const APP_VERSION="v137";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -5198,7 +5273,7 @@ function renderStorageGauge(){
       <div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width .3s"></div>
     </div>
     <div style="font-size:10.5px;color:var(--txt3);margin-top:5px">${tx("Largest: {list}",{list:top})}</div>
-    ${pct>85?'<div style="font-size:11px;color:#dc2626;margin-top:6px;font-weight:600">'+tx("⚠️ Storage is nearly full — export a backup now. Uploaded cover images are the usual cause; replacing them with Google Books covers (URLs) frees space.")+'</div>':""}`;
+    ${pct>85?'<div style="font-size:11px;color:var(--red);margin-top:6px;font-weight:600">'+tx("⚠️ Storage is nearly full — export a backup now. Uploaded cover images are the usual cause; replacing them with Google Books covers (URLs) frees space.")+'</div>':""}`;
 }
 // First-run welcome — shown once, points new users at the Guide. mc_onboarded flag suppresses it.
 function showOnboarding(){
@@ -5241,7 +5316,7 @@ function checkBackupReminder(){
   if(document.getElementById("backup-banner"))return;
   const b=document.createElement("div");
   b.id="backup-banner";
-  b.style.cssText="position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#fef3c7;border-bottom:1px solid #fcd34d;color:#78350f;font-size:12.5px;line-height:1.4";
+  b.style.cssText="position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;background:var(--amb-l);border-bottom:1px solid var(--amb-bdr);color:var(--chip-amb-t);font-size:12.5px;line-height:1.4";
   const mob=window.matchMedia("(max-width:640px)").matches;
   const synced=!!(window.__auth&&window.__auth.currentUser);
   const why=mob?"":synced?" — "+tx("cloud sync is on, but deletions sync too; a file backup is the safety net"):" — "+tx("if the browser's data is cleared, it cannot be recovered");
@@ -5567,6 +5642,7 @@ function importBackupFile(inp){
 }
 function renderSettings(){
   const langSel=document.getElementById("lang-sel");if(langSel)langSel.value=settings.lang||"auto";
+  applyTheme();
   renderWorkspace();renderFeatures();
   applyBranding();
   renderPinState();
@@ -8355,7 +8431,7 @@ const BL_COLUMNS=[
   {id:"cat",       label:tx("Category"),    width:"minmax(70px,100px)",  render:b=>`<div class="cell-sub" title="${escapeAttr(b.cat)}">${escapeHTMLBasic(b.cat||"—")}</div>`},
   {id:"genre",     label:tx("Genre"),       width:"minmax(70px,120px)",  render:b=>`<div class="cell-sub" title="${escapeAttr(b.genre)}">${escapeHTMLBasic(b.genre||"—")}</div>`},
   {id:"labels",    label:tx("Labels"),      width:"minmax(64px,76px)",   render:b=>{
-    const tag=(on,txt,date,kind)=>`<span onclick="toggleLabelPrinted(event,'${escapeAttr(b.id)}','${kind}')" title="${on?tx("{kind} label printed {date} — click to unmark",{kind:tx(txt),date}):tx("{kind} label not printed — click to mark",{kind:tx(txt)})}" style="cursor:pointer;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:4px;${on?"background:#dcfce7;color:#15803d":"background:var(--surf3);color:var(--txt3)"}">${txt[0]}</span>`;
+    const tag=(on,txt,date,kind)=>`<span onclick="toggleLabelPrinted(event,'${escapeAttr(b.id)}','${kind}')" title="${on?tx("{kind} label printed {date} — click to unmark",{kind:tx(txt),date}):tx("{kind} label not printed — click to mark",{kind:tx(txt)})}" style="cursor:pointer;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:4px;${on?"background:var(--ok-l);color:var(--ok-t)":"background:var(--surf3);color:var(--txt3)"}">${txt[0]}</span>`;
     return `<div style="display:flex;gap:4px">${tag(!!b.printedCover,"Cover",b.printedCover,"cover")}${tag(!!b.printedInfo,"Info",b.printedInfo,"info")}</div>`;
   }},
   {id:"arLevel",   label:tx("AR Level"),    width:"minmax(56px,70px)",                render:b=>`<div class="cell-sub" style="font-family:var(--mono)">${escapeHTMLBasic(b.arLevel||"—")}</div>`},
