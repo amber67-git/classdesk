@@ -1555,7 +1555,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p id="gcal-conn" style="font-size:11px;color:var(--txt3);margin-top:8px"></p>
         <div style="margin-top:14px;font-size:12px;font-weight:600" data-i18n>Event colours</div>
         <p class="u-hint" data-i18n>Yellow (Banana) events are your own lessons at the student's rate. Green (Sage / Basil) events are platform lessons — enter their flat rate below (blank = student's rate). Every other colour is ignored.</p>
-        <div class="fg" style="max-width:260px"><label data-i18n>Green lessons · {cur} per hour</label><input type="number" id="gcal-green-hourly" data-money placeholder="e.g. 30000" data-i18n-ph onchange="settings.gcalGreenHourly=parseInt(this.value,10)||0;save();showToast(tx('Green rate saved'))"/></div>
+        <div class="fg" style="max-width:260px"><label data-i18n>Green lessons · {cur} per hour</label><input type="number" id="gcal-green-hourly" data-money placeholder="e.g. 30000" data-i18n-ph onchange="settings.gcalGreenHourly=parseMoney(this.value);save();showToast(tx('Green rate saved'))"/></div>
         <div id="gcal-rules"></div>
         <div style="margin-top:14px;font-size:12px;font-weight:600" data-i18n>First lessons</div>
         <p class="u-hint" data-i18n>Reads the calendar back year by year and shows, for every student, the earliest entry that mentions them — with the entry's own title, so you can see what the date is based on. Entries that read like a consultation, or that sit long before the next one, are flagged. Nothing is written until you press a button.</p>
@@ -3153,6 +3153,9 @@ const CUR_SYM=(_moneyFmt.formatToParts(0).find(x=>x.type==="currency")||{}).valu
 const CUR_STEP=WS_CUR==="KRW"?1000:WS_CUR==="JPY"?100:1;
 // Placeholders every static label may use: "Amount ({cur})".
 const I18N_VARS={cur:CUR_SYM};
+// A typed amount → a number in the workspace currency: cents kept where the currency has them
+// ($45.50), whole units otherwise (₩40,000). Before v130 every money box used parseInt.
+function parseMoney(v){const f=10**CUR_DIGITS;const n=parseFloat(v);return isFinite(n)?Math.round(n*f)/f:0;}
 function hourlyRate(){const v=Number(settings.hourlyRate);return v>0&&isFinite(v)?v:WS_DEFAULTS.hourlyRate;}
 // Name printed on info labels and report headers. Before v130 it was kept on each device only
 // (localStorage mc_library_name); that value is carried into settings once, then synced.
@@ -4184,7 +4187,7 @@ async function saveStudent(){
   // Clamp numbers to sane ranges. Without this a typo ("-3" hours, or a rate with an extra zero)
   // silently corrupts every payment total and schedule calculation downstream.
   const clampDur =v=>Math.min(12,Math.max(0.25,parseFloat(v)||1));       // 15 min – 12 h
-  const clampRate=v=>Math.min(10000000,Math.max(0,parseInt(v)||0));      // 0 – 10,000,000 KRW
+  const clampRate=v=>Math.min(10000000,Math.max(0,parseMoney(v)));      // 0 – 10,000,000 KRW
   const dur=clampDur(document.getElementById("sm-dur")?.value);
   const extraSlots=[...document.querySelectorAll("#sm-slots-list .slot-row")].map(row=>{
     const sched=(row.querySelector(".slot-sched")?.value||"").trim();
@@ -4734,7 +4737,7 @@ function lmStatusChanged(){
   const amtEl=document.getElementById("lm-amt");
   if(!amtEl||st==="cancelled")return;
   if(amtEl.dataset.touched)return;          // a fee typed by hand (including a deliberate 0) stands
-  if((parseInt(amtEl.value)||0)>0)return;
+  if(parseMoney(amtEl.value)>0)return;
   const d=parseFloat(document.getElementById("lm-dur")?.value)||parseFloat(document.getElementById("lm-dur-hidden")?.value)||0;
   if(d>0){amtEl.value=Math.round(d*lessonHourlyRate());delete amtEl.dataset.touched;}
 }
@@ -4749,7 +4752,7 @@ function lmDurTyped(){
 }
 function lmAmtTyped(){
   const amtEl=document.getElementById("lm-amt");
-  const a=parseInt(amtEl?.value)||0;
+  const a=parseMoney(amtEl?.value);
   if(amtEl)amtEl.dataset.touched="1";
   if(a<=0)return;
   const de=document.getElementById("lm-dur");
@@ -4795,7 +4798,7 @@ function saveLesson(){
     // (e.g. ₩24,000 singles) whatever the user typed is exactly what gets saved.
     dur:parseFloat(document.getElementById("lm-dur")?.value)
         ||parseFloat(document.getElementById("lm-dur-hidden")?.value)||1,
-    amt:status==="cancelled"?0:parseInt(document.getElementById("lm-amt")?.value)||0,
+    amt:status==="cancelled"?0:parseMoney(document.getElementById("lm-amt")?.value),
     status:status,topic:g("lm-topic"),workbooks:workbooks,
     wbTime:parseInt(document.getElementById("lm-wbtime")?.value)||0,books:booksRead,
     bTime:parseInt(document.getElementById("lm-btime")?.value)||0,schoolHW:schoolHwItems,
@@ -4877,7 +4880,7 @@ function toggleCancelLesson(){
 
   let l=lessons.find(x=>x.id===editLid);
   if(!l){
-    const amt=parseInt(document.getElementById("lm-amt")?.value)||0;
+    const amt=parseMoney(document.getElementById("lm-amt")?.value);
     const dur=parseFloat(document.getElementById("lm-dur-hidden")?.value)||1;
     const newId=uid();
     l={id:newId,sid:sid,date:date,dur:dur,amt:amt,status:"unpaid",topic:"",workbooks:[],wbTime:20,books:[],bTime:20,schoolHW:[],shwTime:20,bract:[],brTime:20,note:"",cancel:""};
@@ -6669,7 +6672,7 @@ function openIncomeModal(id){
 }
 function saveIncome(){
   const month=document.getElementById("im-month")?.value||"";
-  const amt=Math.round(+document.getElementById("im-amt")?.value||0);
+  const amt=parseMoney(document.getElementById("im-amt")?.value);
   const note=(document.getElementById("im-note")?.value||"").trim();
   if(!month){alert(tx("Pick a month."));return;}
   if(!(amt>0)){alert(tx("Enter an amount greater than 0."));return;}
@@ -7540,7 +7543,7 @@ function saveBook(){
   const customFields=collectCustomFieldsFromModal("bm-custom-fields");
   const obj={
     name:g("bm-name"),brand:titleCaseIfAllCaps(g("bm-brand")),cat:document.getElementById("bm-cat")?.value||"Reading",
-    price:parseInt(document.getElementById("bm-price")?.value)||0,
+    price:parseMoney(document.getElementById("bm-price")?.value),
     wb:document.getElementById("bm-wb")?.value||"yes",
     comment:g("bm-comment"),
     pdf:g("bm-pdf-data"),
@@ -9417,7 +9420,7 @@ function saveMaterial(){
     name:g("mm-name"),cat:document.getElementById("mm-cat")?.value||"Board game",
     players:g("mm-players"),time:g("mm-time"),
     difficulty:document.getElementById("mm-difficulty")?.value||"",
-    price:parseInt(document.getElementById("mm-price")?.value)||0,
+    price:parseMoney(document.getElementById("mm-price")?.value),
     comment:g("mm-comment"),
     customFields,
   };
@@ -9531,6 +9534,9 @@ function applyRemoteRecord(key,id,data){
     // templates (or the logo) must not erase them here. Everything else is replaced wholesale.
     const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalGreenHourly","gcalTitleMap"];
     KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k])obj[k]=settings[k];});
+    // Workspace (v130) and language: a copy from a device on an older version lacks these keys
+    // entirely — keep ours. An empty value ("" library name, [] categories) is a real choice and wins.
+    ["lang","hourlyRate","currency","timeZone","libraryName","currCats"].forEach(k=>{if(obj[k]===undefined&&settings[k]!==undefined)obj[k]=settings[k];});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
     applyBranding();
@@ -10131,7 +10137,7 @@ function renderGcal(){
 }
 function gcalSetColor(cid){
   const mode=document.getElementById("gc-mode-"+cid)?.value||"ignore";
-  const hourly=parseInt(document.getElementById("gc-hr-"+cid)?.value||"0",10)||0;
+  const hourly=parseMoney(document.getElementById("gc-hr-"+cid)?.value);
   if(mode==="hourly"&&!hourly){alert(tx("Enter the {cur} per hour for this colour.",I18N_VARS));return;}
   settings.gcalColors=Object.assign({},gcalRules(),{[cid]:{mode,hourly}});
   save();gcalRun(false);
