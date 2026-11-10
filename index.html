@@ -1704,7 +1704,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p>Create your wording once in Settings → Templates, and messages are generated with the lesson record filled in automatically (placeholders like [student_name], [topic], [hw_page], [books_read]). Copy and send via KakaoTalk or any messenger.</p>
 
         <h3>Customizing the screens</h3>
-        <p>In Settings → Custom Fields you can <b>reorder columns (drag), rename them (click), and hide them (uncheck)</b> on every page, and add your own fields. Hidden fields still always appear in the edit dialog, so data entry is unaffected.</p>
+        <p>In Settings → Custom Fields you can <b>reorder columns (drag), rename them (click), and hide them (uncheck)</b> on every page, and add your own fields. Hidden fields still always appear in the edit dialog, so data entry is unaffected. Since v132 this setup is saved with your account: every signed-in device shows the same columns, names and added fields (column <i>widths</i> stay per device, because they depend on the screen).</p>
 
         <h3>Automatic search setup (API Keys) — optional</h3>
         <p>Book info search (Google Books) works out of the box with no setup. To use <b>image search (🔍) and automatic AR/Lexile lookup</b>, register two things under Settings → API Keys:</p>
@@ -1802,6 +1802,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v132 · 2026-11-10</dt><dd><b>Custom Fields follow you:</b> renamed columns, column order, hidden columns and the fields you added (Settings → Custom Fields) are now saved with your account, so the PC, tablet and phone show the same setup. The setup each device already had is carried over the first time it opens v132. Column widths stay per device. <b>Curriculum:</b> unticking a column in Custom Fields now really hides it, in the table and on phone cards (Topic always stays).</dd>
           <dt>v131 · 2026-11-10</dt><dd><b>Features</b> (Settings → Templates → Features): turn off the pages and lesson-card sections your classes don't use. <b>Any subject</b> hides Reading, Books and the "Books read" section; <b>English reading class</b> turns everything back on. Each page (Reading, Books, Workbooks, Material, Curriculum) and each lesson section (Workbook, Books read, School / Academy HW, Break time) can also be switched one by one. Nothing is deleted, and empty sections already drop out of the parent message.</dd>
           <dt>v130 · 2026-11-10</dt><dd><b>Workspace settings</b> (Settings → Templates → Workspace): the default hourly fee (was fixed at ₩40,000), the currency amounts are shown in, the time zone "today" and Google Calendar times are read in (was always Korea), the library name — now saved with your account so every device prints the same one — and a list of curriculum categories offered when you type a topic's category. Everything stays as before until you change it.</dd>
           <dt>v129 · 2026-11-10</dt><dd><b>Guide in Korean:</b> with the language set to 한국어 (or a Korean device on "Match the device language") this whole Guide — every section, the FAQ and this list — is in Korean. That completes the Korean / English work: every screen of the app now follows the language setting.</dd>
@@ -1830,7 +1831,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v131</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v132</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -1892,7 +1893,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p>설정 → 템플릿에서 문구를 한 번만 만들어 두면 수업 기록이 자동으로 채워진 메시지가 만들어집니다([student_name], [topic], [hw_page], [books_read] 같은 자리 표시). 복사해서 카카오톡이나 다른 메신저로 보내면 됩니다.</p>
 
         <h3>화면 맞춤 설정</h3>
-        <p>설정 → 사용자 항목에서 모든 화면의 <b>열 순서 바꾸기(끌기), 이름 바꾸기(클릭), 숨기기(체크 해제)</b>를 할 수 있고, 나만의 항목도 추가할 수 있습니다. 숨긴 항목도 편집 창에는 항상 나오므로 입력에는 영향이 없습니다.</p>
+        <p>설정 → 사용자 항목에서 모든 화면의 <b>열 순서 바꾸기(끌기), 이름 바꾸기(클릭), 숨기기(체크 해제)</b>를 할 수 있고, 나만의 항목도 추가할 수 있습니다. 숨긴 항목도 편집 창에는 항상 나오므로 입력에는 영향이 없습니다. v132부터 이 설정은 계정에 저장되어, 로그인한 모든 기기가 같은 열·이름·추가 항목을 보여 줍니다(열 <i>너비</i>는 화면에 따라 다르므로 기기마다 따로 둡니다).</p>
 
         <h3>자동 검색 설정 (API 키) — 선택 사항</h3>
         <p>도서 정보 검색(Google Books)은 따로 설정하지 않아도 됩니다. <b>이미지 검색(🔍)과 AR/Lexile 자동 조회</b>를 쓰려면 설정 → API 키에 두 가지를 등록하세요:</p>
@@ -1990,6 +1991,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v132 · 2026-11-10</dt><dd><b>사용자 항목이 모든 기기에:</b> 이름을 바꾼 열, 열 순서, 숨긴 열, 직접 추가한 항목(설정 → 사용자 항목)이 이제 계정에 저장되어 PC, 태블릿, 휴대폰이 같은 구성을 보여 줍니다. 기기마다 이미 해 둔 설정은 v132를 처음 열 때 옮겨집니다. 열 너비는 기기마다 따로 둡니다. <b>커리큘럼:</b> 사용자 항목에서 체크를 해제한 열이 이제 표와 휴대폰 카드에서 실제로 숨겨집니다(주제는 항상 보입니다).</dd>
           <dt>v131 · 2026-11-10</dt><dd><b>기능</b>(설정 → 템플릿 → 기능): 수업에 쓰지 않는 화면과 수업 카드 항목을 끌 수 있습니다. <b>모든 과목</b>은 독서, 도서, "읽은 책" 항목을 숨기고, <b>영어 리딩 수업</b>은 모두 다시 켭니다. 화면(독서, 도서, 교재, 교구, 커리큘럼)과 수업 항목(워크북, 읽은 책, 학교 / 학원 숙제, 쉬는 시간)을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없고, 비어 있는 항목은 원래대로 학부모 메시지에서 빠집니다.</dd>
           <dt>v130 · 2026-11-10</dt><dd><b>작업 공간 설정</b>(설정 → 템플릿 → 작업 공간): 기본 시간당 수업료(전에는 ₩40,000 고정), 금액을 보여 줄 통화, "오늘"과 Google 캘린더 시간을 읽는 시간대(전에는 항상 한국), 도서관 이름 — 이제 계정에 저장되어 모든 기기가 같은 이름을 인쇄합니다 — 그리고 주제의 카테고리를 입력할 때 추천할 커리큘럼 카테고리 목록. 바꾸기 전까지는 모두 예전과 같습니다.</dd>
           <dt>v129 · 2026-11-10</dt><dd><b>한국어 설명서:</b> 언어를 한국어로 두면(또는 "기기 언어에 맞춤"인 한국어 기기라면) 이 설명서 전체 — 모든 항목, 자주 묻는 질문, 이 목록까지 — 가 한국어로 나옵니다. 이것으로 한국어 / 영어 작업이 끝났습니다: 앱의 모든 화면이 언어 설정을 따릅니다.</dd>
@@ -2017,7 +2019,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v131</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
+          설명서 기준 버전: <b>v132</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3474,7 +3476,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v131";
+const APP_VERSION="v132";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   applyI18n();applyFeatures();   // before any render: labels that code reads back (custom column names) must already carry their English source
@@ -7007,20 +7009,30 @@ function currColWidths(){
 function saveCurrColWidths(w){
   const m=lg(COLW_KEY,{});m.tbl_curriculum={n:w.length,tpl:"table",w};return ls(COLW_KEY,m);
 }
+// Column ids of the curriculum table, in order (the last one is the actions column).
+const CURR_COL_IDS=["month","week","cat","topic","wb","writing","books","acts","grammar","note",null];
 function applyCurrColWidths(w){
   w=w||currColWidths();
-  const sum=w.reduce((a,b)=>a+b,0);
+  // Columns unticked in Settings → Custom Fields (v132) are left out everywhere — table and phone
+  // cards. Topic can't be hidden (it is the topic's name).
+  const hidden=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));
+  const shown=i=>!hidden.has(CURR_COL_IDS[i]);
+  let hide="";
+  CURR_COL_IDS.forEach((id,i)=>{if(id&&!shown(i))hide+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}){display:none!important}\n`;});
+  const sum=w.reduce((a,b,i)=>a+(shown(i)?b:0),0);
   let css=`#curr-table{width:${sum}px}\n`;
   w.forEach((v,i)=>{css+=`#curr-table th:nth-child(${i+1}){width:${v}px}\n`;});
   // Frozen columns only where there is room for them next to the rest (the box is ~900px+ wide).
-  let left=0,frz="";
+  // Offsets count only the columns that are shown.
+  let left=0,frz="",lastFrozen=-1;
   for(let i=0;i<CURR_FREEZE;i++){
+    if(!shown(i))continue;
     frz+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}){position:sticky;left:${left}px}\n`
       +`#curr-table td:nth-child(${i+1}){z-index:2}#curr-table th:nth-child(${i+1}){z-index:6}\n`;
-    left+=w[i];
+    left+=w[i];lastFrozen=i;
   }
-  frz+=`#curr-table th:nth-child(${CURR_FREEZE}),#curr-table td:nth-child(${CURR_FREEZE}){box-shadow:6px 0 8px -6px var(--pin-shade)}\n`;
-  css=`@media(min-width:641px){${css}}@media(min-width:1160px){${frz}}`;   // phones keep the card layout
+  if(lastFrozen>=0)frz+=`#curr-table th:nth-child(${lastFrozen+1}),#curr-table td:nth-child(${lastFrozen+1}){box-shadow:6px 0 8px -6px var(--pin-shade)}\n`;
+  css=`${hide}@media(min-width:641px){${css}}@media(min-width:1160px){${frz}}`;   // phones keep the card layout
   let st=document.getElementById("curr-colw-css");
   if(!st){st=document.createElement("style");st.id="curr-colw-css";document.head.appendChild(st);}
   st.textContent=css;
@@ -7839,8 +7851,9 @@ function taxonomyCustom(sel){
 (function(){
   if(localStorage.getItem("mc_migr_booklib_order_v8"))return;
   try{
+    // Runs before settings.fields exists for this page, so it still edits the device's own key.
     const saved=JSON.parse(localStorage.getItem("mc_fieldorder_booklib")||"[]");
-    if(Array.isArray(saved)&&saved.length){
+    if(Array.isArray(saved)&&saved.length&&!(settings.fields&&settings.fields.booklib)){
       const builtin=["title","publisher","author","illustrator","cat","genre","isbn","level","arLevel","lexile","comment"];
       const customs=saved.filter(id=>!builtin.includes(id));
       localStorage.setItem("mc_fieldorder_booklib",JSON.stringify([...builtin,...customs]));
@@ -8296,7 +8309,7 @@ function migrateOldBooklibCols(){
   if(!old)return;
   try{
     const arr=JSON.parse(old);
-    if(Array.isArray(arr)&&arr.length&&!localStorage.getItem("mc_fieldorder_booklib")){
+    if(Array.isArray(arr)&&arr.length&&!getFieldOrder("booklib").length){
       // Old array = visible columns in order. Recreate: order = old array + the rest; hidden = the rest.
       const allIds=[...BL_COLUMNS.map(c=>c.id),...getBookLibCustomFields().map(cf=>cf.id)];
       const rest=allIds.filter(id=>!arr.includes(id));
@@ -8314,8 +8327,9 @@ function migrateOldBooklibCols(){
 // Custom fields are user-added and stored per-page. Both are edited from Settings > Custom Fields.
 //
 // Data model:
-//   localStorage.mc_labels_<page>       — {colId: "Renamed label"}  (custom labels for built-in fields)
-//   localStorage.mc_customfields_<page> — [{id,label,fieldType}]   (user-added fields for this page)
+//   settings.fields[<page>].labels  — {colId: "Renamed label"}  (custom labels for built-in fields)
+//   settings.fields[<page>].custom  — [{id,label,fieldType}]   (user-added fields for this page)
+//   (before v132: localStorage.mc_labels_<page> / mc_customfields_<page>, still read until moved)
 //   book.customFields (or student.customFields, etc.) — {cf_xxx: value}  (per-item data)
 //
 // The 8 supported pages (Dashboard excluded — it's a summary view, not a list).
@@ -8402,19 +8416,45 @@ const CUSTOM_FIELDS_PAGES=[
 const CF_PAGES_BY_KEY=Object.fromEntries(CUSTOM_FIELDS_PAGES.map(p=>[p.key,p]));
 
 // Generic helpers — one place to store/retrieve labels and custom fields for any page
-function getCustomFields(pageKey){
-  try{return JSON.parse(localStorage.getItem(`mc_customfields_${pageKey}`)||"[]");}catch{return[];}
+// v132: a page's column setup — added fields, renamed labels, order, hidden columns — lives in
+// settings.fields[page] = {custom, labels, order, hidden}, so it syncs with the account like the
+// rest of settings (column WIDTHS stay per device: they depend on the screen). Before v132 each part
+// was a localStorage key of its own (mc_customfields_<page> …); a page this device has not moved
+// yet still reads those, and the first change writes all four parts into settings at once.
+const FIELD_PARTS={custom:["mc_customfields_",()=>[]],labels:["mc_labels_",()=>({})],order:["mc_fieldorder_",()=>[]],hidden:["mc_hiddenfields_",()=>[]]};
+function fieldPartLocal(pageKey,part){
+  const [pre,def]=FIELD_PARTS[part];
+  try{const v=JSON.parse(localStorage.getItem(pre+pageKey)||"null");return v==null?def():v;}catch{return def();}
 }
-function saveCustomFields(pageKey,arr){
-  localStorage.setItem(`mc_customfields_${pageKey}`,JSON.stringify(arr));
+function fieldPart(pageKey,part){
+  const f=settings.fields&&settings.fields[pageKey];
+  return f&&f[part]!==undefined?f[part]:fieldPartLocal(pageKey,part);
 }
-function getCustomLabels(pageKey){
-  try{return JSON.parse(localStorage.getItem(`mc_labels_${pageKey}`)||"{}");}catch{return{};}
+function setFieldPart(pageKey,part,val){
+  const cur={...((settings.fields&&settings.fields[pageKey])||{})};
+  for(const p in FIELD_PARTS)if(cur[p]===undefined)cur[p]=fieldPartLocal(pageKey,p); // nothing this device had is dropped
+  cur[part]=val;
+  settings.fields={...(settings.fields||{}),[pageKey]:cur};
+  return save();
 }
-function saveCustomLabels(pageKey,map){
-  if(Object.keys(map).length)localStorage.setItem(`mc_labels_${pageKey}`,JSON.stringify(map));
-  else localStorage.removeItem(`mc_labels_${pageKey}`);
+// Start-up: pages this device customised before v132 are moved into settings in memory. They are
+// uploaded once the first sync with the cloud is done (see reconcileKey), never before — stamping
+// settings earlier could overwrite newer settings saved on another device.
+let _fieldsMoved=false;
+function moveLocalFieldSetups(pageKeys){
+  pageKeys.forEach(pk=>{
+    if(settings.fields&&settings.fields[pk])return;
+    const has=Object.values(FIELD_PARTS).some(([pre])=>localStorage.getItem(pre+pk)!==null);
+    if(!has)return;
+    const cur={};for(const p in FIELD_PARTS)cur[p]=fieldPartLocal(pk,p);
+    settings.fields={...(settings.fields||{}),[pk]:cur};_fieldsMoved=true;
+  });
 }
+function getCustomFields(pageKey){return fieldPart(pageKey,"custom");}
+function saveCustomFields(pageKey,arr){return setFieldPart(pageKey,"custom",arr);}
+function getCustomLabels(pageKey){return fieldPart(pageKey,"labels");}
+function saveCustomLabels(pageKey,map){return setFieldPart(pageKey,"labels",map);}
+moveLocalFieldSetups(CUSTOM_FIELDS_PAGES.map(p=>p.key));
 
 
 // Get the effective label for a column — custom override wins over built-in.
@@ -8483,21 +8523,12 @@ function getOrderedFieldsForPage(pageKey){
   all.forEach(f=>{if(!seen.has(f.id))ordered.push(f);});
   return ordered;
 }
-function getFieldOrder(pageKey){
-  try{return JSON.parse(localStorage.getItem(`mc_fieldorder_${pageKey}`)||"[]");}catch{return[];}
-}
-function saveFieldOrder(pageKey,ids){
-  localStorage.setItem(`mc_fieldorder_${pageKey}`,JSON.stringify(ids));
-}
+function getFieldOrder(pageKey){return fieldPart(pageKey,"order");}
+function saveFieldOrder(pageKey,ids){return setFieldPart(pageKey,"order",ids);}
 // Hidden fields: ids the user has unchecked in Settings. Hidden fields disappear from
 // list columns (Books page) and edit modals, but their data stays untouched on records.
-function getHiddenFields(pageKey){
-  try{return JSON.parse(localStorage.getItem(`mc_hiddenfields_${pageKey}`)||"[]");}catch{return[];}
-}
-function saveHiddenFields(pageKey,ids){
-  if(ids.length)localStorage.setItem(`mc_hiddenfields_${pageKey}`,JSON.stringify(ids));
-  else localStorage.removeItem(`mc_hiddenfields_${pageKey}`);
-}
+function getHiddenFields(pageKey){return fieldPart(pageKey,"hidden");}
+function saveHiddenFields(pageKey,ids){return setFieldPart(pageKey,"hidden",ids);}
 
 // Render the list of fields (built-in + custom) for the current page
 function renderCustomFieldsEditor(){
@@ -9663,6 +9694,8 @@ function applyRemoteRecord(key,id,data){
     // Workspace (v130) and language: a copy from a device on an older version lacks these keys
     // entirely — keep ours. An empty value ("" library name, [] categories) is a real choice and wins.
     ["lang","hourlyRate","currency","timeZone","libraryName","currCats","features"].forEach(k=>{if(obj[k]===undefined&&settings[k]!==undefined){obj[k]=settings[k];_settingsRepush=true;}});
+    // Column setups (v132) merge per page: a page the incoming copy has never set up keeps ours.
+    if(settings.fields)for(const pk in settings.fields){if(!obj.fields||obj.fields[pk]===undefined){obj.fields={...(obj.fields||{}),[pk]:settings.fields[pk]};_settingsRepush=true;}}
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
     applyBranding();
@@ -10458,6 +10491,9 @@ async function reconcileKey(key){
   if(key==="settings"){
     const c=seen.get("settings");
     if(restore||(!c&&settings._u)){settings._u=now;ops.push({id:"settings",j:JSON.stringify(settings),u:now});afterRemoteApplied(key);}
+    // Column setups moved out of this device's storage at start-up (v132) go up now that this
+    // device holds the cloud's newest settings: stamping them earlier could have overwritten them.
+    else if(_fieldsMoved){_fieldsMoved=false;_lastSaved.settings=null;setTimeout(()=>save(),0);}
   }else{
     const tombs=loadTombs()[key]||{};
     const keepIds=new Set();
