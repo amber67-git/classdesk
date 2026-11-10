@@ -6892,7 +6892,7 @@ function currColWidths(){
   return w;
 }
 function saveCurrColWidths(w){
-  const m=lg(COLW_KEY,{});m.tbl_curriculum={n:w.length,tpl:"table",w};ls(COLW_KEY,m);
+  const m=lg(COLW_KEY,{});m.tbl_curriculum={n:w.length,tpl:"table",w};return ls(COLW_KEY,m);
 }
 function applyCurrColWidths(w){
   w=w||currColWidths();
@@ -6913,9 +6913,10 @@ function applyCurrColWidths(w){
   st.textContent=css;
 }
 function currResetCols(){
-  const m=lg(COLW_KEY,{});delete m.tbl_curriculum;ls(COLW_KEY,m);
+  const m=lg(COLW_KEY,{});delete m.tbl_curriculum;
+  const ok=ls(COLW_KEY,m)!==false; // a failed write has already shown the storage alert
   applyCurrColWidths();
-  showToast(tx("Column widths reset"));
+  if(ok)showToast(tx("Column widths reset"));
 }
 // The edge a pointer is on, or -1. Touch gets a wider grab area.
 function currEdgeAt(th,x,coarse){
