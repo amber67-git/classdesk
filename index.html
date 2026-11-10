@@ -3159,7 +3159,10 @@ function parseMoney(v){const f=10**CUR_DIGITS;const n=parseFloat(v);return isFin
 function hourlyRate(){const v=Number(settings.hourlyRate);return v>0&&isFinite(v)?v:WS_DEFAULTS.hourlyRate;}
 // Name printed on info labels and report headers. Before v130 it was kept on each device only
 // (localStorage mc_library_name); that value is carried into settings once, then synced.
-if(settings.libraryName===undefined){const old=localStorage.getItem("mc_library_name");settings.libraryName=old!==null?old:WS_DEFAULTS.libraryName;}
+// _libNameAuto: filled in here, not chosen by the user — the one-time cloud migration (reconcileKey)
+// must not count it when deciding whether this device has settings of its own.
+let _libNameAuto=false;
+if(settings.libraryName===undefined){const old=localStorage.getItem("mc_library_name");settings.libraryName=old!==null?old:WS_DEFAULTS.libraryName;_libNameAuto=old===null;}
 function libraryName(){return String(settings.libraryName??"").trim();}
 // Curriculum categories: the workspace list first, then any other category the curriculum already uses.
 function currCategories(){
@@ -9305,6 +9308,19 @@ function showToast(msg){
   document.body.appendChild(t);
   _toastTimer=setTimeout(()=>t.remove(),2000);
 }
+// Another device changed the language, currency or time zone. Those are read once at start-up, so
+// this page would keep showing (and saving) amounts in the old currency until it reloads. The prompt
+// therefore stays until Reload is pressed — it is its own element, so an Undo toast cannot replace it.
+function showReloadPrompt(){
+  if(document.getElementById("reload-prompt"))return;
+  const t=document.createElement("div");t.id="reload-prompt";t.setAttribute("role","alert");
+  t.style.cssText="position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:3100;background:#1e293b;color:#fff;padding:10px 16px;border-radius:10px;display:flex;gap:14px;align-items:center;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:calc(100vw - 24px)";
+  const span=document.createElement("span");span.textContent=tx("Language or workspace settings changed on another device");
+  const btn=document.createElement("button");btn.textContent=tx("Reload");
+  btn.style.cssText="background:none;border:none;color:#4ade80;font-weight:700;cursor:pointer;font-size:13px;flex-shrink:0;font-family:inherit";
+  btn.onclick=()=>location.reload();
+  t.append(span,btn);document.body.appendChild(t);
+}
 // opts (optional): {label, ms} — a different button text and how long the toast stays.
 function showUndoToast(msg,restoreFn,opts){
   document.getElementById("undo-toast")?.remove();
@@ -9524,6 +9540,9 @@ function syncPush(ops){
 
 // Write one remote record into the local array/object in place (keeps existing object identity
 // for anything holding a reference). Returns true if local state changed.
+// Set when a remote settings copy lacked values we kept: the cloud copy is then missing them too,
+// so a third device would start from defaults. afterRemoteApplied() writes the merged copy back.
+let _settingsRepush=false;
 function applyRemoteRecord(key,id,data){
   const ru=data.u||0;
   if(key==="settings"){
@@ -9533,10 +9552,10 @@ function applyRemoteRecord(key,id,data){
     // Keep text the incoming copy lacks: a settings doc written by a device that never had the
     // templates (or the logo) must not erase them here. Everything else is replaced wholesale.
     const KEEP=["parentTmpl","payUnpaid","payPartial","brandLogo","payPin","gcalClientId","gcalCalendarId","gcalGreenHourly","gcalTitleMap"];
-    KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k])obj[k]=settings[k];});
+    KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k]){obj[k]=settings[k];_settingsRepush=true;}});
     // Workspace (v130) and language: a copy from a device on an older version lacks these keys
     // entirely — keep ours. An empty value ("" library name, [] categories) is a real choice and wins.
-    ["lang","hourlyRate","currency","timeZone","libraryName","currCats"].forEach(k=>{if(obj[k]===undefined&&settings[k]!==undefined)obj[k]=settings[k];});
+    ["lang","hourlyRate","currency","timeZone","libraryName","currCats"].forEach(k=>{if(obj[k]===undefined&&settings[k]!==undefined){obj[k]=settings[k];_settingsRepush=true;}});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
     applyBranding();
@@ -9573,10 +9592,13 @@ function afterRemoteApplied(key){
     if(key==="settings")_lastSaved.settings=cmpJson(val);
     else{const m=new Map();val.forEach(r=>m.set(r.id,cmpJson(r)));_lastSaved[key]=m;}
   }finally{syncApplyingRemote=false;}
+  // Kept values go back up: forgetting what was last saved makes save() see a change, stamp a newer
+  // _u and upload the merged copy — which still holds every value the remote device did send.
+  if(key==="settings"&&_settingsRepush){_settingsRepush=false;_lastSaved.settings=null;setTimeout(()=>save(),0);}
   // Language, currency and time zone are read once at start-up. When another device changes one,
   // offer a reload rather than reloading under the user's hands.
   if(key==="settings"&&(pickLang()!==LANG||String(settings.currency||WS_DEFAULTS.currency).toUpperCase()!==WS_CUR||String(settings.timeZone||WS_DEFAULTS.timeZone)!==WS_TZ))
-    setTimeout(()=>showUndoToast(tx("Language or workspace settings changed on another device"),()=>location.reload(),{label:tx("Reload"),ms:20000}),400);
+    setTimeout(showReloadPrompt,400);
   clearTimeout(_syncRerenderTimer);
   _syncRerenderTimer=setTimeout(()=>{rerenderCurrentPage();renderStorageGauge?.();},250);
 }
@@ -10307,8 +10329,12 @@ async function reconcileKey(key){
     try{legacy=await window.__cloudRead(uid_,key);}catch(e){console.error("Legacy read failed",key,e);}
     const merged=new Map();
     if(key==="settings"){
-      const src=(!localIsSample()&&Object.keys(settings).length)?settings:(legacy&&typeof legacy==="object"?legacy:settings);
+      const ownKeys=Object.keys(settings).filter(k=>!(k==="libraryName"&&_libNameAuto));
+      // A copy, not the object itself: when src IS settings, clearing settings below emptied src too.
+      const src={...((!localIsSample()&&ownKeys.length)?settings:(legacy&&typeof legacy==="object"?legacy:settings))};
+      const libName=settings.libraryName;
       Object.keys(settings).forEach(k=>delete settings[k]);Object.assign(settings,src);
+      if(settings.libraryName===undefined)settings.libraryName=libName; // the chosen copy keeps a library name
       settings._u=now;ops.push({id:"settings",j:JSON.stringify(settings),u:now});
       applyBranding();
     }else{

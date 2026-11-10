@@ -82,7 +82,7 @@
 앱 안 Guide(`index.html`) 끝에 **"What's new — recent changes"**(버전 · 날짜 · 한 줄, 최신이 위)와 기준 줄 `Guide written against version: <b>vNNN</b>`이 있다.
 
 - 사용자가 체감하는 변경(동작·화면·주소·설치·데이터)은 **같은 PR에서** What's new 맨 위에 한 줄 더하고, 바뀐 기능의 Guide 섹션·FAQ도 같이 고친다.
-- 기준 줄의 버전은 **모든 배포에서** `APP_VERSION`과 같게 올린다. 문서만 바뀐 버전은 What's new 줄을 생략해도 되지만 기준 줄은 올린다. `validate.mjs`가 두 값이 다르면 실패시킨다.
+- 기준 줄의 버전은 **모든 배포에서** `APP_VERSION`과 같게 올린다(영어·한국어 두 벌 모두). 문서만 바뀐 버전은 What's new 줄을 생략해도 되지만 기준 줄은 올린다. `validate.mjs`가 기준 줄이 `APP_VERSION`과 다르거나, 두 벌의 맨 위 What's new 버전이 서로 다르거나, 그 버전이 `APP_VERSION`보다 새로우면 실패시킨다.
 - 내부 수정(코드 정리, 리뷰 반영)은 What's new에 넣지 않는다.
 
 ## 언어(한국어 / English) 규칙 — v124부터
@@ -95,7 +95,7 @@
 - 저장되는 값은 바꾸지 않는다. 시간표는 여전히 `"Mon 15:45"`로 저장되고, 화면에 보일 때만 `schedLabel()`이 요일을 번역한다.
 - 번역 함수 이름은 `t`가 아니라 **`tx`**다(파일 안에 `t`라는 지역 변수가 수십 개 있다). `validate.mjs`가 `tx`라는 지역 변수가 생기면 실패시킨다.
 - **교차 검증 두 가지.** ① `node .github/scripts/validate.mjs`(CI에서도 실행): 마크업과 스크립트가 쓰는 모든 키를 모아 한국어가 없는 키, 아무 데서도 쓰지 않는 한국어 줄, 번역할 수 없게 표시된 마크업을 실패로 보고한다. ② `NODE_PATH=$(npm root -g) node .github/scripts/i18n-sweep.mjs [--pages dashboard,students]`(배포 전에 손으로, Playwright 필요): 앱을 한국어로 열어 화면 구조 요소(메뉴·제목·버튼·라벨·열 머리글·placeholder·툴팁·빈 상태)에 남은 영어를, 영어로 열어 새어 나온 한국어를 페이지별로 나열한다. 데이터 행은 보지 않는다.
-- **설명서(Settings → Guide)는 두 벌이다** — `<div class="guide-body" lang="en">`와 `lang="ko"`. `applyI18n()`이 앱 언어에 맞는 쪽만 보여 준다. 릴리스마다 **두 벌 모두**에 "What's new / 새로운 기능" 줄을 더하고 바닥글 버전(`Guide written against version` / `설명서 기준 버전`)을 올린다. `validate.mjs`가 두 바닥글과 두 벌의 맨 위 항목이 `APP_VERSION`과 다르면 실패시킨다.
+- **설명서(Settings → Guide)는 두 벌이다** — `<div class="guide-body" lang="en">`와 `lang="ko"`. `applyI18n()`이 앱 언어에 맞는 쪽만 보여 준다. What's new 줄은 **두 벌 모두에** 같이 더하고(문서만 바뀐 버전은 둘 다 생략), 바닥글 버전(`Guide written against version` / `설명서 기준 버전`)은 매번 둘 다 올린다. 검사 내용은 위 "설명서 갱신 규칙" 참고.
 - 앱이 언어를 정하기 전에 뜰 수 있는 메시지(저장 데이터 손상, 예기치 못한 오류)는 `tx` 대신 `txSafe`를 쓴다 — 키는 같고, 실패하면 영어로 보여 준다.
 - 진행 상황: v124–v126 = 앱 화면 전체, v129 = 설명서 한국어판과 남아 있던 메시지(라벨 인쇄 창, 알림·확인 창). 이것으로 한국어 / 영어 작업 완료.
 
