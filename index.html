@@ -670,12 +670,13 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
   #booklib-list .grid-row>:first-child{grid-area:1/1;position:static!important;margin-left:0!important;padding-left:0!important;box-shadow:none!important;background:transparent!important}
   #booklib-list .bl-cell{display:none}
   #booklib-list .bl-cell[data-col="title"]{display:block;grid-area:1/2;min-width:0}
+  #booklib-list .bl-cell[data-col="labels"]{display:block;grid-column:1/-1}   /* the Cover / Info print toggles still need a tap target */
   #booklib-list .bl-cell[data-col="title"] .cell-main{white-space:normal;font-size:14px}
   #booklib-list .row-actions{grid-area:1/3}
   #booklib-list .row-actions+div{display:none}   /* the spacer that fills the last track on wide screens */
   #booklib-list .bl-meta{display:flex;flex-wrap:wrap;gap:4px;grid-column:1/-1}
   #booklib-list .bl-meta:empty{display:none}
-  .bl-chip{font-size:11px;background:var(--surf2);color:var(--txt2);padding:2px 7px;border-radius:99px;white-space:nowrap}
+  .bl-chip{font-size:11px;background:var(--surf2);color:var(--txt2);padding:2px 7px;border-radius:99px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -6090,8 +6091,9 @@ function renderCurriculum(){
   const fl=curriculum.filter(c=>{if(mf&&c.month!==mf)return false;if(sf&&![c.topic,c.cat,c.books,c.wb].join(" ").toLowerCase().includes(sf))return false;return true;}).sort((a,b)=>{const mo=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];return(mo.indexOf(a.month)-mo.indexOf(b.month))||a.week-b.week;});
   // The detail cells carry their column name (data-l) and a "cur-empty" mark when blank, so the
   // phone card can show "Workbook  Write Right 1" and leave out what a topic doesn't have.
-  const dcell=(label,val,cls)=>`<td class="${cls}${val?"":" cur-empty"}" data-l="${label}">${val||"—"}</td>`;
-  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td>${dcell("Workbook",c.wb,"cell-sub2")}${dcell("Writing",c.writing,"cell-sub2")}${dcell("Books",c.books,"cell-sub2")}${dcell("Activities",c.acts,"cell-sub2")}${dcell("Grammar",c.grammar,"cell-sub2")}${dcell("Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="Edit"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="Delete"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>No curriculum items found</p></div></td></tr>`;
+  // The label is the column's name as the user sees it in the heading (a custom name wins).
+  const dcell=(colId,label,val,cls)=>`<td class="${cls}${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,label))}">${val||"—"}</td>`;
+  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="Edit"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="Delete"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>No curriculum items found</p></div></td></tr>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -7674,7 +7676,7 @@ function renderBookLib(){
         <button class="bic text-red" onclick="delBookLib('${b.id}')" title="Delete"><i class="ti ti-trash"></i></button>
       </div>
       <div></div>
-      ${blMetaCell(b)}
+      ${blMetaCell(b,cols)}
     </div>`).join("");
   // This render rebuilt #booklib-head's innerHTML, wiping the resize handles — re-attach.
   setTimeout(ensureColumnResizers,0);
@@ -7683,18 +7685,21 @@ function renderBookLib(){
 // Phone card for a book: the columns the owner chose are too many for a 390px row, so under 640px
 // only the title column stays and this one extra cell carries the rest as small chips. It is
 // display:none at every other width, so it takes no grid track there.
-function blMetaCell(b){
+// `cols` are the columns the user has chosen to show (getBookLibColumns): a column hidden in
+// Settings is left out of the chips too, and the chips keep the columns' order.
+function blMetaCell(b,cols){
   const chip=(txt,title)=>txt?`<span class="bl-chip" title="${escapeAttr(title||"")}">${txt}</span>`:"";
   const band=arLevelBand(b.arLevel);
-  return `<div class="bl-meta">${[
-    chip(escapeHTMLBasic(b.author||""),"Author"),
-    chip(escapeHTMLBasic(b.publisher||""),"Publisher"),
-    chip(escapeHTMLBasic(b.cat||""),"Category"),
-    chip(escapeHTMLBasic(b.genre||""),"Genre"),
-    b.arLevel?chip("AR "+escapeHTMLBasic(b.arLevel),"AR Level"):"",
-    band?`<span class="badge" style="background:${band.color}22;border:1px solid ${band.color};color:var(--txt)" title="${band.colorName}">L${band.level}</span>`:"",
-    b.lexile?chip(escapeHTMLBasic(String(b.lexile))+"L","Lexile"):"",
-  ].filter(Boolean).join("")}</div>`;
+  const byCol={
+    author:()=>chip(escapeHTMLBasic(b.author||""),labelFor("booklib","author","Author")),
+    publisher:()=>chip(escapeHTMLBasic(b.publisher||""),labelFor("booklib","publisher","Publisher")),
+    cat:()=>chip(escapeHTMLBasic(b.cat||""),labelFor("booklib","cat","Category")),
+    genre:()=>chip(escapeHTMLBasic(b.genre||""),labelFor("booklib","genre","Genre")),
+    arLevel:()=>b.arLevel?chip("AR "+escapeHTMLBasic(b.arLevel),labelFor("booklib","arLevel","AR Level")):"",
+    level:()=>band?`<span class="badge" style="background:${band.color}22;border:1px solid ${band.color};color:var(--txt)" title="${band.colorName}">L${band.level}</span>`:"",
+    lexile:()=>b.lexile?chip(escapeHTMLBasic(String(b.lexile))+"L",labelFor("booklib","lexile","Lexile")):"",
+  };
+  return `<div class="bl-meta">${cols.map(c=>byCol[c.id]?byCol[c.id]():"").filter(Boolean).join("")}</div>`;
 }
 function openBookLibModal(id){
   editBlid=id||null;
@@ -8333,9 +8338,9 @@ function renderMaterial(){
     <div class="grid-row clickable" style="grid-template-columns:220px 126px 92px 82px 82px 96px 220px 76px" title="Double-click to edit" ondblclick="openMaterialModal('${m.id}')">
       <div class="cell-main" title="${m.name}">${m.name}</div>
       <div><span class="u-badge">${m.cat}</span></div>
-      <div class="cell-mono${m.price?"":" ml-empty"}" data-l="Price">${m.price?won(m.price):"—"}</div>
-      <div class="cell-sub2${m.players?"":" ml-empty"}" data-l="Players">${m.players||"—"}</div>
-      <div class="cell-sub2${m.time?"":" ml-empty"}" data-l="Time">${m.time?m.time+"m":"—"}</div>
+      <div class="cell-mono${m.price?"":" ml-empty"}" data-l="${escapeAttr(labelFor("material","price","Price"))}">${m.price?won(m.price):"—"}</div>
+      <div class="cell-sub2${m.players?"":" ml-empty"}" data-l="${escapeAttr(labelFor("material","players","Players"))}">${m.players||"—"}</div>
+      <div class="cell-sub2${m.time?"":" ml-empty"}" data-l="${escapeAttr(labelFor("material","time","Time"))}">${m.time?m.time+"m":"—"}</div>
       <div class="${m.difficulty?"":"ml-empty"}">${m.difficulty?`<span style="font-size:11px;background:var(--surf2);border-radius:99px;padding:2px 8px;color:var(--txt2)">${m.difficulty}</span>`:"—"}</div>
       <div class="cell-sub${m.comment?"":" ml-empty"}" title="${m.comment||""}">${m.comment||"—"}</div>
       <div class="row-actions" ondblclick="event.stopPropagation()">
