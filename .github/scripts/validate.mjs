@@ -22,10 +22,11 @@ const html = readFileSync("index.html", "utf8");
 // The app's code lives in the longest inline <script>. Checking it with the real parser is the
 // only check that truly matters: a stray bracket there takes the whole app down.
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+let main = "";
 if (!scripts.length) {
   fail("index.html has no inline <script>");
 } else {
-  const main = scripts.reduce((a, b) => (a.length > b.length ? a : b));
+  main = scripts.reduce((a, b) => (a.length > b.length ? a : b));
   const file = join(mkdtempSync(join(tmpdir(), "classdesk-")), "main.js");
   writeFileSync(file, main);
   try {
@@ -100,6 +101,93 @@ if (nestingOk && stack.length) {
   nestingOk = false;
 }
 if (nestingOk) ok(`page markup nests correctly (${TRACKED.join(", ")})`);
+
+// ── language (v124) ─────────────────────────────────────────────────────────
+// The UI is English and Korean. The English text is the dictionary key: tx("Add student") in the
+// script, or the text of an element marked data-i18n in the markup (data-i18n-ph → its placeholder,
+// data-i18n-title → its title, data-i18n-opts → a <select>'s options). This cross-check reads every
+// key the app uses and the Korean dictionary (I18N.ko between the i18n-dict markers) and fails when
+// a key has no Korean, when a Korean line is used nowhere, or when markup is marked in a way the
+// runtime cannot translate (text nested inside a child element).
+const dictM = html.match(/\/\* i18n-dict-start \*\/\s*const I18N=(\{[\s\S]*?\});\s*\/\* i18n-dict-end \*\//);
+if (!dictM) {
+  fail("language dictionary not found (/* i18n-dict-start */ const I18N={…}; /* i18n-dict-end */)");
+} else {
+  let I18N = null;
+  try {
+    I18N = new Function("return " + dictM[1])();
+  } catch (e) {
+    fail("language dictionary does not evaluate: " + e.message);
+  }
+  if (I18N) {
+    const ko = I18N.ko || {};
+    const used = new Map(); // key → first place it is used
+    const use = (k, where) => { if (!used.has(k)) used.set(k, where); };
+    const decode = (s) => s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, " ");
+    const lineInHtml = (i) => html.slice(0, i).split("\n").length;
+
+    // Script: tx("…"), tx('…'), tx(`…`) — a template with ${} is not a key the dictionary can hold.
+    // Comment lines are blanked first (the rules above quote tx("…") as an example).
+    const mainAt = html.indexOf(main);
+    const code = main.replace(/^[ \t]*\/\/[^\n]*/gm, (c) => " ".repeat(c.length));
+    for (const m of code.matchAll(/\btx\(\s*(["'`])((?:\\.|(?!\1)[^\\])*)\1/g)) {
+      const line = lineInHtml(mainAt + m.index);
+      if (m[1] === "`" && m[2].includes("${")) { fail(`line ${line}: tx(\`…\`) with \${} — the key must be a fixed string; use {name} placeholders and a second argument`); continue; }
+      const k = m[2].replace(/\\(n|t|'|"|\\|`)/g, (_, c) => ({ n: "\n", t: "\t" }[c] ?? c));
+      use(k, `script line ${line}`);
+    }
+    if (/\b(?:const|let|var)\s+tx\b|\btx\s*=>|\(\s*tx\s*[,)]/.test(main)) fail("the script declares a local variable named tx — that is the translator; rename the variable");
+
+    // Markup: walk the tags with a depth counter to find each marked element's own text.
+    const VOID = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
+    const tags = [...markup.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)((?:\s[^>]*?)?)(\/?)>/g)];
+    const attr = (attrs, name) => { const a = attrs.match(new RegExp(`\\s${name}="([^"]*)"`)); return a ? decode(a[1]) : null; };
+    const hasFlag = (attrs, name) => new RegExp(`\\s${name}(?=[\\s/>]|$)`).test(attrs + " ");
+    for (let i = 0; i < tags.length; i++) {
+      const m = tags[i];
+      if (m[1] === "/") continue;
+      const attrs = m[3] || "";
+      const line = lineAt(m.index);
+      if (hasFlag(attrs, "data-i18n-ph")) { const v = attr(attrs, "placeholder"); if (v == null) fail(`line ${line}: data-i18n-ph on an element with no placeholder`); else use(v, `markup line ${line} (placeholder)`); }
+      if (hasFlag(attrs, "data-i18n-title")) { const v = attr(attrs, "title"); if (v == null) fail(`line ${line}: data-i18n-title on an element with no title`); else use(v, `markup line ${line} (title)`); }
+      const wantText = hasFlag(attrs, "data-i18n"), wantOpts = hasFlag(attrs, "data-i18n-opts");
+      if (!wantText && !wantOpts) continue;
+      if (VOID.has(m[2].toLowerCase()) || m[4] === "/") { fail(`line ${line}: data-i18n on <${m[2]}>, which has no text`); continue; }
+      // find the matching close tag
+      let depth = 0, j = i + 1, end = -1;
+      for (; j < tags.length; j++) {
+        const n = tags[j];
+        if (VOID.has(n[2].toLowerCase()) || n[4] === "/") continue;
+        if (n[1] === "/") { if (depth === 0) { end = j; break; } depth--; } else depth++;
+      }
+      if (end < 0) { fail(`line ${line}: <${m[2]} data-i18n> is never closed`); continue; }
+      if (wantOpts) {
+        const inner = markup.slice(m.index + m[0].length, tags[end].index);
+        for (const o of inner.matchAll(/<option\b[^>]*>([^<]*)<\/option>/g)) { const v = decode(o[1].trim()); if (v) use(v, `markup line ${line} (option)`); }
+        continue;
+      }
+      // Direct text only: the runtime translates the element's own text nodes, not its children's.
+      let pos = m.index + m[0].length, d = 0, own = [], nested = false;
+      for (let k = i + 1; k <= end; k++) {
+        const n = tags[k];
+        const text = markup.slice(pos, n.index);
+        if (text.trim()) { if (d === 0) own.push(decode(text.trim())); else nested = true; }
+        pos = n.index + n[0].length;
+        if (VOID.has(n[2].toLowerCase()) || n[4] === "/") continue;
+        if (n[1] === "/") d--; else d++;
+      }
+      if (nested) fail(`line ${line}: <${m[2]} data-i18n> has text inside a child element, which applyI18n does not translate — mark the child instead`);
+      if (!own.length) fail(`line ${line}: <${m[2]} data-i18n> has no text of its own`);
+      own.forEach((v) => use(v, `markup line ${line}`));
+    }
+
+    const missing = [...used].filter(([k]) => typeof ko[k] !== "string" || !ko[k].trim());
+    const unused = Object.keys(ko).filter((k) => !used.has(k));
+    if (missing.length) fail(`${missing.length} UI string(s) have no Korean in I18N.ko:\n` + missing.map(([k, w]) => `       ${JSON.stringify(k)}  ← ${w}`).join("\n"));
+    if (unused.length) fail(`${unused.length} Korean line(s) in I18N.ko are used nowhere (stale key?):\n` + unused.map((k) => `       ${JSON.stringify(k)}`).join("\n"));
+    if (!missing.length && !unused.length) ok(`language: ${used.size} UI strings, all with Korean`);
+  }
+}
 
 // ── files index.html depends on ─────────────────────────────────────────────
 // These ship next to index.html and the page loads both. Missing is a broken deploy, not a
