@@ -3349,12 +3349,17 @@ function renderFeatures(){
 // holds: when the new choice did not reach storage, put the old one back (and the checkboxes) so a
 // later, unrelated save cannot store a choice the user saw fail.
 // withFields: the preset also set the Curriculum columns — then prevFields is put back too.
+// The change counts as saved only when mc_settings itself holds it: the stamp save() gave settings
+// (_u) and the new values. save() stamps settings._u before it writes, so a failed write also puts
+// the old stamp back — a stale newer stamp would make this device ignore newer remote settings.
 function featCommit(prev,withFields,prevFields){
+  const prevU=settings._u;
   save();
-  let st;try{st=JSON.parse(localStorage.getItem("mc_settings")||"{}");}catch{st={};}
+  let st=null;try{st=JSON.parse(localStorage.getItem("mc_settings")||"null");}catch{st=null;}
   const same=(a,b)=>JSON.stringify(a||{})===JSON.stringify(b||{});
-  const ok=same(st.features,settings.features)&&(!withFields||same(st.fields&&st.fields.curriculum,settings.fields&&settings.fields.curriculum));
+  const ok=!!st&&st._u===settings._u&&same(st.features,settings.features)&&(!withFields||same(st.fields&&st.fields.curriculum,settings.fields&&settings.fields.curriculum));
   if(ok)return true;
+  if(prevU===undefined)delete settings._u;else settings._u=prevU;
   if(prev===undefined)delete settings.features;else settings.features=prev;
   if(withFields){if(prevFields===undefined)delete settings.fields;else settings.fields=prevFields;}
   renderFeatures();
@@ -3362,15 +3367,21 @@ function featCommit(prev,withFields,prevFields){
 }
 // v133: each preset also has a Curriculum column style — names (in the current language, like a
 // name the user typed) and hidden columns. Stored in settings.fields.curriculum, so it syncs.
-const CURR_STYLES={
-  reading:()=>({labels:{},hidden:[]}),
-  general:()=>({labels:{cat:tx("Unit|curriculum column"),wb:tx("Materials|curriculum column"),writing:tx("Homework|curriculum column")},hidden:["books","grammar"]}),
+const CURR_STYLE_DEFS={
+  reading:{labels:{},hidden:[]},
+  general:{labels:{cat:"Unit|curriculum column",wb:"Materials|curriculum column",writing:"Homework|curriculum column"},hidden:["books","grammar"]},
 };
+// Registers the style names for validate.mjs (they are looked up through CURR_STYLE_DEFS).
+const CURR_STYLE_NAMES=[tx("Unit|curriculum column"),tx("Materials|curriculum column"),tx("Homework|curriculum column")];
+const _styleLabels=(n,tr)=>Object.fromEntries(Object.entries(CURR_STYLE_DEFS[n].labels).map(([k,key])=>[k,tr(key)]));
+const CURR_STYLES=Object.fromEntries(Object.keys(CURR_STYLE_DEFS).map(n=>[n,()=>({labels:_styleLabels(n,tx),hidden:CURR_STYLE_DEFS[n].hidden.slice()})]));
 // Which style the Curriculum columns are in now: a preset name, or "" when the user set them up.
 function currStyleNow(){
   const norm=o=>JSON.stringify(Object.keys(o||{}).sort().map(k=>[k,o[k]]));
   const l=norm(getCustomLabels("curriculum")),h=[...getHiddenFields("curriculum")].sort().join();
-  return Object.keys(CURR_STYLES).find(n=>{const st=CURR_STYLES[n]();return norm(st.labels)===l&&[...st.hidden].sort().join()===h;})||"";
+  // Names were stored in the language of the day: a style counts in English or in Korean.
+  const inLang=[k=>k.split("|")[0],k=>(I18N.ko&&I18N.ko[k])||k.split("|")[0]];
+  return Object.keys(CURR_STYLE_DEFS).find(n=>[...CURR_STYLE_DEFS[n].hidden].sort().join()===h&&inLang.some(tr=>norm(_styleLabels(n,tr))===l))||"";
 }
 function featSet(k,on){
   const prev=settings.features;
