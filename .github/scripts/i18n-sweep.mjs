@@ -41,7 +41,7 @@ async function scan(page, lang) {
     const SAME = new RegExp(sameSrc.source);
     const vis = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden"; };
     // Words that are the same in both languages are removed before the test, so "API 키" passes.
-    const SAME_WORDS = /\b(API|AR|PIN|PDF|CSV|JSON|URL|ID|OK|Google|Firebase|ClassDesk|CLASSDESK|KST|Lexile|ISBN|L\d+|AM|PM|WB|e\.g\.)\b/g;
+    const SAME_WORDS = /\b(API|AR|PIN|PDF|CSV|JSON|URL|ID|OK|Google|Firebase|ClassDesk|CLASSDESK|KST|Lexile|ISBN|L\d+|AM|PM|WB|OAuth|iPhone|iPad|AMBER LIBRARY|e\.g\.)\b|\[[a-z_()]+\]/g;
     const bad = (s) => {
       const v = s.replace(/\s+/g, " ").trim();
       if (!v || SAME.test(v)) return false;
@@ -54,7 +54,7 @@ async function scan(page, lang) {
     // The app's collections are top-level let/const, so they are read by name, not off window.
     const g = (name) => { try { return eval(name) || []; } catch { return []; } };
     g("students").forEach((s) => { push(s.name); push(s.k); push(s.parent); push(s.notes); });
-    g("bookLib").forEach((b) => { push(b.title); push(b.author); push(b.publisher); });
+    g("bookLib").forEach((b) => { push(b.title); push(b.author); push(b.publisher); push(b.cat); push(b.genre); });
     g("books").forEach((b) => { push(b.name); push(b.brand); push(b.comment); });
     g("materials").forEach((m) => { push(m.name); push(m.comment); });
     g("curriculum").forEach((c) => { push(c.topic); push(c.cat); });
