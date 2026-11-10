@@ -41,7 +41,7 @@ async function scan(page, lang) {
     const SAME = new RegExp(sameSrc.source);
     const vis = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden"; };
     // Words that are the same in both languages are removed before the test, so "API 키" passes.
-    const SAME_WORDS = /\b(API|AR|PIN|PDF|CSV|JSON|URL|ID|OK|Google|Firebase|ClassDesk|CLASSDESK|KST|Lexile|ISBN|L\d+|AM|PM|WB|OAuth|iPhone|iPad|AMBER LIBRARY|e\.g\.)\b|\[[a-z_()]+\]/g;
+    const SAME_WORDS = /\b(API|AR|PIN|PDF|CSV|JSON|URL|ID|OK|Google|Firebase|ClassDesk|CLASSDESK|KST|Lexile|ISBN|L\d+|AM|PM|WB|OAuth|iPhone|iPad|AMBER LIBRARY|Enter|Esc|Ctrl|e\.g\.)\b|\[[a-z_()]+\]/g;
     const bad = (s) => {
       const v = s.replace(/\s+/g, " ").trim();
       if (!v || SAME.test(v)) return false;
