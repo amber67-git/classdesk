@@ -340,6 +340,17 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .ws-money{display:flex;align-items:center;gap:6px}
 .ws-money span{font-weight:700;color:var(--txt2);min-width:14px}
 .ws-money input{flex:1 1 auto;min-width:0}
+/* Settings → Features (v131) */
+.feat-presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.feat-presets .btn.on{border-color:var(--grn);color:var(--grn);font-weight:700}
+.feat-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 24px}
+.feat-h{font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin:4px 0 6px}
+.feat-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--bdr);cursor:pointer}
+.feat-row:last-child{border-bottom:none}
+.feat-row input{margin-top:2px;flex-shrink:0;width:16px;height:16px;accent-color:var(--grn)}
+.feat-row b{display:block;font-size:13px}
+.feat-row span{font-size:11.5px;color:var(--txt3)}
+[data-feature][hidden],.ni[hidden]{display:none!important}
 .fg label{display:block;font-size:11px;font-weight:600;color:var(--txt2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
 /* A switch inside a form group keeps the switch look (Archive, Bi-weekly), not the uppercase field label */
 .fg label.sw{display:inline-flex;font-size:12px;font-weight:500;margin:0;text-transform:none;letter-spacing:0}
@@ -1372,6 +1383,21 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p class="u-hint" style="margin:10px 0 0"><i class="ti ti-calendar"></i> <span data-i18n>Which Google Calendar colours count as lessons is set in Settings → API Keys → Google Calendar.</span></p>
       </div>
     </div>
+    <!-- Features (v131): which pages and lesson-record sections this workspace uses. Synced setting. -->
+    <div class="card" style="margin-bottom:16px" id="feat-card">
+      <div class="ch"><div class="ct" data-i18n><i class="ti ti-adjustments"></i>Features</div></div>
+      <div class="cb p">
+        <p class="u-hint" style="margin-bottom:10px" data-i18n>Turn off what your classes don't use: the page leaves the menu and the section leaves the lesson card. Nothing is deleted — turn it back on and everything is there.</p>
+        <div class="feat-presets"><span class="u-hint" data-i18n>Start from:</span>
+          <button class="btn btn-sm" data-preset="reading" onclick="featApplyPreset('reading')" data-i18n><i class="ti ti-books"></i> English reading class</button>
+          <button class="btn btn-sm" data-preset="general" onclick="featApplyPreset('general')" data-i18n><i class="ti ti-school"></i> Any subject</button>
+          <span class="u-hint" id="feat-preset-now"></span></div>
+        <div class="feat-cols">
+          <div><div class="feat-h" data-i18n>Pages</div><div id="feat-pages"></div></div>
+          <div><div class="feat-h" data-i18n>Lesson card sections</div><div id="feat-sections"></div></div>
+        </div>
+      </div>
+    </div>
     <!-- App logo (sidebar + favicon + iOS home-screen icon) -->
     <div class="card" style="margin-bottom:16px">
       <div class="ch"><div class="ct" data-i18n><i class="ti ti-photo"></i>App logo</div></div>
@@ -1755,6 +1781,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
+          <dt>I don't teach reading — can I hide Reading and Books?</dt><dd>Settings → Templates → <b>Features</b> → <b>Any subject</b>. The Reading and Books pages leave the menu and the lesson card loses its "Books read" section. You can also switch each page and lesson section on its own. Nothing is deleted: switch it back on and everything is still there.</dd>
           <dt>Can I use another currency or change the default fee?</dt><dd>Settings → Templates → <b>Workspace</b>. The <b>default hourly fee</b> is filled in for a new student or lesson (each student's own rate still wins). <b>Currency</b> only changes how amounts are shown (₩, $, £, €, ¥ …) — numbers already saved are not converted. Changing the currency or time zone reloads the app.</dd>
           <dt>A field is missing in the edit dialog</dt><dd>The edit dialog always shows every field. Custom Fields hiding only applies to list columns. If it's still missing, check whether the file is an old version.</dd>
           <dt>What happens to my data when I replace the file with a new version?</dt><dd>It stays, as long as it's the same computer and browser — data lives in the browser, not in the file. With cloud sync on, there's a copy in the cloud too. To be safe, Export before replacing.</dd>
@@ -1775,6 +1802,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v131 · 2026-11-10</dt><dd><b>Features</b> (Settings → Templates → Features): turn off the pages and lesson-card sections your classes don't use. <b>Any subject</b> hides Reading, Books and the "Books read" section; <b>English reading class</b> turns everything back on. Each page (Reading, Books, Workbooks, Material, Curriculum) and each lesson section (Workbook, Books read, School / Academy HW, Break time) can also be switched one by one. Nothing is deleted, and empty sections already drop out of the parent message.</dd>
           <dt>v130 · 2026-11-10</dt><dd><b>Workspace settings</b> (Settings → Templates → Workspace): the default hourly fee (was fixed at ₩40,000), the currency amounts are shown in, the time zone "today" and Google Calendar times are read in (was always Korea), the library name — now saved with your account so every device prints the same one — and a list of curriculum categories offered when you type a topic's category. Everything stays as before until you change it.</dd>
           <dt>v129 · 2026-11-10</dt><dd><b>Guide in Korean:</b> with the language set to 한국어 (or a Korean device on "Match the device language") this whole Guide — every section, the FAQ and this list — is in Korean. That completes the Korean / English work: every screen of the app now follows the language setting.</dd>
           <dt>v128 · 2026-11-10</dt><dd><b>Curriculum on a tablet or PC reads like a spreadsheet:</b> gridlines, text aligned to the top of each cell, and the heading row stays at the top while you scroll. <b>Drag the line between two column headings</b> to make a column wider or narrower (works with a finger on a tablet too); the table scrolls sideways when it gets wider. <b>Double-click</b> that line to fit the column to its text, and the ↔ button at the right end of the heading puts every width back. On a wide screen Month, Wk, Category and Topic stay frozen on the left. Widths are remembered on each device.</dd>
@@ -1802,7 +1830,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v130</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v131</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -1941,6 +1969,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
+          <dt>리딩 수업이 아닌데 독서와 도서를 숨길 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>모든 과목</b>. 독서와 도서 화면이 메뉴에서 빠지고 수업 카드에서 "읽은 책" 항목이 사라집니다. 화면과 수업 항목을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없으니 다시 켜면 그대로 있습니다.</dd>
           <dt>다른 통화를 쓰거나 기본 수업료를 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>작업 공간</b>. <b>기본 시간당 수업료</b>는 새 학생이나 새 수업에 미리 채워집니다(학생마다 정한 수업료가 있으면 그것이 우선). <b>통화</b>는 금액을 보여 주는 방식(₩, $, £, €, ¥ …)만 바꾸고, 이미 저장된 숫자는 환산하지 않습니다. 통화나 시간대를 바꾸면 앱이 다시 열립니다.</dd>
           <dt>편집 창에 항목이 없어요</dt><dd>편집 창에는 항상 모든 항목이 나옵니다. 사용자 항목의 숨기기는 목록의 열에만 적용됩니다. 그래도 없다면 파일이 옛 버전인지 확인하세요.</dd>
           <dt>파일을 새 버전으로 바꾸면 데이터는 어떻게 되나요?</dt><dd>같은 컴퓨터, 같은 브라우저라면 그대로 남습니다 — 데이터는 파일이 아니라 브라우저에 있습니다. 클라우드 동기화를 켜 두었다면 클라우드에도 사본이 있습니다. 안전하게 바꾸기 전에 내보내기를 해 두세요.</dd>
@@ -1961,6 +1990,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v131 · 2026-11-10</dt><dd><b>기능</b>(설정 → 템플릿 → 기능): 수업에 쓰지 않는 화면과 수업 카드 항목을 끌 수 있습니다. <b>모든 과목</b>은 독서, 도서, "읽은 책" 항목을 숨기고, <b>영어 리딩 수업</b>은 모두 다시 켭니다. 화면(독서, 도서, 교재, 교구, 커리큘럼)과 수업 항목(워크북, 읽은 책, 학교 / 학원 숙제, 쉬는 시간)을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없고, 비어 있는 항목은 원래대로 학부모 메시지에서 빠집니다.</dd>
           <dt>v130 · 2026-11-10</dt><dd><b>작업 공간 설정</b>(설정 → 템플릿 → 작업 공간): 기본 시간당 수업료(전에는 ₩40,000 고정), 금액을 보여 줄 통화, "오늘"과 Google 캘린더 시간을 읽는 시간대(전에는 항상 한국), 도서관 이름 — 이제 계정에 저장되어 모든 기기가 같은 이름을 인쇄합니다 — 그리고 주제의 카테고리를 입력할 때 추천할 커리큘럼 카테고리 목록. 바꾸기 전까지는 모두 예전과 같습니다.</dd>
           <dt>v129 · 2026-11-10</dt><dd><b>한국어 설명서:</b> 언어를 한국어로 두면(또는 "기기 언어에 맞춤"인 한국어 기기라면) 이 설명서 전체 — 모든 항목, 자주 묻는 질문, 이 목록까지 — 가 한국어로 나옵니다. 이것으로 한국어 / 영어 작업이 끝났습니다: 앱의 모든 화면이 언어 설정을 따릅니다.</dd>
           <dt>v128 · 2026-11-10</dt><dd><b>태블릿·PC의 커리큘럼이 스프레드시트처럼 보입니다:</b> 칸 구분선, 칸 위쪽에 맞춘 글, 아래로 스크롤해도 맨 위에 남는 제목 줄. <b>두 열 제목 사이의 선을 끌어</b> 열을 넓히거나 좁힐 수 있습니다(태블릿에서는 손가락으로도 됩니다). 표가 넓어지면 옆으로 스크롤됩니다. 그 선을 <b>두 번 누르면</b> 글에 맞게 너비가 맞춰지고, 제목 줄 오른쪽 끝의 ↔ 버튼은 모든 너비를 처음으로 되돌립니다. 넓은 화면에서는 월, 주, 카테고리, 주제가 왼쪽에 고정됩니다. 너비는 기기마다 기억합니다.</dd>
@@ -1987,7 +2017,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v130</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
+          설명서 기준 버전: <b>v131</b> · 자주 묻는 질문 기준일: <b>2026-11-10</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2432,7 +2462,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <input id="lm-topic" type="text"/>
     </div>
     <!-- Workbook -->
-    <div class="lf-section">
+    <div class="lf-section" data-feature="lsWorkbook">
       <div class="lf-hdr">
         <div class="lf-lbl" data-i18n>Workbook</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
@@ -2455,7 +2485,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="btn btn-sm" onclick="addWbRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add workbook</button>
     </div>
     <!-- Books read -->
-    <div class="lf-section">
+    <div class="lf-section" data-feature="lsBooks">
       <div class="lf-hdr">
         <div class="lf-lbl" data-i18n>Books read</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
@@ -2477,7 +2507,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="btn btn-sm" onclick="addBkRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add book</button>
     </div>
     <!-- School HW -->
-    <div class="lf-section">
+    <div class="lf-section" data-feature="lsSchoolHw">
       <div class="lf-hdr">
         <div class="lf-lbl" data-i18n>School / Academy HW</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
@@ -2499,7 +2529,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <button class="btn btn-sm" onclick="addShwRow()" style="margin-top:6px;border-style:dashed" data-i18n><i class="ti ti-plus"></i> Add HW</button>
     </div>
     <!-- Break time -->
-    <div class="lf-section">
+    <div class="lf-section" data-feature="lsBreak">
       <div class="lf-hdr">
         <div class="lf-lbl" data-i18n>Break time</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
@@ -3105,6 +3135,16 @@ const I18N={ko:{
   "this device":"이 기기","Enter an amount above 0":"0보다 큰 금액을 입력하세요","Default fee saved: {amt} per hour":"기본 수업료를 저장했습니다: 시간당 {amt}",
   "Saved — reloading":"저장했습니다 — 다시 여는 중","Categories saved":"카테고리를 저장했습니다",
   "Language or workspace settings changed on another device":"다른 기기에서 언어나 작업 공간 설정을 바꿨습니다","Reload":"다시 열기",
+  // ── v131: Settings → Features
+  "Features":"기능","Turn off what your classes don't use: the page leaves the menu and the section leaves the lesson card. Nothing is deleted — turn it back on and everything is there.":"수업에 쓰지 않는 것은 끄세요. 화면은 메뉴에서, 항목은 수업 카드에서 빠집니다. 지워지는 것은 없으며 다시 켜면 그대로 있습니다.",
+  "Start from:":"시작 설정:","English reading class":"영어 리딩 수업","Any subject":"모든 과목","Pages":"화면","Lesson card sections":"수업 카드 항목","Custom mix":"직접 고른 구성",
+  "Books read per student, AR trend and the reading report":"학생별 읽은 책, AR 추이, 독서 보고서","Your book library: AR / Lexile levels and label printing":"도서 목록: AR / Lexile 레벨과 라벨 인쇄",
+  "Workbook list, covers and progress":"교재 목록, 표지, 진도","Teaching materials and printouts":"수업 자료와 인쇄물","Lesson plan by year, month and week":"연도·월·주별 수업 계획",
+  "Workbook pages done in the lesson, with a timer":"수업에서 한 워크북 페이지와 타이머","Books read in the lesson — they feed the Reading page":"수업에서 읽은 책 — 독서 화면에 모입니다",
+  "Homework from school or another academy":"학교나 다른 학원 숙제","Break activity and its length":"쉬는 시간 활동과 길이",
+  "Turned on":"켰습니다","Turned off — nothing was deleted":"껐습니다 — 지워진 것은 없습니다",
+  "Set for any subject — Reading and Books are hidden":"모든 과목용으로 설정했습니다 — 독서와 도서는 숨겨집니다","Set for an English reading class — everything is on":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있습니다",
+  "Workbook|lesson section":"워크북",
 }};
 /* i18n-dict-end */
 function pickLang(){
@@ -3254,6 +3294,59 @@ function wsSetLibrary(v){
   try{localStorage.removeItem("mc_library_name");}catch{}
   if(save()!==false)showToast(tx("Library name saved"));
 }
+// ── Features (v131) — Settings → Templates → Features. settings.features[key] === false turns one
+// off; anything else (including a key that doesn't exist yet) is on, so older data keeps everything.
+const FEATURE_PAGES=[
+  {k:"reading",page:"reading",name:tx("Reading"),hint:tx("Books read per student, AR trend and the reading report")},
+  {k:"booklib",page:"booklib",name:tx("Books"),hint:tx("Your book library: AR / Lexile levels and label printing")},
+  {k:"workbooks",page:"books",name:tx("Workbooks"),hint:tx("Workbook list, covers and progress")},
+  {k:"material",page:"material",name:tx("Material"),hint:tx("Teaching materials and printouts")},
+  {k:"curriculum",page:"curriculum",name:tx("Curriculum"),hint:tx("Lesson plan by year, month and week")},
+];
+const FEATURE_SECTIONS=[
+  {k:"lsWorkbook",name:tx("Workbook|lesson section"),hint:tx("Workbook pages done in the lesson, with a timer")},
+  {k:"lsBooks",name:tx("Books read"),hint:tx("Books read in the lesson — they feed the Reading page")},
+  {k:"lsSchoolHw",name:tx("School / Academy HW"),hint:tx("Homework from school or another academy")},
+  {k:"lsBreak",name:tx("Break time"),hint:tx("Break activity and its length")},
+];
+const FEATURE_PRESETS={
+  reading:{},                                                   // everything on — how ClassDesk began
+  general:{reading:false,booklib:false,lsBooks:false},          // any subject: no reading library
+};
+function featureOn(k){return !(settings.features&&settings.features[k]===false);}
+function pageEnabled(p){const f=FEATURE_PAGES.find(x=>x.page===p);return !f||featureOn(f.k);}
+function featCurrentPreset(){
+  const all=[...FEATURE_PAGES,...FEATURE_SECTIONS].map(x=>x.k);
+  return Object.keys(FEATURE_PRESETS).find(name=>all.every(k=>featureOn(k)===(FEATURE_PRESETS[name][k]!==false)))||"";
+}
+// Hide what is off: menu items, lesson-card sections. A page that is off is never shown.
+function applyFeatures(){
+  document.querySelectorAll(".ni[data-page]").forEach(n=>{n.hidden=!pageEnabled(n.dataset.page);});
+  document.querySelectorAll("[data-feature]").forEach(el=>{el.hidden=!featureOn(el.dataset.feature);});
+  if(typeof curPage!=="undefined"&&curPage&&!pageEnabled(curPage))showPage("dashboard");
+}
+function renderFeatures(){
+  const box=(id,list)=>{const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=list.map(f=>`<label class="feat-row"><input type="checkbox" ${featureOn(f.k)?"checked":""} onchange="featSet('${f.k}',this.checked)"/><div><b>${escapeHTMLBasic(f.name)}</b><span>${escapeHTMLBasic(f.hint)}</span></div></label>`).join("");};
+  box("feat-pages",FEATURE_PAGES);box("feat-sections",FEATURE_SECTIONS);
+  const cur=featCurrentPreset();
+  document.querySelectorAll(".feat-presets .btn[data-preset]").forEach(b=>b.classList.toggle("on",b.dataset.preset===cur));
+  const now=document.getElementById("feat-preset-now");if(now)now.textContent=cur?"":tx("Custom mix");
+}
+function featSet(k,on){
+  settings.features={...(settings.features||{})};
+  if(on)delete settings.features[k];else settings.features[k]=false;
+  if(save()===false)return;
+  applyFeatures();renderFeatures();
+  showToast(on?tx("Turned on"):tx("Turned off — nothing was deleted"));
+}
+function featApplyPreset(name){
+  const p=FEATURE_PRESETS[name];if(!p)return;
+  settings.features={...p};
+  if(save()===false)return;
+  applyFeatures();renderFeatures();
+  showToast(name==="general"?tx("Set for any subject — Reading and Books are hidden"):tx("Set for an English reading class — everything is on"));
+}
 function wsSetCats(v){
   settings.currCats=[...new Set(String(v||"").split(/[,\n]/).map(x=>x.trim()).filter(Boolean))];
   if(save()!==false){showToast(tx("Categories saved"));renderWorkspace();}
@@ -3368,10 +3461,10 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v130";
+const APP_VERSION="v131";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
-  applyI18n();   // before any render: labels that code reads back (custom column names) must already carry their English source
+  applyI18n();applyFeatures();   // before any render: labels that code reads back (custom column names) must already carry their English source
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
   applyBranding();
@@ -3925,6 +4018,7 @@ function toggleMobileSidebar(){
 }
 
 function showPage(p){
+  if(!pageEnabled(p))p="dashboard"; // Settings → Features turned that page off
   if(p==="payments"&&pinRequired()){
     // Ask for the PIN before touching the page. Cancel must leave the current page as it is —
     // until v80 the Payments page had already been switched in and stayed visible after Cancel.
@@ -5385,7 +5479,7 @@ function importBackupFile(inp){
 }
 function renderSettings(){
   const langSel=document.getElementById("lang-sel");if(langSel)langSel.value=settings.lang||"auto";
-  renderWorkspace();
+  renderWorkspace();renderFeatures();
   applyBranding();
   renderPinState();
   // Workbook tags grouped by category
@@ -9555,7 +9649,7 @@ function applyRemoteRecord(key,id,data){
     KEEP.forEach(k=>{if((obj[k]===undefined||obj[k]==="")&&settings[k]){obj[k]=settings[k];_settingsRepush=true;}});
     // Workspace (v130) and language: a copy from a device on an older version lacks these keys
     // entirely — keep ours. An empty value ("" library name, [] categories) is a real choice and wins.
-    ["lang","hourlyRate","currency","timeZone","libraryName","currCats"].forEach(k=>{if(obj[k]===undefined&&settings[k]!==undefined){obj[k]=settings[k];_settingsRepush=true;}});
+    ["lang","hourlyRate","currency","timeZone","libraryName","currCats","features"].forEach(k=>{if(obj[k]===undefined&&settings[k]!==undefined){obj[k]=settings[k];_settingsRepush=true;}});
     Object.keys(settings).forEach(k=>delete settings[k]);
     Object.assign(settings,obj);settings._u=ru;
     applyBranding();
@@ -9592,6 +9686,7 @@ function afterRemoteApplied(key){
     if(key==="settings")_lastSaved.settings=cmpJson(val);
     else{const m=new Map();val.forEach(r=>m.set(r.id,cmpJson(r)));_lastSaved[key]=m;}
   }finally{syncApplyingRemote=false;}
+  if(key==="settings")applyFeatures();
   // Kept values go back up: forgetting what was last saved makes save() see a change, stamp a newer
   // _u and upload the merged copy — which still holds every value the remote device did send.
   if(key==="settings"&&_settingsRepush){_settingsRepush=false;_lastSaved.settings=null;setTimeout(()=>save(),0);}
