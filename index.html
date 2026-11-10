@@ -1023,22 +1023,22 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <img id="sb-logo-img" class="sb-logo-img" alt="" src="icons/icon-192.png?v=114"/>
       <div>
         <div class="sb-logo">CLASSDESK</div>
-        <div class="sb-sub">Class Management</div>
+        <div class="sb-sub" data-i18n>Class Management</div>
       </div>
     </div>
   </div>
   <nav class="sb-nav">
-    <button class="ni" data-page="dashboard" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
-    <button class="ni" data-page="students" onclick="showPage('students')"><i class="ti ti-users"></i>Students</button>
-    <button class="ni" data-page="sessions" onclick="showPage('sessions')"><i class="ti ti-notebook"></i>Classes</button>
-    <button class="ni" data-page="reading" onclick="showPage('reading')"><i class="ti ti-book"></i>Reading</button>
-    <button class="ni" data-page="payments" onclick="showPage('payments')"><i class="ti ti-receipt"></i>Payments</button>
-    <button class="ni" data-page="reports" onclick="showPage('reports')"><i class="ti ti-report-analytics"></i>Reports</button>
-    <button class="ni" data-page="curriculum" onclick="showPage('curriculum')"><i class="ti ti-calendar-month"></i>Curriculum</button>
-    <button class="ni" data-page="books" onclick="showPage('books')"><i class="ti ti-notebook"></i>Workbooks</button>
-    <button class="ni" data-page="booklib" onclick="showPage('booklib')"><i class="ti ti-books"></i>Books</button>
-    <button class="ni" data-page="material" onclick="showPage('material')"><i class="ti ti-puzzle"></i>Material</button>
-    <button class="ni" data-page="settings" onclick="showPage('settings')"><i class="ti ti-settings"></i>Settings</button>
+    <button class="ni" data-page="dashboard" data-i18n onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
+    <button class="ni" data-page="students" data-i18n onclick="showPage('students')"><i class="ti ti-users"></i>Students</button>
+    <button class="ni" data-page="sessions" data-i18n onclick="showPage('sessions')"><i class="ti ti-notebook"></i>Classes</button>
+    <button class="ni" data-page="reading" data-i18n onclick="showPage('reading')"><i class="ti ti-book"></i>Reading</button>
+    <button class="ni" data-page="payments" data-i18n onclick="showPage('payments')"><i class="ti ti-receipt"></i>Payments</button>
+    <button class="ni" data-page="reports" data-i18n onclick="showPage('reports')"><i class="ti ti-report-analytics"></i>Reports</button>
+    <button class="ni" data-page="curriculum" data-i18n onclick="showPage('curriculum')"><i class="ti ti-calendar-month"></i>Curriculum</button>
+    <button class="ni" data-page="books" data-i18n onclick="showPage('books')"><i class="ti ti-notebook"></i>Workbooks</button>
+    <button class="ni" data-page="booklib" data-i18n onclick="showPage('booklib')"><i class="ti ti-books"></i>Books</button>
+    <button class="ni" data-page="material" data-i18n onclick="showPage('material')"><i class="ti ti-puzzle"></i>Material</button>
+    <button class="ni" data-page="settings" data-i18n onclick="showPage('settings')"><i class="ti ti-settings"></i>Settings</button>
   </nav>
   <div class="sb-foot"></div>
 </aside>
@@ -1056,20 +1056,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-dashboard" class="page active">
 <div class="pc">
   <div class="stats cols-4">
-    <div class="sc grn"><div class="sc-lbl">Active students</div><div class="sc-val" id="st-s">—</div><div class="sc-sub">enrolled</div></div>
-    <div class="sc blu"><div class="sc-lbl">Today's lessons</div><div class="sc-val" id="st-t">—</div><div class="sc-sub">scheduled</div></div>
-    <div class="sc gry"><div class="sc-lbl">Month lessons</div><div class="sc-val" id="st-ml">—</div><div class="sc-sub" id="st-ml-sub">held / scheduled</div></div>
-    <div class="sc amb"><div class="sc-lbl">Expected (month)</div><div class="sc-val sm" id="st-ex">—</div><div class="sc-sub" id="st-up-sub"></div>
-      <button class="sc-eye" id="st-eye" onclick="togglePrivacy()" title="Show / hide amounts"><i class="ti ti-eye"></i></button></div>
+    <div class="sc grn"><div class="sc-lbl" data-i18n>Active students</div><div class="sc-val" id="st-s">—</div><div class="sc-sub" data-i18n>enrolled</div></div>
+    <div class="sc blu"><div class="sc-lbl" data-i18n>Today's lessons</div><div class="sc-val" id="st-t">—</div><div class="sc-sub" data-i18n>scheduled</div></div>
+    <div class="sc gry"><div class="sc-lbl" data-i18n>Month lessons</div><div class="sc-val" id="st-ml">—</div><div class="sc-sub" id="st-ml-sub">held / scheduled</div></div>
+    <div class="sc amb"><div class="sc-lbl" data-i18n>Expected (month)</div><div class="sc-val sm" id="st-ex">—</div><div class="sc-sub" id="st-up-sub"></div>
+      <button class="sc-eye" id="st-eye" onclick="togglePrivacy()" title="Show / hide amounts" data-i18n-title><i class="ti ti-eye"></i></button></div>
   </div>
   <div class="card">
-    <div class="ch"><div class="ct"><i class="ti ti-calendar-event"></i>Today's Schedule</div>
-      <button class="btn btn-p btn-sm" onclick="openLessonModal()"><i class="ti ti-plus"></i> Add lesson</button></div>
+    <div class="ch"><div class="ct" data-i18n><i class="ti ti-calendar-event"></i>Today's Schedule</div>
+      <button class="btn btn-p btn-sm" onclick="openLessonModal()" data-i18n><i class="ti ti-plus"></i> Add lesson</button></div>
     <div class="cb" id="dash-sched"></div>
   </div>
   <div class="card">
-    <div class="ch"><div class="ct"><i class="ti ti-checklist"></i>To-Do</div>
-      <button class="btn btn-sm" onclick="addTodo()"><i class="ti ti-plus"></i> Add</button></div>
+    <div class="ch"><div class="ct" data-i18n><i class="ti ti-checklist"></i>To-Do</div>
+      <button class="btn btn-sm" onclick="addTodo()" data-i18n><i class="ti ti-plus"></i> Add</button></div>
     <div class="cb p" id="dash-todo"></div>
   </div>
 </div>
@@ -1078,25 +1078,25 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- STUDENTS -->
 <div id="page-students" class="page">
   <div class="fbar">
-    <input type="search" id="std-search" placeholder="Search name, Korean name, parent…" oninput="renderStudents()" autocomplete="off" enterkeyhint="search"/>
-    <label class="sw" title="Include retired (archived) students"><input id="std-show-archived" type="checkbox" onchange="renderStudents()"/><span class="sw-track"></span><span>Show archived</span></label>
+    <input type="search" id="std-search" placeholder="Search name, Korean name, parent…" data-i18n-ph oninput="renderStudents()" autocomplete="off" enterkeyhint="search"/>
+    <label class="sw" title="Include retired (archived) students" data-i18n-title><input id="std-show-archived" type="checkbox" onchange="renderStudents()"/><span class="sw-track"></span><span data-i18n>Show archived</span></label>
     <div class="fbar-right">
       <span id="std-cnt" class="cell-muted2"></span>
-      <button class="btn btn-p" onclick="openStudentModal()"><i class="ti ti-plus"></i> Add student</button>
+      <button class="btn btn-p" onclick="openStudentModal()" data-i18n><i class="ti ti-plus"></i> Add student</button>
     </div>
   </div>
 <div class="pc">
   <div class="card">
     <div class="grid-head" style="display:grid;grid-template-columns:34px 190px 90px 170px 140px 74px 100px 96px minmax(0,1fr) 76px;gap:8px" data-header-page="students">
-      <div class="col-hdr">No.</div>
-      <div class="col-hdr" data-col="name">Student</div>
-      <div class="col-hdr" data-col="korean">Korean</div>
-      <div class="col-hdr" data-col="parent">Parent / Contact</div>
-      <div class="col-hdr" data-col="sched">Schedule</div>
-      <div class="col-hdr" data-col="dur">Duration</div>
-      <div class="col-hdr" data-col="rate">Rate</div>
-      <div class="col-hdr" data-col="ptype">Pay type</div>
-      <div class="col-hdr" data-col="notes">Notes</div>
+      <div class="col-hdr" data-i18n>No.</div>
+      <div class="col-hdr" data-col="name" data-i18n>Student</div>
+      <div class="col-hdr" data-col="korean" data-i18n>Korean</div>
+      <div class="col-hdr" data-col="parent" data-i18n>Parent / Contact</div>
+      <div class="col-hdr" data-col="sched" data-i18n>Schedule</div>
+      <div class="col-hdr" data-col="dur" data-i18n>Duration</div>
+      <div class="col-hdr" data-col="rate" data-i18n>Rate</div>
+      <div class="col-hdr" data-col="ptype" data-i18n>Pay type</div>
+      <div class="col-hdr" data-col="notes" data-i18n>Notes</div>
       <div></div>
     </div>
     <div id="std-list"></div>
@@ -1295,17 +1295,29 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-settings" class="page">
 <div class="pc">
   <div class="stab">
-    <button class="stab-btn active" onclick="switchSettingsTab('templates')">Templates</button>
-    <button class="stab-btn" onclick="switchSettingsTab('customfields')">Custom Fields</button>
-    <button class="stab-btn" onclick="switchSettingsTab('backup')">Backup</button>
-    <button class="stab-btn" onclick="switchSettingsTab('api-keys')">API Keys</button>
-    <button class="stab-btn" onclick="switchSettingsTab('account')">Account</button>
-    <button class="stab-btn" onclick="switchSettingsTab('guide')">Guide</button>
+    <button class="stab-btn active" onclick="switchSettingsTab('templates')" data-i18n>Templates</button>
+    <button class="stab-btn" onclick="switchSettingsTab('customfields')" data-i18n>Custom Fields</button>
+    <button class="stab-btn" onclick="switchSettingsTab('backup')" data-i18n>Backup</button>
+    <button class="stab-btn" onclick="switchSettingsTab('api-keys')" data-i18n>API Keys</button>
+    <button class="stab-btn" onclick="switchSettingsTab('account')" data-i18n>Account</button>
+    <button class="stab-btn" onclick="switchSettingsTab('guide')" data-i18n>Guide</button>
   </div>
 
   <!-- Activities tab -->
   <!-- Templates tab (Parent note + Payment templates combined) -->
   <div class="stab-pane active" id="st-templates">
+    <!-- Language (v124). The value is a synced setting; changing it reloads the app. -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="ch"><div class="ct" data-i18n><i class="ti ti-language"></i>Language</div></div>
+      <div class="cb p">
+        <p class="u-hint" style="margin-bottom:10px" data-i18n>Menus, buttons and messages. Your own entries — names, notes, templates — are never translated. The app reloads when you change this.</p>
+        <select id="lang-sel" style="max-width:320px" onchange="setLang(this.value)" data-i18n-opts>
+          <option value="auto">Match the device language</option>
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+        </select>
+      </div>
+    </div>
     <!-- Library branding -->
     <div class="card" style="margin-bottom:16px">
       <div class="ch"><div class="ct"><i class="ti ti-building-bank"></i>Library name</div></div>
@@ -1704,6 +1716,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Does anything remind me about fees that never arrived?</dt><dd>Yes. Last month's fees are expected by the <b>10th of this month</b>; from the <b>11th</b> on, if any of them are still outstanding, a popup lists who owes how much when you open the app, and it comes back <b>every 5 days</b> until you mark the money as received. Only the month immediately before the current one is checked, so it stops on its own when the month rolls over. On phones and tablets the names and amounts are left out of the popup — the same privacy rule the Dashboard and the Payments PIN follow — and "Open Payments" takes you straight to that month. The 5-day pause is remembered per device, so dismissing it on the PC doesn't silence the tablet.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
+          <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. As of v124 the sidebar, Dashboard, Students and the student card are translated; the remaining pages follow release by release.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>Removing another app from the phone (StudyDesk etc.)</dt><dd>ClassDesk shares its web address (amber67-git.github.io) with older copies of the other apps, and everything stored under one address is wiped together. To remove one of those older apps: phone <b>Settings → Apps</b> → that app → <b>Uninstall</b> only. <b>Never tap "Clear storage" / "Clear site data"</b> — it would erase ClassDesk's data on this phone too (signing back in brings the cloud copy back, but anything not yet synced is lost). Afterwards, typing <b>chrome://webapks</b> in Chrome should still list ClassDesk, with the Manifest Id https://amber67-git.github.io/classdesk/app (a copy installed before v116 shows https://amber67-git.github.io/ — see "How do I put ClassDesk on my phone/tablet home screen?" above).</dd>
           <dt>The app looks broken or outdated on my phone</dt><dd>The browser is remembering (caching) an old file. Visit the address with <b>?v=number</b> appended, or in Chrome settings clear only "Cached images and files". <b>Never clear "Cookies and site data"</b> — that deletes the app's data (recoverable by signing back in if cloud sync is on).</dd>
@@ -1712,6 +1725,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v124 · 2026-11-10</dt><dd><b>Korean / English (part 1):</b> Settings → Templates → <b>Language</b> switches the app's menus, buttons and messages. By default it follows the device language. This first part covers the sidebar, Dashboard, Students and the student card; the other pages and this Guide follow in the next releases. Your own entries — names, notes, templates — are never translated.</dd>
           <dt>v123 · 2026-11-09</dt><dd><b>Phone:</b> Curriculum, Books library, Reading and Material are cards too. A curriculum card shows the month, week and category on top, the topic, then only the columns that topic has (Workbook, Writing, Books…). A book card keeps the cover and title and lists author, publisher, category, AR level and Lexile as small chips. Nothing scrolls sideways; double-tap and the pencil/trash buttons work as before.</dd>
           <dt>v122 · 2026-11-09</dt><dd><b>Phone:</b> Payments → Summary by student and the Dashboard's Today's Schedule are cards instead of sideways-scrolling tables — every figure, the status and both action buttons are on screen. <b>Guide:</b> "What is ClassDesk?" now states where the app is going: a tool any tutor, in any subject, can shape to their own curriculum style.</dd>
           <dt>v121 · 2026-11-09</dt><dd><b>Student card:</b> the rows added with "Add another time" now look like the main Regular schedule row — the same Bi-weekly switch and start-week box, Duration and Rate with labels, and nothing cut off on a narrow dialog.</dd>
@@ -1732,7 +1746,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v123</b> · FAQ current as of: <b>2026-11-09</b><br/>
+          Guide written against version: <b>v124</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2087,53 +2101,53 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- STUDENT MODAL -->
 <div class="mo" id="mo-student">
   <div class="mb">
-    <div class="mt"><span id="sm-title">Add Student</span><button class="bic" onclick="closeModal('mo-student')" title="Close"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span id="sm-title">Add Student</span><button class="bic" onclick="closeModal('mo-student')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <div class="fr c2">
-      <div class="fg"><label data-col="name" data-required="true">English name *</label><input id="sm-name" type="text"/></div>
-      <div class="fg"><label data-col="korean" data-required="true">Korean name *</label><input id="sm-korean" type="text"/></div>
+      <div class="fg"><label data-col="name" data-required="true" data-i18n>English name *</label><input id="sm-name" type="text"/></div>
+      <div class="fg"><label data-col="korean" data-required="true" data-i18n>Korean name *</label><input id="sm-korean" type="text"/></div>
     </div>
     <div class="fr c2">
-      <div class="fg"><label data-col="parent">Parent name</label><input id="sm-parent" type="text"/></div>
-      <div class="fg"><label data-col="contact">Contact</label><input id="sm-contact" type="text"/></div>
+      <div class="fg"><label data-col="parent" data-i18n>Parent name</label><input id="sm-parent" type="text"/></div>
+      <div class="fg"><label data-col="contact" data-i18n>Contact</label><input id="sm-contact" type="text"/></div>
     </div>
-    <div class="fg"><label data-col="sched">Regular schedule</label>
+    <div class="fg"><label data-col="sched" data-i18n>Regular schedule</label>
       <div class="sm-sched-row">
         <select id="sm-sched-day" style="flex:0 0 130px" onchange="syncSchedText()"></select>
         <input id="sm-sched-time" type="time" step="300" style="flex:1 1 120px;min-width:0" onchange="syncSchedText()" oninput="syncSchedText()"/>
-        <label class="sw" title="Once every two weeks"><input id="sm-sched-biweekly" type="checkbox" onchange="toggleBiweekFrom()"/><span class="sw-track"></span> Bi-weekly</label>
-        <input id="sm-biweek-from" type="date" style="display:none;flex:0 0 150px" title="A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday."/>
+        <label class="sw" title="Once every two weeks" data-i18n data-i18n-title><input id="sm-sched-biweekly" type="checkbox" onchange="toggleBiweekFrom()"/><span class="sw-track"></span> Bi-weekly</label>
+        <input id="sm-biweek-from" type="date" style="display:none;flex:0 0 150px" title="A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday." data-i18n-title/>
       </div>
       <input id="sm-sched" type="hidden"/>
     </div>
     <div class="fr c2">
-      <div class="fg"><label title="The Students list counts the months from this date">First lesson</label><input id="sm-firstlesson" type="date"/></div>
-      <div class="fg"><label>Birthday</label><input id="sm-birthday" type="date"/></div>
+      <div class="fg"><label title="The Students list counts the months from this date" data-i18n data-i18n-title>First lesson</label><input id="sm-firstlesson" type="date"/></div>
+      <div class="fg"><label data-i18n>Birthday</label><input id="sm-birthday" type="date"/></div>
     </div>
-    <div class="fg"><label data-col="startdate">Start date</label><input id="sm-startdate" type="date"/></div>
-    <div class="fg"><label data-col="enddate">End date</label><input id="sm-enddate" type="date"/></div>
-    <div class="fg"><label class="sw"><input id="sm-archived" type="checkbox"/><span class="sw-track"></span> Archive</label></div>
+    <div class="fg"><label data-col="startdate" data-i18n>Start date</label><input id="sm-startdate" type="date"/></div>
+    <div class="fg"><label data-col="enddate" data-i18n>End date</label><input id="sm-enddate" type="date"/></div>
+    <div class="fg"><label class="sw" data-i18n><input id="sm-archived" type="checkbox"/><span class="sw-track"></span> Archive</label></div>
     <div class="fr c3">
-      <div class="fg"><label data-col="dur">Duration</label><input id="sm-dur" type="number" min="0.5" max="4" step="0.5" value="1" oninput="autoRate()"/></div>
-      <div class="fg"><label data-col="rate">Rate</label><input id="sm-rate" type="number" step="5000" value="40000"/></div>
-      <div class="fg"><label data-col="ptype">Payment type</label><select id="sm-ptype"><option value="postpay">Post-pay</option><option value="prepay">Prepay</option><option value="apppay">App Payment</option></select></div>
+      <div class="fg"><label data-col="dur" data-i18n>Duration</label><input id="sm-dur" type="number" min="0.5" max="4" step="0.5" value="1" oninput="autoRate()"/></div>
+      <div class="fg"><label data-col="rate" data-i18n>Rate</label><input id="sm-rate" type="number" step="5000" value="40000"/></div>
+      <div class="fg"><label data-col="ptype" data-i18n>Payment type</label><select id="sm-ptype" data-i18n-opts><option value="postpay">Post-pay</option><option value="prepay">Prepay</option><option value="apppay">App Payment</option></select></div>
     </div>
 
     <!-- Extra schedule slots — for students with multiple sessions/week at different durations -->
     <div id="sm-slots-wrap" style="margin-bottom:12px">
       <div id="sm-slots-list"></div>
-      <button type="button" class="btn btn-sm" id="sm-add-slot-btn" onclick="addSlotRow()" style="border-style:dashed;margin-top:4px">
+      <button type="button" class="btn btn-sm" id="sm-add-slot-btn" onclick="addSlotRow()" style="border-style:dashed;margin-top:4px" data-i18n>
         <i class="ti ti-plus"></i> Add another time (different day/duration)
       </button>
     </div>
 
-    <div class="fg"><label data-col="aliases">Bank aliases</label><input id="sm-aliases" type="text" placeholder="comma-separated"/></div>
-    <div class="fg"><label data-col="notes">Notes</label><input id="sm-notes" type="text"/></div>
+    <div class="fg"><label data-col="aliases" data-i18n>Bank aliases</label><input id="sm-aliases" type="text" placeholder="comma-separated" data-i18n-ph/></div>
+    <div class="fg"><label data-col="notes" data-i18n>Notes</label><input id="sm-notes" type="text"/></div>
     <div id="sm-custom-fields"></div>
     <div class="mf" style="justify-content:space-between">
-      <button class="btn btn-d" id="sm-delete-btn" onclick="delStudentFromModal()" style="display:none"><i class="ti ti-trash"></i> Delete student</button>
+      <button class="btn btn-d" id="sm-delete-btn" onclick="delStudentFromModal()" style="display:none" data-i18n><i class="ti ti-trash"></i> Delete student</button>
       <div style="display:flex;gap:8px;margin-left:auto">
-        <button class="btn" onclick="closeModal('mo-student')">Cancel</button>
-        <button class="btn btn-p" onclick="saveStudent()">Save student</button>
+        <button class="btn" onclick="closeModal('mo-student')" data-i18n>Cancel</button>
+        <button class="btn btn-p" onclick="saveStudent()" data-i18n>Save student</button>
       </div>
     </div>
   </div>
@@ -2384,6 +2398,7 @@ const DMATERIAL=[
   {id:"m01",name:"Osmo Coding Awbie",cat:"Tech / App",price:89000,players:"1",time:"15-20",difficulty:"Easy",comment:"코딩 교육 게임. iPad 필요."},
 ];
 const DSET={
+  lang:"auto",   // "auto" follows the device language; "en" / "ko" pin it (Settings → Templates → Language)
   gcalClientId:"",gcalCalendarId:"",gcalGreenHourly:0,gcalTitleMap:{},
   activities:["Board game","Card game","Show & Tell","Drawing","Free talk","Reading for fun","Spelling game"],
   // v115: no "[korean_name] 어머님" — same change as the payment message. See parentTemplate().
@@ -2512,6 +2527,121 @@ let todos=lg("mc_todos",[]);
 // Always money already received: it adds to Expected AND Collected, never to Outstanding (v109).
 let income=lg("mc_income",[]);
 let settings=lg("mc_settings",DSET);
+
+// ═══════════════════════════════════════════════
+// LANGUAGE (v124) — English and Korean
+// ═══════════════════════════════════════════════
+// The English the app was written in IS the key. tx("Add student") shows "Add student" in English and
+// looks the same text up in I18N.ko for Korean; a key with no Korean yet falls back to the English, so
+// a missing line never breaks the screen. validate.mjs reads the dictionary below and every key the
+// markup (data-i18n…) and the script (tx("…")) use, and fails on a key without Korean or a Korean line
+// nothing uses. Rules:
+//  • Only the app's own words are translated — never the user's data (names, notes, templates).
+//  • "Word|context" when one English word needs two Korean words ("Add|todo"): the part after "|"
+//    is never shown.
+//  • {name} placeholders are filled from the second argument: tx("{n} of {m} match",{n,m}).
+//  • Static markup: data-i18n on the element whose own text should change (only its direct text; mark
+//    inner elements separately), data-i18n-ph for a placeholder, data-i18n-title for a title,
+//    data-i18n-opts on a <select> to translate its options.
+//  • The language is a setting (synced), read once at start; changing it reloads the app.
+/* i18n-dict-start */
+const I18N={ko:{
+  // ── pages, sidebar, topbar
+  "Dashboard":"대시보드","Students":"학생","Classes":"수업","Reading":"독서","Payments":"수업료","Reports":"보고서",
+  "Curriculum":"커리큘럼","Workbooks":"교재","Books":"도서","Material":"교구","Settings":"설정",
+  "Class Management":"수업 관리",
+  // ── shared words
+  "Add":"추가","Edit":"수정","Delete":"삭제","Cancel":"취소","Close":"닫기","Notes":"메모",
+  "Student":"학생","Time":"시간","Topic":"주제","Status":"상태","Duration":"수업 시간","Rate":"수업료","Day":"요일",
+  "Previous month":"이전 달","Next month":"다음 달","Double-click to edit":"두 번 클릭하면 수정",
+  "Paid":"납부","Partial":"일부 납부","Unpaid":"미납","Cancelled":"취소됨","Prepaid":"선납","Post-pay":"후불",
+  "Cancelled (Paid)":"취소(납부됨)","Not started":"시작 전","In progress":"진행 중","Done":"완료","Skipped":"건너뜀",
+  "Prepay":"선불","App Payment":"앱 결제",
+  "Monday":"월요일","Tuesday":"화요일","Wednesday":"수요일","Thursday":"목요일","Friday":"금요일","Saturday":"토요일","Sunday":"일요일",
+  "Mon":"월","Tue":"화","Wed":"수","Thu":"목","Fri":"금","Sat":"토","Sun":"일",
+  "Su":"일","Mo":"월","Tu":"화","We":"수","Th":"목","Fr":"금","Sa":"토",
+  "All students":"모든 학생","Select student…":"학생 선택…",
+  // ── dashboard
+  "Active students":"재원 학생","enrolled":"등록","Today's lessons":"오늘 수업","scheduled":"예정","Month lessons":"이달 수업",
+  "held / scheduled":"진행 / 예정","{n} cancelled":"취소 {n}","Expected (month)":"이달 예상 수업료","amounts hidden":"금액 숨김",
+  "unpaid {amt}":"미납 {amt}","Show / hide amounts":"금액 보이기 / 숨기기","Show amounts":"금액 보이기","Hide amounts":"금액 숨기기",
+  "Today's Schedule":"오늘 일정","Add lesson":"수업 추가","No lessons today":"오늘은 수업이 없습니다",
+  "Hidden — tap Show amounts":"숨김 — 금액 보이기를 누르세요","Workbook / Books":"교재 / 도서",
+  "1 cancelled lesson hidden":"취소된 수업 1개는 표시하지 않음","{n} cancelled lessons hidden":"취소된 수업 {n}개는 표시하지 않음",
+  "{a} of {b}":"{b} 중 {a}","To-Do":"할 일","Add a quick note or to-do…":"메모나 할 일을 적으세요…","Nothing on your list yet":"아직 할 일이 없습니다",
+  "Show less":"접기","Show all {n} items":"{n}개 모두 보기",
+  // ── students page
+  "Search name, Korean name, parent…":"이름, 한글 이름, 학부모 검색…","Include retired (archived) students":"그만둔(보관된) 학생도 포함",
+  "Show archived":"보관 학생 보기","Add student":"학생 추가","No.":"번호","Korean":"한글 이름","Parent / Contact":"학부모 / 연락처",
+  "Schedule":"시간표","Pay type":"납부 방식","{n} of {m} match":"{m}명 중 {n}명 일치","{a} active · {b} archived":"재원 {a}명 · 보관 {b}명",
+  "{n} students":"학생 {n}명","No students match “{q}”":"“{q}”에 맞는 학생이 없습니다","No students yet":"아직 학생이 없습니다",
+  "No active students":"재원 중인 학생이 없습니다","{n}hr":"{n}시간","{n}hr/wk":"주 {n}시간","{amt}/wk":"주 {amt}",
+  "Archived":"보관됨","Birthday":"생일","this month":"이번 달","First lesson":"첫 수업","Reading log":"독서 기록",
+  "new|tenure":"신규","{n} mo":"{n}개월","{y} yr {m} mo":"{y}년 {m}개월","{y} yr":"{y}년",
+  // ── student card (dialog)
+  "Add Student":"학생 추가","Edit Student":"학생 수정","English name *":"영어 이름 *","Korean name *":"한글 이름 *","Parent name":"학부모 이름",
+  "Contact":"연락처","Regular schedule":"정규 시간표","Bi-weekly":"격주","Once every two weeks":"2주에 한 번",
+  "A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday.":"이 수업이 실제로 있는 주의 날짜. 여기서부터 격주로 번갈아 가므로 같은 요일에 두 학생이 교대로 수업할 수 있습니다.",
+  "The Students list counts the months from this date":"학생 목록의 재원 개월 수를 이 날짜부터 셉니다",
+  "Start date":"시작일","End date":"종료일","Archive":"보관","Payment type":"납부 방식",
+  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","comma-separated":"쉼표로 구분",
+  "Delete student":"학생 삭제","Save student":"학생 저장","Name required":"이름을 입력하세요",
+  "Delete this student? This cannot be undone.":"이 학생을 삭제할까요? 되돌릴 수 없습니다.",
+  "Stop {sched} from a date you pick next?\n\nThe student's other days carry on unchanged, and lessons already recorded keep the schedule they were booked under.":"{sched} 수업을 다음에 고르는 날짜부터 중단할까요?\n\n이 학생의 다른 요일 수업은 그대로 이어지고, 이미 기록된 수업은 예약 당시의 시간표를 유지합니다.",
+  "this class":"이 수업","hr":"시간","rate ₩":"수업료 ₩",
+  "Stop this class from a date — the other days carry on, and past lessons keep their own schedule":"특정 날짜부터 이 수업 중단 — 다른 요일은 계속되고, 지난 수업은 자기 시간표를 유지합니다",
+  "Remove this line":"이 줄 삭제",
+  "New schedule start date":"새 시간표 시작일",
+  "The new schedule and rate apply from the date you click. Up to the day before, the old schedule stays in effect.":"클릭한 날짜부터 새 시간표와 수업료가 적용됩니다. 그 전날까지는 이전 시간표가 유지됩니다.",
+  "Save — apply new schedule from today":"저장 — 오늘부터 새 시간표 적용","Apply to everything incl. the past (retroactive)":"과거까지 전부 적용 (소급)",
+  "To apply from a specific date, click that date on the calendar above.":"특정 날짜부터 적용하려면 위 달력에서 그 날짜를 클릭하세요.",
+  // ── settings
+  "Templates":"템플릿","Custom Fields":"사용자 항목","Backup":"백업","API Keys":"API 키","Account":"계정","Guide":"설명서",
+  "Language":"언어","Menus, buttons and messages. Your own entries — names, notes, templates — are never translated. The app reloads when you change this.":"메뉴·버튼·안내문의 언어입니다. 직접 입력한 내용(이름, 메모, 템플릿)은 번역하지 않습니다. 바꾸면 앱이 다시 열립니다.",
+  "Match the device language":"기기 언어에 맞춤","English":"English","한국어":"한국어",
+}};
+/* i18n-dict-end */
+function pickLang(){
+  const v=settings.lang||"auto";
+  if(v==="en"||v==="ko")return v;
+  return String(navigator.language||"").toLowerCase().startsWith("ko")?"ko":"en";
+}
+const LANG=pickLang();
+function tx(k,vars){
+  let s=(LANG!=="en"&&I18N[LANG]&&I18N[LANG][k])||k.split("|")[0];
+  if(vars)s=s.replace(/\{(\w+)\}/g,(m,n)=>vars[n]!==undefined?vars[n]:m);
+  return s;
+}
+const LOCALE=LANG==="ko"?"ko-KR":"en-GB";
+// Static markup. Each translated text node remembers the English it was written with (_src), so the
+// source is still there for custom-label code that needs the original wording.
+function applyI18n(root){
+  root=root||document;
+  root.querySelectorAll("[data-i18n]").forEach(el=>{
+    el.childNodes.forEach(n=>{
+      if(n.nodeType!==3||!n.nodeValue.trim())return;
+      if(n._src===undefined)n._src=n.nodeValue;
+      const m=n._src.match(/^(\s*)([\s\S]*?)(\s*)$/);
+      n.nodeValue=m[1]+tx(m[2])+m[3];
+    });
+  });
+  root.querySelectorAll("[data-i18n-ph]").forEach(el=>{if(!el.dataset.phSrc)el.dataset.phSrc=el.placeholder;el.placeholder=tx(el.dataset.phSrc);});
+  root.querySelectorAll("[data-i18n-title]").forEach(el=>{if(!el.dataset.titleSrc)el.dataset.titleSrc=el.title;el.title=tx(el.dataset.titleSrc);});
+  root.querySelectorAll("select[data-i18n-opts] option").forEach(o=>{if(!o.dataset.src)o.dataset.src=o.textContent;o.textContent=tx(o.dataset.src);});
+  document.documentElement.lang=LANG;
+}
+// The English source of an element whose text applyI18n may already have translated.
+function i18nSrc(el){
+  const n=[...el.childNodes].find(x=>x.nodeType===3&&x.nodeValue.trim());
+  return (n&&n._src!==undefined?n._src:el.textContent).trim();
+}
+function setLang(v){
+  settings.lang=v;
+  if(save()===false)return;
+  // Every label, option and constant was built for the old language; a fresh load is the one way
+  // to be sure nothing is left half-translated. The write to localStorage is synchronous.
+  setTimeout(()=>location.reload(),300);
+}
 // Persist all app state. Returns false if ANY key failed to write (ls() already alerted the
 // user), so future callers can react — e.g. skip closing a modal on a failed save.
 //
@@ -2622,9 +2752,10 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v123";
+const APP_VERSION="v124";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
+  applyI18n();   // before any render: labels that code reads back (custom column names) must already carry their English source
   const f=document.querySelector(".sb-foot");
   if(f)f.innerHTML=`<span style="font-size:10px;color:var(--txt3);font-family:var(--mono);padding:0 16px">${APP_VERSION} · ${APP_BUILT}</span>`;
   applyBranding();
@@ -2882,17 +3013,17 @@ const isOD=d=>d<td();
 
 // STATUS
 const SM={
-  paid:{lbl:"Paid",cls:"bp",col:"#16a34a"},partial:{lbl:"Partial",cls:"bpa",col:"#d97706"},
-  unpaid:{lbl:"Unpaid",cls:"bu",col:"#dc2626"},cancelled:{lbl:"Cancelled",cls:"bc",col:"#94a3b8"},
+  paid:{lbl:tx("Paid"),cls:"bp",col:"#16a34a"},partial:{lbl:tx("Partial"),cls:"bpa",col:"#d97706"},
+  unpaid:{lbl:tx("Unpaid"),cls:"bu",col:"#dc2626"},cancelled:{lbl:tx("Cancelled"),cls:"bc",col:"#94a3b8"},
 };
 // Kept for backward-compat display of any legacy records saved before the 3-status simplification.
 const SM_LEGACY={
-  prepaid:{lbl:"Prepaid",cls:"bpr",col:"#2563eb"},postpay:{lbl:"Post-pay",cls:"bpo",col:"#7c3aed"},
-  cancelpaid:{lbl:"Cancelled (Paid)",cls:"bcp",col:"#0e7490"},
+  prepaid:{lbl:tx("Prepaid"),cls:"bpr",col:"#2563eb"},postpay:{lbl:tx("Post-pay"),cls:"bpo",col:"#7c3aed"},
+  cancelpaid:{lbl:tx("Cancelled (Paid)"),cls:"bcp",col:"#0e7490"},
 };
 Object.assign(SM_LEGACY,SM);
-const HWM={not_started:{lbl:"Not started",cls:"bns"},in_progress:{lbl:"In progress",cls:"bip"},done:{lbl:"Done",cls:"bd"},skipped:{lbl:"Skipped",cls:"bsk"}};
-const PTYPE_META={prepay:{lbl:"Prepay",cls:"bpr"},postpay:{lbl:"Post-pay",cls:"bpo"},apppay:{lbl:"App Payment",cls:"bap"}};
+const HWM={not_started:{lbl:tx("Not started"),cls:"bns"},in_progress:{lbl:tx("In progress"),cls:"bip"},done:{lbl:tx("Done"),cls:"bd"},skipped:{lbl:tx("Skipped"),cls:"bsk"}};
+const PTYPE_META={prepay:{lbl:tx("Prepay"),cls:"bpr"},postpay:{lbl:tx("Post-pay"),cls:"bpo"},apppay:{lbl:tx("App Payment"),cls:"bap"}};
 const bdg=s=>{const m=SM_LEGACY[s]||{lbl:s,cls:"bc"};return `<span class="badge ${m.cls}">${m.lbl}</span>`;};
 const hwbdg=s=>{const m=HWM[s]||{lbl:s,cls:"bns"};return `<span class="badge ${m.cls}">${m.lbl}</span>`;};
 const scol=s=>(SM_LEGACY[s]||{col:"#e2e8f0"}).col;
@@ -3171,7 +3302,7 @@ function otherIncome(month){return incomeFor(month).reduce((a,r)=>a+(+r.amt||0),
 // ═══════════════════════════════════════════════
 // NAV
 // ═══════════════════════════════════════════════
-const PT={"dashboard":"Dashboard","students":"Students","sessions":"Classes","reading":"Reading","payments":"Payments","reports":"Reports","curriculum":"Curriculum","books":"Workbooks","booklib":"Books","material":"Material","settings":"Settings"};
+const PT={"dashboard":tx("Dashboard"),"students":tx("Students"),"sessions":tx("Classes"),"reading":tx("Reading"),"payments":tx("Payments"),"reports":tx("Reports"),"curriculum":tx("Curriculum"),"books":tx("Workbooks"),"booklib":tx("Books"),"material":tx("Material"),"settings":tx("Settings")};
 let curPage="dashboard";
 function toggleMobileSidebar(){
   document.querySelector(".sb")?.classList.toggle("mob-open");
@@ -3232,9 +3363,14 @@ let editSid=null;
 // ── Schedule day/time pickers ──
 // The stored format stays "Wed 19:30" (parseSchedKey and everything downstream rely on it), but
 // the UI is now two dropdowns instead of free text, so nobody has to remember the syntax.
-const SCHED_DAYS=[["Mon","Monday"],["Tue","Tuesday"],["Wed","Wednesday"],["Thu","Thursday"],["Fri","Friday"],["Sat","Saturday"],["Sun","Sunday"]];
+// The stored value stays the English short name ("Mon 15:45" is what every schedule string holds);
+// only the label shown in the dropdown is translated.
+const SCHED_DAYS=[["Mon",tx("Monday")],["Tue",tx("Tuesday")],["Wed",tx("Wednesday")],["Thu",tx("Thursday")],["Fri",tx("Friday")],["Sat",tx("Saturday")],["Sun",tx("Sunday")]];
+// Display form of a stored schedule string ("Mon 15:45"): the weekday is translated, the time kept.
+const DAY_SHORT={Mon:tx("Mon"),Tue:tx("Tue"),Wed:tx("Wed"),Thu:tx("Thu"),Fri:tx("Fri"),Sat:tx("Sat"),Sun:tx("Sun")};
+function schedLabel(sched){return String(sched||"").replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b/,d=>DAY_SHORT[d]||d);}
 function schedDayOptions(sel){
-  return `<option value="">Day</option>`+SCHED_DAYS.map(([v,k])=>
+  return `<option value="">${tx("Day")}</option>`+SCHED_DAYS.map(([v,k])=>
     `<option value="${v}"${v===sel?" selected":""}>${k}</option>`).join("");
 }
 // 15-minute steps from 07:00 to 22:00, labelled with AM/PM for readability.
@@ -3288,7 +3424,7 @@ function initMainSchedPickers(schedStr){
 function openStudentModal(id){
   editSid=id||null;
   const s=id?gs(id):null;
-  document.getElementById("sm-title").textContent=id?"Edit Student":"Add Student";
+  document.getElementById("sm-title").textContent=id?tx("Edit Student"):tx("Add Student");
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
   set("sm-name",s?.name);set("sm-korean",s?.k);set("sm-parent",s?.parent);
   set("sm-contact",s?.contact);set("sm-sched",s?.sched);set("sm-startdate",s?.startDate||"");set("sm-firstlesson",s?.firstLesson||"");set("sm-birthday",s?.birthday||"");set("sm-enddate",s?.endDate||"");const _ar=document.getElementById("sm-archived");if(_ar)_ar.checked=!!s?.archived;
@@ -3313,7 +3449,7 @@ async function delStudentFromModal(){
   if(!editSid)return;
   const id=editSid;                       // closeModal() clears editSid; capture before awaiting
   const anchor=event?.currentTarget||event?.target;
-  if(!confirm("Delete this student? This cannot be undone."))return;
+  if(!confirm(tx("Delete this student? This cannot be undone.")))return;
   closeModal("mo-student");
   deleteWithUndo("students",id,()=>{popSelects();renderStudents();});
 }
@@ -3329,8 +3465,8 @@ function toggleBiweekFrom(keep){
 // date it applies, archiving the old timetable so past months keep billing what they billed.
 async function slotStopFromDate(btn){
   const row=btn.closest(".slot-row");if(!row)return;
-  const sched=row.querySelector(".slot-sched")?.value||"this class";
-  if(!confirm("Stop "+sched+" from a date you pick next?\n\nThe student's other days carry on unchanged, and lessons already recorded keep the schedule they were booked under."))return;
+  const sched=row.querySelector(".slot-sched")?.value;
+  if(!confirm(tx("Stop {sched} from a date you pick next?\n\nThe student's other days carry on unchanged, and lessons already recorded keep the schedule they were booked under.",{sched:sched?schedLabel(sched):tx("this class")})))return;
   // Put the row back if the save does not go through — cancelling the date picker would otherwise
   // leave the slot missing from the open dialog, and the next save would drop it for real.
   const list=row.parentNode,next=row.nextSibling;
@@ -3361,15 +3497,15 @@ function addSlotRow(slot){
     +'<div class="sm-sched-row">'
     +  '<select class="slot-day" style="flex:0 0 130px" onchange="slotSyncSched(this)">'+schedDayOptions(day)+'</select>'
     +  '<input class="slot-time" type="time" step="300" style="flex:1 1 120px;min-width:0" value="'+time+'" onchange="slotSyncSched(this)" oninput="slotSyncSched(this)"/>'
-    +  '<label class="sw" title="Once every two weeks"><input type="checkbox" class="slot-biweekly" onchange="slotToggleBiweek(this)"'+(slot?.freq==="biweekly"?" checked":"")+'/><span class="sw-track"></span> Bi-weekly</label>'
-    +  '<input type="date" class="slot-biweek-from" title="A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday." value="'+(slot?.biweekFrom||"")+'" style="flex:0 0 150px;'+(slot?.freq==="biweekly"?"":"display:none")+'"/>'
+    +  '<label class="sw" title="'+tx("Once every two weeks")+'"><input type="checkbox" class="slot-biweekly" onchange="slotToggleBiweek(this)"'+(slot?.freq==="biweekly"?" checked":"")+'/><span class="sw-track"></span> '+tx("Bi-weekly")+'</label>'
+    +  '<input type="date" class="slot-biweek-from" title="'+tx("A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday.")+'" value="'+(slot?.biweekFrom||"")+'" style="flex:0 0 150px;'+(slot?.freq==="biweekly"?"":"display:none")+'"/>'
     +'</div>'
     +'<div class="slot-row2">'
-    +  '<div class="fg"><label>Duration</label><input type="number" min="0.5" max="4" step="0.5" placeholder="hr" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/></div>'
-    +  '<div class="fg"><label>Rate</label><input type="number" step="5000" placeholder="rate ₩" value="'+(slot?.rate??40000)+'"/></div>'
+    +  '<div class="fg"><label>'+tx("Duration")+'</label><input type="number" min="0.5" max="4" step="0.5" placeholder="'+tx("hr")+'" value="'+(slot?.dur??1)+'" oninput="slotAutoRate(this)"/></div>'
+    +  '<div class="fg"><label>'+tx("Rate")+'</label><input type="number" step="5000" placeholder="'+tx("rate ₩")+'" value="'+(slot?.rate??40000)+'"/></div>'
     +  '<div class="slot-acts">'
-    +    '<button type="button" class="bic" onclick="slotStopFromDate(this)" title="Stop this class from a date — the other days carry on, and past lessons keep their own schedule"><i class="ti ti-calendar-off"></i></button>'
-    +    '<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" title="Remove this line"><i class="ti ti-trash"></i></button>'
+    +    '<button type="button" class="bic" onclick="slotStopFromDate(this)" title="'+tx("Stop this class from a date — the other days carry on, and past lessons keep their own schedule")+'"><i class="ti ti-calendar-off"></i></button>'
+    +    '<button type="button" class="bic" onclick="this.closest(\'.slot-row\').remove()" title="'+tx("Remove this line")+'"><i class="ti ti-trash"></i></button>'
     +  '</div>'
     +'</div>';
   list.appendChild(div);
@@ -3407,10 +3543,10 @@ function pickScheduleFromDate(noRetro){
 }
 function renderSchedFromCal(){
   const y=_sfMonth.getUTCFullYear(),m=_sfMonth.getUTCMonth();
-  document.getElementById("sf-mlbl").textContent=`${["January","February","March","April","May","June","July","August","September","October","November","December"][m]} ${y}`;
+  document.getElementById("sf-mlbl").textContent=new Date(Date.UTC(y,m,1)).toLocaleDateString(LOCALE,{month:"long",year:"numeric",timeZone:"UTC"});
   const grid=document.getElementById("sf-grid");
   const today=td();
-  let html=["Su","Mo","Tu","We","Th","Fr","Sa"].map(d=>`<div style="color:var(--txt3);font-weight:700;padding:4px 0">${d}</div>`).join("");
+  let html=[tx("Su"),tx("Mo"),tx("Tu"),tx("We"),tx("Th"),tx("Fr"),tx("Sa")].map(d=>`<div style="color:var(--txt3);font-weight:700;padding:4px 0">${d}</div>`).join("");
   const first=new Date(Date.UTC(y,m,1)),startDow=first.getUTCDay(),days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
   for(let i=0;i<startDow;i++)html+="<div></div>";
   for(let d=1;d<=days;d++){
@@ -3446,7 +3582,7 @@ async function saveStudent(){
   const customFields=collectCustomFieldsFromModal("sm-custom-fields");
   const rawRate=document.getElementById("sm-rate")?.value;
   const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*HR),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
-  if(!obj.name){alert("Name required");return;}
+  if(!obj.name){alert(tx("Name required"));return;}
   const isNew=!editSid;
   const prevStudents=students.slice(); // for rollback if the write fails
   if(editSid){
@@ -3499,7 +3635,7 @@ let isVirtualLesson=false;
 let lessonNaturalDate=null;
 function popSelects(){
   const opts=students.filter(s=>!s.archived).map(s=>`<option value="${s.id}">${s.name} / ${s.k}</option>`).join("");
-  ["lm-sid","sf-sid"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=(id==="sf-sid"?'<option value="">All students</option>':'<option value="">Select student…</option>')+opts;});
+  ["lm-sid","sf-sid"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=(id==="sf-sid"?'<option value="">'+tx("All students")+'</option>':'<option value="">'+tx("Select student…")+'</option>')+opts;});
 }
 function openLessonModal(id){
   editLid=id||null;
@@ -4625,6 +4761,7 @@ function importBackupFile(inp){
   reader.readAsText(file);
 }
 function renderSettings(){
+  const langSel=document.getElementById("lang-sel");if(langSel)langSel.value=settings.lang||"auto";
   const libInp=document.getElementById("library-name-inp");
   if(libInp)libInp.value=localStorage.getItem("mc_library_name")??"AMBER LIBRARY";
   applyBranding();
@@ -4897,16 +5034,16 @@ function renderDash(){
   const monthHeld=monthPlanned.filter(o=>o.date<=t).length;
   const monthCancelled=monthOccs.length-monthPlanned.length;
   setT("st-ml",monthHeld+"/"+monthPlanned.length);
-  setT("st-ml-sub","held / scheduled"+(monthCancelled?" · "+monthCancelled+" cancelled":""));
+  setT("st-ml-sub",tx("held / scheduled")+(monthCancelled?" · "+tx("{n} cancelled",{n:monthCancelled}):""));
   setT("st-ex",pwon(totE));setT("st-up",pwon(totE-totP));
-  setT("st-up-sub",privacyHidden?"amounts hidden":"unpaid "+won(totE-totP));
+  setT("st-up-sub",privacyHidden?tx("amounts hidden"):tx("unpaid {amt}",{amt:won(totE-totP)}));
   const eye=document.getElementById("st-eye");
-  if(eye){eye.innerHTML=`<i class="ti ${privacyHidden?"ti-eye":"ti-eye-off"}"></i>`;eye.title=privacyHidden?"Show amounts":"Hide amounts";}
+  if(eye){eye.innerHTML=`<i class="ti ${privacyHidden?"ti-eye":"ti-eye-off"}"></i>`;eye.title=privacyHidden?tx("Show amounts"):tx("Hide amounts");}
 
   // ── TODAY SCHEDULE ──
   const sc=document.getElementById("dash-sched");
   if(!todayActive.length){
-    sc.innerHTML='<div class="empty"><i class="ti ti-calendar-off"></i><p>No lessons today'+(todayCancelled?" ("+todayCancelled+" cancelled)":"")+'</p></div>';
+    sc.innerHTML='<div class="empty"><i class="ti ti-calendar-off"></i><p>'+tx("No lessons today")+(todayCancelled?" ("+tx("{n} cancelled",{n:todayCancelled})+")":"")+'</p></div>';
   } else {
     const show=dashExpanded.sched?todayActive:todayActive.slice(0,DASH_LIMIT);
     let rows=show.map(l=>{
@@ -4914,8 +5051,8 @@ function renderDash(){
       const wbStr=(l.workbooks||[]).map(w=>w.name).join(", ")||"";
       const bkStr=(l.books||[]).map(b=>b.name).join(", ")||"";
       const content=[wbStr,bkStr].filter(Boolean).join(" · ")||"—";
-      return "<tr class='clickable' title='Double-click to edit' ondblclick=\"openLessonModal('"+l.id+"')\">"
-        +"<td><button class='bic' onclick=\"openLessonModal('"+l.id+"')\" title='Edit'><i class='ti ti-pencil'></i></button></td>"
+      return "<tr class='clickable' title='"+tx("Double-click to edit")+"' ondblclick=\"openLessonModal('"+l.id+"')\">"
+        +"<td><button class='bic' onclick=\"openLessonModal('"+l.id+"')\" title='"+tx("Edit")+"'><i class='ti ti-pencil'></i></button></td>"
         +"<td style='color:var(--txt3);font-family:var(--mono);font-size:11px'>"+occTimeLabel(l)+"</td>"
         +"<td><div style='display:flex;align-items:center;gap:7px'><div class='av'>"+ini(s?.name)+"</div>"
         +"<div><div class='tn'>"+(s?.name||"?")+"</div><div style='font-size:11px;color:var(--txt3)'>"+(s?.k||"")+"</div></div></div></td>"
@@ -4923,20 +5060,20 @@ function renderDash(){
         // printing "—". (Not ".empty" — that is the page-wide empty-state block style.)
         +"<td"+(l.topic?"":" class='sched-empty'")+">"+(l.topic||"—")+"</td>"
         +"<td style='font-size:11px;color:var(--txt2)'"+(content==="—"?" class='sched-empty'":"")+">"+content+"</td>"
-        +"<td>"+(privacyHidden?"<span class='badge bc' title='Hidden — tap Show amounts'>•••</span>":bdg(l.status))+"</td>"
+        +"<td>"+(privacyHidden?"<span class='badge bc' title='"+tx("Hidden — tap Show amounts")+"'>•••</span>":bdg(l.status))+"</td>"
         +"<td style='font-size:11px;color:var(--txt3);max-width:100px;overflow:hidden;text-overflow:ellipsis'"+(l.note?"":" class='sched-empty'")+">"+(l.note||"")+"</td>"
         +"</tr>";
     }).join("");
-    sc.innerHTML="<div class='tw'><table id='dash-sched-tbl'><thead><tr><th></th><th>Time</th><th>Student</th><th>Topic</th><th>Workbook / Books</th><th>Status</th><th>Notes</th></tr></thead><tbody>"
+    sc.innerHTML="<div class='tw'><table id='dash-sched-tbl'><thead><tr><th></th><th>"+tx("Time")+"</th><th>"+tx("Student")+"</th><th>"+tx("Topic")+"</th><th>"+tx("Workbook / Books")+"</th><th>"+tx("Status")+"</th><th>"+tx("Notes")+"</th></tr></thead><tbody>"
       +rows+"</tbody></table></div>"
-      +(todayCancelled?"<div class='u-hint' style='padding:0 14px 10px'>"+todayCancelled+" cancelled "+(todayCancelled===1?"lesson":"lessons")+" hidden</div>":"")
+      +(todayCancelled?"<div class='u-hint' style='padding:0 14px 10px'>"+(todayCancelled===1?tx("1 cancelled lesson hidden"):tx("{n} cancelled lessons hidden",{n:todayCancelled}))+"</div>":"")
       +makeCollapseBtn("sched",todayActive.length);
   }
 
   // ── PROGRESS BAR ──
   const pct=totE>0?Math.round(totP/totE*100):0;
   const pb=document.getElementById("d-pbar");if(pb)pb.style.width=(privacyHidden?0:pct)+"%";
-  const pl=document.getElementById("d-plbl");if(pl)pl.textContent=privacyHidden?MASK_AMT+" of "+MASK_AMT:won(totP)+" of "+won(totE)+" ("+pct+"%)";
+  const pl=document.getElementById("d-plbl");if(pl)pl.textContent=privacyHidden?tx("{a} of {b}",{a:MASK_AMT,b:MASK_AMT}):tx("{a} of {b}",{a:won(totP),b:won(totE)})+" ("+pct+"%)";
 
   renderTodos();
 }
@@ -4949,19 +5086,19 @@ function renderTodos(){
   if(!el)return;
   const inputRow=`
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <input type="text" id="todo-new-inp" placeholder="Add a quick note or to-do…" style="height:34px" onkeydown="if(event.key==='Enter'){event.preventDefault();commitNewTodo();}"/>
+      <input type="text" id="todo-new-inp" placeholder="${tx("Add a quick note or to-do…")}" style="height:34px" onkeydown="if(event.key==='Enter'){event.preventDefault();commitNewTodo();}"/>
       <button class="btn btn-sm btn-p" onclick="commitNewTodo()" style="flex-shrink:0"><i class="ti ti-plus"></i></button>
     </div>`;
   if(!todos.length){
-    el.innerHTML=inputRow+'<div class="empty" style="padding:20px 10px"><i class="ti ti-checklist"></i><p>Nothing on your list yet</p></div>';
+    el.innerHTML=inputRow+'<div class="empty" style="padding:20px 10px"><i class="ti ti-checklist"></i><p>'+tx("Nothing on your list yet")+'</p></div>';
     return;
   }
   const sorted=[...todos].sort((a,b)=>(a.done===b.done)?0:(a.done?1:-1));
-  el.innerHTML=inputRow+sorted.map(t=>`
+  el.innerHTML=inputRow+sorted.map(td_=>`
     <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr)">
-      <input type="checkbox" ${t.done?"checked":""} onchange="toggleTodo('${t.id}')" style="width:16px;height:16px;cursor:pointer;accent-color:var(--grn);flex-shrink:0"/>
-      <span style="flex:1;font-size:13px;${t.done?"color:var(--txt3);text-decoration:line-through":"color:var(--txt)"}">${escAttrTodo(t.text)}</span>
-      <button class="bic text-red" onclick="delTodo('${t.id}')" title="Delete"><i class="ti ti-trash"></i></button>
+      <input type="checkbox" ${td_.done?"checked":""} onchange="toggleTodo('${td_.id}')" style="width:16px;height:16px;cursor:pointer;accent-color:var(--grn);flex-shrink:0"/>
+      <span style="flex:1;font-size:13px;${td_.done?"color:var(--txt3);text-decoration:line-through":"color:var(--txt)"}">${escAttrTodo(td_.text)}</span>
+      <button class="bic text-red" onclick="delTodo('${td_.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button>
     </div>`).join("");
 }
 function escAttrTodo(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -5026,10 +5163,10 @@ function tenureLabel(s){
   const from=studentSince(s);if(!from)return"";
   const n=monthsBetweenDates(from,td());
   if(n<0)return"";
-  if(n<1)return"new";
-  if(n<12)return n+" mo";
+  if(n<1)return tx("new|tenure");
+  if(n<12)return tx("{n} mo",{n});
   const y=Math.floor(n/12),r=n%12;
-  return r?y+" yr "+r+" mo":y+" yr";
+  return r?tx("{y} yr {m} mo",{y,m:r}):tx("{y} yr",{y});
 }
 function ageFromBirthday(b){
   if(!b)return null;
@@ -5048,31 +5185,32 @@ function renderStudents(){
   const matches=s=>[s.name,s.k,s.parent,s.contact,s.notes,...(s.aliases||[])].some(v=>String(v||"").toLowerCase().includes(q));
   const visible=q?students.filter(matches):(showArchived?students:active);
   const cnt=document.getElementById("std-cnt");
-  if(cnt)cnt.textContent=q?`${visible.length} of ${students.length} match`:showArchived&&archived.length?`${active.length} active · ${archived.length} archived`:`${active.length} students`;
+  if(cnt)cnt.textContent=q?tx("{n} of {m} match",{n:visible.length,m:students.length}):showArchived&&archived.length?tx("{a} active · {b} archived",{a:active.length,b:archived.length}):tx("{n} students",{n:active.length});
   const el=document.getElementById("std-list");
-  if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(q?`No students match “${escapeHTMLBasic(q)}”`:showArchived?"No students yet":"No active students")+'</p></div>';return;}
+  if(!visible.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i><p>'+(q?tx("No students match “{q}”",{q:escapeHTMLBasic(q)}):showArchived?tx("No students yet"):tx("No active students"))+'</p></div>';return;}
   const sortedStudents=[...visible].sort((a,b)=>studentSortKey(a)-studentSortKey(b));
   el.innerHTML=sortedStudents.map((s,idx)=>{
     const extras=s.extraSlots||[];
-    const schedDisp=extras.length?[s.sched,...extras.map(sl=>sl.sched)].join("<br>"):s.sched;
+    const schedDisp=extras.length?[s.sched,...extras.map(sl=>sl.sched)].map(schedLabel).join("<br>"):schedLabel(s.sched);
     const totalDur=s.dur+extras.reduce((sum,sl)=>sum+(sl.dur||0),0);
     const totalRate=s.rate+extras.reduce((sum,sl)=>sum+(sl.rate||0),0);
-    const durDisp=extras.length?totalDur+"hr/wk":s.dur+"hr";
-    const rateDisp=extras.length?won(totalRate)+"/wk":won(s.rate);
+    const hr=n=>tx("{n}hr",{n});
+    const durDisp=extras.length?tx("{n}hr/wk",{n:totalDur}):hr(s.dur);
+    const rateDisp=extras.length?tx("{amt}/wk",{amt:won(totalRate)}):won(s.rate);
     const tip=extras.length
-      ?("Tooltip: "+s.sched+" ("+s.dur+"hr, "+won(s.rate)+") + "+extras.map(sl=>sl.sched+" ("+sl.dur+"hr, "+won(sl.rate)+")").join(" + ")).replace("Tooltip: ","")
+      ?(schedLabel(s.sched)+" ("+hr(s.dur)+", "+won(s.rate)+") + "+extras.map(sl=>schedLabel(sl.sched)+" ("+hr(sl.dur)+", "+won(sl.rate)+")").join(" + "))
       :"";
-    return `<div class="std-row${s.archived?" std-archived":""}" ondblclick="openStudentModal('${s.id}')" title="Double-click to edit">
+    return `<div class="std-row${s.archived?" std-archived":""}" ondblclick="openStudentModal('${s.id}')" title="${tx("Double-click to edit")}">
     <div style="font-size:12px;color:var(--txt3);font-family:var(--mono)">${idx+1}</div>
-    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">Archived</span>':''}</div>${s.birthday?`<div class="cell-muted" title="Birthday ${s.birthday}${birthdayThisMonth(s.birthday)?" — this month":""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
+    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>${s.birthday?`<div class="cell-muted" title="${tx("Birthday")} ${s.birthday}${birthdayThisMonth(s.birthday)?" — "+tx("this month"):""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
     <div style="font-size:13px;color:var(--txt2)">${s.k}</div>
     <div><div style="font-size:12px;font-weight:500">${s.parent}</div><div class="cell-muted">${s.contact}</div></div>
-    <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}${tenureLabel(s)?`<div class="cell-muted" title="First lesson ${studentSince(s)}">${tenureLabel(s)}</div>`:""}</div>
+    <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}${tenureLabel(s)?`<div class="cell-muted" title="${tx("First lesson")} ${studentSince(s)}">${tenureLabel(s)}</div>`:""}</div>
     <div class="tm" title="${tip}">${durDisp}</div>
     <div class="tm" title="${tip}">${rateDisp}</div>
-    <div><span class="badge ${PTYPE_META[s.ptype]?.cls||"bpo"}">${PTYPE_META[s.ptype]?.lbl||"Post-pay"}</span></div>
+    <div><span class="badge ${PTYPE_META[s.ptype]?.cls||"bpo"}">${PTYPE_META[s.ptype]?.lbl||tx("Post-pay")}</span></div>
     <div class="u-hint${s.notes?"":" std-notes-empty"}" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${s.notes||""}">${s.notes||"—"}</div>
-    <div class="row-actions" ondblclick="event.stopPropagation()"><button class="bic" onclick="openReadingFor('${s.id}')" title="Reading log"><i class="ti ti-book"></i></button><button class="bic" onclick="openStudentModal('${s.id}')" title="Edit"><i class="ti ti-pencil"></i></button></div>
+    <div class="row-actions" ondblclick="event.stopPropagation()"><button class="bic" onclick="openReadingFor('${s.id}')" title="${tx("Reading log")}"><i class="ti ti-book"></i></button><button class="bic" onclick="openStudentModal('${s.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button></div>
   </div>`;
   }).join("");
 }
@@ -7734,8 +7872,10 @@ function applyCustomLabelsToHeader(pageKey){
   document.querySelectorAll(`[data-header-page="${pageKey}"]`).forEach(head=>{
     head.querySelectorAll("[data-col]").forEach(el=>{
       const colId=el.dataset.col;
-      if(!el.dataset.origLabel)el.dataset.origLabel=el.textContent.trim();
-      const defaultLabel=el.dataset.origLabel;
+      // origLabel is the English the markup was written with (applyI18n may already have shown it
+      // in Korean); the user's own column name wins, otherwise the English is translated here.
+      if(!el.dataset.origLabel)el.dataset.origLabel=i18nSrc(el);
+      const defaultLabel=tx(el.dataset.origLabel);
       el.textContent=labelFor(pageKey,colId,defaultLabel);
     });
   });
@@ -7747,8 +7887,10 @@ function applyCustomLabelsToModal(modalId,pageKey){
   modal.querySelectorAll("label[data-col],.lf-lbl[data-col]").forEach(lbl=>{
     const colId=lbl.dataset.col;
     // Cache the original label the first time we touch it (strip any trailing "*")
-    if(!lbl.dataset.origLabel)lbl.dataset.origLabel=lbl.textContent.replace(/\s*\*\s*$/,"").trim();
-    const defaultLabel=lbl.dataset.origLabel;
+    // origLabel is the English the markup was written with, "*" included (it is part of the
+    // translation key); the "*" is put back below only for a required field.
+    if(!lbl.dataset.origLabel)lbl.dataset.origLabel=i18nSrc(lbl);
+    const defaultLabel=tx(lbl.dataset.origLabel).replace(/\s*\*\s*$/,"").trim();
     const isRequired=lbl.dataset.required==="true";
     const custom=labelFor(pageKey,colId,defaultLabel);
     lbl.textContent=custom+(isRequired?" *":"");
@@ -8413,7 +8555,7 @@ function makeCollapseBtn(section,total){
   if(total<=DASH_LIMIT)return "";
   const exp=dashExpanded[section];
   const icon=exp?"ti-chevron-up":"ti-chevron-down";
-  const label=exp?"Show less":"Show all "+total+" items";
+  const label=exp?tx("Show less"):tx("Show all {n} items",{n:total});
   return "<div style='text-align:center;padding:8px 0;border-top:1px solid var(--bdr)'>"
     +"<button class='btn btn-sm' onclick='toggleDash("+JSON.stringify(section)+")' style='width:100%;color:var(--txt3)'>"
     +"<i class='ti "+icon+"'></i> "+label+"</button></div>";
@@ -9585,20 +9727,20 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 <div class="mo" id="mo-schedfrom" style="z-index:2600">
   <div class="mb" style="max-width:340px">
-    <div class="mt"><span>New schedule start date</span><button class="bic" onclick="schedFromCancel()" title="Close"><i class="ti ti-x"></i></button></div>
+    <div class="mt"><span data-i18n>New schedule start date</span><button class="bic" onclick="schedFromCancel()" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <div style="padding:14px 16px 16px">
-      <p class="u-hint" style="margin-bottom:10px">The new schedule &amp; rate apply <b>from</b> the date you click. Up to the day before, the old schedule stays in effect.</p>
+      <p class="u-hint" style="margin-bottom:10px" data-i18n>The new schedule and rate apply from the date you click. Up to the day before, the old schedule stays in effect.</p>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <button class="bic" onclick="schedFromNav(-1)" title="Previous month"><i class="ti ti-chevron-left"></i></button>
+        <button class="bic" onclick="schedFromNav(-1)" title="Previous month" data-i18n-title><i class="ti ti-chevron-left"></i></button>
         <b id="sf-mlbl" style="font-size:13px"></b>
-        <button class="bic" onclick="schedFromNav(1)" title="Next month"><i class="ti ti-chevron-right"></i></button>
+        <button class="bic" onclick="schedFromNav(1)" title="Next month" data-i18n-title><i class="ti ti-chevron-right"></i></button>
       </div>
       <div id="sf-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px"></div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
-        <button class="btn btn-p" style="width:100%" onclick="schedFromPick(td())">Save — apply new schedule from today</button>
-        <button class="btn" id="sf-apply-all" style="width:100%" onclick="schedFromAll()">Apply to everything incl. the past (retroactive)</button>
+        <button class="btn btn-p" style="width:100%" onclick="schedFromPick(td())" data-i18n>Save — apply new schedule from today</button>
+        <button class="btn" id="sf-apply-all" style="width:100%" onclick="schedFromAll()" data-i18n>Apply to everything incl. the past (retroactive)</button>
       </div>
-      <p class="u-hint" style="margin-top:8px;font-size:10px">To apply from a specific date, click that date on the calendar above.</p>
+      <p class="u-hint" style="margin-top:8px;font-size:10px" data-i18n>To apply from a specific date, click that date on the calendar above.</p>
     </div>
   </div>
 </div>
