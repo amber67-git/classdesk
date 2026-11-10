@@ -137,6 +137,8 @@ if (!dictM) {
       use(k, `script line ${line}`);
     }
     if (/\b(?:const|let|var)\s+tx\b|\btx\s*=>|\(\s*tx\s*[,)]/.test(main)) fail("the script declares a local variable named tx — that is the translator; rename the variable");
+    // Inline handlers in the markup (onclick="…tx('Saved')…") count too.
+    for (const m of markup.matchAll(/\btx\(\s*(["'`])((?:\\.|(?!\1)[^\\])*)\1/g)) use(m[2].replace(/&quot;/g, '"').replace(/&#39;/g, "'"), `markup line ${lineAt(m.index)} (handler)`);
 
     // Markup: walk the tags with a depth counter to find each marked element's own text.
     const VOID = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
