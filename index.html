@@ -162,6 +162,21 @@ tbody tr:hover td{background:var(--row-hover)}
 /* Books library: each chosen column sits in a .bl-cell wrapper (so the phone card can pick the title
    out); .bl-meta is the phone-only summary cell and takes no track at other widths. */
 .bl-cell{min-width:0}
+/* Curriculum (v128): reads like a spreadsheet on tablets and PCs — gridlines, cells aligned to the top,
+   a header that stays put, the table scrolling both ways inside its own box, column widths you drag
+   (stored per device), and Month → Topic frozen on the left on wide screens (see applyCurrColWidths). */
+@media(min-width:641px){
+  #page-curriculum .tw{overflow:auto;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);position:relative}
+  #curr-table{table-layout:fixed;border-collapse:separate;border-spacing:0;min-width:0!important}
+  #curr-table th{position:sticky;top:0;z-index:5;padding:9px 10px;border-right:1px solid var(--bdr);overflow:hidden;text-overflow:ellipsis}
+  #curr-table td{vertical-align:top;padding:10px 12px;line-height:1.55;font-size:12.5px;border-right:1px solid var(--bdr);overflow-wrap:anywhere;background:var(--surf)}
+  #curr-table tbody tr:hover td{background:var(--row-hover)}
+  #curr-table th:last-child,#curr-table td:last-child{border-right:0}
+  #curr-table th.cur-act-h{padding:4px 6px;text-align:right}
+  #curr-table thead th:not(:last-child)::after{background:linear-gradient(to right,transparent 3px,var(--bdr2) 3px,var(--bdr2) 4px,transparent 4px);right:-5px;width:11px}
+  #curr-table thead th:not(:last-child):hover::after{background:linear-gradient(to right,transparent 3px,var(--grn) 3px,var(--grn) 6px,transparent 6px)}
+  .cur-guide{position:absolute;top:0;width:2px;background:var(--grn);z-index:20;pointer-events:none}
+}
 /* Curriculum (v127): text brought in from a spreadsheet keeps its line breaks; the year sits under the month */
 #curr-body td.cur-pre{white-space:pre-line}
 #curr-body .cur-year{display:block;font-weight:400}
@@ -1220,8 +1235,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   <div class="pc">
     <div class="card">
       <div class="tw">
-        <table>
-          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th></th></tr></thead>
+        <table id="curr-table">
+          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th class="cur-act-h"><button class="bic" onclick="currResetCols()" title="Reset column widths" data-i18n-title><i class="ti ti-arrows-horizontal"></i></button></th></tr></thead>
           <tbody id="curr-body"></tbody>
         </table>
       </div>
@@ -1720,6 +1735,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Does anything remind me about fees that never arrived?</dt><dd>Yes. Last month's fees are expected by the <b>10th of this month</b>; from the <b>11th</b> on, if any of them are still outstanding, a popup lists who owes how much when you open the app, and it comes back <b>every 5 days</b> until you mark the money as received. Only the month immediately before the current one is checked, so it stops on its own when the month rolls over. On phones and tablets the names and amounts are left out of the popup — the same privacy rule the Dashboard and the Payments PIN follow — and "Open Payments" takes you straight to that month. The 5-day pause is remembered per device, so dismissing it on the PC doesn't silence the tablet.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
+          <dt>A curriculum column is too narrow to read</dt><dd>Drag the thin line on the right edge of that column's heading — like Google Sheets. Double-click the line to fit the column to its text; the ↔ button at the right end of the heading row resets all widths. Each device remembers its own widths.</dd>
           <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
           <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. As of v126 the whole app is translated except this Guide, whose Korean version is the next release.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
@@ -1730,6 +1746,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v128 · 2026-11-10</dt><dd><b>Curriculum on a tablet or PC reads like a spreadsheet:</b> gridlines, text aligned to the top of each cell, and the heading row stays at the top while you scroll. <b>Drag the line between two column headings</b> to make a column wider or narrower (works with a finger on a tablet too); the table scrolls sideways when it gets wider. <b>Double-click</b> that line to fit the column to its text, and the ↔ button at the right end of the heading puts every width back. On a wide screen Month, Wk, Category and Topic stay frozen on the left. Widths are remembered on each device.</dd>
           <dt>v127 · 2026-11-10</dt><dd><b>Curriculum:</b> topics now have a <b>year</b> (a Year box on the topic card and a year filter on the page; the list shows the newest year first). <b>Import</b> brings in a whole curriculum from a spreadsheet: copy the rows in Google Sheets or Excel, heading row included, and paste them — or choose a CSV / JSON file. A topic already in the app is never duplicated or overwritten; only its empty boxes are filled in, and Undo is offered for a few seconds. Long texts keep their line breaks and web links open.</dd>
           <dt>v126 · 2026-11-10</dt><dd><b>Korean / English (part 3):</b> Workbooks, Books (list, filters, labels, bulk edit), Material, every Settings pane (templates, custom fields, backup, API keys, account and PIN), the Google Calendar compare and first-lesson dialogs, the welcome screen, the backup banner and the unpaid-fee reminder now follow the language setting. Stored category and difficulty values stay English inside the data; only what you see changes. Only this Guide is still English — its Korean version is the next release.</dd>
           <dt>v125 · 2026-11-10</dt><dd><b>Korean / English (part 2):</b> Classes (calendar and the lesson card), Payments (calendar, summary, other income), Reports (all three tabs), Reading and Curriculum now follow the language setting. Month names and weekday heads use the chosen language; schedules are still stored as before. Left for part 3: Workbooks, Books, Material, the rest of Settings, Google compare and this Guide.</dd>
@@ -1754,7 +1771,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v127</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v128</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2829,6 +2846,8 @@ const I18N={ko:{
   "card: {date}":"카드: {date}","card: blank":"카드: 비어 있음","{n} entries":"일정 {n}개","(+{n} other colours)":"(+다른 색 {n}개)","Ready to use":"바로 사용 가능","Worth a look":"확인 필요","Already set":"이미 설정됨","Not in calendar":"캘린더에 없음",
   "Yellow rows are the ones to read: the entry is far from the next one, its title reads like a consultation, or an older entry exists in a colour the app doesn't count as a lesson — an entry with no colour of its own (\"Calendar default\") looks yellow in Google but isn't Banana. Nothing is written until you press a button.":"노란 행을 확인하세요: 다음 일정과 멀리 떨어져 있거나, 제목이 상담처럼 읽히거나, 앱이 수업으로 세지 않는 색에 더 이른 일정이 있는 경우입니다. 색이 없는 일정(\"캘린더 기본\")은 Google에서 노랗게 보이지만 바나나 색이 아닙니다. 버튼을 누르기 전에는 아무것도 쓰지 않습니다.",
   "Earliest entry found":"찾은 가장 이른 일정","Next entry":"다음 일정","No matching entries in the calendar":"캘린더에 일치하는 일정이 없습니다","No entries for: {names} — their months are counted from the Start date instead.":"일정 없음: {names} — 이 학생들의 개월 수는 시작일부터 셉니다.",
+  // ── v128: curriculum columns
+  "Reset column widths":"열 너비 처음으로","Column widths reset":"열 너비를 처음으로 되돌렸습니다",
   // ── v127: curriculum year + import
   "{n} curriculum topics":"커리큘럼 주제 {n}개","Year":"연도","All years":"모든 연도","No year":"연도 없음","Bring in topics from a spreadsheet":"스프레드시트에서 주제 가져오기",
   "Import curriculum":"커리큘럼 가져오기","Paste here…":"여기에 붙여 넣으세요…","Choose file":"파일 선택",
@@ -2990,7 +3009,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v127";
+const APP_VERSION="v128";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   applyI18n();   // before any render: labels that code reads back (custom column names) must already carry their English source
@@ -6471,6 +6490,7 @@ function currText(v){
 }
 function renderCurriculum(){
   applyCustomLabelsToHeader("curriculum");
+  applyCurrColWidths();
   // Year filter: every year that has topics, newest first, plus "No year" for topics without one.
   const yf=document.getElementById("curr-yf");
   const years=[...new Set(curriculum.map(c=>c.year).filter(Boolean).map(String))].sort().reverse();
@@ -6503,6 +6523,92 @@ function renderCurriculum(){
   const dcell=(colId,label,val,cls)=>`<td class="${cls} cur-pre${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,tx(label)))}">${val?currText(val):"—"}</td>`;
   document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month?tx(c.month):"—"}${c.year?`<span class="cell-muted cur-year">${c.year}</span>`:""}</td><td class="tm" style="text-align:center">${c.week||""}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat?escapeHTMLBasic(c.cat):"—"}</span></td><td style="font-weight:500">${escapeHTMLBasic(c.topic||"")}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`;
 }
+
+// ═══════════════════════════════════════════════
+// CURRICULUM COLUMNS (v128) — spreadsheet-style widths
+// ═══════════════════════════════════════════════
+// Every column has its own width in px; dragging one edge changes that column only and the table
+// grows or shrinks (its box scrolls sideways), exactly like a spreadsheet. Double-click an edge to fit
+// the column to its text; the ↔ button in the header corner puts every width back. Widths are kept
+// per device in mc_colwidths.tbl_curriculum, so a phone and a PC can differ.
+const CURR_COL_DEFAULT=[76,56,100,190,200,300,220,160,130,190,52];
+const CURR_FREEZE=4;               // Month, Wk, Category, Topic — the columns the owner's sheet freezes
+function currColWidths(){
+  const rec=lg(COLW_KEY,{}).tbl_curriculum;
+  const w=CURR_COL_DEFAULT.slice();
+  if(rec&&Array.isArray(rec.w)&&rec.n===CURR_COL_DEFAULT.length)rec.w.forEach((v,i)=>{if(+v>0)w[i]=Math.round(+v);});
+  return w;
+}
+function saveCurrColWidths(w){
+  const m=lg(COLW_KEY,{});m.tbl_curriculum={n:w.length,tpl:"table",w};ls(COLW_KEY,m);
+}
+function applyCurrColWidths(w){
+  w=w||currColWidths();
+  const sum=w.reduce((a,b)=>a+b,0);
+  let css=`#curr-table{width:${sum}px}\n`;
+  w.forEach((v,i)=>{css+=`#curr-table th:nth-child(${i+1}){width:${v}px}\n`;});
+  // Frozen columns only where there is room for them next to the rest (the box is ~900px+ wide).
+  let left=0,frz="";
+  for(let i=0;i<CURR_FREEZE;i++){
+    frz+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}){position:sticky;left:${left}px}\n`
+      +`#curr-table td:nth-child(${i+1}){z-index:2}#curr-table th:nth-child(${i+1}){z-index:6}\n`;
+    left+=w[i];
+  }
+  frz+=`#curr-table th:nth-child(${CURR_FREEZE}),#curr-table td:nth-child(${CURR_FREEZE}){box-shadow:6px 0 8px -6px var(--pin-shade)}\n`;
+  css=`@media(min-width:641px){${css}}@media(min-width:1160px){${frz}}`;   // phones keep the card layout
+  let st=document.getElementById("curr-colw-css");
+  if(!st){st=document.createElement("style");st.id="curr-colw-css";document.head.appendChild(st);}
+  st.textContent=css;
+}
+function currResetCols(){
+  const m=lg(COLW_KEY,{});delete m.tbl_curriculum;ls(COLW_KEY,m);
+  applyCurrColWidths();
+  showToast(tx("Column widths reset"));
+}
+// The edge a pointer is on, or -1. Touch gets a wider grab area.
+function currEdgeAt(th,x,coarse){
+  const r=th.getBoundingClientRect(),tol=coarse?14:7;
+  return Math.abs(x-r.right)<=tol;
+}
+// Fit: the widest line of text in the column (line breaks respected), within 60–520px.
+function currFitCol(i){
+  const tds=[...document.querySelectorAll(`#curr-table tbody tr td:nth-child(${i+1})`)];
+  const th=document.querySelector(`#curr-table thead th:nth-child(${i+1})`);
+  const c=document.createElement("canvas").getContext("2d");
+  let max=0;
+  const measure=(el,font)=>{c.font=font;String(el.innerText||"").split("\n").forEach(l=>{max=Math.max(max,c.measureText(l).width);});};
+  if(th)measure(th,getComputedStyle(th).font);
+  tds.slice(0,400).forEach(td=>measure(td,getComputedStyle(td).font));
+  const w=currColWidths();w[i]=Math.max(60,Math.min(520,Math.ceil(max+28)));
+  saveCurrColWidths(w);applyCurrColWidths(w);
+}
+document.addEventListener("pointerdown",e=>{
+  if(e.button!==0)return;
+  const th=e.target.closest?.("#curr-table thead th");if(!th)return;
+  const ths=[...th.parentElement.children],i=ths.indexOf(th);
+  if(i<0||i===ths.length-1)return;                       // the corner (↔ button) column is not dragged
+  const coarse=e.pointerType!=="mouse";
+  if(!currEdgeAt(th,e.clientX,coarse))return;
+  e.preventDefault();
+  const box=th.closest(".tw"),w=currColWidths(),startW=w[i],startX=e.clientX;
+  const guide=document.createElement("div");guide.className="cur-guide";
+  guide.style.height=box.scrollHeight+"px";box.appendChild(guide);
+  const place=()=>{guide.style.left=(th.offsetLeft+th.offsetWidth-1)+"px";};place();
+  document.body.style.cursor="col-resize";
+  try{th.setPointerCapture(e.pointerId);}catch(_){}
+  const move=ev=>{w[i]=Math.max(40,Math.min(900,Math.round(startW+(ev.clientX-startX))));applyCurrColWidths(w);place();};
+  const up=()=>{document.body.style.cursor="";guide.remove();
+    th.removeEventListener("pointermove",move);th.removeEventListener("pointerup",up);th.removeEventListener("pointercancel",up);
+    if(w[i]!==startW)saveCurrColWidths(w);};
+  th.addEventListener("pointermove",move);th.addEventListener("pointerup",up);th.addEventListener("pointercancel",up);
+},true);
+document.addEventListener("dblclick",e=>{
+  const th=e.target.closest?.("#curr-table thead th");if(!th)return;
+  const ths=[...th.parentElement.children],i=ths.indexOf(th);
+  if(i<0||i===ths.length-1||!currEdgeAt(th,e.clientX,false))return;
+  e.preventDefault();e.stopPropagation();
+  currFitCol(i);
+},true);
 
 // ═══════════════════════════════════════════════
 // CURRICULUM IMPORT (v127)
@@ -9925,6 +10031,7 @@ function applyStoredColWidths(){
     if(!v||!v.tpl)return;
     if(k.startsWith("tbl_")){
       const page=k.slice(4);
+      if(page==="curriculum")return;   // applyCurrColWidths() handles that table
       (v.w||[]).forEach((w,i)=>{
         if(w)css+=`table:has(thead[data-header-page="${page}"]){table-layout:fixed;width:100%}\n`
                 +`thead[data-header-page="${page}"] th:nth-child(${i+1}){width:${w}px}\n`;
@@ -9956,7 +10063,7 @@ function ensureColumnResizers(){
 document.addEventListener("mousedown",e=>{
   if(e.button!==0)return;
   const cell=e.target.closest?.(".grid-head > *, thead[data-header-page] th");
-  if(!cell)return;
+  if(!cell||cell.closest("#curr-table"))return;   // the curriculum table has its own (pointer) handler
   const r=cell.getBoundingClientRect();
   if(e.clientX < r.right-COLW_EDGE || e.clientX > r.right+COLW_EDGE)return; // not on the edge
 
@@ -10005,7 +10112,7 @@ document.addEventListener("mousedown",e=>{
 // Double-click the edge to reset that list's widths
 document.addEventListener("dblclick",e=>{
   const cell=e.target.closest?.(".grid-head > *, thead[data-header-page] th");
-  if(!cell)return;
+  if(!cell||cell.closest("#curr-table"))return;
   const r=cell.getBoundingClientRect();
   if(e.clientX < r.right-COLW_EDGE || e.clientX > r.right+COLW_EDGE)return;
   const isTable=cell.tagName==="TH";
