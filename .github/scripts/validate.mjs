@@ -60,6 +60,22 @@ if (!guideVer) fail('Settings → Guide footer "Guide written against version: <
 else if (ver && guideVer[1] !== ver[1]) fail(`Settings → Guide footer says ${guideVer[1]} but APP_VERSION is ${ver[1]} — add a "What's new" line if the release changes how the app is used, then update the footer`);
 else ok(`Guide footer matches APP_VERSION (${guideVer[1]})`);
 
+// Since v129 the Guide has a Korean copy too (lang="ko"); the app shows the one that matches the
+// language. Both footers and both newest "What's new" entries must carry APP_VERSION, so a release
+// cannot update one copy and forget the other.
+const guideKoVer = html.match(/설명서 기준 버전:\s*<b>(v\d+)<\/b>/);
+if (!guideKoVer) fail('Korean Guide footer "설명서 기준 버전: <b>vNN</b>" not found');
+else if (ver && guideKoVer[1] !== ver[1]) fail(`Korean Guide footer says ${guideKoVer[1]} but APP_VERSION is ${ver[1]} — update the Korean copy of the Guide as well`);
+else ok(`Korean Guide footer matches APP_VERSION (${guideKoVer[1]})`);
+for (const lang of ["en", "ko"]) {
+  const at = html.indexOf(`guide-body" lang="${lang}"`);
+  const top = at < 0 ? null : html.slice(at).match(/<dt>(v\d+)(?:–v\d+)? · /);
+  if (at < 0) fail(`Guide copy lang="${lang}" not found`);
+  else if (!top) fail(`Guide copy lang="${lang}" has no "What's new" entries`);
+  else if (ver && top[1] !== ver[1]) fail(`newest "What's new" entry in the ${lang} Guide is ${top[1]} but APP_VERSION is ${ver[1]}`);
+  else ok(`newest "What's new" entry in the ${lang} Guide is ${top[1]}`);
+}
+
 // An unclosed <a> once wrapped half of the Settings page in a link. Only the real markup can be
 // examined — inside <script> the same characters are strings that build HTML at runtime — so
 // script and style bodies are blanked out, keeping the newlines so reported lines stay true.
@@ -130,9 +146,10 @@ if (!dictM) {
     // Comment lines are blanked first (the rules above quote tx("…") as an example).
     const mainAt = html.indexOf(main);
     const code = main.replace(/^[ \t]*\/\/[^\n]*/gm, (c) => " ".repeat(c.length));
-    for (const m of code.matchAll(/\btx\(\s*(["'`])((?:\\.|(?!\1)[^\\])*)\1/g)) {
+    // txSafe("…") is tx for messages that may fire before the language is set up — same keys.
+    for (const m of code.matchAll(/\btx(?:Safe)?\(\s*(["'`])((?:\\.|(?!\1)[^\\])*)\1/g)) {
       const line = lineInHtml(mainAt + m.index);
-      if (m[1] === "`" && m[2].includes("${")) { fail(`line ${line}: tx(\`…\`) with \${} — the key must be a fixed string; use {name} placeholders and a second argument`); continue; }
+      if (m[1] === "`" && m[2].includes("${")) { fail(`line ${line}: tx(\`…\`) / txSafe(\`…\`) with \${} — the key must be a fixed string; use {name} placeholders and a second argument`); continue; }
       const k = m[2].replace(/\\(n|t|'|"|\\|`)/g, (_, c) => ({ n: "\n", t: "\t" }[c] ?? c));
       use(k, `script line ${line}`);
     }
