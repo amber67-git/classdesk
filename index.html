@@ -7018,8 +7018,8 @@ function applyCurrColWidths(w){
   // cards. Topic can't be hidden (it is the topic's name).
   const hidden=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));
   const shown=i=>!hidden.has(CURR_COL_IDS[i]);
-  let hide="";
-  CURR_COL_IDS.forEach((id,i)=>{if(id&&!shown(i))hide+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}){display:none!important}\n`;});
+  let hide="";   // the one-cell "no topics" row (colspan) is never hidden with column 1
+  CURR_COL_IDS.forEach((id,i)=>{if(id&&!shown(i))hide+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}):not([colspan]){display:none!important}\n`;});
   const sum=w.reduce((a,b,i)=>a+(shown(i)?b:0),0);
   let css=`#curr-table{width:${sum}px}\n`;
   w.forEach((v,i)=>{css+=`#curr-table th:nth-child(${i+1}){width:${v}px}\n`;});
@@ -8427,13 +8427,17 @@ function fieldPartLocal(pageKey,part){
   const [pre,def]=FIELD_PARTS[part];
   try{const v=JSON.parse(localStorage.getItem(pre+pageKey)||"null");return v==null?def():v;}catch{return def();}
 }
+// settings.fields[page] === null means "default setup, on purpose" (a restored backup that had
+// none): this device's old keys are then ignored, and other devices don't put theirs back.
 function fieldPart(pageKey,part){
   const f=settings.fields&&settings.fields[pageKey];
+  if(f===null)return FIELD_PARTS[part][1]();
   return f&&f[part]!==undefined?f[part]:fieldPartLocal(pageKey,part);
 }
 function setFieldPart(pageKey,part,val){
-  const cur={...((settings.fields&&settings.fields[pageKey])||{})};
-  for(const p in FIELD_PARTS)if(cur[p]===undefined)cur[p]=fieldPartLocal(pageKey,p); // nothing this device had is dropped
+  const was=settings.fields&&settings.fields[pageKey];
+  const cur={...(was||{})};
+  for(const p in FIELD_PARTS)if(cur[p]===undefined)cur[p]=was===null?FIELD_PARTS[p][1]():fieldPartLocal(pageKey,p); // nothing this device had is dropped
   cur[part]=val;
   settings.fields={...(settings.fields||{}),[pageKey]:cur};
   return save();
@@ -8443,10 +8447,13 @@ function setFieldPart(pageKey,part,val){
 // settings earlier could overwrite newer settings saved on another device.
 let _fieldsMoved=false;
 function moveLocalFieldSetups(pageKeys){
+  // Right after a backup restore the backup is the whole truth: a page it did not customise is
+  // recorded as null (default) so another device's setup for it isn't merged back in.
+  const restoring=localStorage.getItem("cd_restore_pending")==="1";
   pageKeys.forEach(pk=>{
-    if(settings.fields&&settings.fields[pk])return;
+    if(settings.fields&&pk in settings.fields)return;
     const has=Object.values(FIELD_PARTS).some(([pre])=>localStorage.getItem(pre+pk)!==null);
-    if(!has)return;
+    if(!has){if(restoring)settings.fields={...(settings.fields||{}),[pk]:null};return;}
     const cur={};for(const p in FIELD_PARTS)cur[p]=fieldPartLocal(pk,p);
     settings.fields={...(settings.fields||{}),[pk]:cur};_fieldsMoved=true;
   });
@@ -8456,6 +8463,10 @@ function saveCustomFields(pageKey,arr){return setFieldPart(pageKey,"custom",arr)
 function getCustomLabels(pageKey){return fieldPart(pageKey,"labels");}
 function saveCustomLabels(pageKey,map){return setFieldPart(pageKey,"labels",map);}
 moveLocalFieldSetups(CUSTOM_FIELDS_PAGES.map(p=>p.key));
+// The "last saved" snapshot (initLastSaved) was taken before the move. Retake it, so a save()
+// before the first sync — adding a to-do, say — doesn't see the moved setups as a change and
+// stamp the whole settings doc early; reconcileKey uploads them at the right moment.
+if(_lastSaved.settings!==undefined)_lastSaved.settings=cmpJson(settings);
 
 
 // Get the effective label for a column — custom override wins over built-in.
@@ -10503,7 +10514,7 @@ async function reconcileKey(key){
   }
   if(key==="settings"){
     const c=seen.get("settings");
-    if(restore||(!c&&settings._u)){settings._u=now;ops.push({id:"settings",j:JSON.stringify(settings),u:now});afterRemoteApplied(key);}
+    if(restore||(!c&&settings._u)){settings._u=now;ops.push({id:"settings",j:JSON.stringify(settings),u:now});afterRemoteApplied(key);_fieldsMoved=false;}
     // Column setups moved out of this device's storage at start-up (v132) go up now that this
     // device holds the cloud's newest settings: stamping them earlier could have overwritten them.
     else if(_fieldsMoved){_fieldsMoved=false;_lastSaved.settings=null;setTimeout(()=>save(),0);}
