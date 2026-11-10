@@ -3333,17 +3333,30 @@ function renderFeatures(){
   document.querySelectorAll(".feat-presets .btn[data-preset]").forEach(b=>b.classList.toggle("on",b.dataset.preset===cur));
   const now=document.getElementById("feat-preset-now");if(now)now.textContent=cur?"":tx("Custom mix");
 }
+// Save a Features change. save() reports failure for ANY key, so look at what mc_settings now
+// holds: when the new choice did not reach storage, put the old one back (and the checkboxes) so a
+// later, unrelated save cannot store a choice the user saw fail.
+function featCommit(prev){
+  save();
+  let stored;try{stored=JSON.parse(localStorage.getItem("mc_settings")||"{}").features;}catch{stored=undefined;}
+  if(JSON.stringify(stored||{})===JSON.stringify(settings.features||{}))return true;
+  if(prev===undefined)delete settings.features;else settings.features=prev;
+  renderFeatures();
+  return false;
+}
 function featSet(k,on){
+  const prev=settings.features;
   settings.features={...(settings.features||{})};
   if(on)delete settings.features[k];else settings.features[k]=false;
-  if(save()===false)return;
+  if(!featCommit(prev))return;
   applyFeatures();renderFeatures();
   showToast(on?tx("Turned on"):tx("Turned off — nothing was deleted"));
 }
 function featApplyPreset(name){
   const p=FEATURE_PRESETS[name];if(!p)return;
+  const prev=settings.features;
   settings.features={...p};
-  if(save()===false)return;
+  if(!featCommit(prev))return;
   applyFeatures();renderFeatures();
   showToast(name==="general"?tx("Set for any subject — Reading and Books are hidden"):tx("Set for an English reading class — everything is on"));
 }
