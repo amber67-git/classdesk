@@ -162,6 +162,9 @@ tbody tr:hover td{background:var(--row-hover)}
 /* Books library: each chosen column sits in a .bl-cell wrapper (so the phone card can pick the title
    out); .bl-meta is the phone-only summary cell and takes no track at other widths. */
 .bl-cell{min-width:0}
+/* Curriculum (v127): text brought in from a spreadsheet keeps its line breaks; the year sits under the month */
+#curr-body td.cur-pre{white-space:pre-line}
+#curr-body .cur-year{display:block;font-weight:400}
 .bl-meta{display:none}
 .grid-row.clickable{cursor:pointer}
 .grid-head{padding:9px 14px;background:var(--surf2);border-bottom:1px solid var(--bdr);position:sticky;top:52px;z-index:5}
@@ -639,6 +642,7 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
   #page-curriculum td[data-l]{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}
   #page-curriculum td[data-l]::before{content:attr(data-l);flex:0 0 72px;font-size:11px;color:var(--txt3)}
   #page-curriculum td.cur-empty{display:none}
+  #page-curriculum .cur-year{display:inline;margin-left:6px}
   #page-curriculum td[colspan]{grid-column:1/-1}
   /* Reading: book (cover · title · author) across the top, then date · AR · level · Lexile. */
   #page-reading .grid-head{display:none!important}
@@ -1203,6 +1207,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <!-- CURRICULUM -->
 <div id="page-curriculum" class="page">
   <div class="fbar">
+    <select id="curr-yf" onchange="renderCurriculum()" class="u-w-120" title="Year" data-i18n-title></select>
     <select id="curr-mf" onchange="renderCurriculum()" class="u-w-120" data-i18n-opts>
       <option value="">All months</option>
       <option value="JAN">JAN</option><option value="FEB">FEB</option><option value="MAR">MAR</option><option value="APR">APR</option>
@@ -1210,7 +1215,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option>
     </select>
     <input type="text" id="curr-sf" placeholder="Search…" data-i18n-ph oninput="renderCurriculum()" style="width:200px"/>
-    <div style="margin-left:auto"><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
+    <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" onclick="openCurrImport()" title="Bring in topics from a spreadsheet" data-i18n data-i18n-title><i class="ti ti-file-import"></i> Import</button><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
   </div>
   <div class="pc">
     <div class="card">
@@ -1592,7 +1597,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Reading</dt><dd>Books read per student, drawn from the lesson records — AR trend and a printable parent report.</dd>
           <dt>Payments</dt><dd>Tuition management — a payment calendar and a monthly summary per student, the payment-request message, other income that is not a lesson fee, and the unpaid-fee reminder.</dd>
           <dt>Reports</dt><dd>Monthly figures per student: lessons held, hours, fees, cancellations counted against the timetable, plus a Learning report and homework checking.</dd>
-          <dt>Curriculum</dt><dd>A curriculum board for laying out lesson plans on a monthly calendar.</dd>
+          <dt>Curriculum</dt><dd>Your lesson plan by year, month and week: topic, category, workbook, writing task, books, activities, grammar and notes. Filter by year and month, or search. <b>Import</b> brings in a whole plan from a spreadsheet (see the FAQ).</dd>
           <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
           <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
           <dt>Material</dt><dd>Teaching materials, aids, and printouts.</dd>
@@ -1715,6 +1720,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Does anything remind me about fees that never arrived?</dt><dd>Yes. Last month's fees are expected by the <b>10th of this month</b>; from the <b>11th</b> on, if any of them are still outstanding, a popup lists who owes how much when you open the app, and it comes back <b>every 5 days</b> until you mark the money as received. Only the month immediately before the current one is checked, so it stops on its own when the month rolls over. On phones and tablets the names and amounts are left out of the popup — the same privacy rule the Dashboard and the Payments PIN follow — and "Open Payments" takes you straight to that month. The 5-day pause is remembered per device, so dismissing it on the PC doesn't silence the tablet.</dd>
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
+          <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
           <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. As of v126 the whole app is translated except this Guide, whose Korean version is the next release.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
           <dt>Removing another app from the phone (StudyDesk etc.)</dt><dd>ClassDesk shares its web address (amber67-git.github.io) with older copies of the other apps, and everything stored under one address is wiped together. To remove one of those older apps: phone <b>Settings → Apps</b> → that app → <b>Uninstall</b> only. <b>Never tap "Clear storage" / "Clear site data"</b> — it would erase ClassDesk's data on this phone too (signing back in brings the cloud copy back, but anything not yet synced is lost). Afterwards, typing <b>chrome://webapks</b> in Chrome should still list ClassDesk, with the Manifest Id https://amber67-git.github.io/classdesk/app (a copy installed before v116 shows https://amber67-git.github.io/ — see "How do I put ClassDesk on my phone/tablet home screen?" above).</dd>
@@ -1724,6 +1730,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v127 · 2026-11-10</dt><dd><b>Curriculum:</b> topics now have a <b>year</b> (a Year box on the topic card and a year filter on the page; the list shows the newest year first). <b>Import</b> brings in a whole curriculum from a spreadsheet: copy the rows in Google Sheets or Excel, heading row included, and paste them — or choose a CSV / JSON file. A topic already in the app is never duplicated or overwritten; only its empty boxes are filled in, and Undo is offered for a few seconds. Long texts keep their line breaks and web links open.</dd>
           <dt>v126 · 2026-11-10</dt><dd><b>Korean / English (part 3):</b> Workbooks, Books (list, filters, labels, bulk edit), Material, every Settings pane (templates, custom fields, backup, API keys, account and PIN), the Google Calendar compare and first-lesson dialogs, the welcome screen, the backup banner and the unpaid-fee reminder now follow the language setting. Stored category and difficulty values stay English inside the data; only what you see changes. Only this Guide is still English — its Korean version is the next release.</dd>
           <dt>v125 · 2026-11-10</dt><dd><b>Korean / English (part 2):</b> Classes (calendar and the lesson card), Payments (calendar, summary, other income), Reports (all three tabs), Reading and Curriculum now follow the language setting. Month names and weekday heads use the chosen language; schedules are still stored as before. Left for part 3: Workbooks, Books, Material, the rest of Settings, Google compare and this Guide.</dd>
           <dt>v124 · 2026-11-10</dt><dd><b>Korean / English (part 1):</b> Settings → Templates → <b>Language</b> switches the app's menus, buttons and messages. By default it follows the device language. This first part covers the sidebar, Dashboard, Students and the student card; the other pages and this Guide follow in the next releases. Your own entries — names, notes, templates — are never translated.</dd>
@@ -1747,7 +1754,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v126</b> · FAQ current as of: <b>2026-11-10</b><br/>
+          Guide written against version: <b>v127</b> · FAQ current as of: <b>2026-11-10</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2306,6 +2313,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div class="mo" id="mo-curr">
   <div class="mb">
     <div class="mt"><span id="cm-title">Add Topic</span><button class="bic" onclick="closeModal('mo-curr')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div class="fr c3"><div class="fg"><label data-i18n>Year</label><input id="cm-year" type="number" min="2000" max="2100" step="1" placeholder="2026"/></div></div>
     <div class="fr c3">
       <div class="fg"><label data-col="month" data-i18n>Month</label><select id="cm-month" data-i18n-opts><option value="JAN">JAN</option><option value="FEB">FEB</option><option value="MAR">MAR</option><option value="APR">APR</option><option value="MAY" selected>MAY</option><option value="JUN">JUN</option><option value="JUL">JUL</option><option value="AUG">AUG</option><option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option></select></div>
       <div class="fg"><label data-col="week" data-i18n>Week</label><input id="cm-week" type="number" min="1" max="5" value="1"/></div>
@@ -2324,6 +2332,24 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="fg"><label data-col="note" data-i18n>Notes</label><input id="cm-note" type="text"/></div>
     <div id="cm-custom-fields"></div>
     <div class="mf"><button class="btn" onclick="closeModal('mo-curr')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveCurr()" data-i18n>Save topic</button></div>
+  </div>
+</div>
+
+<!-- Curriculum import (v127): paste cells from a spreadsheet, or pick a CSV / JSON file -->
+<div class="mo" id="mo-currimport">
+  <div class="mb wide">
+    <div class="mt"><span data-i18n>Import curriculum</span><button class="bic" onclick="closeModal('mo-currimport')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p class="u-hint" style="margin-bottom:10px" data-i18n>Copy the rows from your spreadsheet, heading row included, and paste them below — or choose a CSV or JSON file. Columns are matched by their headings (Month, Topic / 주제, Workbook, Writing, Reading Books, Activities, Grammar, Notes…). A row holding only a year (2025) starts that year. Nothing changes until you press Import.</p>
+    <textarea id="ci-text" rows="6" placeholder="Paste here…" data-i18n-ph oninput="currImportPreview()" style="font-family:var(--mono);font-size:12px"></textarea>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 12px">
+      <label class="btn btn-sm" data-i18n><i class="ti ti-upload"></i> Choose file<input type="file" id="ci-file" accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,application/json" onchange="currImportFile(this)" style="display:none"/></label>
+      <span id="ci-fname" class="u-hint" style="margin:0"></span>
+    </div>
+    <div id="ci-preview"></div>
+    <div class="mf">
+      <button class="btn" onclick="closeModal('mo-currimport')" data-i18n>Cancel</button>
+      <button class="btn btn-p" id="ci-apply" onclick="currImportApply()" disabled><i class="ti ti-file-import"></i> <span id="ci-apply-lbl">Import</span></button>
+    </div>
   </div>
 </div>
 
@@ -2803,6 +2829,13 @@ const I18N={ko:{
   "card: {date}":"카드: {date}","card: blank":"카드: 비어 있음","{n} entries":"일정 {n}개","(+{n} other colours)":"(+다른 색 {n}개)","Ready to use":"바로 사용 가능","Worth a look":"확인 필요","Already set":"이미 설정됨","Not in calendar":"캘린더에 없음",
   "Yellow rows are the ones to read: the entry is far from the next one, its title reads like a consultation, or an older entry exists in a colour the app doesn't count as a lesson — an entry with no colour of its own (\"Calendar default\") looks yellow in Google but isn't Banana. Nothing is written until you press a button.":"노란 행을 확인하세요: 다음 일정과 멀리 떨어져 있거나, 제목이 상담처럼 읽히거나, 앱이 수업으로 세지 않는 색에 더 이른 일정이 있는 경우입니다. 색이 없는 일정(\"캘린더 기본\")은 Google에서 노랗게 보이지만 바나나 색이 아닙니다. 버튼을 누르기 전에는 아무것도 쓰지 않습니다.",
   "Earliest entry found":"찾은 가장 이른 일정","Next entry":"다음 일정","No matching entries in the calendar":"캘린더에 일치하는 일정이 없습니다","No entries for: {names} — their months are counted from the Start date instead.":"일정 없음: {names} — 이 학생들의 개월 수는 시작일부터 셉니다.",
+  // ── v127: curriculum year + import
+  "{n} curriculum topics":"커리큘럼 주제 {n}개","Year":"연도","All years":"모든 연도","No year":"연도 없음","Bring in topics from a spreadsheet":"스프레드시트에서 주제 가져오기",
+  "Import curriculum":"커리큘럼 가져오기","Paste here…":"여기에 붙여 넣으세요…","Choose file":"파일 선택",
+  "Copy the rows from your spreadsheet, heading row included, and paste them below — or choose a CSV or JSON file. Columns are matched by their headings (Month, Topic / 주제, Workbook, Writing, Reading Books, Activities, Grammar, Notes…). A row holding only a year (2025) starts that year. Nothing changes until you press Import.":"스프레드시트에서 제목 줄까지 포함해 행을 복사해 아래에 붙여 넣거나, CSV·JSON 파일을 고르세요. 열은 제목(MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, Grammar, Note…)으로 찾습니다. 연도(2025)만 있는 행은 그 해의 시작으로 봅니다. 가져오기를 누르기 전에는 아무것도 바뀌지 않습니다.",
+  "No heading row found. The first rows need a Month and a Topic (or 주제) column.":"제목 줄을 찾지 못했습니다. 앞쪽 행에 MONTH(월)와 Topics(주제) 열이 있어야 합니다.","No topics found under the heading row.":"제목 줄 아래에 주제가 없습니다.",
+  "No curriculum topics in this file.":"이 파일에 커리큘럼 주제가 없습니다.","Import {n} topics":"주제 {n}개 가져오기","{n} topics found":"주제 {n}개를 찾았습니다",
+  "New: {a} · already in the app: {b} (empty fields filled in for {c})":"새 주제 {a}개 · 이미 앱에 있음 {b}개 (그중 {c}개는 빈 칸을 채움)","…and {n} more":"…외 {n}개","{a} topics added · {b} updated":"주제 {a}개 추가 · {b}개 갱신",
   "Use all {n} clean":"깨끗한 {n}건 모두 사용","{name} — first lesson {date}":"{name} — 첫 수업 {date}","{n} first lessons set":"첫 수업 {n}건 설정","ignored":"무시","matched automatically again":"다시 자동 매칭",
 }};
 /* i18n-dict-end */
@@ -2957,7 +2990,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v126";
+const APP_VERSION="v127";
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   applyI18n();   // before any render: labels that code reads back (custom column names) must already carry their English source
@@ -4516,6 +4549,7 @@ function openCurrModal(id){
   editCid=id||null;const c=id?curriculum.find(x=>x.id===id):null;
   document.getElementById("cm-title").textContent=id?tx("Edit Topic"):tx("Add Topic");
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
+  set("cm-year",c?c.year||"":(document.getElementById("curr-yf")?.value||"").replace(/\D/g,"")||new Date().getFullYear());
   set("cm-month",c?.month||"MAY");set("cm-week",c?.week||1);set("cm-cat",c?.cat);
   set("cm-topic",c?.topic);set("cm-wb",c?.wb);set("cm-books",c?.books);
   set("cm-writing",c?.writing);set("cm-grammar",c?.grammar);set("cm-acts",c?.acts);set("cm-note",c?.note);
@@ -4526,7 +4560,8 @@ function openCurrModal(id){
 function saveCurr(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
   const customFields=collectCustomFieldsFromModal("cm-custom-fields");
-  const obj={month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),writing:g("cm-writing"),grammar:g("cm-grammar"),acts:g("cm-acts"),note:g("cm-note"),customFields};
+  const yr=parseInt(g("cm-year"),10);
+  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),writing:g("cm-writing"),grammar:g("cm-grammar"),acts:g("cm-acts"),note:g("cm-note"),customFields};
   if(!obj.topic){alert(tx("Topic required"));return;}
   if(editCid){const i=curriculum.findIndex(c=>c.id===editCid);if(i>=0)curriculum[i]={...curriculum[i],...obj};}
   else curriculum.push({id:uid(),...obj});
@@ -4569,12 +4604,12 @@ function switchSettingsTab(t){
 function renderBackupInfo(){
   const el=document.getElementById("backup-stats");if(!el)return;
   const parts=[
-    `${students.length} students`,
-    `${lessons.length} lessons`,
-    `${curriculum.length} curriculum topics`,
-    `${books.length} workbooks`,
-    `${bookLib.length} books`,
-    `${materials.length} materials`,
+    tx("{n} students",{n:students.length}),
+    tx("{n} lessons",{n:lessons.length}),
+    tx("{n} curriculum topics",{n:curriculum.length}),
+    tx("{n} workbooks",{n:books.length}),
+    tx("{n} books",{n:bookLib.length}),
+    tx("{n} items",{n:materials.length}),
   ];
   el.innerHTML=`<b>${location.origin==="null"?"file://":location.origin}</b> — ${parts.join(" · ")}`;
 }
@@ -6428,16 +6463,216 @@ function singleStat(lid,stat){
 // ═══════════════════════════════════════════════
 // CURRICULUM
 // ═══════════════════════════════════════════════
+const CURR_MONTHS=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+// Text typed into a curriculum field (or brought in from a spreadsheet) is shown as text, never as
+// markup; line breaks stay, and a web address becomes a link.
+function currText(v){
+  return escapeHTMLBasic(String(v||"")).replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u.replace(/"/g,"&quot;")}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--grn);word-break:break-all">${u.length>48?u.slice(0,45)+"…":u}</a>`);
+}
 function renderCurriculum(){
   applyCustomLabelsToHeader("curriculum");
+  // Year filter: every year that has topics, newest first, plus "No year" for topics without one.
+  const yf=document.getElementById("curr-yf");
+  const years=[...new Set(curriculum.map(c=>c.year).filter(Boolean).map(String))].sort().reverse();
+  const hasNoYear=curriculum.some(c=>!c.year);
+  if(yf){
+    const want=["",...years,...(hasNoYear&&years.length?["none"]:[])].join("|");
+    if(yf.dataset.opts!==want){
+      const cur=yf.value;
+      yf.innerHTML=`<option value="">${tx("All years")}</option>`+years.map(y=>`<option value="${y}">${y}</option>`).join("")+(hasNoYear&&years.length?`<option value="none">${tx("No year")}</option>`:"");
+      yf.dataset.opts=want;
+      if([...yf.options].some(o=>o.value===cur))yf.value=cur;
+    }
+    yf.style.display=years.length?"":"none";
+  }
+  const yv=yf?.value||"";
   const mf=document.getElementById("curr-mf")?.value||"";
   const sf=(document.getElementById("curr-sf")?.value||"").toLowerCase();
-  const fl=curriculum.filter(c=>{if(mf&&c.month!==mf)return false;if(sf&&![c.topic,c.cat,c.books,c.wb].join(" ").toLowerCase().includes(sf))return false;return true;}).sort((a,b)=>{const mo=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];return(mo.indexOf(a.month)-mo.indexOf(b.month))||a.week-b.week;});
+  const mi=m=>{const i=CURR_MONTHS.indexOf(m);return i<0?99:i;};
+  const fl=curriculum.filter(c=>{
+    if(yv==="none"&&c.year)return false;
+    if(yv&&yv!=="none"&&String(c.year||"")!==yv)return false;
+    if(mf&&c.month!==mf)return false;
+    if(sf&&![c.topic,c.cat,c.books,c.wb,c.writing,c.acts,c.grammar,c.note].join(" ").toLowerCase().includes(sf))return false;
+    return true;
+  // Newest year first (topics without a year last), then the months in order, then the week.
+  }).sort((a,b)=>((+b.year||0)-(+a.year||0))||(mi(a.month)-mi(b.month))||((+a.week||0)-(+b.week||0)));
   // The detail cells carry their column name (data-l) and a "cur-empty" mark when blank, so the
   // phone card can show "Workbook  Write Right 1" and leave out what a topic doesn't have.
   // The label is the column's name as the user sees it in the heading (a custom name wins).
-  const dcell=(colId,label,val,cls)=>`<td class="${cls}${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,tx(label)))}">${val||"—"}</td>`;
-  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${tx(c.month)}</td><td class="tm" style="text-align:center">${c.week}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat||"—"}</span></td><td style="font-weight:500">${c.topic}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`;
+  const dcell=(colId,label,val,cls)=>`<td class="${cls} cur-pre${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,tx(label)))}">${val?currText(val):"—"}</td>`;
+  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month?tx(c.month):"—"}${c.year?`<span class="cell-muted cur-year">${c.year}</span>`:""}</td><td class="tm" style="text-align:center">${c.week||""}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat?escapeHTMLBasic(c.cat):"—"}</span></td><td style="font-weight:500">${escapeHTMLBasic(c.topic||"")}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`;
+}
+
+// ═══════════════════════════════════════════════
+// CURRICULUM IMPORT (v127)
+// ═══════════════════════════════════════════════
+// Brings topics in from a spreadsheet: cells pasted from Google Sheets / Excel (tab-separated), a
+// CSV file, or JSON (a list of topics, or a ClassDesk backup). Columns are found by their
+// headings, so any tutor's sheet works as long as it has a Month and a Topic column. Nothing is
+// written until Import is pressed; a topic already in the app is never duplicated or overwritten —
+// only its empty fields are filled in. Undo is offered for 6 seconds.
+let currImportPlan=null;
+function openCurrImport(){
+  const t=document.getElementById("ci-text");if(t)t.value="";
+  const f=document.getElementById("ci-file");if(f)f.value="";
+  const n=document.getElementById("ci-fname");if(n)n.textContent="";
+  currImportPlan=null;currImportShow();
+  openModal("mo-currimport");
+}
+// Spreadsheet text → rows of cells. Quoted cells may hold the delimiter, line breaks and "" quotes
+// (that is how Google Sheets copies a cell with several lines).
+function parseDelimited(text,delim){
+  const rows=[];let row=[],cell="",q=false,i=0;
+  text=String(text).replace(/^\uFEFF/,"");
+  while(i<text.length){
+    const ch=text[i];
+    if(q){
+      if(ch==='"'){if(text[i+1]==='"'){cell+='"';i+=2;continue;}q=false;i++;continue;}
+      cell+=ch;i++;continue;
+    }
+    if(ch==='"'&&cell===""){q=true;i++;continue;}
+    if(ch===delim){row.push(cell);cell="";i++;continue;}
+    if(ch==="\r"){i++;continue;}
+    if(ch==="\n"){row.push(cell);rows.push(row);row=[];cell="";i++;continue;}
+    cell+=ch;i++;
+  }
+  if(cell!==""||row.length){row.push(cell);rows.push(row);}
+  return rows;
+}
+const CURR_HEAD={
+  year:/^(year|연도|년도)$/i, month:/^(month|월)$/i, week:/^(wk|week|주차|주)$/i,
+  cat:/^(category|cat|카테고리|분류)$/i, ko:/^(주제|제목)$/i, topic:/^(topics?|title)$/i,
+  wb:/^(workbooks?|교재)$/i, writing:/^(writing|writing instructions?|쓰기)$/i,
+  books:/^(books?|reading books?|reading|도서|책)$/i, acts:/^(activit(y|ies)|활동)$/i,
+  ort:/^ort$/i, grammar:/^(grammar|문법)$/i, note:/^(notes?|memo|메모|비고)/i,
+};
+function currMonthOf(v){
+  const t=String(v||"").trim().split(/\s|\n/)[0].toUpperCase();
+  if(!t)return "";
+  const en=CURR_MONTHS.find(m=>t.startsWith(m));if(en)return en;
+  const n=parseInt(t.replace(/월$/,""),10);
+  return n>=1&&n<=12?CURR_MONTHS[n-1]:"";
+}
+const currNorm=s=>String(s||"").toLowerCase().replace(/[^a-z0-9가-힣]+/g,"");
+// Rows → topics. Returns {items, error}.
+function currRowsToItems(rows){
+  const clean=v=>String(v??"").replace(/\r\n?/g,"\n").trim();
+  let hi=-1,map=null;
+  for(let r=0;r<Math.min(rows.length,15)&&hi<0;r++){
+    const m={};
+    rows[r].forEach((c,ci)=>{const h=clean(c).split("/")[0].trim();for(const [k,re] of Object.entries(CURR_HEAD))if(m[k]===undefined&&re.test(h)){m[k]=ci;break;}});
+    if((m.topic!==undefined||m.ko!==undefined)&&(m.month!==undefined||m.year!==undefined)){hi=r;map=m;}
+  }
+  if(hi<0)return {items:[],error:tx("No heading row found. The first rows need a Month and a Topic (or 주제) column.")};
+  const get=(row,k)=>map[k]===undefined?"":clean(row[map[k]]);
+  const items=[];let year="",month="",blank=0;const weeks={};
+  for(let r=hi+1;r<rows.length;r++){
+    const row=rows[r];
+    const cells=row.map(clean);
+    if(!cells.some(Boolean)){if(++blank>=3){month="";year="";}continue;}
+    blank=0;
+    // A row holding only a year starts that year.
+    const filled=cells.filter(Boolean);
+    if(filled.length===1&&/^(19|20)\d\d$/.test(filled[0])){year=+filled[0];month="";continue;}
+    if(map.year!==undefined&&/^(19|20)\d\d$/.test(get(row,"year")))year=+get(row,"year");
+    const mo=currMonthOf(get(row,"month"));if(mo)month=mo;
+    let ko=get(row,"ko"),en=get(row,"topic"),cat=get(row,"cat");
+    const br=/^\[([^\]]+)\]\s*([\s\S]*)$/;
+    if(ko&&br.test(ko)){const m=ko.match(br);if(!cat)cat=m[1].trim();ko=m[2].trim();}
+    if(en&&br.test(en)){const m=en.match(br);if(!cat)cat=m[1].trim();en=m[2].trim();}
+    en=en.replace(/\s*\n\s*/g," ");
+    const topic=ko&&en&&currNorm(ko)!==currNorm(en)?ko+" · "+en:(ko||en);
+    if(!topic)continue;
+    const key=year+"|"+month;weeks[key]=(weeks[key]||0)+1;
+    const wk=parseInt(get(row,"week"),10);
+    const ort=get(row,"ort"),bk=get(row,"books");
+    items.push({year,month,week:wk>0?wk:(month?weeks[key]:""),cat,topic,ko,en,
+      wb:get(row,"wb"),writing:get(row,"writing"),books:[bk,ort?"ORT: "+ort:""].filter(Boolean).join("\n"),
+      acts:get(row,"acts"),grammar:get(row,"grammar"),note:get(row,"note")});
+  }
+  return {items,error:items.length?"":tx("No topics found under the heading row.")};
+}
+function currJsonToItems(text){
+  let d;try{d=JSON.parse(String(text).replace(/^\uFEFF/,""));}catch(e){return {items:[],error:tx("This file isn't valid JSON.")};}
+  if(d&&d.app==="classdesk"&&d.data&&d.data.mc_curriculum){try{d=JSON.parse(d.data.mc_curriculum);}catch(e){d=null;}}
+  else if(d&&!Array.isArray(d)&&Array.isArray(d.curriculum))d=d.curriculum;
+  if(!Array.isArray(d))return {items:[],error:tx("No curriculum topics in this file.")};
+  const items=d.filter(x=>x&&x.topic).map(x=>({year:+x.year||"",month:currMonthOf(x.month),week:+x.week||"",cat:x.cat||"",topic:String(x.topic),ko:"",en:"",
+    wb:x.wb||"",writing:x.writing||"",books:x.books||"",acts:x.acts||"",grammar:x.grammar||"",note:x.note||""}));
+  return {items,error:items.length?"":tx("No curriculum topics in this file.")};
+}
+function currParseInput(text){
+  const t=String(text||"").trim();
+  if(!t)return {items:[],error:""};
+  if(/^[\[{]/.test(t))return currJsonToItems(t);
+  const first=t.split("\n")[0];
+  return currRowsToItems(parseDelimited(t,first.includes("\t")?"\t":","));
+}
+// Match each incoming topic to one already in the app: same month and year (either side may be
+// blank), and the same title — in full, or its Korean or English half, or a title that starts with
+// the existing one ("Sophie's Masterpiece" ← "Sophie's Masterpiece: A Spider's Tale").
+const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note"];
+function currPlan(items){
+  const used=new Set(),add=[],fill=[],same=[];
+  for(const it of items){
+    const names=[it.topic,it.ko,it.en].map(currNorm).filter(Boolean);
+    const ex=curriculum.find(e=>{
+      if(used.has(e.id))return false;
+      if(e.month&&it.month&&e.month!==it.month)return false;
+      if(e.year&&it.year&&String(e.year)!==String(it.year))return false;
+      const n=currNorm(e.topic);if(!n)return false;
+      return names.includes(n)||(n.length>=8&&names.some(x=>x.startsWith(n)));
+    });
+    if(!ex){add.push(it);continue;}
+    used.add(ex.id);
+    const changes={};CURR_FILL.forEach(k=>{if(!ex[k]&&it[k])changes[k]=it[k];});
+    if(Object.keys(changes).length)fill.push({ex,changes});else same.push(ex);
+  }
+  return {add,fill,same,total:items.length};
+}
+function currImportPreview(){
+  const text=document.getElementById("ci-text")?.value||"";
+  const r=currParseInput(text);
+  currImportPlan=r.items.length?currPlan(r.items):null;
+  currImportShow(r.error,r.items);
+}
+function currImportFile(inp){
+  const f=inp.files?.[0];if(!f)return;
+  const n=document.getElementById("ci-fname");if(n)n.textContent=f.name;
+  const rd=new FileReader();
+  rd.onload=()=>{const t=document.getElementById("ci-text");if(t)t.value=String(rd.result||"");currImportPreview();};
+  rd.onerror=()=>alert(tx("Couldn't read the file."));
+  rd.readAsText(f);
+}
+function currImportShow(error,items){
+  const box=document.getElementById("ci-preview"),btn=document.getElementById("ci-apply"),lbl=document.getElementById("ci-apply-lbl");
+  if(!box)return;
+  const p=currImportPlan;
+  if(btn)btn.disabled=!p||!(p.add.length||p.fill.length);
+  if(lbl)lbl.textContent=p&&(p.add.length||p.fill.length)?tx("Import {n} topics",{n:p.add.length+p.fill.length}):tx("Import");
+  if(error){box.innerHTML=`<p class="u-hint" style="color:var(--red)">${escapeHTMLBasic(error)}</p>`;return;}
+  if(!p){box.innerHTML="";return;}
+  const byYear={};items.forEach(it=>{const k=it.year||tx("No year");byYear[k]=(byYear[k]||0)+1;});
+  const yrs=Object.keys(byYear).sort().reverse().map(k=>`<span class="u-badge">${escapeHTMLBasic(String(k))} · ${byYear[k]}</span>`).join(" ");
+  const sample=items.slice(0,6).map(it=>`<div class="inc-row"><div class="cell-main">${escapeHTMLBasic([it.year,it.month?tx(it.month):"",it.week?tx("Wk")+" "+it.week:""].filter(Boolean).join(" "))}</div><div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.cat?`<span class="u-badge">${escapeHTMLBasic(it.cat)}</span> `:""}${escapeHTMLBasic(it.topic)}</div><span></span></div>`).join("");
+  box.innerHTML=`<p style="font-size:13px;margin:0 0 6px">${tx("{n} topics found",{n:p.total})} ${yrs}</p>
+    <p class="u-hint" style="margin:0 0 10px">${tx("New: {a} · already in the app: {b} (empty fields filled in for {c})",{a:p.add.length,b:p.fill.length+p.same.length,c:p.fill.length})}</p>
+    ${sample}${items.length>6?`<div class="u-hint" style="padding:6px 0">${tx("…and {n} more",{n:items.length-6})}</div>`:""}`;
+}
+function currImportApply(){
+  const p=currImportPlan;if(!p||!(p.add.length||p.fill.length))return;
+  const snapshot=JSON.parse(JSON.stringify(curriculum));
+  p.add.forEach(it=>{const {ko,en,...rec}=it;curriculum.push({id:uid(),...rec});});
+  p.fill.forEach(({ex,changes})=>Object.assign(ex,changes));
+  if(save()===false)return;
+  closeModal("mo-currimport");
+  const yf=document.getElementById("curr-yf");if(yf)yf.value="";
+  renderCurriculum();
+  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:p.fill.length}),()=>{
+    curriculum.splice(0,curriculum.length,...snapshot);   // in place: the sync layer holds this array
+    save();renderCurriculum();
+  });
 }
 
 // ═══════════════════════════════════════════════
