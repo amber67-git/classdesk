@@ -51,6 +51,19 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
   --blu:#2563eb;--blu-l:#dbeafe;     /* 정보, 선불 */
   --pur:#7c3aed;--pur-l:#ede9fe;     /* 기타 라벨 */
 
+  /* Tinted badges, chips and boxes (v137) — 글자는 같은 색 계열의 -l 배경 위에서 4.5:1 이상 */
+  --amb-t:#92400e;--amb-bdr:#fcd34d;  /* 주의 배지 글자 / 주의 띠 밑선 */
+  --red-t:#991b1b;--red-h:#fca5a5;    /* 미납 배지 글자 / 빨간 버튼 hover 배경 */
+  --blu-t:#1e40af;--blu-bdr:#bfdbfe;--blu-ll:#eff6ff;   /* 정보 배지 글자 / 정보 상자 테두리·배경 */
+  --pur-t:#5b21b6;--pur-tt:#6d28d9;   /* 보라 배지 글자 / 격주 표시 */
+  --cyn-l:#cffafe;--cyn-t:#0e7490;    /* 앱 결제 배지 */
+  --ok-h:#bbf7d0;                     /* 초록 버튼 hover 배경 */
+  --ind:#6366f1;--ind-l:#e0e7ff;--ind-t:#3730a3;        /* 달력 수업 칩 (테두리 / 배경 / 글자) */
+  --day-out:#fafafa;                  /* 달력에서 다른 달의 날 */
+  --chip-red-t:#7f1d1d;--chip-amb-t:#78350f;--chip-off:#94a3b8;   /* 달력 칩: 미납 글자 / 부분 글자 / 취소 테두리 */
+  --sel-tint:rgba(22,163,74,.09);     /* 커리큘럼 시트에서 고른 셀 (v138) */
+  color-scheme:light;                 /* 스크롤바·폼 컨트롤도 밝게 */
+
   /* Type scale (px) */
   --fs-xs:10px;--fs-sm:11px;--fs-base:12px;--fs-md:13px;--fs-lg:15px;--fs-xl:17px;--fs-2xl:22px;
 
@@ -70,6 +83,26 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
   --shm:0 4px 16px rgba(0,0,0,.08);
   --shl:0 10px 40px rgba(0,0,0,.12);       /* 모달 */
 }
+
+/* Dark mode (v137) — 같은 이름에 어두운 값. 글꼴·간격·모서리는 그대로 */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0d1321;--surf:#161e2e;--surf2:#1d2738;--surf3:#283447;
+  --bdr:#283447;--bdr2:#3a475c;
+  --row-hover:#1b2436;--pin-shade:rgba(0,0,0,.55);--edge-fade:rgba(0,0,0,.35);
+  --txt:#e6ebf2;--txt2:#b6c0ce;--txt3:#8d99ab;
+  --pri:#16a34a;--pri-h:#1fb257;--pri-l:#12341f;--pri-t:#86efac;
+  --ok:#22c55e;--ok-l:#12341f;--ok-t:#86efac;--ok-h:#1a4d2e;
+  --red:#f87171;--red-l:#3d1a1a;--red-t:#fca5a5;--red-h:#5c2323;
+  --amb:#fbbf24;--amb-l:#3a2a0c;--amb-t:#fcd34d;--amb-bdr:#6b4e12;
+  --blu:#60a5fa;--blu-l:#172554;--blu-t:#93c5fd;--blu-bdr:#1e3a8a;--blu-ll:#14203d;
+  --pur:#a78bfa;--pur-l:#2e1f5e;--pur-t:#c4b5fd;--pur-tt:#c4b5fd;
+  --cyn-l:#0b3340;--cyn-t:#67e8f9;
+  --ind:#818cf8;--ind-l:#232a5c;--ind-t:#c7d2fe;--day-out:#111827;
+  --chip-red-t:#fca5a5;--chip-amb-t:#fcd34d;--chip-off:#5b6678;
+  --sel-tint:rgba(74,222,128,.13);
+  --sh:0 1px 3px rgba(0,0,0,.4);--shm:0 4px 16px rgba(0,0,0,.45);--shl:0 10px 40px rgba(0,0,0,.6);
+}
 ```
 
 ### 메인 컬러 바꾸는 법
@@ -83,7 +116,7 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 - `<html data-theme="light|dark">`. 설정 → 템플릿 → 화면 모드(기기 설정에 맞춤 — 기본 / 밝게 / 어둡게)가 정하고, 기기마다 `localStorage.classdesk_theme`에 둔다(동기화·백업 안 함 — `mc_`로 시작하지 않는 이유).
 - `<head>`의 작은 스크립트가 첫 화면 전에 적용하므로 흰 화면이 번쩍이지 않는다. 인쇄할 때는 `beforeprint`에서 밝게 바꿨다가 `afterprint`에서 되돌린다.
 - **색은 토큰만 바꾼다.** `:root[data-theme="dark"]` 블록에 같은 이름의 어두운 값이 있다. 새 색이 필요하면 `:root`에 밝은 값을, 다크 블록에 어두운 값을 같이 넣는다. hex를 직접 쓰면 다크 모드에서 그 칸만 밝게 남는다.
-- 배지·칩 글자색 토큰: `--amb-t --red-t --blu-t --pur-t --cyn-l/--cyn-t --ind/--ind-l/--ind-t`, 달력 칩 전용 `--chip-red-t --chip-amb-t --chip-off`, 바깥 달 `--day-out`.
+- v137에 더한 토큰(값은 위 2장의 두 블록): 배지·칩 글자 `--amb-t --red-t --blu-t --pur-t --pur-tt --cyn-l --cyn-t`, 상자·띠 `--amb-bdr --blu-bdr --blu-ll`, hover `--ok-h --red-h`, 달력 `--ind --ind-l --ind-t --day-out --chip-red-t --chip-amb-t --chip-off`, 커리큘럼 시트 선택 `--sel-tint`(v138), 그리고 `color-scheme`.
 - 다크 값 규칙: 글자(`--txt*`, 강조색)는 `--bg/--surf/--surf2` 위에서 4.5:1 이상, `--x-t`는 `--x-l` 위에서 4.5:1 이상. `design4-test.js`가 확인한다.
 - 밝은 화면은 v136과 계산된 색이 한 칸도 다르지 않아야 한다(토큰으로 옮길 때 값을 그대로 둔다).
 
