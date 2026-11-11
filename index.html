@@ -56,6 +56,7 @@
   --pur-t:#5b21b6;--pur-tt:#6d28d9;--cyn-l:#cffafe;--cyn-t:#0e7490;--ok-h:#bbf7d0;
   --ind:#6366f1;--ind-l:#e0e7ff;--ind-t:#3730a3;--day-out:#fafafa;
   --chip-red-t:#7f1d1d;--chip-amb-t:#78350f;--chip-off:#94a3b8;
+  --sel-tint:rgba(22,163,74,.09);   /* v138: selected cells in the curriculum sheet */
   color-scheme:light;
   /* Font sizes */
   --fs-xs:10px;--fs-sm:11px;--fs-base:12px;--fs-md:13px;--fs-lg:15px;--fs-xl:17px;--fs-2xl:22px;
@@ -86,6 +87,7 @@
   --cyn-l:#0b3340;--cyn-t:#67e8f9;
   --ind:#818cf8;--ind-l:#232a5c;--ind-t:#c7d2fe;--day-out:#111827;
   --chip-red-t:#fca5a5;--chip-amb-t:#fcd34d;--chip-off:#5b6678;
+  --sel-tint:rgba(74,222,128,.13);
   --sh:0 1px 3px rgba(0,0,0,.4);--shm:0 4px 16px rgba(0,0,0,.45);--shl:0 10px 40px rgba(0,0,0,.6);
 }
 :root[data-theme="dark"] img{opacity:.92}   /* covers and logos a touch less glaring */
@@ -216,7 +218,7 @@ tbody tr:hover td{background:var(--row-hover)}
 #curr-body td.cur-pre{white-space:pre-line}
 /* v138: curriculum sheet */
 #curr-body td.cs-c{cursor:cell;user-select:none;-webkit-user-select:none}
-#curr-body td.cs-in{box-shadow:inset 0 0 0 9999px rgba(22,163,74,.09)}
+#curr-body td.cs-in{box-shadow:inset 0 0 0 9999px var(--sel-tint)}
 #page-curriculum .tw:focus-within #curr-body td.cs-act{outline:2px solid var(--grn);outline-offset:-2px}
 #curr-body td.cs-act{outline:1px solid var(--bdr2);outline-offset:-1px}
 #curr-body td.cs-mon{font-weight:700;color:var(--grn)}
@@ -3602,6 +3604,11 @@ const SYNC_VARS={
 };
 // JSON without the sync stamp — what "did this record change?" is judged on.
 const cmpJson=rec=>JSON.stringify(rec,(k,v)=>k==="_u"?undefined:v);
+// Two copies of a record (cmpJson strings or objects) that differ in nothing but ord (row place).
+function sameButOrd(a,b){
+  const strip=x=>{const o=typeof x==="string"?JSON.parse(x):x;return JSON.stringify(o,(k,v)=>k==="_u"||k==="ord"?undefined:v);};
+  try{return strip(a)===strip(b);}catch(e){return false;}
+}
 function initLastSaved(){
   for(const key of SYNC_KEYS){
     const val=SYNC_VARS[key]();
@@ -3647,14 +3654,20 @@ function save(){
       if(!rec.id)rec.id=uid();
       const c=cmpJson(rec);
       cur.set(rec.id,c);
-      if(prev.get(rec.id)!==c){rec._u=now;changed.push(rec);}
+      if(prev.get(rec.id)!==c){
+        // v138: a change to a curriculum row's place only (ord) keeps the record's _u, so a re-order
+        // never outranks a content edit made on another device. Other devices take the new ord from
+        // a copy with the same _u (applyRemoteRecord). A record never synced (no _u) is stamped.
+        if(!(key==="curriculum"&&rec._u&&prev.has(rec.id)&&sameButOrd(prev.get(rec.id),c)))rec._u=now;
+        changed.push(rec);
+      }
     }
     const deleted=[...prev.keys()].filter(id=>!cur.has(id));
     if(!changed.length&&!deleted.length)continue;
     if(!ls("mc_"+key,val)){ok=false;continue;}
     _lastSaved[key]=cur;
     ops[key]=[
-      ...changed.map(r=>({id:r.id,j:cloudJson(r),u:now})),
+      ...changed.map(r=>({id:r.id,j:cloudJson(r),u:r._u})),
       ...deleted.map(id=>({id,u:now,d:true})),
     ];
     if(deleted.length)rememberTombs(key,deleted,now);
@@ -10565,7 +10578,16 @@ function applyRemoteRecord(key,id,data){
     let rec;try{rec=JSON.parse(data.j);}catch(e){console.error("Bad record",key,id,e);return false;}
     rec.id=id;rec._u=ru;arr.push(rec);return true;
   }
-  if(!(ru>lu))return false;
+  if(!(ru>lu)){
+    // v138: a curriculum row moved on another device arrives with the same _u (see save()).
+    // Take its ord when that is the only difference; content precedence is untouched.
+    if(key==="curriculum"&&ru===lu){
+      let r;try{r=JSON.parse(data.j);}catch(e){return false;}
+      const cur=arr[idx];
+      if(typeof r.ord==="number"&&r.ord!==cur.ord&&sameButOrd(r,cur)){cur.ord=r.ord;return true;}
+    }
+    return false;
+  }
   let rec;try{rec=JSON.parse(data.j);}catch(e){console.error("Bad record",key,id,e);return false;}
   const cur=arr[idx];
   // A remote copy carries "" where we still hold a base64 cover/PDF that hasn't been uploaded
