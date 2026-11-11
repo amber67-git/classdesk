@@ -24,6 +24,7 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
   --pri-h:#15803d;    /* primary hover (조금 더 진하게) */
   --pri-l:#dcfce7;    /* primary light — 활성 메뉴 배경, 선택 바 배경, 배지 배경 */
   --pri-t:#14532d;    /* primary text — light 배경 위에 얹는 진한 글자색 */
+  --grn:var(--pri);--grn-l:var(--pri-l);--grn-t:var(--pri-t);   /* 옛 이름(코드 곳곳에서 --grn을 쓴다) — 포커스 링도 --grn */
 
   /* Success (paid / done) — 의미 색. 브랜드 색과 별개로 항상 초록 */
   --ok:#16a34a;--ok-l:#dcfce7;--ok-t:#15803d;
@@ -42,7 +43,7 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
   /* Text */
   --txt:#0f172a;      /* 본문 */
   --txt2:#475569;     /* 보조 */
-  --txt3:#64748b;     /* 힌트, 표 헤더, 비활성 — v136: 흰 바탕 4.8:1. 이보다 연하게 하지 말 것(작은 글씨는 4.5:1 이상) */
+  --txt3:#5f6f84;     /* 힌트, 표 헤더, 비활성 — v136: 흰 바탕 5.1:1, --surf2(표·달력 머리) 위 4.7:1. 이보다 연하게 하지 말 것(작은 글씨는 4.5:1 이상) */
 
   /* Semantic */
   --red:#dc2626;--red-l:#fee2e2;     /* 미납, 삭제, 오류 */
@@ -238,8 +239,9 @@ input:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l);outline:no
 ```css
 :where(button,a[href],summary,[role="button"],[tabindex]:not([tabindex="-1"]),label.btn):focus-visible{outline:2px solid var(--grn);outline-offset:2px}
 input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{outline:2px solid var(--grn);outline-offset:2px}
+.sw input:focus-visible+.sw-track{outline:2px solid var(--grn);outline-offset:2px}   /* 스위치: input은 투명이라 트랙에 */
 ```
-누를 수 있는 것은 키보드(Tab)로 왔을 때 초록 테두리가 보여야 한다. `:focus-visible`이라 마우스·터치에는 안 보인다. 새 버튼에 `outline:none`을 주지 말 것. 클릭되는 `div`를 새로 만들 땐 `button`을 쓰거나 `tabindex="0"`과 Enter 처리를 같이 붙인다.
+누를 수 있는 것은 키보드(Tab)로 왔을 때 초록 테두리가 보여야 한다. `:focus-visible`이라 마우스·터치에는 안 보인다. 새 버튼에 `outline:none`을 주지 말 것. 마우스용으로 `outline:none`을 준 포커스 상자(예: 책 표지·PDF 칸)는 같은 요소에 `:focus-visible` 규칙을 따로 둔다. 클릭되는 `div`를 새로 만들 땐 `button`을 쓰거나 `tabindex="0"`과 Enter 처리를 같이 붙인다.
 
 ### 비교/동기화 창 (Google Calendar)
 외부 데이터와의 차이는 **차이만** 목록으로, 행마다 하나의 동작 버튼(추가 / 취소 / 시간 맞추기). 자동 반영 없음.
