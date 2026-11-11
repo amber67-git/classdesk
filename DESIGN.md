@@ -80,7 +80,7 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 5. 브랜드 색을 쓰는 곳: 사이드바 로고 글자, 활성 메뉴(배경 `--pri-l`, 글자 `--pri-t`, 아이콘 `--pri`), 초록 버튼, 스위치 on, 세그먼트 활성, 입력창 포커스 링, 링크, 선택 바.
 
 ### 다크 모드 (v137)
-- `<html data-theme="light|dark">`. 설정 → 템플릿 → 화면 모드(밝게 / 어둡게 / 기기 설정에 맞춤)가 정하고, 기기마다 `localStorage.classdesk_theme`에 둔다(동기화·백업 안 함 — `mc_`로 시작하지 않는 이유).
+- `<html data-theme="light|dark">`. 설정 → 템플릿 → 화면 모드(기기 설정에 맞춤 — 기본 / 밝게 / 어둡게)가 정하고, 기기마다 `localStorage.classdesk_theme`에 둔다(동기화·백업 안 함 — `mc_`로 시작하지 않는 이유).
 - `<head>`의 작은 스크립트가 첫 화면 전에 적용하므로 흰 화면이 번쩍이지 않는다. 인쇄할 때는 `beforeprint`에서 밝게 바꿨다가 `afterprint`에서 되돌린다.
 - **색은 토큰만 바꾼다.** `:root[data-theme="dark"]` 블록에 같은 이름의 어두운 값이 있다. 새 색이 필요하면 `:root`에 밝은 값을, 다크 블록에 어두운 값을 같이 넣는다. hex를 직접 쓰면 다크 모드에서 그 칸만 밝게 남는다.
 - 배지·칩 글자색 토큰: `--amb-t --red-t --blu-t --pur-t --cyn-l/--cyn-t --ind/--ind-l/--ind-t`, 달력 칩 전용 `--chip-red-t --chip-amb-t --chip-off`, 바깥 달 `--day-out`.
