@@ -32,7 +32,7 @@
   --bdr:#e2e8f0;--bdr2:#cbd5e1;
   /* Lists that scroll sideways: row hover, the pinned first column's shadow, the right-edge fade */
   --row-hover:#fafbfc;--pin-shade:rgba(15,23,42,.14);--edge-fade:rgba(15,23,42,.08);
-  --txt:#0f172a;--txt2:#475569;--txt3:#64748b;   /* v136: was #94a3b8 (2.6:1 on white) — now 4.8:1, readable small text */
+  --txt:#0f172a;--txt2:#475569;--txt3:#5f6f84;   /* v136: was #94a3b8 (2.6:1 on white) — now 5.1:1 on white, 4.7:1 on --surf2 (table and calendar headings) */
   /* Brand / primary — change these four to re-theme the whole app (nav, buttons, focus, switch…) */
   --pri:#16a34a;--pri-h:#15803d;--pri-l:#dcfce7;--pri-t:#14532d;
   /* Success (paid / done) — semantic, stays green even if the brand color changes */
@@ -225,7 +225,7 @@ tbody tr:hover td{background:var(--row-hover)}
 .sw-track::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
 .sw input:checked+.sw-track{background:var(--grn)}
 .sw input:checked+.sw-track::after{transform:translateX(12px)}
-.sw input:focus-visible+.sw-track{box-shadow:0 0 0 3px var(--grn-l)}
+.sw input:focus-visible+.sw-track{box-shadow:0 0 0 3px var(--grn-l);outline:2px solid var(--grn);outline-offset:2px}   /* the input itself is invisible */
 /* SEGMENTED CONTROL — small set of mutually exclusive views (e.g. Payments: Calendar / Summary) */
 .seg{display:inline-flex;align-items:center;height:34px;box-sizing:border-box;background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r);padding:2px;gap:2px}
 .seg-btn{border:none;background:none;height:28px;padding:0 12px;border-radius:6px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;font-family:var(--font);line-height:1.2;transition:all .12s;display:inline-flex;align-items:center;gap:5px}
@@ -365,6 +365,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--grn);box-shadow:0 0 0
    keyboard (and similar) focus, never after a mouse click or a tap. :where keeps it overridable. */
 :where(button,a[href],summary,[role="button"],[tabindex]:not([tabindex="-1"]),label.btn):focus-visible{outline:2px solid var(--grn);outline-offset:2px}
 input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{outline:2px solid var(--grn);outline-offset:2px}   /* beats input{outline:none} */
+/* the book dialog's cover and PDF areas are focusable boxes that set outline:none for the mouse */
+.book-modal .blm-cover-box:focus-visible,.book-modal .blm-pdf-dropzone:focus-visible{outline:2px solid var(--grn);outline-offset:2px}
 textarea{height:auto;padding:8px 10px;resize:vertical}
 .fr{display:grid;gap:10px}.fr.c2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.fr.c3{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}
 /* minmax(0,…): a date input's built-in minimum width pushed the right-hand field 1px past a phone dialog */
