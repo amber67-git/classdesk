@@ -201,7 +201,7 @@ tbody tr:hover td{background:var(--row-hover)}
    a header that stays put, the table scrolling both ways inside its own box, column widths you drag
    (stored per device), and Month → Topic frozen on the left on wide screens (see applyCurrColWidths). */
 @media(min-width:641px){
-  #page-curriculum .tw{overflow:auto;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);position:relative}
+  #page-curriculum .tw{overflow:auto;max-height:calc(100vh - 192px);max-height:calc(100dvh - 192px);position:relative}
   #curr-table{table-layout:fixed;border-collapse:separate;border-spacing:0;min-width:0!important}
   #curr-table th{position:sticky;top:0;z-index:5;padding:9px 10px;border-right:1px solid var(--bdr);overflow:hidden;text-overflow:ellipsis}
   #curr-table td{vertical-align:top;padding:10px 12px;line-height:1.55;font-size:12.5px;border-right:1px solid var(--bdr);overflow-wrap:anywhere;background:var(--surf)}
@@ -214,6 +214,54 @@ tbody tr:hover td{background:var(--row-hover)}
 }
 /* Curriculum (v127): text brought in from a spreadsheet keeps its line breaks; the year sits under the month */
 #curr-body td.cur-pre{white-space:pre-line}
+/* v138: curriculum sheet */
+#curr-body td.cs-c{cursor:cell;user-select:none;-webkit-user-select:none}
+#curr-body td.cs-in{box-shadow:inset 0 0 0 9999px rgba(22,163,74,.09)}
+#page-curriculum .tw:focus-within #curr-body td.cs-act{outline:2px solid var(--grn);outline-offset:-2px}
+#curr-body td.cs-act{outline:1px solid var(--bdr2);outline-offset:-1px}
+#curr-body td.cs-mon{font-weight:700;color:var(--grn)}
+#curr-body td.cs-wk{text-align:center}
+#curr-body td.cs-topic{font-weight:500;white-space:pre-line}
+#curr-body td[rowspan]{vertical-align:middle}
+.cs-pill{font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)}
+textarea.cs-ed{position:absolute;z-index:30;left:0;top:0;width:1px;height:1px;min-height:0;opacity:0;pointer-events:none;resize:none;border:2px solid var(--grn);border-radius:0;padding:8px 10px;font-family:var(--font);font-size:12.5px;line-height:1.55;background:var(--surf);color:var(--txt);box-shadow:var(--shm);overflow:hidden;caret-color:transparent;white-space:pre-wrap}
+textarea.cs-ed:focus{border-color:var(--grn);box-shadow:var(--shm)}
+textarea.cs-ed.on{opacity:1;pointer-events:auto;caret-color:auto}
+#curr-body td.cs-tools{padding:4px 6px;vertical-align:middle}
+@media(min-width:641px){
+  /* the row tools (⠿ and ⋮) stay at the right edge while the sheet scrolls sideways */
+  #curr-table thead th:last-child,#curr-body td.cs-tools{position:sticky;right:0;box-shadow:-6px 0 8px -6px var(--pin-shade)}
+  #curr-body td.cs-tools{z-index:3}
+  #curr-table thead th:last-child{z-index:7}
+}
+.cs-desk{display:flex;gap:2px;align-items:center;justify-content:flex-end}
+.cs-grip{cursor:grab;color:var(--txt3);padding:4px 2px;touch-action:none;display:inline-flex}
+.cs-grip:hover{color:var(--txt)}
+.cs-phone{display:none}
+#curr-body tr.cs-add td{padding:6px 10px;background:var(--surf)}
+#curr-body tr.cs-add .btn{position:sticky;left:10px}
+#curr-body tr.cs-add:hover td{background:var(--surf)}
+.cs-drop{position:absolute;left:0;height:2px;background:var(--grn);z-index:25;pointer-events:none}
+.cs-sheetbar{display:flex;align-items:center;gap:4px;padding:6px 10px;border-bottom:1px solid var(--bdr);background:var(--surf);border-radius:var(--rl) var(--rl) 0 0}
+.cs-hint{margin-left:auto;font-size:11.5px;color:var(--txt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cs-sheetbar .btn-sm{gap:4px}
+.cs-vsep{width:1px;height:20px;background:var(--bdr);margin:0 4px}
+.cs-menu{position:fixed;z-index:4000;background:var(--surf);border:1px solid var(--bdr);border-radius:10px;box-shadow:var(--shl);padding:6px;min-width:230px}
+.cs-menu button[data-i]{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;border:0;background:none;border-radius:6px;font:inherit;font-size:13px;color:var(--txt);cursor:pointer;text-align:left}
+.cs-menu button[data-i]:hover,.cs-menu button[data-i]:focus{background:var(--surf2);outline:none}
+.cs-menu button[data-i] i{font-size:16px;color:var(--txt3)}
+.cs-menu kbd{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--txt3)}
+.cs-sep{height:1px;background:var(--bdr);margin:5px 2px}
+.cs-sw{display:flex;gap:6px;padding:6px 8px}
+.cs-swb{width:24px;height:24px;border-radius:6px;border:1px solid var(--bdr2);padding:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--txt3);background:var(--surf)}
+.cs-swb:hover{border-color:var(--txt3)}
+@media(max-width:640px){
+  .cs-desk,.cs-sheetbar{display:none!important}
+  .cs-phone{display:flex;gap:3px}
+  #curr-body td.cs-c{cursor:auto;user-select:text;-webkit-user-select:text}
+  textarea.cs-ed{display:none}
+}
+
 #curr-body .cur-year{display:block;font-weight:400}
 .bl-meta{display:none}
 .grid-row.clickable{cursor:pointer}
@@ -711,12 +759,12 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
   #page-curriculum tbody tr{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:4px 8px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--bdr)}
   #page-curriculum tbody tr:last-child{border-bottom:none}
   #page-curriculum td{display:block;padding:0;border:0}
-  #page-curriculum td:nth-child(1){grid-area:1/1}
-  #page-curriculum td:nth-child(2){grid-area:1/2;text-align:left!important}
-  #page-curriculum td:nth-child(2)::before{content:"Wk ";color:var(--txt3);font-family:var(--font);font-size:11px}
-  #page-curriculum td:nth-child(3){grid-area:1/3}
-  #page-curriculum td:nth-child(11){grid-area:1/4}
-  #page-curriculum td:nth-child(4){grid-column:1/-1;font-size:14px;margin:2px 0 4px}
+  #page-curriculum td[data-c="0"]{grid-area:1/1}
+  #page-curriculum td[data-c="1"]{grid-area:1/2;text-align:left!important}
+  #page-curriculum td[data-c="1"]::before{content:"Wk ";color:var(--txt3);font-family:var(--font);font-size:11px}
+  #page-curriculum td[data-c="2"]{grid-area:1/3}
+  #page-curriculum td[data-c="10"]{grid-area:1/4}
+  #page-curriculum td[data-c="3"]{grid-column:1/-1;font-size:14px;margin:2px 0 4px}
   #page-curriculum td[data-l]{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}
   #page-curriculum td[data-l]::before{content:attr(data-l);flex:0 0 72px;font-size:11px;color:var(--txt3)}
   #page-curriculum td.cur-empty{display:none}
@@ -1300,6 +1348,16 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
   </div>
   <div class="pc">
     <div class="card">
+      <!-- v138: spreadsheet tools (tablet / PC only) -->
+      <div class="cs-sheetbar" role="toolbar" aria-label="Sheet">
+        <button type="button" class="bic" onclick="csUndo()" title="Undo (Ctrl+Z)" data-i18n-title><i class="ti ti-arrow-back-up"></i></button>
+        <button type="button" class="bic" onclick="csRedo()" title="Redo (Ctrl+Y)" data-i18n-title><i class="ti ti-arrow-forward-up"></i></button>
+        <span class="cs-vsep"></span>
+        <button type="button" class="btn btn-sm" onclick="csToolMenu(event,'merge')" title="Merge cells" data-i18n-title><i class="ti ti-layout-grid-add"></i><span data-i18n>Merge</span><i class="ti ti-chevron-down"></i></button>
+        <button type="button" class="btn btn-sm" onclick="csToolMenu(event,'fill')" title="Cell colour" data-i18n-title><i class="ti ti-palette"></i><i class="ti ti-chevron-down"></i></button>
+        <button type="button" class="btn btn-sm" onclick="csSortRows()" title="Put the rows shown in month and week order" data-i18n-title><i class="ti ti-sort-ascending"></i><span data-i18n>Sort</span></button>
+        <span class="cs-hint" data-i18n>Click a cell and type · Alt+↑↓ moves a row · right-click for more</span>
+      </div>
       <div class="tw">
         <table id="curr-table">
           <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th class="cur-act-h"><button class="bic" onclick="currResetCols()" title="Reset column widths" data-i18n-title><i class="ti ti-arrows-horizontal"></i></button></th></tr></thead>
@@ -1725,7 +1783,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Reading</dt><dd>Books read per student, drawn from the lesson records — AR trend and a printable parent report.</dd>
           <dt>Payments</dt><dd>Tuition management — a payment calendar and a monthly summary per student, the payment-request message, other income that is not a lesson fee, and the unpaid-fee reminder.</dd>
           <dt>Reports</dt><dd>Monthly figures per student: lessons held, hours, fees, cancellations counted against the timetable, plus a Learning report and homework checking.</dd>
-          <dt>Curriculum</dt><dd>Your lesson plan by year, month and week: topic, category, workbook, writing task, books, activities, grammar and notes. Filter by year and month, or search. <b>Import</b> brings in a whole plan from a spreadsheet (see the FAQ).</dd>
+          <dt>Curriculum</dt><dd>Your lesson plan by year, month and week: topic, category, workbook, writing task, books, activities, grammar and notes. Filter by year and month, or search. <b>Import</b> brings in a whole plan from a spreadsheet (see the FAQ). On a tablet or computer the table works like Google Sheets: click a cell and type, and it saves at once (see the FAQ "Editing the curriculum like a spreadsheet"). On a phone, tap ✎ to edit a topic.</dd>
           <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
           <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
           <dt>Material</dt><dd>Teaching materials, aids, and printouts.</dd>
@@ -1851,6 +1909,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Why are the amounts on the Dashboard hidden (₩ •••••)?</dt><dd>Privacy — so students can't see tuition or who hasn't paid. Tap the small <b>eye icon</b> in the "Expected (month)" card to reveal amounts and Paid/Unpaid badges. On phones and tablets they are hidden again every time you leave and reopen the app. On a PC they're shown by default, and your Show/Hide choice is remembered.</dd>
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
           <dt>A curriculum column is too narrow to read</dt><dd>Drag the thin line on the right edge of that column's heading — like Google Sheets. Double-click the line to fit the column to its text; the ↔ button at the right end of the heading row resets all widths. Each device remembers its own widths.</dd>
+          <dt>Editing the curriculum like a spreadsheet</dt><dd>On a tablet or computer: click a cell and type to replace it, or press Enter / F2 / double-click to change what is there (<kbd>Alt</kbd>+<kbd>Enter</kbd> starts a new line, <kbd>Esc</kbd> cancels). Enter, Tab and the arrow keys move; Shift+arrows or dragging selects several cells. <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>V</kbd> copy and paste — blocks from Google Sheets or Excel fill the cells, and rows past the end are added. Delete clears, <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd> undo and redo. <b>Rows:</b> <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> or drag ⠿ to move a row; right-click (or ⋮) to insert, duplicate or delete. <b>Merge</b> joins the selected cells (all, vertically or horizontally); a merged cell keeps the top-left text, and in a vertical merge every week in it shares that text. Moving a row never cuts a merge in half. The palette button colours cells, and <b>Sort</b> puts the rows back in month and week order. Every change is saved and synced straight away.</dd>
           <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
           <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. Since v129 this Guide has a Korean version too and switches with the rest of the app.</dd>
           <dt>Can I use a dark screen?</dt><dd>Settings → Templates → <b>Appearance</b>: Light (default), Dark, or "Match the device" (dark when the phone or computer is set to dark, and it changes along with it). It is set per device, so the classroom PC can stay light while your phone is dark. It is not part of a backup, and printed labels and reports always come out light.</dd>
@@ -1862,6 +1921,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v138 · 2026-11-11</dt><dd><b>Curriculum works like Google Sheets</b> (tablet and computer): type straight into a cell and it saves at once; copy and paste blocks to and from Google Sheets; undo / redo; insert, duplicate, delete and <b>move whole rows up and down</b>; <b>merge cells</b> (all, vertically, horizontally) and unmerge; cell colours; Sort by month and week. The row order is now yours — moving a row keeps it there. Phones keep the card list. See the FAQ.</dd>
           <dt>v137 · 2026-11-11</dt><dd><b>Dark mode:</b> Settings → Templates → <b>Appearance</b> offers Light, Dark or Match the device. It switches straight away, is kept per device (not synced, not in backups), and printing still uses light colours. Light mode looks exactly as before.</dd>
           <dt>v136 · 2026-11-10</dt><dd><b>Easier to read, easier by keyboard:</b> the light grey hint text (dates under names, column notes, empty-list hints) is darker so it reads clearly on every background, and when you move around with the <kbd>Tab</kbd> key the button, menu item or checkbox you are on now has a green ring. Clicking or tapping shows no ring, so nothing changes for mouse and touch use.</dd>
           <dt>v135 · 2026-11-10</dt><dd><b>Tidier small screens:</b> on a tablet, split screen or phone the Payments figures sit 2 + 2 + 1 — the fifth card (Hours taught) now spans the row instead of leaving a blank half — and an empty To-Do list on the Dashboard is a one-line hint instead of a large empty box. Also fixed: when typing Korean, the Enter that finishes a syllable no longer saves a To-Do or starts a search before you are done.</dd>
@@ -1896,7 +1956,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v137</b> · FAQ current as of: <b>2026-11-11</b><br/>
+          Guide written against version: <b>v138</b> · FAQ current as of: <b>2026-11-11</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -1920,7 +1980,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>독서</dt><dd>수업 기록에서 모은 학생별 읽은 책 — AR 추이와 인쇄용 학부모 보고서.</dd>
           <dt>수업료</dt><dd>수업료 관리 — 수납 달력과 학생별 월 요약, 수업료 안내 메시지, 수업료가 아닌 기타 수입, 미납 알림.</dd>
           <dt>보고서</dt><dd>학생별 월간 수치: 진행한 수업, 시간, 수업료, 시간표 대비 취소 횟수, 그리고 학습 보고서와 숙제 확인.</dd>
-          <dt>커리큘럼</dt><dd>연도·월·주별 수업 계획: 주제, 카테고리, 워크북, 글쓰기 과제, 책, 활동, 문법, 메모. 연도와 월로 거르거나 검색할 수 있습니다. <b>가져오기</b>로 스프레드시트의 계획 전체를 한 번에 불러옵니다(자주 묻는 질문 참고).</dd>
+          <dt>커리큘럼</dt><dd>연도·월·주별 수업 계획: 주제, 카테고리, 워크북, 글쓰기 과제, 책, 활동, 문법, 메모. 연도와 월로 거르거나 검색할 수 있습니다. <b>가져오기</b>로 스프레드시트의 계획 전체를 한 번에 불러옵니다(자주 묻는 질문 참고). 태블릿이나 컴퓨터에서는 표가 Google 스프레드시트처럼 동작합니다. 셀을 누르고 입력하면 바로 저장됩니다(자주 묻는 질문 "커리큘럼을 스프레드시트처럼 고치기" 참고). 휴대폰에서는 ✎를 눌러 고칩니다.</dd>
           <dt>교재</dt><dd>교재 관리 — 표지, 진도, 학생별 배정.</dd>
           <dt>도서</dt><dd>영어 도서 목록 — 아래 "도서 자세히 보기" 참고. 이 앱의 핵심 화면입니다.</dd>
           <dt>교구</dt><dd>수업 자료, 교구, 인쇄물.</dd>
@@ -2046,6 +2106,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>대시보드의 금액이 왜 가려져 있나요 (₩ •••••)?</dt><dd>개인정보 보호 — 학생들이 수업료나 미납 여부를 보지 못하게 하려는 것입니다. "이달 예상 수업료" 카드의 작은 <b>눈 아이콘</b>을 누르면 금액과 납부/미납 표시가 보입니다. 휴대폰과 태블릿에서는 앱을 나갔다 다시 열 때마다 다시 가려집니다. PC에서는 기본으로 보이고, 보이기/가리기 선택을 기억합니다.</dd>
           <dt>태블릿에서 수업료 화면을 잠글 수 있나요?</dt><dd>네 — 설정 → 계정 → <b>수업료 PIN</b>. 설정하면 태블릿과 휴대폰에서는 수업료 화면을 열거나 가려진 금액을 볼 때 PIN을 묻고, 수업료 화면을 떠나는 순간 다시 잠깁니다. PC에서는 묻지 않습니다. PIN은 내 계정으로 로그인한 모든 기기가 함께 쓰므로 PC에서 한 번만 설정하면 됩니다.</dd>
           <dt>커리큘럼 열이 좁아서 잘 안 보여요</dt><dd>그 열 제목 오른쪽 끝의 가는 선을 끌어 넓히세요 — Google 스프레드시트처럼요. 선을 두 번 누르면 글에 맞게 너비가 맞춰지고, 제목 줄 오른쪽 끝의 ↔ 버튼은 모든 너비를 처음으로 되돌립니다. 너비는 기기마다 따로 기억합니다.</dd>
+          <dt>커리큘럼을 스프레드시트처럼 고치기</dt><dd>태블릿이나 컴퓨터에서: 셀을 누르고 입력하면 내용이 바뀌고, Enter·F2·두 번 누르기로는 있던 내용을 고칩니다(<kbd>Alt</kbd>+<kbd>Enter</kbd>는 줄 바꿈, <kbd>Esc</kbd>는 취소). Enter·Tab·방향키로 이동하고, Shift+방향키나 끌기로 여러 셀을 고릅니다. <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>V</kbd>로 복사·붙여넣기를 하며, Google 스프레드시트나 엑셀에서 복사한 칸을 붙이면 셀이 채워지고 모자란 줄은 새로 생깁니다. Delete는 지우기, <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd>는 실행 취소와 다시 실행입니다. <b>줄:</b> <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>나 ⠿를 끌어 줄을 옮기고, 오른쪽 클릭(또는 ⋮)으로 삽입·복제·삭제합니다. <b>병합</b>은 고른 셀을 하나로 합칩니다(모두·세로·가로). 병합한 셀에는 왼쪽 맨 위 내용이 남고, 세로로 병합하면 그 안의 모든 주가 같은 내용을 씁니다. 줄을 옮겨도 병합이 반으로 잘리지 않습니다. 팔레트 버튼은 셀에 색을 칠하고, <b>정렬</b>은 줄을 월·주차 순서로 되돌립니다. 바꾼 내용은 바로 저장되고 동기화됩니다.</dd>
           <dt>스프레드시트에 있는 커리큘럼을 가져오려면요?</dt><dd>커리큘럼 → <b>가져오기</b>. Google 스프레드시트에서 제목 줄까지 포함해 행을 선택하고 복사(Ctrl+C)한 뒤 상자에 붙여 넣거나, 파일 → 다운로드 → CSV로 받은 파일을 고르세요. 열은 제목으로 찾습니다: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note. 연도만 있는 행(2025)이 그 연도의 시작이 되고, 주제 칸 맨 앞의 "[과학]" 같은 표시는 카테고리가 됩니다. 바꾸기 전에 찾은 내용을 창에서 먼저 보여 주고, 앱에 이미 있는 주제는 빈 칸만 채우며(중복으로 만들지 않음), 가져온 직후에는 되돌리기도 할 수 있습니다.</dd>
           <dt>앱을 한국어로 쓸 수 있나요?</dt><dd>설정 → 템플릿 → <b>언어</b>: "기기 언어에 맞춤"(기본), English, 한국어 중에서 고릅니다. 고르면 앱이 새 언어로 다시 열립니다. 앱의 말만 바뀌고, 학생 이름·메모·메시지 템플릿은 입력한 그대로 남습니다. v129부터는 이 설명서도 한국어로 바뀝니다.</dd>
           <dt>어두운 화면으로 쓸 수 있나요?</dt><dd>설정 → 템플릿 → <b>화면 모드</b>: 밝게(기본), 어둡게, "기기 설정에 맞춤"(휴대폰이나 컴퓨터가 어두운 모드면 어둡게, 기기 설정이 바뀌면 함께 바뀝니다). 기기마다 따로 정하므로 교실 PC는 밝게, 휴대폰은 어둡게 둘 수 있습니다. 백업 파일에는 들어가지 않고, 인쇄하는 라벨과 보고서는 항상 밝게 나옵니다.</dd>
@@ -2057,6 +2118,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v138 · 2026-11-11</dt><dd><b>커리큘럼이 Google 스프레드시트처럼</b>(태블릿·컴퓨터): 셀에 바로 입력하면 곧바로 저장됩니다. Google 스프레드시트와 칸 단위로 복사·붙여넣기, 실행 취소·다시 실행, 줄 삽입·복제·삭제와 <b>줄 통째로 위아래 이동</b>, <b>셀 병합</b>(모두·세로·가로)과 병합 해제, 셀 색, 월·주차 정렬이 됩니다. 이제 줄 순서는 직접 정한 대로 유지됩니다. 휴대폰은 카드 목록 그대로입니다. 자주 묻는 질문 참고.</dd>
           <dt>v137 · 2026-11-11</dt><dd><b>다크 모드:</b> 설정 → 템플릿 → <b>화면 모드</b>에서 밝게, 어둡게, 기기 설정에 맞춤을 고를 수 있습니다. 바로 바뀌고, 기기마다 따로 저장되며(동기화·백업 안 됨), 인쇄는 그대로 밝게 나옵니다. 밝은 화면은 전과 똑같습니다.</dd>
           <dt>v136 · 2026-11-10</dt><dd><b>더 잘 보이고, 키보드로 쓰기 쉽게:</b> 연한 회색 안내 글씨(이름 아래 날짜, 열 설명, 빈 목록 안내)를 더 진하게 바꿔 어떤 배경에서도 잘 읽힙니다. <kbd>Tab</kbd> 키로 이동하면 지금 선택된 버튼·메뉴·체크박스에 초록 테두리가 보입니다. 마우스로 누르거나 손가락으로 탭할 때는 테두리가 나오지 않아 평소 사용은 그대로입니다.</dd>
           <dt>v135 · 2026-11-10</dt><dd><b>작은 화면 정리:</b> 태블릿·화면 분할·휴대폰에서 수업료 숫자 카드가 2 + 2 + 1로 놓이며, 다섯 번째 카드(수업 시간)가 빈 반쪽을 남기지 않고 한 줄을 다 씁니다. 대시보드의 빈 할 일 목록은 큰 빈 상자 대신 한 줄 안내로 보입니다. 함께 고친 점: 한글을 입력할 때 글자를 완성하려고 누른 Enter 때문에 할 일이 덜 쓴 채 저장되거나 검색이 먼저 시작되던 문제를 고쳤습니다.</dd>
@@ -2090,7 +2152,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v137</b> · 자주 묻는 질문 기준일: <b>2026-11-11</b><br/>
+          설명서 기준 버전: <b>v138</b> · 자주 묻는 질문 기준일: <b>2026-11-11</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2961,7 +3023,19 @@ const I18N={ko:{
   "Templates":"템플릿","Custom Fields":"사용자 항목","Backup":"백업","API Keys":"API 키","Account":"계정","Guide":"설명서",
   "Language":"언어","Menus, buttons and messages. Your own entries — names, notes, templates — are never translated. The app reloads when you change this.":"메뉴·버튼·안내문의 언어입니다. 직접 입력한 내용(이름, 메모, 템플릿)은 번역하지 않습니다. 바꾸면 앱이 다시 열립니다.",
   "Match the device language":"기기 언어에 맞춤",
-  "Appearance":"화면 모드","Light":"밝게","Dark":"어둡게","Match the device":"기기 설정에 맞춤",
+  "Appearance":"화면 모드",
+  "Undo (Ctrl+Z)":"실행 취소 (Ctrl+Z)","Redo (Ctrl+Y)":"다시 실행 (Ctrl+Y)","Merge cells":"셀 병합","Merge":"병합","Cell colour":"셀 색",
+  "Put the rows shown in month and week order":"보이는 줄을 월·주차 순서로 정렬","Sort":"정렬","Add row":"줄 추가","Cell":"셀",
+  "Drag to move the row":"끌어서 줄 옮기기",
+  "Click a cell and type · Alt+↑↓ moves a row · right-click for more":"셀을 누르고 입력 · Alt+↑↓ 줄 이동 · 오른쪽 클릭으로 더 보기","Row":"줄","Nothing to undo":"취소할 작업이 없습니다","Nothing to redo":"다시 실행할 작업이 없습니다",
+  "Some rows were changed on another device and were left as they are":"다른 기기에서 바뀐 줄은 그대로 두었습니다",
+  "Type a month like MAY or 5":"MAY나 5처럼 월을 입력하세요","{n} rows deleted":"{n}줄을 지웠습니다","Sorted by month and week":"월·주차 순서로 정렬했습니다",
+  "Select two or more cells to merge":"병합할 셀을 두 개 이상 선택하세요","A merge can't cross the frozen columns":"고정된 열과 나머지 열에 걸쳐 병합할 수는 없습니다",
+  "Merging keeps only the top-left value. {n} other cells will be replaced. Merge?":"병합하면 왼쪽 맨 위 값만 남습니다. 다른 셀 {n}개의 내용이 바뀝니다. 병합할까요?",
+  "No merged cells here":"여기에는 병합된 셀이 없습니다","No colour":"색 없음","Grey":"회색",
+  "Merge all":"모두 병합","Merge vertically":"세로로 병합","Merge horizontally":"가로로 병합","Unmerge":"병합 해제",
+  "Insert row above":"위에 줄 삽입","Insert row below":"아래에 줄 삽입","Duplicate row":"줄 복제","Move row up":"줄 위로 이동","Move row down":"줄 아래로 이동",
+  "Delete row":"줄 삭제","Edit as form":"입력 창으로 편집","Light":"밝게","Dark":"어둡게","Match the device":"기기 설정에 맞춤",
   "Light or dark colours on this device. Printed labels and reports always stay light.":"이 기기의 밝은 화면/어두운 화면입니다. 인쇄하는 라벨과 보고서는 항상 밝게 나옵니다.","English":"English","한국어":"한국어",
   // ── v125: Classes, Payments, Reports, Reading, Curriculum
   // shared
@@ -3620,7 +3694,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v137";
+const APP_VERSION="v138";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -7125,20 +7199,15 @@ function renderCurriculum(){
   const yv=yf?.value||"";
   const mf=document.getElementById("curr-mf")?.value||"";
   const sf=(document.getElementById("curr-sf")?.value||"").toLowerCase();
-  const mi=m=>{const i=CURR_MONTHS.indexOf(m);return i<0?99:i;};
-  const fl=curriculum.filter(c=>{
+  // v138: the order is the sheet's own (see currOrdered) — moving a row moves it, nothing re-sorts.
+  const fl=currOrdered().filter(c=>{
     if(yv==="none"&&c.year)return false;
     if(yv&&yv!=="none"&&String(c.year||"")!==yv)return false;
     if(mf&&c.month!==mf)return false;
     if(sf&&![c.topic,c.cat,c.books,c.wb,c.writing,c.acts,c.grammar,c.note].join(" ").toLowerCase().includes(sf))return false;
     return true;
-  // Newest year first (topics without a year last), then the months in order, then the week.
-  }).sort((a,b)=>((+b.year||0)-(+a.year||0))||(mi(a.month)-mi(b.month))||((+a.week||0)-(+b.week||0)));
-  // The detail cells carry their column name (data-l) and a "cur-empty" mark when blank, so the
-  // phone card can show "Workbook  Write Right 1" and leave out what a topic doesn't have.
-  // The label is the column's name as the user sees it in the heading (a custom name wins).
-  const dcell=(colId,label,val,cls)=>`<td class="${cls} cur-pre${val?"":" cur-empty"}" data-l="${escapeAttr(labelFor("curriculum",colId,tx(label)))}">${val?currText(val):"—"}</td>`;
-  document.getElementById("curr-body").innerHTML=fl.length?fl.map(c=>`<tr><td style="font-weight:700;color:var(--grn)">${c.month?tx(c.month):"—"}${c.year?`<span class="cell-muted cur-year">${c.year}</span>`:""}</td><td class="tm" style="text-align:center">${c.week||""}</td><td><span style="font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2)">${c.cat?escapeHTMLBasic(c.cat):"—"}</span></td><td style="font-weight:500">${escapeHTMLBasic(c.topic||"")}</td>${dcell("wb","Workbook",c.wb,"cell-sub2")}${dcell("writing","Writing",c.writing,"cell-sub2")}${dcell("books","Books",c.books,"cell-sub2")}${dcell("acts","Activities",c.acts,"cell-sub2")}${dcell("grammar","Grammar",c.grammar,"cell-sub2")}${dcell("note","Notes",c.note,"cell-muted")}<td><div style="display:flex;gap:3px"><button class="bic" onclick="openCurrModal('${c.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${c.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td></tr>`).join(""):`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`;
+  });
+  csRender(fl);
 }
 
 // ═══════════════════════════════════════════════
@@ -7167,8 +7236,10 @@ function applyCurrColWidths(w){
   // cards. Topic can't be hidden (it is the topic's name).
   const hidden=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));
   const shown=i=>!hidden.has(CURR_COL_IDS[i]);
-  let hide="";   // the one-cell "no topics" row (colspan) is never hidden with column 1
-  CURR_COL_IDS.forEach((id,i)=>{if(id&&!shown(i))hide+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}):not([colspan]){display:none!important}\n`;});
+  // v138: body cells carry data-c (their column) — merged cells make nth-child unreliable — and a
+  // hidden column's cells are not drawn at all (csRender); only its heading is hidden here.
+  let hide="";
+  CURR_COL_IDS.forEach((id,i)=>{if(id&&!shown(i))hide+=`#curr-table th:nth-child(${i+1}){display:none!important}\n`;});
   const sum=w.reduce((a,b,i)=>a+(shown(i)?b:0),0);
   let css=`#curr-table{width:${sum}px}\n`;
   w.forEach((v,i)=>{css+=`#curr-table th:nth-child(${i+1}){width:${v}px}\n`;});
@@ -7177,11 +7248,11 @@ function applyCurrColWidths(w){
   let left=0,frz="",lastFrozen=-1;
   for(let i=0;i<CURR_FREEZE;i++){
     if(!shown(i))continue;
-    frz+=`#curr-table th:nth-child(${i+1}),#curr-table td:nth-child(${i+1}){position:sticky;left:${left}px}\n`
-      +`#curr-table td:nth-child(${i+1}){z-index:2}#curr-table th:nth-child(${i+1}){z-index:6}\n`;
+    frz+=`#curr-table th:nth-child(${i+1}),#curr-table td[data-c="${i}"]{position:sticky;left:${left}px}\n`
+      +`#curr-table td[data-c="${i}"]{z-index:2}#curr-table th:nth-child(${i+1}){z-index:6}\n`;
     left+=w[i];lastFrozen=i;
   }
-  if(lastFrozen>=0)frz+=`#curr-table th:nth-child(${lastFrozen+1}),#curr-table td:nth-child(${lastFrozen+1}){box-shadow:6px 0 8px -6px var(--pin-shade)}\n`;
+  if(lastFrozen>=0)frz+=`#curr-table th:nth-child(${lastFrozen+1}),#curr-table td[data-c="${lastFrozen}"]{box-shadow:6px 0 8px -6px var(--pin-shade)}\n`;
   css=`${hide}@media(min-width:641px){${css}}@media(min-width:1160px){${frz}}`;   // phones keep the card layout
   let st=document.getElementById("curr-colw-css");
   if(!st){st=document.createElement("style");st.id="curr-colw-css";document.head.appendChild(st);}
@@ -7200,7 +7271,7 @@ function currEdgeAt(th,x,coarse){
 }
 // Fit: the widest line of text in the column (line breaks respected), within 60–520px.
 function currFitCol(i){
-  const tds=[...document.querySelectorAll(`#curr-table tbody tr td:nth-child(${i+1})`)];
+  const tds=[...document.querySelectorAll(`#curr-table tbody td[data-c="${i}"]:not([colspan])`)];
   const th=document.querySelector(`#curr-table thead th:nth-child(${i+1})`);
   const c=document.createElement("canvas").getContext("2d");
   let max=0;
@@ -7237,6 +7308,609 @@ document.addEventListener("dblclick",e=>{
   e.preventDefault();e.stopPropagation();
   currFitCol(i);
 },true);
+
+// ═══════════════════════════════════════════════
+// CURRICULUM SHEET (v138) — the table works like a live spreadsheet
+// ═══════════════════════════════════════════════
+// Owner request: "make the Curriculum page a Google Sheet that saves as you type, with partial
+// merges and whole rows you can move up and down". On tablets and PCs (641px+) the table is a grid:
+//   • click a cell and type (or Enter / F2 / double-click to edit what is there, Alt+Enter for a new
+//     line, Esc to cancel); every change is saved and synced at once;
+//   • arrows / Tab / Enter move, Shift+arrows or a drag select a range; Ctrl+C / X / V copy, cut
+//     and paste as tab-separated text (so blocks go to and from Google Sheets / Excel); Delete
+//     clears; Ctrl+Z / Ctrl+Y undo and redo;
+//   • rows: insert above / below, duplicate, delete, move up / down (Alt+↑/↓ or drag ⠿);
+//   • merge all / vertically / horizontally, unmerge; a cell colour; sort by month & week.
+// Phones keep the card list (tap ✎ for the form) — a grid is not usable at 390px.
+//
+// Data, all on the topic records so it syncs like any other edit:
+//   ord   — the row's place (a number; a move gives the row a value between its new neighbours, so
+//           only the moved rows are written). Topics without one (made before v138, by the Add form,
+//           by Import, or by an older app on another device) are placed by year / month / week.
+//   mv    — {column: groupId}: vertical merge. Rows next to each other with the same id in a column
+//           show as one cell. Every row keeps the value (a merged "Books" cell applies to each week).
+//   mh    — {column: n}: horizontal merge of n columns starting here; the covered cells are empty.
+//   fill  — {column: colour key}: cell colour.
+const CS_COLS=CURR_COL_IDS.filter(Boolean);           // month … note (the 11th column holds the row tools)
+const CS_FROZEN=CURR_FREEZE;                           // a horizontal merge stays on one side of the frozen edge
+const CS_FILLS={y:"var(--amb-l)",g:"var(--ok-l)",b:"var(--blu-l)",r:"var(--red-l)",p:"var(--pur-l)",s:"var(--surf3)"};
+const csFillName=k=>({y:tx("Yellow"),g:tx("Green"),b:tx("Blue"),r:tx("Red"),p:tx("Purple"),s:tx("Grey")})[k];
+const csMonthIdx=m=>{const i=CURR_MONTHS.indexOf(m);return i<0?99:i;};
+// The order before v138: newest year first (no year last), then month, then week.
+function currLegacyCmp(a,b){return ((+b.year||0)-(+a.year||0))||(csMonthIdx(a.month)-csMonthIdx(b.month))||((+a.week||0)-(+b.week||0));}
+const csHasOrd=c=>typeof c.ord==="number"&&isFinite(c.ord);
+function currOrdered(){
+  const placed=curriculum.filter(csHasOrd).sort((a,b)=>a.ord-b.ord);
+  if(!placed.length)return curriculum.slice().sort(currLegacyCmp);
+  curriculum.filter(c=>!csHasOrd(c)).sort(currLegacyCmp).forEach(x=>{
+    let at=0;for(let i=0;i<placed.length;i++)if(currLegacyCmp(placed[i],x)<=0)at=i+1;
+    placed.splice(at,0,x);
+  });
+  return placed;
+}
+// Give the topics an ord that matches what is on screen. The first time (no ords yet) every topic
+// gets one; after that only newcomers (Add form, Import, an older app) get a value between their
+// neighbours, so only they are written.
+function csFixOrder(full){
+  if(!full.some(csHasOrd)){full.forEach((c,i)=>{c.ord=(i+1)*1024;});return;}
+  for(let i=0;i<full.length;i++){
+    if(csHasOrd(full[i]))continue;
+    let j=i;while(j<full.length&&!csHasOrd(full[j]))j++;
+    const prev=i>0?full[i-1].ord:null,next=j<full.length?full[j].ord:null,k=j-i;
+    const lo=prev??next-1024*(k+1),hi=next??prev+1024*(k+1);
+    for(let t=0;t<k;t++)full[i+t].ord=lo+(hi-lo)*(t+1)/(k+1);
+    i=j-1;
+  }
+  if(!full.every((c,i)=>!i||full[i-1].ord<c.ord))full.forEach((c,i)=>{c.ord=(i+1)*1024;});
+}
+// Put `block` (records, in order) just before `before` (a record) or at the end (null).
+function csPlaceBlock(block,before){
+  const full=currOrdered();csFixOrder(full);
+  const inBlock=new Set(block),rest=full.filter(r=>!inBlock.has(r));
+  const n=block.length;
+  const bounds=()=>{const i=before?rest.indexOf(before):rest.length;
+    const lo=i>0?rest[i-1].ord:(rest.length?rest[0].ord-1024*(n+1):0);
+    const hi=i<rest.length?rest[i].ord:lo+1024*(n+1);return [lo,hi];};
+  let [lo,hi]=bounds();
+  if((hi-lo)/(n+1)<1e-6){rest.forEach((c,i)=>{c.ord=(i+1)*1024*(n+1);});[lo,hi]=bounds();}
+  block.forEach((r,k)=>{r.ord=lo+(hi-lo)*(k+1)/(n+1);});
+}
+
+// ── state ──
+const CS={vis:[],cols:[],grid:[],span:[],r:0,c:0,ar:0,ac:0,edit:null,undo:[],redo:[],pending:false,keep:null};
+const csPhone=()=>window.matchMedia&&matchMedia("(max-width:640px)").matches;
+const csShown=()=>{const h=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));return CS_COLS.filter(id=>!h.has(id));};
+function csRaw(rec,col){
+  const v=rec[col];
+  return v==null?"":String(v);
+}
+function csDisplay(rec,col){
+  const v=rec[col];
+  if(col==="month")return `${v?tx(v):"—"}${rec.year?`<span class="cell-muted cur-year">${rec.year}</span>`:""}`;
+  if(col==="week")return v?escapeHTMLBasic(String(v)):"";
+  if(col==="cat")return v?`<span class="cs-pill">${escapeHTMLBasic(v)}</span>`:"";
+  if(col==="topic")return escapeHTMLBasic(v||"");
+  return v?currText(v):"";
+}
+const CS_LABEL={wb:"Workbook",writing:"Writing",books:"Books",acts:"Activities",grammar:"Grammar",note:"Notes"};
+
+// ── render ──
+function csRender(fl){
+  const body=document.getElementById("curr-body");if(!body)return;
+  if(CS.edit){CS.pending=true;return;}          // never pull the table out from under someone typing
+  const phone=csPhone(),cols=csShown();
+  // remember the selection by record and column, so a re-render (sync, undo…) keeps it
+  const keepSel=CS.keep||(CS.vis.length?{rid:CS.vis[CS.r]?.id,col:CS.cols[CS.c],arid:CS.vis[CS.ar]?.id,acol:CS.cols[CS.ac]}:null);
+  CS.keep=null;
+  CS.vis=fl;CS.cols=cols;
+  const R=fl.length,C=cols.length;
+  CS.grid=Array.from({length:R},()=>new Array(C));   // grid[r][c] = [anchorRow, anchorCol]
+  CS.span=Array.from({length:R},()=>new Array(C));   // span[r][c] = [rows, cols] at an anchor
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    if(CS.grid[r][c])continue;
+    let rs=1,cs=1;
+    if(!phone){
+      const rec=fl[r],col=cols[c];
+      const n=+(rec.mh&&rec.mh[col])||0;
+      if(n>1){const ci=CS_COLS.indexOf(col);
+        for(let k=c+1;k<C;k++){const ck=CS_COLS.indexOf(cols[k]);if(ck>ci+n-1)break;
+          if((ci<CS_FROZEN)!==(ck<CS_FROZEN))break;cs++;}}
+      const g=rec.mv&&rec.mv[col];
+      if(g){while(r+rs<R){const o=fl[r+rs];if(!(o.mv&&o.mv[col]===g)||(+(o.mh&&o.mh[col])||0)!==n)break;
+        let free=true;for(let k=c;k<c+cs;k++)if(CS.grid[r+rs][k])free=false;if(!free)break;rs++;}}
+    }
+    for(let i=r;i<r+rs;i++)for(let k=c;k<c+cs;k++)CS.grid[i][k]=[r,c];
+    CS.span[r][c]=[rs,cs];
+  }
+  const td=(r,c)=>{
+    const rec=fl[r],col=cols[c],[rs,cs]=CS.span[r][c];
+    const lab=CS_LABEL[col]?` data-l="${escapeAttr(labelFor("curriculum",col,tx(CS_LABEL[col])))}"`:"";
+    const empty=CS_LABEL[col]&&!rec[col]?" cur-empty":"";
+    const f=rec.fill&&CS_FILLS[rec.fill[col]]?` style="background:${CS_FILLS[rec.fill[col]]}"`:"";
+    const cls=`cs-c${col==="month"?" cs-mon":col==="week"?" tm cs-wk":col==="topic"?" cs-topic":col==="note"?" cell-muted cur-pre":CS_LABEL[col]?" cell-sub2 cur-pre":""}${empty}`;
+    return `<td class="${cls}" data-c="${CS_COLS.indexOf(col)}" data-r="${r}" data-k="${c}"${rs>1?` rowspan="${rs}"`:""}${cs>1?` colspan="${cs}"`:""}${lab}${f}>${csDisplay(rec,col)}</td>`;
+  };
+  const tools=rec=>`<td class="cs-tools" data-c="10"><div class="cs-desk"><span class="cs-grip" title="${tx("Drag to move the row")}"><i class="ti ti-grip-vertical"></i></span><button class="bic" onclick="csRowMenu(event,'${rec.id}')" title="${tx("Row")}"><i class="ti ti-dots-vertical"></i></button></div><div class="cs-phone"><button class="bic" onclick="openCurrModal('${rec.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${rec.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td>`;
+  const addRow=phone?"":`<tr class="cs-add"><td colspan="11"><button type="button" class="btn btn-sm" onclick="csAddRow()"><i class="ti ti-plus"></i> ${tx("Add row")}</button></td></tr>`;
+  body.innerHTML=(R?fl.map((rec,r)=>`<tr data-id="${rec.id}">${cols.map((_,c)=>CS.grid[r][c][0]===r&&CS.grid[r][c][1]===c?td(r,c):"").join("")}${tools(rec)}</tr>`).join("")
+    :`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`)+addRow;
+  // put the cursor back
+  const ri=id=>fl.findIndex(x=>x.id===id),ci=col=>cols.indexOf(col);
+  if(keepSel&&R){
+    const r=ri(keepSel.rid),c=ci(keepSel.col);
+    CS.r=r>=0?r:Math.min(CS.r,R-1);CS.c=c>=0?c:Math.min(CS.c,C-1);
+    const ar=ri(keepSel.arid),ac=ci(keepSel.acol);
+    CS.ar=ar>=0?ar:CS.r;CS.ac=ac>=0?ac:CS.c;
+  }else{CS.r=CS.ar=0;CS.c=CS.ac=0;}
+  csPaint();
+}
+// The selected rectangle, grown so no merged cell is cut in half.
+function csRect(){
+  if(!CS.vis.length)return null;
+  let r0=Math.min(CS.r,CS.ar),r1=Math.max(CS.r,CS.ar),c0=Math.min(CS.c,CS.ac),c1=Math.max(CS.c,CS.ac);
+  for(let grew=true;grew;){grew=false;
+    for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++){const a=CS.grid[r]?.[c];if(!a)continue;const [rs,cs]=CS.span[a[0]][a[1]];
+      if(a[0]<r0){r0=a[0];grew=true;}if(a[1]<c0){c0=a[1];grew=true;}
+      if(a[0]+rs-1>r1){r1=a[0]+rs-1;grew=true;}if(a[1]+cs-1>c1){c1=a[1]+cs-1;grew=true;}}}
+  return {r0,r1,c0,c1};
+}
+const csTd=(r,c)=>{const a=CS.grid[r]?.[c];return a?document.querySelector(`#curr-body td[data-r="${a[0]}"][data-k="${a[1]}"]`):null;};
+function csPaint(){
+  document.querySelectorAll("#curr-body td.cs-in,#curr-body td.cs-act").forEach(t=>t.classList.remove("cs-in","cs-act"));
+  if(csPhone()||!CS.vis.length)return;
+  const q=csRect();
+  for(let r=q.r0;r<=q.r1;r++)for(let c=q.c0;c<=q.c1;c++)csTd(r,c)?.classList.add("cs-in");
+  const a=csTd(CS.r,CS.c);
+  if(a){a.classList.add("cs-act");csPlaceEditor();}
+}
+// The editor is one textarea that always sits (invisibly) on the active cell, so typing — including
+// a Korean syllable being composed — goes straight into it and turns it into the cell editor.
+function csEd(){
+  let ed=document.getElementById("cs-ed");
+  if(!ed){
+    const box=document.querySelector("#page-curriculum .tw");if(!box)return null;
+    ed=document.createElement("textarea");ed.id="cs-ed";ed.className="cs-ed";ed.spellcheck=false;ed.setAttribute("aria-label",tx("Cell"));
+    ed.addEventListener("keydown",csKey);
+    ed.addEventListener("input",()=>{if(!CS.edit&&ed.value)csBeginEdit("enter",null);csGrow();});
+    ed.addEventListener("compositionstart",()=>{if(!CS.edit)csBeginEdit("enter",null);});
+    ed.addEventListener("copy",e=>{if(CS.edit)return;e.preventDefault();e.clipboardData.setData("text/plain",csCopyText());});
+    ed.addEventListener("cut",e=>{if(CS.edit)return;e.preventDefault();e.clipboardData.setData("text/plain",csCopyText());csClear();});
+    ed.addEventListener("paste",e=>{if(CS.edit)return;e.preventDefault();csPaste(e.clipboardData.getData("text/plain"));});
+    ed.addEventListener("blur",()=>{setTimeout(()=>{if(CS.edit&&document.activeElement!==ed)csCommit(0,0);},0);});
+    box.appendChild(ed);
+  }
+  return ed;
+}
+function csPlaceEditor(){
+  const ed=csEd(),a=csTd(CS.r,CS.c);if(!ed||!a)return;
+  const box=ed.parentElement,b=box.getBoundingClientRect(),t=a.getBoundingClientRect();
+  ed.style.left=(t.left-b.left+box.scrollLeft)+"px";ed.style.top=(t.top-b.top+box.scrollTop)+"px";
+  ed.style.width=t.width+"px";ed.dataset.h=t.height;
+  if(!CS.edit)ed.style.height=t.height+"px";
+}
+function csGrow(){const ed=csEd();if(!ed||!CS.edit)return;ed.style.height="auto";ed.style.height=Math.max(+ed.dataset.h||0,ed.scrollHeight+2)+"px";}
+function csFocus(){const ed=csEd();if(ed&&document.activeElement!==ed){ed.focus({preventScroll:true});}}
+function csScrollIntoView(){const a=csTd(CS.r,CS.c);if(!a)return;
+  const box=a.closest(".tw"),b=box.getBoundingClientRect(),t=a.getBoundingClientRect();
+  const frozenW=[...document.querySelectorAll("#curr-table thead th")].slice(0,CS_FROZEN).reduce((s,th)=>s+(getComputedStyle(th).position==="sticky"?th.offsetWidth:0),0);
+  const headH=document.querySelector("#curr-table thead")?.offsetHeight||0;
+  if(t.top<b.top+headH)box.scrollTop-=b.top+headH-t.top;else if(t.bottom>b.bottom)box.scrollTop+=Math.min(t.bottom-b.bottom,t.top-b.top-headH);
+  if(+a.dataset.c>=CS_FROZEN){if(t.left<b.left+frozenW)box.scrollLeft-=b.left+frozenW-t.left;else if(t.right>b.right)box.scrollLeft+=t.right-b.right;}
+}
+function csSelect(r,c,extend){
+  const R=CS.vis.length,C=CS.cols.length;if(!R)return;
+  r=Math.max(0,Math.min(R-1,r));c=Math.max(0,Math.min(C-1,c));
+  const a=CS.grid[r][c];CS.r=a[0];CS.c=a[1];
+  if(!extend){CS.ar=CS.r;CS.ac=CS.c;}
+  csPaint();csScrollIntoView();csPlaceEditor();
+}
+// Step from the active cell; a merged cell counts as one.
+function csStep(dr,dc,extend){
+  const [rs,cs]=CS.span[CS.grid[CS.r][CS.c][0]][CS.grid[CS.r][CS.c][1]]||[1,1];
+  const base=extend?{r:CS.r,c:CS.c}:{r:CS.r,c:CS.c};
+  let r=base.r+(dr>0?rs:dr),c=base.c+(dc>0?cs:dc);
+  if(dr===0)r=base.r;if(dc===0)c=base.c;
+  if(extend){CS.r=Math.max(0,Math.min(CS.vis.length-1,r));CS.c=Math.max(0,Math.min(CS.cols.length-1,c));csPaint();csScrollIntoView();return;}
+  csSelect(r,c,false);
+}
+
+// ── editing ──
+function csBeginEdit(mode,initial){
+  if(csPhone()||!CS.vis.length)return;
+  const ed=csEd(),rec=CS.vis[CS.r],col=CS.cols[CS.c];if(!ed||!rec)return;
+  CS.edit={mode,id:rec.id,col};
+  if(initial!==null)ed.value=initial;
+  ed.classList.add("on");csPlaceEditor();csGrow();csFocus();
+  if(mode==="edit"){const n=ed.value.length;ed.setSelectionRange(n,n);}
+}
+function csCommit(dr,dc){
+  const ed=csEd();if(!CS.edit)return;
+  const {id,col}=CS.edit,val=ed.value;
+  CS.edit=null;ed.classList.remove("on");ed.value="";
+  const rec=curriculum.find(x=>x.id===id);
+  if(col==="month"&&val.trim()&&!currMonthOf(val))showToast(tx("Type a month like MAY or 5"));
+  if(rec&&csRaw(rec,col)!==csNormalise(col,val,rec)){csSnap();csWrite(rec,col,val);csSave();}
+  else if(CS.pending){CS.pending=false;renderCurriculum();}
+  else csPaint();
+  if(dr||dc)csStep(dr,dc,false);
+  csFocus();
+}
+function csCancel(){
+  const ed=csEd();CS.edit=null;if(ed){ed.classList.remove("on");ed.value="";}
+  if(CS.pending){CS.pending=false;renderCurriculum();}else csPaint();
+  csFocus();
+}
+function csNormalise(col,val,rec){
+  val=String(val??"");
+  if(col==="month"){const t=val.trim();if(!t)return "";return currMonthOf(t)||csRaw(rec,col);}
+  if(col==="week"){const n=parseInt(val,10);return n>0?String(n):"";}
+  return val.replace(/\s+$/,"");
+}
+// One cell. A vertically merged cell writes every row of its group.
+function csWrite(rec,col,val){
+  const v=csNormalise(col,val,rec);
+  const out=col==="week"?(v?+v:""):v;
+  const g=rec.mv&&rec.mv[col];
+  (g?curriculum.filter(x=>x.mv&&x.mv[col]===g):[rec]).forEach(x=>{x[col]=out;});
+}
+function csSave(){
+  const top=CS.undo[CS.undo.length-1];
+  if(top&&!top.after)csSealStep(top);
+  if(save()===false){csUndo(true);return;}   // storage full: put it back (the alert has been shown)
+  renderCurriculum();
+}
+// ── undo / redo ──
+// Each step keeps only the topics it changed, before and after. Undo puts back a topic only if it
+// still looks exactly as this step left it — a change that came from another device in between is
+// never thrown away by Ctrl+Z.
+const csJson=r=>{const {_u,...rest}=r;return JSON.stringify(rest);};
+const csMapNow=()=>new Map(curriculum.map(r=>[r.id,csJson(r)]));
+function csSnap(){
+  csFixOrder(currOrdered());
+  const step={before:csMapNow(),after:null};
+  CS.undo.push(step);if(CS.undo.length>80)CS.undo.shift();CS.redo.length=0;
+  return step;
+}
+function csSealStep(step){
+  const now=csMapNow(),b=new Map(),a=new Map();
+  new Set([...step.before.keys(),...now.keys()]).forEach(id=>{const x=step.before.get(id),y=now.get(id);if(x!==y){if(x!==undefined)b.set(id,x);if(y!==undefined)a.set(id,y);b.has(id)||b.set(id,undefined);a.has(id)||a.set(id,undefined);}});
+  step.before=b;step.after=a;
+}
+// Move the records of a step from one side to the other. Returns how many could not be (changed elsewhere).
+function csApplyStep(from,to){
+  CS.keep={rid:CS.vis[CS.r]?.id,col:CS.cols[CS.c],arid:CS.vis[CS.ar]?.id,acol:CS.cols[CS.ac]};
+  let skipped=0;
+  to.forEach((json,id)=>{
+    const i=curriculum.findIndex(r=>r.id===id),cur=i>=0?csJson(curriculum[i]):undefined;
+    if(cur!==from.get(id)){skipped++;return;}
+    if(json===undefined){if(i>=0)curriculum.splice(i,1);}           // in place: the sync layer holds this array
+    else if(i>=0)curriculum[i]=JSON.parse(json);
+    else curriculum.push(JSON.parse(json));
+  });
+  save();renderCurriculum();
+  if(skipped)showToast(tx("Some rows were changed on another device and were left as they are"));
+}
+function csUndo(silent){
+  const step=CS.undo.pop();if(!step){if(!silent)showToast(tx("Nothing to undo"));return;}
+  if(!step.after)csSealStep(step);
+  csApplyStep(step.after,step.before);CS.redo.push(step);
+}
+function csRedo(){
+  const step=CS.redo.pop();if(!step){showToast(tx("Nothing to redo"));return;}
+  csApplyStep(step.before,step.after);CS.undo.push(step);
+}
+
+// ── keys ──
+function csKey(e){
+  if(imeBusy(e))return;
+  const k=e.key,ctrl=e.ctrlKey||e.metaKey;
+  if(CS.edit){
+    if(k==="Escape"){e.preventDefault();e.stopPropagation();csCancel();return;}
+    if(k==="Enter"&&(e.altKey||ctrl)){e.preventDefault();const ed=e.target,s=ed.selectionStart,t=ed.selectionEnd;ed.setRangeText("\n",s,t,"end");csGrow();return;}
+    if(k==="Enter"){e.preventDefault();csCommit(e.shiftKey?-1:1,0);return;}
+    if(k==="Tab"){e.preventDefault();csCommit(0,e.shiftKey?-1:1);return;}
+    if(CS.edit.mode==="enter"&&/^Arrow/.test(k)){e.preventDefault();csCommit(k==="ArrowUp"?-1:k==="ArrowDown"?1:0,k==="ArrowLeft"?-1:k==="ArrowRight"?1:0);return;}
+    return;
+  }
+  if(e.altKey&&(k==="ArrowUp"||k==="ArrowDown")){e.preventDefault();csMoveRows(k==="ArrowUp"?-1:1);return;}
+  if(ctrl&&(k==="z"||k==="Z")){e.preventDefault();e.shiftKey?csRedo():csUndo();return;}
+  if(ctrl&&(k==="y"||k==="Y")){e.preventDefault();csRedo();return;}
+  if(ctrl&&(k==="a"||k==="A")){e.preventDefault();CS.ar=0;CS.ac=0;CS.r=CS.vis.length-1;CS.c=CS.cols.length-1;csPaint();return;}
+  if(ctrl&&(k==="d"||k==="D")){e.preventDefault();csFillDown();return;}
+  if(ctrl)return;                                  // Ctrl+C / X / V arrive as copy / cut / paste events
+  const mv={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[k];
+  if(mv){e.preventDefault();csStep(mv[0],mv[1],e.shiftKey);return;}
+  if(k==="Tab"){e.preventDefault();csStep(0,e.shiftKey?-1:1,false);return;}
+  if(k==="Enter"||k==="F2"){e.preventDefault();if(e.shiftKey&&k==="Enter"){csStep(-1,0,false);return;}const rec=CS.vis[CS.r];csBeginEdit("edit",rec?csRaw(rec,CS.cols[CS.c]):"");return;}
+  if(k==="Delete"||k==="Backspace"){e.preventDefault();csClear();return;}
+  if(k==="Escape"){CS.ar=CS.r;CS.ac=CS.c;csPaint();return;}
+  if(k==="Home"){e.preventDefault();csSelect(CS.r,0,false);return;}
+  if(k==="End"){e.preventDefault();csSelect(CS.r,CS.cols.length-1,false);return;}
+  // anything else that types goes into the textarea and becomes an edit (see the input listener)
+}
+// The cells of the selection, one per merged cell: [[rec, col], …] by row.
+function csCells(q){
+  q=q||csRect();const out=[];if(!q)return out;
+  for(let r=q.r0;r<=q.r1;r++){const row=[];for(let c=q.c0;c<=q.c1;c++){const a=CS.grid[r][c];row.push(a[0]===r&&a[1]===c?[CS.vis[r],CS.cols[c]]:null);}out.push(row);}
+  return out;
+}
+function csClear(){
+  const cells=csCells().flat().filter(Boolean).filter(([rec,col])=>csRaw(rec,col)!=="");
+  if(!cells.length)return;
+  csSnap();cells.forEach(([rec,col])=>csWrite(rec,col,""));csSave();
+}
+function csFillDown(){
+  const q=csRect();if(!q||q.r1===q.r0)return;
+  csSnap();
+  for(let c=q.c0;c<=q.c1;c++){const top=CS.vis[q.r0],col=CS.cols[c];for(let r=q.r0+1;r<=q.r1;r++)csWrite(CS.vis[r],col,csRaw(top,col));}
+  csSave();
+}
+// ── copy / paste (tab-separated, quoted like Google Sheets does) ──
+function csCopyText(){
+  const q=csRect();if(!q)return "";
+  const quote=v=>/[\t\n"]/.test(v)?`"${v.replace(/"/g,'""')}"`:v;
+  const lines=[];
+  for(let r=q.r0;r<=q.r1;r++){const row=[];for(let c=q.c0;c<=q.c1;c++){const a=CS.grid[r][c];
+    row.push(a[1]===c?quote(csRaw(CS.vis[r],CS.cols[c])):"");}lines.push(row.join("\t"));}
+  return lines.join("\n");
+}
+function csPaste(text){
+  if(text==null||csPhone())return;
+  let rows=parseDelimited(String(text).replace(/\r\n?/g,"\n").replace(/\n$/,""),"\t");
+  if(!rows.length)rows=[[""]];
+  const q=csRect();if(!q)return;
+  csSnap();
+  // one value onto a range fills the range (as in Google Sheets)
+  if(rows.length===1&&rows[0].length===1&&(q.r1>q.r0||q.c1>q.c0)){
+    csCells(q).flat().filter(Boolean).forEach(([rec,col])=>csWrite(rec,col,rows[0][0]));csSave();return;}
+  // rows past the end of the list become new topics after the last shown row
+  const need=q.r0+rows.length-CS.vis.length;
+  if(need>0){
+    const last=CS.vis[CS.vis.length-1],after=currOrdered(),i=after.indexOf(last);
+    const made=[];for(let n=0;n<need;n++)made.push(csNewRec(last));
+    curriculum.push(...made);csPlaceBlock(made,after[i+1]||null);
+    CS.vis=CS.vis.concat(made);
+    for(let r=CS.grid.length;r<CS.vis.length;r++){CS.grid[r]=CS.cols.map((_,c)=>[r,c]);CS.span[r]=CS.cols.map(()=>[1,1]);}
+  }
+  rows.forEach((vals,i)=>{const r=q.r0+i,rec=CS.vis[r];if(!rec)return;
+    vals.forEach((v,j)=>{const c=q.c0+j;if(c>=CS.cols.length)return;const a=CS.grid[r][c];if(a[0]!==r||a[1]!==c)return;csWrite(rec,CS.cols[c],v);});});
+  CS.ar=q.r0;CS.ac=q.c0;CS.r=Math.min(CS.vis.length-1,q.r0+rows.length-1);CS.c=Math.min(CS.cols.length-1,q.c0+Math.max(...rows.map(x=>x.length))-1);
+  CS.keep={rid:CS.vis[CS.r].id,col:CS.cols[CS.c],arid:CS.vis[CS.ar].id,acol:CS.cols[CS.ac]};
+  csSave();
+}
+
+// ── rows ──
+const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:ref?.week||"",cat:"",topic:"",wb:"",books:"",writing:"",grammar:"",acts:"",note:""});
+function csSelRows(){const q=csRect();return q?CS.vis.slice(q.r0,q.r1+1):[];}
+function csInsert(where){
+  const rows=csSelRows();const ref=where<0?rows[0]:rows[rows.length-1];if(!ref&&CS.vis.length)return;
+  csSnap();
+  const rec=csNewRec(ref||null);curriculum.push(rec);
+  const full=currOrdered();
+  csPlaceBlock([rec],where<0?ref:(ref?full[full.indexOf(ref)+1]||null:null));
+  CS.keep={rid:rec.id,col:"topic",arid:rec.id,acol:"topic"};
+  csSave();csFocus();
+}
+function csAddRow(){
+  if(CS.vis.length){CS.r=CS.ar=CS.vis.length-1;}
+  csInsert(1);
+}
+function csDuplicate(){
+  const rows=csSelRows();if(!rows.length)return;
+  csSnap();
+  const copies=rows.map(r=>{const c=JSON.parse(JSON.stringify(r));c.id=uid();delete c._u;delete c.ord;delete c.mv;return c;});
+  curriculum.push(...copies);const full=currOrdered();
+  csPlaceBlock(copies,full[full.indexOf(rows[rows.length-1])+1]||null);
+  CS.keep={rid:copies[0].id,col:CS.cols[CS.c],arid:copies[copies.length-1].id,acol:CS.cols[CS.c]};
+  csSave();
+}
+function csDeleteRows(){
+  const rows=csSelRows();if(!rows.length)return;
+  const step=csSnap();
+  const ids=new Set(rows.map(r=>r.id));
+  for(let i=curriculum.length-1;i>=0;i--)if(ids.has(curriculum[i].id))curriculum.splice(i,1);
+  const next=CS.vis.find((r,i)=>i>CS.vis.indexOf(rows[rows.length-1])&&!ids.has(r.id))||CS.vis.slice().reverse().find(r=>!ids.has(r.id));
+  CS.keep=next?{rid:next.id,col:CS.cols[CS.c],arid:next.id,acol:CS.cols[CS.c]}:null;
+  csSave();
+  showUndoToast(tx("{n} rows deleted",{n:rows.length}),()=>{
+    if(!CS.undo.includes(step))return;                         // already undone with Ctrl+Z
+    CS.undo.splice(CS.undo.indexOf(step),1);csApplyStep(step.after,step.before);CS.redo.push(step);});
+}
+// Move the selected rows one step. A neighbour that is part of a merged block the moving rows are
+// not in is stepped over as a whole, so a merge is never cut in two by a move.
+function csMoveRows(dir){
+  const q=csRect();if(!q)return;
+  const block=CS.vis.slice(q.r0,q.r1+1);
+  const gids=new Set();block.forEach(r=>Object.entries(r.mv||{}).forEach(([c,g])=>gids.add(c+":"+g)));
+  const shares=(a,b)=>Object.entries(a.mv||{}).some(([c,g])=>b.mv&&b.mv[c]===g&&!gids.has(c+":"+g));
+  let j=dir<0?q.r0-1:q.r1+1;if(j<0||j>=CS.vis.length)return;
+  while(dir<0?j>0&&shares(CS.vis[j],CS.vis[j-1]):j<CS.vis.length-1&&shares(CS.vis[j],CS.vis[j+1]))j+=dir;
+  csSnap();
+  const full=currOrdered(),rest=full.filter(r=>!block.includes(r));
+  const before=dir<0?CS.vis[j]:rest[rest.indexOf(CS.vis[j])+1]||null;
+  csPlaceBlock(block,before);
+  CS.keep={rid:CS.vis[CS.r].id,col:CS.cols[CS.c],arid:CS.vis[CS.ar].id,acol:CS.cols[CS.ac]};
+  csSave();
+}
+function csSortRows(){
+  const rows=CS.vis.slice();if(rows.length<2)return;
+  csSnap();
+  const full=currOrdered();csFixOrder(full);
+  const slots=rows.map(r=>r.ord).sort((a,b)=>a-b);
+  rows.slice().sort(currLegacyCmp).forEach((r,i)=>{r.ord=slots[i];});
+  csSave();showToast(tx("Sorted by month and week"));
+}
+// ── merges ──
+function csMerge(kind){
+  const q=csRect();if(!q)return;
+  if(kind==="none")return csUnmerge(q);
+  let vert=kind!=="h"&&q.r1>q.r0,hor=kind!=="v"&&q.c1>q.c0;
+  if(!vert&&!hor){showToast(tx("Select two or more cells to merge"));return;}
+  const ci0=CS_COLS.indexOf(CS.cols[q.c0]),ci1=CS_COLS.indexOf(CS.cols[q.c1]);
+  if(hor&&(ci0<CS_FROZEN)!==(ci1<CS_FROZEN)){showToast(tx("A merge can't cross the frozen columns"));return;}
+  // Like Google Sheets: only the top-left value is kept. Ask when that drops something.
+  const lost=[];
+  for(let r=q.r0;r<=q.r1;r++)for(let c=q.c0;c<=q.c1;c++){
+    const keep=hor&&vert?(r===q.r0&&c===q.c0):hor?c===q.c0:r===q.r0;
+    if(keep)continue;
+    const v=csRaw(CS.vis[r],CS.cols[c]),top=csRaw(CS.vis[vert?q.r0:r],CS.cols[hor?q.c0:c]);
+    if(v&&v!==top)lost.push(v);
+  }
+  if(lost.length&&!confirm(tx("Merging keeps only the top-left value. {n} other cells will be replaced. Merge?",{n:lost.length})))return;
+  csSnap();
+  const rows=CS.vis.slice(q.r0,q.r1+1);
+  const cols=hor?[CS.cols[q.c0]]:CS.cols.slice(q.c0,q.c1+1);
+  // clear any merge these cells were part of first
+  csUnmergeRaw(q);
+  cols.forEach(col=>{
+    const top=csRaw(rows[0],col),g=vert?uid():null;
+    rows.forEach(rec=>{
+      if(vert){rec.mv=Object.assign({},rec.mv,{[col]:g});csWriteOne(rec,col,top);}
+      if(hor){
+        rec.mh=Object.assign({},rec.mh,{[col]:ci1-ci0+1});
+        for(let c=q.c0+1;c<=q.c1;c++)csWriteOne(rec,CS.cols[c],"");
+      }
+    });
+  });
+  CS.r=CS.ar=q.r0;CS.c=CS.ac=q.c0;CS.keep={rid:rows[0].id,col:CS.cols[q.c0],arid:rows[0].id,acol:CS.cols[q.c0]};
+  csSave();
+}
+const csWriteOne=(rec,col,v)=>{rec[col]=col==="week"?(parseInt(v,10)||""):v;};
+// Remove every merge that touches the rectangle (whole merges, as in Google Sheets). Values stay.
+function csUnmergeRaw(q){
+  for(let r=q.r0;r<=q.r1;r++)for(let c=q.c0;c<=q.c1;c++){
+    const a=CS.grid[r][c],[rs,cs]=CS.span[a[0]][a[1]],col=CS.cols[a[1]];
+    for(let i=a[0];i<a[0]+rs;i++){const rec=CS.vis[i];
+      if(rec.mv&&rec.mv[col]){const g=rec.mv[col];curriculum.forEach(x=>{if(x.mv&&x.mv[col]===g){delete x.mv[col];if(!Object.keys(x.mv).length)delete x.mv;}});}
+      if(rec.mh&&rec.mh[col]){delete rec.mh[col];if(!Object.keys(rec.mh).length)delete rec.mh;}
+      if(cs>1)for(let k=a[1];k<a[1]+cs;k++){const cc=CS.cols[k];if(rec.mh&&rec.mh[cc]){delete rec.mh[cc];if(!Object.keys(rec.mh).length)delete rec.mh;}}
+    }
+  }
+}
+function csUnmerge(q){
+  const any=csCells(q).some((row,ri)=>row.some((x,ci)=>{const a=CS.grid[q.r0+ri][q.c0+ci];const [rs,cs]=CS.span[a[0]][a[1]];return rs>1||cs>1;}));
+  if(!any){showToast(tx("No merged cells here"));return;}
+  csSnap();csUnmergeRaw(q);csSave();
+}
+// ── colour ──
+function csFill(key){
+  const cells=csCells().flat().filter(Boolean);if(!cells.length)return;
+  csSnap();
+  const q=csRect();
+  for(let r=q.r0;r<=q.r1;r++)for(let c=q.c0;c<=q.c1;c++){const rec=CS.vis[r],col=CS.cols[c];
+    if(key&&CS_FILLS[key])rec.fill=Object.assign({},rec.fill,{[col]:key});
+    else if(rec.fill){delete rec.fill[col];if(!Object.keys(rec.fill).length)delete rec.fill;}}
+  csSave();
+}
+
+// ── menus (row ⋮, right-click, toolbar) ──
+function csMenu(ev,items){
+  ev.preventDefault();ev.stopPropagation();
+  document.getElementById("cs-menu")?.remove();
+  const m=document.createElement("div");m.id="cs-menu";m.className="cs-menu";m.setAttribute("role","menu");
+  m.innerHTML=items.map(it=>it==="-"?`<div class="cs-sep"></div>`:it.swatches?`<div class="cs-sw">${it.swatches}</div>`
+    :`<button type="button" role="menuitem" data-i="${items.indexOf(it)}"><i class="ti ${it.icon}"></i><span>${it.label}</span>${it.key?`<kbd>${it.key}</kbd>`:""}</button>`).join("");
+  document.body.appendChild(m);
+  const x=ev.clientX||ev.target.getBoundingClientRect().left,y=ev.clientY||ev.target.getBoundingClientRect().bottom;
+  m.style.left=Math.max(8,Math.min(x,innerWidth-m.offsetWidth-8))+"px";m.style.top=Math.max(8,Math.min(y,innerHeight-m.offsetHeight-8))+"px";
+  m.addEventListener("click",e=>{const b=e.target.closest("button[data-i]");const s=e.target.closest("[data-fill]");
+    if(s){m.remove();csFill(s.dataset.fill);csFocus();return;}
+    if(!b)return;m.remove();items[+b.dataset.i].run();csFocus();});
+  setTimeout(()=>{const off=e=>{if(!m.contains(e.target)){m.remove();document.removeEventListener("pointerdown",off,true);}};document.addEventListener("pointerdown",off,true);},0);
+  m.querySelector("button")?.focus();
+  m.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();m.remove();csFocus();}
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();const bs=[...m.querySelectorAll("button")],i=bs.indexOf(document.activeElement);bs[(i+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length]?.focus();}});
+}
+const csSwatches=()=>`<button type="button" data-fill="" title="${tx("No colour")}" class="cs-swb"><i class="ti ti-droplet-off"></i></button>`+Object.keys(CS_FILLS).map(k=>`<button type="button" data-fill="${k}" title="${csFillName(k)}" class="cs-swb" style="background:${CS_FILLS[k]}"></button>`).join("");
+const csMac=/Mac|iPhone|iPad/.test(navigator.platform||"");
+const csK=s=>s.replace("Ctrl",csMac?"⌘":"Ctrl").replace("Alt",csMac?"⌥":"Alt");
+function csMergeItems(){return [
+  {icon:"ti-layout-grid-add",label:tx("Merge all"),run:()=>csMerge("all")},
+  {icon:"ti-arrows-vertical",label:tx("Merge vertically"),run:()=>csMerge("v")},
+  {icon:"ti-arrows-horizontal",label:tx("Merge horizontally"),run:()=>csMerge("h")},
+  {icon:"ti-layout-grid-remove",label:tx("Unmerge"),run:()=>csMerge("none")}];}
+function csAllItems(){return [
+  {icon:"ti-row-insert-top",label:tx("Insert row above"),run:()=>csInsert(-1)},
+  {icon:"ti-row-insert-bottom",label:tx("Insert row below"),run:()=>csInsert(1)},
+  {icon:"ti-copy",label:tx("Duplicate row"),run:csDuplicate},
+  {icon:"ti-arrow-up",label:tx("Move row up"),key:csK("Alt+↑"),run:()=>csMoveRows(-1)},
+  {icon:"ti-arrow-down",label:tx("Move row down"),key:csK("Alt+↓"),run:()=>csMoveRows(1)},
+  {icon:"ti-trash",label:tx("Delete row"),run:csDeleteRows},"-",
+  ...csMergeItems(),"-",{swatches:csSwatches()},"-",
+  {icon:"ti-forms",label:tx("Edit as form"),run:()=>openCurrModal(CS.vis[CS.r]?.id)}];}
+function csRowMenu(ev,id){
+  const r=CS.vis.findIndex(x=>x.id===id);if(r<0)return;
+  const q=csRect();if(!q||r<q.r0||r>q.r1){CS.ar=CS.r=r;CS.ac=0;CS.c=CS.cols.length-1;csPaint();}
+  csMenu(ev,csAllItems());
+}
+function csToolMenu(ev,which){
+  if(!CS.vis.length)return;
+  csMenu(ev,which==="merge"?csMergeItems():[{swatches:csSwatches()}]);
+}
+// ── pointer: select, drag a range, edit, drag rows ──
+document.addEventListener("pointerdown",e=>{
+  if(e.button!==0||csPhone())return;
+  const t=e.target.closest?.("#curr-body td");if(!t||t.closest(".cs-ed"))return;
+  if(t.classList.contains("cs-tools")){
+    if(e.target.closest(".cs-grip")){e.preventDefault();csDragRows(e,t.parentElement.dataset.id);}
+    return;
+  }
+  if(e.target.closest("a"))return;
+  if(t.dataset.r==null)return;
+  e.preventDefault();
+  if(CS.edit)csCommit(0,0);
+  const r=+t.dataset.r,c=+t.dataset.k;
+  if(e.shiftKey){CS.r=r;CS.c=c;csPaint();}else csSelect(r,c,false);
+  csFocus();
+  const move=ev=>{const el=document.elementFromPoint(ev.clientX,ev.clientY)?.closest?.("#curr-body td[data-r]");if(!el)return;
+    const nr=+el.dataset.r,nc=+el.dataset.k;if(nr!==CS.r||nc!==CS.c){CS.r=nr;CS.c=nc;csPaint();}};
+  const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);csFocus();};
+  document.addEventListener("pointermove",move);document.addEventListener("pointerup",up);
+});
+document.addEventListener("dblclick",e=>{
+  if(csPhone())return;
+  const t=e.target.closest?.("#curr-body td[data-r]");if(!t||e.target.closest("a"))return;
+  e.preventDefault();csSelect(+t.dataset.r,+t.dataset.k,false);
+  const rec=CS.vis[CS.r];csBeginEdit("edit",rec?csRaw(rec,CS.cols[CS.c]):"");
+});
+document.addEventListener("contextmenu",e=>{
+  if(csPhone())return;
+  const t=e.target.closest?.("#curr-body td[data-r]");if(!t)return;
+  const r=+t.dataset.r,c=+t.dataset.k,q=csRect();
+  if(!q||r<q.r0||r>q.r1||c<q.c0||c>q.c1)csSelect(r,c,false);
+  csMenu(e,csAllItems());
+});
+function csDragRows(e,id){
+  const r=CS.vis.findIndex(x=>x.id===id);if(r<0)return;
+  let q=csRect();if(!q||r<q.r0||r>q.r1){CS.ar=CS.r=r;CS.ac=0;CS.c=CS.cols.length-1;csPaint();q=csRect();}
+  const block=CS.vis.slice(q.r0,q.r1+1),box=document.querySelector("#page-curriculum .tw");
+  const line=document.createElement("div");line.className="cs-drop";box.appendChild(line);
+  const trs=[...document.querySelectorAll("#curr-body tr[data-id]")];
+  let at=null;                                      // index in CS.vis to insert before (vis.length = end)
+  document.body.style.cursor="grabbing";
+  const move=ev=>{
+    const b=box.getBoundingClientRect();
+    if(ev.clientY<b.top+40)box.scrollTop-=12;else if(ev.clientY>b.bottom-30)box.scrollTop+=12;
+    let i=trs.findIndex(tr=>{const t=tr.getBoundingClientRect();return ev.clientY<t.top+t.height/2;});
+    if(i<0)i=trs.length;
+    at=(i>=q.r0&&i<=q.r1+1)?null:i;
+    const ref=trs[Math.min(i,trs.length-1)].getBoundingClientRect();
+    line.style.display=at==null?"none":"block";
+    line.style.top=((i<trs.length?ref.top:ref.bottom)-b.top+box.scrollTop-1)+"px";
+    line.style.width=box.scrollWidth+"px";
+  };
+  const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);
+    document.body.style.cursor="";line.remove();
+    if(at==null)return;
+    csSnap();
+    const full=currOrdered(),rest=full.filter(x=>!block.includes(x));
+    const before=at<CS.vis.length?CS.vis[at]:(rest[rest.indexOf(CS.vis[CS.vis.length-1])+1]||null);
+    csPlaceBlock(block,before);
+    CS.keep={rid:block[0].id,col:CS.cols[0],arid:block[block.length-1].id,acol:CS.cols[CS.cols.length-1]};
+    csSave();csFocus();};
+  document.addEventListener("pointermove",move);document.addEventListener("pointerup",up);
+}
+if(window.matchMedia)matchMedia("(max-width:640px)").addEventListener?.("change",()=>{if(curPage==="curriculum"){CS.edit=null;renderCurriculum();}});
 
 // ═══════════════════════════════════════════════
 // CURRICULUM IMPORT (v127)
