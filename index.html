@@ -3119,7 +3119,7 @@ const I18N={ko:{
   "(Empty)":"(빈칸)","Sort A → Z":"오름차순 정렬","Sort Z → A":"내림차순 정렬","Search values":"값 검색","Select all":"모두 선택","OK":"확인","Sorted by {col}":"{col} 기준으로 정렬했습니다",
   "Fit the text":"내용에 맞춤","Up to 3 lines":"최대 3줄","One line":"한 줄","Bold (Ctrl+B)":"굵게 (Ctrl+B)","Italic (Ctrl+I)":"기울임 (Ctrl+I)","Strikethrough (Alt+Shift+5)":"취소선 (Alt+Shift+5)",
   "Filter or sort by a column":"열 기준으로 필터·정렬","Filter":"필터","Clear filter":"필터 해제","Find and replace (Ctrl+H)":"찾기 및 바꾸기 (Ctrl+H)","Row height":"줄 높이","Find":"찾기","Replace with":"바꿀 내용",
-  "Close (Esc)":"닫기 (Esc)","Match case":"대소문자 구분","Previous (Shift+Enter)":"이전 (Shift+Enter)","Next (Enter)":"다음 (Enter)","Replace":"바꾸기","Replace all":"모두 바꾸기",
+  "The sheet changed while you were dragging — nothing was filled":"끄는 동안 시트가 바뀌어서 채우지 않았습니다","Close (Esc)":"닫기 (Esc)","Match case":"대소문자 구분","Previous (Shift+Enter)":"이전 (Shift+Enter)","Next (Enter)":"다음 (Enter)","Replace":"바꾸기","Replace all":"모두 바꾸기",
   "Merge all":"모두 병합","Merge vertically":"세로로 병합","Merge horizontally":"가로로 병합","Unmerge":"병합 해제",
   "Insert row above":"위에 줄 삽입","Insert row below":"아래에 줄 삽입","Duplicate row":"줄 복제","Move row up":"줄 위로 이동","Move row down":"줄 아래로 이동",
   "Delete row":"줄 삭제","Edit as form":"입력 창으로 편집","Light":"밝게","Dark":"어둡게","Match the device":"기기 설정에 맞춤",
@@ -7941,7 +7941,9 @@ function csMenu(ev,items){
   m.style.left=Math.max(8,Math.min(x,innerWidth-m.offsetWidth-8))+"px";m.style.top=Math.max(8,Math.min(y,innerHeight-m.offsetHeight-8))+"px";
   m.addEventListener("click",e=>{const b=e.target.closest("button[data-i]");const s=e.target.closest("[data-fill]");
     if(s){m.remove();csFill(s.dataset.fill);csFocus();return;}
-    if(!b)return;m.remove();items[+b.dataset.i].run();csFocus();});
+    if(!b)return;m.remove();items[+b.dataset.i].run();
+    // back to the sheet, unless the command opened something that took the focus (the note box)
+    if(!document.activeElement||document.activeElement===document.body)csFocus();});
   setTimeout(()=>{const off=e=>{if(!m.contains(e.target)){m.remove();document.removeEventListener("pointerdown",off,true);}};document.addEventListener("pointerdown",off,true);},0);
   m.querySelector("button")?.focus();
   m.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();m.remove();csFocus();}
@@ -8141,6 +8143,8 @@ function csFillDrag(e){
   if(CS.edit)csCommit(0,0);
   const q=csRect();if(!q)return;
   const box=document.querySelector("#page-curriculum .tw");
+  // q and to are row numbers: if a sync redraws the sheet mid-drag they may point at other rows
+  const shape=()=>CS.vis.map(r=>r.id).join()+"|"+CS.cols.join(),before=shape();
   let to=null;
   const clear=()=>document.querySelectorAll("#curr-body td.cs-fp").forEach(t=>t.classList.remove("cs-fp"));
   const move=ev=>{
@@ -8152,7 +8156,9 @@ function csFillDrag(e){
     clear();
     if(to){const [a,z]=to.dir>0?[q.r1+1,to.r]:[to.r,q.r0-1];for(let r=a;r<=z;r++)for(let c=q.c0;c<=q.c1;c++)csTd(r,c)?.classList.add("cs-fp");}
   };
-  const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);clear();if(to)csFillTo(q,to);csFocus();};
+  const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);clear();
+    if(to&&shape()!==before){showToast(tx("The sheet changed while you were dragging — nothing was filled"));to=null;}
+    if(to)csFillTo(q,to);csFocus();};
   document.addEventListener("pointermove",move);document.addEventListener("pointerup",up);
 }
 function csFillTo(q,to){
