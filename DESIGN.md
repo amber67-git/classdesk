@@ -295,6 +295,23 @@ button.ph-chip{line-height:1.5}                                                 
 ```
 떠 있는 고르기 창(표지 고르기 등)은 Escape로 닫고, 그 Escape가 뒤의 창까지 닫지 않도록 `preventDefault()`·`stopPropagation()`을 함께 부른다.
 
+### 커리큘럼 시트 (v138–v140, 태블릿·PC)
+```css
+#curr-body td.cs-in{box-shadow:inset 0 0 0 9999px var(--sel-tint)}          /* 고른 칸 */
+#curr-body td.cs-act{outline:2px solid var(--grn);outline-offset:-2px}      /* 지금 칸 (시트에 포커스가 있을 때) */
+#curr-body td.cs-hit{box-shadow:inset 0 0 0 2px var(--amb)}                /* 찾기 결과 */
+#curr-body td.cs-b{font-weight:700} .cs-i{font-style:italic} .cs-s .cs-v{text-decoration:line-through;color:var(--txt3)}
+#curr-body td.cs-note{background-image:linear-gradient(225deg,var(--amb) 6px,transparent 6px)}  /* 메모 있는 칸: 오른쪽 위 삼각형 */
+.cs-fh{width:8px;height:8px;background:var(--grn);border:1px solid var(--surf)}  /* 채우기 핸들: 고른 범위 오른쪽 아래 */
+.cs-notetip{background:var(--amb-l);border:1px solid var(--amb-bdr);border-radius:6px}  /* 고른 칸 아래 메모 */
+.cs-menu{position:fixed;background:var(--surf);border:1px solid var(--bdr);border-radius:10px;box-shadow:var(--shl);padding:6px;min-width:230px;
+  max-height:calc(100vh - 16px);overflow-y:auto}                             /* 오른쪽 클릭 메뉴: 창보다 길면 세로로 스크롤 */
+```
+- 도구 막대(`.cs-sheetbar`)는 카드 머리에 한 줄: 실행 취소·다시 실행 | B I S | 병합·색 | 정렬·필터 | 찾기 | 줄 높이. 1100px 이하에서는 버튼 글자를 숨기고 아이콘만(`.cs-lbl`). 필터가 걸리면 "필터 해제" 버튼과 그 열 머리글 아래 초록 선(`th.cs-filt`).
+- 찾기 막대(`.cs-find`)는 도구 막대 바로 아래 `--surf2` 띠. 필터 창(`.cs-fpop`)과 메모 창(`.cs-notebox`)은 `.cs-menu`와 같은 떠 있는 상자이며 Esc로 닫는다.
+- 메뉴 명령이 새 입력창(메모 등)을 열면 포커스는 그 입력창에 남고, 그렇지 않으면 시트로 돌아간다.
+- 폰(≤640px)에서는 이 도구들을 모두 숨기고 카드 목록을 쓴다.
+
 ### 비교/동기화 창 (Google Calendar)
 외부 데이터와의 차이는 **차이만** 목록으로, 행마다 하나의 동작 버튼(추가 / 취소 / 시간 맞추기). 자동 반영 없음.
 같은 목록 규격(`.grid-head/.grid-row`)을 쓰고, 알 수 없는 항목은 `--amb-l` 배경 + 선택 상자. 통계 카드 4개로 요약.
