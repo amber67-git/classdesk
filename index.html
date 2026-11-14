@@ -1950,6 +1950,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>I want to resize columns</dt><dd>Hover over the <b>gray vertical line</b> between column headers — it turns green. Drag left or right. Adjusted widths are saved on this device. <b>Double-click to reset.</b></dd>
           <dt>How do I edit a row quickly?</dt><dd><b>Double-click any row</b> in any list to open the edit dialog. Today's classes on the Dashboard work the same way.</dd>
+          <dt>Some columns disappeared from a list</dt><dd>On a split screen or tablet (about 641–1300px wide), the <b>Students</b>, <b>Workbooks</b> and <b>Material</b> lists fold their least important columns away when they don't fit. Names never fold. A line above the list names the folded columns. Press <b>Show all</b> to bring every column back and scroll sideways instead, or <b>Fit to screen</b> to fold again. The choice is remembered on this device. A wider window brings the columns back by itself. Columns you unticked in Settings → Custom Fields stay hidden either way.</dd>
         </dl>
 
         <h3>Cover images</h3>
@@ -2150,6 +2151,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>열 너비를 바꾸고 싶어요</dt><dd>열 제목 사이의 <b>회색 세로선</b>에 마우스를 올리면 초록색으로 바뀝니다. 좌우로 끌면 됩니다. 바꾼 너비는 이 기기에 저장됩니다. <b>두 번 누르면 처음으로 돌아갑니다.</b></dd>
           <dt>행을 빨리 고치려면요?</dt><dd>어느 목록이든 <b>행을 두 번 누르면</b> 편집 창이 열립니다. 대시보드의 오늘 수업도 같습니다.</dd>
+          <dt>목록에서 열 몇 개가 사라졌어요</dt><dd>화면 분할이나 태블릿(폭 약 641–1300px)에서 <b>학생</b>·<b>교재</b>·<b>교구</b> 목록이 화면에 다 들어가지 않으면 덜 중요한 열부터 접힙니다. 이름 열은 접히지 않습니다. 목록 위 한 줄에 접힌 열이 나옵니다. <b>모두 보기</b>를 누르면 모든 열이 돌아오고 옆으로 밀어 보게 되며, <b>화면에 맞추기</b>를 누르면 다시 접힙니다. 이 선택은 이 기기에 기억됩니다. 창을 넓히면 열이 저절로 돌아옵니다. 설정 → 사용자 항목에서 체크를 끈 열은 어느 쪽이든 숨겨진 채로 있습니다.</dd>
         </dl>
 
         <h3>표지 이미지</h3>
@@ -11698,7 +11700,10 @@ function syncListWidths(){
     const head=card.querySelector(":scope > .grid-head");if(!head)return;
     // A list shown as cards on a phone hides its heading band — nothing to line up, and a min-width
     // written onto the rows would only make the card wider than the screen.
-    if(getComputedStyle(head).display==="none"){card.querySelectorAll(".grid-row,.std-row,.pr").forEach(e=>{e.style.minWidth="";});card.querySelector(":scope > .fold-note")?.remove();return;}
+    if(getComputedStyle(head).display==="none"){card.querySelectorAll(".grid-row,.std-row,.pr").forEach(e=>{e.style.minWidth="";});card.querySelector(":scope > .fold-note")?.remove();
+      // phone cards: nothing is folded (a fold left over from a wider window would hide those cells too)
+      const pk=head.dataset.headerPage;if(GRID_AUTO[pk]?.length){GRID_AUTO[pk]=[];applyGridHidden();}
+      return;}
     const els=[head,...card.querySelectorAll(".grid-row,.std-row,.pr")];
     els.forEach(e=>{
       e.style.minWidth="";
