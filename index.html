@@ -645,6 +645,17 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .ph-chips{display:flex;gap:5px;flex-wrap:wrap}
 .ph-chip{font-size:11px;font-weight:500;background:var(--surf2);border:1px solid var(--bdr2);border-radius:var(--r);padding:3px 8px;cursor:pointer;font-family:var(--mono);color:var(--txt2);transition:all .12s}
 .ph-chip:hover{background:var(--grn-l);border-color:var(--grn);color:var(--grn-t)}
+/* v139: things that used to be click-only <div>/<span>s are buttons now, so Tab and Enter reach them */
+button.ph-chip{line-height:1.5}
+.x-btn{background:none;border:0;padding:0 4px;cursor:pointer;color:var(--txt3);line-height:1;font-family:inherit}
+.x-btn:hover{color:var(--txt)}
+.sf-day{padding:6px 0;border-radius:6px;border:0;cursor:pointer;background:var(--surf2);color:var(--txt);font:inherit;font-size:inherit}
+.sf-day:hover{background:var(--grn-l)}
+.sf-day.today{background:var(--grn);color:#fff;font-weight:700}
+.gb-res{display:flex;gap:8px;width:100%;padding:7px 10px;border:0;border-bottom:1px solid var(--bdr);background:none;cursor:pointer;text-align:left;font:inherit;color:inherit;align-items:flex-start}
+.gb-res:hover{background:var(--surf2)}
+.cover-pick{display:block;padding:0;cursor:pointer;border-radius:6px;overflow:hidden;border:2px solid transparent;background:none;transition:border-color .15s}
+.cover-pick:hover{border-color:var(--grn)}
 .tmpl-textarea{height:160px;font-size:13px;line-height:1.6}
 /* AVATAR */
 .av{width:32px;height:32px;border-radius:50%;background:var(--grn-l);color:var(--grn-t);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -1322,13 +1333,13 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         </div>
       </div>
       <div class="grid-head" style="display:grid;grid-template-columns:200px 64px 64px 116px 116px 116px 280px;gap:8px" data-header-page="payments">
-        <div class="col-hdr" data-i18n>Student</div>
-        <div class="col-hdr center" data-i18n>Lessons</div>
-        <div class="col-hdr center" data-i18n>Cancel</div>
-        <div class="col-hdr" data-i18n>Expected</div>
-        <div class="col-hdr" data-i18n>Paid</div>
-        <div class="col-hdr" data-i18n>Remaining</div>
-        <div class="col-hdr" data-i18n>Status</div>
+        <div class="col-hdr" data-col="student" data-i18n>Student</div>
+        <div class="col-hdr center" data-col="lessons" data-i18n>Lessons</div>
+        <div class="col-hdr center" data-col="cancel" data-i18n>Cancel</div>
+        <div class="col-hdr" data-col="expected" data-i18n>Expected</div>
+        <div class="col-hdr" data-col="paid" data-i18n>Paid</div>
+        <div class="col-hdr" data-col="remaining" data-i18n>Remaining</div>
+        <div class="col-hdr" data-col="status" data-i18n>Status</div>
       </div>
       <div id="pm-rows"></div>
     </div>
@@ -1539,17 +1550,17 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <div class="ph-wrap">
           <div class="ph-lbl" data-i18n>Lesson placeholders:</div>
           <div class="ph-chips">
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[student_name]')">[student_name]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[korean_name]')">[korean_name]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[date]')">[date]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[(day)]')">[(day)]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[topic]')">[topic]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[workbook]')">[workbook]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[hw_page]')">[hw_page]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[books_read]')">[books_read]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[school_hw]')">[school_hw]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[break_activity]')">[break_activity]</span>
-            <span class="ph-chip" onclick="insertPh('pt-tmpl','[note_to_parent]')">[note_to_parent]</span>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[student_name]')">[student_name]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[korean_name]')">[korean_name]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[date]')">[date]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[(day)]')">[(day)]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[topic]')">[topic]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[workbook]')">[workbook]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[hw_page]')">[hw_page]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[books_read]')">[books_read]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[school_hw]')">[school_hw]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[break_activity]')">[break_activity]</button>
+            <button type="button" class="ph-chip" onclick="insertPh('pt-tmpl','[note_to_parent]')">[note_to_parent]</button>
           </div>
         </div>
         <textarea class="tmpl-textarea" id="pt-tmpl"></textarea>
@@ -1564,15 +1575,15 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <div class="ph-wrap" style="margin-bottom:16px">
           <div class="ph-lbl" data-i18n>Payment placeholders:</div>
           <div class="ph-chips">
-            <span class="ph-chip" onclick="insertPhPay('[student_name]')">[student_name]</span>
-            <span class="ph-chip" onclick="insertPhPay('[korean_name]')">[korean_name]</span>
-            <span class="ph-chip" onclick="insertPhPay('[month]')">[month]</span>
-            <span class="ph-chip" onclick="insertPhPay('[lesson_count]')">[lesson_count]</span>
-            <span class="ph-chip" onclick="insertPhPay('[lesson_dates]')">[lesson_dates]</span>
-            <span class="ph-chip" onclick="insertPhPay('[total_hours]')">[total_hours]</span>
-            <span class="ph-chip" onclick="insertPhPay('[expected_amount]')">[expected_amount]</span>
-            <span class="ph-chip" onclick="insertPhPay('[paid_amount]')">[paid_amount]</span>
-            <span class="ph-chip" onclick="insertPhPay('[remaining_amount]')">[remaining_amount]</span>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[student_name]')">[student_name]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[korean_name]')">[korean_name]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[month]')">[month]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[lesson_count]')">[lesson_count]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[lesson_dates]')">[lesson_dates]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[total_hours]')">[total_hours]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[expected_amount]')">[expected_amount]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[paid_amount]')">[paid_amount]</button>
+            <button type="button" class="ph-chip" onclick="insertPhPay('[remaining_amount]')">[remaining_amount]</button>
           </div>
         </div>
         <!-- One template for every request (v112). There used to be a second "Partial" template,
@@ -1923,6 +1934,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v139 · 2026-11-14</dt><dd><b>Payments columns can be hidden</b>: Settings → Custom Fields → Payments — untick a column (Lessons, Cancel, Expected, Paid, Remaining or Status) to drop it from the "Summary by student" list, or rename it there. <b>More of the app works from the keyboard</b>: Tab reaches the class and payment chips on the calendars (Enter opens one), the Google Books results, the cover picker, the start-date calendar and the template placeholder chips.</dd>
           <dt>v138 · 2026-11-11</dt><dd><b>Curriculum works like Google Sheets</b> (tablet and computer): type straight into a cell and it saves at once; copy and paste blocks to and from Google Sheets; undo / redo; insert, duplicate, delete and <b>move whole rows up and down</b>; <b>merge cells</b> (all, vertically, horizontally) and unmerge; cell colours; Sort by month and week. The row order is now yours — moving a row keeps it there. Phones keep the card list. See the FAQ.</dd>
           <dt>v137 · 2026-11-11</dt><dd><b>Dark mode:</b> Settings → Templates → <b>Appearance</b> offers Match the device (the default, so a phone set to dark mode shows the app dark), Light or Dark. It switches straight away, is kept per device (not synced, not in backups), and printing still uses light colours. The light colours look exactly as before.</dd>
           <dt>v136 · 2026-11-10</dt><dd><b>Easier to read, easier by keyboard:</b> the light grey hint text (dates under names, column notes, empty-list hints) is darker so it reads clearly on every background, and when you move around with the <kbd>Tab</kbd> key the button, menu item or checkbox you are on now has a green ring. Clicking or tapping shows no ring, so nothing changes for mouse and touch use.</dd>
@@ -1958,7 +1970,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v138</b> · FAQ current as of: <b>2026-11-11</b><br/>
+          Guide written against version: <b>v139</b> · FAQ current as of: <b>2026-11-14</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2120,6 +2132,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v139 · 2026-11-14</dt><dd><b>수업료 목록의 열을 숨길 수 있습니다</b>: 설정 → 사용자 항목 → 수업료에서 열(수업, 취소, 예정액, 받은 금액, 남은 금액, 상태)의 체크를 끄면 "학생별 요약" 목록에서 빠지고, 이름도 바꿀 수 있습니다. <b>키보드로 쓸 수 있는 곳이 늘었습니다</b>: 달력의 수업·수업료 칩(Enter로 열기), Google Books 검색 결과, 표지 고르기, 시작 날짜 달력, 템플릿 자리표시 칩에 Tab으로 닿습니다.</dd>
           <dt>v138 · 2026-11-11</dt><dd><b>커리큘럼이 Google 스프레드시트처럼</b>(태블릿·컴퓨터): 셀에 바로 입력하면 곧바로 저장됩니다. Google 스프레드시트와 칸 단위로 복사·붙여넣기, 실행 취소·다시 실행, 줄 삽입·복제·삭제와 <b>줄 통째로 위아래 이동</b>, <b>셀 병합</b>(모두·세로·가로)과 병합 해제, 셀 색, 월·주차 정렬이 됩니다. 이제 줄 순서는 직접 정한 대로 유지됩니다. 휴대폰은 카드 목록 그대로입니다. 자주 묻는 질문 참고.</dd>
           <dt>v137 · 2026-11-11</dt><dd><b>다크 모드:</b> 설정 → 템플릿 → <b>화면 모드</b>에서 기기 설정에 맞춤(기본 — 휴대폰이 어두운 모드면 앱도 어둡게), 밝게, 어둡게를 고를 수 있습니다. 바로 바뀌고, 기기마다 따로 저장되며(동기화·백업 안 됨), 인쇄는 그대로 밝게 나옵니다. 밝은 화면은 전과 똑같습니다.</dd>
           <dt>v136 · 2026-11-10</dt><dd><b>더 잘 보이고, 키보드로 쓰기 쉽게:</b> 연한 회색 안내 글씨(이름 아래 날짜, 열 설명, 빈 목록 안내)를 더 진하게 바꿔 어떤 배경에서도 잘 읽힙니다. <kbd>Tab</kbd> 키로 이동하면 지금 선택된 버튼·메뉴·체크박스에 초록 테두리가 보입니다. 마우스로 누르거나 손가락으로 탭할 때는 테두리가 나오지 않아 평소 사용은 그대로입니다.</dd>
@@ -2154,7 +2167,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v138</b> · 자주 묻는 질문 기준일: <b>2026-11-11</b><br/>
+          설명서 기준 버전: <b>v139</b> · 자주 묻는 질문 기준일: <b>2026-11-14</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2217,7 +2230,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="blm-layout">
       <div class="blm-left">
         <div class="blm-section-label" data-i18n>Cover</div>
-        <div id="bm-cover-box" class="blm-cover-box" onclick="document.getElementById('bm-cover-file').click()" onpaste="handleCoverPaste(event,'bm')" ondragover="handleCoverDragover(event,'bm')" ondragleave="handleCoverDragleave(event,'bm')" ondrop="handleCoverDrop(event,'bm')" tabindex="0">
+        <div id="bm-cover-box" class="blm-cover-box" role="button" onclick="document.getElementById('bm-cover-file').click()" onpaste="handleCoverPaste(event,'bm')" ondragover="handleCoverDragover(event,'bm')" ondragleave="handleCoverDragleave(event,'bm')" ondrop="handleCoverDrop(event,'bm')" tabindex="0">
           <img id="bm-cover-img" src="" onerror="this.style.display='none';document.getElementById('bm-cover-placeholder').style.display='flex'"/>
           <div id="bm-cover-placeholder" class="blm-cover-placeholder">
             <span data-i18n>Paste, drag or upload an image</span>
@@ -2245,7 +2258,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           </div>
           <div class="fg">
             <label data-col="pdf" data-i18n>Answer PDF</label>
-            <div class="blm-pdf-dropzone" id="bm-pdf-dropzone" onclick="document.getElementById('bm-pdf-file').click()" onpaste="handlePdfPaste(event)" ondragover="handlePdfDragover(event)" ondragleave="handlePdfDragleave(event)" ondrop="handlePdfDrop(event)" tabindex="0">
+            <div class="blm-pdf-dropzone" id="bm-pdf-dropzone" role="button" onclick="document.getElementById('bm-pdf-file').click()" onpaste="handlePdfPaste(event)" ondragover="handlePdfDragover(event)" ondragleave="handlePdfDragleave(event)" ondrop="handlePdfDrop(event)" tabindex="0">
               <span class="blm-pdf-fname" id="bm-pdf-fname" data-i18n>Paste, drag or upload the file</span>
               <button id="bm-pdf-clear" type="button" class="blm-pdf-remove" onclick="event.stopPropagation();clearPdf()" style="display:none" title="Remove" data-i18n-title>✕</button>
             </div>
@@ -2378,7 +2391,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="blm-layout">
       <div class="blm-left">
         <div class="blm-section-label" data-i18n>Cover</div>
-        <div id="blm-cover-box" class="blm-cover-box" onclick="document.getElementById('blm-cover-file').click()" onpaste="handleBookCoverPaste(event)" ondragover="handleBookCoverDragover(event)" ondragleave="handleBookCoverDragleave(event)" ondrop="handleBookCoverDrop(event)" tabindex="0">
+        <div id="blm-cover-box" class="blm-cover-box" role="button" onclick="document.getElementById('blm-cover-file').click()" onpaste="handleBookCoverPaste(event)" ondragover="handleBookCoverDragover(event)" ondragleave="handleBookCoverDragleave(event)" ondrop="handleBookCoverDrop(event)" tabindex="0">
           <img id="blm-cover-img" src="" onerror="this.style.display='none';document.getElementById('blm-cover-placeholder').style.display='flex'"/>
           <div id="blm-cover-placeholder" class="blm-cover-placeholder">
             <span data-i18n>Paste, drag or upload an image</span>
@@ -3707,11 +3720,20 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v138";
+const APP_VERSION="v139";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
 function imeBusy(e){return !!(e&&(e.isComposing||e.keyCode===229));}
+// v139: a focusable non-button marked role="button" (calendar chips, which hold a checkbox and so
+// can't be <button>s; the cover / PDF drop boxes) opens with Enter or Space, as a button would.
+document.addEventListener("keydown",e=>{
+  if((e.key!=="Enter"&&e.key!==" ")||imeBusy(e)||e.ctrlKey||e.metaKey||e.altKey)return;
+  const t=e.target;
+  if(!t||!t.matches||!t.matches('[role="button"][tabindex]:not(button)'))return;
+  e.preventDefault();
+  t.click();
+});
 const APP_BUILT="2026-11-09";
 document.addEventListener("DOMContentLoaded",()=>{
   applyI18n();applyFeatures();   // before any render: labels that code reads back (custom column names) must already carry their English source
@@ -4516,8 +4538,7 @@ function renderSchedFromCal(){
   for(let d=1;d<=days;d++){
     const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
     const isToday=ds===today;
-    html+=`<div onclick="schedFromPick('${ds}')" style="padding:6px 0;border-radius:6px;cursor:pointer;${isToday?"background:var(--grn);color:#fff;font-weight:700":"background:var(--surf2)"}"
-      onmouseover="if(!this.dataset.t)this.style.background='#bbf7d0'" onmouseout="this.style.background='${isToday?"var(--grn)":"var(--surf2)"}'" ${isToday?'data-t="1"':""}>${d}</div>`;
+    html+=`<button type="button" class="sf-day${isToday?" today":""}" onclick="schedFromPick('${ds}')" aria-label="${ds}">${d}</button>`;
   }
   grid.innerHTML=html;
 }
@@ -6854,7 +6875,7 @@ function renderCalendar(){
     const hasConflict=conflicted&&conflicted.has(occ.id);
     const chipCls="cal-event"+(isCancelled?" cancelled-chip":isCompleted?" completed":"")+(hasConflict?" conflict-chip":"");
     const dragPayload=escAttr(JSON.stringify({sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,isVirtual:!!occ.isVirtual,lessonId:occ.isVirtual?null:occ.id}));
-    return "<div class=\""+chipCls+"\" draggable=\"true\" data-payload=\""+dragPayload+"\" ondragstart=\"calDragStart(event,this)\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
+    return "<div class=\""+chipCls+"\" draggable=\"true\" data-payload=\""+dragPayload+"\" ondragstart=\"calDragStart(event,this)\" title=\""+safeLabel+"\" tabindex=\"0\" role=\"button\" aria-label=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
       +(hasConflict?"<span class=\"cal-conflict-dot\" title=\""+tx("Times overlap")+"\">⚠</span>":"")
       +(gcalDiffKeys.has(occ.date+"|"+occ.sid)?"<span class=\"cal-gdot\" title=\""+tx("Differs from Google Calendar")+"\"></span>":"")
       +"<span class=\"cal-event-label\">"+labelHtml+"</span>"
@@ -6966,6 +6987,7 @@ function renderPayments(){
   const pct=totE>0?Math.round(totP/totE*100):0;
   const pb=document.getElementById("pm-bar");if(pb)pb.style.width=pct+"%";
   const pl=document.getElementById("pm-lbl");if(pl)pl.textContent=tx("{paid} collected of {exp}",{paid:won(totP),exp:won(totE)})+` (${pct}%)`;
+  applyCustomLabelsToHeader("payments");
   // Student rows
   document.getElementById("pm-rows").innerHTML=ss.map(({s,c})=>`<div class="pr">
     <div>
@@ -7126,7 +7148,7 @@ function renderPaymentCalendar(mon){
     else chipCls+=" pay-unpaid";
     const checked=isSettled;
     const disabled=occ.status==="cancelled";
-    return "<div class=\""+chipCls+"\" title=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
+    return "<div class=\""+chipCls+"\" title=\""+safeLabel+"\" tabindex=\"0\" role=\"button\" aria-label=\""+safeLabel+"\" onclick=\"event.stopPropagation();openLessonModal('"+occ.id+"')\">"
       +"<span class=\"cal-event-label\">"
       +"<span class=\"cal-name\">"+escAttr(name)+"</span> <span class=\"cal-amt\">"+won(occ.amt)+"</span>"
       +(subLine?"<span class=\"pay-chip-sub\">"+escAttr(subLine)+"</span>":"")
@@ -8307,9 +8329,9 @@ function showCoverPicker(items, onPick){
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
         ${items.map((it,i)=>`
-          <div onclick="window._coverPickCb&&window._coverPickCb('${it.link.replace(/'/g,"\\'")}')" style="cursor:pointer;border-radius:6px;overflow:hidden;border:2px solid transparent;transition:border-color .15s" onmouseover="this.style.borderColor='var(--grn)'" onmouseout="this.style.borderColor='transparent'">
-            <img src="${it.link}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" onerror="this.parentElement.style.display='none'"/>
-          </div>`).join("")}
+          <button type="button" class="cover-pick" data-i="${i}" aria-label="${tx("Cover")} ${i+1}">
+            <img src="${escapeAttr(it.link)}" alt="" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" onerror="this.parentElement.style.display='none'"/>
+          </button>`).join("")}
       </div>
     </div>`;
   window._coverPickCb=(url)=>{
@@ -8318,7 +8340,13 @@ function showCoverPicker(items, onPick){
     window._coverPickCb=null;
   };
   document.body.appendChild(overlay);
-  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.remove();});
+  overlay.addEventListener("click",e=>{
+    const b=e.target.closest(".cover-pick");
+    if(b){const it=items[+b.dataset.i];if(it&&window._coverPickCb)window._coverPickCb(it.link);return;}
+    if(e.target===overlay)overlay.remove();
+  });
+  overlay.addEventListener("keydown",e=>{if(e.key==="Escape")overlay.remove();});
+  overlay.querySelector(".cover-pick")?.focus();
 }
 // ─────────────────────────────────────────────────────────────────────
 function setAnyCoverPreview(url,prefix='blm'){
@@ -8884,7 +8912,7 @@ function openBulkEditBooks(){
   ov.className="mo show";
   ov.innerHTML=`
     <div class="mb" style="width:420px">
-      <div class="mt">${tx("Edit {n} books",{n:sel.length})} <span style="cursor:pointer;font-size:18px" onclick="document.getElementById('bulk-edit-overlay').remove()">×</span></div>
+      <div class="mt">${tx("Edit {n} books",{n:sel.length})} <button type="button" class="x-btn" style="font-size:18px" aria-label="${tx("Close")}" onclick="document.getElementById('bulk-edit-overlay').remove()">×</button></div>
       <div class="fg"><label>${tx("Category")}</label>
         <select id="bulk-cat"><option value="">${tx("(keep — no change)")}</option>${optsFor("cat")}</select>
       </div>
@@ -9118,7 +9146,7 @@ const BL_COLUMNS=[
   {id:"cat",       label:tx("Category"),    width:"minmax(70px,100px)",  render:b=>`<div class="cell-sub" title="${escapeAttr(b.cat)}">${escapeHTMLBasic(b.cat||"—")}</div>`},
   {id:"genre",     label:tx("Genre"),       width:"minmax(70px,120px)",  render:b=>`<div class="cell-sub" title="${escapeAttr(b.genre)}">${escapeHTMLBasic(b.genre||"—")}</div>`},
   {id:"labels",    label:tx("Labels"),      width:"minmax(64px,76px)",   render:b=>{
-    const tag=(on,txt,date,kind)=>`<span onclick="toggleLabelPrinted(event,'${escapeAttr(b.id)}','${kind}')" title="${on?tx("{kind} label printed {date} — click to unmark",{kind:tx(txt),date}):tx("{kind} label not printed — click to mark",{kind:tx(txt)})}" style="cursor:pointer;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:4px;${on?"background:var(--ok-l);color:var(--ok-t)":"background:var(--surf3);color:var(--txt3)"}">${txt[0]}</span>`;
+    const tag=(on,txt,date,kind)=>`<button type="button" aria-pressed="${on}" onclick="toggleLabelPrinted(event,'${escapeAttr(b.id)}','${kind}')" title="${on?tx("{kind} label printed {date} — click to unmark",{kind:tx(txt),date}):tx("{kind} label not printed — click to mark",{kind:tx(txt)})}" style="cursor:pointer;font:inherit;font-size:9.5px;font-weight:700;padding:1px 6px;border:0;border-radius:4px;${on?"background:var(--ok-l);color:var(--ok-t)":"background:var(--surf3);color:var(--txt3)"}">${txt[0]}</button>`;
     return `<div style="display:flex;gap:4px">${tag(!!b.printedCover,"Cover",b.printedCover,"cover")}${tag(!!b.printedInfo,"Info",b.printedInfo,"info")}</div>`;
   }},
   {id:"arLevel",   label:tx("AR Level"),    width:"minmax(56px,70px)",                render:b=>`<div class="cell-sub" style="font-family:var(--mono)">${escapeHTMLBasic(b.arLevel||"—")}</div>`},
@@ -9194,10 +9222,14 @@ const CUSTOM_FIELDS_PAGES=[
     ]},
   {key:"payments", label:tx("Payments"), modalId:null,
     fields:[
-      {id:"student",  label:tx("Student")},
-      {id:"month",    label:tx("Month")},
+      // v139: one field per column of the "Summary by student" list, so each can be renamed or
+      // hidden (applyGridHidden). The student column always stays.
+      {id:"student",  label:tx("Student"), required:true},
+      {id:"lessons",  label:tx("Lessons")},
+      {id:"cancel",   label:tx("Cancel")},
       {id:"expected", label:tx("Expected")},
       {id:"paid",     label:tx("Paid")},
+      {id:"remaining",label:tx("Remaining")},
       {id:"status",   label:tx("Status")},
     ]},
   {key:"curriculum", label:tx("Curriculum"), modalId:"mo-curr",
@@ -9381,9 +9413,9 @@ function saveHiddenFields(pageKey,ids){return setFieldPart(pageKey,"hidden",ids)
 // Render the list of fields (built-in + custom) for the current page
 // Where unticking a BUILT-IN field actually hides something (added fields can always be hidden:
 // their box in the edit dialog goes). Books and Curriculum lists, and the lesson card's Topic / Notes
-// sections, and since v134 the Students, Workbooks and Material grids (applyGridHidden). Payments and
-// the other Classes fields have no such columns yet, so their built-in boxes can't be unticked.
-const CF_HIDE_WORKS={booklib:true,curriculum:true,students:"grid",workbooks:"grid",material:"grid",classes:["topic","note"]};
+// sections, since v134 the Students, Workbooks and Material grids (applyGridHidden), and since v139
+// the Payments summary. The other Classes fields have no columns, so their boxes can't be unticked.
+const CF_HIDE_WORKS={booklib:true,curriculum:true,students:"grid",workbooks:"grid",material:"grid",payments:"grid",classes:["topic","note"]};
 function cfCanHide(pageKey,f){
   if(!f.builtIn)return true;
   const w=CF_HIDE_WORKS[pageKey];
@@ -9978,13 +10010,14 @@ async function searchGoogleBooks(prefix='blm'){
     resultsEl.innerHTML=items.map((it,i)=>{
       const v=it.volumeInfo||{};
       const thumb=v.imageLinks?.thumbnail||v.imageLinks?.smallThumbnail||"";
-      return `<div onclick="pickGoogleBook(${i},'${prefix}')" style="display:flex;gap:8px;padding:7px 10px;cursor:pointer;border-bottom:1px solid var(--bdr)" onmouseover="this.style.background='var(--surf2)'" onmouseout="this.style.background=''">
-        ${thumb?`<img src="${thumb}" style="width:28px;height:38px;object-fit:cover;object-position:center;border-radius:2px;flex-shrink:0"/>`:'<div style="width:28px;height:38px;background:var(--surf3);border-radius:2px;flex-shrink:0"></div>'}
-        <div style="overflow:hidden">
-          <div style="font-size:12px;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.title||"Untitled"}</div>
-          <div class="u-hint" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(v.authors||[]).join(", ")||"Unknown author"} ${v.publisher?"· "+v.publisher:""} ${v.publishedDate?"· "+v.publishedDate.slice(0,4):""}</div>
-        </div>
-      </div>`;
+      // v139: a real button (Tab + Enter reach it), and Google's text is escaped before it is shown.
+      return `<button type="button" class="gb-res" onclick="pickGoogleBook(${i},'${prefix}')">
+        ${thumb?`<img src="${escapeAttr(thumb)}" alt="" style="width:28px;height:38px;object-fit:cover;object-position:center;border-radius:2px;flex-shrink:0"/>`:'<span style="display:block;width:28px;height:38px;background:var(--surf3);border-radius:2px;flex-shrink:0"></span>'}
+        <span style="display:block;overflow:hidden;min-width:0">
+          <span style="display:block;font-size:12px;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeAttr(v.title||"Untitled")}</span>
+          <span class="u-hint" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeAttr((v.authors||[]).join(", ")||"Unknown author")} ${v.publisher?"· "+escapeAttr(v.publisher):""} ${v.publishedDate?"· "+escapeAttr(v.publishedDate.slice(0,4)):""}</span>
+        </span>
+      </button>`;
     }).join("");
     resultsEl.style.display="block";
   }catch(err){
@@ -11457,7 +11490,10 @@ function applyStoredColWidths(){
 // track becomes 0px and its cells are hidden in place, so every other cell keeps its track (the rows
 // are positional grids; their phone cards place cells by position as well). On phones the cells
 // are simply not shown. Scoped per page; works on top of the saved column widths.
-const GRID_HIDE_PAGES={students:{scope:"#page-students",row:".std-row"},workbooks:{scope:"#page-books",row:".grid-row"},material:{scope:"#page-material",row:".grid-row"}};
+// bp: a list whose stylesheet swaps in narrower templates at some widths (Payments, v139) lists them
+// here, widest first, so a hidden column stays hidden in a split-screen window too.
+const GRID_HIDE_PAGES={students:{scope:"#page-students",row:".std-row"},workbooks:{scope:"#page-books",row:".grid-row"},material:{scope:"#page-material",row:".grid-row"},
+  payments:{scope:"#page-payments",row:".pr",bp:[[1320,"minmax(90px,1fr) 70px 50px 80px 80px 80px 158px"],[1000,"minmax(72px,1fr) 62px 50px 70px 70px 70px 150px"]]}};
 function splitTracks(tpl){
   const out=[];let depth=0,cur="";
   for(const ch of String(tpl||"").trim()){
@@ -11480,7 +11516,7 @@ function applyGridHidden(){
   let css="";
   const widths=lg(COLW_KEY,{});
   for(const pk in GRID_HIDE_PAGES){
-    const {scope,row}=GRID_HIDE_PAGES[pk];
+    const {scope,row,bp}=GRID_HIDE_PAGES[pk];
     const head=document.querySelector(`${scope} .grid-head[data-header-page="${pk}"]`);if(!head)continue;
     const idx=gridHiddenIdx(head);
     if(!idx.length)continue;
@@ -11490,6 +11526,8 @@ function applyGridHidden(){
     const cells=idx.map(i=>`${scope} .grid-head>:nth-child(${i+1}),${scope} ${row}>:nth-child(${i+1})`).join(",");
     css+=`@media(min-width:641px){${scope} .grid-head,${scope} ${row}{grid-template-columns:${tracks.join(" ")}!important}`
        +`${cells}{visibility:hidden!important;overflow:hidden!important;padding:0!important;margin:0!important;min-width:0!important;border:0!important}}\n`
+       +(bp||[]).map(([w,tpl])=>{const t=splitTracks(tpl);if(t.length!==tracks.length)return "";idx.forEach(i=>{t[i]="0px";});
+          return `@media(min-width:641px) and (max-width:${w}px){${scope} .grid-head,${scope} ${row}{grid-template-columns:${t.join(" ")}!important}}\n`;}).join("")
        +`@media(max-width:640px){${idx.map(i=>`${scope} ${row}>:nth-child(${i+1})`).join(",")}{display:none!important}}\n`;
   }
   let st=document.getElementById("gridhide-css");
