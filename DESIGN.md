@@ -206,6 +206,7 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 - 헤더에 세로 구분선을 그리지 않는다. 열 너비 조절 손잡이는 평소 투명, hover 때만 `--pri` 선.
 - 행마다 오른쪽 끝에 연필(편집) 아이콘 버튼(`.bic`). 더블클릭도 편집. 안내 문구("더블클릭하세요")는 넣지 않는다.
 - 숫자·금액·시간은 `--mono`.
+- 설정 → 사용자 항목에서 체크를 끈 열은 목록에서 빠진다(학생·교재·교구 v134, 수업료 v139). 헤더와 행의 그 열 트랙을 `0px`로 만들고 셀은 제자리에서 숨겨 다른 열이 어긋나지 않게 한다. 폰 카드에서는 그 칸만 `display:none`. 폭에 따라 열 구성이 바뀌는 목록(수업료: ≤1320px, ≤1000px)은 각 폭의 구성에도 같은 `0px`를 넣는다(`GRID_HIDE_PAGES.payments.bp`).
 - 목록이 카드보다 넓으면 **카드 안에서 가로 스크롤**된다 — 넓이 ≤1280px(화면 반 분할, 태블릿)에서는 항상, 그보다 넓은 화면에서도 넘칠 때(`.list-scroll`, v115). 카드 밖으로 삐져나가면 안 된다. 첫 열은 고정되고(`--pin-shade` 그림자), 오른쪽 끝에 옅은 그림자(`--edge-fade`)로 "더 있음"을 표시. **예외: Books(`#page-booklib`)** — 첫 열이 선택 체크박스라 고정하지 않는다(`position:static`, 그림자 없음).
 
 ### Buttons
@@ -283,6 +284,16 @@ input[type="checkbox"]:focus-visible,input[type="radio"]:focus-visible{outline:2
 .sw input:focus-visible+.sw-track{outline:2px solid var(--grn);outline-offset:2px}   /* 스위치: input은 투명이라 트랙에 */
 ```
 누를 수 있는 것은 키보드(Tab)로 왔을 때 초록 테두리가 보여야 한다. `:focus-visible`이라 마우스·터치에는 안 보인다. 새 버튼에 `outline:none`을 주지 말 것. 마우스용으로 `outline:none`을 준 포커스 상자(예: 책 표지·PDF 칸)는 같은 요소에 `:focus-visible` 규칙을 따로 둔다. 클릭되는 `div`를 새로 만들 땐 `button`을 쓰거나 `tabindex="0"`과 Enter 처리를 같이 붙인다.
+
+v139부터: 누르는 것은 `<button type="button">`이 기본이다. 안에 체크박스 같은 다른 컨트롤이 있어 `button`이 될 수 없는 것(달력 칩)만 `tabindex="0" role="button"`을 단다. 문서 전체 keydown 처리기가 이런 요소에서 Enter/Space를 클릭으로 바꾼다(한글 조합 중이면 무시). 자식 컨트롤은 따로 Tab으로 닿는다. 버튼으로 바꾼 것은 기본 버튼 모양을 지우고 원래 모양을 그대로 쓴다:
+```css
+.x-btn{background:none;border:0;padding:0 4px;color:var(--txt3);line-height:1}        /* 창 닫기 × — title·aria-label 필수 */
+.sf-day{padding:6px 0;border-radius:6px;border:0;background:var(--surf2)}             /* 날짜 고르기 칸; 오늘 .today = --grn 배경, 흰 글자 */
+.gb-res{display:flex;gap:8px;width:100%;padding:7px 10px;border:0;border-bottom:1px solid var(--bdr);background:none;text-align:left}  /* 검색 결과 한 줄 */
+.cover-pick{padding:0;border:2px solid transparent;border-radius:6px;background:none}  /* 표지 고르기; hover 때 테두리 --grn */
+button.ph-chip{line-height:1.5}                                                       /* 자리표시 칩: 모양은 .ph-chip 그대로 */
+```
+떠 있는 고르기 창(표지 고르기 등)은 Escape로 닫고, 그 Escape가 뒤의 창까지 닫지 않도록 `preventDefault()`·`stopPropagation()`을 함께 부른다.
 
 ### 비교/동기화 창 (Google Calendar)
 외부 데이터와의 차이는 **차이만** 목록으로, 행마다 하나의 동작 버튼(추가 / 취소 / 시간 맞추기). 자동 반영 없음.
