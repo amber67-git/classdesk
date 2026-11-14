@@ -8345,7 +8345,7 @@ function showCoverPicker(items, onPick){
     if(b){const it=items[+b.dataset.i];if(it&&window._coverPickCb)window._coverPickCb(it.link);return;}
     if(e.target===overlay)overlay.remove();
   });
-  overlay.addEventListener("keydown",e=>{if(e.key==="Escape")overlay.remove();});
+  overlay.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();overlay.remove();}});   // not the dialog behind it
   overlay.querySelector(".cover-pick")?.focus();
 }
 // ─────────────────────────────────────────────────────────────────────
@@ -8912,7 +8912,7 @@ function openBulkEditBooks(){
   ov.className="mo show";
   ov.innerHTML=`
     <div class="mb" style="width:420px">
-      <div class="mt">${tx("Edit {n} books",{n:sel.length})} <button type="button" class="x-btn" style="font-size:18px" aria-label="${tx("Close")}" onclick="document.getElementById('bulk-edit-overlay').remove()">×</button></div>
+      <div class="mt">${tx("Edit {n} books",{n:sel.length})} <button type="button" class="x-btn" style="font-size:18px" title="${tx("Close")}" aria-label="${tx("Close")}" onclick="document.getElementById('bulk-edit-overlay').remove()">×</button></div>
       <div class="fg"><label>${tx("Category")}</label>
         <select id="bulk-cat"><option value="">${tx("(keep — no change)")}</option>${optsFor("cat")}</select>
       </div>
