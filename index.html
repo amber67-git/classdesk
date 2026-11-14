@@ -397,6 +397,7 @@ textarea.cs-ed.on~.cs-fh,textarea.cs-ed.on~.cs-notetip{display:none!important}
 @media(max-width:1280px){
   .card:has(.grid-head),.tw{position:relative;background-image:linear-gradient(to right,transparent 92%,var(--edge-fade) 100%);background-attachment:local}
   .card:has(.grid-head){overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .card.list-fits:has(.grid-head){background-image:none}
   /* Header band and rows get one shared min-width from syncListWidths(), so the band never ends mid-scroll */
   .card:has(.grid-head) .grid-head,.card:has(.grid-head) .grid-row,.card:has(.grid-head) .std-row,.card:has(.grid-head) .pr{min-width:100%}
   /* Group bands (e.g. Workbooks categories) pin to the left edge instead */
@@ -689,6 +690,11 @@ textarea{height:auto;padding:8px 10px;resize:vertical}
 .ph-chip:hover{background:var(--grn-l);border-color:var(--grn);color:var(--grn-t)}
 /* v139: things that used to be click-only <div>/<span>s are buttons now, so Tab and Enter reach them */
 button.ph-chip{line-height:1.5}
+/* v141: "N columns hidden to fit" above a list folded for a split screen / tablet */
+.fold-note{display:flex;align-items:center;gap:8px;padding:6px 14px;font-size:11.5px;color:var(--txt3);background:var(--surf);border-bottom:1px solid var(--bdr);position:sticky;left:0}
+.fold-note span{flex:1;min-width:0}
+.fold-note i{font-size:14px}
+@media(max-width:640px){.fold-note{display:none!important}}
 .x-btn{background:none;border:0;padding:0 4px;cursor:pointer;color:var(--txt3);line-height:1;font-family:inherit}
 .x-btn:hover{color:var(--txt)}
 .sf-day{padding:6px 0;border-radius:6px;border:0;cursor:pointer;background:var(--surf2);color:var(--txt);font:inherit;font-size:inherit}
@@ -1997,6 +2003,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v141 · 2026-11-14</dt><dd><b>Lists fit a split screen or tablet</b>: when the Students, Workbooks or Material list is too wide (about 641–1300px), its least important columns fold away instead of the list scrolling sideways. A line above the list names them; <b>Show all</b> brings them back with sideways scrolling (remembered on this device) and <b>Fit to screen</b> folds again. Names never fold. Columns hidden in Settings no longer make rows extra tall.</dd>
           <dt>v140 · 2026-11-14</dt><dd><b>More of Google Sheets in Curriculum</b> (tablet and computer): bold / italic / strikethrough, notes on cells, find and replace, a filter and A → Z sort on any column, a fill handle that repeats cells or continues week numbers, and a row-height setting. See the FAQ "Editing the curriculum like a spreadsheet".</dd>
           <dt>v139 · 2026-11-14</dt><dd><b>Payments columns can be hidden</b>: Settings → Custom Fields → Payments — untick a column (Lessons, Cancel, Expected, Paid, Remaining or Status) to drop it from the "Summary by student" list, or rename it there. <b>More of the app works from the keyboard</b>: Tab reaches the class and payment chips on the calendars (Enter opens one), the Google Books results, the cover picker, the start-date calendar and the template placeholder chips.</dd>
           <dt>v138 · 2026-11-11</dt><dd><b>Curriculum works like Google Sheets</b> (tablet and computer): type straight into a cell and it saves at once; copy and paste blocks to and from Google Sheets; undo / redo; insert, duplicate, delete and <b>move whole rows up and down</b>; <b>merge cells</b> (all, vertically, horizontally) and unmerge; cell colours; Sort by month and week. The row order is now yours — moving a row keeps it there. Phones keep the card list. See the FAQ.</dd>
@@ -2034,7 +2041,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v140</b> · FAQ current as of: <b>2026-11-14</b><br/>
+          Guide written against version: <b>v141</b> · FAQ current as of: <b>2026-11-14</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2196,6 +2203,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v141 · 2026-11-14</dt><dd><b>화면 분할·태블릿에서 목록이 화면에 맞춰집니다</b>: 학생·교재·교구 목록이 화면보다 넓으면(약 641–1300px) 옆으로 밀리는 대신 덜 중요한 열부터 접힙니다. 목록 위 한 줄에 접힌 열이 나오고, <b>모두 보기</b>를 누르면 옆으로 밀어 보는 방식으로 돌아가며(이 기기에 기억), <b>화면에 맞추기</b>로 다시 접습니다. 이름 열은 접히지 않습니다. 설정에서 숨긴 열 때문에 줄이 길어지던 문제도 고쳤습니다.</dd>
           <dt>v140 · 2026-11-14</dt><dd><b>커리큘럼에 Google 스프레드시트 기능 추가</b>(태블릿·컴퓨터): 굵게·기울임·취소선, 셀 메모, 찾기 및 바꾸기, 모든 열의 필터와 오름차순 정렬, 칸을 반복하거나 주차를 이어 주는 채우기 핸들, 줄 높이 설정. 자주 묻는 질문 "커리큘럼을 스프레드시트처럼 고치기"를 보세요.</dd>
           <dt>v139 · 2026-11-14</dt><dd><b>수업료 목록의 열을 숨길 수 있습니다</b>: 설정 → 사용자 항목 → 수업료에서 열(수업, 취소, 예정액, 받은 금액, 남은 금액, 상태)의 체크를 끄면 "학생별 요약" 목록에서 빠지고, 이름도 바꿀 수 있습니다. <b>키보드로 쓸 수 있는 곳이 늘었습니다</b>: 달력의 수업·수업료 칩(Enter로 열기), Google Books 검색 결과, 표지 고르기, 시작 날짜 달력, 템플릿 자리표시 칩에 Tab으로 닿습니다.</dd>
           <dt>v138 · 2026-11-11</dt><dd><b>커리큘럼이 Google 스프레드시트처럼</b>(태블릿·컴퓨터): 셀에 바로 입력하면 곧바로 저장됩니다. Google 스프레드시트와 칸 단위로 복사·붙여넣기, 실행 취소·다시 실행, 줄 삽입·복제·삭제와 <b>줄 통째로 위아래 이동</b>, <b>셀 병합</b>(모두·세로·가로)과 병합 해제, 셀 색, 월·주차 정렬이 됩니다. 이제 줄 순서는 직접 정한 대로 유지됩니다. 휴대폰은 카드 목록 그대로입니다. 자주 묻는 질문 참고.</dd>
@@ -2232,7 +2240,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v140</b> · 자주 묻는 질문 기준일: <b>2026-11-14</b><br/>
+          설명서 기준 버전: <b>v141</b> · 자주 묻는 질문 기준일: <b>2026-11-14</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3119,7 +3127,7 @@ const I18N={ko:{
   "(Empty)":"(빈칸)","Sort A → Z":"오름차순 정렬","Sort Z → A":"내림차순 정렬","Search values":"값 검색","Select all":"모두 선택","OK":"확인","Sorted by {col}":"{col} 기준으로 정렬했습니다",
   "Fit the text":"내용에 맞춤","Up to 3 lines":"최대 3줄","One line":"한 줄","Bold (Ctrl+B)":"굵게 (Ctrl+B)","Italic (Ctrl+I)":"기울임 (Ctrl+I)","Strikethrough (Alt+Shift+5)":"취소선 (Alt+Shift+5)",
   "Filter or sort by a column":"열 기준으로 필터·정렬","Filter":"필터","Clear filter":"필터 해제","Find and replace (Ctrl+H)":"찾기 및 바꾸기 (Ctrl+H)","Row height":"줄 높이","Find":"찾기","Replace with":"바꿀 내용",
-  "The sheet changed while you were dragging — nothing was filled":"끄는 동안 시트가 바뀌어서 채우지 않았습니다","Close (Esc)":"닫기 (Esc)","Match case":"대소문자 구분","Previous (Shift+Enter)":"이전 (Shift+Enter)","Next (Enter)":"다음 (Enter)","Replace":"바꾸기","Replace all":"모두 바꾸기",
+  "The sheet changed while you were dragging — nothing was filled":"끄는 동안 시트가 바뀌어서 채우지 않았습니다","Hidden to fit the screen: {list}":"화면에 맞추려고 숨긴 열: {list}","Show all":"모두 보기","All columns shown — scroll sideways":"모든 열을 보는 중 — 옆으로 밀어 보세요","Fit to screen":"화면에 맞추기","Close (Esc)":"닫기 (Esc)","Match case":"대소문자 구분","Previous (Shift+Enter)":"이전 (Shift+Enter)","Next (Enter)":"다음 (Enter)","Replace":"바꾸기","Replace all":"모두 바꾸기",
   "Merge all":"모두 병합","Merge vertically":"세로로 병합","Merge horizontally":"가로로 병합","Unmerge":"병합 해제",
   "Insert row above":"위에 줄 삽입","Insert row below":"아래에 줄 삽입","Duplicate row":"줄 복제","Move row up":"줄 위로 이동","Move row down":"줄 아래로 이동",
   "Delete row":"줄 삭제","Edit as form":"입력 창으로 편집","Light":"밝게","Dark":"어둡게","Match the device":"기기 설정에 맞춤",
@@ -3792,7 +3800,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v140";
+const APP_VERSION="v141";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -11690,7 +11698,7 @@ function syncListWidths(){
     const head=card.querySelector(":scope > .grid-head");if(!head)return;
     // A list shown as cards on a phone hides its heading band — nothing to line up, and a min-width
     // written onto the rows would only make the card wider than the screen.
-    if(getComputedStyle(head).display==="none"){card.querySelectorAll(".grid-row,.std-row,.pr").forEach(e=>{e.style.minWidth="";});return;}
+    if(getComputedStyle(head).display==="none"){card.querySelectorAll(".grid-row,.std-row,.pr").forEach(e=>{e.style.minWidth="";});card.querySelector(":scope > .fold-note")?.remove();return;}
     const els=[head,...card.querySelectorAll(".grid-row,.std-row,.pr")];
     els.forEach(e=>{
       e.style.minWidth="";
@@ -11701,6 +11709,7 @@ function syncListWidths(){
         ?tpl.replace(/minmax\(0(?:px)?,\s*1fr\)/g,"minmax(160px,1fr)").replace(/(^|\s)1fr(?=\s|$)/g,"$1minmax(160px,1fr)")
         :tpl;
     });
+    gridAutoFold(card,head);                       // v141: fold the least important columns first
     // scrollWidth stops at the last column's edge (no right padding) once content overflows
     let w=0;els.forEach(e=>{const over=e.scrollWidth>e.clientWidth;w=Math.max(w,e.scrollWidth+(over?(parseFloat(getComputedStyle(e).paddingRight)||0):0));});
     const overflows=w>card.clientWidth+1;
@@ -11709,6 +11718,7 @@ function syncListWidths(){
     // used to spill past its card. It now scrolls sideways like the narrow layout does; a list that
     // fits is untouched and keeps its sticky heading.
     card.classList.toggle("list-scroll",!narrow&&overflows);
+    card.classList.toggle("list-fits",!overflows);   // v141: no "more to the right" shade on a list that fits
   });
 }
 // Esc closes the topmost open dialog by pressing its own Close/Cancel button, so promise-based
@@ -11912,8 +11922,39 @@ function gridHiddenIdx(head){
   const pk=head&&head.dataset.headerPage;
   if(!pk||!GRID_HIDE_PAGES[pk])return [];
   const req=new Set(((CF_PAGES_BY_KEY[pk]||{}).fields||[]).filter(f=>f.required).map(f=>f.id));
-  const hidden=new Set(getHiddenFields(pk).filter(id=>!req.has(id)));
+  const hidden=new Set([...getHiddenFields(pk),...(GRID_AUTO[pk]||[])].filter(id=>!req.has(id)));
   return [...head.children].map((el,i)=>el.dataset.col&&hidden.has(el.dataset.col)?i:-1).filter(i=>i>=0);
+}
+// v141: columns folded away automatically because the list doesn't fit (split screen, tablet). Least
+// important first; the names (and the required ones) never fold. Not saved — worked out on every
+// layout pass (syncListWidths); "Show all" turns it off on this device (sideways scroll instead).
+const GRID_FOLD={students:["notes","ptype","dur","rate","parent"],workbooks:["comment","pdf","wb","price","brand"],material:["comment","difficulty","time","players","price"]};
+const GRID_AUTO={};
+const FOLD_KEY="classdesk_fold";
+const foldOff=()=>{try{return localStorage.getItem(FOLD_KEY)==="off";}catch(e){return false;}};
+function setFoldOff(off){try{off?localStorage.setItem(FOLD_KEY,"off"):localStorage.removeItem(FOLD_KEY);}catch(e){}syncListWidths();}
+const foldRange=()=>innerWidth>=641&&innerWidth<=1300;
+function gridAutoFold(card,head){
+  const pk=head.dataset.headerPage;if(!GRID_FOLD[pk])return;
+  const had=(GRID_AUTO[pk]||[]).join();
+  GRID_AUTO[pk]=[];
+  const over=()=>{head.style.minWidth="";return head.scrollWidth>head.clientWidth+1;};
+  if(foldRange()&&!foldOff()){
+    applyGridHidden();
+    const user=new Set(getHiddenFields(pk));
+    const order=GRID_FOLD[pk].filter(id=>!user.has(id)&&head.querySelector(`[data-col="${id}"]`));
+    while(order.length&&over()){GRID_AUTO[pk].push(order.shift());applyGridHidden();}
+  }
+  if(GRID_AUTO[pk].join()!==had||!GRID_AUTO[pk].length)applyGridHidden();
+  // the note above the list: what was folded (and a way out), or a way back in
+  let note=card.querySelector(":scope > .fold-note");
+  const names=GRID_AUTO[pk].map(id=>{const h=head.querySelector(`[data-col="${id}"]`);return h?h.textContent.trim():id;});
+  let html="";
+  if(names.length)html=`<i class="ti ti-layout-columns"></i><span>${escapeHTMLBasic(tx("Hidden to fit the screen: {list}",{list:names.join(", ")}))}</span><button type="button" class="btn btn-xs" onclick="setFoldOff(true)">${tx("Show all")}</button>`;
+  else if(foldOff()&&foldRange()&&over())html=`<i class="ti ti-layout-columns"></i><span>${tx("All columns shown — scroll sideways")}</span><button type="button" class="btn btn-xs" onclick="setFoldOff(false)">${tx("Fit to screen")}</button>`;
+  if(!html){if(note)note.remove();return;}
+  if(!note){note=document.createElement("div");note.className="fold-note";card.insertBefore(note,head);}
+  if(note.dataset.h!==html){note.dataset.h=html;note.innerHTML=html;}
 }
 function applyGridHidden(){
   let css="";
@@ -11928,7 +11969,7 @@ function applyGridHidden(){
     idx.forEach(i=>{tracks[i]="0px";});
     const cells=idx.map(i=>`${scope} .grid-head>:nth-child(${i+1}),${scope} ${row}>:nth-child(${i+1})`).join(",");
     css+=`@media(min-width:641px){${scope} .grid-head,${scope} ${row}{grid-template-columns:${tracks.join(" ")}!important}`
-       +`${cells}{visibility:hidden!important;overflow:hidden!important;padding:0!important;margin:0!important;min-width:0!important;border:0!important}}\n`
+       +`${cells}{visibility:hidden!important;overflow:hidden!important;padding:0!important;margin:0!important;min-width:0!important;border:0!important;max-height:0!important}}\n`   /* max-height: text squeezed into a 0px track must not make the row tall */
        +(bp||[]).map(([w,tpl])=>{const t=splitTracks(tpl);if(t.length!==tracks.length)return "";idx.forEach(i=>{t[i]="0px";});
           return `@media(min-width:641px) and (max-width:${w}px){${scope} .grid-head,${scope} ${row}{grid-template-columns:${t.join(" ")}!important}}\n`;}).join("")
        +`@media(max-width:640px){${idx.map(i=>`${scope} ${row}>:nth-child(${i+1})`).join(",")}{display:none!important}}\n`;
