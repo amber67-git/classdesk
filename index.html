@@ -3798,28 +3798,58 @@ function cloudJson(rec){
   }
   return JSON.stringify(out);
 }
-// v142: repair ids that an older uid() gave to two records in the same list. The later copies get a
-// fresh id; both they and the copy that kept the id are sent to the cloud again (the cloud's record
-// for that id may hold the other copy's content). Nothing is deleted. Students are left alone: they
-// were always added one at a time, and lessons point at them by id.
-const _idRepaired={};
-for(const key of SYNC_KEYS){
-  if(key==="settings"||key==="students")continue;
-  const seen=new Set(),fix=new Set();
-  SYNC_VARS[key]().forEach(r=>{
-    if(!r||!r.id)return;
-    if(seen.has(r.id)){fix.add(r.id);r.id=uid();fix.add(r.id);}else seen.add(r.id);
-  });
-  if(fix.size)_idRepaired[key]=fix;
+// v142: repair ids that an older uid() gave to two records in the same list. Nothing is deleted
+// and nothing is re-stamped (a fresh _u could let old content beat a newer edit from another device):
+//   • at load, the later copies get predictable ids — X~1, X~2 … in list order — so two devices
+//     holding the same pair (a backup restored on both) end up with the same ids;
+//   • when the cloud's record X first shows up (onSyncSnapshot → idFixResolve), the copy whose
+//     content matches it keeps X (ids are swapped if that is a later copy); if it matches none — it
+//     was edited on another device since — the cloud keeps X and our first copy moves to X~0;
+//   • the renamed copies reach the cloud through reconcileKey, which uploads records the cloud
+//     lacks, with their own _u.
+// Pending pairs are kept on this device (cd_idfix) until sync has handled them. Students are left
+// alone: they were always added one at a time, and lessons point at them by id.
+const IDFIX_KEY="cd_idfix";
+const _idFix=(()=>{try{return JSON.parse(localStorage.getItem(IDFIX_KEY)||"{}")||{};}catch(e){return {};}})();
+const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[k]).length)delete _idFix[k];});
+  Object.keys(_idFix).length?localStorage.setItem(IDFIX_KEY,JSON.stringify(_idFix)):localStorage.removeItem(IDFIX_KEY);}catch(e){}};
+{
+  let found=0;
+  for(const key of SYNC_KEYS){
+    if(key==="settings"||key==="students")continue;
+    const arr=SYNC_VARS[key](),ids=new Set(arr.map(r=>r&&r.id)),seen=new Map();
+    let changed=false;
+    arr.forEach(r=>{
+      if(!r||!r.id)return;
+      if(!seen.has(r.id)){seen.set(r.id,0);return;}
+      const x=r.id,k=seen.get(x)+1;seen.set(x,k);
+      let nid=x+"~"+k;while(ids.has(nid))nid+="~";
+      r.id=nid;ids.add(nid);changed=true;found++;
+      ((_idFix[key]=_idFix[key]||{})[x]=_idFix[key][x]||[]).push(nid);
+    });
+    if(changed)ls("mc_"+key,arr);
+  }
+  if(found){idFixSave();console.info("Split repeated record ids:",found);}
+}
+// The cloud's copy of a record whose id was repeated has arrived: decide which local copy keeps the
+// id. Returns true when local records were renamed.
+function idFixResolve(key,id,data){
+  const pend=_idFix[key]&&_idFix[key][id];if(!pend||data.d)return false;
+  let rec;try{rec=JSON.parse(data.j);}catch(e){return false;}
+  const arr=SYNC_VARS[key]();
+  const body=r=>JSON.stringify(Object.keys(r).filter(k=>k!=="id"&&k!=="_u").sort().reduce((o,k)=>(o[k]=r[k],o),{}));
+  const want=body(rec),first=arr.find(r=>r.id===id);
+  const copies=pend.map(c=>arr.find(r=>r.id===c)).filter(Boolean);
+  const match=[first,...copies].find(r=>r&&body(r)===want);
+  let moved=false;
+  if(match&&match!==first){const t=match.id;match.id=id;if(first)first.id=t;moved=true;}
+  else if(!match&&first){let nid=id+"~0";while(arr.some(r=>r.id===nid))nid+="~";first.id=nid;moved=true;}
+  delete _idFix[key][id];idFixSave();
+  return moved;
 }
 // Baseline for record-level change detection — runs once at load, after the load-time
 // migrations above and before anything can call save().
 initLastSaved();
-if(Object.keys(_idRepaired).length){
-  for(const k in _idRepaired)_idRepaired[k].forEach(id=>_lastSaved[k].delete(id));   // so save() sends them
-  console.info("Repaired repeated record ids:",Object.fromEntries(Object.entries(_idRepaired).map(([k,v])=>[k,v.size])));
-  setTimeout(()=>{try{save();}catch(e){console.error(e);}},0);
-}
 // Did this browser start on the untouched built-in samples? (See localIsSample() in the sync code.)
 const startedWithSamples=JSON.stringify(students)===JSON.stringify(DS)&&lessons.length===0;
 async function resetData(){if(!confirm(tx("Reset to sample data?")))return;["mc_students","mc_lessons","mc_homework","mc_curriculum","mc_books","mc_booklib","mc_materials","mc_todos","mc_income","mc_settings"].forEach(k=>localStorage.removeItem(k));location.reload();}
@@ -11787,6 +11817,7 @@ async function onSyncSnapshot(key,ev){
     if(ch.type==="removed"){seen.delete(ch.id);continue;} // docs are never deleted server-side; defensive
     seen.set(ch.id,{u:ch.data.u||0,d:!!ch.data.d});
     if((ch.data.u||0)>syncMaxU)syncMaxU=ch.data.u;
+    if(!holdOff&&idFixResolve(key,ch.id,ch.data))touched=true;   // v142: repeated ids, before the copy is applied
     if(!holdOff&&applyRemoteRecord(key,ch.id,ch.data))touched=true;
   }
   if(touched)afterRemoteApplied(key);
@@ -11797,6 +11828,7 @@ async function onSyncSnapshot(key,ev){
     // syncReconciled flips BEFORE the reconcile runs (it guards against running it twice), so it
     // can't say "finished". This one is only set once the reconcile has actually completed.
     syncSettled[key]=true;
+    if(_idFix[key]){delete _idFix[key];idFixSave();}   // v142: anything the cloud never had was uploaded by reconcileKey
     // Last month's figures are only trustworthy once every collection has really been reconciled.
     if(SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
   }
