@@ -2004,7 +2004,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
-          <dt>v142 · 2026-11-15</dt><dd><b>Fix: records made in one go could share an id.</b> Importing a curriculum, "All paid", pasting several rows or bringing in Google Calendar classes could give two records the same internal id, so syncing could overwrite one with the other and importing the same sheet again could add a stray copy. New records always get their own id now, and any pair already sharing one is separated when the app opens; both are kept and synced again.</dd>
+          <dt>v142 · 2026-11-16</dt><dd><b>Fix: importing the same curriculum again no longer adds stray copies.</b> Records made in one go (importing a curriculum, "All paid", pasting several rows) could get the same internal id, and a later import of the same sheet then sometimes added a topic twice. New records now always get their own id, and the importer matches each existing topic even if an older version gave two of them one id.</dd>
           <dt>v141 · 2026-11-14</dt><dd><b>Lists fit a split screen or tablet</b>: when the Students, Workbooks or Material list is too wide (about 641–1300px), its least important columns fold away instead of the list scrolling sideways. A line above the list names them; <b>Show all</b> brings them back with sideways scrolling (remembered on this device) and <b>Fit to screen</b> folds again. Names never fold. Columns hidden in Settings no longer make rows extra tall.</dd>
           <dt>v140 · 2026-11-14</dt><dd><b>More of Google Sheets in Curriculum</b> (tablet and computer): bold / italic / strikethrough, notes on cells, find and replace, a filter and A → Z sort on any column, a fill handle that repeats cells or continues week numbers, and a row-height setting. See the FAQ "Editing the curriculum like a spreadsheet".</dd>
           <dt>v139 · 2026-11-14</dt><dd><b>Payments columns can be hidden</b>: Settings → Custom Fields → Payments — untick a column (Lessons, Cancel, Expected, Paid, Remaining or Status) to drop it from the "Summary by student" list, or rename it there. <b>More of the app works from the keyboard</b>: Tab reaches the class and payment chips on the calendars (Enter opens one), the Google Books results, the cover picker, the start-date calendar and the template placeholder chips.</dd>
@@ -2043,7 +2043,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v142</b> · FAQ current as of: <b>2026-11-15</b><br/>
+          Guide written against version: <b>v142</b> · FAQ current as of: <b>2026-11-16</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2206,7 +2206,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
-          <dt>v142 · 2026-11-15</dt><dd><b>버그 수정: 한꺼번에 만든 기록이 같은 번호를 받을 수 있었습니다.</b> 커리큘럼 가져오기, "모두 납부", 여러 줄 붙여넣기, Google 캘린더 수업 가져오기에서 두 기록이 같은 내부 번호를 받아, 동기화 때 하나가 다른 하나를 덮어쓰거나 같은 시트를 다시 가져오면 사본이 하나 더 생길 수 있었습니다. 이제 새 기록은 항상 고유한 번호를 받고, 이미 번호가 겹친 기록은 앱을 열 때 둘 다 그대로 둔 채 번호를 나누고 다시 동기화합니다.</dd>
+          <dt>v142 · 2026-11-16</dt><dd><b>버그 수정: 같은 커리큘럼을 다시 가져와도 사본이 더 생기지 않습니다.</b> 한꺼번에 만든 기록(커리큘럼 가져오기, "모두 납부", 여러 줄 붙여넣기)이 같은 내부 번호를 받을 수 있었고, 그러면 같은 시트를 다시 가져올 때 주제가 하나 더 생기기도 했습니다. 이제 새 기록은 항상 고유한 번호를 받고, 예전 버전에서 번호가 겹친 주제도 가져오기가 하나씩 제대로 찾습니다.</dd>
           <dt>v141 · 2026-11-14</dt><dd><b>화면 분할·태블릿에서 목록이 화면에 맞춰집니다</b>: 학생·교재·교구 목록이 화면보다 넓으면(약 641–1300px) 옆으로 밀리는 대신 덜 중요한 열부터 접힙니다. 목록 위 한 줄에 접힌 열이 나오고, <b>모두 보기</b>를 누르면 옆으로 밀어 보는 방식으로 돌아가며(이 기기에 기억), <b>화면에 맞추기</b>로 다시 접습니다. 이름 열은 접히지 않습니다. 설정에서 숨긴 열 때문에 줄이 길어지던 문제도 고쳤습니다.</dd>
           <dt>v140 · 2026-11-14</dt><dd><b>커리큘럼에 Google 스프레드시트 기능 추가</b>(태블릿·컴퓨터): 굵게·기울임·취소선, 셀 메모, 찾기 및 바꾸기, 모든 열의 필터와 오름차순 정렬, 칸을 반복하거나 주차를 이어 주는 채우기 핸들, 줄 높이 설정. 자주 묻는 질문 "커리큘럼을 스프레드시트처럼 고치기"를 보세요.</dd>
           <dt>v139 · 2026-11-14</dt><dd><b>수업료 목록의 열을 숨길 수 있습니다</b>: 설정 → 사용자 항목 → 수업료에서 열(수업, 취소, 예정액, 받은 금액, 남은 금액, 상태)의 체크를 끄면 "학생별 요약" 목록에서 빠지고, 이름도 바꿀 수 있습니다. <b>키보드로 쓸 수 있는 곳이 늘었습니다</b>: 달력의 수업·수업료 칩(Enter로 열기), Google Books 검색 결과, 표지 고르기, 시작 날짜 달력, 템플릿 자리표시 칩에 Tab으로 닿습니다.</dd>
@@ -2244,7 +2244,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v142</b> · 자주 묻는 질문 기준일: <b>2026-11-15</b><br/>
+          설명서 기준 버전: <b>v142</b> · 자주 묻는 질문 기준일: <b>2026-11-16</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3693,9 +3693,10 @@ function wsSetCats(v){
 // The maps are built from the loaded data at startup so a plain reload never re-stamps anything.
 const _lastSaved={};
 // v142: the old id (time in ms + 3 random characters) could repeat when many records were made in one
-// go (curriculum import, "all paid", pasting rows): two records then shared one id, and on sync one
-// overwrote the other. A counter makes ids from this page unique; 6 random characters keep two
-// devices apart.
+// go (curriculum import, "All paid", pasting rows): two records then shared one id. A counter makes
+// ids from this page unique; 6 random characters keep two devices apart. Pairs made by the old id are
+// left as they are (an automatic repair would have to agree across devices and sync timing); the
+// importer below no longer trips over them.
 let _uidN=0;
 const uid=()=>"id"+Date.now()+Math.random().toString(36).slice(2,8)+(_uidN++).toString(36);
 const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","income","settings"];
@@ -3797,69 +3798,6 @@ function cloudJson(rec){
     }
   }
   return JSON.stringify(out);
-}
-// v142: repair ids that an older uid() gave to two records in the same list. Nothing is deleted
-// and nothing is re-stamped (a fresh _u could let old content beat a newer edit from another device):
-//   • at load, the later copies get ids made from their content — X~<fingerprint> — so two devices
-//     holding the same pair (a backup restored on both) name each record the same way, in any order;
-//   • once the server has answered (not a cached snapshot), the cloud's record X decides: the copy whose
-//     content matches it keeps X (ids are swapped if that is a later copy); if it matches none — it
-//     was edited on another device since — the cloud keeps X and our first copy takes its own X~<fingerprint>;
-//   • the renamed copies reach the cloud through reconcileKey, which uploads records the cloud
-//     lacks, with their own _u.
-// Pending pairs are kept on this device (cd_idfix) until sync has handled them. Students are left
-// alone: they were always added one at a time, and lessons point at them by id.
-const IDFIX_KEY="cd_idfix";
-const _idFix=(()=>{try{return JSON.parse(localStorage.getItem(IDFIX_KEY)||"{}")||{};}catch(e){return {};}})();
-const _idFixBuf={};   // key → {id: latest cloud copy seen} for pending ids, held until the server answers
-// Ids this repair created (X~k, X~0), kept until the list has reconciled: reconcileKey uploads them
-// even when they have no _u (records from before v58), instead of dropping them as leftovers.
-const IDSPLIT_KEY="cd_idsplit";
-const _idSplit=(()=>{try{return JSON.parse(localStorage.getItem(IDSPLIT_KEY)||"{}")||{};}catch(e){return {};}})();
-const idSplitAdd=(key,id)=>{(_idSplit[key]=_idSplit[key]||[]).push(id);try{localStorage.setItem(IDSPLIT_KEY,JSON.stringify(_idSplit));}catch(e){}};
-const idSplitDone=key=>{if(!_idSplit[key])return;delete _idSplit[key];try{Object.keys(_idSplit).length?localStorage.setItem(IDSPLIT_KEY,JSON.stringify(_idSplit)):localStorage.removeItem(IDSPLIT_KEY);}catch(e){}};
-// A split copy is named after its content (X~<fingerprint>), so every device names the same record the
-// same way whatever order its list is in; identical copies on one device get ~2, ~3 after that.
-const idBody=r=>JSON.stringify(Object.keys(r).filter(k=>k!=="id"&&k!=="_u").sort().reduce((o,k)=>(o[k]=r[k],o),{}));
-const idHash=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36);};
-const idSplitName=(x,r,taken)=>{const n=x+"~"+idHash(idBody(r));let k=n,i=2;while(taken.has(k))k=n+"~"+(i++);return k;};
-// Is this id one of a repeated-id group still waiting for the server (the original X or one of its copies)?
-// Any X~… counts, not just the copies listed here: another device names its copies from their content.
-const idFixPending=(key,id)=>{const g=_idFix[key];if(!g)return false;if(g[id])return true;for(const x in g)if(g[x].includes(id)||id.startsWith(x+"~"))return true;return false;};
-const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[k]).length)delete _idFix[k];});
-  Object.keys(_idFix).length?localStorage.setItem(IDFIX_KEY,JSON.stringify(_idFix)):localStorage.removeItem(IDFIX_KEY);}catch(e){}};
-{
-  let found=0;
-  for(const key of SYNC_KEYS){
-    if(key==="settings"||key==="students")continue;
-    const arr=SYNC_VARS[key](),ids=new Set(arr.map(r=>r&&r.id)),seen=new Map();
-    let changed=false;
-    arr.forEach(r=>{
-      if(!r||!r.id)return;
-      if(!seen.has(r.id)){seen.set(r.id,0);return;}
-      const x=r.id;
-      const nid=idSplitName(x,r,ids);
-      r.id=nid;ids.add(nid);changed=true;found++;
-      ((_idFix[key]=_idFix[key]||{})[x]=_idFix[key][x]||[]).push(nid);idSplitAdd(key,nid);
-    });
-    if(changed)ls("mc_"+key,arr);
-  }
-  if(found){idFixSave();console.info("Split repeated record ids:",found);}
-}
-// The cloud's copy of a record whose id was repeated has arrived: decide which local copy keeps the
-// id. Returns true when local records were renamed.
-function idFixResolve(key,id,data){
-  const pend=_idFix[key]&&_idFix[key][id];if(!pend||data.d)return false;
-  let rec;try{rec=JSON.parse(data.j);}catch(e){return false;}
-  const arr=SYNC_VARS[key]();
-  const body=idBody,want=body(rec),first=arr.find(r=>r.id===id);
-  const copies=pend.map(c=>arr.find(r=>r.id===c)).filter(Boolean);
-  const match=[first,...copies].find(r=>r&&body(r)===want);
-  let moved=false;
-  if(match&&match!==first){match.id=id;if(first){const nid=idSplitName(id,first,new Set(arr.map(r=>r.id)));first.id=nid;idSplitAdd(key,nid);}moved=true;}
-  else if(!match&&first){const nid=idSplitName(id,first,new Set(arr.map(r=>r.id)));first.id=nid;idSplitAdd(key,nid);moved=true;}
-  delete _idFix[key][id];idFixSave();
-  return moved;
 }
 // Baseline for record-level change detection — runs once at load, after the load-time
 // migrations above and before anything can call save().
@@ -8540,18 +8478,20 @@ function currParseInput(text){
 // the existing one ("Sophie's Masterpiece" ← "Sophie's Masterpiece: A Spider's Tale").
 const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note"];
 function currPlan(items){
+  // v142: "used" holds the topic records themselves, not their ids — two topics that an older version
+  // gave the same id must still each be matchable, or a re-import added a stray copy.
   const used=new Set(),add=[],fill=[],same=[];
   for(const it of items){
     const names=[it.topic,it.ko,it.en].map(currNorm).filter(Boolean);
     const ex=curriculum.find(e=>{
-      if(used.has(e.id))return false;
+      if(used.has(e))return false;
       if(e.month&&it.month&&e.month!==it.month)return false;
       if(e.year&&it.year&&String(e.year)!==String(it.year))return false;
       const n=currNorm(e.topic);if(!n)return false;
       return names.includes(n)||(n.length>=8&&names.some(x=>x.startsWith(n)));
     });
     if(!ex){add.push(it);continue;}
-    used.add(ex.id);
+    used.add(ex);
     const changes={};CURR_FILL.forEach(k=>{if(!ex[k]&&it[k])changes[k]=it[k];});
     if(Object.keys(changes).length)fill.push({ex,changes});else same.push(ex);
   }
@@ -11831,19 +11771,7 @@ async function onSyncSnapshot(key,ev){
     if(ch.type==="removed"){seen.delete(ch.id);continue;} // docs are never deleted server-side; defensive
     seen.set(ch.id,{u:ch.data.u||0,d:!!ch.data.d});
     if((ch.data.u||0)>syncMaxU)syncMaxU=ch.data.u;
-    // v142: a record whose id was repeated waits for the server's answer — a cached copy may be stale,
-    // and deciding on it could let a newer server copy overwrite one of ours later.
-    // Its copies (X~k, possibly already uploaded by another device that repaired the same pair) wait too.
-    if(!holdOff&&idFixPending(key,ch.id)){((_idFixBuf[key]=_idFixBuf[key]||{})[ch.id]=ch.data);continue;}
     if(!holdOff&&applyRemoteRecord(key,ch.id,ch.data))touched=true;
-  }
-  if(!holdOff&&!ev.fromCache&&_idFixBuf[key]){
-    // The server has answered: its copy (or the cached one it left unchanged) decides who keeps the id.
-    const buf=_idFixBuf[key];
-    // First decide who keeps each original id, then apply every held copy (originals and X~k).
-    for(const x of Object.keys(_idFix[key]||{}))if(buf[x]&&idFixResolve(key,x,buf[x]))touched=true;
-    for(const [id,data] of Object.entries(buf))if(applyRemoteRecord(key,id,data))touched=true;
-    delete _idFixBuf[key];
   }
   if(touched)afterRemoteApplied(key);
   if(!ev.fromCache&&!syncReconciled[key]){
@@ -11853,8 +11781,6 @@ async function onSyncSnapshot(key,ev){
     // syncReconciled flips BEFORE the reconcile runs (it guards against running it twice), so it
     // can't say "finished". This one is only set once the reconcile has actually completed.
     syncSettled[key]=true;
-    if(_idFix[key]){delete _idFix[key];idFixSave();}   // v142: anything the cloud never had was uploaded by reconcileKey
-    idSplitDone(key);
     // Last month's figures are only trustworthy once every collection has really been reconciled.
     if(SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
   }
@@ -11910,7 +11836,6 @@ async function reconcileKey(key){
       if(restore){r._u=now;ops.push({id:r.id,j:cloudJson(r),u:now});keepIds.add(r.id);continue;}
       if(!c){
         if(r._u)ops.push({id:r.id,j:cloudJson(r),u:r._u});   // created here under the new system → upload
-        else if((_idSplit[key]||[]).includes(r.id)){r._u=now;ops.push({id:r.id,j:cloudJson(r),u:now});}   // v142: a split copy (new id) is kept
         else local.splice(i,1);                                // pre-v58 leftover / sample → cloud wins
         continue;
       }
