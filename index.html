@@ -3802,7 +3802,7 @@ function cloudJson(rec){
 // and nothing is re-stamped (a fresh _u could let old content beat a newer edit from another device):
 //   • at load, the later copies get predictable ids — X~1, X~2 … in list order — so two devices
 //     holding the same pair (a backup restored on both) end up with the same ids;
-//   • when the cloud's record X first shows up (onSyncSnapshot → idFixResolve), the copy whose
+//   • once the server has answered (not a cached snapshot), the cloud's record X decides: the copy whose
 //     content matches it keeps X (ids are swapped if that is a later copy); if it matches none — it
 //     was edited on another device since — the cloud keeps X and our first copy moves to X~0;
 //   • the renamed copies reach the cloud through reconcileKey, which uploads records the cloud
@@ -3811,6 +3811,7 @@ function cloudJson(rec){
 // alone: they were always added one at a time, and lessons point at them by id.
 const IDFIX_KEY="cd_idfix";
 const _idFix=(()=>{try{return JSON.parse(localStorage.getItem(IDFIX_KEY)||"{}")||{};}catch(e){return {};}})();
+const _idFixBuf={};   // key → {id: latest cloud copy seen} for pending ids, held until the server answers
 const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[k]).length)delete _idFix[k];});
   Object.keys(_idFix).length?localStorage.setItem(IDFIX_KEY,JSON.stringify(_idFix)):localStorage.removeItem(IDFIX_KEY);}catch(e){}};
 {
@@ -11817,8 +11818,18 @@ async function onSyncSnapshot(key,ev){
     if(ch.type==="removed"){seen.delete(ch.id);continue;} // docs are never deleted server-side; defensive
     seen.set(ch.id,{u:ch.data.u||0,d:!!ch.data.d});
     if((ch.data.u||0)>syncMaxU)syncMaxU=ch.data.u;
-    if(!holdOff&&idFixResolve(key,ch.id,ch.data))touched=true;   // v142: repeated ids, before the copy is applied
+    // v142: a record whose id was repeated waits for the server's answer — a cached copy may be stale,
+    // and deciding on it could let a newer server copy overwrite one of ours later.
+    if(!holdOff&&_idFix[key]&&_idFix[key][ch.id]){((_idFixBuf[key]=_idFixBuf[key]||{})[ch.id]=ch.data);continue;}
     if(!holdOff&&applyRemoteRecord(key,ch.id,ch.data))touched=true;
+  }
+  if(!holdOff&&!ev.fromCache&&_idFixBuf[key]){
+    // The server has answered: its copy (or the cached one it left unchanged) decides who keeps the id.
+    for(const [id,data] of Object.entries(_idFixBuf[key])){
+      if(idFixResolve(key,id,data))touched=true;
+      if(applyRemoteRecord(key,id,data))touched=true;
+    }
+    delete _idFixBuf[key];
   }
   if(touched)afterRemoteApplied(key);
   if(!ev.fromCache&&!syncReconciled[key]){
