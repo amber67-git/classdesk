@@ -3800,11 +3800,11 @@ function cloudJson(rec){
 }
 // v142: repair ids that an older uid() gave to two records in the same list. Nothing is deleted
 // and nothing is re-stamped (a fresh _u could let old content beat a newer edit from another device):
-//   • at load, the later copies get predictable ids — X~1, X~2 … in list order — so two devices
-//     holding the same pair (a backup restored on both) end up with the same ids;
+//   • at load, the later copies get ids made from their content — X~<fingerprint> — so two devices
+//     holding the same pair (a backup restored on both) name each record the same way, in any order;
 //   • once the server has answered (not a cached snapshot), the cloud's record X decides: the copy whose
 //     content matches it keeps X (ids are swapped if that is a later copy); if it matches none — it
-//     was edited on another device since — the cloud keeps X and our first copy moves to X~0;
+//     was edited on another device since — the cloud keeps X and our first copy takes its own X~<fingerprint>;
 //   • the renamed copies reach the cloud through reconcileKey, which uploads records the cloud
 //     lacks, with their own _u.
 // Pending pairs are kept on this device (cd_idfix) until sync has handled them. Students are left
@@ -3818,8 +3818,14 @@ const IDSPLIT_KEY="cd_idsplit";
 const _idSplit=(()=>{try{return JSON.parse(localStorage.getItem(IDSPLIT_KEY)||"{}")||{};}catch(e){return {};}})();
 const idSplitAdd=(key,id)=>{(_idSplit[key]=_idSplit[key]||[]).push(id);try{localStorage.setItem(IDSPLIT_KEY,JSON.stringify(_idSplit));}catch(e){}};
 const idSplitDone=key=>{if(!_idSplit[key])return;delete _idSplit[key];try{Object.keys(_idSplit).length?localStorage.setItem(IDSPLIT_KEY,JSON.stringify(_idSplit)):localStorage.removeItem(IDSPLIT_KEY);}catch(e){}};
+// A split copy is named after its content (X~<fingerprint>), so every device names the same record the
+// same way whatever order its list is in; identical copies on one device get ~2, ~3 after that.
+const idBody=r=>JSON.stringify(Object.keys(r).filter(k=>k!=="id"&&k!=="_u").sort().reduce((o,k)=>(o[k]=r[k],o),{}));
+const idHash=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36);};
+const idSplitName=(x,r,taken)=>{const n=x+"~"+idHash(idBody(r));let k=n,i=2;while(taken.has(k))k=n+"~"+(i++);return k;};
 // Is this id one of a repeated-id group still waiting for the server (the original X or one of its copies)?
-const idFixPending=(key,id)=>{const g=_idFix[key];if(!g)return false;if(g[id])return true;for(const x in g)if(g[x].includes(id))return true;return false;};
+// Any X~… counts, not just the copies listed here: another device names its copies from their content.
+const idFixPending=(key,id)=>{const g=_idFix[key];if(!g)return false;if(g[id])return true;for(const x in g)if(g[x].includes(id)||id.startsWith(x+"~"))return true;return false;};
 const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[k]).length)delete _idFix[k];});
   Object.keys(_idFix).length?localStorage.setItem(IDFIX_KEY,JSON.stringify(_idFix)):localStorage.removeItem(IDFIX_KEY);}catch(e){}};
 {
@@ -3831,8 +3837,8 @@ const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[
     arr.forEach(r=>{
       if(!r||!r.id)return;
       if(!seen.has(r.id)){seen.set(r.id,0);return;}
-      const x=r.id,k=seen.get(x)+1;seen.set(x,k);
-      let nid=x+"~"+k;while(ids.has(nid))nid+="~";
+      const x=r.id;
+      const nid=idSplitName(x,r,ids);
       r.id=nid;ids.add(nid);changed=true;found++;
       ((_idFix[key]=_idFix[key]||{})[x]=_idFix[key][x]||[]).push(nid);idSplitAdd(key,nid);
     });
@@ -3846,13 +3852,12 @@ function idFixResolve(key,id,data){
   const pend=_idFix[key]&&_idFix[key][id];if(!pend||data.d)return false;
   let rec;try{rec=JSON.parse(data.j);}catch(e){return false;}
   const arr=SYNC_VARS[key]();
-  const body=r=>JSON.stringify(Object.keys(r).filter(k=>k!=="id"&&k!=="_u").sort().reduce((o,k)=>(o[k]=r[k],o),{}));
-  const want=body(rec),first=arr.find(r=>r.id===id);
+  const body=idBody,want=body(rec),first=arr.find(r=>r.id===id);
   const copies=pend.map(c=>arr.find(r=>r.id===c)).filter(Boolean);
   const match=[first,...copies].find(r=>r&&body(r)===want);
   let moved=false;
-  if(match&&match!==first){const t=match.id;match.id=id;if(first)first.id=t;moved=true;}
-  else if(!match&&first){let nid=id+"~0";while(arr.some(r=>r.id===nid))nid+="~";first.id=nid;idSplitAdd(key,nid);moved=true;}
+  if(match&&match!==first){match.id=id;if(first){const nid=idSplitName(id,first,new Set(arr.map(r=>r.id)));first.id=nid;idSplitAdd(key,nid);}moved=true;}
+  else if(!match&&first){const nid=idSplitName(id,first,new Set(arr.map(r=>r.id)));first.id=nid;idSplitAdd(key,nid);moved=true;}
   delete _idFix[key][id];idFixSave();
   return moved;
 }
