@@ -3812,6 +3812,14 @@ function cloudJson(rec){
 const IDFIX_KEY="cd_idfix";
 const _idFix=(()=>{try{return JSON.parse(localStorage.getItem(IDFIX_KEY)||"{}")||{};}catch(e){return {};}})();
 const _idFixBuf={};   // key → {id: latest cloud copy seen} for pending ids, held until the server answers
+// Ids this repair created (X~k, X~0), kept until the list has reconciled: reconcileKey uploads them
+// even when they have no _u (records from before v58), instead of dropping them as leftovers.
+const IDSPLIT_KEY="cd_idsplit";
+const _idSplit=(()=>{try{return JSON.parse(localStorage.getItem(IDSPLIT_KEY)||"{}")||{};}catch(e){return {};}})();
+const idSplitAdd=(key,id)=>{(_idSplit[key]=_idSplit[key]||[]).push(id);try{localStorage.setItem(IDSPLIT_KEY,JSON.stringify(_idSplit));}catch(e){}};
+const idSplitDone=key=>{if(!_idSplit[key])return;delete _idSplit[key];try{Object.keys(_idSplit).length?localStorage.setItem(IDSPLIT_KEY,JSON.stringify(_idSplit)):localStorage.removeItem(IDSPLIT_KEY);}catch(e){}};
+// Is this id one of a repeated-id group still waiting for the server (the original X or one of its copies)?
+const idFixPending=(key,id)=>{const g=_idFix[key];if(!g)return false;if(g[id])return true;for(const x in g)if(g[x].includes(id))return true;return false;};
 const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[k]).length)delete _idFix[k];});
   Object.keys(_idFix).length?localStorage.setItem(IDFIX_KEY,JSON.stringify(_idFix)):localStorage.removeItem(IDFIX_KEY);}catch(e){}};
 {
@@ -3826,7 +3834,7 @@ const idFixSave=()=>{try{Object.keys(_idFix).forEach(k=>{if(!Object.keys(_idFix[
       const x=r.id,k=seen.get(x)+1;seen.set(x,k);
       let nid=x+"~"+k;while(ids.has(nid))nid+="~";
       r.id=nid;ids.add(nid);changed=true;found++;
-      ((_idFix[key]=_idFix[key]||{})[x]=_idFix[key][x]||[]).push(nid);
+      ((_idFix[key]=_idFix[key]||{})[x]=_idFix[key][x]||[]).push(nid);idSplitAdd(key,nid);
     });
     if(changed)ls("mc_"+key,arr);
   }
@@ -3844,7 +3852,7 @@ function idFixResolve(key,id,data){
   const match=[first,...copies].find(r=>r&&body(r)===want);
   let moved=false;
   if(match&&match!==first){const t=match.id;match.id=id;if(first)first.id=t;moved=true;}
-  else if(!match&&first){let nid=id+"~0";while(arr.some(r=>r.id===nid))nid+="~";first.id=nid;moved=true;}
+  else if(!match&&first){let nid=id+"~0";while(arr.some(r=>r.id===nid))nid+="~";first.id=nid;idSplitAdd(key,nid);moved=true;}
   delete _idFix[key][id];idFixSave();
   return moved;
 }
@@ -11820,15 +11828,16 @@ async function onSyncSnapshot(key,ev){
     if((ch.data.u||0)>syncMaxU)syncMaxU=ch.data.u;
     // v142: a record whose id was repeated waits for the server's answer — a cached copy may be stale,
     // and deciding on it could let a newer server copy overwrite one of ours later.
-    if(!holdOff&&_idFix[key]&&_idFix[key][ch.id]){((_idFixBuf[key]=_idFixBuf[key]||{})[ch.id]=ch.data);continue;}
+    // Its copies (X~k, possibly already uploaded by another device that repaired the same pair) wait too.
+    if(!holdOff&&idFixPending(key,ch.id)){((_idFixBuf[key]=_idFixBuf[key]||{})[ch.id]=ch.data);continue;}
     if(!holdOff&&applyRemoteRecord(key,ch.id,ch.data))touched=true;
   }
   if(!holdOff&&!ev.fromCache&&_idFixBuf[key]){
     // The server has answered: its copy (or the cached one it left unchanged) decides who keeps the id.
-    for(const [id,data] of Object.entries(_idFixBuf[key])){
-      if(idFixResolve(key,id,data))touched=true;
-      if(applyRemoteRecord(key,id,data))touched=true;
-    }
+    const buf=_idFixBuf[key];
+    // First decide who keeps each original id, then apply every held copy (originals and X~k).
+    for(const x of Object.keys(_idFix[key]||{}))if(buf[x]&&idFixResolve(key,x,buf[x]))touched=true;
+    for(const [id,data] of Object.entries(buf))if(applyRemoteRecord(key,id,data))touched=true;
     delete _idFixBuf[key];
   }
   if(touched)afterRemoteApplied(key);
@@ -11840,6 +11849,7 @@ async function onSyncSnapshot(key,ev){
     // can't say "finished". This one is only set once the reconcile has actually completed.
     syncSettled[key]=true;
     if(_idFix[key]){delete _idFix[key];idFixSave();}   // v142: anything the cloud never had was uploaded by reconcileKey
+    idSplitDone(key);
     // Last month's figures are only trustworthy once every collection has really been reconciled.
     if(SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
   }
@@ -11895,6 +11905,7 @@ async function reconcileKey(key){
       if(restore){r._u=now;ops.push({id:r.id,j:cloudJson(r),u:now});keepIds.add(r.id);continue;}
       if(!c){
         if(r._u)ops.push({id:r.id,j:cloudJson(r),u:r._u});   // created here under the new system → upload
+        else if((_idSplit[key]||[]).includes(r.id)){r._u=now;ops.push({id:r.id,j:cloudJson(r),u:now});}   // v142: a split copy (new id) is kept
         else local.splice(i,1);                                // pre-v58 leftover / sample → cloud wins
         continue;
       }
