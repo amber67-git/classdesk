@@ -4304,10 +4304,31 @@ function getOccurrencesForMonth(sid,month){
 function materialiseUnclaimedSlots(sid,dateStr){
   getOccurrencesForDate(dateStr,sid).forEach(o=>{if(o.isVirtual)materializeOccurrence(o);});
 }
+// Which saved lesson each recurring slot of that day holds, handed out in the same order as
+// getOccurrencesForDate: a lesson of the slot's own length first, then any left over.
+function slotHolders(s,dateStr){
+  const used={},out=[];
+  for(const slot of getSlotsForStudent(s,dateStr)){
+    if(!slotMatchesDate(slot,dateStr))continue;
+    const free=x=>x.sid===s.id&&x.date===dateStr&&!used[x.id];
+    const real=lessons.find(x=>free(x)&&Math.abs((x.dur||0)-slot.dur)<0.01)||lessons.find(free)||null;
+    if(real)used[real.id]=true;
+    out.push({slot,real});
+  }
+  return out;
+}
 function materializeOccurrence(occ){
   if(!occ.isVirtual){
     const existing=lessons.find(l=>l.id===occ.id);
     if(existing)return existing;
+  }else{
+    // A virtual class handed over a moment ago may have been saved since: Google "Apply all" saves
+    // the day's own class before adding an extra next to it, then reaches that class's own time
+    // change. Saving it a second time would leave two records for one slot — a third class on the
+    // day and a higher expected fee — so the record that now holds the slot is used.
+    const s=gs(occ.sid);
+    const held=s&&slotHolders(s,occ.date).find(h=>"v_"+s.id+"_"+occ.date+"_"+Math.round(h.slot.dur*10)===occ.id);
+    if(held&&held.real&&held.real.status!=="deleted")return held.real;
   }
   const real={
     id:uid(),sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,status:occ.status,
@@ -5074,19 +5095,8 @@ function naturalSlotFor(s,dur,dateStr,l){
   if(!s||!dateStr)return null;
   const onDay=getSlotsForStudent(s,dateStr).filter(sl=>slotMatchesDate(sl,dateStr));
   if(!onDay.length)return null;
-  // A saved lesson still on its own day: the slot that claims it, handing real lessons to slots
-  // in the same order getOccurrencesForDate does (same length first, then any left over).
-  if(l&&l.id&&!l.movedFrom&&l.date===dateStr){
-    const used={};
-    for(const slot of onDay){
-      const free=x=>x.sid===s.id&&x.date===dateStr&&!used[x.id];
-      const real=lessons.find(x=>free(x)&&Math.abs((x.dur||0)-slot.dur)<0.01)||lessons.find(free);
-      if(!real)continue;
-      used[real.id]=true;
-      if(real.id===l.id)return slot;
-    }
-    return null;
-  }
+  // A saved lesson still on its own day: the slot that holds it (see slotHolders).
+  if(l&&l.id&&!l.movedFrom&&l.date===dateStr)return slotHolders(s,dateStr).find(h=>h.real&&h.real.id===l.id)?.slot||null;
   const d=l?.movedDur??dur??s.dur;
   return onDay.find(sl=>Math.abs(sl.dur-d)<0.01)||onDay[0];
 }
