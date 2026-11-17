@@ -4326,9 +4326,12 @@ function materializeOccurrence(occ){
     // the day's own class before adding an extra next to it, then reaches that class's own time
     // change. Saving it a second time would leave two records for one slot — a third class on the
     // day and a higher expected fee — so the record that now holds the slot is used.
+    // Two classes of one length on the same day share a virtual id, so the record is reused only
+    // when every slot with this id is already held — while one is still free, this is that class.
     const s=gs(occ.sid);
-    const held=s&&slotHolders(s,occ.date).find(h=>"v_"+s.id+"_"+occ.date+"_"+Math.round(h.slot.dur*10)===occ.id);
-    if(held&&held.real&&held.real.status!=="deleted")return held.real;
+    const mine=s?slotHolders(s,occ.date).filter(h=>"v_"+s.id+"_"+occ.date+"_"+Math.round(h.slot.dur*10)===occ.id):[];
+    const last=mine[mine.length-1];
+    if(last&&mine.every(h=>h.real)&&last.real.status!=="deleted")return last.real;
   }
   const real={
     id:uid(),sid:occ.sid,date:occ.date,dur:occ.dur,amt:occ.amt,status:occ.status,
