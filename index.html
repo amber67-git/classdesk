@@ -12255,8 +12255,17 @@ function setSyncStatus(text,tone){
   el.textContent=text;
   el.style.color=tone==="err"?"#dc2626":tone==="ok"?"#16a34a":"var(--txt3)";
 }
+// Collections whose cloud listener failed (key → message). A failed listener gets no more
+// snapshots, so its error must stay on screen: without this, the next good answer from any OTHER
+// collection put "✓ Synced" over it and a collection that was not syncing looked fine.
+const syncListenErr={};
+function syncShowListenErr(){
+  const k=Object.keys(syncListenErr);if(!k.length)return false;
+  setSyncStatus("Sync error ("+k.join(", ")+"): "+syncListenErr[k[0]],"err");return true;
+}
 function syncStatusIdle(){
   if(!syncUser)return;
+  if(syncShowListenErr())return;
   if(navigator.onLine===false)setSyncStatus(tx("Offline — changes are saved here and upload when you're back online"));
   else setSyncStatus(tx("✓ Synced {time}",{time:new Date().toLocaleTimeString(LOCALE)}),"ok");
 }
@@ -13049,7 +13058,8 @@ function rerenderCurrentPage(){
 
 // One collection's listener callback.
 async function onSyncSnapshot(key,ev){
-  if(ev.error){console.error("Sync listener failed:",key,ev.error);setSyncStatus("Sync error: "+(ev.error.message||ev.error.code),"err");return;}
+  if(ev.error){console.error("Sync listener failed:",key,ev.error);syncListenErr[key]=String(ev.error.message||ev.error.code||"");syncShowListenErr();return;}
+  delete syncListenErr[key];
   const seen=cloudSeen[key]||(cloudSeen[key]=new Map());
   // While a restored backup is waiting to be reconciled, this browser's data is the truth —
   // cloud records must not flow in first, or the reconcile would keep them instead of deleting them.
@@ -13164,7 +13174,7 @@ function stopCloudSync(){
   syncUnwatchers.forEach(u=>{try{u();}catch(e){}});
   syncUnwatchers=[];
   syncUser=null;
-  SYNC_KEYS.forEach(k=>{delete cloudSeen[k];delete syncReconciled[k];delete syncSettled[k];});
+  SYNC_KEYS.forEach(k=>{delete cloudSeen[k];delete syncReconciled[k];delete syncSettled[k];delete syncListenErr[k];});
   setSyncStatus("");
 }
 
