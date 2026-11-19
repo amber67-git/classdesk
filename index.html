@@ -3122,7 +3122,7 @@ const I18N={ko:{
   "A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday.":"이 수업이 실제로 있는 주의 날짜. 여기서부터 격주로 번갈아 가므로 같은 요일에 두 학생이 교대로 수업할 수 있습니다.",
   "The Students list counts the months from this date":"학생 목록의 재원 개월 수를 이 날짜부터 셉니다",
   "Start date":"시작일","End date":"종료일","Archive":"보관","Payment type":"납부 방식",
-  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","Lesson plan":"수업 설정","No level":"레벨 없음","Level {l}":"레벨 {l}","Activity":"활동","Speaking lesson no.":"스피킹 회차","Which lesson of the speaking course this student is on":"이 학생이 스피킹 과정의 몇 번째 회차인지","lesson {n}":"{n}회차",
+  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","Lesson plan":"수업 설정","No level":"레벨 없음","Level {l}":"레벨 {l}","Activity":"활동","Speaking lesson no.":"스피킹 회차","Which lesson of the speaking course this student is on":"이 학생이 스피킹 과정의 몇 번째 회차인지","lesson {n}":"{n}회차","The speaking lesson number has to be a whole number from 1 to 999.":"스피킹 회차는 1부터 999까지의 정수여야 합니다.",
   "What this student does in class. It shows at the top of the student's lesson window.":"이 학생이 수업에서 하는 것입니다. 이 학생의 수업 창 맨 위에 보입니다.","comma-separated":"쉼표로 구분",
   "Delete student":"학생 삭제","Save student":"학생 저장","Name required":"이름을 입력하세요",
   "Delete this student? This cannot be undone.":"이 학생을 삭제할까요? 되돌릴 수 없습니다.",
@@ -4564,8 +4564,11 @@ function fillStudentPlan(s){
 function readStudentPlan(){
   const lv=document.getElementById("sm-level")?.value||"";
   const mods=PLAN_MODS.map(([k])=>k).filter(k=>document.getElementById("sm-mod-"+k)?.checked);
-  const n=parseInt(document.getElementById("sm-spk")?.value,10);
-  return {group:PLAN_LEVELS.includes(lv)?lv:"",mods,spk:n>0&&n<1000?n:""};
+  // An empty box clears the speaking lesson. Anything else has to be a whole number from 1 to 999:
+  // null tells saveStudent to stop, so a typo never wipes or changes the number already saved.
+  const box=document.getElementById("sm-spk"),raw=(box?.value||"").trim(),n=Number(raw);
+  if(box?.validity?.badInput||(raw!==""&&!(Number.isInteger(n)&&n>=1&&n<=999)))return null;
+  return {group:PLAN_LEVELS.includes(lv)?lv:"",mods,spk:raw===""?"":n};
 }
 // One line of chips for a student's plan; "" when nothing is set.
 function studentPlanHtml(s){
@@ -4745,7 +4748,9 @@ async function saveStudent(){
   }).filter(sl=>sl.sched);
   const customFields=collectCustomFieldsFromModal("sm-custom-fields");
   const rawRate=document.getElementById("sm-rate")?.value;
-  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*hourlyRate()),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields,...readStudentPlan()};
+  const plan=readStudentPlan();
+  if(!plan){alert(tx("The speaking lesson number has to be a whole number from 1 to 999."));document.getElementById("sm-spk")?.focus();return;}
+  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*hourlyRate()),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields,...plan};
   if(!obj.name){alert(tx("Name required"));return;}
   const isNew=!editSid;
   const prevStudents=students.slice(); // for rollback if the write fails
