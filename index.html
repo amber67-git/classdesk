@@ -4007,8 +4007,16 @@ function rememberTombs(key,ids,u){
 // or deleting a record you've seen always beats the copy you saw, whatever the clocks say.
 let syncMaxU=0;
 function syncStamp(){return Math.max(Date.now(),syncMaxU+1);}
+// The collections the last save() could not write to this device. save() answers for all of them
+// at once (false if any failed); saveKey() asks about one — a step that undoes itself on failure
+// must do so only when its own collection was not written. If another collection failed, this
+// one is on the device and on its way to the cloud, and undoing it in memory would bring it back
+// on the next load.
+let saveFailedKeys=[];
+const saveKey=key=>{save();return !saveFailedKeys.includes(key);};
 function save(){
   let ok=true;
+  saveFailedKeys=[];
   const ops={};       // key → [{id,j,u} | {id,u,d:true}] for the sync layer
   const now=syncStamp();
   syncMaxU=Math.max(syncMaxU,now);
@@ -4018,7 +4026,7 @@ function save(){
       const c=cmpJson(val);
       if(_lastSaved.settings===c)continue;
       val._u=now;
-      if(!ls("mc_settings",val)){ok=false;continue;}
+      if(!ls("mc_settings",val)){ok=false;saveFailedKeys.push(key);continue;}
       _lastSaved.settings=c;
       ops.settings=[{id:"settings",j:JSON.stringify(val),u:now}];
       continue;
@@ -4038,7 +4046,7 @@ function save(){
     }
     const deleted=[...prev.keys()].filter(id=>!cur.has(id));
     if(!changed.length&&!deleted.length)continue;
-    if(!ls("mc_"+key,val)){ok=false;continue;}
+    if(!ls("mc_"+key,val)){ok=false;saveFailedKeys.push(key);continue;}
     _lastSaved[key]=cur;
     ops[key]=[
       ...changed.map(r=>({id:r.id,j:cloudJson(r),u:r._u})),
@@ -7914,13 +7922,13 @@ const ltFinal=a=>(a.teacher&&a.teacher.finalLevel)||"";
 function ltAddMonths(dateStr,m){const p=String(dateStr).split("-").map(Number);return fmtDate(new Date(p[0],p[1]-1+m,p[2]));}
 const ltLv=(L,cls)=>`<span class="lt-lv${L?"":" none"}${cls?" "+cls:""}">${L?escapeAttr(L):"–"}</span>`;
 
-// Make a change to one test record and store it. If storing fails (the device is full), the record
-// goes back to what it was and false comes back, so the caller can stay where it is instead of
-// showing a step that would be gone after a reload.
+// Make a change to one test record and store it. If the test records cannot be written (the device
+// is full), the record goes back to what it was — its stamp too — and false comes back, so the
+// caller can stay where it is instead of showing a step that would be gone after a reload.
 function ltCommit(a,change){
   const snap=JSON.stringify(a);
   change();
-  if(save()!==false)return true;
+  if(saveKey("assessments"))return true;
   const old=JSON.parse(snap);
   Object.keys(a).forEach(k=>{delete a[k];});Object.assign(a,old);
   return false;
@@ -7995,7 +8003,7 @@ function ltDelete(aid){
   const i=assessments.findIndex(a=>a.id===aid);if(i<0)return;
   if(!confirm(tx("Delete this test record? This cannot be undone.")))return;
   const [gone]=assessments.splice(i,1);        // in place — the sync layer holds this very array
-  if(save()===false){assessments.splice(i,0,gone);showToast(ltSaveFailed());}
+  if(!saveKey("assessments")){assessments.splice(i,0,gone);showToast(ltSaveFailed());}
   renderLevelTest();
 }
 
@@ -8044,7 +8052,7 @@ function ltStart(){
   if(paper){const d=document.getElementById("lts-date").value;a.paperDate=/^\d{4}-\d{2}-\d{2}$/.test(d)&&d<=td()?d:td();}
   else a.koHelp=!!document.getElementById("lts-ko").checked;
   assessments.push(a);
-  if(save()===false){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
+  if(!saveKey("assessments")){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
   closeModal("mo-lt-start");
   if(curPage==="leveltest")renderLevelTest();        // the row now offers "Continue", whatever happens next
   ltResume(a.id);
@@ -8444,6 +8452,15 @@ const ltDomTask=d=>LANG==="ko"?AEA.RATING_DOMAINS[d].task:LT_DOMAINS_EN[d].task;
 const ltDomLevel=(d,L)=>LANG==="ko"?AEA.RATING_DOMAINS[d].levels[L]:LT_DOMAINS_EN[d].levels[L];
 const ltRatings=(s,d)=>(s&&s.ratings&&Array.isArray(s.ratings[d]))?s.ratings[d].filter(r=>r&&AEA.LEVELS.includes(r.level)):[];
 const ltLastRating=(s,d)=>{const r=ltRatings(s,d);return r.length?r[r.length-1]:null;};
+// The ratings a report of test `a` goes by: for each skill, the last one made before the student's
+// next finished test. So the newest test's report follows the ratings as they are added (they are
+// usually made in the lessons after the test), and an older test's report stays as it was printed
+// once a newer test exists. The report shows each rating's date.
+function ltRatingsFor(s,a){
+  const done=ltDone(s.id),next=done[done.findIndex(x=>x.id===a.id)+1],o={};
+  LT_DOMAIN_IDS.forEach(d=>{const r=ltRatings(s,d).filter(x=>!next||String(x.date||"")<next.date);o[d]=r.length?r[r.length-1]:null;});
+  return o;
+}
 // What the Details panel of a student shows first: reading from the test, then the four ratings.
 function ltProfileHtml(s){
   const e=escapeAttr,last=ltLatest(s.id);
@@ -8474,12 +8491,18 @@ function ltRenderRate(){
 function ltPickRate(L){if(AEA.LEVELS.includes(L)){LTR.level=L;ltRenderRate();}}
 function ltSaveRate(){
   const s=ltStudent(LTR.sid),d=LTR.dom;if(!s||!LT_DOMAIN_IDS.includes(d)||!AEA.LEVELS.includes(LTR.level))return;
-  const before=s.ratings;
+  const before=s.ratings,hadU=Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s._u;
   // a new object and a new list, so a failed save can simply put the old ones back
   const all=before&&typeof before==="object"&&!Array.isArray(before)?{...before}:{};
   all[d]=[...(Array.isArray(all[d])?all[d]:[]),{date:td(),level:LTR.level,note:(document.getElementById("ltq-note").value||"").trim()}];
   s.ratings=all;
-  if(save()===false){if(before===undefined)delete s.ratings;else s.ratings=before;showToast(ltSaveFailed());return;}
+  if(!saveKey("students")){
+    // save() stamps a record before it writes it. The student goes back to the stored copy, so the
+    // stamp goes back too — a newer stamp on old content would turn away a change from another device.
+    if(before===undefined)delete s.ratings;else s.ratings=before;
+    if(hadU)s._u=oldU;else delete s._u;
+    showToast(ltSaveFailed());return;
+  }
   closeModal("mo-lt-rate");
   if(curPage==="leveltest")renderLevelTest();
   showToast(tx("{name}: rating saved",{name:LT_DOMAIN_NAME[d]}));
@@ -8505,9 +8528,9 @@ function ltGrowthSvg(done){
     s+=`<circle cx="${cx}" cy="${y(val(a)).toFixed(1)}" r="${last?6:4}" class="${last?"g-now":"g-dot"}"/>`+
       `<text x="${cx}" y="${H-8}" text-anchor="${pts.length===1?"middle":i===0?"start":last?"end":"middle"}" class="g-date">${escapeAttr(String(a.date||"").slice(2,7).replace("-","."))}</text>`;
   });
-  return s+`</svg><p class="rp-small">점의 높이는 레벨 안에서의 단계(시작·발전·안정)를 나타냅니다. 점수가 아닙니다.</p>`;
+  return s+`</svg>`;
 }
-function ltFindings(s,a){
+function ltFindings(a,rated){
   const r=a.result,f=AEA.skillFindings(r.skills||{}),SK=AEA.SKILLS,good=[],need=[];
   if(r.mastered)good.push(`레벨 ${r.mastered}(${AEA.LEVEL_INFO[r.mastered].name}) 수준의 글을 안정적으로 이해합니다.`);
   f.good.slice(0,3).forEach(k=>good.push(SK[k].good));
@@ -8519,7 +8542,7 @@ function ltFindings(s,a){
   if(!need.length)Object.keys(r.skills||{}).filter(k=>r.skills[k].c===0).slice(0,2).forEach(k=>need.push(SK[k].need));
   const ri=AEA.LEVELS.indexOf(ltFinal(a)||r.level);
   ["speaking","writing"].forEach(d=>{
-    const x=ltLastRating(s,d);if(!x)return;const gap=ri-AEA.LEVELS.indexOf(x.level),nm=AEA.RATING_DOMAINS[d].ko;
+    const x=rated[d];if(!x)return;const gap=ri-AEA.LEVELS.indexOf(x.level),nm=AEA.RATING_DOMAINS[d].ko;
     if(gap>=1)need.push(`Reading에 비해 ${nm}이 낮은 편입니다. 읽은 내용을 ${d==="speaking"?"말로":"글로"} 표현하는 활동을 늘리면 좋습니다.`);
     else if(gap<=-1)good.push(`${nm}이 Reading보다 앞서 있습니다.`);
   });
@@ -8527,8 +8550,21 @@ function ltFindings(s,a){
   if(!need.length)need.push("현재 레벨의 글을 더 다양하게 읽으며 이해를 다지면 좋습니다.");
   return {good,need};
 }
+// The teacher's note as it is printed. The box takes 600 characters, and every one of them could be
+// a line break — so blank lines are kept to one in a row and the lines to LT_NOTE_LINES; what comes
+// after is run on in the last line; a note over 300 characters is set a size smaller (.rp-note.long).
+// Nothing is dropped, and the fullest report — four ratings, the chart and a note of 600
+// characters — still prints on two pages.
+const LT_NOTE_LINES=6;
+function ltNoteHtml(t){
+  let L=String(t).replace(/\r/g,"").split("\n").map(x=>x.trim());
+  L=L.filter((x,i)=>x||(i>0&&L[i-1]));
+  while(L.length&&!L[L.length-1])L.pop();
+  if(L.length>LT_NOTE_LINES)L=L.slice(0,LT_NOTE_LINES-1).concat(L.slice(LT_NOTE_LINES-1).filter(Boolean).join(" "));
+  return L.map(escapeAttr).join("<br>");
+}
 function ltReportBlocks(s,a){
-  const e=escapeAttr,r=a.result,fin=ltFinal(a)||r.level,same=fin===r.level,rec=AEA.RECS[fin],fd=ltFindings(s,a),ST=AEA.STAGES,LV=AEA.LEVELS,B=[];
+  const e=escapeAttr,r=a.result,fin=ltFinal(a)||r.level,same=fin===r.level,rec=AEA.RECS[fin],rated=ltRatingsFor(s,a),fd=ltFindings(a,rated),ST=AEA.STAGES,LV=AEA.LEVELS,B=[];
   const before=ltDone(s.id).filter(x=>x.id!==a.id&&(x.date<a.date||(x.date===a.date&&(x.finishedAt||x.startedAt)<(a.finishedAt||a.startedAt)))),prev=before[before.length-1];
   const big=L=>`<span class="lv big">${e(L)}</span>`;
   B.push(`<div class="rp-head"><div class="rp-title">영어 진단 리포트</div><div class="rp-meta"><b>${e(s.name||"")}</b><br>평가일 ${e(a.date||"")} · ${a.mode==="paper"?"종이 시험":"화면 진단"}</div></div>`);
@@ -8536,21 +8572,21 @@ function ltReportBlocks(s,a){
     `<p>${e(AEA.LEVEL_INFO[fin].can)}입니다. ${same?ST[r.stage].desc:""}</p>`+
     (same?"":`<p class="rp-small">적응형 진단의 추천은 ${r.level} · ${ST[r.stage].ko}였고, 수업 중 관찰을 함께 고려해 선생님이 ${fin} 레벨로 정했습니다.</p>`)+`</div>`);
   const rows=[["Reading · Comprehension","적응형 진단",r.level,ST[r.stage].ko]];
-  LT_DOMAIN_IDS.forEach(d=>{const x=ltLastRating(s,d);if(x)rows.push([AEA.RATING_DOMAINS[d].ko,"선생님 평가",x.level,""]);});
+  LT_DOMAIN_IDS.forEach(d=>{const x=rated[d];if(x)rows.push([AEA.RATING_DOMAINS[d].ko,"선생님 평가",x.level,e(x.date||"")]);});
   B.push(`<div class="rp-sec"><h3>영역별 수준</h3><div class="rg"><div class="rg-row rg-head"><span></span>${LV.map(L=>`<span>${L}</span>`).join("")}</div>`+
     rows.map(x=>`<div class="rg-row"><span class="rg-name">${e(x[0])}<small>${x[1]}${x[3]?" · "+x[3]:""}</small></span>${LV.map(L=>`<span class="rg-cell">${L===x[2]?`<i>${L}</i>`:""}</span>`).join("")}</div>`).join("")+
-    `</div><p class="rp-small">영역마다 레벨이 다를 수 있습니다. ${rows.length===1?"Speaking과 Writing은 수업 중 평가 후 추가됩니다.":"선생님 평가는 기준표에 따른 관찰 결과입니다."}</p></div>`);
+    `</div><p class="rp-small">영역마다 레벨이 다를 수 있습니다. ${rows.length===1?"Speaking과 Writing은 수업 중 평가 후 추가됩니다.":"선생님 평가는 기준표에 따른 관찰 결과이며, 옆의 날짜는 평가한 날입니다."}</p></div>`);
   B.push(`<div class="rp-sec rp-two"><div><h3>강점</h3><ul>${fd.good.map(x=>`<li>${e(x)}</li>`).join("")}</ul></div><div><h3>보완할 점</h3><ul>${fd.need.map(x=>`<li>${e(x)}</li>`).join("")}</ul></div></div>`);
   const pr=a.teacher&&a.teacher.probe;
   B.push(`<div class="rp-sec"><h3>이번 평가에서 한 일</h3><p>${a.mode==="paper"?"종이 시험지로 진행했고, 결과에 따라 다음 시험지의 난이도를 조절했습니다.":"학생의 답에 따라 글의 난이도가 자동으로 조절되는 방식으로 진행했습니다."} 모두 ${r.items}문항을 풀었습니다.</p><ul>`+
     a.path.filter(p=>p.responses.length&&AEA.TL[p.testlet]).map(p=>{const t=AEA.TL[p.testlet],c=p.responses.filter(x=>x.correct).length;
       return `<li>레벨 ${p.level}${t.passage?` 글 “${e(t.title)}” (${t.words}단어)`:" 글자·단어 문제"}: ${p.responses.length}문항 중 ${c}문항 정답</li>`;}).join("")+
     (pr&&[0,1,2].includes(pr.score)?`<li>읽은 내용을 말로 설명하는 확인 질문: ${["설명하기 어려워함","일부 설명함","충분히 설명함"][pr.score]}</li>`:"")+`</ul></div>`);
-  B.push(`<div class="rp-sec"><h3>지금 수준에 맞는 학습 목표</h3><ol>${rec.goals.map(x=>`<li>${e(x)}</li>`).join("")}</ol></div>`);
-  B.push(`<div class="rp-sec"><h3>추천 수업 활동과 읽기 자료</h3><ul>${rec.acts.map(x=>`<li>${e(x)}</li>`).join("")}<li>알맞은 읽기 자료: ${e(rec.reading)}</li></ul></div>`);
+  B.push(`<div class="rp-sec rp-two"><div><h3>지금 수준에 맞는 학습 목표</h3><ol>${rec.goals.map(x=>`<li>${e(x)}</li>`).join("")}</ol></div>`+
+    `<div><h3>추천 수업 활동과 읽기 자료</h3><ul>${rec.acts.map(x=>`<li>${e(x)}</li>`).join("")}<li>알맞은 읽기 자료: ${e(rec.reading)}</li></ul></div></div>`);
   B.push(`<div class="rp-sec"><h3>앞으로 3개월 계획</h3><div class="rp-plan">${rec.plan.map((x,i)=>`<div><b>${i+1}개월차</b><span>${e(x)}</span></div>`).join("")}</div><p class="rp-small">다음 정기 평가 예정: ${e(ltAddMonths(a.date,LT_RETEST_MONTHS))}</p></div>`);
-  B.push(`<div class="rp-sec"><h3>성장 변화</h3>${prev?`<p>지난 평가(${e(prev.date)}) <b>${prev.result.level} · ${ST[prev.result.stage].ko}</b> → 이번 평가 <b>${r.level} · ${ST[r.stage].ko}</b></p>`+ltGrowthSvg(before.concat([a])):`<p>이번이 첫 평가입니다. 다음 평가부터 변화를 비교해 드립니다.</p>`}</div>`);
-  if(a.teacher&&a.teacher.note)B.push(`<div class="rp-sec"><h3>선생님 의견</h3><p>${e(a.teacher.note).replace(/\n/g,"<br>")}</p></div>`);
+  B.push(`<div class="rp-sec"><h3>성장 변화</h3>${prev?`<div class="rp-grow"><div><p>지난 평가(${e(prev.date)}) <b>${prev.result.level} · ${ST[prev.result.stage].ko}</b> → 이번 평가 <b>${r.level} · ${ST[r.stage].ko}</b></p><p class="rp-small">점의 높이는 레벨 안에서의 단계(시작·발전·안정)를 나타냅니다. 점수가 아닙니다.</p></div>`+ltGrowthSvg(before.concat([a]))+`</div>`:`<p>이번이 첫 평가입니다. 다음 평가부터 변화를 비교해 드립니다.</p>`}</div>`);
+  if(a.teacher&&a.teacher.note)B.push(`<div class="rp-sec"><h3>선생님 의견</h3><p class="rp-note${String(a.teacher.note).length>300?" long":""}">${ltNoteHtml(a.teacher.note)}</p></div>`);
   B.push(`<div class="rp-sec rp-foot">이 리포트는 수업에서 쓰는 자체 진단 결과입니다. 공인 시험 점수나 CEFR, SR, AR 등의 공식 지수가 아니며, 수업 방향을 정하기 위한 참고 자료입니다. 한 번의 평가는 그날의 컨디션에 영향을 받을 수 있어 수업 중 관찰과 함께 해석합니다.</div>`);
   return B;
 }
@@ -8566,17 +8602,17 @@ h3{margin:0 0 6px;font-size:14.5px;font-weight:600;color:var(--brand)}p{margin:6
 .lv.big{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;flex:none;border-radius:12px;background:var(--brand);color:var(--white);font-weight:700;font-size:26px}
 .rp-stage{font-size:13px;font-weight:600;background:var(--amber-soft);color:var(--amber-ink);padding:2px 8px;border-radius:999px;white-space:nowrap}
 .rp-small{font-size:12.5px;color:var(--muted)}.rp-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.rg{display:flex;flex-direction:column}.rg-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(5,40px);align-items:center;border-top:1px solid var(--line);min-height:44px}
+.rg{display:flex;flex-direction:column}.rg-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(5,40px);align-items:center;border-top:1px solid var(--line);min-height:40px}
 .rg-head{border-top:0;min-height:24px;font-weight:700;font-size:13px;color:var(--muted);text-align:center}
-.rg-name{font-weight:500;display:flex;flex-direction:column;padding:4px 0}.rg-name small{font-weight:400;font-size:12px;color:var(--muted)}
+.rg-name{font-weight:500;display:flex;flex-direction:column;padding:2px 0;line-height:1.35}.rg-name small{font-weight:400;font-size:12px;color:var(--muted)}
 .rg-cell{height:100%;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line);background:var(--cell)}
 .rg-cell i{width:28px;height:28px;border-radius:50%;background:var(--amber);color:var(--ink);font-weight:700;font-size:14px;line-height:28px;text-align:center;font-style:normal}
 .rp-plan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rp-plan div{background:var(--bg);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;font-size:13px}
-.rp-foot{border-bottom:0;font-size:12px;color:var(--muted)}
-.growth{width:100%;height:auto;max-width:420px;display:block}.g-b0{fill:var(--white)}.g-b1{fill:var(--bg)}.g-frame{fill:none;stroke:var(--line)}.g-lv{font-size:12px;font-weight:600;fill:var(--muted)}
+.rp-note.long{font-size:12.5px;line-height:1.5}.rp-foot{border-bottom:0;font-size:12px;color:var(--muted)}
+.rp-grow{display:flex;align-items:center;gap:16px}.rp-grow>div{flex:1;min-width:0}.rp-grow p:first-child{margin-top:0}.growth{width:300px;flex:none;height:auto;display:block}.g-b0{fill:var(--white)}.g-b1{fill:var(--bg)}.g-frame{fill:none;stroke:var(--line)}.g-lv{font-size:12px;font-weight:600;fill:var(--muted)}
 .g-line{fill:none;stroke:var(--brand);stroke-width:2}.g-dot{fill:var(--brand);stroke:var(--white);stroke-width:2}.g-now{fill:var(--amber);stroke:var(--white);stroke-width:2}.g-date{font-size:10px;fill:var(--muted)}
 @page{size:A4;margin:12mm 14mm}
-@media(max-width:560px){.paper{padding:20px 16px}.rp-two,.rp-plan{grid-template-columns:1fr}.rg-row{grid-template-columns:minmax(0,1fr) repeat(5,30px)}}
+@media(max-width:560px){.paper{padding:20px 16px}.rp-two,.rp-plan{grid-template-columns:1fr}.rp-grow{flex-direction:column;align-items:stretch}.growth{width:100%;max-width:320px}.rg-row{grid-template-columns:minmax(0,1fr) repeat(5,30px)}}
 @media print{body{background:var(--white)}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}}`;
 function ltOpenReport(aid){
   const a=ltGet(aid),s=a?ltStudent(a.studentId):null;
@@ -8594,7 +8630,15 @@ function ltOpenReport(aid){
 // ── CSV (v148) ────────────────────────────────────────────────────────────
 // Two files for the teacher's own records: one row per test, or one row per answer. The headings
 // are the source app's (Korean), so files from both apps line up.
-const ltCsvCell=v=>{v=v==null?"":String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+// Text that a spreadsheet would read as a formula (it starts with = + - @, a tab or a return) gets a
+// leading apostrophe, so a name or a note like "=A" or "- good" stays the text it is. Numbers are
+// written as they are.
+const ltCsvCell=v=>{
+  if(typeof v==="number")return String(v);
+  v=v==null?"":String(v);
+  if(/^[=+\-@\t\r]/.test(v))v="'"+v;
+  return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;
+};
 function ltCsv(kind){
   const all=assessments.slice().sort((a,b)=>a.startedAt-b.startedAt),rows=[],ST=AEA.STAGES,nm=a=>{const s=ltStudent(a.studentId);return s?s.name||"":"";};
   const basis={high:"판정 근거 충분",medium:"판정 근거 보통",low:"판정 근거 부족"};
@@ -8700,6 +8744,7 @@ function ltSaveReview(){
   const s=ltStudent(a.studentId),last=s?ltLatest(s.id):null,newest=!!(s&&last&&last.id===a.id);
   const sure=ltSyncSure(),move=newest&&sure;
   const snap=JSON.stringify(a),hadGroup=!!s&&Object.prototype.hasOwnProperty.call(s,"group"),oldGroup=s?s.group:undefined;
+  const hadU=!!s&&Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s?s._u:undefined;
   a.teacher={...(a.teacher||{}),finalLevel:lv,note:note,reviewedAt:Date.now()};
   if(newest&&!sure)a.teacher.held=true;else delete a.teacher.held;
   if(move)s.group=lv;
@@ -8708,7 +8753,9 @@ function ltSaveReview(){
     // without the other. Put both back and store that, so a level never stands without the
     // decision it came from.
     const old=JSON.parse(snap);Object.keys(a).forEach(k=>{delete a[k];});Object.assign(a,old);
-    if(move){if(hadGroup)s.group=oldGroup;else delete s.group;}
+    // The student's stamp goes back with the level: if the student was not written, the second
+    // save() finds nothing changed and leaves the old stamp; if it was, it stamps the undo anew.
+    if(move){if(hadGroup)s.group=oldGroup;else delete s.group;if(hadU)s._u=oldU;else delete s._u;}
     save();
     showToast(ltSaveFailed());return;
   }
