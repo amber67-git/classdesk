@@ -530,11 +530,12 @@ thead[data-header-page] th:not(:last-child):hover::after{
 /* The student's test screen: full screen and always light, whatever the app's appearance is — the
    passage colours and sizes are part of the test. Every class is lt-…, and every colour is its own. */
 body.lt-testing{overflow:hidden}
-#lt-screen{position:fixed;inset:0;z-index:2900;background:#fff;color:#16232A;color-scheme:light;font:400 15px/1.55 var(--font);word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%;
-  --lt-surface:#FFFFFF;--lt-bg:#F3F5F4;--lt-ink:#16232A;--lt-muted:#5C6A72;--lt-line:#D9E0DE;--lt-brand:#1B5E66;--lt-brand-soft:#E4EFEF;--lt-amber:#F2A81D;--lt-amber-soft:#FFF4DC;
-  --lt-read:"Andika",var(--font)}
+#lt-screen,#lt-hint{--lt-surface:#FFFFFF;--lt-bg:#F3F5F4;--lt-ink:#16232A;--lt-muted:#5C6A72;--lt-line:#D9E0DE;--lt-brand:#1B5E66;--lt-brand-soft:#E4EFEF;--lt-amber:#F2A81D;--lt-amber-soft:#FFF4DC;
+  --lt-amber-ink:#7A5200;--lt-lock:#A9B4B2;--lt-shade:rgba(22,35,42,.5);--lt-read:"Andika",var(--font)}
+#lt-screen{position:fixed;inset:0;z-index:2900;background:var(--lt-surface);color:var(--lt-ink);color-scheme:light;font:400 15px/1.55 var(--font);word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%}
+#lt-screen:focus{outline:none}
 #lt-screen[hidden]{display:none}
-#lt-hint{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:2950;pointer-events:none;background:#16232A;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;max-width:calc(100vw - 32px);text-align:center}
+#lt-hint{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:2950;pointer-events:none;background:var(--lt-ink);color:var(--lt-surface);padding:10px 16px;border-radius:10px;font-size:14px;max-width:calc(100vw - 32px);text-align:center}
 #lt-screen *{box-sizing:border-box}
 #lt-screen button{font:inherit;color:inherit;cursor:pointer}
 #lt-screen :focus-visible{outline:3px solid var(--lt-amber);outline-offset:2px}
@@ -546,19 +547,19 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-part{font:700 14px var(--lt-read);color:var(--lt-brand)}
 #lt-screen .lt-dots{flex:1;display:flex;gap:6px}
 #lt-screen .lt-dots i{width:100%;max-width:36px;height:8px;border-radius:4px;background:var(--lt-line)}
-#lt-screen .lt-dots i.done{background:var(--lt-brand)}
-#lt-screen .lt-dots i.now{background:var(--lt-amber)}
-#lt-screen .lt-lock{border:0;background:none;color:#A9B4B2;width:44px;height:44px;display:grid;place-items:center;border-radius:8px}
+#lt-screen .lt-dots i.lt-done{background:var(--lt-brand)}
+#lt-screen .lt-dots i.lt-now{background:var(--lt-amber)}
+#lt-screen .lt-lock{border:0;background:none;color:var(--lt-lock);width:44px;height:44px;display:grid;place-items:center;border-radius:8px}
 #lt-screen [data-hold]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 #lt-screen .lt-passage{font-family:var(--lt-read);font-size:18px;line-height:1.75}
 #lt-screen .lt-passage h2{font:700 19px/1.3 var(--lt-read);margin-bottom:8px}
 #lt-screen .lt-passage p{margin:0 0 10px}
 #lt-screen .lt-passbox{flex:1 1 0;min-height:110px;overflow:auto;padding:12px 16px 4px;background:var(--lt-amber-soft);-webkit-overflow-scrolling:touch}
-#lt-screen .lt-passtoggle{flex:none;border:0;border-bottom:1px solid var(--lt-line);background:var(--lt-amber-soft);color:#7A5200;font-size:13px;font-weight:600;min-height:36px}
+#lt-screen .lt-passtoggle{flex:none;border:0;border-bottom:1px solid var(--lt-line);background:var(--lt-amber-soft);color:var(--lt-amber-ink);font-size:13px;font-weight:600;min-height:36px}
 #lt-screen .lt-qwrap{flex:0 1 auto;max-height:66%;overflow:auto;padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
-#lt-screen .lt-tscreen.full .lt-passbox{flex:1 1 auto}
-#lt-screen .lt-tscreen.full .lt-qwrap{display:none}
-#lt-screen .lt-tscreen.nopass .lt-qwrap{flex:1;max-height:none;justify-content:center;gap:12px}
+#lt-screen .lt-tscreen.lt-full .lt-passbox{flex:1 1 auto}
+#lt-screen .lt-tscreen.lt-full .lt-qwrap{display:none}
+#lt-screen .lt-tscreen.lt-nopass .lt-qwrap{flex:1;max-height:none;justify-content:center;gap:12px}
 #lt-screen .lt-readwrap{flex:1;overflow:auto;padding:16px}
 #lt-screen .lt-readhint{color:var(--lt-muted);font-size:14px}
 #lt-screen .lt-tfoot{flex:none;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--lt-line)}
@@ -572,21 +573,21 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-stim{font-size:72px;line-height:1.1;text-align:center}
 #lt-screen .lt-qword{font:700 44px/1.2 var(--lt-read);text-align:center;padding:6px 0}
 #lt-screen .lt-opts{display:grid;gap:8px}
-#lt-screen .lt-opts.pic{grid-template-columns:1fr 1fr}
-#lt-screen .lt-opts.letters{grid-template-columns:repeat(4,1fr)}
+#lt-screen .lt-opts.lt-pic{grid-template-columns:1fr 1fr}
+#lt-screen .lt-opts.lt-letters{grid-template-columns:repeat(4,1fr)}
 #lt-screen .lt-opt{display:flex;align-items:center;gap:12px;text-align:left;min-height:50px;padding:8px 14px;border:2px solid var(--lt-line);border-radius:12px;background:var(--lt-surface);font:400 17.5px/1.35 var(--lt-read)}
-#lt-screen .lt-opt.sel,#lt-screen .lt-idk.sel{border-color:var(--lt-brand);background:var(--lt-brand-soft);border-style:solid}
+#lt-screen .lt-opt.lt-sel,#lt-screen .lt-idk.lt-sel{border-color:var(--lt-brand);background:var(--lt-brand-soft);border-style:solid}
 #lt-screen .lt-ol{color:var(--lt-brand);font-weight:700;flex:none}
 #lt-screen .lt-optpic{font-size:44px;line-height:1.2;margin:0 auto}
-#lt-screen .lt-opts.pic .lt-opt{min-height:92px;justify-content:center}
-#lt-screen .lt-opts.letters .lt-opt{justify-content:center;font-size:30px;font-weight:700;min-height:72px;padding:6px}
-#lt-screen .lt-opts.letters .lt-ol{display:none}
+#lt-screen .lt-opts.lt-pic .lt-opt{min-height:92px;justify-content:center}
+#lt-screen .lt-opts.lt-letters .lt-opt{justify-content:center;font-size:30px;font-weight:700;min-height:72px;padding:6px}
+#lt-screen .lt-opts.lt-letters .lt-ol{display:none}
 #lt-screen .lt-idk{flex:none;min-height:44px;border:2px dashed var(--lt-line);border-radius:12px;background:none;color:var(--lt-muted);font-size:15px}
 #lt-screen .lt-btn{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--lt-line);background:var(--lt-surface);font-weight:600;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center}
-#lt-screen .lt-btn.primary{background:var(--lt-brand);border-color:var(--lt-brand);color:#fff}
-#lt-screen .lt-btn.big{min-height:56px;font-size:18px;width:100%}
+#lt-screen .lt-btn.lt-primary{background:var(--lt-brand);border-color:var(--lt-brand);color:var(--lt-surface)}
+#lt-screen .lt-btn.lt-big{min-height:56px;font-size:18px;width:100%}
 #lt-screen .lt-btn[disabled]{opacity:.45;cursor:default}
-#lt-screen .lt-backdrop{position:fixed;inset:0;background:rgba(22,35,42,.5);z-index:1}
+#lt-screen .lt-backdrop{position:fixed;inset:0;background:var(--lt-shade);z-index:1}
 #lt-screen .lt-sheet{position:fixed;left:0;right:0;bottom:0;z-index:2;background:var(--lt-surface);border-radius:16px 16px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));max-height:90%;overflow:auto;max-width:560px;margin:0 auto}
 #lt-screen .lt-sheet h2{font-size:18px;font-weight:600;margin-bottom:8px}
 #lt-screen .lt-stack{display:flex;flex-direction:column;gap:8px}
@@ -2102,6 +2103,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
+          <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
           <dt>I don't teach reading — can I hide Reading and Books?</dt><dd>Settings → Templates → <b>Features</b> → <b>Any subject</b>. The Reading and Books pages leave the menu, the lesson card loses its "Books read" section, and the Curriculum columns become Unit, Materials and Homework (Books and Grammar hidden). You can also switch each page and lesson section on its own. Nothing is deleted: switch it back on and everything is still there.</dd>
           <dt>Can I use another currency or change the default fee?</dt><dd>Settings → Templates → <b>Workspace</b>. The <b>default hourly fee</b> is filled in for a new student or lesson (each student's own rate still wins). <b>Currency</b> only changes how amounts are shown (₩, $, £, €, ¥ …) — numbers already saved are not converted. Changing the currency or time zone reloads the app.</dd>
           <dt>A field is missing in the edit dialog</dt><dd>The edit dialog always shows every field. Custom Fields hiding only applies to list columns. If it's still missing, check whether the file is an old version.</dd>
@@ -2125,7 +2127,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
-          <dt>v145 · 2026-11-19</dt><dd><b>New: the level test is inside ClassDesk.</b> A new <b>Level test</b> page lists your students. Press <b>Start test</b>, pick a start level and hand the device over: the student reads and answers on a full, always-light screen that never shows right or wrong, and the test moves up or down by itself. To stop in the middle, <b>press and hold the lock</b> (top right) for two seconds; at the end, press and hold the button at the bottom the same way. The <b>result</b> shows the app's level (A–E) and stage, how each part went and the skills; you then <b>confirm the class level</b>, and only that changes the student's Level. The app's result and your decision are kept side by side. Results sync like everything else and are in the backup. Paper tests, printing and the parent report follow in the next versions.</dd>
+          <dt>v145 · 2026-11-19</dt><dd><b>New: the level test is inside ClassDesk.</b> A new <b>Level test</b> page lists your students. Press <b>Start test</b>, pick a start level and hand the device over: the student reads and answers on a full, always-light screen that never shows right or wrong, and the test moves up or down by itself. To stop in the middle, <b>press and hold the lock</b> (top right); at the end, press and hold the button at the bottom the same way (with a keyboard: hold Enter or Space on it). The <b>result</b> shows the app's level (A–E) and stage, how each part went and the skills; you then <b>confirm the class level</b>, and only that changes the student's Level. The app's result and your decision are kept side by side. Results sync like everything else and are in the backup. Paper tests, printing and the parent report follow in the next versions.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>New: a lesson plan on each student.</b> The student window has a <b>Lesson plan</b> row: pick a <b>Level</b> (A–E), tick the parts of a lesson this child does (<b>Speaking, Book, Grammar, Activity, Writing</b>) and, if you follow a speaking course, the <b>speaking lesson number</b> they are on. The level shows as a small badge next to the name in Students, and the whole plan shows at the top of that student's lesson window, so you can see what to do with each child without opening their card. Everything is optional: a student with nothing filled in looks exactly as before.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>Fix: an extra class is no longer labelled "moved from its usual time".</b> The lesson window showed the amber "Moved from this student's usual time" note — and a <b>Reset to usual time</b> button — for any class whose time differed from the student's regular one, even an extra class on a day they have no regular class (a Sunday 9:00 extra for a Thursday 19:30 student read "moved from Sun, 7:30pm"). The note now appears only for a class that really belongs to a regular slot: the same weekday (and the right week for a bi-weekly student), and not a second class added next to the day's regular one. Fees and lesson counts were never affected — only the label. Also: when Google Calendar has two events for a student on one day and the app has one class, the compare now matches the event at the class's own time and offers the other as the addition; before, the earlier event could be shown as a "time change" of the regular class.</dd>
           <dt>v142 · 2026-11-16</dt><dd><b>Fix: importing the same curriculum again no longer adds stray copies.</b> Records made in one go (importing a curriculum, "All paid", pasting several rows) could get the same internal id, and a later import of the same sheet then sometimes added a topic twice. New records now always get their own id, and the importer matches each existing topic even if an older version gave two of them one id.</dd>
@@ -2308,6 +2310,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
+          <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
           <dt>리딩 수업이 아닌데 독서와 도서를 숨길 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>모든 과목</b>. 독서와 도서 화면이 메뉴에서 빠지고, 수업 카드에서 "읽은 책" 항목이 사라지며, 커리큘럼 열은 단원·자료·숙제가 됩니다(도서·문법 열은 숨김). 화면과 수업 항목을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없으니 다시 켜면 그대로 있습니다.</dd>
           <dt>다른 통화를 쓰거나 기본 수업료를 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>작업 공간</b>. <b>기본 시간당 수업료</b>는 새 학생이나 새 수업에 미리 채워집니다(학생마다 정한 수업료가 있으면 그것이 우선). <b>통화</b>는 금액을 보여 주는 방식(₩, $, £, €, ¥ …)만 바꾸고, 이미 저장된 숫자는 환산하지 않습니다. 통화나 시간대를 바꾸면 앱이 다시 열립니다.</dd>
           <dt>편집 창에 항목이 없어요</dt><dd>편집 창에는 항상 모든 항목이 나옵니다. 사용자 항목의 숨기기는 목록의 열에만 적용됩니다. 그래도 없다면 파일이 옛 버전인지 확인하세요.</dd>
@@ -2331,7 +2334,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
-          <dt>v145 · 2026-11-19</dt><dd><b>새 기능: 레벨테스트가 ClassDesk 안으로 들어왔습니다.</b> 새 <b>레벨테스트</b> 페이지에 학생이 나옵니다. <b>테스트 시작</b>을 누르고 시작 레벨을 고른 뒤 기기를 건네면, 학생은 화면 전체를 쓰는 밝은 화면에서 읽고 답합니다. 맞았는지 틀렸는지는 보여 주지 않고, 답에 따라 레벨이 저절로 오르내립니다. 중간에 멈추려면 오른쪽 위 <b>자물쇠를 2초간 길게</b> 누르고, 끝난 뒤에는 아래 버튼을 같은 방법으로 누릅니다. <b>결과</b>에는 앱이 판정한 레벨(A–E)과 단계, 묶음별 진행, 스킬별 기록이 나오고, 선생님이 <b>수업 레벨을 확정</b>해야 학생의 레벨이 바뀝니다. 앱 결과와 선생님 확정은 따로 저장됩니다. 결과는 다른 데이터처럼 동기화되고 백업에도 들어갑니다. 종이 시험, 인쇄, 학부모 리포트는 다음 버전에서 이어집니다.</dd>
+          <dt>v145 · 2026-11-19</dt><dd><b>새 기능: 레벨테스트가 ClassDesk 안으로 들어왔습니다.</b> 새 <b>레벨테스트</b> 페이지에 학생이 나옵니다. <b>테스트 시작</b>을 누르고 시작 레벨을 고른 뒤 기기를 건네면, 학생은 화면 전체를 쓰는 밝은 화면에서 읽고 답합니다. 맞았는지 틀렸는지는 보여 주지 않고, 답에 따라 레벨이 저절로 오르내립니다. 중간에 멈추려면 오른쪽 위 <b>자물쇠를 길게</b> 누르고, 끝난 뒤에는 아래 버튼을 같은 방법으로 누릅니다(키보드로는 그 버튼에서 Enter나 Space를 길게). <b>결과</b>에는 앱이 판정한 레벨(A–E)과 단계, 묶음별 진행, 스킬별 기록이 나오고, 선생님이 <b>수업 레벨을 확정</b>해야 학생의 레벨이 바뀝니다. 앱 결과와 선생님 확정은 따로 저장됩니다. 결과는 다른 데이터처럼 동기화되고 백업에도 들어갑니다. 종이 시험, 인쇄, 학부모 리포트는 다음 버전에서 이어집니다.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>새 기능: 학생별 수업 설정.</b> 학생 창에 <b>수업 설정</b> 줄이 생겼습니다. <b>레벨</b>(A–E)을 고르고, 이 학생이 수업에서 하는 부분(<b>말하기, 도서, 문법, 활동, 쓰기</b>)을 체크하고, 스피킹 과정을 따라가는 학생이면 지금 <b>몇 회차</b>인지 적습니다. 레벨은 학생 목록의 이름 옆에 작은 배지로 보이고, 설정 전체는 그 학생의 수업 창 맨 위에 보여서 학생 카드를 열지 않아도 무엇을 할지 알 수 있습니다. 모두 선택 사항이라, 아무것도 넣지 않은 학생은 전과 똑같이 보입니다.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>버그 수정: 추가 수업에 "원래 시간에서 옮긴 수업"이라고 나오지 않습니다.</b> 수업 창은 시간이 학생의 정규 시간과 다르기만 하면 노란색 "이 학생의 원래 시간에서 옮긴 수업입니다" 안내와 <b>원래 시간으로 되돌리기</b> 버튼을 보여 줬습니다. 정규 수업이 없는 요일에 넣은 추가 수업도 그랬습니다(목요일 19:30 학생의 일요일 9:00 추가 수업에 "일요일 7:30pm에서 옮김"이라고 표시). 이제 이 안내는 정말 정규 수업 자리에 속한 수업에만 나옵니다: 같은 요일이고(격주 학생은 해당 주), 그날 정규 수업 옆에 따로 추가한 수업이 아닐 때입니다. 수업료와 수업 횟수는 처음부터 영향이 없었고, 표시만 잘못됐던 것입니다. 또한 Google 캘린더에 한 학생의 일정이 하루에 두 개 있고 앱에는 수업이 하나일 때, 비교는 이제 수업 시간과 같은 일정을 짝짓고 나머지를 추가로 제안합니다. 전에는 더 이른 일정이 정규 수업의 "시간 변경"으로 나올 수 있었습니다.</dd>
           <dt>v142 · 2026-11-16</dt><dd><b>버그 수정: 같은 커리큘럼을 다시 가져와도 사본이 더 생기지 않습니다.</b> 한꺼번에 만든 기록(커리큘럼 가져오기, "모두 납부", 여러 줄 붙여넣기)이 같은 내부 번호를 받을 수 있었고, 그러면 같은 시트를 다시 가져올 때 주제가 하나 더 생기기도 했습니다. 이제 새 기록은 항상 고유한 번호를 받고, 예전 버전에서 번호가 겹친 주제도 가져오기가 하나씩 제대로 찾습니다.</dd>
@@ -3551,16 +3554,16 @@ const I18N={ko:{
   "Level test":"레벨테스트","Reading level test on screen, the result and the class level you confirm":"화면으로 보는 읽기 레벨테스트, 결과, 선생님이 확정하는 수업 레벨",
   "A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.":"학생이 이 화면에서 푸는 읽기 테스트입니다. 답에 따라 위아래 레벨로 옮겨 가며 A–E 가운데 한 레벨로 끝납니다. 선생님이 결과를 보고 수업 레벨을 확정해야 학생의 레벨이 바뀝니다.",
   "Start the level test":"레벨테스트 시작","Start level":"시작 레벨","Korean help under the questions of level A and B":"A·B 레벨 문제 아래에 한국어 도움말 보여 주기",
-  "Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right for two seconds.":"학생이 편하게 풀 수 있는 레벨에서 시작하세요. 잘하면 올라가고 어려우면 내려갑니다. 중간에 멈추려면 오른쪽 위 자물쇠를 2초간 길게 누르세요.",
+  "Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right.":"학생이 편하게 풀 수 있는 레벨에서 시작하세요. 잘하면 올라가고 어려우면 내려갑니다. 중간에 멈추려면 오른쪽 위 자물쇠를 길게 누르세요.",
   "Hand over and start":"학생에게 건네고 시작","Level test result":"레벨테스트 결과","Confirm the class level":"수업 레벨 확정",
   "Beginning stage":"시작 단계","Developing stage":"발전 단계","Secure stage":"안정 단계",
-  "Has just started on texts at this level. The level below is secure.":"이 레벨의 글을 막 시작한 상태입니다. 아래 레벨은 안정적입니다.",
+  "Has just started on texts at this level.":"이 레벨의 글을 막 시작한 상태입니다.","The level below is secure.":"아래 레벨은 안정적입니다.",
   "Understands texts at this level in part. The right level to learn at now.":"이 레벨의 글을 부분적으로 이해합니다. 지금 배우기에 알맞은 수준입니다.",
   "Understands texts at this level securely.":"이 레벨의 글을 안정적으로 이해합니다.",
   "Letter–sound":"글자–소리","Word decoding":"단어 해독","Sentence reading":"문장 읽기","Vocabulary in context":"문맥 속 어휘","Literal understanding":"사실 이해","Sequence and flow":"순서·흐름",
   "Main idea":"중심 생각","Inference":"추론","Finding evidence":"근거 찾기","Applying to a new case":"새 상황 적용","Critical reading":"비판적 읽기",
   "Enough to judge on":"판정 근거 충분","Fair basis to judge on":"판정 근거 보통","Thin basis · check again":"판정 근거 부족 · 재확인 권장",
-  "Secure|test part":"안정","Borderline → checked again":"경계 → 재확인","Hard|test part":"어려움",
+  "Secure|test part":"안정","Borderline":"경계","Borderline → checked again":"경계 → 재확인","Hard|test part":"어려움",
   "No level yet":"레벨 미정","Add a student first — the level test is started from the student's row here.":"먼저 학생을 추가하세요. 레벨테스트는 여기 학생 줄에서 시작합니다.",
   "Not tested yet":"아직 테스트 전","Last test {date} · app result {res}":"최근 테스트 {date} · 앱 결과 {res}","confirmed {lv}":"확정 {lv}","Not confirmed":"확정 전","Retest due":"재테스트 시기",
   "Result":"결과","History ({n})":"기록 ({n})","Continue test":"이어서 풀기","Start test":"테스트 시작","Delete this test record":"이 테스트 기록 삭제",
@@ -3568,9 +3571,9 @@ const I18N={ko:{
   "Delete this test record? This cannot be undone.":"이 테스트 기록을 삭제할까요? 되돌릴 수 없습니다.",
   "There is an unfinished test. Continue it or end it first.":"끝나지 않은 테스트가 있습니다. 이어서 하거나 먼저 끝내 주세요.",
   "In the first-letter questions of level A you may say the picture's name aloud (dog, sun).":"A 레벨의 첫 글자 문제는 그림 이름(dog, sun)을 말해 줘도 됩니다.",
-  "Teacher's menu: press and hold for two seconds":"선생님 메뉴: 2초간 길게 누르기","Teacher's menu":"선생님 메뉴","The answers so far are saved.":"지금까지의 답은 저장되어 있습니다.",
+  "Teacher's menu: press and hold":"선생님 메뉴: 길게 누르기","Teacher's menu":"선생님 메뉴","The answers so far are saved.":"지금까지의 답은 저장되어 있습니다.",
   "Keep going":"계속 풀기","Stop and leave (continue later)":"멈추고 나가기 (나중에 이어서)","Too few answers to judge — recorded as stopped.":"판정할 만큼 풀지 않아 중단으로 기록했습니다.",
-  "Teacher: press and hold for two seconds":"선생님: 2초간 길게 눌러 주세요","Deleted student":"삭제된 학생","On paper":"종이 시험","On screen":"화면 테스트","{n} questions":"{n}문항",
+  "Teacher: keep it pressed a little longer":"선생님: 조금 더 길게 눌러 주세요","Deleted student":"삭제된 학생","On paper":"종이 시험","On screen":"화면 테스트","{n} questions":"{n}문항",
   "App result — class level for reading":"앱 결과 — 읽기 수업 레벨","Levels passed securely: {lv}":"안정적으로 통과한 레벨: {lv}",
   "This test was ended early. It is judged only on what was answered.":"중간에 끝낸 테스트입니다. 지금까지 푼 내용으로만 판정했습니다.",
   "It ended at the limit of {n} parts. Next time, carry on from level {lv}.":"묶음 수 제한({n}묶음)으로 끝났습니다. 다음에 레벨 {lv}부터 이어서 확인하세요.",
@@ -3582,6 +3585,8 @@ const I18N={ko:{
   "Your decision":"선생님 확정","Class level":"수업 레벨","What you noticed (optional)":"관찰 메모 (선택)","Confirmed: {lv} · {date}":"확정함: {lv} · {date}",
   "This is not the app's result ({lv}). Both are kept, side by side.":"앱 결과({lv})와 다르게 확정합니다. 두 값은 따로 저장됩니다.",
   "Confirmed. Class level: {lv}":"확정했습니다. 수업 레벨: {lv}","Confirmed. The class level follows the newest test, so it was not changed.":"확정했습니다. 수업 레벨은 가장 최근 테스트를 따르므로 바꾸지 않았습니다.",
+  "Confirmed. The class level will change once this device has synced — a newer test may exist on another device.":"확정했습니다. 다른 기기에 더 최근 테스트가 있을 수 있어서, 수업 레벨은 이 기기의 동기화가 끝나면 바뀝니다.",
+  "Could not save — the device's storage may be full. Nothing was changed; try again.":"저장하지 못했습니다. 기기의 저장 공간이 가득 찼을 수 있습니다. 바뀐 것은 없으니 다시 해 보세요.",
 }};
 /* i18n-dict-end */
 function pickLang(){
@@ -3841,7 +3846,9 @@ function currStyleNow(){
 function featSet(k,on){
   const prev=settings.features;
   settings.features={...(settings.features||{})};
-  if(on)delete settings.features[k];else settings.features[k]=false;
+  // "On" is normally "no entry". The level test is the exception: with no entry it follows the
+  // Reading page (featureOn), so switching it on by hand has to be written down.
+  if(!on)settings.features[k]=false;else if(k==="leveltest")settings.features[k]=true;else delete settings.features[k];
   if(!featCommit(prev))return;
   applyFeatures();renderFeatures();
   showToast(on?tx("Turned on"):tx("Turned off — nothing was deleted"));
@@ -3889,6 +3896,9 @@ const _lastSaved={};
 let _uidN=0;
 const uid=()=>"id"+Date.now()+Math.random().toString(36).slice(2,8)+(_uidN++).toString(36);
 const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","income","assessments","settings"];
+// The unpaid-fee reminder needs last month's figures, not the level test: a test collection that
+// cannot be read (or is slow) must not hold the reminder back.
+const FEE_SYNC_KEYS=SYNC_KEYS.filter(k=>k!=="assessments");
 const SYNC_VARS={
   students:()=>students, lessons:()=>lessons, homework:()=>homework, curriculum:()=>curriculum,
   books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, income:()=>income, assessments:()=>assessments,
@@ -5833,7 +5843,7 @@ function dataIsSample(){return lessons.length===0&&JSON.stringify(students)===JS
 function checkFeeReminder(){
   if(document.getElementById("mo-feealert")?.classList.contains("show"))return;
   if(!feeAuthKnown)return;                                      // sign-in state not known yet
-  if(syncUser&&!SYNC_KEYS.every(k=>syncSettled[k]))return;      // signed in, cloud read not finished
+  if(syncUser&&!FEE_SYNC_KEYS.every(k=>syncSettled[k]))return;  // signed in, cloud read not finished
   if(dataIsSample())return;                                     // untouched browser: built-in samples only
   if(nowKST().getDate()<=FEE_GRACE_DAY)return;                 // still inside the grace period
   const mon=feeTargetMonth();
@@ -7796,7 +7806,7 @@ return {LEVELS:LEVELS,LEVEL_INFO:LEVEL_INFO,TESTLETS:TESTLETS,TL:TL,MAX_TESTLETS
 // screen follows the language setting like the rest of the app.
 const LT_STAGE={beginning:tx("Beginning stage"),developing:tx("Developing stage"),secure:tx("Secure stage")};
 const LT_STAGE_DESC={
-  beginning:tx("Has just started on texts at this level. The level below is secure."),
+  beginning:tx("Has just started on texts at this level."),
   developing:tx("Understands texts at this level in part. The right level to learn at now."),
   secure:tx("Understands texts at this level securely."),
 };
@@ -7804,7 +7814,7 @@ const LT_SKILL={phonics:tx("Letter–sound"),decode:tx("Word decoding"),sentence
   literal:tx("Literal understanding"),sequence:tx("Sequence and flow"),main:tx("Main idea"),inference:tx("Inference"),
   evidence:tx("Finding evidence"),apply:tx("Applying to a new case"),critical:tx("Critical reading")};
 const LT_BASIS={high:[tx("Enough to judge on"),"bd"],medium:[tx("Fair basis to judge on"),"bpa"],low:[tx("Thin basis · check again"),"bu"]};
-const LT_OUTCOME={secure:[tx("Secure|test part"),"bd"],borderline:[tx("Borderline → checked again"),"bpa"],low:[tx("Hard|test part"),"bu"]};
+const LT_OUTCOME={secure:[tx("Secure|test part"),"bd"],borderline:[tx("Borderline"),"bpa"],low:[tx("Hard|test part"),"bu"]};
 const LT_CIRC=["①","②","③","④"];
 const LT_RETEST_MONTHS=3;
 
@@ -7815,7 +7825,7 @@ const ltOf=sid=>assessments.filter(a=>ltSame(a.studentId,sid));
 // Finished tests of one student, oldest first.
 function ltDone(sid){
   return ltOf(sid).filter(a=>a.status==="done"&&a.result)
-    .sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.startedAt-b.startedAt);
+    .sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.finishedAt||a.startedAt)-(b.finishedAt||b.startedAt));
 }
 function ltLatest(sid){const d=ltDone(sid);return d.length?d[d.length-1]:null;}
 function ltInProgress(sid){return ltOf(sid).filter(a=>a.status==="in_progress").sort((a,b)=>b.startedAt-a.startedAt)[0]||null;}
@@ -7828,6 +7838,22 @@ function ltSeen(sid){
 const ltFinal=a=>(a.teacher&&a.teacher.finalLevel)||"";
 function ltAddMonths(dateStr,m){const p=String(dateStr).split("-").map(Number);return fmtDate(new Date(p[0],p[1]-1+m,p[2]));}
 const ltLv=(L,cls)=>`<span class="lt-lv${L?"":" none"}${cls?" "+cls:""}">${L?escapeAttr(L):"–"}</span>`;
+
+// Make a change to one test record and store it. If storing fails (the device is full), the record
+// goes back to what it was and false comes back, so the caller can stay where it is instead of
+// showing a step that would be gone after a reload.
+function ltCommit(a,change){
+  const snap=JSON.stringify(a);
+  change();
+  if(save()!==false)return true;
+  const old=JSON.parse(snap);
+  Object.keys(a).forEach(k=>{delete a[k];});Object.assign(a,old);
+  return false;
+}
+const ltSaveFailed=()=>tx("Could not save — the device's storage may be full. Nothing was changed; try again.");
+// Is this device sure it has every test? Signed out: yes, there is only this device. Signed in:
+// only once the cloud copy has been read and the device is online.
+function ltSyncSure(){return !syncUser||(navigator.onLine!==false&&!!syncSettled.assessments&&!!syncSettled.students);}
 
 // ── The page: one row per student ─────────────────────────────────────────
 let ltOpenSid=null;       // the student whose history is unfolded
@@ -7889,8 +7915,9 @@ document.addEventListener("click",e=>{
 function ltDelete(aid){
   const i=assessments.findIndex(a=>a.id===aid);if(i<0)return;
   if(!confirm(tx("Delete this test record? This cannot be undone.")))return;
-  assessments.splice(i,1);        // in place — the sync layer holds this very array
-  save();renderLevelTest();
+  const [gone]=assessments.splice(i,1);        // in place — the sync layer holds this very array
+  if(save()===false){assessments.splice(i,0,gone);showToast(ltSaveFailed());}
+  renderLevelTest();
 }
 
 // ── Start ────────────────────────────────────────────────────────────────
@@ -7919,7 +7946,8 @@ function ltStart(){
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   const a=AEA.newAssessment(uid(),s.id,LTS.level,"online",ltSeen(s.id),Date.now());
   a.koHelp=!!document.getElementById("lts-ko").checked;
-  assessments.push(a);save();
+  assessments.push(a);
+  if(save()===false){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
   closeModal("mo-lt-start");
   ltOpenTest(a.id);
 }
@@ -7930,11 +7958,27 @@ function ltStart(){
 // menu behind the lock follows the language setting.
 const LT={aid:null,screen:"intro",sel:null,itemKey:"",t0:0,readKey:"",r0:0,menu:false};
 const LT_LOCK_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2" fill="currentColor"/></svg>';
+// The rest of the app is made inert for as long as the test is on screen, so Tab cannot walk out
+// of it to a menu behind (a child at a keyboard could otherwise open any page with Enter).
+let _ltInert=[],_ltFocusBack=null;
+function ltLockBackground(on){
+  if(on){
+    if(_ltInert.length)return;
+    _ltFocusBack=document.activeElement;
+    _ltInert=[...document.body.children].filter(el=>el.id!=="lt-screen"&&el.id!=="lt-hint"&&!el.inert&&!/^(SCRIPT|STYLE|LINK)$/.test(el.tagName));
+    _ltInert.forEach(el=>{el.inert=true;});
+  }else{
+    _ltInert.forEach(el=>{el.inert=false;});_ltInert=[];
+    const f=_ltFocusBack;_ltFocusBack=null;
+    if(f&&document.contains(f)&&typeof f.focus==="function"){try{f.focus();}catch(e){}}
+  }
+}
 function ltOpenTest(aid){
   const a=ltGet(aid);if(!a||a.status!=="in_progress")return;
   Object.assign(LT,{aid:aid,screen:"intro",sel:null,itemKey:"",readKey:"",menu:false});
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
+  ltLockBackground(true);
   ltRenderTest();
 }
 function ltCloseTest(){
@@ -7942,85 +7986,98 @@ function ltCloseTest(){
   document.getElementById("lt-hint")?.remove();
   const scr=document.getElementById("lt-screen");scr.hidden=true;scr.innerHTML="";
   document.body.classList.remove("lt-testing");
+  ltLockBackground(false);
   if(curPage==="leveltest")renderLevelTest();
 }
 function ltPassageHtml(t){return `<article class="lt-passage"><h2>${escapeAttr(t.title)}</h2>${t.passage.map(p=>`<p>${escapeAttr(p)}</p>`).join("")}</article>`;}
 function ltBar(a,t){
   const p=a.path[a.path.length-1];let dots="";
-  if(t)for(let i=0;i<t.items.length;i++)dots+=`<i class="${i<p.responses.length?"done":i===p.responses.length&&a.cur&&a.cur.phase==="item"?"now":""}"></i>`;
+  if(t)for(let i=0;i<t.items.length;i++)dots+=`<i class="${i<p.responses.length?"lt-done":i===p.responses.length&&a.cur&&a.cur.phase==="item"?"lt-now":""}"></i>`;
   return `<div class="lt-tbar"><span class="lt-part">Part ${a.path.length}</span><span class="lt-dots">${dots}</span>`+
-    `<button type="button" class="lt-lock" data-hold="menu" aria-label="${escapeAttr(tx("Teacher's menu: press and hold for two seconds"))}">${LT_LOCK_SVG}</button></div>`;
+    `<button type="button" class="lt-lock" data-hold="menu" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
 }
 function ltTestHtml(a,s){
   const scr=LT.screen;
-  if(a.status==="done"||scr==="end")return `<div class="lt-tscreen mid"><div class="lt-tmsg"><div class="lt-tbig">All done!</div><p>끝까지 잘 풀었어요. 수고했어요!</p><p class="lt-muted">선생님께 기기를 돌려주세요.</p></div>`+
-    `<div class="lt-tfoot"><button type="button" class="lt-btn big" data-hold="review">선생님: 2초간 길게 눌러 결과 확인</button></div></div>`;
+  if(a.status==="done"||scr==="end")return `<div class="lt-tscreen lt-mid"><div class="lt-tmsg"><div class="lt-tbig">All done!</div><p>끝까지 잘 풀었어요. 수고했어요!</p><p class="lt-muted">선생님께 기기를 돌려주세요.</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-big" data-hold="review">선생님: 길게 눌러 결과 확인</button></div></div>`;
   if(scr==="intro"){
     const resumed=a.path[0].responses.length>0||a.path.length>1;
-    return `<div class="lt-tscreen mid">${ltBar(a,null)}<div class="lt-tmsg"><div class="lt-tbig">Hi, ${escapeAttr(s?s.name||"":"")}!</div><p>${resumed?"이어서 풀어 볼까요?":"영어 글을 읽고 문제를 풀어 볼 거예요."}</p>`+
+    return `<div class="lt-tscreen lt-mid">${ltBar(a,null)}<div class="lt-tmsg"><div class="lt-tbig">Hi, ${escapeAttr(s?s.name||"":"")}!</div><p>${resumed?"이어서 풀어 볼까요?":"영어 글을 읽고 문제를 풀어 볼 거예요."}</p>`+
       `<ul class="lt-tips"><li>모르는 문제는 <b>잘 모르겠어요</b>를 눌러도 괜찮아요.</li><li>점수를 매기는 시험이 아니에요. 지금 무엇을 배우면 좋을지 알아보는 거예요.</li><li>천천히 읽고 골라요.</li></ul></div>`+
-      `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" data-act="tStart">시작 · Start</button></div></div>`;
+      `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="tStart">시작 · Start</button></div></div>`;
   }
-  if(scr==="break")return `<div class="lt-tscreen mid">${ltBar(a,null)}<div class="lt-tmsg"><div class="lt-tbig">Good job!</div><p>잘하고 있어요. 다음 문제로 넘어갈게요.</p><p class="lt-muted">잠깐 쉬어도 괜찮아요.</p></div>`+
-    `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" data-act="tStart">계속하기 · Continue</button></div></div>`;
+  if(scr==="break")return `<div class="lt-tscreen lt-mid">${ltBar(a,null)}<div class="lt-tmsg"><div class="lt-tbig">Good job!</div><p>잘하고 있어요. 다음 문제로 넘어갈게요.</p><p class="lt-muted">잠깐 쉬어도 괜찮아요.</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="tStart">계속하기 · Continue</button></div></div>`;
 
   const p=a.path[a.path.length-1],t=AEA.TL[p.testlet];
   if(a.cur.phase==="read"){
     if(LT.readKey!==p.testlet){LT.readKey=p.testlet;LT.r0=performance.now();}
     return `<div class="lt-tscreen">${ltBar(a,t)}<div class="lt-readwrap"><p class="lt-readhint">천천히 읽어 보세요. 문제를 풀 때 다시 볼 수 있어요.</p>${ltPassageHtml(t)}</div>`+
-      `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" data-act="tReadDone">다 읽었어요 · I’m ready</button></div></div>`;
+      `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="tReadDone">다 읽었어요 · I’m ready</button></div></div>`;
   }
   const it=t.items[a.cur.idx];
   if(LT.itemKey!==it.id){LT.itemKey=it.id;LT.t0=performance.now();LT.sel=null;}
   const ko=a.koHelp&&it.ko?`<p class="lt-qko">${escapeAttr(it.ko)}</p>`:"";
   // it.order: display position → option index in the bank. Pictures (emoji) and the stimulus are the bank's own markup.
-  const opts=it.order.map((o,k)=>`<button type="button" class="lt-opt${LT.sel===k?" sel":""}" data-act="pick" data-pos="${k}">`+
+  const opts=it.order.map((o,k)=>`<button type="button" class="lt-opt${LT.sel===k?" lt-sel":""}" data-act="pick" data-pos="${k}">`+
     (it.pic?`<span class="lt-optpic">${it.opts[o]}</span>`:`<span class="lt-ol">${LT_CIRC[k]}</span><span class="lt-ot">${escapeAttr(it.opts[o])}</span>`)+`</button>`).join("");
-  return `<div class="lt-tscreen${t.passage?"":" nopass"}">${ltBar(a,t)}`+
+  return `<div class="lt-tscreen${t.passage?"":" lt-nopass"}">${ltBar(a,t)}`+
     (t.passage?`<div class="lt-passbox">${ltPassageHtml(t)}</div><button type="button" class="lt-passtoggle" data-act="passToggle">글 크게 보기</button>`:"")+
     `<div class="lt-qwrap"><div class="lt-qn">Question ${it.n}</div>${it.stim?`<div class="lt-stim">${it.stim}</div>`:""}${it.text?`<div class="lt-qword">${escapeAttr(it.text)}</div>`:""}`+
-    `<p class="lt-qtext">${escapeAttr(it.q)}</p>${ko}<div class="lt-opts${it.pic?" pic":""}${it.opts[0].length<=2&&!it.pic?" letters":""}">${opts}</div>`+
-    `<button type="button" class="lt-idk${LT.sel===-1?" sel":""}" data-act="pick" data-pos="-1">잘 모르겠어요 · I’m not sure</button></div>`+
-    `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" id="lt-next" data-act="nextItem"${LT.sel==null?" disabled":""}>다음 · Next</button></div></div>`;
+    `<p class="lt-qtext">${escapeAttr(it.q)}</p>${ko}<div class="lt-opts${it.pic?" lt-pic":""}${it.opts[0].length<=2&&!it.pic?" lt-letters":""}">${opts}</div>`+
+    `<button type="button" class="lt-idk${LT.sel===-1?" lt-sel":""}" data-act="pick" data-pos="-1">잘 모르겠어요 · I’m not sure</button></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" id="lt-next" data-act="nextItem"${LT.sel==null?" disabled":""}>다음 · Next</button></div></div>`;
 }
 function ltMenuHtml(){
   return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${escapeAttr(tx("Teacher's menu"))}</h2>`+
     `<p class="lt-muted">${escapeAttr(tx("The answers so far are saved."))}</p><div class="lt-stack">`+
-    `<button type="button" class="lt-btn primary" data-act="menuClose">${escapeAttr(tx("Keep going"))}</button>`+
+    `<button type="button" class="lt-btn lt-primary" data-act="menuClose">${escapeAttr(tx("Keep going"))}</button>`+
     `<button type="button" class="lt-btn" data-act="pauseExit">${escapeAttr(tx("Stop and leave (continue later)"))}</button>`+
     `<button type="button" class="lt-btn" data-act="endEarly">${escapeAttr(tx("End here and judge"))}</button></div></div>`;
 }
 function ltRenderTest(){
   const scr=document.getElementById("lt-screen");if(!scr||scr.hidden)return;
   const a=ltGet(LT.aid);
-  if(!a){ltCloseTest();return;}      // the record was deleted from another device
+  if(!a||a.status==="aborted"){ltCloseTest();return;}      // deleted, or ended without a result, on another device
   scr.innerHTML=ltTestHtml(a,ltStudent(a.studentId))+(LT.menu?ltMenuHtml():"");
+  // Rendering replaces the button that had the focus. Keep the focus inside the test — in the
+  // teacher's menu while it is open (the test under it is inert then), on the screen otherwise.
+  const ts=scr.querySelector(".lt-tscreen");if(ts)ts.inert=LT.menu;
+  if(LT.menu)scr.querySelector(".lt-sheet .lt-btn")?.focus();
+  else if(!scr.contains(document.activeElement))scr.focus();
 }
 const LT_ACTS={
   tStart(){LT.screen="run";ltRenderTest();},
   tReadDone(){
     const a=ltGet(LT.aid);if(!a||a.status!=="in_progress"||!a.cur)return;
-    const p=a.path[a.path.length-1];
-    p.readMs=Math.round(performance.now()-(LT.r0||performance.now()));a.cur.phase="item";
-    save();ltRenderTest();
+    if(a.cur.phase!=="read"){ltRenderTest();return;}       // another device already moved on
+    const ms=Math.round(performance.now()-(LT.r0||performance.now()));
+    if(!ltCommit(a,()=>{a.path[a.path.length-1].readMs=ms;a.cur.phase="item";})){ltHint(ltSaveFailed());return;}
+    ltRenderTest();
   },
   pick(el){          // no re-render, so the passage keeps its scroll position
     LT.sel=Number(el.dataset.pos);
-    document.querySelectorAll("#lt-screen .lt-opt,#lt-screen .lt-idk").forEach(x=>x.classList.toggle("sel",x===el));
+    document.querySelectorAll("#lt-screen .lt-opt,#lt-screen .lt-idk").forEach(x=>x.classList.toggle("lt-sel",x===el));
     const nb=document.getElementById("lt-next");if(nb)nb.disabled=false;
   },
   passToggle(el){
-    const on=document.querySelector("#lt-screen .lt-tscreen").classList.toggle("full");
+    const on=document.querySelector("#lt-screen .lt-tscreen").classList.toggle("lt-full");
     el.textContent=on?"문제로 돌아가기":"글 크게 보기";
   },
   nextItem(){
-    const a=ltGet(LT.aid);if(LT.sel==null||!a||a.status!=="in_progress"||!a.cur||a.cur.phase!=="item")return;
-    const p=a.path[a.path.length-1],it=AEA.TL[p.testlet].items[a.cur.idx];
-    const r=AEA.recordResponse(a,LT.sel<0?-1:it.order[LT.sel],performance.now()-LT.t0);
+    const a=ltGet(LT.aid);if(LT.sel==null||!a)return;
+    // The record may have moved on under this screen (the same test answered on another device,
+    // ended, or finished there). An answer picked for the question that WAS on screen must never
+    // be stored for a different one: show where the test stands now and store nothing.
+    const p=a.status==="in_progress"&&a.cur&&a.cur.phase==="item"?a.path[a.path.length-1]:null;
+    const it=p?AEA.TL[p.testlet].items[a.cur.idx]:null;
+    if(!it||it.id!==LT.itemKey){LT.sel=null;ltRenderTest();return;}
+    const choice=LT.sel<0?-1:it.order[LT.sel],ms=performance.now()-LT.t0;
+    let r=null;
+    if(!ltCommit(a,()=>{r=AEA.recordResponse(a,choice,ms);if(r.done){a.date=td();a.finishedAt=Date.now();}})){ltHint(ltSaveFailed());return;}
     LT.sel=null;
-    if(r.done){a.date=td();a.finishedAt=Date.now();LT.screen="end";}
-    else if(r.next)LT.screen="break";
-    save();ltRenderTest();
+    if(r.done)LT.screen="end";else if(r.next)LT.screen="break";
+    ltRenderTest();
   },
   menuClose(){LT.menu=false;ltRenderTest();},
   pauseExit(){ltCloseTest();},
@@ -8033,10 +8090,8 @@ document.addEventListener("click",e=>{
 // The teacher ends a test before the end: judge from what is complete. Nothing complete → "stopped".
 function ltEndEarly(aid){
   const a=ltGet(aid);if(!a||a.status!=="in_progress")return;
-  const ok=AEA.provisionalFinish(a);
-  a.date=td();a.finishedAt=Date.now();
-  if(!ok){a.status="aborted";a.cur=null;}
-  save();
+  let ok=false;
+  if(!ltCommit(a,()=>{ok=AEA.provisionalFinish(a);a.date=td();a.finishedAt=Date.now();if(!ok){a.status="aborted";a.cur=null;}})){showToast(ltSaveFailed());return;}
   if(curPage==="leveltest")renderLevelTest();
   if(ok)ltOpenReview(a.id);else showToast(tx("Too few answers to judge — recorded as stopped."));
 }
@@ -8052,23 +8107,36 @@ function ltHint(msg){
 }
 // Teacher-only controls on the student's screen (the lock, and the way out at the end) answer to a
 // long press, so a child's tap does nothing — the result and the rest of the app stay out of reach.
+// With a keyboard the same press is Enter or Space held down on the control.
+const LT_HOLD_MS=1200;
 (function(){
   let timer=null;
   const held=e=>e.target.closest?e.target.closest("#lt-screen [data-hold]"):null;
-  document.addEventListener("pointerdown",e=>{
-    const b=held(e);if(!b)return;
+  const start=b=>{
     clearTimeout(timer);
     timer=setTimeout(()=>{
       timer=null;
+      if(!document.contains(b))return;
       if(b.dataset.hold==="menu"){LT.menu=true;ltRenderTest();}
       else if(b.dataset.hold==="review"){const aid=LT.aid;ltCloseTest();ltOpenReview(aid);}
-    },1200);
-  });
-  const cancel=e=>{
-    if(!timer)return;clearTimeout(timer);timer=null;
-    if(e.type==="pointerup"&&held(e))ltHint(tx("Teacher: press and hold for two seconds"));
+    },LT_HOLD_MS);
   };
-  document.addEventListener("pointerup",cancel);document.addEventListener("pointercancel",cancel);
+  // Let go too soon: nothing happens, and a note says to hold longer.
+  const stop=note=>{
+    if(!timer)return;clearTimeout(timer);timer=null;
+    if(note)ltHint(tx("Teacher: keep it pressed a little longer"));
+  };
+  document.addEventListener("pointerdown",e=>{const b=held(e);if(b)start(b);});
+  document.addEventListener("pointerup",e=>stop(!!held(e)));
+  document.addEventListener("pointercancel",()=>stop(false));
+  const holdKey=e=>e.key==="Enter"||e.key===" "||e.key==="Spacebar";
+  document.addEventListener("keydown",e=>{
+    if(!holdKey(e))return;const b=held(e);if(!b)return;
+    e.preventDefault();
+    if(!e.repeat&&!timer)start(b);
+  });
+  document.addEventListener("keyup",e=>{if(holdKey(e)&&held(e)){e.preventDefault();stop(true);}});
+  document.addEventListener("focusout",e=>{if(held(e))stop(false);});
   document.addEventListener("contextmenu",e=>{if(held(e))e.preventDefault();});
 })();
 
@@ -8086,7 +8154,7 @@ function ltRenderReview(){
   let h=`<p class="u-hint ltr-meta">${e(a.date||"")} · ${e(a.mode==="paper"?tx("On paper"):tx("On screen"))} · ${e(tx("{n} questions",{n:r.items}))}</p>`;
   h+=`<div class="ltr-res">${ltLv(r.level,"big")}<div><div class="ltr-k">${e(tx("App result — class level for reading"))}</div>`+
     `<div class="ltr-v">${e(r.level)} · ${e(AEA.LEVEL_INFO[r.level].name)} · ${e(LT_STAGE[r.stage])}</div></div></div>`+
-    `<p class="ltr-desc">${e(LT_STAGE_DESC[r.stage])}</p>`+
+    `<p class="ltr-desc">${e(LT_STAGE_DESC[r.stage])}${r.stage==="beginning"&&r.mastered&&AEA.LEVELS.indexOf(r.mastered)===AEA.LEVELS.indexOf(r.level)-1?" "+e(tx("The level below is secure.")):""}</p>`+
     `<p class="ltr-basis"><span class="badge ${basis[1]}">${e(basis[0])}</span> <span class="cell-muted2">${e(tx("Levels passed securely: {lv}",{lv:r.mastered||tx("none")}))}</span></p>`;
   const flags=[];
   if(r.provisional)flags.push(tx("This test was ended early. It is judged only on what was answered."));
@@ -8096,9 +8164,12 @@ function ltRenderReview(){
   if(r.idk)flags.push(tx("“I’m not sure” was chosen {n} time(s).",{n:r.idk}));
   if(flags.length)h+=`<ul class="ltr-flags">${flags.map(f=>`<li>${e(f)}</li>`).join("")}</ul>`;
 
-  h+=`<h3 class="ltr-h">${e(tx("How the test went"))}</h3>`+a.path.map(p=>{
+  h+=`<h3 class="ltr-h">${e(tx("How the test went"))}</h3>`+a.path.map((p,pi)=>{
     const t=AEA.TL[p.testlet];if(!t)return "";
-    const oc=p.done?(LT_OUTCOME[p.outcome]||LT_OUTCOME.low):[tx("Not finished"),"bc"];
+    let oc=p.done?(LT_OUTCOME[p.outcome]||LT_OUTCOME.low):[tx("Not finished"),"bc"];
+    // A borderline part is checked again with the other set of the same level — unless the test
+    // had already reached its limit of parts. Say "checked again" only when that happened.
+    if(p.done&&p.outcome==="borderline"&&a.path.slice(pi+1).some(q=>q.level===p.level&&q.done))oc=[tx("Borderline → checked again"),"bpa"];
     return `<details class="ltr-path"><summary>${ltLv(p.level)}<span class="ltr-pmain"><b>${e(t.title)}</b><span class="cell-muted2">${e(tx("Set {n}",{n:t.form}))}${p.readMs?" · "+e(tx("reading {n}s",{n:Math.round(p.readMs/1000)})):""}</span></span>`+
       `<span class="ltr-score">${p.responses.filter(x=>x.correct).length}/${p.total}</span><span class="badge ${oc[1]}">${e(oc[0])}</span></summary><ol class="ltr-resp">`+
       p.responses.map((x,k)=>{
@@ -8133,17 +8204,44 @@ function ltSaveReview(){
   const a=ltGet(ltReviewId);if(!a||!a.result)return;
   const lv=document.getElementById("ltr-final")?.value;
   if(!AEA.LEVELS.includes(lv))return;
-  a.teacher=a.teacher||{};
-  a.teacher.finalLevel=lv;
-  a.teacher.note=(document.getElementById("ltr-note")?.value||"").trim();
-  a.teacher.reviewedAt=Date.now();
+  const note=(document.getElementById("ltr-note")?.value||"").trim();
   // Only the newest finished test moves the class level; confirming an older one is a record only.
-  const s=ltStudent(a.studentId),last=s?ltLatest(s.id):null,moved=!!(s&&last&&last.id===a.id);
-  if(moved)s.group=lv;
-  save();
+  // And only when this device is sure it has every test: signed in but offline (or still reading
+  // the cloud copy), a newer test may exist on another device. The decision is kept and marked
+  // "held"; ltApplyHeld() moves the level once the cloud copy has been read.
+  const s=ltStudent(a.studentId),last=s?ltLatest(s.id):null,newest=!!(s&&last&&last.id===a.id);
+  const sure=ltSyncSure(),move=newest&&sure;
+  const snap=JSON.stringify(a),hadGroup=!!s&&Object.prototype.hasOwnProperty.call(s,"group"),oldGroup=s?s.group:undefined;
+  a.teacher={...(a.teacher||{}),finalLevel:lv,note:note,reviewedAt:Date.now()};
+  if(newest&&!sure)a.teacher.held=true;else delete a.teacher.held;
+  if(move)s.group=lv;
+  if(save()===false){
+    // The student and the test are stored one after the other, so one may have gone through
+    // without the other. Put both back and store that, so a level never stands without the
+    // decision it came from.
+    const old=JSON.parse(snap);Object.keys(a).forEach(k=>{delete a[k];});Object.assign(a,old);
+    if(move){if(hadGroup)s.group=oldGroup;else delete s.group;}
+    save();
+    showToast(ltSaveFailed());return;
+  }
   closeModal("mo-lt-review");
   if(curPage==="leveltest")renderLevelTest();
-  showToast(moved?tx("Confirmed. Class level: {lv}",{lv:lv}):tx("Confirmed. The class level follows the newest test, so it was not changed."));
+  showToast(move?tx("Confirmed. Class level: {lv}",{lv:lv})
+    :newest?tx("Confirmed. The class level will change once this device has synced — a newer test may exist on another device.")
+    :tx("Confirmed. The class level follows the newest test, so it was not changed."));
+}
+// Decisions confirmed while this device could not be sure it had every test (see ltSaveReview).
+// Runs when the cloud copy of the tests or the students has been read.
+function ltApplyHeld(){
+  if(!ltSyncSure())return;
+  const held=assessments.filter(a=>a.teacher&&a.teacher.held);if(!held.length)return;
+  held.forEach(a=>{
+    const s=ltStudent(a.studentId),last=s?ltLatest(s.id):null;
+    if(s&&last&&last.id===a.id&&AEA.LEVELS.includes(a.teacher.finalLevel))s.group=a.teacher.finalLevel;
+    delete a.teacher.held;
+  });
+  save();
+  if(curPage==="leveltest")renderLevelTest();
 }
 
 // ── Other income (v109) ───────────────────────────────────────────────────────
@@ -12112,6 +12210,8 @@ function afterRemoteApplied(key){
   // offer a reload rather than reloading under the user's hands.
   if(key==="settings"&&(pickLang()!==LANG||String(settings.currency||WS_DEFAULTS.currency).toUpperCase()!==WS_CUR||String(settings.timeZone||WS_DEFAULTS.timeZone)!==WS_TZ))
     setTimeout(showReloadPrompt,400);
+  // A test that is on screen here was changed on another device: show where it stands now.
+  if(key==="assessments"&&LT.aid)ltRenderTest();
   clearTimeout(_syncRerenderTimer);
   _syncRerenderTimer=setTimeout(()=>{rerenderCurrentPage();renderStorageGauge?.();},250);
 }
@@ -12829,7 +12929,8 @@ async function onSyncSnapshot(key,ev){
     // can't say "finished". This one is only set once the reconcile has actually completed.
     syncSettled[key]=true;
     // Last month's figures are only trustworthy once every collection has really been reconciled.
-    if(SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
+    if(FEE_SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
+    if(key==="assessments"||key==="students")ltApplyHeld();
   }
   if(!ev.fromCache&&_syncInFlight<=0)syncStatusIdle();
 }
@@ -13266,7 +13367,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <div class="fg"><label data-i18n>Start level</label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
     <label class="sw" style="white-space:normal"><input id="lts-ko" type="checkbox" checked/><span class="sw-track"></span><span data-i18n>Korean help under the questions of level A and B</span></label>
-    <p class="u-hint" style="margin-top:12px" data-i18n>Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right for two seconds.</p>
+    <p class="u-hint" style="margin-top:12px" data-i18n>Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right.</p>
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-start')" data-i18n>Cancel</button><button class="btn btn-p" onclick="ltStart()" data-i18n>Hand over and start</button></span></div>
   </div>
 </div>
@@ -13277,7 +13378,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-review')" data-i18n>Close</button><button class="btn btn-p" onclick="ltSaveReview()" data-i18n>Confirm the class level</button></span></div>
   </div>
 </div>
-<div id="lt-screen" hidden></div>
+<div id="lt-screen" tabindex="-1" hidden></div>
 
 <!-- Unpaid-fee reminder (v110): from the 11th on, while the previous month is still short -->
 <div class="mo" id="mo-feealert">
