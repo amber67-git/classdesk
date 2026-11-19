@@ -236,6 +236,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 레벨 배지(v144): 학생 이름 옆의 `.lv-badge`는 상태가 아니라 분류라서 메인 컬러의 연한 쌍(`--pri-l` / `--pri-t`)을 쓴다. 수업 창 맨 위의 수업 설정 한 줄(`.lm-plan`)은 레벨 배지 하나와 `.tag` 칩으로 이루어지고, 값이 없으면 줄 자체를 숨긴다.
 
+레벨테스트(v145): 페이지와 결과 창은 앱의 색 변수를 그대로 쓰고 다크 모드를 따른다(레벨 네모 `.lt-lv`는 `.lv-badge`와 같은 `--pri-l` / `--pri-t`). 학생이 푸는 화면 `#lt-screen`만 예외로, 지문 색과 글자 크기가 시험의 일부라서 **항상 밝은 화면**이고 자체 색(`--lt-*`)과 읽기용 글꼴 Andika를 쓴다. 안의 클래스는 모두 `lt-`로 시작하고 앱의 `.btn`, `.card`를 쓰지 않는다. 선생님용 조작은 길게 눌러야 동작하므로, 안내는 화면 아래 토스트가 아니라 위쪽 `#lt-hint`(누름을 가로채지 않음)로 보여 준다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}

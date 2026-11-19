@@ -30,7 +30,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="ClassDesk"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Andika:wght@400;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
 <style>
 :root{
@@ -486,6 +486,111 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .fg label.sw{display:inline-flex;font-size:12px;font-weight:500;margin:0;text-transform:none;letter-spacing:0}
 /* Student dialog: day · time · Bi-weekly. Wraps on a phone, where Bi-weekly was cut off the right edge. */
 .sm-sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* v145: level test. The page and the result window use the app's own colours (and follow dark mode). */
+.lt-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.lt-row:last-child{border-bottom:0}
+.lt-lv{flex:none;width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:var(--pri-l);color:var(--pri-t);font-weight:700;font-size:14px}
+.lt-lv.none{background:var(--surf2);color:var(--txt3)}
+.lt-lv.big{width:48px;height:48px;font-size:22px;border-radius:12px}
+.lt-main{flex:1 1 220px;min-width:0}
+.lt-name{font-weight:600;overflow-wrap:anywhere}
+.lt-sub{font-size:var(--fs-sm);color:var(--txt3);overflow-wrap:anywhere}
+.lt-acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto}
+.lt-hist{background:var(--surf2);border-bottom:1px solid var(--bdr);padding:6px 14px 8px 56px}
+.lt-hrow{display:flex;gap:10px;align-items:center;padding:4px 0;flex-wrap:wrap;font-size:var(--fs-sm)}
+.lt-hdate{font-variant-numeric:tabular-nums;color:var(--txt2)}
+.lt-htext{flex:1 1 160px;min-width:0}
+.lt-hacts{display:flex;gap:6px;align-items:center}
+.lt-empty{padding:28px 18px;text-align:center;color:var(--txt3)}
+#lt-sum{margin:0}
+#lts-levels .seg-btn{min-width:40px;justify-content:center}
+.ltr-res{display:flex;align-items:center;gap:12px;margin:10px 0 8px}
+.ltr-k{font-size:var(--fs-sm);color:var(--txt3)}
+.ltr-v{font-size:17px;font-weight:600;line-height:1.3}
+.ltr-desc{margin:0 0 6px}
+.ltr-basis{margin:0 0 4px}
+.ltr-flags{margin:10px 0 0;padding:10px 12px 10px 28px;background:var(--amb-l);color:var(--amb-t);border-radius:8px;font-size:var(--fs-sm)}
+.ltr-h{font-size:13px;font-weight:700;margin:18px 0 6px;color:var(--txt)}
+.ltr-path{border-top:1px solid var(--bdr)}
+.ltr-path summary{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;list-style:none}
+.ltr-path summary::-webkit-details-marker{display:none}
+.ltr-pmain{flex:1;min-width:0;display:flex;flex-direction:column}
+.ltr-score{font-weight:700;font-variant-numeric:tabular-nums}
+.ltr-resp{margin:0 0 12px;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:var(--fs-sm)}
+.ltr-resp li{display:flex;gap:8px}
+.ltr-mark{font-weight:700;width:18px;flex:none;text-align:center}
+.ltr-resp .c .ltr-mark{color:var(--ok-t)}
+.ltr-resp .w .ltr-mark,.ltr-warn{color:var(--red)}
+.ltr-skills{display:flex;flex-direction:column;gap:6px}
+.ltr-skill{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center;font-size:var(--fs-sm)}
+.ltr-sdots{display:flex;gap:4px;flex-wrap:wrap}
+.ltr-sdots i{width:13px;height:13px;border-radius:50%;border:2px solid var(--grn)}
+.ltr-sdots i.on{background:var(--grn)}
+@media(max-width:600px){.lt-hist{padding-left:14px}.lt-acts{margin-left:42px}.ltr-skill{grid-template-columns:110px 1fr auto}}
+/* The student's test screen: full screen and always light, whatever the app's appearance is — the
+   passage colours and sizes are part of the test. Every class is lt-…, and every colour is its own. */
+body.lt-testing{overflow:hidden}
+#lt-screen{position:fixed;inset:0;z-index:2900;background:#fff;color:#16232A;color-scheme:light;font:400 15px/1.55 var(--font);word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%;
+  --lt-surface:#FFFFFF;--lt-bg:#F3F5F4;--lt-ink:#16232A;--lt-muted:#5C6A72;--lt-line:#D9E0DE;--lt-brand:#1B5E66;--lt-brand-soft:#E4EFEF;--lt-amber:#F2A81D;--lt-amber-soft:#FFF4DC;
+  --lt-read:"Andika",var(--font)}
+#lt-screen[hidden]{display:none}
+#lt-hint{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:2950;pointer-events:none;background:#16232A;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;max-width:calc(100vw - 32px);text-align:center}
+#lt-screen *{box-sizing:border-box}
+#lt-screen button{font:inherit;color:inherit;cursor:pointer}
+#lt-screen :focus-visible{outline:3px solid var(--lt-amber);outline-offset:2px}
+#lt-screen p{margin:0 0 8px}
+#lt-screen h2{margin:0}
+#lt-screen .lt-muted{color:var(--lt-muted)}
+#lt-screen .lt-tscreen{height:100%;max-width:720px;margin:0 auto;display:flex;flex-direction:column;background:var(--lt-surface);padding-top:env(safe-area-inset-top)}
+#lt-screen .lt-tbar{flex:none;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;border-bottom:1px solid var(--lt-line)}
+#lt-screen .lt-part{font:700 14px var(--lt-read);color:var(--lt-brand)}
+#lt-screen .lt-dots{flex:1;display:flex;gap:6px}
+#lt-screen .lt-dots i{width:100%;max-width:36px;height:8px;border-radius:4px;background:var(--lt-line)}
+#lt-screen .lt-dots i.done{background:var(--lt-brand)}
+#lt-screen .lt-dots i.now{background:var(--lt-amber)}
+#lt-screen .lt-lock{border:0;background:none;color:#A9B4B2;width:44px;height:44px;display:grid;place-items:center;border-radius:8px}
+#lt-screen [data-hold]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+#lt-screen .lt-passage{font-family:var(--lt-read);font-size:18px;line-height:1.75}
+#lt-screen .lt-passage h2{font:700 19px/1.3 var(--lt-read);margin-bottom:8px}
+#lt-screen .lt-passage p{margin:0 0 10px}
+#lt-screen .lt-passbox{flex:1 1 0;min-height:110px;overflow:auto;padding:12px 16px 4px;background:var(--lt-amber-soft);-webkit-overflow-scrolling:touch}
+#lt-screen .lt-passtoggle{flex:none;border:0;border-bottom:1px solid var(--lt-line);background:var(--lt-amber-soft);color:#7A5200;font-size:13px;font-weight:600;min-height:36px}
+#lt-screen .lt-qwrap{flex:0 1 auto;max-height:66%;overflow:auto;padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+#lt-screen .lt-tscreen.full .lt-passbox{flex:1 1 auto}
+#lt-screen .lt-tscreen.full .lt-qwrap{display:none}
+#lt-screen .lt-tscreen.nopass .lt-qwrap{flex:1;max-height:none;justify-content:center;gap:12px}
+#lt-screen .lt-readwrap{flex:1;overflow:auto;padding:16px}
+#lt-screen .lt-readhint{color:var(--lt-muted);font-size:14px}
+#lt-screen .lt-tfoot{flex:none;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--lt-line)}
+#lt-screen .lt-tmsg{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px;gap:6px;font-size:17px}
+#lt-screen .lt-tbig{font:700 34px/1.2 var(--lt-read);color:var(--lt-brand);margin-bottom:6px}
+#lt-screen .lt-tips{margin:10px 0 0;padding-left:20px;font-size:15.5px}
+#lt-screen .lt-tips li{margin-bottom:6px}
+#lt-screen .lt-qn{font:700 13px var(--lt-read);color:var(--lt-muted);letter-spacing:.02em}
+#lt-screen .lt-qtext{font:400 19px/1.5 var(--lt-read);margin:0}
+#lt-screen .lt-qko{font-size:14px;color:var(--lt-muted);margin:-4px 0 0}
+#lt-screen .lt-stim{font-size:72px;line-height:1.1;text-align:center}
+#lt-screen .lt-qword{font:700 44px/1.2 var(--lt-read);text-align:center;padding:6px 0}
+#lt-screen .lt-opts{display:grid;gap:8px}
+#lt-screen .lt-opts.pic{grid-template-columns:1fr 1fr}
+#lt-screen .lt-opts.letters{grid-template-columns:repeat(4,1fr)}
+#lt-screen .lt-opt{display:flex;align-items:center;gap:12px;text-align:left;min-height:50px;padding:8px 14px;border:2px solid var(--lt-line);border-radius:12px;background:var(--lt-surface);font:400 17.5px/1.35 var(--lt-read)}
+#lt-screen .lt-opt.sel,#lt-screen .lt-idk.sel{border-color:var(--lt-brand);background:var(--lt-brand-soft);border-style:solid}
+#lt-screen .lt-ol{color:var(--lt-brand);font-weight:700;flex:none}
+#lt-screen .lt-optpic{font-size:44px;line-height:1.2;margin:0 auto}
+#lt-screen .lt-opts.pic .lt-opt{min-height:92px;justify-content:center}
+#lt-screen .lt-opts.letters .lt-opt{justify-content:center;font-size:30px;font-weight:700;min-height:72px;padding:6px}
+#lt-screen .lt-opts.letters .lt-ol{display:none}
+#lt-screen .lt-idk{flex:none;min-height:44px;border:2px dashed var(--lt-line);border-radius:12px;background:none;color:var(--lt-muted);font-size:15px}
+#lt-screen .lt-btn{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--lt-line);background:var(--lt-surface);font-weight:600;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+#lt-screen .lt-btn.primary{background:var(--lt-brand);border-color:var(--lt-brand);color:#fff}
+#lt-screen .lt-btn.big{min-height:56px;font-size:18px;width:100%}
+#lt-screen .lt-btn[disabled]{opacity:.45;cursor:default}
+#lt-screen .lt-backdrop{position:fixed;inset:0;background:rgba(22,35,42,.5);z-index:1}
+#lt-screen .lt-sheet{position:fixed;left:0;right:0;bottom:0;z-index:2;background:var(--lt-surface);border-radius:16px 16px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));max-height:90%;overflow:auto;max-width:560px;margin:0 auto}
+#lt-screen .lt-sheet h2{font-size:18px;font-weight:600;margin-bottom:8px}
+#lt-screen .lt-stack{display:flex;flex-direction:column;gap:8px}
+@media(min-width:640px){#lt-screen .lt-sheet{bottom:auto;top:50%;transform:translateY(-50%);border-radius:16px}}
 /* v144: what each student does in class — level, lesson parts, speaking lesson */
 .sm-plan-row{display:flex;gap:8px 16px;align-items:center;flex-wrap:wrap}
 .lv-badge{display:inline-block;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--pri-l);color:var(--pri-t);font-size:11px;font-weight:600;line-height:18px;vertical-align:1px}
@@ -1233,6 +1338,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <button class="ni" data-page="reading" data-i18n onclick="showPage('reading')"><i class="ti ti-book"></i>Reading</button>
     <button class="ni" data-page="payments" data-i18n onclick="showPage('payments')"><i class="ti ti-receipt"></i>Payments</button>
     <button class="ni" data-page="reports" data-i18n onclick="showPage('reports')"><i class="ti ti-report-analytics"></i>Reports</button>
+    <button class="ni" data-page="leveltest" data-i18n onclick="showPage('leveltest')"><i class="ti ti-clipboard-check"></i>Level test</button>
     <button class="ni" data-page="curriculum" data-i18n onclick="showPage('curriculum')"><i class="ti ti-calendar-month"></i>Curriculum</button>
     <button class="ni" data-page="books" data-i18n onclick="showPage('books')"><i class="ti ti-notebook"></i>Workbooks</button>
     <button class="ni" data-page="booklib" data-i18n onclick="showPage('booklib')"><i class="ti ti-books"></i>Books</button>
@@ -1520,6 +1626,15 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div id="rp-print-head" class="rd-print-head"></div>
     <div id="rp-body"></div>
   </div>
+</div>
+
+<!-- LEVEL TEST (v145) -->
+<div id="page-leveltest" class="page">
+  <div class="fbar"><div id="lt-sum" class="tag-list"></div></div>
+<div class="pc">
+  <p class="u-hint" style="margin:0 0 12px" data-i18n>A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.</p>
+  <div class="card"><div id="lt-list"></div></div>
+</div>
 </div>
 
 <!-- SETTINGS -->
@@ -1870,6 +1985,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Reading</dt><dd>Books read per student, drawn from the lesson records — AR trend and a printable parent report.</dd>
           <dt>Payments</dt><dd>Tuition management — a payment calendar and a monthly summary per student, the payment-request message, other income that is not a lesson fee, and the unpaid-fee reminder.</dd>
           <dt>Reports</dt><dd>Monthly figures per student: lessons held, hours, fees, cancellations counted against the timetable, plus a Learning report and homework checking.</dd>
+          <dt>Level test</dt><dd>The reading level test your students take on this screen: start it from a student's row, look at the result (level A–E, stage, skills) and confirm the class level.</dd>
           <dt>Curriculum</dt><dd>Your lesson plan by year, month and week: topic, category, workbook, writing task, books, activities, grammar and notes. Filter by year and month, or search. <b>Import</b> brings in a whole plan from a spreadsheet (see the FAQ). On a tablet or computer the table works like Google Sheets: click a cell and type, and it saves at once (see the FAQ "Editing the curriculum like a spreadsheet"). On a phone, tap ✎ to edit a topic.</dd>
           <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
           <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
@@ -2009,6 +2125,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v145 · 2026-11-19</dt><dd><b>New: the level test is inside ClassDesk.</b> A new <b>Level test</b> page lists your students. Press <b>Start test</b>, pick a start level and hand the device over: the student reads and answers on a full, always-light screen that never shows right or wrong, and the test moves up or down by itself. To stop in the middle, <b>press and hold the lock</b> (top right) for two seconds; at the end, press and hold the button at the bottom the same way. The <b>result</b> shows the app's level (A–E) and stage, how each part went and the skills; you then <b>confirm the class level</b>, and only that changes the student's Level. The app's result and your decision are kept side by side. Results sync like everything else and are in the backup. Paper tests, printing and the parent report follow in the next versions.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>New: a lesson plan on each student.</b> The student window has a <b>Lesson plan</b> row: pick a <b>Level</b> (A–E), tick the parts of a lesson this child does (<b>Speaking, Book, Grammar, Activity, Writing</b>) and, if you follow a speaking course, the <b>speaking lesson number</b> they are on. The level shows as a small badge next to the name in Students, and the whole plan shows at the top of that student's lesson window, so you can see what to do with each child without opening their card. Everything is optional: a student with nothing filled in looks exactly as before.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>Fix: an extra class is no longer labelled "moved from its usual time".</b> The lesson window showed the amber "Moved from this student's usual time" note — and a <b>Reset to usual time</b> button — for any class whose time differed from the student's regular one, even an extra class on a day they have no regular class (a Sunday 9:00 extra for a Thursday 19:30 student read "moved from Sun, 7:30pm"). The note now appears only for a class that really belongs to a regular slot: the same weekday (and the right week for a bi-weekly student), and not a second class added next to the day's regular one. Fees and lesson counts were never affected — only the label. Also: when Google Calendar has two events for a student on one day and the app has one class, the compare now matches the event at the class's own time and offers the other as the addition; before, the earlier event could be shown as a "time change" of the regular class.</dd>
           <dt>v142 · 2026-11-16</dt><dd><b>Fix: importing the same curriculum again no longer adds stray copies.</b> Records made in one go (importing a curriculum, "All paid", pasting several rows) could get the same internal id, and a later import of the same sheet then sometimes added a topic twice. New records now always get their own id, and the importer matches each existing topic even if an older version gave two of them one id.</dd>
@@ -2050,7 +2167,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v144</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v145</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2074,6 +2191,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>독서</dt><dd>수업 기록에서 모은 학생별 읽은 책 — AR 추이와 인쇄용 학부모 보고서.</dd>
           <dt>수업료</dt><dd>수업료 관리 — 수납 달력과 학생별 월 요약, 수업료 안내 메시지, 수업료가 아닌 기타 수입, 미납 알림.</dd>
           <dt>보고서</dt><dd>학생별 월간 수치: 진행한 수업, 시간, 수업료, 시간표 대비 취소 횟수, 그리고 학습 보고서와 숙제 확인.</dd>
+          <dt>레벨테스트</dt><dd>학생이 이 화면에서 푸는 읽기 레벨테스트: 학생 줄에서 시작하고, 결과(레벨 A–E, 단계, 스킬)를 본 뒤 수업 레벨을 확정합니다.</dd>
           <dt>커리큘럼</dt><dd>연도·월·주별 수업 계획: 주제, 카테고리, 워크북, 글쓰기 과제, 책, 활동, 문법, 메모. 연도와 월로 거르거나 검색할 수 있습니다. <b>가져오기</b>로 스프레드시트의 계획 전체를 한 번에 불러옵니다(자주 묻는 질문 참고). 태블릿이나 컴퓨터에서는 표가 Google 스프레드시트처럼 동작합니다. 셀을 누르고 입력하면 바로 저장됩니다(자주 묻는 질문 "커리큘럼을 스프레드시트처럼 고치기" 참고). 휴대폰에서는 ✎를 눌러 고칩니다.</dd>
           <dt>교재</dt><dd>교재 관리 — 표지, 진도, 학생별 배정.</dd>
           <dt>도서</dt><dd>영어 도서 목록 — 아래 "도서 자세히 보기" 참고. 이 앱의 핵심 화면입니다.</dd>
@@ -2213,6 +2331,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v145 · 2026-11-19</dt><dd><b>새 기능: 레벨테스트가 ClassDesk 안으로 들어왔습니다.</b> 새 <b>레벨테스트</b> 페이지에 학생이 나옵니다. <b>테스트 시작</b>을 누르고 시작 레벨을 고른 뒤 기기를 건네면, 학생은 화면 전체를 쓰는 밝은 화면에서 읽고 답합니다. 맞았는지 틀렸는지는 보여 주지 않고, 답에 따라 레벨이 저절로 오르내립니다. 중간에 멈추려면 오른쪽 위 <b>자물쇠를 2초간 길게</b> 누르고, 끝난 뒤에는 아래 버튼을 같은 방법으로 누릅니다. <b>결과</b>에는 앱이 판정한 레벨(A–E)과 단계, 묶음별 진행, 스킬별 기록이 나오고, 선생님이 <b>수업 레벨을 확정</b>해야 학생의 레벨이 바뀝니다. 앱 결과와 선생님 확정은 따로 저장됩니다. 결과는 다른 데이터처럼 동기화되고 백업에도 들어갑니다. 종이 시험, 인쇄, 학부모 리포트는 다음 버전에서 이어집니다.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>새 기능: 학생별 수업 설정.</b> 학생 창에 <b>수업 설정</b> 줄이 생겼습니다. <b>레벨</b>(A–E)을 고르고, 이 학생이 수업에서 하는 부분(<b>말하기, 도서, 문법, 활동, 쓰기</b>)을 체크하고, 스피킹 과정을 따라가는 학생이면 지금 <b>몇 회차</b>인지 적습니다. 레벨은 학생 목록의 이름 옆에 작은 배지로 보이고, 설정 전체는 그 학생의 수업 창 맨 위에 보여서 학생 카드를 열지 않아도 무엇을 할지 알 수 있습니다. 모두 선택 사항이라, 아무것도 넣지 않은 학생은 전과 똑같이 보입니다.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>버그 수정: 추가 수업에 "원래 시간에서 옮긴 수업"이라고 나오지 않습니다.</b> 수업 창은 시간이 학생의 정규 시간과 다르기만 하면 노란색 "이 학생의 원래 시간에서 옮긴 수업입니다" 안내와 <b>원래 시간으로 되돌리기</b> 버튼을 보여 줬습니다. 정규 수업이 없는 요일에 넣은 추가 수업도 그랬습니다(목요일 19:30 학생의 일요일 9:00 추가 수업에 "일요일 7:30pm에서 옮김"이라고 표시). 이제 이 안내는 정말 정규 수업 자리에 속한 수업에만 나옵니다: 같은 요일이고(격주 학생은 해당 주), 그날 정규 수업 옆에 따로 추가한 수업이 아닐 때입니다. 수업료와 수업 횟수는 처음부터 영향이 없었고, 표시만 잘못됐던 것입니다. 또한 Google 캘린더에 한 학생의 일정이 하루에 두 개 있고 앱에는 수업이 하나일 때, 비교는 이제 수업 시간과 같은 일정을 짝짓고 나머지를 추가로 제안합니다. 전에는 더 이른 일정이 정규 수업의 "시간 변경"으로 나올 수 있었습니다.</dd>
           <dt>v142 · 2026-11-16</dt><dd><b>버그 수정: 같은 커리큘럼을 다시 가져와도 사본이 더 생기지 않습니다.</b> 한꺼번에 만든 기록(커리큘럼 가져오기, "모두 납부", 여러 줄 붙여넣기)이 같은 내부 번호를 받을 수 있었고, 그러면 같은 시트를 다시 가져올 때 주제가 하나 더 생기기도 했습니다. 이제 새 기록은 항상 고유한 번호를 받고, 예전 버전에서 번호가 겹친 주제도 가져오기가 하나씩 제대로 찾습니다.</dd>
@@ -2253,7 +2372,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v144</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v145</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3064,6 +3183,10 @@ let todos=lg("mc_todos",[]);
 // and is only known once it arrives. There is no formula to derive it from, so the owner types it.
 // Always money already received: it adds to Expected AND Collected, never to Outstanding (v109).
 let income=lg("mc_income",[]);
+// Level test records (v145): one per test a student took — the path through the parts, every answer,
+// the app's result and the teacher's confirmation. See "LEVEL TEST" below.
+let assessments=lg("mc_assessments",[]);
+if(!Array.isArray(assessments))assessments=[];
 let settings=lg("mc_settings",DSET);
 
 // ═══════════════════════════════════════════════
@@ -3424,6 +3547,41 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v145: level test
+  "Level test":"레벨테스트","Reading level test on screen, the result and the class level you confirm":"화면으로 보는 읽기 레벨테스트, 결과, 선생님이 확정하는 수업 레벨",
+  "A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.":"학생이 이 화면에서 푸는 읽기 테스트입니다. 답에 따라 위아래 레벨로 옮겨 가며 A–E 가운데 한 레벨로 끝납니다. 선생님이 결과를 보고 수업 레벨을 확정해야 학생의 레벨이 바뀝니다.",
+  "Start the level test":"레벨테스트 시작","Start level":"시작 레벨","Korean help under the questions of level A and B":"A·B 레벨 문제 아래에 한국어 도움말 보여 주기",
+  "Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right for two seconds.":"학생이 편하게 풀 수 있는 레벨에서 시작하세요. 잘하면 올라가고 어려우면 내려갑니다. 중간에 멈추려면 오른쪽 위 자물쇠를 2초간 길게 누르세요.",
+  "Hand over and start":"학생에게 건네고 시작","Level test result":"레벨테스트 결과","Confirm the class level":"수업 레벨 확정",
+  "Beginning stage":"시작 단계","Developing stage":"발전 단계","Secure stage":"안정 단계",
+  "Has just started on texts at this level. The level below is secure.":"이 레벨의 글을 막 시작한 상태입니다. 아래 레벨은 안정적입니다.",
+  "Understands texts at this level in part. The right level to learn at now.":"이 레벨의 글을 부분적으로 이해합니다. 지금 배우기에 알맞은 수준입니다.",
+  "Understands texts at this level securely.":"이 레벨의 글을 안정적으로 이해합니다.",
+  "Letter–sound":"글자–소리","Word decoding":"단어 해독","Sentence reading":"문장 읽기","Vocabulary in context":"문맥 속 어휘","Literal understanding":"사실 이해","Sequence and flow":"순서·흐름",
+  "Main idea":"중심 생각","Inference":"추론","Finding evidence":"근거 찾기","Applying to a new case":"새 상황 적용","Critical reading":"비판적 읽기",
+  "Enough to judge on":"판정 근거 충분","Fair basis to judge on":"판정 근거 보통","Thin basis · check again":"판정 근거 부족 · 재확인 권장",
+  "Secure|test part":"안정","Borderline → checked again":"경계 → 재확인","Hard|test part":"어려움",
+  "No level yet":"레벨 미정","Add a student first — the level test is started from the student's row here.":"먼저 학생을 추가하세요. 레벨테스트는 여기 학생 줄에서 시작합니다.",
+  "Not tested yet":"아직 테스트 전","Last test {date} · app result {res}":"최근 테스트 {date} · 앱 결과 {res}","confirmed {lv}":"확정 {lv}","Not confirmed":"확정 전","Retest due":"재테스트 시기",
+  "Result":"결과","History ({n})":"기록 ({n})","Continue test":"이어서 풀기","Start test":"테스트 시작","Delete this test record":"이 테스트 기록 삭제",
+  "In progress — part {n}":"진행 중 — {n}번째 묶음","End here and judge":"여기서 끝내고 판정","Stopped before it could be judged":"판정할 만큼 풀기 전에 중단함",
+  "Delete this test record? This cannot be undone.":"이 테스트 기록을 삭제할까요? 되돌릴 수 없습니다.",
+  "There is an unfinished test. Continue it or end it first.":"끝나지 않은 테스트가 있습니다. 이어서 하거나 먼저 끝내 주세요.",
+  "In the first-letter questions of level A you may say the picture's name aloud (dog, sun).":"A 레벨의 첫 글자 문제는 그림 이름(dog, sun)을 말해 줘도 됩니다.",
+  "Teacher's menu: press and hold for two seconds":"선생님 메뉴: 2초간 길게 누르기","Teacher's menu":"선생님 메뉴","The answers so far are saved.":"지금까지의 답은 저장되어 있습니다.",
+  "Keep going":"계속 풀기","Stop and leave (continue later)":"멈추고 나가기 (나중에 이어서)","Too few answers to judge — recorded as stopped.":"판정할 만큼 풀지 않아 중단으로 기록했습니다.",
+  "Teacher: press and hold for two seconds":"선생님: 2초간 길게 눌러 주세요","Deleted student":"삭제된 학생","On paper":"종이 시험","On screen":"화면 테스트","{n} questions":"{n}문항",
+  "App result — class level for reading":"앱 결과 — 읽기 수업 레벨","Levels passed securely: {lv}":"안정적으로 통과한 레벨: {lv}",
+  "This test was ended early. It is judged only on what was answered.":"중간에 끝낸 테스트입니다. 지금까지 푼 내용으로만 판정했습니다.",
+  "It ended at the limit of {n} parts. Next time, carry on from level {lv}.":"묶음 수 제한({n}묶음)으로 끝났습니다. 다음에 레벨 {lv}부터 이어서 확인하세요.",
+  "{n} answer(s) were right although the sentence that supports them was not found — possibly guessed.":"답은 맞혔지만 근거 문장을 찾지 못한 문항이 {n}개 있습니다. 추측으로 맞혔을 수 있습니다.",
+  "{n} answer(s) came too fast for the text to have been read.":"읽기 어려울 만큼 빨리 답한 문항이 {n}개 있습니다.",
+  "“I’m not sure” was chosen {n} time(s).":"“잘 모르겠어요”가 {n}개 있습니다.",
+  "How the test went":"진행 경로","Not finished":"미완료","Set {n}":"세트 {n}","reading {n}s":"읽기 {n}초","Chose: {v}":"선택: {v}","not sure":"모름","{n}s":"{n}초","fast answer":"빠른 응답",
+  "By skill":"스킬별 기록","With so few questions per skill these numbers are a guide only.":"문항 수가 적어 스킬별 숫자는 참고용입니다.",
+  "Your decision":"선생님 확정","Class level":"수업 레벨","What you noticed (optional)":"관찰 메모 (선택)","Confirmed: {lv} · {date}":"확정함: {lv} · {date}",
+  "This is not the app's result ({lv}). Both are kept, side by side.":"앱 결과({lv})와 다르게 확정합니다. 두 값은 따로 저장됩니다.",
+  "Confirmed. Class level: {lv}":"확정했습니다. 수업 레벨: {lv}","Confirmed. The class level follows the newest test, so it was not changed.":"확정했습니다. 수업 레벨은 가장 최근 테스트를 따르므로 바꾸지 않았습니다.",
 }};
 /* i18n-dict-end */
 function pickLang(){
@@ -3603,6 +3761,7 @@ const FEATURE_PAGES=[
   {k:"workbooks",page:"books",name:tx("Workbooks"),hint:tx("Workbook list, covers and progress")},
   {k:"material",page:"material",name:tx("Material"),hint:tx("Teaching materials and printouts")},
   {k:"curriculum",page:"curriculum",name:tx("Curriculum"),hint:tx("Lesson plan by year, month and week")},
+  {k:"leveltest",page:"leveltest",name:tx("Level test"),hint:tx("Reading level test on screen, the result and the class level you confirm")},
 ];
 const FEATURE_SECTIONS=[
   {k:"lsWorkbook",name:tx("Workbook|lesson section"),hint:tx("Workbook pages done in the lesson, with a timer")},
@@ -3612,9 +3771,16 @@ const FEATURE_SECTIONS=[
 ];
 const FEATURE_PRESETS={
   reading:{},                                                   // everything on — how ClassDesk began
-  general:{reading:false,booklib:false,lsBooks:false},          // any subject: no reading library
+  general:{reading:false,booklib:false,lsBooks:false,leveltest:false},          // any subject: no reading library
 };
-function featureOn(k){return !(settings.features&&settings.features[k]===false);}
+function featureOn(k){
+  const f=settings.features;
+  // v145: the level test arrived after people had already made their choice here. Until it is
+  // switched by hand it follows the Reading page — a class set up without reading ("Any subject")
+  // does not suddenly get an English reading test, and that preset still reads as chosen.
+  if(k==="leveltest"&&f&&f.leveltest===undefined)return f.reading!==false;
+  return !(f&&f[k]===false);
+}
 function pageEnabled(p){const f=FEATURE_PAGES.find(x=>x.page===p);return !f||featureOn(f.k);}
 function featCurrentPreset(){
   const all=[...FEATURE_PAGES,...FEATURE_SECTIONS].map(x=>x.k);
@@ -3722,10 +3888,10 @@ const _lastSaved={};
 // importer below no longer trips over them.
 let _uidN=0;
 const uid=()=>"id"+Date.now()+Math.random().toString(36).slice(2,8)+(_uidN++).toString(36);
-const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","income","settings"];
+const SYNC_KEYS=["students","lessons","homework","curriculum","books","booklib","materials","todos","income","assessments","settings"];
 const SYNC_VARS={
   students:()=>students, lessons:()=>lessons, homework:()=>homework, curriculum:()=>curriculum,
-  books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, income:()=>income,
+  books:()=>books, booklib:()=>bookLib, materials:()=>materials, todos:()=>todos, income:()=>income, assessments:()=>assessments,
   settings:()=>settings,
 };
 // JSON without the sync stamp — what "did this record change?" is judged on.
@@ -3827,13 +3993,13 @@ function cloudJson(rec){
 initLastSaved();
 // Did this browser start on the untouched built-in samples? (See localIsSample() in the sync code.)
 const startedWithSamples=JSON.stringify(students)===JSON.stringify(DS)&&lessons.length===0;
-async function resetData(){if(!confirm(tx("Reset to sample data?")))return;["mc_students","mc_lessons","mc_homework","mc_curriculum","mc_books","mc_booklib","mc_materials","mc_todos","mc_income","mc_settings"].forEach(k=>localStorage.removeItem(k));location.reload();}
+async function resetData(){if(!confirm(tx("Reset to sample data?")))return;["mc_students","mc_lessons","mc_homework","mc_curriculum","mc_books","mc_booklib","mc_materials","mc_todos","mc_income","mc_assessments","mc_settings"].forEach(k=>localStorage.removeItem(k));location.reload();}
 const gs=id=>students.find(s=>s.id===id);
 // "Today" and "this month" are always computed in Korea Standard Time (UTC+9), regardless of
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v144";
+const APP_VERSION="v145";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -4422,7 +4588,7 @@ function otherIncome(month){return incomeFor(month).reduce((a,r)=>a+(+r.amt||0),
 // ═══════════════════════════════════════════════
 // NAV
 // ═══════════════════════════════════════════════
-const PT={"dashboard":tx("Dashboard"),"students":tx("Students"),"sessions":tx("Classes"),"reading":tx("Reading"),"payments":tx("Payments"),"reports":tx("Reports"),"curriculum":tx("Curriculum"),"books":tx("Workbooks"),"booklib":tx("Books"),"material":tx("Material"),"settings":tx("Settings")};
+const PT={"dashboard":tx("Dashboard"),"students":tx("Students"),"sessions":tx("Classes"),"reading":tx("Reading"),"payments":tx("Payments"),"reports":tx("Reports"),"leveltest":tx("Level test"),"curriculum":tx("Curriculum"),"books":tx("Workbooks"),"booklib":tx("Books"),"material":tx("Material"),"settings":tx("Settings")};
 let curPage="dashboard";
 function toggleMobileSidebar(){
   document.querySelector(".sb")?.classList.toggle("mob-open");
@@ -4461,6 +4627,7 @@ function showPage(p){
   else if(p==="material")renderMaterial();
   else if(p==="reading")renderReading();
   else if(p==="reports")renderReports();
+  else if(p==="leveltest")renderLevelTest();
   else if(p==="settings")renderSettings();
   // Attach/refresh column-resize handles after the page's list has rendered
   setTimeout(ensureColumnResizers,0);
@@ -7204,6 +7371,779 @@ function renderPayments(){
   </div>`).join("");
   renderIncomeCard(mon);
   renderPaymentCalendar(mon);
+}
+
+// ═══════════════════════════════════════════════
+// LEVEL TEST (v145)
+// ═══════════════════════════════════════════════
+// The reading level test from the owner's own app (Amber English Assessment). Between the two
+// markers below are that app's bank.js and engine.js, UNCHANGED, inside one function scope so their
+// names (LEVELS, TL, …) cannot collide with ClassDesk's. Rules that come with them:
+//  · opts[0] is always the correct answer. The order a student sees is fixed per item by
+//    hashStr('aea:'+item.id) — changing an item id, the order of the items or that seed changes
+//    what students see and breaks the comparison between one quarter and the next.
+//  · The student's screen never shows whether an answer was right.
+//  · A–E are this class's own levels. They are never converted to SR / AR / Lexile / CEFR scores.
+//  · result.level (what the app judged) and teacher.finalLevel (what the teacher confirmed) are
+//    two separate values; only the confirmed one becomes the student's class level (student.group).
+// Records live in mc_assessments and sync like every other collection (one record per test).
+const AEA=(function(){
+/* aea-core-start */
+/* Amber English Assessment — pilot item bank (not standardized, provisional difficulty) */
+/* In every item, opts[0] is the correct answer. Display order is shuffled once, deterministically, in engine.js. */
+
+var LEVELS = ['A', 'B', 'C', 'D', 'E'];
+
+var LEVEL_INFO = {
+  A: { name: 'Foundation', ko: '알파벳 소리, CVC 단어 해독, 그림과 짧은 문장 연결', cefr: 'Pre-A1 기술문 참고',
+       can: '글자의 소리를 알고 cat, sun 같은 짧은 단어와 한 줄 문장을 읽기 시작하는 단계' },
+  B: { name: 'Early Reader', ko: '40~60단어의 짧은 글을 읽고 누가·어디서·무엇을 했는지 파악', cefr: 'Pre-A1~A1 기술문 참고',
+       can: '짧은 이야기를 혼자 읽고 글에 나온 사실과 순서를 이해하는 단계' },
+  C: { name: 'Developing', ko: '100단어 안팎의 글을 혼자 읽고 중심 내용과 간단한 추론', cefr: 'A1~A2 기술문 참고',
+       can: '조금 긴 글을 혼자 읽고 중심 내용을 파악하며, 쓰여 있지 않은 이유도 짐작하기 시작하는 단계' },
+  D: { name: 'Independent', ko: '여러 문단 글의 중심 생각, 근거가 있는 추론, 새 상황 적용', cefr: 'A2~B1 초입 기술문 참고',
+       can: '여러 문단의 글에서 중심 생각을 찾고, 근거를 들어 추론하며 의견을 표현하는 단계' },
+  E: { name: 'Advanced', ko: '주장하는 글의 입장 파악, 논증 평가, 비판적 읽기', cefr: 'B1 안팎 기술문 참고',
+       can: '주장하는 글을 읽고 글쓴이의 입장과 근거를 따져 보며 비판적으로 읽는 단계' }
+};
+
+var STAGES = {
+  beginning: { ko: '시작 단계', desc: '이 레벨의 글을 막 시작한 상태입니다. 아래 레벨은 안정적입니다.' },
+  developing: { ko: '발전 단계', desc: '이 레벨의 글을 부분적으로 이해합니다. 지금 배우기에 알맞은 수준입니다.' },
+  secure: { ko: '안정 단계', desc: '이 레벨의 글을 안정적으로 이해합니다.' }
+};
+
+var SKILLS = {
+  phonics:   { ko: '글자–소리',     good: '글자와 소리를 잘 연결합니다.', need: '글자와 소리를 연결하는 연습이 더 필요합니다.' },
+  decode:    { ko: '단어 해독',     good: '단어를 소리 내어 정확히 읽어 냅니다.', need: '처음 보는 단어를 소리로 읽어 내는 연습이 더 필요합니다.' },
+  sentence:  { ko: '문장 읽기',     good: '짧은 문장을 읽고 뜻을 이해합니다.', need: '짧은 문장을 읽고 뜻을 떠올리는 연습이 더 필요합니다.' },
+  vocab:     { ko: '문맥 속 어휘',  good: '문맥 속에서 단어의 뜻을 잘 파악합니다.', need: '문맥에서 단어 뜻을 파악하는 연습이 필요합니다.' },
+  literal:   { ko: '사실 이해',     good: '글에 나온 정보를 정확하게 찾습니다.', need: '글에 나온 정보를 정확히 찾아 확인하는 연습이 필요합니다.' },
+  sequence:  { ko: '순서·흐름',     good: '이야기의 순서와 흐름을 잘 따라갑니다.', need: '일의 순서와 흐름을 따라가는 연습이 필요합니다.' },
+  main:      { ko: '중심 생각',     good: '글의 중심 내용을 잘 파악합니다.', need: '글 전체가 무엇에 대한 내용인지 한 문장으로 정리하는 연습이 필요합니다.' },
+  inference: { ko: '추론',          good: '글에 직접 나오지 않은 내용도 잘 짐작합니다.', need: '글에 직접 쓰여 있지 않은 이유나 감정을 짐작하는 연습이 필요합니다.' },
+  evidence:  { ko: '근거 찾기',     good: '답의 근거를 글에서 찾아냅니다.', need: '답의 근거가 되는 문장을 글에서 찾는 연습이 필요합니다.' },
+  apply:     { ko: '새 상황 적용',  good: '읽은 내용을 새로운 상황에 적용합니다.', need: '읽은 내용을 새로운 상황에 적용해 보는 연습이 필요합니다.' },
+  critical:  { ko: '비판적 읽기',   good: '글쓴이의 주장을 따져 보며 읽습니다.', need: '글쓴이의 주장을 따져 보고 평가하는 연습이 필요합니다.' }
+};
+
+var TESTLETS = [
+  /* ───────── Level A ───────── */
+  { id: 'A1', level: 'A', form: 1, title: 'Letters and Words 1', passage: null,
+    probe: { q: '단어 카드 3개(sit, hop, red)를 보여 주고 소리 내어 읽게 합니다.', look: '글자 소리를 하나씩 내고 합쳐서 읽는지 봅니다.' },
+    items: [
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🐶', say: 'dog', opts: ['d', 'b', 'p', 'g'], d: 1 },
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '☀️', say: 'sun', opts: ['s', 'm', 'n', 'f'], d: 1 },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'pig', pic: true, opts: ['🐷', '🖊️', '🐛', '🐶'], d: 2, note: '오답: pen, bug, dog' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'bed', pic: true, opts: ['🛏️', '🚌', '🐝', '🔔'], d: 2, note: '오답이 모두 b로 시작: bus, bee, bell' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'hat', pic: true, opts: ['🎩', '🐔', '🏠', '🖐️'], d: 2, note: '오답이 모두 h로 시작: hen, house, hand' },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'a red apple', pic: true, opts: ['🍎', '🍏', '🍓', '🍌'], d: 2 },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'I see two cats.', pic: true, opts: ['🐱🐱', '🐱', '🐶🐶', '🐱🐱🐱'], d: 3 },
+      { skill: 'sentence', q: 'Look at the picture. Which one is right?', ko: '그림에 맞는 문장을 고르세요.', stim: '🐟', opts: ['It is a fish.', 'It is a dish.', 'It is a ship.', 'It is a fig.'], d: 3 }
+    ] },
+  { id: 'A2', level: 'A', form: 2, title: 'Letters and Words 2', passage: null,
+    probe: { q: '단어 카드 3개(map, wet, fun)를 보여 주고 소리 내어 읽게 합니다.', look: '글자 소리를 하나씩 내고 합쳐서 읽는지 봅니다.' },
+    items: [
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🐻', say: 'bear', opts: ['b', 'd', 'p', 'h'], d: 1 },
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🌙', say: 'moon', opts: ['m', 'n', 'w', 'r'], d: 1 },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'cup', pic: true, opts: ['☕', '🐱', '🧢', '🚗'], d: 2, note: '오답이 모두 c로 시작: cat, cap, car' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'sun', pic: true, opts: ['☀️', '⭐', '🧦', '🐍'], d: 2, note: '오답이 모두 s로 시작: star, sock, snake' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'bug', pic: true, opts: ['🐛', '🚌', '🛏️', '👜'], d: 2, note: '오답이 모두 b로 시작: bus, bed, bag' },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'a green frog', pic: true, opts: ['🐸', '🐢', '🐶', '🦊'], d: 2 },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'I see three stars.', pic: true, opts: ['⭐⭐⭐', '⭐⭐', '🌙🌙🌙', '⭐'], d: 3 },
+      { skill: 'sentence', q: 'Look at the picture. Which one is right?', ko: '그림에 맞는 문장을 고르세요.', stim: '🐔', opts: ['It is a hen.', 'It is a pen.', 'It is a hat.', 'It is ten.'], d: 3 }
+    ] },
+
+  /* ───────── Level B ───────── */
+  { id: 'B1', level: 'B', form: 1, title: 'Max and the Ball',
+    passage: ['Sam has a dog. His name is Max. Max is small and brown. Max likes to play with a red ball.',
+              'Today, Sam and Max go to the park. Sam throws the ball. Max runs fast and gets it. Then the ball falls into the pond! Max jumps in. Now Max is wet, but he has his ball.'],
+    probe: { q: '“이 이야기에서 무슨 일이 있었는지 말해 줄래? 한국어로 해도 돼.”', look: '공원에 감 → 공이 연못에 빠짐 → Max가 뛰어들어 공을 찾음. 세 가지 중 두 가지 이상이면 2점.' },
+    items: [
+      { skill: 'literal', q: 'What color is the ball?', ko: '공은 무슨 색인가요?', opts: ['red', 'brown', 'blue', 'green'], d: 1 },
+      { skill: 'literal', q: 'Where do Sam and Max go?', ko: 'Sam과 Max는 어디에 가나요?', opts: ['to the park', 'to a school', 'to a farm', 'to a shop'], d: 1 },
+      { skill: 'vocab', q: '“Now Max is wet.” What does “wet” mean?', ko: '“wet”은 무슨 뜻일까요?', opts: ['He has water on him.', 'He is sleepy.', 'He is hungry.', 'He is very big.'], d: 2 },
+      { skill: 'sequence', q: 'What happens after the ball falls into the pond?', ko: '공이 연못에 빠진 다음에 무슨 일이 일어나나요?', opts: ['Max jumps in.', 'Sam throws the ball.', 'They go to the park.', 'Max sleeps.'], d: 2 },
+      { skill: 'inference', q: 'Why does Max jump into the pond?', ko: 'Max는 왜 연못에 뛰어드나요?', opts: ['He wants his ball.', 'He is very hot.', 'He sees a fish.', 'Sam is in the pond.'], d: 3 },
+      { skill: 'evidence', dep: 4, q: 'Which sentence helps you answer Question 5?', ko: '5번 문제의 답을 알려 주는 문장은 무엇인가요?', opts: ['Now Max is wet, but he has his ball.', 'Max is small and brown.', 'Sam has a dog.', 'Today, Sam and Max go to the park.'], d: 3 }
+    ] },
+  { id: 'B2', level: 'B', form: 2, title: 'Mia’s Lunch',
+    passage: ['Mia is at school. It is time for lunch. She opens her bag. Oh no! Her lunch box is not there. It is at home on the table. Mia is sad.',
+              'Her friend Tom sits next to her. He has two sandwiches. He gives one to Mia. Mia smiles and says, “Thank you, Tom!”'],
+    probe: { q: '“이 이야기에서 무슨 일이 있었는지 말해 줄래? 한국어로 해도 돼.”', look: '도시락을 집에 두고 옴 → 슬픔 → Tom이 샌드위치를 나눠 줌. 세 가지 중 두 가지 이상이면 2점.' },
+    items: [
+      { skill: 'literal', q: 'Where is Mia?', ko: 'Mia는 어디에 있나요?', opts: ['at school', 'at home', 'at the park', 'at a shop'], d: 1 },
+      { skill: 'literal', q: 'Where is Mia’s lunch box?', ko: 'Mia의 도시락은 어디에 있나요?', opts: ['on the table at home', 'in her bag', 'in Tom’s bag', 'at the park'], d: 1 },
+      { skill: 'vocab', q: '“He gives one to Mia.” What is “one”?', ko: '여기서 “one”은 무엇을 말하나요?', opts: ['a sandwich', 'a bag', 'a table', 'a friend'], d: 2 },
+      { skill: 'sequence', q: 'What happens last in the story?', ko: '이야기에서 마지막에 일어나는 일은 무엇인가요?', opts: ['Mia says thank you.', 'Mia opens her bag.', 'Mia is sad.', 'Tom sits next to Mia.'], d: 2 },
+      { skill: 'inference', q: 'How does Mia feel at the end of the story?', ko: '이야기의 끝에서 Mia의 기분은 어떤가요?', opts: ['happy', 'sad', 'angry', 'sleepy'], d: 2 },
+      { skill: 'evidence', dep: 4, q: 'Which sentence helps you answer Question 5?', ko: '5번 문제의 답을 알려 주는 문장은 무엇인가요?', opts: ['Mia smiles and says, “Thank you, Tom!”', 'Mia is sad.', 'She opens her bag.', 'It is time for lunch.'], d: 3 }
+    ] },
+
+  /* ───────── Level C ───────── */
+  { id: 'C1', level: 'C', form: 1, title: 'The Lost Kitten',
+    passage: ['On Saturday morning, Jin heard a soft sound outside his window. He looked out and saw a tiny gray kitten under a bush. It was shaking because the morning was cold.',
+              'Jin wanted to bring it inside, but his mom said, “Wait. Maybe it has a family.” So Jin put a small bowl of water near the bush and watched from the window.',
+              'An hour later, a big gray cat came. She picked up the kitten gently with her mouth and carried it away. Jin felt a little sad, but he was also glad. The kitten was going home.'],
+    probe: { q: '“Jin은 왜 고양이를 집에 데려오지 않았을까? 한국어로 설명해도 돼.”', look: '가족이 있을 수 있어서 기다렸다는 내용과, 어미 고양이가 데려갔다는 내용을 말하면 2점. 하나만 말하면 1점.' },
+    items: [
+      { skill: 'literal', q: 'What did Jin see under the bush?', opts: ['a tiny gray kitten', 'a big gray cat', 'a small bowl of water', 'a little bird'], d: 1 },
+      { skill: 'vocab', q: '“It was shaking because the morning was cold.” What does “shaking” mean here?', opts: ['moving its body quickly, again and again', 'sleeping quietly', 'running away fast', 'crying very loudly'], d: 2 },
+      { skill: 'sequence', q: 'What did Jin do after his mom told him to wait?', opts: ['He put water near the bush and watched.', 'He brought the kitten inside.', 'He called the big gray cat.', 'He went back to bed.'], d: 2 },
+      { skill: 'inference', q: 'Who was the big gray cat, most likely?', opts: ['the kitten’s mother', 'Jin’s pet cat', 'a cat that wanted the water', 'a cat that was lost, too'], d: 2 },
+      { skill: 'evidence', dep: 3, q: 'Which sentence best supports your answer to Question 4?', opts: ['She picked up the kitten gently with her mouth and carried it away.', 'It was shaking because the morning was cold.', 'So Jin put a small bowl of water near the bush and watched from the window.', 'On Saturday morning, Jin heard a soft sound outside his window.'], d: 3 },
+      { skill: 'main', q: 'What is this story mostly about?', opts: ['A boy helps a kitten by waiting for its family.', 'A boy gets a new pet cat.', 'A cat that drinks water every morning.', 'A mom who does not like animals.'], d: 3 }
+    ] },
+  { id: 'C2', level: 'C', form: 2, title: 'Beans in a Cup',
+    passage: ['Our class did a science project last month. Each student planted three beans in a paper cup. Hana put her cup next to the sunny window. Leo put his cup in the dark closet because he wanted to see what would happen. Both of them gave their plants water every two days.',
+              'After two weeks, Hana’s plant was tall and green. Leo’s plant was thin and pale yellow. It was bending toward the closet door, where a little light came in.',
+              'Our teacher smiled. “Now you can see it,” she said. “Plants do not only need water. They need light, too.”'],
+    probe: { q: '“두 식물이 왜 다르게 자랐는지 설명해 줄래? 한국어로 해도 돼.”', look: '물은 똑같이 주었고 빛이 달랐다는 두 가지를 모두 말하면 2점. 빛만 말하면 1점.' },
+    items: [
+      { skill: 'literal', q: 'Where did Leo put his cup?', opts: ['in the dark closet', 'next to the sunny window', 'on the teacher’s desk', 'outside the classroom'], d: 1 },
+      { skill: 'vocab', q: '“Leo’s plant was thin and pale yellow.” What does “pale” mean here?', opts: ['light in color, not bright', 'very dark', 'strong and tall', 'wet and heavy'], d: 3 },
+      { skill: 'literal', q: 'What was the same for both plants?', opts: ['They got water every two days.', 'They got a lot of sunlight.', 'They grew tall and green.', 'They were kept in the closet.'], d: 2 },
+      { skill: 'inference', q: 'Why was Leo’s plant bending toward the closet door?', opts: ['It was trying to reach the light.', 'It was too heavy to stand up.', 'Leo pushed it toward the door.', 'It had too much water.'], d: 2 },
+      { skill: 'evidence', dep: 3, q: 'Which sentence best supports your answer to Question 4?', opts: ['It was bending toward the closet door, where a little light came in.', 'Both of them gave their plants water every two days.', 'Each student planted three beans in a paper cup.', 'Our class did a science project last month.'], d: 3 },
+      { skill: 'main', q: 'What did the class learn from the project?', opts: ['Plants need light as well as water.', 'Beans grow best in paper cups.', 'Plants need water every day.', 'A closet is a good place for plants.'], d: 2 }
+    ] },
+
+  /* ───────── Level D ───────── */
+  { id: 'D1', level: 'D', form: 1, title: 'Why Do Birds Fly South?',
+    passage: ['Every autumn, millions of birds leave their homes and travel thousands of kilometers. This long journey is called migration. For a long time, people believed that birds left only because of the cold. However, scientists now know that the main reason is food.',
+              'In winter, insects disappear and many plants stop producing seeds. A bird can survive low temperatures if it eats enough, but it cannot survive without food. So the birds fly to warmer places where food is easier to find.',
+              'Migration is dangerous. Storms, tall buildings, and hungry animals kill many birds on the way. Bright city lights can also confuse birds that travel at night. Even so, most birds make the same trip every year. When spring returns and food appears again, they fly back to the place where they were born and build their nests.'],
+    probe: { q: '“새들이 겨울에 이동하는 진짜 이유가 뭐라고 했지? 추위 때문이 아니라는 건 어떻게 알 수 있어? 한국어로 설명해도 돼.”', look: '먹이가 주된 이유라는 점과, 충분히 먹으면 추위는 견딘다는 근거를 말하면 2점. 먹이만 말하면 1점.' },
+    items: [
+      { skill: 'main', q: 'What is the main idea of the passage?', opts: ['Birds migrate mainly to find food, even though the trip is risky.', 'Birds cannot live in cold weather.', 'City lights are the biggest danger to birds.', 'Scientists still do not know why birds migrate.'], d: 2 },
+      { skill: 'literal', q: 'According to the passage, what did people believe for a long time?', opts: ['Birds left only because of the cold.', 'Birds left to build new nests.', 'Birds got lost in storms.', 'Birds followed the city lights.'], d: 1 },
+      { skill: 'vocab', q: '“Bright city lights can also confuse birds that travel at night.” What does “confuse” mean here?', opts: ['make it hard for them to know where to go', 'help them see the ground better', 'make them fly much faster', 'keep them warm at night'], d: 2 },
+      { skill: 'apply', q: 'A park has plenty of seeds and insects all winter, but it is very cold. Based on the passage, what would many birds there most likely do?', opts: ['stay, because they have enough food', 'leave, because it is too cold', 'stop eating until spring', 'fly only at night'], d: 3 },
+      { skill: 'evidence', dep: 3, q: 'Which sentence best supports your answer to Question 4?', opts: ['A bird can survive low temperatures if it eats enough, but it cannot survive without food.', 'Migration is dangerous.', 'Every autumn, millions of birds leave their homes and travel thousands of kilometers.', 'Bright city lights can also confuse birds that travel at night.'], d: 3 },
+      { skill: 'inference', q: 'Why does the author write “Even so” in the last paragraph?', opts: ['to show that birds still migrate although it is dangerous', 'to show that migration is easy for most birds', 'to explain why storms happen in autumn', 'to say that birds should stay at home'], d: 3 }
+    ] },
+  { id: 'D2', level: 'D', form: 2, title: 'The Science Fair',
+    passage: ['Dana had worked on her volcano model for three weeks. On the morning of the science fair, she carried it carefully into the gym and set it on her table. Then she saw the project next to hers. A boy named Eric had built a small robot that could pick up paper balls. A crowd was already standing around it.',
+              'Dana looked at her volcano. Suddenly it seemed plain and childish. When the judges arrived, her voice was so quiet that they had to lean in to hear her. She forgot to explain how the gas pushes the “lava” out.',
+              'After the judges left, Eric walked over. “Your volcano is cool,” he said. “Mine broke twice this morning. I almost didn’t come.” Dana stared at him. She had thought he was not nervous at all.',
+              'Next year, she decided, she would practice her talk as much as her project.'],
+    probe: { q: '“Dana는 왜 발표를 잘 못했을까? 그리고 마지막에 무엇을 깨달았을까? 한국어로 설명해도 돼.”', look: 'Eric의 로봇을 보고 자신감을 잃었다는 점과, 발표 연습도 중요하다는(또는 남들도 긴장한다는) 깨달음을 말하면 2점. 하나만 말하면 1점.' },
+    items: [
+      { skill: 'literal', q: 'What had Eric built?', opts: ['a robot that could pick up paper balls', 'a model of a volcano', 'a machine that makes gas', 'a table for the judges'], d: 1 },
+      { skill: 'vocab', q: '“Suddenly it seemed plain and childish.” What does “plain” mean here?', opts: ['simple and not special', 'flat like a field', 'easy to see', 'honest and direct'], d: 3 },
+      { skill: 'inference', q: 'Why was Dana’s voice so quiet when the judges arrived?', opts: ['She lost confidence after seeing Eric’s robot.', 'She had a cold that morning.', 'The judges asked her to speak softly.', 'She did not want Eric to hear her idea.'], d: 2 },
+      { skill: 'evidence', dep: 2, q: 'Which sentence best supports your answer to Question 3?', opts: ['Suddenly it seemed plain and childish.', 'Dana had worked on her volcano model for three weeks.', 'After the judges left, Eric walked over.', 'She carried it carefully into the gym and set it on her table.'], d: 3 },
+      { skill: 'inference', q: 'What did Dana learn from what Eric said?', opts: ['People can feel nervous even when they look confident.', 'Robots are better projects than volcanoes.', 'Eric wanted to win more than she did.', 'The judges liked her project best.'], d: 3 },
+      { skill: 'main', q: 'What lesson does Dana take from the science fair?', opts: ['Preparing how to present is as important as the project itself.', 'She should build a robot next year.', 'She should not join the science fair again.', 'It is better to work with a partner.'], d: 2 }
+    ] },
+
+  /* ───────── Level E ───────── */
+  { id: 'E1', level: 'E', form: 1, title: 'The Homework Question',
+    passage: ['Many students complain about homework, and some adults agree with them. A few schools have even stopped giving homework to young children. Supporters of this change argue that children already spend six or seven hours a day at school and need time to play, rest, and be with their families. They also point to studies showing that, for elementary students, more homework does not lead to much higher test scores.',
+              'Others believe this goes too far. Homework, they say, is not only about test scores. Finishing a task alone, without a teacher nearby, teaches children to plan their time and to keep trying when something is difficult. These habits may matter more in the long run than any single lesson.',
+              'Perhaps the real problem is not homework itself but the kind of homework that is given. Copying the same word twenty times teaches very little. Reading a book of your own choice for twenty minutes, or interviewing a grandparent about their childhood, can be both enjoyable and valuable. Before we ask whether homework should disappear, we might ask a better question: is this homework worth a child’s time?'],
+    probe: { q: '“글쓴이는 숙제를 없애자는 쪽이야, 유지하자는 쪽이야? 왜 그렇게 생각해? 한국어로 설명해도 돼.”', look: '어느 쪽도 아니고 숙제의 질이 문제라는 입장을 말하고, 3문단의 예를 근거로 들면 2점. 입장만 말하면 1점.' },
+    items: [
+      { skill: 'main', q: 'Which statement best expresses the author’s own position?', opts: ['The kind of homework matters more than whether homework exists.', 'Homework should be stopped for all children.', 'Homework is necessary because it raises test scores.', 'Children should decide whether to do homework.'], d: 2 },
+      { skill: 'evidence', dep: 0, q: 'Which sentence best shows the position you chose in Question 1?', opts: ['Perhaps the real problem is not homework itself but the kind of homework that is given.', 'A few schools have even stopped giving homework to young children.', 'Others believe this goes too far.', 'Homework, they say, is not only about test scores.'], d: 2 },
+      { skill: 'vocab', q: '“These habits may matter more in the long run than any single lesson.” What does “in the long run” mean?', opts: ['over a long period of time', 'during a long race', 'as quickly as possible', 'in a physical education class'], d: 2 },
+      { skill: 'inference', q: 'Why does the author mention “copying the same word twenty times”?', opts: ['as an example of homework that has little value', 'to show how children learn to spell', 'to explain why test scores are low', 'to describe the author’s own school days'], d: 2 },
+      { skill: 'critical', q: 'Which finding would most weaken the argument in paragraph 2?', opts: ['Students who never have homework manage their time just as well as students who do.', 'Most students say that homework is boring.', 'Some homework takes more than an hour to finish.', 'Parents often help their children with homework.'], d: 3 },
+      { skill: 'apply', q: 'Which homework would the author most likely approve of?', opts: ['asking a family member about a job they once had and writing three things you learned', 'writing each spelling word fifteen times', 'solving fifty math problems of the same type', 'copying a page from the textbook'], d: 3 }
+    ] },
+  { id: 'E2', level: 'E', form: 2, title: 'The Problem with a Perfect Material',
+    passage: ['When plastic became common in the 1950s, it seemed almost perfect. It was light, strong, cheap, and could be shaped into nearly anything. It kept food fresh, made medical tools safer, and replaced materials such as ivory, which had been taken from elephants. In many ways, plastic solved real problems.',
+              'The quality that made plastic so useful, however, is the same quality that makes it harmful: it lasts. A plastic bottle used for ten minutes may remain in the environment for hundreds of years. Much of it breaks into tiny pieces that end up in rivers, oceans, and even the bodies of animals.',
+              'Some people respond by saying we should ban plastic completely. Yet this ignores what plastic still does well. A hospital without plastic would be less safe, and replacing every plastic package with glass would make trucks heavier and burn more fuel. A more sensible goal is to stop using plastic for things we throw away after a single use, while keeping it where no good alternative exists. The question is not whether plastic is good or bad, but where it belongs.'],
+    probe: { q: '“글쓴이는 플라스틱을 완전히 금지하자는 의견에 찬성해? 왜 그렇게 생각해? 한국어로 설명해도 돼.”', look: '완전 금지에는 반대하고 일회용은 줄이자는 입장을 말하고, 병원·유리 운송의 예를 근거로 들면 2점. 입장만 말하면 1점.' },
+    items: [
+      { skill: 'main', q: 'Which statement best expresses the author’s position?', opts: ['Plastic should be kept only for uses where it is truly needed.', 'Plastic should be banned completely.', 'Plastic is harmless if people recycle it.', 'Glass is always a better choice than plastic.'], d: 2 },
+      { skill: 'evidence', dep: 0, q: 'Which sentence best shows the position you chose in Question 1?', opts: ['A more sensible goal is to stop using plastic for things we throw away after a single use, while keeping it where no good alternative exists.', 'When plastic became common in the 1950s, it seemed almost perfect.', 'Some people respond by saying we should ban plastic completely.', 'Much of it breaks into tiny pieces that end up in rivers, oceans, and even the bodies of animals.'], d: 2 },
+      { skill: 'vocab', q: '“Yet this ignores what plastic still does well.” What does “ignores” mean here?', opts: ['pays no attention to', 'explains clearly', 'makes worse', 'agrees with'], d: 2 },
+      { skill: 'inference', q: 'What does the author mean in the first sentence of paragraph 2?', opts: ['Plastic lasts a long time, which is both its strength and its danger.', 'Plastic is cheap, so people buy too much of it.', 'Plastic is light, so the wind carries it into the ocean.', 'Plastic can be shaped easily, so it hurts animals.'], d: 3 },
+      { skill: 'critical', q: 'Which new fact would most weaken the author’s argument against a complete ban?', opts: ['A new material is as safe, light, and cheap as plastic but breaks down within a year.', 'Most plastic waste comes from things used only once.', 'Hospitals use more plastic today than they did before.', 'Many people already carry cloth bags when they shop.'], d: 3 },
+      { skill: 'apply', q: 'Which use of plastic would the author most likely want to stop?', opts: ['plastic forks used once at a picnic', 'a plastic part inside a hospital machine', 'a plastic tube used during surgery', 'a plastic bike helmet used for years'], d: 2 }
+    ] }
+];
+
+/* Teacher can-do scales (teacher-rated domains) */
+var RATING_DOMAINS = {
+  speaking: { ko: 'Speaking', task: '그림 한 장이나 어제 한 일에 대해 1~2분 이야기하게 한 뒤, 가장 가까운 설명을 고릅니다.',
+    levels: {
+      A: '단어나 외운 짧은 표현으로 답합니다. (예: “Dog.” “I like pizza.”)',
+      B: '익숙한 주제를 짧은 문장으로 묻고 답합니다. 멈춤과 오류가 있어도 뜻은 통합니다.',
+      C: 'and, but, because로 문장을 이어 자기 경험이나 이야기를 3~4문장으로 말합니다.',
+      D: '의견과 이유를 말하고 읽은 내용을 스스로 요약해 설명합니다. 모르는 단어는 돌려서 말합니다.',
+      E: '낯선 주제도 근거를 들어 논리적으로 설명하고 반대 의견에 대답합니다.' } },
+  writing: { ko: 'Writing', task: '“My favorite day”처럼 쉬운 주제로 5~10분 쓰게 한 뒤, 가장 가까운 설명을 고릅니다.',
+    levels: {
+      A: '알파벳과 익숙한 단어를 쓰고, 보기 문장을 따라 씁니다.',
+      B: '짧은 단문을 스스로 씁니다. 철자 오류는 있지만 읽을 수 있습니다.',
+      C: '한 주제로 4~6문장을 이어 씁니다. and, but, because와 과거형을 일부 씁니다.',
+      D: '주제문, 뒷받침, 맺음이 있는 한 문단을 쓰고 의견과 이유를 제시합니다.',
+      E: '여러 문단으로 근거와 예시, 연결어를 써서 주장을 전개합니다.' } },
+  phonics: { ko: 'Phonics', task: '처음 보는 단어 목록을 소리 내어 읽게 한 뒤, 가장 가까운 설명을 고릅니다.',
+    levels: {
+      A: '알파벳 소리를 대부분 알고 CVC 단어(cat, sun)를 소리 합쳐 읽습니다.',
+      B: 'sh, ch, th와 magic e가 있는 단어를 읽습니다.',
+      C: '모음팀(ai, ea, oa)과 2음절 단어를 읽고, 처음 보는 단어도 규칙으로 읽어 냅니다.',
+      D: '다음절 단어와 접두사·접미사가 붙은 단어를 정확히 읽습니다.',
+      E: '낯선 긴 단어도 음절과 형태로 나누어 막힘 없이 읽습니다.' } },
+  vocabulary: { ko: 'Vocabulary', task: '최근 배운 단어 5개로 문장을 말하거나 쓰게 한 뒤, 가장 가까운 설명을 고릅니다.',
+    levels: {
+      A: '그림과 연결되는 기초 명사, 색, 숫자, 동작 단어를 압니다.',
+      B: '일상에서 자주 쓰는 단어를 문장 안에서 이해합니다.',
+      C: '배운 단어를 자기 문장에 넣어 쓰고, 문맥으로 뜻을 일부 짐작합니다.',
+      D: '문맥으로 낯선 단어의 뜻을 추론하고, 뜻이 여러 개인 단어를 구분합니다.',
+      E: '추상적인 단어와 학습 어휘를 이해하고 말과 글에 정확히 씁니다.' } }
+};
+
+/* Recommendations by working level */
+var RECS = {
+  A: { goals: ['알파벳 26자의 대표 소리를 바로 떠올리기', 'CVC 단어(cat, sun, bed)를 소리 합쳐 읽기', '자주 나오는 sight word 20~30개를 바로 읽기'],
+       acts: ['소리 카드로 하루 5분 blending 연습', '그림과 단어 짝 맞추기 놀이', '한 줄짜리 decodable 문장 소리 내어 읽기'],
+       plan: ['단모음 a, e, i 중심의 CVC 단어 읽기', '단모음 o, u와 sight word 넓히기', '짧은 문장 읽고 그림 고르기, 이후 재평가'],
+       reading: '한 쪽에 한두 문장이 있고 그림 비중이 큰 decodable 리더' },
+  B: { goals: ['40~60단어 글을 혼자 끝까지 읽기', '누가, 어디서, 무엇을 했는지 답하기', '이야기 순서를 세 단계로 말하기'],
+       acts: ['읽은 뒤 “누가, 어디서, 무엇을” 세 가지 질문하기', '문장 카드 순서 맞추기', 'sh, ch, th와 magic e 단어 읽기'],
+       plan: ['짧은 이야기 주 2편 읽기, 사실 질문 중심', '순서 말하기와 “왜 그랬을까?” 질문 시작', '읽은 내용을 한두 문장으로 다시 말하기, 이후 재평가'],
+       reading: '한 쪽에 2~4문장, 반복 문형이 있는 초기 리더' },
+  C: { goals: ['100단어 안팎 글의 중심 내용을 한 문장으로 말하기', '글에 직접 나오지 않은 이유와 감정 짐작하기', '모르는 단어를 문맥으로 짐작하기'],
+       acts: ['읽은 뒤 한 문장 요약하기 (Somebody–Wanted–But–So)', '“어떻게 알았어?” 근거 문장에 밑줄 긋기', '배운 단어로 자기 문장 만들기'],
+       plan: ['요약 틀을 써서 이야기 글 요약하기', '추론 질문과 근거 문장 찾기', '짧은 정보 글 읽기와 4~6문장 쓰기, 이후 재평가'],
+       reading: '짧은 장으로 나뉜 초기 챕터북과 쉬운 논픽션' },
+  D: { goals: ['여러 문단 글의 중심 생각과 뒷받침 내용 구분하기', '추론한 내용의 근거를 글에서 찾아 설명하기', '읽은 내용에 대한 의견을 이유와 함께 말하고 쓰기'],
+       acts: ['문단마다 핵심 문장 찾기', '읽은 내용을 새 상황에 적용하는 질문하기', '의견–이유–예시 구조로 한 문단 쓰기'],
+       plan: ['정보 글의 중심 생각과 세부 내용 정리하기', '근거를 들어 추론 설명하기', '의견 문단 쓰기와 발표, 이후 재평가'],
+       reading: '챕터북, 주제가 있는 논픽션, 어린이 신문 기사' },
+  E: { goals: ['주장하는 글에서 글쓴이의 입장과 근거 구분하기', '논증의 약점과 반론을 찾아 평가하기', '근거와 예시를 갖춘 여러 문단의 글 쓰기'],
+       acts: ['찬반이 있는 글을 읽고 양쪽 근거를 표로 정리하기', '“이 주장을 약하게 만드는 사실은?” 토론하기', '주장–근거–반론–맺음 구조로 글쓰기'],
+       plan: ['주장하는 글의 구조 분석하기', '반론 찾기와 토론하기', '근거를 갖춘 에세이 쓰기, 이후 재평가'],
+       reading: '중편 소설, 주제별 논픽션, 의견 기사' }
+};
+
+
+
+/* Amber English Assessment — rule-based multistage adaptive engine (pure functions) */
+
+var MAX_TESTLETS = 5;
+var TL = {};
+
+function hashStr(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function seededRng(seed) { var a = seed >>> 0; return function () { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+function prepareBank(testlets) {
+  testlets.forEach(function (t) {
+    TL[t.id] = t;
+    t.words = t.passage ? t.passage.join(' ').split(/\s+/).length : 0;
+    t.items.forEach(function (it, i) {
+      it.id = t.id + '-' + (i + 1); it.n = i + 1;
+      var idx = it.opts.map(function (_, k) { return k; }), r = seededRng(hashStr('aea:' + it.id));
+      for (var k = idx.length - 1; k > 0; k--) { var j = Math.floor(r() * (k + 1)); var tmp = idx[k]; idx[k] = idx[j]; idx[j] = tmp; }
+      it.order = idx;               // display position -> original option index
+      it.ansPos = idx.indexOf(0);   // display position of the correct option
+    });
+  });
+}
+
+function rapidThreshold(level) { return { A: 800, B: 2000, C: 2500, D: 3000, E: 3000 }[level]; }
+
+function formsAt(level) { return Object.keys(TL).filter(function (id) { return TL[id].level === level; }).sort(); }
+
+function pickForm(a, level) {
+  var used = (a.levels[level] && a.levels[level].forms) || [];
+  var cands = formsAt(level).filter(function (id) { return used.indexOf(id) < 0; });
+  if (!cands.length) return null;
+  var seen = a.seen || [];
+  cands.sort(function (x, y) { return seen.lastIndexOf(x) - seen.lastIndexOf(y) || (x < y ? -1 : 1); });
+  return cands[0];
+}
+
+function newAssessment(id, studentId, startLevel, mode, seen, now, tid) {
+  var a = { id: id, studentId: studentId, mode: mode, status: 'in_progress', startedAt: now, date: null, startLevel: startLevel,
+            path: [], levels: {}, cur: null, seen: seen || [], result: null, teacher: {} };
+  beginTestlet(a, tid || pickForm(a, startLevel));
+  return a;
+}
+
+function beginTestlet(a, tid) {
+  var t = TL[tid];
+  a.path.push({ testlet: tid, level: t.level, readMs: 0, responses: [], correct: 0, total: t.items.length, outcome: null, done: false });
+  a.cur = { testlet: tid, idx: 0, phase: (t.passage && a.mode === 'online') ? 'read' : 'item' };
+}
+
+/* choice: original option index (0 = correct), or -1 for "not sure" / blank */
+function recordResponse(a, choice, ms) {
+  var p = a.path[a.path.length - 1], t = TL[p.testlet], it = t.items[p.responses.length];
+  var correct = choice === 0;
+  var rapid = a.mode === 'online' && choice >= 0 && ms != null && ms < rapidThreshold(t.level);
+  p.responses.push({ n: it.n, choice: choice, correct: correct, ms: ms == null ? null : Math.round(ms), rapid: !!rapid });
+  a.cur.idx = p.responses.length;
+  if (p.responses.length >= t.items.length) return completeTestlet(a);
+  return { more: true };
+}
+
+function testletOutcome(p) {
+  var n = p.total, c = p.responses.filter(function (r) { return r.correct; }).length;
+  var rapidCorrect = p.responses.filter(function (r) { return r.correct && r.rapid; }).length;
+  var o = c >= 0.8 * n ? 'secure' : (c <= 0.5 * n ? 'low' : 'borderline');
+  if (o === 'secure' && rapidCorrect >= 2) o = 'borderline';
+  return o;
+}
+
+function completeTestlet(a) {
+  var p = a.path[a.path.length - 1], L = p.level;
+  p.correct = p.responses.filter(function (r) { return r.correct; }).length;
+  p.outcome = testletOutcome(p); p.done = true;
+  var st = a.levels[L] || (a.levels[L] = { forms: [], correct: 0, total: 0, status: null });
+  st.forms.push(p.testlet); st.correct += p.correct; st.total += p.total;
+
+  var status;
+  if (st.forms.length === 1) {
+    if (p.outcome === 'borderline') {
+      var other = pickForm(a, L);
+      if (other && a.path.length < MAX_TESTLETS) { beginTestlet(a, other); return { next: other, reason: 'confirm' }; }
+      status = 'developing';
+    } else status = p.outcome;
+  } else {
+    status = st.correct >= 0.75 * st.total ? 'secure' : (st.correct <= 0.5 * st.total ? 'low' : 'developing');
+  }
+  st.status = status;
+
+  var i = LEVELS.indexOf(L);
+  if (status === 'developing') return finish(a, L, 'developing', {});
+  if (status === 'secure') {
+    if (i === LEVELS.length - 1) return finish(a, L, 'secure', {});
+    var up = LEVELS[i + 1];
+    if (a.levels[up] && a.levels[up].status === 'low') return finish(a, up, 'beginning', {});
+    if (a.path.length >= MAX_TESTLETS) return finish(a, up, 'beginning', { capped: true });
+    beginTestlet(a, pickForm(a, up)); return { next: a.cur.testlet, reason: 'up' };
+  }
+  if (i === 0) return finish(a, L, 'beginning', {});
+  var dn = LEVELS[i - 1];
+  if (a.levels[dn] && a.levels[dn].status === 'secure') return finish(a, L, 'beginning', {});
+  if (a.path.length >= MAX_TESTLETS) return finish(a, L, 'beginning', { capped: true });
+  beginTestlet(a, pickForm(a, dn)); return { next: a.cur.testlet, reason: 'down' };
+}
+
+function finish(a, level, stage, flags) {
+  a.status = 'done'; a.cur = null;
+  a.result = computeResult(a, level, stage, flags || {});
+  return { done: true, result: a.result };
+}
+
+/* Teacher ends the session early: judge from what is complete so far. Returns false if nothing can be judged. */
+function provisionalFinish(a) {
+  var sec = [], low = [], pend = [];
+  LEVELS.forEach(function (L, i) { var st = a.levels[L]; if (!st) return; if (st.status === 'secure') sec.push(i); else if (st.status === 'low') low.push(i); else pend.push(i); });
+  var level, stage;
+  if (sec.length) { var m = Math.max.apply(null, sec); if (m === LEVELS.length - 1) { level = 'E'; stage = 'secure'; } else { level = LEVELS[m + 1]; stage = 'beginning'; } }
+  else if (pend.length) { level = LEVELS[pend[0]]; stage = 'developing'; }
+  else if (low.length) { level = LEVELS[Math.min.apply(null, low)]; stage = 'beginning'; }
+  else return false;
+  finish(a, level, stage, { provisional: true });
+  return true;
+}
+
+function computeResult(a, level, stage, flags) {
+  var items = 0, correct = 0, rapid = 0, idk = 0, unsupported = 0, skills = {};
+  a.path.forEach(function (p) {
+    var t = TL[p.testlet];
+    p.responses.forEach(function (r, k) {
+      var it = t.items[k]; items++; if (r.correct) correct++; if (r.rapid) rapid++; if (r.choice < 0) idk++;
+      var s = skills[it.skill] || (skills[it.skill] = { c: 0, n: 0 }); s.n++; if (r.correct) s.c++;
+      if (it.dep != null && !r.correct && p.responses[it.dep] && p.responses[it.dep].correct) unsupported++;
+    });
+  });
+  var secure = LEVELS.filter(function (L) { return a.levels[L] && a.levels[L].status === 'secure'; });
+  var mastered = secure.length ? secure[secure.length - 1] : null;
+  var done = a.path.filter(function (p) { return p.done; }).length;
+  var basis = 'medium';
+  if (flags.provisional || flags.capped || rapid >= 3) basis = 'low';
+  else if (done >= 2 && rapid <= 1) basis = 'high';
+  return { level: level, stage: stage, mastered: mastered, basis: basis, capped: !!flags.capped, provisional: !!flags.provisional,
+           items: items, correct: correct, rapid: rapid, idk: idk, unsupported: unsupported, skills: skills, testlets: done };
+}
+
+/* Basis after the teacher's oral check: a 0 on the check lowers it one step, a 2 never raises it. */
+function effectiveBasis(a) {
+  var b = a.result ? a.result.basis : 'low', pr = a.teacher && a.teacher.probe;
+  if (pr && pr.score === 0) return b === 'high' ? 'medium' : 'low';
+  return b;
+}
+
+function stageValue(level, stage) { return LEVELS.indexOf(level) + ({ beginning: 0.2, developing: 0.5, secure: 0.85 }[stage] || 0.5); }
+
+function skillFindings(skills) {
+  var good = [], need = [];
+  Object.keys(skills).forEach(function (k) { var s = skills[k]; if (s.n < 2) return; if (s.c / s.n >= 0.8) good.push(k); else if (s.c / s.n <= 0.5) need.push(k); });
+  return { good: good, need: need };
+}
+
+/* Which testlet should the teacher's oral check use: the last completed one where the student got more than half. */
+function probeTestlet(a) {
+  var done = a.path.filter(function (p) { return p.done; });
+  for (var i = done.length - 1; i >= 0; i--) if (done[i].correct > 0.5 * done[i].total) return done[i].testlet;
+  return done.length ? done[done.length - 1].testlet : null;
+}
+/* aea-core-end */
+prepareBank(TESTLETS);
+return {LEVELS:LEVELS,LEVEL_INFO:LEVEL_INFO,TESTLETS:TESTLETS,TL:TL,MAX_TESTLETS:MAX_TESTLETS,
+  newAssessment:newAssessment,recordResponse:recordResponse,provisionalFinish:provisionalFinish,effectiveBasis:effectiveBasis};
+})();
+
+// Words the teacher reads. The bank's own Korean labels say the same; these go through tx() so the
+// screen follows the language setting like the rest of the app.
+const LT_STAGE={beginning:tx("Beginning stage"),developing:tx("Developing stage"),secure:tx("Secure stage")};
+const LT_STAGE_DESC={
+  beginning:tx("Has just started on texts at this level. The level below is secure."),
+  developing:tx("Understands texts at this level in part. The right level to learn at now."),
+  secure:tx("Understands texts at this level securely."),
+};
+const LT_SKILL={phonics:tx("Letter–sound"),decode:tx("Word decoding"),sentence:tx("Sentence reading"),vocab:tx("Vocabulary in context"),
+  literal:tx("Literal understanding"),sequence:tx("Sequence and flow"),main:tx("Main idea"),inference:tx("Inference"),
+  evidence:tx("Finding evidence"),apply:tx("Applying to a new case"),critical:tx("Critical reading")};
+const LT_BASIS={high:[tx("Enough to judge on"),"bd"],medium:[tx("Fair basis to judge on"),"bpa"],low:[tx("Thin basis · check again"),"bu"]};
+const LT_OUTCOME={secure:[tx("Secure|test part"),"bd"],borderline:[tx("Borderline → checked again"),"bpa"],low:[tx("Hard|test part"),"bu"]};
+const LT_CIRC=["①","②","③","④"];
+const LT_RETEST_MONTHS=3;
+
+const ltSame=(a,b)=>String(a)===String(b);
+const ltStudent=sid=>students.find(s=>ltSame(s.id,sid))||null;
+const ltGet=aid=>assessments.find(a=>a.id===aid)||null;
+const ltOf=sid=>assessments.filter(a=>ltSame(a.studentId,sid));
+// Finished tests of one student, oldest first.
+function ltDone(sid){
+  return ltOf(sid).filter(a=>a.status==="done"&&a.result)
+    .sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.startedAt-b.startedAt);
+}
+function ltLatest(sid){const d=ltDone(sid);return d.length?d[d.length-1]:null;}
+function ltInProgress(sid){return ltOf(sid).filter(a=>a.status==="in_progress").sort((a,b)=>b.startedAt-a.startedAt)[0]||null;}
+// Every part this student has already met, oldest first — the engine picks the set seen longest ago.
+function ltSeen(sid){
+  const out=[];
+  ltOf(sid).sort((a,b)=>a.startedAt-b.startedAt).forEach(a=>(a.path||[]).forEach(p=>out.push(p.testlet)));
+  return out;
+}
+const ltFinal=a=>(a.teacher&&a.teacher.finalLevel)||"";
+function ltAddMonths(dateStr,m){const p=String(dateStr).split("-").map(Number);return fmtDate(new Date(p[0],p[1]-1+m,p[2]));}
+const ltLv=(L,cls)=>`<span class="lt-lv${L?"":" none"}${cls?" "+cls:""}">${L?escapeAttr(L):"–"}</span>`;
+
+// ── The page: one row per student ─────────────────────────────────────────
+let ltOpenSid=null;       // the student whose history is unfolded
+function renderLevelTest(){
+  const box=document.getElementById("lt-list");if(!box)return;
+  const list=students.filter(s=>!s.archived);
+  const counts={};
+  list.forEach(s=>{const g=PLAN_LEVELS.includes(s.group)?s.group:"";counts[g]=(counts[g]||0)+1;});
+  const sum=document.getElementById("lt-sum");
+  if(sum)sum.innerHTML=PLAN_LEVELS.map(L=>`<span class="tag"><b>${L}</b> ${counts[L]||0}</span>`).join("")+
+    (counts[""]?`<span class="tag">${escapeAttr(tx("No level yet"))} ${counts[""]}</span>`:"");
+  if(!list.length){box.innerHTML=`<div class="lt-empty">${escapeAttr(tx("Add a student first — the level test is started from the student's row here."))}</div>`;return;}
+  const today=td();
+  box.innerHTML=list.map(s=>{
+    const sid=escapeAttr(s.id),all=ltOf(s.id),last=ltLatest(s.id),ip=ltInProgress(s.id);
+    const lvl=PLAN_LEVELS.includes(s.group)?s.group:"";
+    let sub=tx("Not tested yet");
+    if(last)sub=tx("Last test {date} · app result {res}",{date:last.date,res:last.result.level+" · "+LT_STAGE[last.result.stage]})+
+      (ltFinal(last)?" · "+tx("confirmed {lv}",{lv:ltFinal(last)}):"");
+    const badges=[];
+    if(ip)badges.push(`<span class="badge bip">${escapeAttr(tx("In progress"))}</span>`);
+    if(last&&!ltFinal(last))badges.push(`<span class="badge bpa">${escapeAttr(tx("Not confirmed"))}</span>`);
+    if(last&&today>=ltAddMonths(last.date,LT_RETEST_MONTHS))badges.push(`<span class="badge bpr">${escapeAttr(tx("Retest due"))}</span>`);
+    const acts=[];
+    if(last)acts.push(`<button class="btn btn-sm" data-lt="review" data-aid="${escapeAttr(last.id)}">${escapeAttr(tx("Result"))}</button>`);
+    if(all.length)acts.push(`<button class="btn btn-sm" data-lt="hist" data-sid="${sid}" aria-expanded="${ltSame(ltOpenSid,s.id)}">${escapeAttr(tx("History ({n})",{n:all.length}))}</button>`);
+    acts.push(ip
+      ?`<button class="btn btn-sm btn-p" data-lt="resume" data-aid="${escapeAttr(ip.id)}">${escapeAttr(tx("Continue test"))}</button>`
+      :`<button class="btn btn-sm btn-p" data-lt="start" data-sid="${sid}">${escapeAttr(tx("Start test"))}</button>`);
+    let h=`<div class="lt-row">${ltLv(lvl)}<div class="lt-main"><div class="lt-name">${escapeAttr(s.name||"")}${s.k?` <span class="cell-muted2">${escapeAttr(s.k)}</span>`:""}</div>`+
+      `<div class="lt-sub">${escapeAttr(sub)}</div></div><div class="lt-acts">${badges.join("")}${acts.join("")}</div></div>`;
+    if(ltSame(ltOpenSid,s.id)&&all.length)h+=`<div class="lt-hist">${all.sort((a,b)=>b.startedAt-a.startedAt).map(ltHistRow).join("")}</div>`;
+    return h;
+  }).join("");
+}
+function ltHistRow(a){
+  const aid=escapeAttr(a.id),del=`<button class="bic" data-lt="del" data-aid="${aid}" title="${escapeAttr(tx("Delete this test record"))}" aria-label="${escapeAttr(tx("Delete this test record"))}"><i class="ti ti-trash"></i></button>`;
+  let date=a.date||fmtDate(new Date(a.startedAt)),text,acts="";
+  if(a.status==="done"&&a.result){
+    text=a.result.level+" · "+LT_STAGE[a.result.stage]+(ltFinal(a)?" → "+tx("confirmed {lv}",{lv:ltFinal(a)}):" · "+tx("Not confirmed"));
+    acts=`<button class="btn btn-xs" data-lt="review" data-aid="${aid}">${escapeAttr(tx("Result"))}</button>`;
+  }else if(a.status==="in_progress"){
+    text=tx("In progress — part {n}",{n:(a.path||[]).length});
+    acts=`<button class="btn btn-xs" data-lt="resume" data-aid="${aid}">${escapeAttr(tx("Continue test"))}</button>`+
+      `<button class="btn btn-xs" data-lt="end" data-aid="${aid}">${escapeAttr(tx("End here and judge"))}</button>`;
+  }else text=tx("Stopped before it could be judged");
+  return `<div class="lt-hrow"><span class="lt-hdate">${escapeAttr(date)}</span><span class="lt-htext">${escapeAttr(text)}</span><span class="lt-hacts">${acts}${del}</span></div>`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest?e.target.closest("#lt-list [data-lt]"):null;if(!b)return;
+  const act=b.dataset.lt,aid=b.dataset.aid,sid=b.dataset.sid;
+  if(act==="start")ltOpenStart(sid);
+  else if(act==="resume")ltOpenTest(aid);
+  else if(act==="review")ltOpenReview(aid);
+  else if(act==="hist"){ltOpenSid=ltSame(ltOpenSid,sid)?null:sid;renderLevelTest();}
+  else if(act==="end")ltEndEarly(aid);
+  else if(act==="del")ltDelete(aid);
+});
+function ltDelete(aid){
+  const i=assessments.findIndex(a=>a.id===aid);if(i<0)return;
+  if(!confirm(tx("Delete this test record? This cannot be undone.")))return;
+  assessments.splice(i,1);        // in place — the sync layer holds this very array
+  save();renderLevelTest();
+}
+
+// ── Start ────────────────────────────────────────────────────────────────
+const LTS={sid:null,level:"B"};
+function ltOpenStart(sid){
+  const s=ltStudent(sid);if(!s)return;
+  if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
+  const last=ltLatest(s.id);
+  LTS.sid=s.id;
+  LTS.level=(last&&last.result.level)||(PLAN_LEVELS.includes(s.group)?s.group:"")||"B";
+  document.getElementById("lts-name").textContent=s.name||"";
+  document.getElementById("lts-ko").checked=true;
+  ltRenderStart();
+  openModal("mo-lt-start");
+}
+function ltRenderStart(){
+  const L=LTS.level,info=AEA.LEVEL_INFO[L];
+  document.getElementById("lts-levels").innerHTML=AEA.LEVELS.map(x=>
+    `<button type="button" class="seg-btn${x===L?" active":""}" aria-pressed="${x===L}" onclick="ltSetStartLevel('${x}')">${x}</button>`).join("");
+  document.getElementById("lts-info").textContent=L+" · "+info.name+(LANG==="ko"?" — "+info.ko:"")+
+    (L==="A"?" "+tx("In the first-letter questions of level A you may say the picture's name aloud (dog, sun)."):"");
+}
+function ltSetStartLevel(L){if(AEA.LEVELS.includes(L)){LTS.level=L;ltRenderStart();}}
+function ltStart(){
+  const s=ltStudent(LTS.sid);if(!s)return;
+  if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
+  const a=AEA.newAssessment(uid(),s.id,LTS.level,"online",ltSeen(s.id),Date.now());
+  a.koHelp=!!document.getElementById("lts-ko").checked;
+  assessments.push(a);save();
+  closeModal("mo-lt-start");
+  ltOpenTest(a.id);
+}
+
+// ── The student's screen ──────────────────────────────────────────────────
+// Full screen and always light. What the child reads here is the test itself, so its wording is
+// fixed (Korean with English) whatever language the teacher's screens use. Only the teacher's
+// menu behind the lock follows the language setting.
+const LT={aid:null,screen:"intro",sel:null,itemKey:"",t0:0,readKey:"",r0:0,menu:false};
+const LT_LOCK_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2" fill="currentColor"/></svg>';
+function ltOpenTest(aid){
+  const a=ltGet(aid);if(!a||a.status!=="in_progress")return;
+  Object.assign(LT,{aid:aid,screen:"intro",sel:null,itemKey:"",readKey:"",menu:false});
+  document.getElementById("lt-screen").hidden=false;
+  document.body.classList.add("lt-testing");
+  ltRenderTest();
+}
+function ltCloseTest(){
+  LT.aid=null;LT.menu=false;
+  document.getElementById("lt-hint")?.remove();
+  const scr=document.getElementById("lt-screen");scr.hidden=true;scr.innerHTML="";
+  document.body.classList.remove("lt-testing");
+  if(curPage==="leveltest")renderLevelTest();
+}
+function ltPassageHtml(t){return `<article class="lt-passage"><h2>${escapeAttr(t.title)}</h2>${t.passage.map(p=>`<p>${escapeAttr(p)}</p>`).join("")}</article>`;}
+function ltBar(a,t){
+  const p=a.path[a.path.length-1];let dots="";
+  if(t)for(let i=0;i<t.items.length;i++)dots+=`<i class="${i<p.responses.length?"done":i===p.responses.length&&a.cur&&a.cur.phase==="item"?"now":""}"></i>`;
+  return `<div class="lt-tbar"><span class="lt-part">Part ${a.path.length}</span><span class="lt-dots">${dots}</span>`+
+    `<button type="button" class="lt-lock" data-hold="menu" aria-label="${escapeAttr(tx("Teacher's menu: press and hold for two seconds"))}">${LT_LOCK_SVG}</button></div>`;
+}
+function ltTestHtml(a,s){
+  const scr=LT.screen;
+  if(a.status==="done"||scr==="end")return `<div class="lt-tscreen mid"><div class="lt-tmsg"><div class="lt-tbig">All done!</div><p>끝까지 잘 풀었어요. 수고했어요!</p><p class="lt-muted">선생님께 기기를 돌려주세요.</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn big" data-hold="review">선생님: 2초간 길게 눌러 결과 확인</button></div></div>`;
+  if(scr==="intro"){
+    const resumed=a.path[0].responses.length>0||a.path.length>1;
+    return `<div class="lt-tscreen mid">${ltBar(a,null)}<div class="lt-tmsg"><div class="lt-tbig">Hi, ${escapeAttr(s?s.name||"":"")}!</div><p>${resumed?"이어서 풀어 볼까요?":"영어 글을 읽고 문제를 풀어 볼 거예요."}</p>`+
+      `<ul class="lt-tips"><li>모르는 문제는 <b>잘 모르겠어요</b>를 눌러도 괜찮아요.</li><li>점수를 매기는 시험이 아니에요. 지금 무엇을 배우면 좋을지 알아보는 거예요.</li><li>천천히 읽고 골라요.</li></ul></div>`+
+      `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" data-act="tStart">시작 · Start</button></div></div>`;
+  }
+  if(scr==="break")return `<div class="lt-tscreen mid">${ltBar(a,null)}<div class="lt-tmsg"><div class="lt-tbig">Good job!</div><p>잘하고 있어요. 다음 문제로 넘어갈게요.</p><p class="lt-muted">잠깐 쉬어도 괜찮아요.</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" data-act="tStart">계속하기 · Continue</button></div></div>`;
+
+  const p=a.path[a.path.length-1],t=AEA.TL[p.testlet];
+  if(a.cur.phase==="read"){
+    if(LT.readKey!==p.testlet){LT.readKey=p.testlet;LT.r0=performance.now();}
+    return `<div class="lt-tscreen">${ltBar(a,t)}<div class="lt-readwrap"><p class="lt-readhint">천천히 읽어 보세요. 문제를 풀 때 다시 볼 수 있어요.</p>${ltPassageHtml(t)}</div>`+
+      `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" data-act="tReadDone">다 읽었어요 · I’m ready</button></div></div>`;
+  }
+  const it=t.items[a.cur.idx];
+  if(LT.itemKey!==it.id){LT.itemKey=it.id;LT.t0=performance.now();LT.sel=null;}
+  const ko=a.koHelp&&it.ko?`<p class="lt-qko">${escapeAttr(it.ko)}</p>`:"";
+  // it.order: display position → option index in the bank. Pictures (emoji) and the stimulus are the bank's own markup.
+  const opts=it.order.map((o,k)=>`<button type="button" class="lt-opt${LT.sel===k?" sel":""}" data-act="pick" data-pos="${k}">`+
+    (it.pic?`<span class="lt-optpic">${it.opts[o]}</span>`:`<span class="lt-ol">${LT_CIRC[k]}</span><span class="lt-ot">${escapeAttr(it.opts[o])}</span>`)+`</button>`).join("");
+  return `<div class="lt-tscreen${t.passage?"":" nopass"}">${ltBar(a,t)}`+
+    (t.passage?`<div class="lt-passbox">${ltPassageHtml(t)}</div><button type="button" class="lt-passtoggle" data-act="passToggle">글 크게 보기</button>`:"")+
+    `<div class="lt-qwrap"><div class="lt-qn">Question ${it.n}</div>${it.stim?`<div class="lt-stim">${it.stim}</div>`:""}${it.text?`<div class="lt-qword">${escapeAttr(it.text)}</div>`:""}`+
+    `<p class="lt-qtext">${escapeAttr(it.q)}</p>${ko}<div class="lt-opts${it.pic?" pic":""}${it.opts[0].length<=2&&!it.pic?" letters":""}">${opts}</div>`+
+    `<button type="button" class="lt-idk${LT.sel===-1?" sel":""}" data-act="pick" data-pos="-1">잘 모르겠어요 · I’m not sure</button></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn primary big" id="lt-next" data-act="nextItem"${LT.sel==null?" disabled":""}>다음 · Next</button></div></div>`;
+}
+function ltMenuHtml(){
+  return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${escapeAttr(tx("Teacher's menu"))}</h2>`+
+    `<p class="lt-muted">${escapeAttr(tx("The answers so far are saved."))}</p><div class="lt-stack">`+
+    `<button type="button" class="lt-btn primary" data-act="menuClose">${escapeAttr(tx("Keep going"))}</button>`+
+    `<button type="button" class="lt-btn" data-act="pauseExit">${escapeAttr(tx("Stop and leave (continue later)"))}</button>`+
+    `<button type="button" class="lt-btn" data-act="endEarly">${escapeAttr(tx("End here and judge"))}</button></div></div>`;
+}
+function ltRenderTest(){
+  const scr=document.getElementById("lt-screen");if(!scr||scr.hidden)return;
+  const a=ltGet(LT.aid);
+  if(!a){ltCloseTest();return;}      // the record was deleted from another device
+  scr.innerHTML=ltTestHtml(a,ltStudent(a.studentId))+(LT.menu?ltMenuHtml():"");
+}
+const LT_ACTS={
+  tStart(){LT.screen="run";ltRenderTest();},
+  tReadDone(){
+    const a=ltGet(LT.aid);if(!a||a.status!=="in_progress"||!a.cur)return;
+    const p=a.path[a.path.length-1];
+    p.readMs=Math.round(performance.now()-(LT.r0||performance.now()));a.cur.phase="item";
+    save();ltRenderTest();
+  },
+  pick(el){          // no re-render, so the passage keeps its scroll position
+    LT.sel=Number(el.dataset.pos);
+    document.querySelectorAll("#lt-screen .lt-opt,#lt-screen .lt-idk").forEach(x=>x.classList.toggle("sel",x===el));
+    const nb=document.getElementById("lt-next");if(nb)nb.disabled=false;
+  },
+  passToggle(el){
+    const on=document.querySelector("#lt-screen .lt-tscreen").classList.toggle("full");
+    el.textContent=on?"문제로 돌아가기":"글 크게 보기";
+  },
+  nextItem(){
+    const a=ltGet(LT.aid);if(LT.sel==null||!a||a.status!=="in_progress"||!a.cur||a.cur.phase!=="item")return;
+    const p=a.path[a.path.length-1],it=AEA.TL[p.testlet].items[a.cur.idx];
+    const r=AEA.recordResponse(a,LT.sel<0?-1:it.order[LT.sel],performance.now()-LT.t0);
+    LT.sel=null;
+    if(r.done){a.date=td();a.finishedAt=Date.now();LT.screen="end";}
+    else if(r.next)LT.screen="break";
+    save();ltRenderTest();
+  },
+  menuClose(){LT.menu=false;ltRenderTest();},
+  pauseExit(){ltCloseTest();},
+  endEarly(){const aid=LT.aid;ltCloseTest();ltEndEarly(aid);},
+};
+document.addEventListener("click",e=>{
+  const b=e.target.closest?e.target.closest("#lt-screen [data-act]"):null;if(!b||b.disabled)return;
+  const f=LT_ACTS[b.dataset.act];if(f)f(b);
+});
+// The teacher ends a test before the end: judge from what is complete. Nothing complete → "stopped".
+function ltEndEarly(aid){
+  const a=ltGet(aid);if(!a||a.status!=="in_progress")return;
+  const ok=AEA.provisionalFinish(a);
+  a.date=td();a.finishedAt=Date.now();
+  if(!ok){a.status="aborted";a.cur=null;}
+  save();
+  if(curPage==="leveltest")renderLevelTest();
+  if(ok)ltOpenReview(a.id);else showToast(tx("Too few answers to judge — recorded as stopped."));
+}
+// A short note at the top of the test screen. Not the app's toast: that one sits at the bottom, right
+// on top of the button it would be explaining, and would swallow the next press.
+let _ltHintTimer=null;
+function ltHint(msg){
+  document.getElementById("lt-hint")?.remove();clearTimeout(_ltHintTimer);
+  const scr=document.getElementById("lt-screen");if(!scr||scr.hidden)return;
+  const t=document.createElement("div");t.id="lt-hint";t.setAttribute("role","status");t.textContent=msg;
+  document.body.appendChild(t);
+  _ltHintTimer=setTimeout(()=>t.remove(),2200);
+}
+// Teacher-only controls on the student's screen (the lock, and the way out at the end) answer to a
+// long press, so a child's tap does nothing — the result and the rest of the app stay out of reach.
+(function(){
+  let timer=null;
+  const held=e=>e.target.closest?e.target.closest("#lt-screen [data-hold]"):null;
+  document.addEventListener("pointerdown",e=>{
+    const b=held(e);if(!b)return;
+    clearTimeout(timer);
+    timer=setTimeout(()=>{
+      timer=null;
+      if(b.dataset.hold==="menu"){LT.menu=true;ltRenderTest();}
+      else if(b.dataset.hold==="review"){const aid=LT.aid;ltCloseTest();ltOpenReview(aid);}
+    },1200);
+  });
+  const cancel=e=>{
+    if(!timer)return;clearTimeout(timer);timer=null;
+    if(e.type==="pointerup"&&held(e))ltHint(tx("Teacher: press and hold for two seconds"));
+  };
+  document.addEventListener("pointerup",cancel);document.addEventListener("pointercancel",cancel);
+  document.addEventListener("contextmenu",e=>{if(held(e))e.preventDefault();});
+})();
+
+// ── Result and the teacher's confirmation ─────────────────────────────────
+let ltReviewId=null;
+function ltOpenReview(aid){
+  const a=ltGet(aid);if(!a||!a.result)return;
+  ltReviewId=aid;ltRenderReview();openModal("mo-lt-review");
+}
+function ltRenderReview(){
+  const a=ltGet(ltReviewId),body=document.getElementById("ltr-body");if(!a||!a.result||!body)return;
+  const s=ltStudent(a.studentId),r=a.result,basis=LT_BASIS[AEA.effectiveBasis(a)]||LT_BASIS.low,T=a.teacher||{};
+  const e=escapeAttr;
+  document.getElementById("ltr-name").textContent=(s?s.name:tx("Deleted student"))||"";
+  let h=`<p class="u-hint ltr-meta">${e(a.date||"")} · ${e(a.mode==="paper"?tx("On paper"):tx("On screen"))} · ${e(tx("{n} questions",{n:r.items}))}</p>`;
+  h+=`<div class="ltr-res">${ltLv(r.level,"big")}<div><div class="ltr-k">${e(tx("App result — class level for reading"))}</div>`+
+    `<div class="ltr-v">${e(r.level)} · ${e(AEA.LEVEL_INFO[r.level].name)} · ${e(LT_STAGE[r.stage])}</div></div></div>`+
+    `<p class="ltr-desc">${e(LT_STAGE_DESC[r.stage])}</p>`+
+    `<p class="ltr-basis"><span class="badge ${basis[1]}">${e(basis[0])}</span> <span class="cell-muted2">${e(tx("Levels passed securely: {lv}",{lv:r.mastered||tx("none")}))}</span></p>`;
+  const flags=[];
+  if(r.provisional)flags.push(tx("This test was ended early. It is judged only on what was answered."));
+  if(r.capped)flags.push(tx("It ended at the limit of {n} parts. Next time, carry on from level {lv}.",{n:AEA.MAX_TESTLETS,lv:r.level}));
+  if(r.unsupported)flags.push(tx("{n} answer(s) were right although the sentence that supports them was not found — possibly guessed.",{n:r.unsupported}));
+  if(r.rapid)flags.push(tx("{n} answer(s) came too fast for the text to have been read.",{n:r.rapid}));
+  if(r.idk)flags.push(tx("“I’m not sure” was chosen {n} time(s).",{n:r.idk}));
+  if(flags.length)h+=`<ul class="ltr-flags">${flags.map(f=>`<li>${e(f)}</li>`).join("")}</ul>`;
+
+  h+=`<h3 class="ltr-h">${e(tx("How the test went"))}</h3>`+a.path.map(p=>{
+    const t=AEA.TL[p.testlet];if(!t)return "";
+    const oc=p.done?(LT_OUTCOME[p.outcome]||LT_OUTCOME.low):[tx("Not finished"),"bc"];
+    return `<details class="ltr-path"><summary>${ltLv(p.level)}<span class="ltr-pmain"><b>${e(t.title)}</b><span class="cell-muted2">${e(tx("Set {n}",{n:t.form}))}${p.readMs?" · "+e(tx("reading {n}s",{n:Math.round(p.readMs/1000)})):""}</span></span>`+
+      `<span class="ltr-score">${p.responses.filter(x=>x.correct).length}/${p.total}</span><span class="badge ${oc[1]}">${e(oc[0])}</span></summary><ol class="ltr-resp">`+
+      p.responses.map((x,k)=>{
+        const it=t.items[k];if(!it)return "";
+        return `<li class="${x.correct?"c":"w"}"><span class="ltr-mark">${x.correct?"○":"×"}</span><span><b>${e(LT_SKILL[it.skill]||it.skill)}</b> ${e(it.q)}${it.text?" — "+e(it.text):""}<br><span class="cell-muted2">`+
+          `${e(tx("Chose: {v}",{v:x.choice<0?tx("not sure"):it.opts[x.choice]}))}${x.ms!=null?" · "+e(tx("{n}s",{n:(x.ms/1000).toFixed(1)})):""}${x.rapid?` · <b class="ltr-warn">${e(tx("fast answer"))}</b>`:""}</span></span></li>`;
+      }).join("")+`</ol></details>`;
+  }).join("");
+
+  h+=`<h3 class="ltr-h">${e(tx("By skill"))}</h3><div class="ltr-skills">`+Object.keys(LT_SKILL).filter(k=>r.skills&&r.skills[k]).map(k=>{
+    const sk=r.skills[k];let d="";for(let i=0;i<sk.n;i++)d+=`<i class="${i<sk.c?"on":""}"></i>`;
+    return `<div class="ltr-skill"><span>${e(LT_SKILL[k])}</span><span class="ltr-sdots">${d}</span><span class="cell-muted2">${sk.c}/${sk.n}</span></div>`;
+  }).join("")+`</div><p class="u-hint">${e(tx("With so few questions per skill these numbers are a guide only."))}</p>`;
+
+  const fin=T.finalLevel||r.level;
+  h+=`<h3 class="ltr-h">${e(tx("Your decision"))}</h3><div class="fg"><label for="ltr-final">${e(tx("Class level"))}</label>`+
+    `<select id="ltr-final" onchange="ltReviewHint()">${AEA.LEVELS.map(L=>`<option value="${L}"${L===fin?" selected":""}>${L} · ${e(AEA.LEVEL_INFO[L].name)}</option>`).join("")}</select>`+
+    `<p class="u-hint" id="ltr-diff" hidden></p></div>`+
+    `<div class="fg"><label for="ltr-note">${e(tx("What you noticed (optional)"))}</label><textarea id="ltr-note" rows="3" maxlength="600">${e(T.note||"")}</textarea></div>`+
+    (T.reviewedAt?`<p class="u-hint">${e(tx("Confirmed: {lv} · {date}",{lv:T.finalLevel,date:fmtDate(new Date(T.reviewedAt))}))}</p>`:"");
+  body.innerHTML=h;
+  ltReviewHint();
+}
+function ltReviewHint(){
+  const a=ltGet(ltReviewId),sel=document.getElementById("ltr-final"),p=document.getElementById("ltr-diff");
+  if(!a||!a.result||!sel||!p)return;
+  const diff=sel.value!==a.result.level;
+  p.hidden=!diff;
+  p.textContent=diff?tx("This is not the app's result ({lv}). Both are kept, side by side.",{lv:a.result.level}):"";
+}
+function ltSaveReview(){
+  const a=ltGet(ltReviewId);if(!a||!a.result)return;
+  const lv=document.getElementById("ltr-final")?.value;
+  if(!AEA.LEVELS.includes(lv))return;
+  a.teacher=a.teacher||{};
+  a.teacher.finalLevel=lv;
+  a.teacher.note=(document.getElementById("ltr-note")?.value||"").trim();
+  a.teacher.reviewedAt=Date.now();
+  // Only the newest finished test moves the class level; confirming an older one is a record only.
+  const s=ltStudent(a.studentId),last=s?ltLatest(s.id):null,moved=!!(s&&last&&last.id===a.id);
+  if(moved)s.group=lv;
+  save();
+  closeModal("mo-lt-review");
+  if(curPage==="leveltest")renderLevelTest();
+  showToast(moved?tx("Confirmed. Class level: {lv}",{lv:lv}):tx("Confirmed. The class level follows the newest test, so it was not changed."));
 }
 
 // ── Other income (v109) ───────────────────────────────────────────────────────
@@ -12319,6 +13259,25 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()" data-i18n><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveIncome()" data-i18n>Save</button></div>
   </div>
 </div>
+
+<!-- Level test (v145): start, result, and the student's full-screen test -->
+<div class="mo" id="mo-lt-start">
+  <div class="mb" style="max-width:460px">
+    <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div class="fg"><label data-i18n>Start level</label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
+    <label class="sw" style="white-space:normal"><input id="lts-ko" type="checkbox" checked/><span class="sw-track"></span><span data-i18n>Korean help under the questions of level A and B</span></label>
+    <p class="u-hint" style="margin-top:12px" data-i18n>Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right for two seconds.</p>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-start')" data-i18n>Cancel</button><button class="btn btn-p" onclick="ltStart()" data-i18n>Hand over and start</button></span></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-review">
+  <div class="mb" style="max-width:620px">
+    <div class="mt"><span><span data-i18n>Level test result</span> · <span id="ltr-name"></span></span><button class="bic" onclick="closeModal('mo-lt-review')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div id="ltr-body"></div>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-review')" data-i18n>Close</button><button class="btn btn-p" onclick="ltSaveReview()" data-i18n>Confirm the class level</button></span></div>
+  </div>
+</div>
+<div id="lt-screen" hidden></div>
 
 <!-- Unpaid-fee reminder (v110): from the 11th on, while the previous month is still short -->
 <div class="mo" id="mo-feealert">
