@@ -7179,7 +7179,7 @@ function renderPayments(){
   // Student rows
   document.getElementById("pm-rows").innerHTML=ss.map(({s,c})=>`<div class="pr">
     <div>
-      <div style="font-weight:600;font-size:13px">${s.name}${PLAN_LEVELS.includes(s.group)?'<span class="lv-badge" title="'+tx("Level {l}",{l:s.group})+'">'+s.group+"</span>":""}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>
+      <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>
       <div class="cell-muted">${s.k} · ${schedLabel(s.sched)}</div>
     </div>
     <div class="tm" style="text-align:center" title="${tx("lessons · hours")}" data-l="${tx("Lessons")}">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
