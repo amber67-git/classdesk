@@ -486,6 +486,8 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .fg label.sw{display:inline-flex;font-size:12px;font-weight:500;margin:0;text-transform:none;letter-spacing:0}
 /* Student dialog: day · time · Bi-weekly. Wraps on a phone, where Bi-weekly was cut off the right edge. */
 .sm-sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* v146: curriculum rows for one level */
+.cs-lv{margin:0}
 /* v145: level test. The page and the result window use the app's own colours (and follow dark mode). */
 .lt-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
 .lt-row:last-child{border-bottom:0}
@@ -935,7 +937,7 @@ button.ph-chip{line-height:1.5}
   #page-curriculum td[data-c="1"]{grid-area:1/2;text-align:left!important}
   #page-curriculum td[data-c="1"]::before{content:"Wk ";color:var(--txt3);font-family:var(--font);font-size:11px}
   #page-curriculum td[data-c="2"]{grid-area:1/3}
-  #page-curriculum td[data-c="10"]{grid-area:1/4}
+  #page-curriculum td.cs-tools{grid-area:1/4}
   #page-curriculum td[data-c="3"]{grid-column:1/-1;font-size:14px;margin:2px 0 4px}
   #page-curriculum td[data-l]{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}
   #page-curriculum td[data-l]::before{content:attr(data-l);flex:0 0 72px;font-size:11px;color:var(--txt3)}
@@ -1516,8 +1518,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <option value="MAY">MAY</option><option value="JUN">JUN</option><option value="JUL">JUL</option><option value="AUG">AUG</option>
       <option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option>
     </select>
+    <select id="curr-lf" onchange="renderCurriculum()" class="u-w-120" title="Show one level, or what one student does" data-i18n-title></select>
     <input type="text" id="curr-sf" placeholder="Search…" data-i18n-ph oninput="renderCurriculum()" style="width:200px"/>
-    <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" onclick="openCurrImport()" title="Bring in topics from a spreadsheet" data-i18n data-i18n-title><i class="ti ti-file-import"></i> Import</button><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
+    <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" onclick="openCurrNote()" title="A month's plan for one student, as a message for the parents" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Monthly note</button><button class="btn" onclick="openCurrImport()" title="Bring in topics from a spreadsheet" data-i18n data-i18n-title><i class="ti ti-file-import"></i> Import</button><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
   </div>
   <div class="pc">
     <div class="card">
@@ -1554,7 +1557,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </div>
       <div class="tw">
         <table id="curr-table">
-          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th class="cur-act-h"><button class="bic" onclick="currResetCols()" title="Reset column widths" data-i18n-title><i class="ti ti-arrows-horizontal"></i></button></th></tr></thead>
+          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th data-col="level" data-i18n>Level</th><th data-col="speaking" data-i18n>Speaking</th><th class="cur-act-h"><button class="bic" onclick="currResetCols()" title="Reset column widths" data-i18n-title><i class="ti ti-arrows-horizontal"></i></button></th></tr></thead>
           <tbody id="curr-body"></tbody>
         </table>
       </div>
@@ -2127,6 +2130,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v146 · 2026-11-19</dt><dd><b>New: the curriculum by level and by student.</b> Curriculum has two new columns at the end, <b>Level</b> and <b>Speaking</b>. A row with a level (<b>A·B</b>, <b>C</b>, <b>D·E</b>…) is for those levels only; a row without one is for everyone — so a topic can have one row for all (book, activity) and one row per level (writing, speaking, grammar). <b>Import</b> reads this from your sheet: add <b>Level</b> and <b>Speaking</b> headings, and put each level's row under its topic with the topic cell left empty. The new box in the bar shows <b>one level</b>, or <b>one student</b>: that student's level and only the columns of the lesson parts ticked on them. <b>Monthly note</b> writes a month's plan for one student as a message for the parents (Korean or English) that you can edit and copy.</dd>
           <dt>v145 · 2026-11-19</dt><dd><b>New: the level test is inside ClassDesk.</b> A new <b>Level test</b> page lists your students. Press <b>Start test</b>, pick a start level and hand the device over: the student reads and answers on a full, always-light screen that never shows right or wrong, and the test moves up or down by itself. To stop in the middle, <b>press and hold the lock</b> (top right); at the end, press and hold the button at the bottom the same way (with a keyboard: hold Enter or Space on it). The <b>result</b> shows the app's level (A–E) and stage, how each part went and the skills; you then <b>confirm the class level</b>, and only that changes the student's Level. The app's result and your decision are kept side by side. Results sync like everything else and are in the backup. Paper tests, printing and the parent report follow in the next versions.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>New: a lesson plan on each student.</b> The student window has a <b>Lesson plan</b> row: pick a <b>Level</b> (A–E), tick the parts of a lesson this child does (<b>Speaking, Book, Grammar, Activity, Writing</b>) and, if you follow a speaking course, the <b>speaking lesson number</b> they are on. The level shows as a small badge next to the name in Students, and the whole plan shows at the top of that student's lesson window, so you can see what to do with each child without opening their card. Everything is optional: a student with nothing filled in looks exactly as before.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>Fix: an extra class is no longer labelled "moved from its usual time".</b> The lesson window showed the amber "Moved from this student's usual time" note — and a <b>Reset to usual time</b> button — for any class whose time differed from the student's regular one, even an extra class on a day they have no regular class (a Sunday 9:00 extra for a Thursday 19:30 student read "moved from Sun, 7:30pm"). The note now appears only for a class that really belongs to a regular slot: the same weekday (and the right week for a bi-weekly student), and not a second class added next to the day's regular one. Fees and lesson counts were never affected — only the label. Also: when Google Calendar has two events for a student on one day and the app has one class, the compare now matches the event at the class's own time and offers the other as the addition; before, the earlier event could be shown as a "time change" of the regular class.</dd>
@@ -2169,7 +2173,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v145</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v146</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2334,6 +2338,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v146 · 2026-11-19</dt><dd><b>새 기능: 레벨별·학생별 커리큘럼.</b> 커리큘럼 끝에 <b>레벨</b>과 <b>말하기</b> 열이 생겼습니다. 레벨이 적힌 줄(<b>A·B</b>, <b>C</b>, <b>D·E</b>…)은 그 레벨에만 해당하고, 레벨이 없는 줄은 모두에게 해당합니다. 그래서 한 주제에 공통 줄(책, 활동) 하나와 레벨별 줄(쓰기, 말하기, 문법)을 둘 수 있습니다. <b>가져오기</b>가 시트에서 이것을 읽습니다: 제목 줄에 <b>Level</b>과 <b>Speaking</b>을 더하고, 레벨별 줄은 주제 칸을 비운 채 그 주제 아래에 두면 됩니다. 위쪽 새 상자에서 <b>한 레벨</b>이나 <b>한 학생</b>을 고르면, 그 학생의 레벨과 학생에게 체크된 수업 부분의 열만 보입니다. <b>월간 안내</b>는 한 학생의 한 달 계획을 학부모께 보낼 메시지(한국어 또는 영어)로 만들어 주며, 고쳐서 복사할 수 있습니다.</dd>
           <dt>v145 · 2026-11-19</dt><dd><b>새 기능: 레벨테스트가 ClassDesk 안으로 들어왔습니다.</b> 새 <b>레벨테스트</b> 페이지에 학생이 나옵니다. <b>테스트 시작</b>을 누르고 시작 레벨을 고른 뒤 기기를 건네면, 학생은 화면 전체를 쓰는 밝은 화면에서 읽고 답합니다. 맞았는지 틀렸는지는 보여 주지 않고, 답에 따라 레벨이 저절로 오르내립니다. 중간에 멈추려면 오른쪽 위 <b>자물쇠를 길게</b> 누르고, 끝난 뒤에는 아래 버튼을 같은 방법으로 누릅니다(키보드로는 그 버튼에서 Enter나 Space를 길게). <b>결과</b>에는 앱이 판정한 레벨(A–E)과 단계, 묶음별 진행, 스킬별 기록이 나오고, 선생님이 <b>수업 레벨을 확정</b>해야 학생의 레벨이 바뀝니다. 앱 결과와 선생님 확정은 따로 저장됩니다. 결과는 다른 데이터처럼 동기화되고 백업에도 들어갑니다. 종이 시험, 인쇄, 학부모 리포트는 다음 버전에서 이어집니다.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>새 기능: 학생별 수업 설정.</b> 학생 창에 <b>수업 설정</b> 줄이 생겼습니다. <b>레벨</b>(A–E)을 고르고, 이 학생이 수업에서 하는 부분(<b>말하기, 도서, 문법, 활동, 쓰기</b>)을 체크하고, 스피킹 과정을 따라가는 학생이면 지금 <b>몇 회차</b>인지 적습니다. 레벨은 학생 목록의 이름 옆에 작은 배지로 보이고, 설정 전체는 그 학생의 수업 창 맨 위에 보여서 학생 카드를 열지 않아도 무엇을 할지 알 수 있습니다. 모두 선택 사항이라, 아무것도 넣지 않은 학생은 전과 똑같이 보입니다.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>버그 수정: 추가 수업에 "원래 시간에서 옮긴 수업"이라고 나오지 않습니다.</b> 수업 창은 시간이 학생의 정규 시간과 다르기만 하면 노란색 "이 학생의 원래 시간에서 옮긴 수업입니다" 안내와 <b>원래 시간으로 되돌리기</b> 버튼을 보여 줬습니다. 정규 수업이 없는 요일에 넣은 추가 수업도 그랬습니다(목요일 19:30 학생의 일요일 9:00 추가 수업에 "일요일 7:30pm에서 옮김"이라고 표시). 이제 이 안내는 정말 정규 수업 자리에 속한 수업에만 나옵니다: 같은 요일이고(격주 학생은 해당 주), 그날 정규 수업 옆에 따로 추가한 수업이 아닐 때입니다. 수업료와 수업 횟수는 처음부터 영향이 없었고, 표시만 잘못됐던 것입니다. 또한 Google 캘린더에 한 학생의 일정이 하루에 두 개 있고 앱에는 수업이 하나일 때, 비교는 이제 수업 시간과 같은 일정을 짝짓고 나머지를 추가로 제안합니다. 전에는 더 이른 일정이 정규 수업의 "시간 변경"으로 나올 수 있었습니다.</dd>
@@ -2375,7 +2380,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v145</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v146</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2964,6 +2969,10 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="fg"><label data-col="acts" data-i18n>Activities</label><input id="cm-acts" type="text"/></div>
     </div>
     <div class="fg"><label data-col="note" data-i18n>Notes</label><input id="cm-note" type="text"/></div>
+    <div class="fr c2">
+      <div class="fg"><label data-col="level" data-i18n>Level</label><input id="cm-level" type="text" maxlength="12" placeholder="A·B" title="Leave empty when the row is for every level" data-i18n-title/></div>
+      <div class="fg"><label data-col="speaking" data-i18n>Speaking</label><input id="cm-speaking" type="text"/></div>
+    </div>
     <div id="cm-custom-fields"></div>
     <div class="mf"><button class="btn" onclick="closeModal('mo-curr')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveCurr()" data-i18n>Save topic</button></div>
   </div>
@@ -3550,6 +3559,12 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v146: curriculum by level
+  "All levels":"모든 레벨","Monthly note":"월간 안내","Copy":"복사","Copied":"복사했습니다","A month's plan for one student, as a message for the parents":"한 학생의 한 달 수업 계획을 학부모께 보낼 메시지로 만들기",
+  "Monthly note for parents":"학부모께 보내는 월간 안내","Written in":"작성 언어","Message":"메시지","Add a student first.":"먼저 학생을 추가하세요.",
+  "You can edit the text here before copying. It is made from the Curriculum rows of that month for this student's level, and lists only the lesson parts ticked on the student.":"복사하기 전에 여기서 글을 고칠 수 있습니다. 그 달 커리큘럼에서 이 학생 레벨에 해당하는 줄로 만들고, 학생에게 체크된 수업 부분만 적습니다.",
+  "This student has no level yet, so only the rows meant for every level are listed. Set the level on the student, or confirm a level test.":"이 학생은 아직 레벨이 없어서 모든 레벨 공통 줄만 적었습니다. 학생 창에서 레벨을 정하거나 레벨테스트를 확정하세요.",
+  "No lesson parts are ticked on this student, so every part is listed.":"이 학생에게 체크된 수업 부분이 없어서 모든 부분을 적었습니다.","Level {lv}":"레벨 {lv}","Show one level, or what one student does":"한 레벨만 보거나, 한 학생이 하는 내용만 보기","Leave empty when the row is for every level":"모든 레벨에 해당하는 줄이면 비워 두세요",
   // ── v145: level test
   "Level test":"레벨테스트","Reading level test on screen, the result and the class level you confirm":"화면으로 보는 읽기 레벨테스트, 결과, 선생님이 확정하는 수업 레벨",
   "A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.":"학생이 이 화면에서 푸는 읽기 테스트입니다. 답에 따라 위아래 레벨로 옮겨 가며 A–E 가운데 한 레벨로 끝납니다. 선생님이 결과를 보고 수업 레벨을 확정해야 학생의 레벨이 바뀝니다.",
@@ -4009,7 +4024,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v145";
+const APP_VERSION="v146";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -5666,6 +5681,7 @@ function openCurrModal(id){
   set("cm-month",c?.month||"MAY");set("cm-week",c?.week||1);set("cm-cat",c?.cat);
   set("cm-topic",c?.topic);set("cm-wb",c?.wb);set("cm-books",c?.books);
   set("cm-writing",c?.writing);set("cm-grammar",c?.grammar);set("cm-acts",c?.acts);set("cm-note",c?.note);
+  set("cm-level",c?.level);set("cm-speaking",c?.speaking);
   reorderModalFields("curriculum");
   renderCustomFieldsIntoModal("cm-custom-fields","curriculum",c);
   openModal("mo-curr");
@@ -5674,7 +5690,7 @@ function saveCurr(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
   const customFields=collectCustomFieldsFromModal("cm-custom-fields");
   const yr=parseInt(g("cm-year"),10);
-  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),writing:g("cm-writing"),grammar:g("cm-grammar"),acts:g("cm-acts"),note:g("cm-note"),customFields};
+  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),writing:g("cm-writing"),grammar:g("cm-grammar"),acts:g("cm-acts"),note:g("cm-note"),level:currLevelText(g("cm-level")),speaking:g("cm-speaking"),customFields};
   if(!obj.topic){alert(tx("Topic required"));return;}
   if(editCid){const i=curriculum.findIndex(c=>c.id===editCid);if(i>=0)curriculum[i]={...curriculum[i],...obj};}
   else curriculum.push({id:uid(),...obj});
@@ -8462,6 +8478,7 @@ function renderCurriculum(){
     }
     yf.style.display=years.length?"":"none";
   }
+  currLevelOptions();
   // v138: the order is the sheet's own (see currOrdered) — moving a row moves it, nothing re-sorts.
   // v140: the sheet's column filters (tablet / PC) apply on top of the bar's filters.
   const base=currBaseFilter(),sheet=!csPhone();
@@ -8469,16 +8486,124 @@ function renderCurriculum(){
   csRender(fl);
   csMarkFilters();
 }
+// ── Levels (v146) ──────────────────────────────────────────────────────────
+// A row may say which levels it is for ("A·B", "C", "D·E"); no level = for everyone. The same topic
+// can so have one row for all (book, activity) and one row per level (writing, speaking, grammar).
+// The bar's level box shows one level, or what one student does: that student's level and — when
+// lesson parts are ticked on the student — only the columns of those parts.
+const currLevelsOf=v=>[...new Set(String(v||"").toUpperCase().match(/[A-E]/g)||[])].sort();
+// "a, b" / "AB" / "A·B" → "A·B". Text with no level letter in it is kept as typed.
+function currLevelText(v){const t=String(v||"").trim();if(!t)return "";const l=currLevelsOf(/^[\sA-Ea-e·,.&/+~-]+$/.test(t)?t:"");return l.length?l.join("·"):t;}
+const currForLevel=(c,lv)=>{const l=currLevelsOf(c.level);return !l.length||l.includes(lv);};
+function currViewStudent(){const v=document.getElementById("curr-lf")?.value||"";return v.startsWith("s:")?students.find(x=>String(x.id)===v.slice(2))||null:null;}
+function currViewLevel(){
+  const v=document.getElementById("curr-lf")?.value||"";
+  if(v.startsWith("s:")){const s=currViewStudent();return s&&PLAN_LEVELS.includes(s.group)?s.group:"";}
+  return PLAN_LEVELS.includes(v)?v:"";
+}
+// Columns a lesson part stands for. A student with parts ticked sees these only for their parts.
+const CURR_PART_COL={sp:"speaking",bk:"books",gr:"grammar",ac:"acts",wr:"writing"};
+function currHiddenNow(){
+  const h=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));
+  const s=currViewStudent(),mods=s&&Array.isArray(s.mods)?s.mods:[];
+  if(mods.length)for(const k in CURR_PART_COL)if(!mods.includes(k))h.add(CURR_PART_COL[k]);
+  return h;
+}
+function currLevelOptions(){
+  const sel=document.getElementById("curr-lf");if(!sel)return;
+  const studs=students.filter(x=>!x.archived);
+  const want=JSON.stringify(studs.map(x=>[x.id,x.name,x.group]));
+  if(sel.dataset.opts===want)return;
+  const cur=sel.value;
+  sel.innerHTML=`<option value="">${escapeAttr(tx("All levels"))}</option>`+PLAN_LEVELS.map(L=>`<option value="${L}">${escapeAttr(tx("Level {lv}",{lv:L}))}</option>`).join("")+
+    (studs.length?`<optgroup label="${escapeAttr(tx("Students"))}">`+studs.map(x=>`<option value="s:${escapeAttr(x.id)}">${escapeAttr(x.name||"")}${PLAN_LEVELS.includes(x.group)?" · "+x.group:""}</option>`).join("")+`</optgroup>`:"");
+  sel.dataset.opts=want;
+  if([...sel.options].some(o=>o.value===cur))sel.value=cur;
+}
+// ── A month's plan for one student, as a message for the parents (v146) ──
+// Built from the rows of that month that are for the student's level (rows with no level are for
+// everyone), one block per week; a topic's own row and its level row are folded together. Only the
+// columns of the lesson parts ticked on the student are listed. The message is written in Korean
+// or English whatever language the app is in — it is for the parents, not for the screen.
+const CURR_NOTE_TXT={
+  ko:{head:(n,y,m)=>`안녕하세요. ${y?y+"년 ":""}${m}월 ${n} 수업 계획을 안내드립니다.`,week:(w,t)=>`■ ${w?w+"주차: ":""}${t}`,
+      books:"책",acts:"활동",speaking:"말하기",writing:"쓰기",grammar:"문법",wb:"교재",foot:"수업 진행 상황에 따라 순서나 내용이 조금 달라질 수 있습니다.",none:"이 달에는 아직 계획된 내용이 없습니다."},
+  en:{head:(n,y,m)=>`Hello. Here is ${n}'s lesson plan for ${CURR_NOTE_MONTHS[m-1]}${y?" "+y:""}.`,week:(w,t)=>`■ ${w?"Week "+w+": ":""}${t}`,
+      books:"Book",acts:"Activity",speaking:"Speaking",writing:"Writing",grammar:"Grammar",wb:"Workbook",foot:"The order and details may change a little as the lessons go.",none:"Nothing is planned for this month yet."},
+};
+const CURR_NOTE_MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+// The workbook column is left out: it holds the teacher's own reminders ("if there is a matching unit").
+const CURR_NOTE_COLS=["books","acts","speaking","writing","grammar"];
+function currNoteText(s,ym,lang){
+  const T=CURR_NOTE_TXT[lang]||CURR_NOTE_TXT.ko;
+  const [y,m]=String(ym||"").split("-").map(Number),mon=CURR_MONTHS[m-1];
+  if(!s||!mon)return "";
+  const lv=PLAN_LEVELS.includes(s.group)?s.group:"";
+  const mods=Array.isArray(s.mods)?s.mods:[],off=new Set(getHiddenFields("curriculum"));
+  if(mods.length)for(const k in CURR_PART_COL)if(!mods.includes(k))off.add(CURR_PART_COL[k]);
+  // A student with no level gets the rows that are for everyone, not every level's rows at once.
+  const rows=currOrdered().filter(c=>c.month===mon&&(!c.year||!y||+c.year===y)&&(lv?currForLevel(c,lv):!currLevelsOf(c.level).length));
+  const weeks=[];
+  rows.forEach(c=>{
+    const key=(c.week||"")+"|"+currNorm(c.topic);
+    let g=weeks.find(x=>x.key===key);
+    if(!g){g={key,week:c.week,topic:c.topic,v:{}};weeks.push(g);}
+    CURR_NOTE_COLS.forEach(col=>{
+      const t=String(c[col]||"").replace(/\*\*|~~|__/g,"").split(/\n+/).map(x=>x.trim()).filter(Boolean).join(" / ");
+      if(t&&!off.has(col)&&!(g.v[col]||[]).includes(t))(g.v[col]=g.v[col]||[]).push(t);
+    });
+  });
+  const out=[T.head(s.name||"",y,m),""];
+  if(!weeks.length)out.push(T.none);
+  weeks.forEach(g=>{
+    out.push(T.week(g.week,g.topic));
+    CURR_NOTE_COLS.forEach(col=>{if(g.v[col])out.push("· "+T[col]+": "+g.v[col].join(" / "));});
+    out.push("");
+  });
+  if(weeks.length)out.push(T.foot);
+  return out.join("\n").trim();
+}
+function openCurrNote(){
+  const sel=document.getElementById("cn-sid");if(!sel)return;
+  const studs=students.filter(x=>!x.archived);
+  if(!studs.length){showToast(tx("Add a student first."));return;}
+  const cur=currViewStudent();
+  sel.innerHTML=studs.map(x=>`<option value="${escapeAttr(x.id)}">${escapeAttr(x.name||"")}${PLAN_LEVELS.includes(x.group)?" · "+x.group:""}</option>`).join("");
+  if(cur)sel.value=String(cur.id);
+  // The month the bar shows, else next month (the note goes out before the month begins).
+  const yv=document.getElementById("curr-yf")?.value||"",mv=document.getElementById("curr-mf")?.value||"";
+  const now=nowKST(),next=new Date(now.getFullYear(),now.getMonth()+1,1);
+  const mi=CURR_MONTHS.indexOf(mv);
+  const y=/^\d{4}$/.test(yv)?+yv:(mi>=0?(mi<now.getMonth()?now.getFullYear()+1:now.getFullYear()):next.getFullYear());
+  document.getElementById("cn-month").value=y+"-"+String((mi>=0?mi:next.getMonth())+1).padStart(2,"0");
+  document.getElementById("cn-lang").value=LANG==="en"?"en":"ko";
+  currNoteFill();openModal("mo-currnote");
+}
+function currNoteFill(){
+  const s=students.find(x=>String(x.id)===document.getElementById("cn-sid").value);
+  document.getElementById("cn-text").value=currNoteText(s,document.getElementById("cn-month").value,document.getElementById("cn-lang").value);
+  const hint=document.getElementById("cn-hint");
+  if(hint)hint.textContent=!s?"":!PLAN_LEVELS.includes(s.group)?tx("This student has no level yet, so only the rows meant for every level are listed. Set the level on the student, or confirm a level test."):
+    (Array.isArray(s.mods)&&s.mods.length?"":tx("No lesson parts are ticked on this student, so every part is listed."));
+}
+function currNoteCopy(){
+  const ta=document.getElementById("cn-text");if(!ta||!ta.value)return;
+  const done=()=>showToast(tx("Copied"));
+  const old=()=>{ta.select();try{document.execCommand("copy");done();}catch(e){}};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,old);else old();
+}
 // The filter bar's year / month / search, as one test.
 function currBaseFilter(){
   const yv=document.getElementById("curr-yf")?.value||"";
   const mf=document.getElementById("curr-mf")?.value||"";
   const sf=(document.getElementById("curr-sf")?.value||"").toLowerCase();
+  const lv=currViewLevel();
   return c=>{
+    if(lv&&!currForLevel(c,lv))return false;
     if(yv==="none"&&c.year)return false;
     if(yv&&yv!=="none"&&String(c.year||"")!==yv)return false;
     if(mf&&c.month!==mf)return false;
-    if(sf&&![c.topic,c.cat,c.books,c.wb,c.writing,c.acts,c.grammar,c.note].join(" ").toLowerCase().includes(sf))return false;
+    if(sf&&![c.topic,c.cat,c.books,c.wb,c.writing,c.acts,c.grammar,c.note,c.speaking,c.level].join(" ").toLowerCase().includes(sf))return false;
     return true;
   };
 }
@@ -8490,24 +8615,26 @@ function currBaseFilter(){
 // grows or shrinks (its box scrolls sideways), exactly like a spreadsheet. Double-click an edge to fit
 // the column to its text; the ↔ button in the header corner puts every width back. Widths are kept
 // per device in mc_colwidths.tbl_curriculum, so a phone and a PC can differ.
-const CURR_COL_DEFAULT=[76,56,100,190,200,300,220,160,130,190,52];
+const CURR_COL_DEFAULT=[76,56,100,190,200,300,220,160,130,190,76,280,52];
 const CURR_FREEZE=4;               // Month, Wk, Category, Topic — the columns the owner's sheet freezes
 function currColWidths(){
   const rec=lg(COLW_KEY,{}).tbl_curriculum;
   const w=CURR_COL_DEFAULT.slice();
   if(rec&&Array.isArray(rec.w)&&rec.n===CURR_COL_DEFAULT.length)rec.w.forEach((v,i)=>{if(+v>0)w[i]=Math.round(+v);});
+  // Widths saved before v146 (11 columns): the first ten are the same columns; Level and Speaking are new.
+  else if(rec&&Array.isArray(rec.w)&&rec.n===11)rec.w.slice(0,10).forEach((v,i)=>{if(+v>0)w[i]=Math.round(+v);});
   return w;
 }
 function saveCurrColWidths(w){
   const m=lg(COLW_KEY,{});m.tbl_curriculum={n:w.length,tpl:"table",w};return ls(COLW_KEY,m);
 }
 // Column ids of the curriculum table, in order (the last one is the actions column).
-const CURR_COL_IDS=["month","week","cat","topic","wb","writing","books","acts","grammar","note",null];
+const CURR_COL_IDS=["month","week","cat","topic","wb","writing","books","acts","grammar","note","level","speaking",null];
 function applyCurrColWidths(w){
   w=w||currColWidths();
   // Columns unticked in Settings → Custom Fields (v132) are left out everywhere — table and phone
   // cards. Topic can't be hidden (it is the topic's name).
-  const hidden=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));
+  const hidden=currHiddenNow();
   const shown=i=>!hidden.has(CURR_COL_IDS[i]);
   // v138: body cells carry data-c (their column) — merged cells make nth-child unreliable — and a
   // hidden column's cells are not drawn at all (csRender); only its heading is hidden here.
@@ -8652,7 +8779,7 @@ function csPlaceBlock(block,before){
 // ── state ──
 const CS={vis:[],cols:[],grid:[],span:[],r:0,c:0,ar:0,ac:0,edit:null,undo:[],redo:[],pending:false,keep:null};
 const csPhone=()=>window.matchMedia&&matchMedia("(max-width:640px)").matches;
-const csShown=()=>{const h=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));return CS_COLS.filter(id=>!h.has(id));};
+const csShown=()=>{const h=currHiddenNow();return CS_COLS.filter(id=>!h.has(id));};
 function csRaw(rec,col){
   const v=rec[col];
   return v==null?"":String(v);
@@ -8662,10 +8789,13 @@ function csDisplay(rec,col){
   if(col==="month")return `${v?tx(v):"—"}${rec.year?`<span class="cell-muted cur-year">${rec.year}</span>`:""}`;
   if(col==="week")return v?escapeHTMLBasic(String(v)):"";
   if(col==="cat")return v?`<span class="cs-pill">${escapeHTMLBasic(v)}</span>`:"";
-  if(col==="topic")return escapeHTMLBasic(v||"");
+  // A row for one level shows it next to the name, so the rows of one topic can be told apart
+  // without scrolling to the Level column.
+  if(col==="topic")return escapeHTMLBasic(v||"")+(rec.level?` <span class="lv-badge">${escapeHTMLBasic(String(rec.level))}</span>`:"");
+  if(col==="level")return v?`<span class="lv-badge cs-lv">${escapeHTMLBasic(String(v))}</span>`:"";
   return v?currText(v):"";
 }
-const CS_LABEL={wb:"Workbook",writing:"Writing",books:"Books",acts:"Activities",grammar:"Grammar",note:"Notes"};
+const CS_LABEL={wb:"Workbook",writing:"Writing",books:"Books",acts:"Activities",grammar:"Grammar",note:"Notes",level:"Level",speaking:"Speaking"};
 
 // ── render ──
 function csRender(fl){
@@ -8708,7 +8838,7 @@ function csRender(fl){
     const tip=note?` title="${escapeAttr(tx("Note")+": "+note)}"`:"";
     return `<td class="${cls}" data-c="${CS_COLS.indexOf(col)}" data-r="${r}" data-k="${c}"${rs>1?` rowspan="${rs}"`:""}${cs>1?` colspan="${cs}"`:""}${lab}${f}${tip}>${phone?csDisplay(rec,col):`<div class="cs-v">${csDisplay(rec,col)}</div>`}</td>`;
   };
-  const tools=rec=>`<td class="cs-tools" data-c="10"><div class="cs-desk"><span class="cs-grip" title="${tx("Drag to move the row")}"><i class="ti ti-grip-vertical"></i></span><button class="bic" onclick="csRowMenu(event,'${rec.id}')" title="${tx("Row")}"><i class="ti ti-dots-vertical"></i></button></div><div class="cs-phone"><button class="bic" onclick="openCurrModal('${rec.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${rec.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td>`;
+  const tools=rec=>`<td class="cs-tools" data-c="${CS_COLS.length}"><div class="cs-desk"><span class="cs-grip" title="${tx("Drag to move the row")}"><i class="ti ti-grip-vertical"></i></span><button class="bic" onclick="csRowMenu(event,'${rec.id}')" title="${tx("Row")}"><i class="ti ti-dots-vertical"></i></button></div><div class="cs-phone"><button class="bic" onclick="openCurrModal('${rec.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${rec.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td>`;
   const addRow=phone?"":`<tr class="cs-add"><td colspan="11"><button type="button" class="btn btn-sm" onclick="csAddRow()"><i class="ti ti-plus"></i> ${tx("Add row")}</button></td></tr>`;
   body.innerHTML=(R?fl.map((rec,r)=>`<tr data-id="${rec.id}">${cols.map((_,c)=>CS.grid[r][c][0]===r&&CS.grid[r][c][1]===c?td(r,c):"").join("")}${tools(rec)}</tr>`).join("")
     :`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`)+addRow;
@@ -8965,7 +9095,7 @@ function csPaste(text){
 }
 
 // ── rows ──
-const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:ref?.week||"",cat:"",topic:"",wb:"",books:"",writing:"",grammar:"",acts:"",note:""});
+const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:ref?.week||"",cat:"",topic:"",wb:"",books:"",writing:"",grammar:"",acts:"",note:"",level:"",speaking:""});
 function csSelRows(){const q=csRect();return q?CS.vis.slice(q.r0,q.r1+1):[];}
 function csInsert(where){
   const rows=csSelRows();const ref=where<0?rows[0]:rows[rows.length-1];if(!ref&&CS.vis.length)return;
@@ -9347,7 +9477,7 @@ document.addEventListener("pointerdown",e=>{if(e.target.id==="cs-fh")csFillDrag(
 
 // ── find & replace ──
 const CSF={open:false,q:"",rep:"",mc:false};
-const CS_REPL=new Set(["cat","topic","wb","writing","books","acts","grammar","note"]);
+const CS_REPL=new Set(["cat","topic","wb","writing","books","acts","grammar","note","speaking"]);
 function csFindOpen(){
   const p=document.getElementById("cs-find");if(!p||csPhone())return;
   if(CS.edit)csCommit(0,0);
@@ -9551,6 +9681,7 @@ const CURR_HEAD={
   wb:/^(workbooks?|교재)$/i, writing:/^(writing|writing instructions?|쓰기)$/i,
   books:/^(books?|reading books?|reading|도서|책)$/i, acts:/^(activit(y|ies)|활동)$/i,
   ort:/^ort$/i, grammar:/^(grammar|문법)$/i, note:/^(notes?|memo|메모|비고)/i,
+  level:/^(levels?|레벨|수준)$/i, speaking:/^(speaking|스피킹|말하기)$/i,
 };
 function currMonthOf(v){
   const t=String(v||"").trim().split(/\s|\n/)[0].toUpperCase();
@@ -9571,7 +9702,7 @@ function currRowsToItems(rows){
   }
   if(hi<0)return {items:[],error:tx("No heading row found. The first rows need a Month and a Topic (or 주제) column.")};
   const get=(row,k)=>map[k]===undefined?"":clean(row[map[k]]);
-  const items=[];let year="",month="",blank=0;const weeks={};
+  const items=[];let year="",month="",blank=0,main=null;const weeks={};
   for(let r=hi+1;r<rows.length;r++){
     const row=rows[r];
     const cells=row.map(clean);
@@ -9588,13 +9719,20 @@ function currRowsToItems(rows){
     if(en&&br.test(en)){const m=en.match(br);if(!cat)cat=m[1].trim();en=m[2].trim();}
     en=en.replace(/\s*\n\s*/g," ");
     const topic=ko&&en&&currNorm(ko)!==currNorm(en)?ko+" · "+en:(ko||en);
-    if(!topic)continue;
+    const level=currLevelText(get(row,"level"));
+    const ort=get(row,"ort"),bk=get(row,"books");
+    const rest={wb:get(row,"wb"),writing:get(row,"writing"),books:[bk,ort?"ORT: "+ort:""].filter(Boolean).join("\n"),
+      acts:get(row,"acts"),grammar:get(row,"grammar"),note:get(row,"note"),speaking:get(row,"speaking")};
+    if(!topic){
+      // v146: a row with a level but no topic belongs to the topic above it — that level's writing,
+      // speaking and so on. It takes the topic's name, month and week so it can stand on its own.
+      if(level&&main&&Object.values(rest).some(Boolean))items.push({year:main.year,month:main.month,week:main.week,cat:main.cat,topic:main.topic,ko:main.ko,en:main.en,level,...rest});
+      continue;
+    }
     const key=year+"|"+month;weeks[key]=(weeks[key]||0)+1;
     const wk=parseInt(get(row,"week"),10);
-    const ort=get(row,"ort"),bk=get(row,"books");
-    items.push({year,month,week:wk>0?wk:(month?weeks[key]:""),cat,topic,ko,en,
-      wb:get(row,"wb"),writing:get(row,"writing"),books:[bk,ort?"ORT: "+ort:""].filter(Boolean).join("\n"),
-      acts:get(row,"acts"),grammar:get(row,"grammar"),note:get(row,"note")});
+    main={year,month,week:wk>0?wk:(month?weeks[key]:""),cat,topic,ko,en,level,...rest};
+    items.push(main);
   }
   return {items,error:items.length?"":tx("No topics found under the heading row.")};
 }
@@ -9604,7 +9742,7 @@ function currJsonToItems(text){
   else if(d&&!Array.isArray(d)&&Array.isArray(d.curriculum))d=d.curriculum;
   if(!Array.isArray(d))return {items:[],error:tx("No curriculum topics in this file.")};
   const items=d.filter(x=>x&&x.topic).map(x=>({year:+x.year||"",month:currMonthOf(x.month),week:+x.week||"",cat:x.cat||"",topic:String(x.topic),ko:"",en:"",
-    wb:x.wb||"",writing:x.writing||"",books:x.books||"",acts:x.acts||"",grammar:x.grammar||"",note:x.note||""}));
+    wb:x.wb||"",writing:x.writing||"",books:x.books||"",acts:x.acts||"",grammar:x.grammar||"",note:x.note||"",level:currLevelText(x.level),speaking:x.speaking||""}));
   return {items,error:items.length?"":tx("No curriculum topics in this file.")};
 }
 function currParseInput(text){
@@ -9617,7 +9755,7 @@ function currParseInput(text){
 // Match each incoming topic to one already in the app: same month and year (either side may be
 // blank), and the same title — in full, or its Korean or English half, or a title that starts with
 // the existing one ("Sophie's Masterpiece" ← "Sophie's Masterpiece: A Spider's Tale").
-const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note"];
+const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note","speaking"];
 function currPlan(items){
   // v142: "used" holds the topic records themselves, not their ids — two topics that an older version
   // gave the same id must still each be matchable, or a re-import added a stray copy.
@@ -9628,6 +9766,7 @@ function currPlan(items){
       if(used.has(e))return false;
       if(e.month&&it.month&&e.month!==it.month)return false;
       if(e.year&&it.year&&String(e.year)!==String(it.year))return false;
+      if(currLevelText(e.level)!==(it.level||""))return false;      // the same topic has one row per level
       const n=currNorm(e.topic);if(!n)return false;
       return names.includes(n)||(n.length>=8&&names.some(x=>x.startsWith(n)));
     });
@@ -10808,6 +10947,8 @@ const CUSTOM_FIELDS_PAGES=[
       {id:"grammar", label:tx("Grammar")},
       {id:"acts",    label:tx("Activities")},
       {id:"note",    label:tx("Notes")},
+      {id:"level",   label:tx("Level")},
+      {id:"speaking",label:tx("Speaking")},
     ]},
   {key:"workbooks", label:tx("Workbooks"), modalId:"mo-book",
     fields:[
@@ -13358,6 +13499,22 @@ document.addEventListener("DOMContentLoaded",()=>{
       <div class="fg"><label data-i18n>What for</label><input id="im-note" type="text" maxlength="60" placeholder="Platform bonus" data-i18n-ph/></div>
     </div>
     <div class="mf"><button id="im-delete" class="btn btn-d modal-delete-btn" onclick="deleteIncome()" data-i18n><i class="ti ti-trash"></i> Delete</button><button class="btn" onclick="closeModal('mo-income')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveIncome()" data-i18n>Save</button></div>
+  </div>
+</div>
+
+<!-- Curriculum (v146): a month's plan for one student, as a message for the parents -->
+<div class="mo" id="mo-currnote">
+  <div class="mb" style="max-width:560px">
+    <div class="mt"><span data-i18n>Monthly note for parents</span><button class="bic" onclick="closeModal('mo-currnote')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div class="fr c3">
+      <div class="fg"><label for="cn-sid" data-i18n>Student</label><select id="cn-sid" onchange="currNoteFill()"></select></div>
+      <div class="fg"><label for="cn-month" data-i18n>Month</label><input id="cn-month" type="month" onchange="currNoteFill()"/></div>
+      <div class="fg"><label for="cn-lang" data-i18n>Written in</label><select id="cn-lang" onchange="currNoteFill()"><option value="ko">한국어</option><option value="en">English</option></select></div>
+    </div>
+    <p class="u-hint" id="cn-hint"></p>
+    <div class="fg"><label for="cn-text" data-i18n>Message</label><textarea id="cn-text" rows="14" style="width:100%"></textarea></div>
+    <p class="u-hint" data-i18n>You can edit the text here before copying. It is made from the Curriculum rows of that month for this student's level, and lists only the lesson parts ticked on the student.</p>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-currnote')" data-i18n>Close</button><button class="btn btn-p" onclick="currNoteCopy()" data-i18n><i class="ti ti-copy"></i> Copy</button></span></div>
   </div>
 </div>
 
