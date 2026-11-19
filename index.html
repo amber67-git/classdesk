@@ -497,6 +497,21 @@ thead[data-header-page] th:not(:last-child):hover::after{
 #ltq-list{display:flex;flex-direction:column;gap:8px;margin:10px 0 12px}
 .ltq-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:2px solid var(--bdr);background:var(--surf);color:var(--txt);border-radius:10px;padding:10px;font-size:var(--fs-base);cursor:pointer;font-family:var(--font)}
 .ltq-opt.on{border-color:var(--grn);background:var(--grn-l)}
+/* v149: the 100-point sheet in the rating window; sample tests above the student rows */
+.ltq-rub{border-top:1px solid var(--bdr);margin-bottom:12px}
+.ltq-r{display:flex;flex-direction:column;gap:6px;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.ltq-rn{font-weight:500;font-size:var(--fs-sm);display:flex;flex-direction:column}
+.ltq-rn small{font-weight:400;color:var(--txt2);font-size:12px}
+.ltq-rb{display:flex;gap:6px;flex-wrap:wrap}
+.ltq-pt{min-width:44px;min-height:44px;border:2px solid var(--bdr);background:var(--surf);color:var(--txt);border-radius:10px;font-size:var(--fs-base);font-weight:600;cursor:pointer;font-family:var(--font)}
+.ltq-pt.on{border-color:var(--grn);background:var(--grn-l);color:var(--grn-t)}
+.ltq-total{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;font-size:var(--fs-sm)}
+.ltq-total b{font-size:20px;font-variant-numeric:tabular-nums}
+.ltq-total>span:last-child{display:flex;align-items:center;gap:8px}
+.ltq-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lt-score{font-variant-numeric:tabular-nums;font-weight:600}
+.lt-trial{padding:6px 14px 10px;border-bottom:1px solid var(--bdr);background:var(--surf2)}
+.lt-trial .u-hint{margin:0 0 4px}
 /* v147: a test on paper — answer entry, the sheet picker, the oral check */
 .ltp-next{display:flex;align-items:center;gap:12px;margin:4px 0 12px}
 .ltp-forms{height:auto;flex-wrap:wrap}
@@ -1664,7 +1679,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
 <!-- LEVEL TEST (v145) -->
 <div id="page-leveltest" class="page">
-  <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button><button class="btn" onclick="openModal('mo-lt-export')" title="Save the test records as a spreadsheet file" data-i18n data-i18n-title><i class="ti ti-download"></i> Save as CSV</button></div></div>
+  <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenTrial()" title="A test without a student — for a trial lesson, or to see the test yourself" data-i18n data-i18n-title><i class="ti ti-player-play"></i> Sample test</button><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button><button class="btn" onclick="openModal('mo-lt-export')" title="Save the test records as a spreadsheet file" data-i18n data-i18n-title><i class="ti ti-download"></i> Save as CSV</button></div></div>
 <div class="pc">
   <p class="u-hint" style="margin:0 0 12px" data-i18n>A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.</p>
   <div class="card"><div id="lt-list"></div></div>
@@ -2160,6 +2175,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v149 · 2026-11-19</dt><dd><b>New: sample tests and a 100-point score sheet.</b> <b>Sample test</b> (top of the Level test page) starts a test that belongs to no student — for a trial lesson, or to see the test yourself. Type a name if you like, choose on screen or on paper, and the result and the parent report work as usual. Sample tests are listed above the students; delete them when you are done, or use <b>Move to a student</b> when the child joins (the student's level still changes only when you confirm the result). When you rate <b>Speaking or Writing</b> there is now an optional <b>score sheet</b>: four things (content, sentences, accuracy, flow), each 0 to 5 where 1 to 5 mean levels A to E, 5 points a step, 100 in all — plus two counts you may add (words in one minute and sentences, or words and sentences written). The score shows in Details and in the parent report next to last time's, and <b>Save as CSV</b> has a third file with every rating and score.</dd>
           <dt>v148 · 2026-11-19</dt><dd><b>New: skill ratings, the parent report and CSV.</b> On the Level test page each student now has a <b>Details</b> button: it shows the reading level from the test and lets you <b>rate Speaking, Writing, Phonics and Vocabulary</b> against a five-step description (A–E), each rating kept with its date. A finished test has a <b>Parent report</b> (in the result window, and in Details): it opens in a new window to print or save as PDF, in Korean, with the class level, the level of each skill, strengths and points to work on, what the test did, goals, a three-month plan, the change since the last test and your note — and it says that these are the class's own levels, not an official score. <b>CSV</b> saves all test records as a spreadsheet file, one row per test or one row per answer.</dd>
           <dt>v147 · 2026-11-19</dt><dd><b>New: the level test on paper.</b> On the Level test page, <b>Print sheets</b> opens the test sheets you tick (two sets per level) and the <b>answer key</b> in a new window with a Print button. To record a paper test, press <b>Start test</b> on the student's row, choose <b>On paper</b>, pick the sheet the student did and the date, and enter the number they circled for each question; the app then says which sheet comes next (one level up, one down, or the other set), exactly as it would on screen, and you can leave and continue later. The <b>result</b> window also has an optional one-minute <b>oral check</b>: ask the question shown about the last part the student got mostly right — "could not explain" marks the result as needing a second look.</dd>
           <dt>v146 · 2026-11-19</dt><dd><b>New: the curriculum by level and by student.</b> Curriculum has two new columns at the end, <b>Level</b> and <b>Speaking</b>. A row with a level (<b>A·B</b>, <b>C</b>, <b>D·E</b>…) is for those levels only; a row without one is for everyone — so a topic can have one row for all (book, activity) and one row per level (writing, speaking, grammar). <b>Import</b> reads this from your sheet: add <b>Level</b> and <b>Speaking</b> headings, and put each level's row under its topic with the topic cell left empty. The new box in the bar shows <b>one level</b>, or <b>one student</b>: that student's level and only the columns of the lesson parts ticked on them. <b>Monthly note</b> writes a month's plan for one student as a message for the parents (Korean or English) that you can edit and copy.</dd>
@@ -2205,7 +2221,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v148</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v149</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2370,6 +2386,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v149 · 2026-11-19</dt><dd><b>새 기능: 샘플 테스트와 100점 채점표.</b> 레벨테스트 페이지 위쪽의 <b>샘플 테스트</b>는 어느 학생에도 연결되지 않는 테스트를 시작합니다. 시범 수업 때나 선생님이 테스트를 직접 확인할 때 쓰세요. 이름은 적어도 되고 안 적어도 되며, 화면으로도 종이로도 볼 수 있고, 결과와 학부모 리포트도 그대로 나옵니다. 샘플 테스트는 학생 목록 위에 모여 있습니다. 다 보셨으면 지우고, 아이가 등록하면 <b>학생에게 옮기기</b>로 그 학생의 테스트로 만드세요(학생의 레벨은 결과를 확정할 때만 바뀝니다). <b>Speaking과 Writing</b>을 평가할 때는 <b>채점표</b>(선택)가 생겼습니다. 내용·문장·정확성·흐름 네 항목을 각각 0~5로 매기는데, 1~5는 레벨 A~E와 같은 뜻이고 한 칸이 5점이라 합계가 100점 만점입니다. 1분 동안 말한 단어 수와 문장 수(쓰기는 쓴 단어 수와 문장 수)도 함께 적을 수 있습니다. 점수는 자세히와 학부모 리포트에 지난번 점수와 나란히 나오고, <b>CSV 저장</b>에 모든 평가와 점수를 담은 세 번째 파일이 생겼습니다.</dd>
           <dt>v148 · 2026-11-19</dt><dd><b>새 기능: 영역별 평가, 학부모 리포트, CSV.</b> 레벨테스트 페이지의 학생마다 <b>자세히</b> 버튼이 생겼습니다. 테스트로 나온 읽기 레벨을 보여 주고, <b>Speaking·Writing·Phonics·Vocabulary</b>를 다섯 단계 설명(A–E)에 맞춰 평가할 수 있으며, 평가는 날짜와 함께 쌓입니다. 끝난 테스트에는 <b>학부모 리포트</b>가 있습니다(결과 창과 자세히 안). 새 창으로 열려 인쇄하거나 PDF로 저장할 수 있고, 한국어로 수업 레벨, 영역별 수준, 강점과 보완할 점, 이번 평가에서 한 일, 학습 목표, 3개월 계획, 지난 평가와의 변화, 선생님 의견이 들어갑니다. 자체 기준의 레벨이며 공식 점수가 아니라는 안내도 함께 나옵니다. <b>CSV</b>는 모든 테스트 기록을 스프레드시트 파일로 저장합니다(테스트 한 번에 한 줄, 또는 문항 하나에 한 줄).</dd>
           <dt>v147 · 2026-11-19</dt><dd><b>새 기능: 종이로 보는 레벨테스트.</b> 레벨테스트 페이지의 <b>시험지 인쇄</b>에서 체크한 시험지(레벨마다 세트 두 개)와 <b>정답지</b>를 인쇄 버튼이 있는 새 창으로 엽니다. 종이 시험을 기록하려면 학생 줄의 <b>테스트 시작</b>에서 <b>종이 시험</b>을 고르고, 학생이 푼 시험지와 날짜를 정한 뒤 문항마다 학생이 고른 번호를 누르세요. 화면 테스트와 똑같이 다음에 풀 시험지(한 단계 위, 아래, 또는 같은 레벨의 다른 세트)를 알려 주며, 나갔다가 나중에 이어서 입력할 수 있습니다. <b>결과</b> 창에는 선택 사항인 1분짜리 <b>구두 확인</b>도 생겼습니다. 학생이 대체로 맞힌 마지막 묶음에 대해 화면에 나온 질문을 하고, "설명 못함"이면 결과에 재확인 표시가 붙습니다.</dd>
           <dt>v146 · 2026-11-19</dt><dd><b>새 기능: 레벨별·학생별 커리큘럼.</b> 커리큘럼 끝에 <b>레벨</b>과 <b>말하기</b> 열이 생겼습니다. 레벨이 적힌 줄(<b>A·B</b>, <b>C</b>, <b>D·E</b>…)은 그 레벨에만 해당하고, 레벨이 없는 줄은 모두에게 해당합니다. 그래서 한 주제에 공통 줄(책, 활동) 하나와 레벨별 줄(쓰기, 말하기, 문법)을 둘 수 있습니다. <b>가져오기</b>가 시트에서 이것을 읽습니다: 제목 줄에 <b>Level</b>과 <b>Speaking</b>을 더하고, 레벨별 줄은 주제 칸을 비운 채 그 주제 아래에 두면 됩니다. 위쪽 새 상자에서 <b>한 레벨</b>이나 <b>한 학생</b>을 고르면, 그 학생의 레벨과 학생에게 체크된 수업 부분의 열만 보입니다. <b>월간 안내</b>는 한 학생의 한 달 계획을 학부모께 보낼 메시지(한국어 또는 영어)로 만들어 주며, 고쳐서 복사할 수 있습니다.</dd>
@@ -2414,7 +2431,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v148</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v149</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3593,6 +3610,47 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v149: sample tests, the 100-point sheet
+  "Sample test":"샘플 테스트",
+  "A test without a student — for a trial lesson, or to see the test yourself":"학생 없이 보는 테스트 — 시범 수업이나 직접 확인용",
+  "Name (optional)":"이름 (선택)",
+  "e.g. the child at a trial lesson":"예: 시범 수업에 온 아이 이름",
+  "A sample test belongs to no student. Use it for a trial lesson, or to see the test yourself. If the child joins, you can move the test to the student later.":"샘플 테스트는 어느 학생에도 연결되지 않습니다. 시범 수업 때나 테스트를 직접 확인할 때 쓰세요. 아이가 등록하면 나중에 그 학생의 테스트로 옮길 수 있습니다.",
+  "Add a student first — the level test is started from the student's row here. To see the test without a student, press “Sample test” above.":"먼저 학생을 추가하세요. 레벨테스트는 여기 학생 줄에서 시작합니다. 학생 없이 테스트를 보려면 위의 “샘플 테스트”를 누르세요.",
+  "Sample tests ({n})":"샘플 테스트 ({n})",
+  "Not tied to a student. Delete them when you are done, or move one to a student who has joined.":"학생에 연결되지 않은 테스트입니다. 다 보셨으면 지우거나, 등록한 학생에게 옮기세요.",
+  "Make this one of a student's tests":"이 테스트를 학생의 테스트로 옮기기",
+  "Move to a student":"학생에게 옮기기",
+  "Move the sample test to a student":"샘플 테스트를 학생에게 옮기기",
+  "Move to":"옮길 학생",
+  "The test becomes one of that student's tests. The student's class level changes only when you confirm the result.":"이 테스트가 그 학생의 테스트가 됩니다. 학생의 수업 레벨은 결과를 확정할 때만 바뀝니다.",
+  "Move the test":"옮기기",
+  "Add the student first, then move the test.":"먼저 학생을 추가한 뒤 테스트를 옮기세요.",
+  "Moved to {name}. Open the result and confirm it to set the class level.":"{name} 학생에게 옮겼습니다. 결과를 열어 확정하면 수업 레벨이 정해집니다.",
+  "Moved to {name}.":"{name} 학생에게 옮겼습니다.",
+  "Confirmed. A sample test changes no student's level.":"확정했습니다. 샘플 테스트는 학생의 레벨을 바꾸지 않습니다.",
+  "Content|score":"내용",
+  "Sentences|score":"문장",
+  "Accuracy|score":"정확성",
+  "Flow|score":"흐름",
+  "How much they say that answers the question":"질문에 맞는 내용을 얼마나 말하는가",
+  "How long the sentences are and how they are linked":"문장의 길이와 연결",
+  "Grammar and pronunciation do not get in the way of the meaning":"문법과 발음이 뜻을 방해하지 않는가",
+  "Keeps talking without long pauses":"긴 멈춤 없이 이어 말하는가",
+  "How much they write that fits the topic":"주제에 맞는 내용을 얼마나 쓰는가",
+  "Spelling and grammar do not get in the way of the meaning":"철자와 문법이 뜻을 방해하지 않는가",
+  "The writing has an order and a shape":"글에 순서와 구성이 있는가",
+  "Words said in one minute (optional)":"1분 동안 말한 단어 수 (선택)",
+  "Full sentences said (optional)":"완전한 문장 수 (선택)",
+  "Words written (optional)":"쓴 단어 수 (선택)",
+  "Sentences written (optional)":"쓴 문장 수 (선택)",
+  "Score sheet — 100 points (optional)":"채점표 — 100점 만점 (선택)",
+  "Give each of the four 0 to 5: 1 is level A in the list above, 5 is level E, and 0 is no response. Each step is 5 points.":"네 항목을 각각 0~5로 매기세요. 1은 위 목록의 레벨 A, 5는 레벨 E 수준이고, 0은 아무 반응이 없을 때입니다. 한 칸이 5점입니다.",
+  "Score all four, or clear them.":"네 항목을 모두 매기거나 지우세요.",
+  "Total|score":"합계",
+  "Clear|score":"지우기",
+  "Ratings and scores — one row per rating":"평가와 점수 — 평가 한 번에 한 줄",
+  "There are no ratings yet.":"아직 평가 기록이 없습니다.",
   // ── v148: ratings, the parent report, CSV
   "Save as CSV":"CSV 저장","Phonics":"파닉스","Skills":"영역별 수준","Reading|skill":"읽기","from the level test":"레벨테스트 결과","No record":"기록 없음","your rating · {date}":"선생님 평가 · {date}","your rating":"선생님 평가",
   "Rate again":"다시 평가","Rate|skill":"평가하기","{name}: rating saved":"{name} 평가를 저장했습니다","Note (optional)":"메모 (선택)","Details":"자세히","Tests ({n})":"테스트 ({n})","No tests yet.":"아직 테스트 기록이 없습니다.",
@@ -3636,7 +3694,7 @@ const I18N={ko:{
   "Main idea":"중심 생각","Inference":"추론","Finding evidence":"근거 찾기","Applying to a new case":"새 상황 적용","Critical reading":"비판적 읽기",
   "Enough to judge on":"판정 근거 충분","Fair basis to judge on":"판정 근거 보통","Thin basis · check again":"판정 근거 부족 · 재확인 권장",
   "Secure|test part":"안정","Borderline":"경계","Borderline → checked again":"경계 → 재확인","Hard|test part":"어려움",
-  "No level yet":"레벨 미정","Add a student first — the level test is started from the student's row here.":"먼저 학생을 추가하세요. 레벨테스트는 여기 학생 줄에서 시작합니다.",
+  "No level yet":"레벨 미정",
   "Not tested yet":"아직 테스트 전","Last test {date} · app result {res}":"최근 테스트 {date} · 앱 결과 {res}","confirmed {lv}":"확정 {lv}","Not confirmed":"확정 전","Retest due":"재테스트 시기",
   "Result":"결과","Continue test":"이어서 풀기","Start test":"테스트 시작","Delete this test record":"이 테스트 기록 삭제",
   "In progress — part {n}":"진행 중 — {n}번째 묶음","End here and judge":"여기서 끝내고 판정","Stopped before it could be judged":"판정할 만큼 풀기 전에 중단함",
@@ -4089,7 +4147,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v148";
+const APP_VERSION="v149";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -7902,7 +7960,16 @@ const LT_CIRC=["①","②","③","④"];
 const LT_RETEST_MONTHS=3;
 
 const ltSame=(a,b)=>String(a)===String(b);
-const ltStudent=sid=>students.find(s=>ltSame(s.id,sid))||null;
+// A sample test (v149) belongs to no student — it is for a trial lesson, or for the teacher to see
+// the test. Its studentId is "trial:<id>" and the name typed at the start is kept on the record
+// (guest). ltStudent() answers for such an id with a stand-in, so the test screen, the result, the
+// report and the CSV work as they do for a student; nothing is ever written to a student for it.
+const LT_TRIAL="trial:";
+const ltIsTrial=sid=>String(sid).startsWith(LT_TRIAL);
+const ltTrialName=a=>String((a&&a.guest)||"").trim()||tx("Sample test");
+function ltTrialStudent(sid){const a=assessments.find(x=>ltSame(x.studentId,sid));return a?{id:sid,name:ltTrialName(a),trial:true}:null;}
+const ltStudent=sid=>students.find(s=>ltSame(s.id,sid))||(ltIsTrial(sid)?ltTrialStudent(sid):null);
+const ltTrials=()=>assessments.filter(a=>ltIsTrial(a.studentId)).sort((a,b)=>b.startedAt-a.startedAt);
 const ltGet=aid=>assessments.find(a=>a.id===aid)||null;
 const ltOf=sid=>assessments.filter(a=>ltSame(a.studentId,sid));
 // Finished tests of one student, oldest first.
@@ -7948,9 +8015,9 @@ function renderLevelTest(){
   const sum=document.getElementById("lt-sum");
   if(sum)sum.innerHTML=PLAN_LEVELS.map(L=>`<span class="tag"><b>${L}</b> ${counts[L]||0}</span>`).join("")+
     (counts[""]?`<span class="tag">${escapeAttr(tx("No level yet"))} ${counts[""]}</span>`:"");
-  if(!list.length){box.innerHTML=`<div class="lt-empty">${escapeAttr(tx("Add a student first — the level test is started from the student's row here."))}</div>`;return;}
+  if(!list.length){box.innerHTML=`<div class="lt-empty">${escapeAttr(tx("Add a student first — the level test is started from the student's row here. To see the test without a student, press “Sample test” above."))}</div>`+ltTrialHtml();return;}
   const today=td();
-  box.innerHTML=list.map(s=>{
+  box.innerHTML=ltTrialHtml()+list.map(s=>{
     const sid=escapeAttr(s.id),all=ltOf(s.id),last=ltLatest(s.id),ip=ltInProgress(s.id);
     const lvl=PLAN_LEVELS.includes(s.group)?s.group:"";
     let sub=tx("Not tested yet");
@@ -7969,11 +8036,18 @@ function renderLevelTest(){
     let h=`<div class="lt-row">${ltLv(lvl)}<div class="lt-main"><div class="lt-name">${escapeAttr(s.name||"")}${s.k?` <span class="cell-muted2">${escapeAttr(s.k)}</span>`:""}</div>`+
       `<div class="lt-sub">${escapeAttr(sub)}</div></div><div class="lt-acts">${badges.join("")}${acts.join("")}</div></div>`;
     if(ltSame(ltOpenSid,s.id))h+=`<div class="lt-hist">${ltProfileHtml(s)}<div class="lt-ph">${escapeAttr(tx("Tests ({n})",{n:all.length}))}</div>`+
-      (all.length?all.sort((a,b)=>b.startedAt-a.startedAt).map(ltHistRow).join(""):`<div class="lt-hrow cell-muted2">${escapeAttr(tx("No tests yet."))}</div>`)+`</div>`;
+      (all.length?all.sort((a,b)=>b.startedAt-a.startedAt).map(a=>ltHistRow(a)).join(""):`<div class="lt-hrow cell-muted2">${escapeAttr(tx("No tests yet."))}</div>`)+`</div>`;
     return h;
   }).join("");
 }
-function ltHistRow(a){
+// Sample tests, above the students: shown only when there are any.
+function ltTrialHtml(){
+  const list=ltTrials();if(!list.length)return "";
+  return `<div class="lt-trial"><div class="lt-ph">${escapeAttr(tx("Sample tests ({n})",{n:list.length}))}</div>`+
+    `<p class="u-hint">${escapeAttr(tx("Not tied to a student. Delete them when you are done, or move one to a student who has joined."))}</p>`+
+    list.map(a=>ltHistRow(a,true)).join("")+`</div>`;
+}
+function ltHistRow(a,trial){
   const aid=escapeAttr(a.id),del=`<button class="bic" data-lt="del" data-aid="${aid}" title="${escapeAttr(tx("Delete this test record"))}" aria-label="${escapeAttr(tx("Delete this test record"))}"><i class="ti ti-trash"></i></button>`;
   let date=a.date||fmtDate(new Date(a.startedAt)),text,acts="";
   if(a.status==="done"&&a.result){
@@ -7985,6 +8059,10 @@ function ltHistRow(a){
     acts=`<button class="btn btn-xs" data-lt="resume" data-aid="${aid}">${escapeAttr(tx("Continue test"))}</button>`+
       `<button class="btn btn-xs" data-lt="end" data-aid="${aid}">${escapeAttr(tx("End here and judge"))}</button>`;
   }else text=tx("Stopped before it could be judged");
+  if(trial){
+    text=ltTrialName(a)+" · "+text;
+    if(students.some(s=>!s.archived))acts+=`<button class="btn btn-xs" data-lt="move" data-aid="${aid}" title="${escapeAttr(tx("Make this one of a student's tests"))}">${escapeAttr(tx("Move to a student"))}</button>`;
+  }
   return `<div class="lt-hrow"><span class="lt-hdate">${escapeAttr(date)}</span><span class="lt-htext">${escapeAttr(text)}</span><span class="lt-hacts">${acts}${del}</span></div>`;
 }
 document.addEventListener("click",e=>{
@@ -7998,6 +8076,7 @@ document.addEventListener("click",e=>{
   else if(act==="del")ltDelete(aid);
   else if(act==="report")ltOpenReport(aid);
   else if(act==="rate")ltOpenRate(sid,b.dataset.dom);
+  else if(act==="move")ltOpenMove(aid);
 });
 function ltDelete(aid){
   const i=assessments.findIndex(a=>a.id===aid);if(i<0)return;
@@ -8008,12 +8087,23 @@ function ltDelete(aid){
 }
 
 // ── Start ────────────────────────────────────────────────────────────────
-const LTS={sid:null,level:"B",mode:"online",form:""};
+const LTS={sid:null,level:"B",mode:"online",form:"",trial:false};
+// The same start window without a student: a new sample test with its own id.
+function ltOpenTrial(){
+  LTS.sid=LT_TRIAL+uid();LTS.trial=true;LTS.mode="online";LTS.form="";LTS.level="B";
+  document.getElementById("lts-name").textContent=tx("Sample test");
+  document.getElementById("lts-guest-row").hidden=false;document.getElementById("lts-guest").value="";
+  document.getElementById("lts-ko").checked=true;
+  const d=document.getElementById("lts-date");d.value=td();d.max=td();
+  ltRenderStart();
+  openModal("mo-lt-start");
+}
 function ltOpenStart(sid){
-  const s=ltStudent(sid);if(!s)return;
+  const s=ltStudent(sid);if(!s||s.trial)return;
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   const last=ltLatest(s.id);
-  LTS.sid=s.id;LTS.mode="online";LTS.form="";
+  LTS.sid=s.id;LTS.trial=false;LTS.mode="online";LTS.form="";
+  document.getElementById("lts-guest-row").hidden=true;
   LTS.level=(last&&last.result.level)||(PLAN_LEVELS.includes(s.group)?s.group:"")||"B";
   document.getElementById("lts-name").textContent=s.name||"";
   document.getElementById("lts-ko").checked=true;
@@ -8045,17 +8135,39 @@ function ltSetStartLevel(L){if(AEA.LEVELS.includes(L)){LTS.level=L;ltRenderStart
 function ltSetStartMode(m){if(m==="online"||m==="paper"){LTS.mode=m;ltRenderStart();}}
 function ltSetStartForm(id){if(AEA.TL[id]&&AEA.TL[id].level===LTS.level){LTS.form=id;ltRenderStart();}}
 function ltStart(){
-  const s=ltStudent(LTS.sid);if(!s)return;
+  const s=LTS.trial?(ltIsTrial(LTS.sid)?{id:LTS.sid}:null):ltStudent(LTS.sid);if(!s)return;
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   const paper=LTS.mode==="paper";
   const a=AEA.newAssessment(uid(),s.id,LTS.level,paper?"paper":"online",ltSeen(s.id),Date.now(),paper?LTS.form:undefined);
   if(paper){const d=document.getElementById("lts-date").value;a.paperDate=/^\d{4}-\d{2}-\d{2}$/.test(d)&&d<=td()?d:td();}
   else a.koHelp=!!document.getElementById("lts-ko").checked;
+  if(LTS.trial){const g=(document.getElementById("lts-guest").value||"").trim().slice(0,40);if(g)a.guest=g;}
   assessments.push(a);
   if(!saveKey("assessments")){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
   closeModal("mo-lt-start");
   if(curPage==="leveltest")renderLevelTest();        // the row now offers "Continue", whatever happens next
   ltResume(a.id);
+}
+// A sample test becomes one of a student's tests — the child from the trial lesson has joined.
+// Only the owner of the record changes; the student's level waits for the result to be confirmed.
+let ltMoveId=null;
+function ltOpenMove(aid){
+  const a=ltGet(aid),list=students.filter(s=>!s.archived);if(!a||!ltIsTrial(a.studentId))return;
+  if(!list.length){showToast(tx("Add the student first, then move the test."));return;}
+  ltMoveId=aid;
+  document.getElementById("ltm-what").textContent=ltTrialName(a)+" · "+(a.date||fmtDate(new Date(a.startedAt)));
+  document.getElementById("ltm-student").innerHTML=list.map(s=>`<option value="${escapeAttr(s.id)}">${escapeAttr(s.name||"")}</option>`).join("");
+  openModal("mo-lt-move");
+}
+function ltMove(){
+  const a=ltGet(ltMoveId),s=students.find(x=>ltSame(x.id,document.getElementById("ltm-student").value));
+  if(!a||!ltIsTrial(a.studentId)||!s)return;
+  if(a.status==="in_progress"&&ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
+  if(!ltCommit(a,()=>{a.studentId=s.id;delete a.guest;if(a.teacher)delete a.teacher.held;})){showToast(ltSaveFailed());return;}
+  closeModal("mo-lt-move");
+  ltOpenSid=s.id;
+  if(curPage==="leveltest")renderLevelTest();
+  showToast(a.status==="done"?tx("Moved to {name}. Open the result and confirm it to set the class level.",{name:s.name||""}):tx("Moved to {name}.",{name:s.name||""}));
 }
 // Carry on with a test: the student's screen, or the answer entry for a test on paper.
 function ltResume(aid){const a=ltGet(aid);if(!a||a.status!=="in_progress")return;if(a.mode==="paper")ltOpenPaper(aid);else ltOpenTest(aid);}
@@ -8452,6 +8564,33 @@ const ltDomTask=d=>LANG==="ko"?AEA.RATING_DOMAINS[d].task:LT_DOMAINS_EN[d].task;
 const ltDomLevel=(d,L)=>LANG==="ko"?AEA.RATING_DOMAINS[d].levels[L]:LT_DOMAINS_EN[d].levels[L];
 const ltRatings=(s,d)=>(s&&s.ratings&&Array.isArray(s.ratings[d]))?s.ratings[d].filter(r=>r&&AEA.LEVELS.includes(r.level)):[];
 const ltLastRating=(s,d)=>{const r=ltRatings(s,d);return r.length?r[r.length-1]:null;};
+// ── The 100-point sheet for Speaking and Writing (v149) ──────────────────
+// Four things to look at, each given 0 to 5: 1 to 5 mean what levels A to E mean in the list above
+// the sheet (so there is no second scale to learn), and 0 is no response. Each step is 5 points —
+// 25 a thing, 100 in all. The sheet is optional: a rating without it is the level alone. It is
+// kept on the rating as it was filled in (rubric), with the two counts the teacher may add; the
+// total is worked out from it, never stored.
+const LT_RUBRIC_IDS=["content","sentence","accuracy","flow"];
+const LT_RUBRIC_KO={content:"내용",sentence:"문장",accuracy:"정확성",flow:"흐름"};
+const LT_RUBRIC_NAME={content:tx("Content|score"),sentence:tx("Sentences|score"),accuracy:tx("Accuracy|score"),flow:tx("Flow|score")};
+const LT_RUBRIC_LOOK={
+  speaking:{content:tx("How much they say that answers the question"),sentence:tx("How long the sentences are and how they are linked"),
+    accuracy:tx("Grammar and pronunciation do not get in the way of the meaning"),flow:tx("Keeps talking without long pauses")},
+  writing:{content:tx("How much they write that fits the topic"),sentence:tx("How long the sentences are and how they are linked"),
+    accuracy:tx("Spelling and grammar do not get in the way of the meaning"),flow:tx("The writing has an order and a shape")},
+};
+const LT_COUNT_LBL={speaking:[tx("Words said in one minute (optional)"),tx("Full sentences said (optional)")],writing:[tx("Words written (optional)"),tx("Sentences written (optional)")]};
+const LT_COUNT_KO={speaking:["1분 동안 말한 단어","완전한 문장"],writing:["쓴 단어","쓴 문장"]};
+const ltHasRubric=d=>!!LT_RUBRIC_LOOK[d];
+const ltRubricOk=x=>!!x&&typeof x==="object"&&LT_RUBRIC_IDS.every(k=>Number.isInteger(x[k])&&x[k]>=0&&x[k]<=5);
+const ltScore=r=>r&&ltRubricOk(r.rubric)?LT_RUBRIC_IDS.reduce((n,k)=>n+r.rubric[k],0)*5:null;
+const ltCount=v=>Number.isInteger(v)&&v>=0&&v<=999?v:null;
+// The rating with a score that came before this one, for "last time".
+function ltPrevScored(s,d,r){
+  const all=ltRatings(s,d),i=all.indexOf(r);
+  for(let k=(i<0?all.length:i)-1;k>=0;k--)if(ltScore(all[k])!=null)return all[k];
+  return null;
+}
 // The ratings a report of test `a` goes by: for each skill, the last one made before the student's
 // next finished test. So the newest test's report follows the ratings as they are added (they are
 // usually made in the lessons after the test), and an older test's report stays as it was printed
@@ -8467,16 +8606,21 @@ function ltProfileHtml(s){
   let h=`<div class="lt-ph">${e(tx("Skills"))}</div><div class="lt-prof"><div class="lt-prow"><span class="lt-pname">${e(tx("Reading|skill"))}<small>${e(tx("from the level test"))}</small></span><span class="lt-pval">${last?ltLv(last.result.level)+`<span>${e(LT_STAGE[last.result.stage])}</span>`:`<span class="cell-muted2">${e(tx("No record"))}</span>`}</span></div>`;
   LT_DOMAIN_IDS.forEach(d=>{
     const r=ltLastRating(s,d);
-    h+=`<div class="lt-prow"><span class="lt-pname">${e(LT_DOMAIN_NAME[d])}<small>${e(r?tx("your rating · {date}",{date:r.date}):tx("your rating"))}</small></span><span class="lt-pval">${r?ltLv(r.level):""}`+
+    const sc=ltScore(r);
+    h+=`<div class="lt-prow"><span class="lt-pname">${e(LT_DOMAIN_NAME[d])}<small>${e(r?tx("your rating · {date}",{date:r.date}):tx("your rating"))}</small></span><span class="lt-pval">${r?ltLv(r.level):""}${sc!=null?`<span class="lt-score">${sc}/100</span>`:""}`+
       `<button class="btn btn-xs" data-lt="rate" data-sid="${e(s.id)}" data-dom="${d}">${e(r?tx("Rate again"):tx("Rate|skill"))}</button></span></div>`;
   });
   return h+`</div>`;
 }
-const LTR={sid:null,dom:null,level:""};
+const LTR={sid:null,dom:null,level:"",manual:false,rub:{}};
 function ltOpenRate(sid,dom){
   const s=ltStudent(sid);if(!s||!LT_DOMAIN_IDS.includes(dom))return;
   const r=ltLastRating(s,dom);
-  LTR.sid=s.id;LTR.dom=dom;LTR.level=r?r.level:"";
+  if(s.trial)return;
+  LTR.sid=s.id;LTR.dom=dom;LTR.level=r?r.level:"";LTR.manual=false;LTR.rub={};
+  const has=ltHasRubric(dom),g=id=>document.getElementById(id);
+  g("ltq-counts").hidden=!has;g("ltq-c1").value="";g("ltq-c2").value="";
+  if(has){g("ltq-c1l").textContent=LT_COUNT_LBL[dom][0];g("ltq-c2l").textContent=LT_COUNT_LBL[dom][1];}
   document.getElementById("ltq-title").textContent=LT_DOMAIN_NAME[dom]+" · "+(s.name||"");
   document.getElementById("ltq-task").textContent=ltDomTask(dom);
   document.getElementById("ltq-note").value="";
@@ -8486,15 +8630,45 @@ function ltRenderRate(){
   if(!LT_DOMAIN_IDS.includes(LTR.dom))return;
   document.getElementById("ltq-list").innerHTML=AEA.LEVELS.map(L=>
     `<button type="button" class="ltq-opt${LTR.level===L?" on":""}" aria-pressed="${LTR.level===L}" onclick="ltPickRate('${L}')">${ltLv(L)}<span>${escapeAttr(ltDomLevel(LTR.dom,L))}</span></button>`).join("");
-  document.getElementById("ltq-save").disabled=!LTR.level;
+  const rub=document.getElementById("ltq-rub"),has=ltHasRubric(LTR.dom),e=escapeAttr;
+  const n=LT_RUBRIC_IDS.filter(k=>LTR.rub[k]!=null).length,total=n===4?LT_RUBRIC_IDS.reduce((m,k)=>m+LTR.rub[k],0)*5:null;
+  rub.hidden=!has;
+  if(has)rub.innerHTML=`<div class="lt-ph">${e(tx("Score sheet — 100 points (optional)"))}</div>`+
+    `<p class="u-hint">${e(tx("Give each of the four 0 to 5: 1 is level A in the list above, 5 is level E, and 0 is no response. Each step is 5 points."))}</p>`+
+    LT_RUBRIC_IDS.map(k=>`<div class="ltq-r"><span class="ltq-rn">${e(LT_RUBRIC_NAME[k])}<small>${e(LT_RUBRIC_LOOK[LTR.dom][k])}</small></span>`+
+      `<span class="ltq-rb" role="group" aria-label="${e(LT_RUBRIC_NAME[k])}">`+[0,1,2,3,4,5].map(v=>
+        `<button type="button" class="ltq-pt${LTR.rub[k]===v?" on":""}" aria-pressed="${LTR.rub[k]===v}" data-k="${k}" data-v="${v}" onclick="ltPickPoint('${k}',${v})">${v}</button>`).join("")+`</span></div>`).join("")+
+    `<div class="ltq-total"><span>${e(n&&n<4?tx("Score all four, or clear them."):tx("Total|score"))}</span><span>${total!=null?`<b>${total}</b> / 100`:"– / 100"}`+
+    (n?`<button type="button" class="btn btn-xs" onclick="ltClearPoints()">${e(tx("Clear|score"))}</button>`:"")+`</span></div>`;
+  document.getElementById("ltq-save").disabled=!LTR.level||(has&&n>0&&n<4);
 }
-function ltPickRate(L){if(AEA.LEVELS.includes(L)){LTR.level=L;ltRenderRate();}}
+function ltPickRate(L){if(AEA.LEVELS.includes(L)){LTR.level=L;LTR.manual=true;ltRenderRate();}}
+// A point on the sheet. Once all four are in, the level follows their average (1 = A … 5 = E)
+// unless the teacher has picked the level by hand.
+function ltPickPoint(k,v){
+  if(!ltHasRubric(LTR.dom)||!LT_RUBRIC_IDS.includes(k)||!Number.isInteger(v)||v<0||v>5)return;
+  LTR.rub[k]=v;
+  if(!LTR.manual&&ltRubricOk(LTR.rub)){
+    const avg=LT_RUBRIC_IDS.reduce((m,x)=>m+LTR.rub[x],0)/4;
+    LTR.level=AEA.LEVELS[Math.min(5,Math.max(1,Math.round(avg)))-1];
+  }
+  ltRenderRate();
+  document.querySelector(`#ltq-rub [data-k="${k}"][data-v="${v}"]`)?.focus();
+}
+function ltClearPoints(){LTR.rub={};ltRenderRate();}
 function ltSaveRate(){
-  const s=ltStudent(LTR.sid),d=LTR.dom;if(!s||!LT_DOMAIN_IDS.includes(d)||!AEA.LEVELS.includes(LTR.level))return;
+  const s=ltStudent(LTR.sid),d=LTR.dom;if(!s||s.trial||!LT_DOMAIN_IDS.includes(d)||!AEA.LEVELS.includes(LTR.level))return;
   const before=s.ratings,hadU=Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s._u;
   // a new object and a new list, so a failed save can simply put the old ones back
   const all=before&&typeof before==="object"&&!Array.isArray(before)?{...before}:{};
-  all[d]=[...(Array.isArray(all[d])?all[d]:[]),{date:td(),level:LTR.level,note:(document.getElementById("ltq-note").value||"").trim()}];
+  const entry={date:td(),level:LTR.level,note:(document.getElementById("ltq-note").value||"").trim()};
+  if(ltHasRubric(d)){
+    const n=LT_RUBRIC_IDS.filter(k=>LTR.rub[k]!=null).length;
+    if(n&&!ltRubricOk(LTR.rub))return;                    // a sheet is all four or none
+    if(n)entry.rubric=Object.fromEntries(LT_RUBRIC_IDS.map(k=>[k,LTR.rub[k]]));
+    [["words","ltq-c1"],["sentences","ltq-c2"]].forEach(([f,id])=>{const raw=document.getElementById(id).value.trim(),v=ltCount(Number(raw));if(raw!==""&&v!=null)entry[f]=v;});
+  }
+  all[d]=[...(Array.isArray(all[d])?all[d]:[]),entry];
   s.ratings=all;
   if(!saveKey("students")){
     // save() stamps a record before it writes it. The student goes back to the stored copy, so the
@@ -8571,11 +8745,23 @@ function ltReportBlocks(s,a){
   B.push(`<div class="rp-sec"><div class="rp-sum">${big(fin)}<div><div class="k">현재 수업 레벨</div><div class="v">${fin} · ${e(AEA.LEVEL_INFO[fin].name)}${same?` <span class="rp-stage">${ST[r.stage].ko}</span>`:""}</div></div></div>`+
     `<p>${e(AEA.LEVEL_INFO[fin].can)}입니다. ${same?ST[r.stage].desc:""}</p>`+
     (same?"":`<p class="rp-small">적응형 진단의 추천은 ${r.level} · ${ST[r.stage].ko}였고, 수업 중 관찰을 함께 고려해 선생님이 ${fin} 레벨로 정했습니다.</p>`)+`</div>`);
-  const rows=[["Reading · Comprehension","적응형 진단",r.level,ST[r.stage].ko]];
-  LT_DOMAIN_IDS.forEach(d=>{const x=rated[d];if(x)rows.push([AEA.RATING_DOMAINS[d].ko,"선생님 평가",x.level,e(x.date||"")]);});
-  B.push(`<div class="rp-sec"><h3>영역별 수준</h3><div class="rg"><div class="rg-row rg-head"><span></span>${LV.map(L=>`<span>${L}</span>`).join("")}</div>`+
-    rows.map(x=>`<div class="rg-row"><span class="rg-name">${e(x[0])}<small>${x[1]}${x[3]?" · "+x[3]:""}</small></span>${LV.map(L=>`<span class="rg-cell">${L===x[2]?`<i>${L}</i>`:""}</span>`).join("")}</div>`).join("")+
-    `</div><p class="rp-small">영역마다 레벨이 다를 수 있습니다. ${rows.length===1?"Speaking과 Writing은 수업 중 평가 후 추가됩니다.":"선생님 평가는 기준표에 따른 관찰 결과이며, 옆의 날짜는 평가한 날입니다."}</p></div>`);
+  // name, the small line under it, level, score (or null), the score before it (or null)
+  const rows=[["Reading · Comprehension","적응형 진단 · "+ST[r.stage].ko,r.level,null,null]];
+  LT_DOMAIN_IDS.forEach(d=>{
+    const x=rated[d];if(!x)return;
+    const sc=ltScore(x),pv=sc!=null?ltPrevScored(s,d,x):null;
+    let sub="선생님 평가 · "+e(x.date||"");
+    if(sc!=null)sub+=" · "+LT_RUBRIC_IDS.map(k=>LT_RUBRIC_KO[k]+" "+x.rubric[k]*5).join(" · ");
+    const cnt=LT_COUNT_KO[d]?[["words",0],["sentences",1]].filter(([f])=>ltCount(x[f])!=null).map(([f,i])=>LT_COUNT_KO[d][i]+" "+x[f]+"개"):[];
+    if(cnt.length)sub+="<br>"+cnt.join(" · ");
+    rows.push([AEA.RATING_DOMAINS[d].ko,sub,x.level,sc,pv?ltScore(pv):null]);
+  });
+  const scored=rows.some(x=>x[3]!=null);
+  B.push(`<div class="rp-sec"><h3>영역별 수준</h3><div class="rg${scored?" sc":""}"><div class="rg-row rg-head"><span></span>${LV.map(L=>`<span>${L}</span>`).join("")}${scored?"<span>점수</span>":""}</div>`+
+    rows.map(x=>`<div class="rg-row"><span class="rg-name">${e(x[0])}<small>${x[1]}</small></span>${LV.map(L=>`<span class="rg-cell">${L===x[2]?`<i>${L}</i>`:""}</span>`).join("")}`+
+      (scored?`<span class="rg-score">${x[3]!=null?`<b>${x[3]}</b>${x[4]!=null?`<small>지난번 ${x[4]}</small>`:""}`:""}</span>`:"")+`</div>`).join("")+
+    `</div><p class="rp-small">영역마다 레벨이 다를 수 있습니다. ${rows.length===1?"Speaking과 Writing은 수업 중 평가 후 추가됩니다.":"선생님 평가는 기준표에 따른 관찰 결과이며, 옆의 날짜는 평가한 날입니다."}`+
+    (scored?" 점수는 내용·문장·정확성·흐름을 25점씩 본 100점 만점이고, 레벨 A부터 E까지 전체가 기준입니다(네 항목이 모두 레벨 C 수준이면 60점).":"")+`</p></div>`);
   B.push(`<div class="rp-sec rp-two"><div><h3>강점</h3><ul>${fd.good.map(x=>`<li>${e(x)}</li>`).join("")}</ul></div><div><h3>보완할 점</h3><ul>${fd.need.map(x=>`<li>${e(x)}</li>`).join("")}</ul></div></div>`);
   const pr=a.teacher&&a.teacher.probe;
   B.push(`<div class="rp-sec"><h3>이번 평가에서 한 일</h3><p>${a.mode==="paper"?"종이 시험지로 진행했고, 결과에 따라 다음 시험지의 난이도를 조절했습니다.":"학생의 답에 따라 글의 난이도가 자동으로 조절되는 방식으로 진행했습니다."} 모두 ${r.items}문항을 풀었습니다.</p><ul>`+
@@ -8597,22 +8783,24 @@ const LT_REPORT_CSS=LT_PRINT_TOKENS+`*{box-sizing:border-box}body{margin:0;backg
 h3{margin:0 0 6px;font-size:14.5px;font-weight:600;color:var(--brand)}p{margin:6px 0 0}
 .rp-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:6px 16px;padding-bottom:12px;border-bottom:3px solid var(--brand)}
 .rp-title{font-size:20px;font-weight:600}.rp-meta{font-size:13px;color:var(--muted);text-align:right}
-.rp-sec{padding:12px 0;border-bottom:1px solid var(--line);break-inside:avoid}.rp-sec ul,.rp-sec ol{margin:0;padding-left:20px}.rp-sec li{margin-bottom:3px}
+.rp-sec{padding:10px 0;border-bottom:1px solid var(--line);break-inside:avoid}.rp-sec ul,.rp-sec ol{margin:0;padding-left:20px}.rp-sec li{margin-bottom:2px}
 .rp-sum{display:flex;align-items:center;gap:12px}.k{font-size:12.5px;color:var(--muted)}.v{font-size:18px;font-weight:600;line-height:1.3}
 .lv.big{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;flex:none;border-radius:12px;background:var(--brand);color:var(--white);font-weight:700;font-size:26px}
 .rp-stage{font-size:13px;font-weight:600;background:var(--amber-soft);color:var(--amber-ink);padding:2px 8px;border-radius:999px;white-space:nowrap}
 .rp-small{font-size:12.5px;color:var(--muted)}.rp-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .rg{display:flex;flex-direction:column}.rg-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(5,40px);align-items:center;border-top:1px solid var(--line);min-height:40px}
+.rg.sc .rg-row{grid-template-columns:minmax(0,1fr) repeat(5,40px) 64px}
+.rg-score{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px solid var(--line);line-height:1.2}.rg-score b{font-size:16px;font-variant-numeric:tabular-nums}.rg-score small{font-size:10.5px;color:var(--muted)}
 .rg-head{border-top:0;min-height:24px;font-weight:700;font-size:13px;color:var(--muted);text-align:center}
 .rg-name{font-weight:500;display:flex;flex-direction:column;padding:2px 0;line-height:1.35}.rg-name small{font-weight:400;font-size:12px;color:var(--muted)}
 .rg-cell{height:100%;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line);background:var(--cell)}
 .rg-cell i{width:28px;height:28px;border-radius:50%;background:var(--amber);color:var(--ink);font-weight:700;font-size:14px;line-height:28px;text-align:center;font-style:normal}
 .rp-plan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rp-plan div{background:var(--bg);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;font-size:13px}
-.rp-note.long{font-size:12.5px;line-height:1.5}.rp-foot{border-bottom:0;font-size:12px;color:var(--muted)}
-.rp-grow{display:flex;align-items:center;gap:16px}.rp-grow>div{flex:1;min-width:0}.rp-grow p:first-child{margin-top:0}.growth{width:300px;flex:none;height:auto;display:block}.g-b0{fill:var(--white)}.g-b1{fill:var(--bg)}.g-frame{fill:none;stroke:var(--line)}.g-lv{font-size:12px;font-weight:600;fill:var(--muted)}
-.g-line{fill:none;stroke:var(--brand);stroke-width:2}.g-dot{fill:var(--brand);stroke:var(--white);stroke-width:2}.g-now{fill:var(--amber);stroke:var(--white);stroke-width:2}.g-date{font-size:10px;fill:var(--muted)}
+.rp-note.long{font-size:12.5px;line-height:1.45}.rp-foot{border-bottom:0;font-size:12px;color:var(--muted)}
+.rp-grow{display:flex;align-items:center;gap:16px}.rp-grow>div{flex:1;min-width:0}.rp-grow p:first-child{margin-top:0}.growth{width:264px;flex:none;height:auto;display:block}.g-b0{fill:var(--white)}.g-b1{fill:var(--bg)}.g-frame{fill:none;stroke:var(--line)}.g-lv{font-size:13px;font-weight:600;fill:var(--muted)}
+.g-line{fill:none;stroke:var(--brand);stroke-width:2}.g-dot{fill:var(--brand);stroke:var(--white);stroke-width:2}.g-now{fill:var(--amber);stroke:var(--white);stroke-width:2}.g-date{font-size:12px;fill:var(--muted)}
 @page{size:A4;margin:12mm 14mm}
-@media(max-width:560px){.paper{padding:20px 16px}.rp-two,.rp-plan{grid-template-columns:1fr}.rp-grow{flex-direction:column;align-items:stretch}.growth{width:100%;max-width:320px}.rg-row{grid-template-columns:minmax(0,1fr) repeat(5,30px)}}
+@media(max-width:560px){.paper{padding:20px 16px}.rp-two,.rp-plan{grid-template-columns:1fr}.rp-grow{flex-direction:column;align-items:stretch}.growth{width:100%;max-width:320px}.rg-row{grid-template-columns:minmax(0,1fr) repeat(5,30px)}.rg.sc .rg-row{grid-template-columns:minmax(0,1fr) repeat(5,26px) 50px}}
 @media print{body{background:var(--white)}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}}`;
 function ltOpenReport(aid){
   const a=ltGet(aid),s=a?ltStudent(a.studentId):null;
@@ -8642,7 +8830,11 @@ const ltCsvCell=v=>{
 function ltCsv(kind){
   const all=assessments.slice().sort((a,b)=>a.startedAt-b.startedAt),rows=[],ST=AEA.STAGES,nm=a=>{const s=ltStudent(a.studentId);return s?s.name||"":"";};
   const basis={high:"판정 근거 충분",medium:"판정 근거 보통",low:"판정 근거 부족"};
-  if(kind==="answers"){
+  if(kind==="ratings"){
+    rows.push(["학생","영역","평가일","레벨","점수","내용","문장","정확성","흐름","단어수","문장수","메모"]);
+    students.forEach(s=>LT_DOMAIN_IDS.forEach(d=>ltRatings(s,d).forEach(x=>{const sc=ltScore(x);
+      rows.push([s.name||"",AEA.RATING_DOMAINS[d].ko,x.date||"",x.level,sc??"",...LT_RUBRIC_IDS.map(k=>sc!=null?x.rubric[k]*5:""),ltCount(x.words)??"",ltCount(x.sentences)??"",x.note||""]);})));
+  }else if(kind==="answers"){
     rows.push(["학생","평가일","세트","문항","스킬","선택번호","정답여부","응답시간ms","빠른응답"]);
     all.forEach(a=>(a.path||[]).forEach(p=>{const t=AEA.TL[p.testlet];if(!t)return;
       p.responses.forEach((x,k)=>{const it=t.items[k];if(!it)return;
@@ -8656,9 +8848,10 @@ function ltCsv(kind){
   return "﻿"+rows.map(r=>r.map(ltCsvCell).join(",")).join("\r\n");
 }
 function ltExport(kind){
-  if(!assessments.length){showToast(tx("There are no test records yet."));return;}
+  if(!["results","answers","ratings"].includes(kind))return;
+  if(kind==="ratings"?!students.some(s=>LT_DOMAIN_IDS.some(d=>ltRatings(s,d).length)):!assessments.length){showToast(kind==="ratings"?tx("There are no ratings yet."):tx("There are no test records yet."));return;}
   const blob=new Blob([ltCsv(kind)],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);a.download="level-test-"+(kind==="answers"?"answers":"results")+"-"+td()+".csv";
+  a.href=URL.createObjectURL(blob);a.download="level-test-"+kind+"-"+td()+".csv";
   document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
   closeModal("mo-lt-export");
 }
@@ -8741,7 +8934,7 @@ function ltSaveReview(){
   // And only when this device is sure it has every test: signed in but offline (or still reading
   // the cloud copy), a newer test may exist on another device. The decision is kept and marked
   // "held"; ltApplyHeld() moves the level once the cloud copy has been read.
-  const s=ltStudent(a.studentId),last=s?ltLatest(s.id):null,newest=!!(s&&last&&last.id===a.id);
+  const s=ltStudent(a.studentId),trial=!!(s&&s.trial),last=s?ltLatest(s.id):null,newest=!!(s&&!trial&&last&&last.id===a.id);
   const sure=ltSyncSure(),move=newest&&sure;
   const snap=JSON.stringify(a),hadGroup=!!s&&Object.prototype.hasOwnProperty.call(s,"group"),oldGroup=s?s.group:undefined;
   const hadU=!!s&&Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s?s._u:undefined;
@@ -8761,7 +8954,8 @@ function ltSaveReview(){
   }
   closeModal("mo-lt-review");
   if(curPage==="leveltest")renderLevelTest();
-  showToast(move?tx("Confirmed. Class level: {lv}",{lv:lv})
+  showToast(trial?tx("Confirmed. A sample test changes no student's level.")
+    :move?tx("Confirmed. Class level: {lv}",{lv:lv})
     :newest?tx("Confirmed. The class level will change once this device has synced — a newer test may exist on another device.")
     :tx("Confirmed. The class level follows the newest test, so it was not changed."));
 }
@@ -14059,6 +14253,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-lt-start">
   <div class="mb" style="max-width:480px">
     <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div class="fg" id="lts-guest-row" hidden><label for="lts-guest" data-i18n>Name (optional)</label><input id="lts-guest" type="text" maxlength="40" placeholder="e.g. the child at a trial lesson" data-i18n-ph/><p class="u-hint" data-i18n>A sample test belongs to no student. Use it for a trial lesson, or to see the test yourself. If the child joins, you can move the test to the student later.</p></div>
     <div class="fg"><label data-i18n>How the test is taken</label><div class="seg" id="lts-mode"></div></div>
     <div class="fg"><label id="lts-level-lbl"></label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
     <div id="lts-online">
@@ -14085,8 +14280,22 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div class="mt"><span id="ltq-title"></span><button class="bic" onclick="closeModal('mo-lt-rate')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <p class="u-hint" id="ltq-task"></p>
     <div id="ltq-list"></div>
+    <div id="ltq-rub" class="ltq-rub" hidden></div>
+    <div id="ltq-counts" class="ltq-counts" hidden>
+      <div class="fg"><label for="ltq-c1" id="ltq-c1l"></label><input id="ltq-c1" type="number" min="0" max="999" step="1" inputmode="numeric"/></div>
+      <div class="fg"><label for="ltq-c2" id="ltq-c2l"></label><input id="ltq-c2" type="number" min="0" max="999" step="1" inputmode="numeric"/></div>
+    </div>
     <div class="fg"><label for="ltq-note" data-i18n>Note (optional)</label><textarea id="ltq-note" rows="2" maxlength="300"></textarea></div>
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-rate')" data-i18n>Cancel</button><button class="btn btn-p" id="ltq-save" onclick="ltSaveRate()" data-i18n>Save</button></span></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-move">
+  <div class="mb" style="max-width:420px">
+    <div class="mt"><span data-i18n>Move the sample test to a student</span><button class="bic" onclick="closeModal('mo-lt-move')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p class="u-hint" id="ltm-what" style="margin-bottom:12px"></p>
+    <div class="fg"><label for="ltm-student" data-i18n>Move to</label><select id="ltm-student"></select></div>
+    <p class="u-hint" data-i18n>The test becomes one of that student's tests. The student's class level changes only when you confirm the result.</p>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-move')" data-i18n>Cancel</button><button class="btn btn-p" onclick="ltMove()" data-i18n>Move the test</button></span></div>
   </div>
 </div>
 <div class="mo" id="mo-lt-export">
@@ -14096,6 +14305,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div style="display:flex;flex-direction:column;gap:8px">
       <button class="btn" onclick="ltExport('results')" data-i18n>Results — one row per test</button>
       <button class="btn" onclick="ltExport('answers')" data-i18n>Answers — one row per question</button>
+      <button class="btn" onclick="ltExport('ratings')" data-i18n>Ratings and scores — one row per rating</button>
     </div>
     <div class="mf"><span></span><button class="btn" onclick="closeModal('mo-lt-export')" data-i18n>Close</button></div>
   </div>
