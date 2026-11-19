@@ -486,6 +486,25 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .fg label.sw{display:inline-flex;font-size:12px;font-weight:500;margin:0;text-transform:none;letter-spacing:0}
 /* Student dialog: day · time · Bi-weekly. Wraps on a phone, where Bi-weekly was cut off the right edge. */
 .sm-sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* v147: a test on paper — answer entry, the sheet picker, the oral check */
+.ltp-next{display:flex;align-items:center;gap:12px;margin:4px 0 12px}
+.ltp-forms{height:auto;flex-wrap:wrap}
+.ltp-forms .seg-btn{height:auto;min-height:28px;padding:4px 12px;text-align:left}
+.ltp-rows{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.ltp-row{display:flex;align-items:center;gap:10px}
+.ltp-n{width:22px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.ltp-btns{display:flex;gap:6px;flex:1}
+.ltp-b{flex:1;min-height:44px;border:1px solid var(--bdr2);background:var(--surf);color:var(--txt);border-radius:8px;font-size:20px;padding:0;cursor:pointer;font-family:var(--font)}
+.ltp-b.blank{font-size:12px;color:var(--txt3);flex:1.2}
+.ltp-b.on{background:var(--grn);border-color:var(--grn);color:#fff}
+.ltsh-lv{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--bdr)}
+.ltsh-lv:first-child{border-top:0}
+.ltsh-sets{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ltsh-set{display:flex;gap:8px;align-items:center;font-size:var(--fs-base);cursor:pointer}
+.ltr-probe{background:var(--surf2);border-radius:8px;padding:10px 12px;margin:6px 0 8px}
+.ltr-probe b{display:block;margin-bottom:4px}
+.ltr-pbtns{display:flex;gap:6px;flex-wrap:wrap}
+.ltr-pbtns .btn.on{background:var(--grn-l);color:var(--grn-t);border-color:var(--grn)}
 /* v146: curriculum rows for one level */
 .cs-lv{margin:0}
 /* v145: level test. The page and the result window use the app's own colours (and follow dark mode). */
@@ -1634,7 +1653,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
 <!-- LEVEL TEST (v145) -->
 <div id="page-leveltest" class="page">
-  <div class="fbar"><div id="lt-sum" class="tag-list"></div></div>
+  <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button></div></div>
 <div class="pc">
   <p class="u-hint" style="margin:0 0 12px" data-i18n>A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.</p>
   <div class="card"><div id="lt-list"></div></div>
@@ -2130,6 +2149,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v147 · 2026-11-19</dt><dd><b>New: the level test on paper.</b> On the Level test page, <b>Print sheets</b> opens the test sheets you tick (two sets per level) and the <b>answer key</b> in a new window with a Print button. To record a paper test, press <b>Start test</b> on the student's row, choose <b>On paper</b>, pick the sheet the student did and the date, and enter the number they circled for each question; the app then says which sheet comes next (one level up, one down, or the other set), exactly as it would on screen, and you can leave and continue later. The <b>result</b> window also has an optional one-minute <b>oral check</b>: ask the question shown about the last part the student got mostly right — "could not explain" marks the result as needing a second look.</dd>
           <dt>v146 · 2026-11-19</dt><dd><b>New: the curriculum by level and by student.</b> Curriculum has two new columns at the end, <b>Level</b> and <b>Speaking</b>. A row with a level (<b>A·B</b>, <b>C</b>, <b>D·E</b>…) is for those levels only; a row without one is for everyone — so a topic can have one row for all (book, activity) and one row per level (writing, speaking, grammar). <b>Import</b> reads this from your sheet: add <b>Level</b> and <b>Speaking</b> headings, and put each level's row under its topic with the topic cell left empty. The new box in the bar shows <b>one level</b>, or <b>one student</b>: that student's level and only the columns of the lesson parts ticked on them. <b>Monthly note</b> writes a month's plan for one student as a message for the parents (Korean or English) that you can edit and copy.</dd>
           <dt>v145 · 2026-11-19</dt><dd><b>New: the level test is inside ClassDesk.</b> A new <b>Level test</b> page lists your students. Press <b>Start test</b>, pick a start level and hand the device over: the student reads and answers on a full, always-light screen that never shows right or wrong, and the test moves up or down by itself. To stop in the middle, <b>press and hold the lock</b> (top right); at the end, press and hold the button at the bottom the same way (with a keyboard: hold Enter or Space on it). The <b>result</b> shows the app's level (A–E) and stage, how each part went and the skills; you then <b>confirm the class level</b>, and only that changes the student's Level. The app's result and your decision are kept side by side. Results sync like everything else and are in the backup. Paper tests, printing and the parent report follow in the next versions.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>New: a lesson plan on each student.</b> The student window has a <b>Lesson plan</b> row: pick a <b>Level</b> (A–E), tick the parts of a lesson this child does (<b>Speaking, Book, Grammar, Activity, Writing</b>) and, if you follow a speaking course, the <b>speaking lesson number</b> they are on. The level shows as a small badge next to the name in Students, and the whole plan shows at the top of that student's lesson window, so you can see what to do with each child without opening their card. Everything is optional: a student with nothing filled in looks exactly as before.</dd>
@@ -2173,7 +2193,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v146</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v147</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2338,6 +2358,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v147 · 2026-11-19</dt><dd><b>새 기능: 종이로 보는 레벨테스트.</b> 레벨테스트 페이지의 <b>시험지 인쇄</b>에서 체크한 시험지(레벨마다 세트 두 개)와 <b>정답지</b>를 인쇄 버튼이 있는 새 창으로 엽니다. 종이 시험을 기록하려면 학생 줄의 <b>테스트 시작</b>에서 <b>종이 시험</b>을 고르고, 학생이 푼 시험지와 날짜를 정한 뒤 문항마다 학생이 고른 번호를 누르세요. 화면 테스트와 똑같이 다음에 풀 시험지(한 단계 위, 아래, 또는 같은 레벨의 다른 세트)를 알려 주며, 나갔다가 나중에 이어서 입력할 수 있습니다. <b>결과</b> 창에는 선택 사항인 1분짜리 <b>구두 확인</b>도 생겼습니다. 학생이 대체로 맞힌 마지막 묶음에 대해 화면에 나온 질문을 하고, "설명 못함"이면 결과에 재확인 표시가 붙습니다.</dd>
           <dt>v146 · 2026-11-19</dt><dd><b>새 기능: 레벨별·학생별 커리큘럼.</b> 커리큘럼 끝에 <b>레벨</b>과 <b>말하기</b> 열이 생겼습니다. 레벨이 적힌 줄(<b>A·B</b>, <b>C</b>, <b>D·E</b>…)은 그 레벨에만 해당하고, 레벨이 없는 줄은 모두에게 해당합니다. 그래서 한 주제에 공통 줄(책, 활동) 하나와 레벨별 줄(쓰기, 말하기, 문법)을 둘 수 있습니다. <b>가져오기</b>가 시트에서 이것을 읽습니다: 제목 줄에 <b>Level</b>과 <b>Speaking</b>을 더하고, 레벨별 줄은 주제 칸을 비운 채 그 주제 아래에 두면 됩니다. 위쪽 새 상자에서 <b>한 레벨</b>이나 <b>한 학생</b>을 고르면, 그 학생의 레벨과 학생에게 체크된 수업 부분의 열만 보입니다. <b>월간 안내</b>는 한 학생의 한 달 계획을 학부모께 보낼 메시지(한국어 또는 영어)로 만들어 주며, 고쳐서 복사할 수 있습니다.</dd>
           <dt>v145 · 2026-11-19</dt><dd><b>새 기능: 레벨테스트가 ClassDesk 안으로 들어왔습니다.</b> 새 <b>레벨테스트</b> 페이지에 학생이 나옵니다. <b>테스트 시작</b>을 누르고 시작 레벨을 고른 뒤 기기를 건네면, 학생은 화면 전체를 쓰는 밝은 화면에서 읽고 답합니다. 맞았는지 틀렸는지는 보여 주지 않고, 답에 따라 레벨이 저절로 오르내립니다. 중간에 멈추려면 오른쪽 위 <b>자물쇠를 길게</b> 누르고, 끝난 뒤에는 아래 버튼을 같은 방법으로 누릅니다(키보드로는 그 버튼에서 Enter나 Space를 길게). <b>결과</b>에는 앱이 판정한 레벨(A–E)과 단계, 묶음별 진행, 스킬별 기록이 나오고, 선생님이 <b>수업 레벨을 확정</b>해야 학생의 레벨이 바뀝니다. 앱 결과와 선생님 확정은 따로 저장됩니다. 결과는 다른 데이터처럼 동기화되고 백업에도 들어갑니다. 종이 시험, 인쇄, 학부모 리포트는 다음 버전에서 이어집니다.</dd>
           <dt>v144 · 2026-11-19</dt><dd><b>새 기능: 학생별 수업 설정.</b> 학생 창에 <b>수업 설정</b> 줄이 생겼습니다. <b>레벨</b>(A–E)을 고르고, 이 학생이 수업에서 하는 부분(<b>말하기, 도서, 문법, 활동, 쓰기</b>)을 체크하고, 스피킹 과정을 따라가는 학생이면 지금 <b>몇 회차</b>인지 적습니다. 레벨은 학생 목록의 이름 옆에 작은 배지로 보이고, 설정 전체는 그 학생의 수업 창 맨 위에 보여서 학생 카드를 열지 않아도 무엇을 할지 알 수 있습니다. 모두 선택 사항이라, 아무것도 넣지 않은 학생은 전과 똑같이 보입니다.</dd>
@@ -2380,7 +2401,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v146</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v147</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3559,6 +3580,22 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v147: level test on paper
+  "Print sheets":"시험지 인쇄","Test sheets and the answer key, for a test on paper":"종이로 보는 테스트용 시험지와 정답지","How the test is taken":"테스트 방법","The sheet the student did":"학생이 푼 시험지",
+  "Date of the test":"시험 본 날짜","Print the sheets with “Print sheets” on the Level test page. When you have entered the answers, the app tells you which sheet comes next.":"시험지는 레벨테스트 페이지의 “시험지 인쇄”로 뽑으세요. 답을 입력하면 다음에 풀 시험지를 알려 줍니다.",
+  "Enter the answers":"답 입력하기","Answers of the paper test":"종이 시험 답 입력","Leave (continue later)":"나가기 (나중에 이어서)","Print test sheets":"시험지 인쇄",
+  "Tick the sheets you need. Each level has two sets: a student who is checked again at a level gets the other one. The sheets open in a new window with a Print button.":"필요한 시험지를 체크하세요. 레벨마다 세트가 두 개 있어서, 같은 레벨을 다시 확인하는 학생은 다른 세트를 풉니다. 시험지는 인쇄 버튼이 있는 새 창으로 열립니다.",
+  "Tick all":"모두 체크","Answer key":"정답지","Test sheets":"시험지","Tick at least one sheet.":"시험지를 하나 이상 체크하세요.","Set":"세트",
+  "Answer key — for the teacher only":"정답지 — 선생님용","Level A sheets have colour questions: print them in colour.":"레벨 A 시험지에는 색을 구분하는 문항이 있으니 컬러로 인쇄하세요.",
+  "That level is secure. Next, check one level up.":"이 레벨은 안정적입니다. 한 단계 위를 확인합니다.","That level is still hard. Next, check one level down.":"이 레벨은 아직 어렵습니다. 한 단계 아래를 확인합니다.",
+  "The result is on the border. Check once more with the other set of the same level.":"결과가 경계에 있습니다. 같은 레벨의 다른 세트로 한 번 더 확인합니다.",
+  "Next sheet: {lv}-{n}":"다음 시험지: {lv}-{n}","When the student has done that sheet, enter its answers here. You can leave now and continue later from the student's row.":"학생이 그 시험지를 푼 뒤 여기에 답을 입력하세요. 지금 나갔다가 학생 줄에서 나중에 이어서 할 수 있습니다.",
+  "Enter that sheet now":"지금 이어서 입력","Sheet {n} of this test · {date}":"이 테스트의 {n}번째 시험지 · {date}","Sheet {lv}-{n}":"시험지 {lv}-{n}",
+  "Press the number the student circled. No answer, or two answers: press “Blank”.":"학생이 고른 번호를 누르세요. 답을 쓰지 않았거나 두 개를 골랐으면 “무응답”을 누릅니다.","Blank":"무응답","Answers entered":"입력 완료",
+  "{n} question(s) had no answer, or two.":"답을 쓰지 않았거나 두 개를 고른 문항이 {n}개 있습니다.",
+  "The oral check did not show understanding. Think about confirming one level lower.":"구두 확인에서 이해가 확인되지 않았습니다. 한 단계 낮은 레벨로 확정하는 것을 검토하세요.",
+  "Oral check (optional, one minute)":"구두 확인 (선택, 1분)","Show “{t}” again and ask. An answer in Korean counts.":"“{t}” 시험지를 다시 보여 주고 물어보세요. 한국어 대답도 인정합니다.",
+  "Explained well":"충분히 설명","Explained in part":"일부 설명","Could not explain":"설명 못함",
   // ── v146: curriculum by level
   "All levels":"모든 레벨","Monthly note":"월간 안내","Copy":"복사","Copied":"복사했습니다","A month's plan for one student, as a message for the parents":"한 학생의 한 달 수업 계획을 학부모께 보낼 메시지로 만들기",
   "Monthly note for parents":"학부모께 보내는 월간 안내","Written in":"작성 언어","Message":"메시지","Add a student first.":"먼저 학생을 추가하세요.",
@@ -4024,7 +4061,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v146";
+const APP_VERSION="v147";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -7815,7 +7852,8 @@ function probeTestlet(a) {
 /* aea-core-end */
 prepareBank(TESTLETS);
 return {LEVELS:LEVELS,LEVEL_INFO:LEVEL_INFO,TESTLETS:TESTLETS,TL:TL,MAX_TESTLETS:MAX_TESTLETS,
-  newAssessment:newAssessment,recordResponse:recordResponse,provisionalFinish:provisionalFinish,effectiveBasis:effectiveBasis};
+  newAssessment:newAssessment,recordResponse:recordResponse,provisionalFinish:provisionalFinish,effectiveBasis:effectiveBasis,
+  SKILLS:SKILLS,formsAt:formsAt,beginTestlet:beginTestlet,probeTestlet:probeTestlet};
 })();
 
 // Words the teacher reads. The bank's own Korean labels say the same; these go through tx() so the
@@ -7909,10 +7947,10 @@ function ltHistRow(a){
   const aid=escapeAttr(a.id),del=`<button class="bic" data-lt="del" data-aid="${aid}" title="${escapeAttr(tx("Delete this test record"))}" aria-label="${escapeAttr(tx("Delete this test record"))}"><i class="ti ti-trash"></i></button>`;
   let date=a.date||fmtDate(new Date(a.startedAt)),text,acts="";
   if(a.status==="done"&&a.result){
-    text=a.result.level+" · "+LT_STAGE[a.result.stage]+(ltFinal(a)?" → "+tx("confirmed {lv}",{lv:ltFinal(a)}):" · "+tx("Not confirmed"));
+    text=a.result.level+" · "+LT_STAGE[a.result.stage]+(ltFinal(a)?" → "+tx("confirmed {lv}",{lv:ltFinal(a)}):" · "+tx("Not confirmed"))+(a.mode==="paper"?" · "+tx("On paper"):"");
     acts=`<button class="btn btn-xs" data-lt="review" data-aid="${aid}">${escapeAttr(tx("Result"))}</button>`;
   }else if(a.status==="in_progress"){
-    text=tx("In progress — part {n}",{n:(a.path||[]).length});
+    text=tx("In progress — part {n}",{n:(a.path||[]).length})+(a.mode==="paper"?" · "+tx("On paper"):"");
     acts=`<button class="btn btn-xs" data-lt="resume" data-aid="${aid}">${escapeAttr(tx("Continue test"))}</button>`+
       `<button class="btn btn-xs" data-lt="end" data-aid="${aid}">${escapeAttr(tx("End here and judge"))}</button>`;
   }else text=tx("Stopped before it could be judged");
@@ -7922,7 +7960,7 @@ document.addEventListener("click",e=>{
   const b=e.target.closest?e.target.closest("#lt-list [data-lt]"):null;if(!b)return;
   const act=b.dataset.lt,aid=b.dataset.aid,sid=b.dataset.sid;
   if(act==="start")ltOpenStart(sid);
-  else if(act==="resume")ltOpenTest(aid);
+  else if(act==="resume")ltResume(aid);
   else if(act==="review")ltOpenReview(aid);
   else if(act==="hist"){ltOpenSid=ltSame(ltOpenSid,sid)?null:sid;renderLevelTest();}
   else if(act==="end")ltEndEarly(aid);
@@ -7937,35 +7975,211 @@ function ltDelete(aid){
 }
 
 // ── Start ────────────────────────────────────────────────────────────────
-const LTS={sid:null,level:"B"};
+const LTS={sid:null,level:"B",mode:"online",form:""};
 function ltOpenStart(sid){
   const s=ltStudent(sid);if(!s)return;
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   const last=ltLatest(s.id);
-  LTS.sid=s.id;
+  LTS.sid=s.id;LTS.mode="online";LTS.form="";
   LTS.level=(last&&last.result.level)||(PLAN_LEVELS.includes(s.group)?s.group:"")||"B";
   document.getElementById("lts-name").textContent=s.name||"";
   document.getElementById("lts-ko").checked=true;
+  const d=document.getElementById("lts-date");d.value=td();d.max=td();
   ltRenderStart();
   openModal("mo-lt-start");
 }
+// The set of a level this student met longest ago (or never) — the engine's own rule for a second set.
+function ltPickForm(sid,L){
+  const seen=ltSeen(sid);
+  return AEA.formsAt(L).slice().sort((x,y)=>seen.lastIndexOf(x)-seen.lastIndexOf(y)||(x<y?-1:1))[0]||"";
+}
 function ltRenderStart(){
-  const L=LTS.level,info=AEA.LEVEL_INFO[L];
-  document.getElementById("lts-levels").innerHTML=AEA.LEVELS.map(x=>
+  const L=LTS.level,info=AEA.LEVEL_INFO[L],paper=LTS.mode==="paper",g=id=>document.getElementById(id);
+  if(!AEA.formsAt(L).includes(LTS.form))LTS.form=ltPickForm(LTS.sid,L);
+  g("lts-mode").innerHTML=[["online",tx("On screen")],["paper",tx("On paper")]].map(([k,t])=>
+    `<button type="button" class="seg-btn${k===LTS.mode?" active":""}" aria-pressed="${k===LTS.mode}" onclick="ltSetStartMode('${k}')">${escapeAttr(t)}</button>`).join("");
+  g("lts-level-lbl").textContent=paper?tx("The sheet the student did"):tx("Start level");
+  g("lts-levels").innerHTML=AEA.LEVELS.map(x=>
     `<button type="button" class="seg-btn${x===L?" active":""}" aria-pressed="${x===L}" onclick="ltSetStartLevel('${x}')">${x}</button>`).join("");
-  document.getElementById("lts-info").textContent=L+" · "+info.name+(LANG==="ko"?" — "+info.ko:"")+
+  g("lts-info").textContent=L+" · "+info.name+(LANG==="ko"?" — "+info.ko:"")+
     (L==="A"?" "+tx("In the first-letter questions of level A you may say the picture's name aloud (dog, sun)."):"");
+  g("lts-forms").innerHTML=AEA.formsAt(L).map(id=>
+    `<button type="button" class="seg-btn${id===LTS.form?" active":""}" aria-pressed="${id===LTS.form}" onclick="ltSetStartForm('${id}')">${escapeAttr(tx("Set {n}",{n:AEA.TL[id].form}))} · ${escapeAttr(AEA.TL[id].title)}</button>`).join("");
+  g("lts-paper").hidden=!paper;g("lts-online").hidden=paper;
+  g("lts-go").textContent=paper?tx("Enter the answers"):tx("Hand over and start");
 }
 function ltSetStartLevel(L){if(AEA.LEVELS.includes(L)){LTS.level=L;ltRenderStart();}}
+function ltSetStartMode(m){if(m==="online"||m==="paper"){LTS.mode=m;ltRenderStart();}}
+function ltSetStartForm(id){if(AEA.TL[id]&&AEA.TL[id].level===LTS.level){LTS.form=id;ltRenderStart();}}
 function ltStart(){
   const s=ltStudent(LTS.sid);if(!s)return;
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
-  const a=AEA.newAssessment(uid(),s.id,LTS.level,"online",ltSeen(s.id),Date.now());
-  a.koHelp=!!document.getElementById("lts-ko").checked;
+  const paper=LTS.mode==="paper";
+  const a=AEA.newAssessment(uid(),s.id,LTS.level,paper?"paper":"online",ltSeen(s.id),Date.now(),paper?LTS.form:undefined);
+  if(paper){const d=document.getElementById("lts-date").value;a.paperDate=/^\d{4}-\d{2}-\d{2}$/.test(d)&&d<=td()?d:td();}
+  else a.koHelp=!!document.getElementById("lts-ko").checked;
   assessments.push(a);
   if(save()===false){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
   closeModal("mo-lt-start");
-  ltOpenTest(a.id);
+  ltResume(a.id);
+}
+// Carry on with a test: the student's screen, or the answer entry for a test on paper.
+function ltResume(aid){const a=ltGet(aid);if(!a||a.status!=="in_progress")return;if(a.mode==="paper")ltOpenPaper(aid);else ltOpenTest(aid);}
+
+// ── A test on paper (v147) ────────────────────────────────────────────────
+// The student does a printed sheet; the teacher enters which number was circled. The same engine
+// then says which sheet comes next (one level up, one down, or the other set of the same level).
+// Every change goes through ltCommit, like the on-screen test: nothing moves on unless it is saved.
+const LTP={aid:null,sel:{},next:null};
+function ltOpenPaper(aid){
+  const a=ltGet(aid);if(!a||a.status!=="in_progress"||a.mode!=="paper")return;
+  LTP.aid=aid;LTP.sel={};LTP.next=null;
+  ltRenderPaper();openModal("mo-lt-paper");
+}
+function ltRenderPaper(){
+  const a=ltGet(LTP.aid),body=document.getElementById("ltp-body"),foot=document.getElementById("ltp-done");
+  if(!a||!body||!foot)return;
+  if(a.status!=="in_progress"||!a.cur){closeModal("mo-lt-paper");return;}      // finished or removed on another device
+  const s=ltStudent(a.studentId),e=escapeAttr;
+  document.getElementById("ltp-name").textContent=(s?s.name:"")||"";
+  const p=a.path[a.path.length-1],t=AEA.TL[p.testlet];
+  if(LTP.next&&LTP.next.id===p.testlet){          // between two sheets: which one comes next, and why
+    const why=LTP.next.reason==="up"?tx("That level is secure. Next, check one level up.")
+      :LTP.next.reason==="down"?tx("That level is still hard. Next, check one level down."):tx("The result is on the border. Check once more with the other set of the same level.");
+    body.innerHTML=`<div class="ltp-next">${ltLv(t.level,"big")}<div><div class="ltr-v">${e(tx("Next sheet: {lv}-{n}",{lv:t.level,n:t.form}))}</div><div class="cell-muted2">${e(t.title)}</div></div></div>`+
+      `<p>${e(why)}</p><p class="u-hint">${e(tx("When the student has done that sheet, enter its answers here. You can leave now and continue later from the student's row."))}</p>`;
+    foot.textContent=tx("Enter that sheet now");foot.disabled=false;
+    return;
+  }
+  LTP.next=null;
+  const used=(a.levels[t.level]&&a.levels[t.level].forms)||[];
+  const forms=AEA.formsAt(t.level).filter(id=>!used.includes(id));
+  let h=`<p class="u-hint">${e(tx("Sheet {n} of this test · {date}",{n:a.path.length,date:a.paperDate||td()}))}</p><div class="fg"><label>${e(tx("Sheet {lv}-{n}",{lv:t.level,n:t.form}))}</label>`;
+  h+=forms.length>1&&!p.responses.length
+    ?`<div class="seg ltp-forms">${forms.map(id=>`<button type="button" class="seg-btn${id===p.testlet?" active":""}" aria-pressed="${id===p.testlet}" onclick="ltPaperForm('${id}')">${e(tx("Set {n}",{n:AEA.TL[id].form}))} · ${e(AEA.TL[id].title)}</button>`).join("")}</div>`
+    :`<b>${e(t.title)}</b>`;
+  h+=`</div><p class="u-hint">${e(tx("Press the number the student circled. No answer, or two answers: press “Blank”."))}</p><div class="ltp-rows">`+
+    t.items.map(it=>`<div class="ltp-row"><span class="ltp-n">${it.n}</span><span class="ltp-btns">`+[0,1,2,3,-1].map(k=>
+      `<button type="button" class="ltp-b${LTP.sel[it.n]===k?" on":""}${k<0?" blank":""}" aria-pressed="${LTP.sel[it.n]===k}" data-n="${it.n}" data-k="${k}" onclick="ltPaperPick(${it.n},${k},this)">${k<0?e(tx("Blank")):LT_CIRC[k]}</button>`).join("")+`</span></div>`).join("")+`</div>`;
+  body.innerHTML=h;
+  foot.textContent=tx("Answers entered");
+  foot.disabled=!t.items.every(it=>LTP.sel[it.n]!=null);
+}
+// No re-render: the list keeps its scroll position and the pressed button keeps the focus.
+function ltPaperPick(n,k,btn){
+  LTP.sel[n]=k;
+  btn.parentNode.querySelectorAll(".ltp-b").forEach(b=>{const on=b===btn;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);});
+  const a=ltGet(LTP.aid),foot=document.getElementById("ltp-done");
+  if(a&&a.cur&&foot)foot.disabled=!AEA.TL[a.path[a.path.length-1].testlet].items.every(it=>LTP.sel[it.n]!=null);
+}
+// The other set of the same level, as long as nothing has been entered for this sheet.
+function ltPaperForm(id){
+  const a=ltGet(LTP.aid);if(!a||a.status!=="in_progress"||!a.cur)return;
+  const p=a.path[a.path.length-1],t=AEA.TL[id];
+  if(!t||p.responses.length||t.level!==p.level||id===p.testlet)return;
+  if(!ltCommit(a,()=>{a.path.pop();AEA.beginTestlet(a,id);})){showToast(ltSaveFailed());return;}
+  LTP.sel={};ltRenderPaper();
+}
+function ltPaperDone(){
+  const a=ltGet(LTP.aid);if(!a||a.status!=="in_progress"||!a.cur){closeModal("mo-lt-paper");return;}
+  if(LTP.next){LTP.next=null;LTP.sel={};ltRenderPaper();return;}
+  const p=a.path[a.path.length-1],t=AEA.TL[p.testlet];
+  // Entered already (the same test on another device)? Show where it stands; store nothing twice.
+  if(p.responses.length){LTP.sel={};ltRenderPaper();return;}
+  if(!t.items.every(it=>LTP.sel[it.n]!=null))return;
+  let r=null;
+  const ok=ltCommit(a,()=>{
+    t.items.forEach(it=>{const k=LTP.sel[it.n];r=AEA.recordResponse(a,k<0?-1:it.order[k],null);});
+    if(r.done){a.date=a.paperDate||td();a.finishedAt=Date.now();}
+  });
+  if(!ok){showToast(ltSaveFailed());return;}
+  LTP.sel={};
+  if(curPage==="leveltest")renderLevelTest();
+  if(r.done){closeModal("mo-lt-paper");ltOpenReview(a.id);return;}
+  LTP.next={id:r.next,reason:r.reason};ltRenderPaper();
+}
+
+// ── Printed sheets and the answer key ─────────────────────────────────────
+// What is on the sheet is the test itself, so — like the student's screen — its wording does not
+// follow the language setting. The order of the choices is the same fixed order as on screen.
+function ltSheetBlocks(ids,kind){
+  const e=escapeAttr,B=[];
+  if(kind==="key"){
+    B.push(`<div class="sh-head"><div class="sh-brand">Level test</div><div class="sh-title">정답지 · 선생님용</div></div>`);
+    B.push(`<div class="sh-guide"><b>다음 시험지 정하기</b> 6문항: 5개 이상 맞으면 위 레벨, 3개 이하면 아래 레벨, 4개면 같은 레벨의 다른 세트. 8문항(레벨 A): 7개 이상 위 레벨, 4개 이하 아래 레벨, 5~6개 다른 세트. 앱에 답을 입력하면 자동으로 알려 드립니다. 레벨 A 시험지는 색을 구분하는 문항이 있어 컬러로 인쇄하세요.</div>`);
+    ids.forEach(id=>{const t=AEA.TL[id];
+      B.push(`<div class="sh-key"><h3>레벨 ${t.level} · 세트 ${t.form} · ${e(t.title)}</h3><table><tr><th>문항</th>${t.items.map(it=>`<td>${it.n}</td>`).join("")}</tr><tr><th>정답</th>${t.items.map(it=>`<td class="k">${LT_CIRC[it.ansPos]}</td>`).join("")}`+
+        `</tr><tr><th>스킬</th>${t.items.map(it=>`<td class="s">${e(AEA.SKILLS[it.skill].ko)}</td>`).join("")}</tr></table><p><b>구두 확인</b> ${e(t.probe.q)} <span class="g">${e(t.probe.look)}</span></p>`+
+        (t.items.some(it=>it.say)?`<p class="g">첫 글자 문제는 그림 이름을 말해 줘도 됩니다: ${t.items.filter(it=>it.say).map(it=>it.n+"번 "+e(it.say)).join(", ")}</p>`:"")+`</div>`);});
+    return B;
+  }
+  ids.forEach((id,i)=>{const t=AEA.TL[id],young=t.level==="A"||t.level==="B";
+    B.push(`<section class="sh-page${i?" brk":""}"><div class="sh-head"><div class="sh-brand">Level test</div><div class="sh-title">${t.level}-${t.form}</div><div class="sh-name">Name ______________ &nbsp; Date ____________</div></div>`+
+      (t.passage?`<div class="sh-pass lv${t.level}"><h3>${e(t.title)}</h3>${t.passage.map(p=>`<p>${e(p)}</p>`).join("")}</div>`:"")+
+      t.items.map(it=>`<div class="sh-q lv${t.level}"><div class="sh-qt"><b>${it.n}.</b> ${it.stim?`<span class="sh-stim">${it.stim}</span> `:""}${it.text?`<span class="sh-word">${e(it.text)}</span> `:""}${e(it.q)}${young&&it.ko?` <span class="g">${e(it.ko)}</span>`:""}</div>`+
+        `<div class="sh-opts${it.pic?" pic":""}${it.opts[0].length<=2||it.pic?" inline":it.opts.every(o=>o.length<=30)?" two":""}">${it.order.map((o,k)=>`<span>${LT_CIRC[k]} ${it.pic?`<em>${it.opts[o]}</em>`:e(it.opts[o])}</span>`).join("")}</div></div>`).join("")+`</section>`);
+  });
+  return B;
+}
+const LT_SHEET_CSS=`*{box-sizing:border-box}body{margin:0;background:#eef1f0;color:#16232A;font:14px/1.55 "Andika","Inter",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.toolbar{position:sticky;top:0;z-index:5;background:#16232A;color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center;font:13px system-ui,sans-serif}
+.toolbar button{font:inherit;padding:6px 14px;border-radius:8px;border:0;background:#fff;color:#16232A;font-weight:600;cursor:pointer}
+.paper{background:#fff;max-width:794px;margin:16px auto;padding:44px 52px;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.sh-page.brk{break-before:page;page-break-before:always;margin-top:40px}
+.sh-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:2px solid #16232A;padding-bottom:8px;margin-bottom:14px}
+.sh-brand{font-size:14px;font-weight:700}.sh-title{font-weight:700;font-size:14px}.sh-name{font-size:13px}
+.sh-pass{border:1px solid #9AA5A3;border-radius:6px;padding:12px 16px 4px;margin-bottom:14px;font-size:14px;line-height:1.7}.sh-pass h3{font-size:16px;margin:0 0 6px}.sh-pass p{margin:0 0 8px}
+.sh-pass.lvB{font-size:16.5px;line-height:1.8}.sh-pass.lvC{font-size:15.5px}.sh-pass.lvD{font-size:13.5px;line-height:1.62}.sh-pass.lvE{font-size:13px;line-height:1.6;padding-top:10px}
+.sh-q{margin-bottom:12px;font-size:13.5px;line-height:1.5;break-inside:avoid}.sh-q.lvA{font-size:17px;margin-bottom:20px}.sh-q.lvB{font-size:15px;margin-bottom:12px}.sh-q.lvD,.sh-q.lvE{font-size:13px;line-height:1.42;margin-bottom:8px}.sh-q.lvC{font-size:14.5px}
+.g{color:#5C6A72;font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:.8em}
+.sh-stim{font-size:34px;vertical-align:middle}.sh-word{font-weight:700;font-size:1.5em;margin-right:6px}
+.sh-opts{display:flex;flex-direction:column;gap:2px;margin:4px 0 0 18px}.sh-opts.inline{flex-direction:row;gap:36px}.sh-opts.two{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px}.sh-opts em{font-style:normal;font-size:30px;vertical-align:middle}
+.sh-guide{font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:12.5px;background:#F3F5F4;border-radius:6px;padding:8px 10px;margin-bottom:12px}
+.sh-key{font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;margin-bottom:14px;font-size:12.5px;break-inside:avoid}.sh-key h3{font-size:14px;margin:0 0 6px}.sh-key p{margin:4px 0 0}
+.sh-key table{border-collapse:collapse;width:100%}.sh-key th,.sh-key td{border:1px solid #9AA5A3;padding:4px 6px;text-align:center}.sh-key th{width:52px;background:#F3F5F4;font-weight:600}.sh-key td.k{font-size:17px;font-weight:700}.sh-key td.s{font-size:11px}
+@page{size:A4;margin:12mm 15mm}
+@media print{body{background:#fff}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}.sh-page.brk{margin-top:0}}`;
+function ltOpenSheets(){
+  const box=document.getElementById("ltsh-list");if(!box)return;
+  box.innerHTML=AEA.LEVELS.map(L=>`<div class="ltsh-lv">${ltLv(L)}<div class="ltsh-sets">`+AEA.formsAt(L).map(id=>
+    `<label class="ltsh-set"><input type="checkbox" value="${id}"/> ${escapeAttr(tx("Set {n}",{n:AEA.TL[id].form}))} · ${escapeAttr(AEA.TL[id].title)}</label>`).join("")+`</div></div>`).join("");
+  openModal("mo-lt-sheets");
+}
+function ltSheetsAll(){
+  const boxes=[...document.querySelectorAll("#ltsh-list input[type=checkbox]")],all=boxes.every(b=>b.checked);
+  boxes.forEach(b=>{b.checked=!all;});
+}
+function ltPrintSheets(kind){
+  const ids=[...document.querySelectorAll("#ltsh-list input:checked")].map(x=>x.value).filter(id=>AEA.TL[id]);
+  if(!ids.length){showToast(tx("Tick at least one sheet."));return;}
+  // Open the window inside the click, or popup blockers stop it.
+  const w=window.open("","_blank");
+  if(!w){alert(tx("Popup blocked. Please allow popups for this site."));return;}
+  const title=(kind==="key"?"answer-key-":"test-")+ids.join("_");
+  w.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title>`+
+    `<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet"/><style>${LT_SHEET_CSS}</style></head><body>`+
+    `<div class="toolbar"><button onclick="window.print()">${escapeAttr(tx("Print"))}</button><span>${escapeAttr(kind==="key"?tx("Answer key — for the teacher only"):tx("Level A sheets have colour questions: print them in colour."))}</span></div>`+
+    `<div class="paper">${ltSheetBlocks(ids,kind).join("")}</div></body></html>`);
+  w.document.close();
+}
+
+// ── Oral check ────────────────────────────────────────────────────────────
+// A "could not explain" lowers the basis of the result by one step; a full answer never raises it
+// (AEA.effectiveBasis). Pressing the chosen answer again takes it back.
+function ltSetProbe(tid,score){
+  const a=ltGet(ltReviewId);if(!a||!a.result||!AEA.TL[tid]||![0,1,2].includes(score))return;
+  const keep={lv:document.getElementById("ltr-final")?.value,note:document.getElementById("ltr-note")?.value};
+  const ok=ltCommit(a,()=>{
+    a.teacher=a.teacher||{};
+    if(a.teacher.probe&&a.teacher.probe.testlet===tid&&a.teacher.probe.score===score)delete a.teacher.probe;
+    else a.teacher.probe={testlet:tid,score:score};
+  });
+  if(!ok){showToast(ltSaveFailed());return;}
+  ltRenderReview();
+  // what was being chosen and typed in "Your decision" stays as it was
+  const sel=document.getElementById("ltr-final"),note=document.getElementById("ltr-note");
+  if(sel&&keep.lv){sel.value=keep.lv;ltReviewHint();}
+  if(note&&keep.note!=null)note.value=keep.note;
 }
 
 // ── The student's screen ──────────────────────────────────────────────────
@@ -7990,7 +8204,7 @@ function ltLockBackground(on){
   }
 }
 function ltOpenTest(aid){
-  const a=ltGet(aid);if(!a||a.status!=="in_progress")return;
+  const a=ltGet(aid);if(!a||a.status!=="in_progress"||a.mode==="paper")return;
   Object.assign(LT,{aid:aid,screen:"intro",sel:null,itemKey:"",readKey:"",menu:false});
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -8107,7 +8321,7 @@ document.addEventListener("click",e=>{
 function ltEndEarly(aid){
   const a=ltGet(aid);if(!a||a.status!=="in_progress")return;
   let ok=false;
-  if(!ltCommit(a,()=>{ok=AEA.provisionalFinish(a);a.date=td();a.finishedAt=Date.now();if(!ok){a.status="aborted";a.cur=null;}})){showToast(ltSaveFailed());return;}
+  if(!ltCommit(a,()=>{ok=AEA.provisionalFinish(a);a.date=a.paperDate||td();a.finishedAt=Date.now();if(!ok){a.status="aborted";a.cur=null;}})){showToast(ltSaveFailed());return;}
   if(curPage==="leveltest")renderLevelTest();
   if(ok)ltOpenReview(a.id);else showToast(tx("Too few answers to judge — recorded as stopped."));
 }
@@ -8177,7 +8391,8 @@ function ltRenderReview(){
   if(r.capped)flags.push(tx("It ended at the limit of {n} parts. Next time, carry on from level {lv}.",{n:AEA.MAX_TESTLETS,lv:r.level}));
   if(r.unsupported)flags.push(tx("{n} answer(s) were right although the sentence that supports them was not found — possibly guessed.",{n:r.unsupported}));
   if(r.rapid)flags.push(tx("{n} answer(s) came too fast for the text to have been read.",{n:r.rapid}));
-  if(r.idk)flags.push(tx("“I’m not sure” was chosen {n} time(s).",{n:r.idk}));
+  if(r.idk)flags.push(a.mode==="paper"?tx("{n} question(s) had no answer, or two.",{n:r.idk}):tx("“I’m not sure” was chosen {n} time(s).",{n:r.idk}));
+  if(T.probe&&T.probe.score===0)flags.push(tx("The oral check did not show understanding. Think about confirming one level lower."));
   if(flags.length)h+=`<ul class="ltr-flags">${flags.map(f=>`<li>${e(f)}</li>`).join("")}</ul>`;
 
   h+=`<h3 class="ltr-h">${e(tx("How the test went"))}</h3>`+a.path.map((p,pi)=>{
@@ -8201,6 +8416,14 @@ function ltRenderReview(){
   }).join("")+`</div><p class="u-hint">${e(tx("With so few questions per skill these numbers are a guide only."))}</p>`;
 
   const fin=T.finalLevel||r.level;
+  // One spoken question about the last part the student got mostly right — it tells understanding
+  // from guessing, and reading from speaking (an answer in Korean counts). The question itself is
+  // the bank's own script for the teacher, so it is shown as written.
+  const pt=AEA.probeTestlet(a),pq=pt&&AEA.TL[pt]?AEA.TL[pt].probe:null,pr=T.probe||{};
+  if(pq)h+=`<h3 class="ltr-h">${e(tx("Oral check (optional, one minute)"))}</h3><p class="u-hint">${e(tx("Show “{t}” again and ask. An answer in Korean counts.",{t:AEA.TL[pt].title}))}</p>`+
+    `<div class="ltr-probe"><b>${e(pq.q)}</b><span class="cell-muted2">${e(pq.look)}</span></div><div class="ltr-pbtns">`+
+    [[2,tx("Explained well")],[1,tx("Explained in part")],[0,tx("Could not explain")]].map(([sc,t])=>
+      `<button type="button" class="btn btn-sm${pr.testlet===pt&&pr.score===sc?" on":""}" aria-pressed="${pr.testlet===pt&&pr.score===sc}" onclick="ltSetProbe('${pt}',${sc})">${e(t)}</button>`).join("")+`</div>`;
   h+=`<h3 class="ltr-h">${e(tx("Your decision"))}</h3><div class="fg"><label for="ltr-final">${e(tx("Class level"))}</label>`+
     `<select id="ltr-final" onchange="ltReviewHint()">${AEA.LEVELS.map(L=>`<option value="${L}"${L===fin?" selected":""}>${L} · ${e(AEA.LEVEL_INFO[L].name)}</option>`).join("")}</select>`+
     `<p class="u-hint" id="ltr-diff" hidden></p></div>`+
@@ -13537,12 +13760,35 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 <!-- Level test (v145): start, result, and the student's full-screen test -->
 <div class="mo" id="mo-lt-start">
-  <div class="mb" style="max-width:460px">
+  <div class="mb" style="max-width:480px">
     <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <div class="fg"><label data-i18n>Start level</label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
-    <label class="sw" style="white-space:normal"><input id="lts-ko" type="checkbox" checked/><span class="sw-track"></span><span data-i18n>Korean help under the questions of level A and B</span></label>
-    <p class="u-hint" style="margin-top:12px" data-i18n>Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right.</p>
-    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-start')" data-i18n>Cancel</button><button class="btn btn-p" onclick="ltStart()" data-i18n>Hand over and start</button></span></div>
+    <div class="fg"><label data-i18n>How the test is taken</label><div class="seg" id="lts-mode"></div></div>
+    <div class="fg"><label id="lts-level-lbl"></label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
+    <div id="lts-online">
+      <label class="sw" style="white-space:normal"><input id="lts-ko" type="checkbox" checked/><span class="sw-track"></span><span data-i18n>Korean help under the questions of level A and B</span></label>
+      <p class="u-hint" style="margin-top:12px" data-i18n>Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right.</p>
+    </div>
+    <div id="lts-paper" hidden>
+      <div class="fg"><label data-i18n>Set</label><div class="seg ltp-forms" id="lts-forms"></div></div>
+      <div class="fg"><label for="lts-date" data-i18n>Date of the test</label><input id="lts-date" type="date"/></div>
+      <p class="u-hint" data-i18n>Print the sheets with “Print sheets” on the Level test page. When you have entered the answers, the app tells you which sheet comes next.</p>
+    </div>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-start')" data-i18n>Cancel</button><button class="btn btn-p" id="lts-go" onclick="ltStart()"></button></span></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-paper">
+  <div class="mb" style="max-width:480px">
+    <div class="mt"><span><span data-i18n>Answers of the paper test</span> · <span id="ltp-name"></span></span><button class="bic" onclick="closeModal('mo-lt-paper')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div id="ltp-body"></div>
+    <div class="mf"><span></span><span style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn" onclick="closeModal('mo-lt-paper')" data-i18n>Leave (continue later)</button><button class="btn btn-p" id="ltp-done" onclick="ltPaperDone()"></button></span></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-sheets">
+  <div class="mb" style="max-width:480px">
+    <div class="mt"><span data-i18n>Print test sheets</span><button class="bic" onclick="closeModal('mo-lt-sheets')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p class="u-hint" style="margin-bottom:8px" data-i18n>Tick the sheets you need. Each level has two sets: a student who is checked again at a level gets the other one. The sheets open in a new window with a Print button.</p>
+    <div id="ltsh-list"></div>
+    <div class="mf"><button class="btn btn-sm" onclick="ltSheetsAll()" data-i18n>Tick all</button><span style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn" onclick="ltPrintSheets('key')" data-i18n>Answer key</button><button class="btn btn-p" onclick="ltPrintSheets('test')" data-i18n>Test sheets</button></span></div>
   </div>
 </div>
 <div class="mo" id="mo-lt-review">
