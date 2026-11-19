@@ -486,6 +486,11 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .fg label.sw{display:inline-flex;font-size:12px;font-weight:500;margin:0;text-transform:none;letter-spacing:0}
 /* Student dialog: day · time · Bi-weekly. Wraps on a phone, where Bi-weekly was cut off the right edge. */
 .sm-sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* v144: what each student does in class — level, lesson parts, speaking lesson */
+.sm-plan-row{display:flex;gap:8px 16px;align-items:center;flex-wrap:wrap}
+.lv-badge{display:inline-block;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--pri-l);color:var(--pri-t);font-size:11px;font-weight:600;line-height:18px;vertical-align:1px}
+.lm-plan{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px;font-size:12px;color:var(--txt2)}
+.lm-plan .lv-badge{margin-left:0}
 input,select,textarea{width:100%;height:36px;padding:0 10px;border:1px solid var(--bdr2);border-radius:var(--r);font-family:var(--font);font-size:13px;color:var(--txt);background:var(--surf);outline:none;transition:border-color .12s,box-shadow .12s;display:block}
 input::placeholder,textarea::placeholder{color:var(--txt3);font-size:12px}
 input:focus,select:focus,textarea:focus{border-color:var(--grn);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
@@ -2004,6 +2009,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v144 · 2026-11-19</dt><dd><b>New: a lesson plan on each student.</b> The student window has a <b>Lesson plan</b> row: pick a <b>Level</b> (A–E), tick the parts of a lesson this child does (<b>Speaking, Book, Grammar, Activity, Writing</b>) and, if you follow a speaking course, the <b>speaking lesson number</b> they are on. The level shows as a small badge next to the name in Students, and the whole plan shows at the top of that student's lesson window, so you can see what to do with each child without opening their card. Everything is optional: a student with nothing filled in looks exactly as before.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>Fix: an extra class is no longer labelled "moved from its usual time".</b> The lesson window showed the amber "Moved from this student's usual time" note — and a <b>Reset to usual time</b> button — for any class whose time differed from the student's regular one, even an extra class on a day they have no regular class (a Sunday 9:00 extra for a Thursday 19:30 student read "moved from Sun, 7:30pm"). The note now appears only for a class that really belongs to a regular slot: the same weekday (and the right week for a bi-weekly student), and not a second class added next to the day's regular one. Fees and lesson counts were never affected — only the label. Also: when Google Calendar has two events for a student on one day and the app has one class, the compare now matches the event at the class's own time and offers the other as the addition; before, the earlier event could be shown as a "time change" of the regular class.</dd>
           <dt>v142 · 2026-11-16</dt><dd><b>Fix: importing the same curriculum again no longer adds stray copies.</b> Records made in one go (importing a curriculum, "All paid", pasting several rows) could get the same internal id, and a later import of the same sheet then sometimes added a topic twice. New records now always get their own id, and the importer matches each existing topic even if an older version gave two of them one id.</dd>
           <dt>v141 · 2026-11-14</dt><dd><b>Lists fit a split screen or tablet</b>: when the Students, Workbooks or Material list is too wide (about 641–1300px), its least important columns fold away instead of the list scrolling sideways. A line above the list names them; <b>Show all</b> brings them back with sideways scrolling (remembered on this device) and <b>Fit to screen</b> folds again. Names never fold. Columns hidden in Settings no longer make rows extra tall.</dd>
@@ -2044,7 +2050,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v143</b> · FAQ current as of: <b>2026-11-18</b><br/>
+          Guide written against version: <b>v144</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2207,6 +2213,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v144 · 2026-11-19</dt><dd><b>새 기능: 학생별 수업 설정.</b> 학생 창에 <b>수업 설정</b> 줄이 생겼습니다. <b>레벨</b>(A–E)을 고르고, 이 학생이 수업에서 하는 부분(<b>말하기, 도서, 문법, 활동, 쓰기</b>)을 체크하고, 스피킹 과정을 따라가는 학생이면 지금 <b>몇 회차</b>인지 적습니다. 레벨은 학생 목록의 이름 옆에 작은 배지로 보이고, 설정 전체는 그 학생의 수업 창 맨 위에 보여서 학생 카드를 열지 않아도 무엇을 할지 알 수 있습니다. 모두 선택 사항이라, 아무것도 넣지 않은 학생은 전과 똑같이 보입니다.</dd>
           <dt>v143 · 2026-11-18</dt><dd><b>버그 수정: 추가 수업에 "원래 시간에서 옮긴 수업"이라고 나오지 않습니다.</b> 수업 창은 시간이 학생의 정규 시간과 다르기만 하면 노란색 "이 학생의 원래 시간에서 옮긴 수업입니다" 안내와 <b>원래 시간으로 되돌리기</b> 버튼을 보여 줬습니다. 정규 수업이 없는 요일에 넣은 추가 수업도 그랬습니다(목요일 19:30 학생의 일요일 9:00 추가 수업에 "일요일 7:30pm에서 옮김"이라고 표시). 이제 이 안내는 정말 정규 수업 자리에 속한 수업에만 나옵니다: 같은 요일이고(격주 학생은 해당 주), 그날 정규 수업 옆에 따로 추가한 수업이 아닐 때입니다. 수업료와 수업 횟수는 처음부터 영향이 없었고, 표시만 잘못됐던 것입니다. 또한 Google 캘린더에 한 학생의 일정이 하루에 두 개 있고 앱에는 수업이 하나일 때, 비교는 이제 수업 시간과 같은 일정을 짝짓고 나머지를 추가로 제안합니다. 전에는 더 이른 일정이 정규 수업의 "시간 변경"으로 나올 수 있었습니다.</dd>
           <dt>v142 · 2026-11-16</dt><dd><b>버그 수정: 같은 커리큘럼을 다시 가져와도 사본이 더 생기지 않습니다.</b> 한꺼번에 만든 기록(커리큘럼 가져오기, "모두 납부", 여러 줄 붙여넣기)이 같은 내부 번호를 받을 수 있었고, 그러면 같은 시트를 다시 가져올 때 주제가 하나 더 생기기도 했습니다. 이제 새 기록은 항상 고유한 번호를 받고, 예전 버전에서 번호가 겹친 주제도 가져오기가 하나씩 제대로 찾습니다.</dd>
           <dt>v141 · 2026-11-14</dt><dd><b>화면 분할·태블릿에서 목록이 화면에 맞춰집니다</b>: 학생·교재·교구 목록이 화면보다 넓으면(약 641–1300px) 옆으로 밀리는 대신 덜 중요한 열부터 접힙니다. 목록 위 한 줄에 접힌 열이 나오고, <b>모두 보기</b>를 누르면 옆으로 밀어 보는 방식으로 돌아가며(이 기기에 기억), <b>화면에 맞추기</b>로 다시 접습니다. 이름 열은 접히지 않습니다. 설정에서 숨긴 열 때문에 줄이 길어지던 문제도 고쳤습니다.</dd>
@@ -2246,7 +2253,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v143</b> · 자주 묻는 질문 기준일: <b>2026-11-18</b><br/>
+          설명서 기준 버전: <b>v144</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -2640,6 +2647,18 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </button>
     </div>
 
+    <div class="fg" id="sm-plan"><label data-i18n>Lesson plan</label>
+      <div class="sm-plan-row">
+        <select id="sm-level" style="flex:0 0 130px" title="Level" data-i18n-title></select>
+        <label class="sw" data-i18n><input id="sm-mod-sp" type="checkbox"/><span class="sw-track"></span> Speaking</label>
+        <label class="sw" data-i18n><input id="sm-mod-bk" type="checkbox"/><span class="sw-track"></span> Book</label>
+        <label class="sw" data-i18n><input id="sm-mod-gr" type="checkbox"/><span class="sw-track"></span> Grammar</label>
+        <label class="sw" data-i18n><input id="sm-mod-ac" type="checkbox"/><span class="sw-track"></span> Activity</label>
+        <label class="sw" data-i18n><input id="sm-mod-wr" type="checkbox"/><span class="sw-track"></span> Writing</label>
+        <input id="sm-spk" type="number" min="1" max="999" step="1" style="flex:0 0 170px" placeholder="Speaking lesson no." title="Which lesson of the speaking course this student is on" data-i18n-ph data-i18n-title/>
+      </div>
+      <div class="u-hint" style="margin-top:4px" data-i18n>What this student does in class. It shows at the top of the student's lesson window.</div>
+    </div>
     <div class="fg"><label data-col="aliases" data-i18n>Bank aliases</label><input id="sm-aliases" type="text" placeholder="comma-separated" data-i18n-ph/></div>
     <div class="fg"><label data-col="notes" data-i18n>Notes</label><input id="sm-notes" type="text"/></div>
     <div id="sm-custom-fields"></div>
@@ -2659,7 +2678,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div class="mt"><span id="lm-title">Add Lesson</span><button class="bic" onclick="closeModal('mo-lesson')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <!-- Basic info -->
     <div class="lm-basic">
-      <div class="fg" style="margin:0"><label data-col="student" data-required="true" data-i18n>Student *</label><select id="lm-sid" onchange="renderHomeworkCheck()" onchange="lessonAutoFill()"></select></div>
+      <div class="fg" style="margin:0"><label data-col="student" data-required="true" data-i18n>Student *</label><select id="lm-sid" onchange="renderHomeworkCheck();renderLessonPlan()" onchange="lessonAutoFill()"></select></div>
       <div class="fg" style="margin:0"><label data-col="date" data-required="true" data-i18n>Date *</label><input id="lm-date" type="date" onchange="lessonDateChanged();updateCreditRow();renderHomeworkCheck()"/></div>
       <div class="fg" style="margin:0"><label data-col="time" data-i18n>Start time</label><input id="lm-time" type="time" onchange="lessonTimeChanged()"/></div>
       <div class="fg" style="margin:0"><label data-col="dur" data-i18n>Hours</label><input id="lm-dur" type="number" step="0.25" min="0.25" placeholder="1.5" oninput="lmDurTyped()"/></div>
@@ -2668,6 +2687,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <select id="lm-status" onchange="lmStatusChanged()" data-i18n-opts><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select>
       </div>
     </div>
+    <div class="lm-plan" id="lm-plan" style="display:none"></div>
     <div class="fg" id="lm-credit-row" style="display:none;margin-bottom:10px;padding:8px 12px;background:var(--pri-l);border-radius:var(--r)">
       <label class="sw" data-i18n><input type="checkbox" id="lm-credit" checked/><span class="sw-track"></span> The fee was already paid — move it to the next class</label>
       <div class="u-hint" id="lm-credit-hint" style="margin-top:4px"></div>
@@ -3102,7 +3122,8 @@ const I18N={ko:{
   "A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday.":"이 수업이 실제로 있는 주의 날짜. 여기서부터 격주로 번갈아 가므로 같은 요일에 두 학생이 교대로 수업할 수 있습니다.",
   "The Students list counts the months from this date":"학생 목록의 재원 개월 수를 이 날짜부터 셉니다",
   "Start date":"시작일","End date":"종료일","Archive":"보관","Payment type":"납부 방식",
-  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","comma-separated":"쉼표로 구분",
+  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","Lesson plan":"수업 설정","No level":"레벨 없음","Level {l}":"레벨 {l}","Activity":"활동","Speaking lesson no.":"스피킹 회차","Which lesson of the speaking course this student is on":"이 학생이 스피킹 과정의 몇 번째 회차인지","lesson {n}":"{n}회차",
+  "What this student does in class. It shows at the top of the student's lesson window.":"이 학생이 수업에서 하는 것입니다. 이 학생의 수업 창 맨 위에 보입니다.","comma-separated":"쉼표로 구분",
   "Delete student":"학생 삭제","Save student":"학생 저장","Name required":"이름을 입력하세요",
   "Delete this student? This cannot be undone.":"이 학생을 삭제할까요? 되돌릴 수 없습니다.",
   "Stop {sched} from a date you pick next?\n\nThe student's other days carry on unchanged, and lessons already recorded keep the schedule they were booked under.":"{sched} 수업을 다음에 고르는 날짜부터 중단할까요?\n\n이 학생의 다른 요일 수업은 그대로 이어지고, 이미 기록된 수업은 예약 당시의 시간표를 유지합니다.",
@@ -3812,7 +3833,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v143";
+const APP_VERSION="v144";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -4526,6 +4547,44 @@ function initMainSchedPickers(schedStr){
   syncSchedText();
 }
 
+// v144: the lesson plan of one student. group = level A–E (the same field the level test will
+// write), mods = which parts of a lesson this child does, spk = the speaking lesson they are on.
+const PLAN_LEVELS=["A","B","C","D","E"];
+const PLAN_MODS=[["sp","Speaking"],["bk","Book"],["gr","Grammar"],["ac","Activity"],["wr","Writing"]];
+function fillStudentPlan(s){
+  const lv=document.getElementById("sm-level");
+  if(lv){
+    lv.innerHTML='<option value="">'+tx("No level")+"</option>"+PLAN_LEVELS.map(l=>'<option value="'+l+'">'+tx("Level {l}",{l})+"</option>").join("");
+    lv.value=PLAN_LEVELS.includes(s?.group)?s.group:"";
+  }
+  const mods=Array.isArray(s?.mods)?s.mods:[];
+  PLAN_MODS.forEach(([k])=>{const e=document.getElementById("sm-mod-"+k);if(e)e.checked=mods.includes(k);});
+  const sp=document.getElementById("sm-spk");if(sp)sp.value=s?.spk>0?s.spk:"";
+}
+function readStudentPlan(){
+  const lv=document.getElementById("sm-level")?.value||"";
+  const mods=PLAN_MODS.map(([k])=>k).filter(k=>document.getElementById("sm-mod-"+k)?.checked);
+  const n=parseInt(document.getElementById("sm-spk")?.value,10);
+  return {group:PLAN_LEVELS.includes(lv)?lv:"",mods,spk:n>0&&n<1000?n:""};
+}
+// One line of chips for a student's plan; "" when nothing is set.
+function studentPlanHtml(s){
+  if(!s)return "";
+  const parts=[];
+  if(PLAN_LEVELS.includes(s.group))parts.push('<span class="lv-badge">'+tx("Level {l}",{l:s.group})+"</span>");
+  const mods=Array.isArray(s.mods)?s.mods:[];
+  PLAN_MODS.forEach(([k,label])=>{
+    if(!mods.includes(k))return;
+    parts.push('<span class="tag">'+tx(label)+(k==="sp"&&s.spk>0?" · "+tx("lesson {n}",{n:s.spk}):"")+"</span>");
+  });
+  if(s.spk>0&&!mods.includes("sp"))parts.push('<span class="tag">'+tx("Speaking")+" · "+tx("lesson {n}",{n:s.spk})+"</span>");
+  return parts.join("");
+}
+function renderLessonPlan(){
+  const box=document.getElementById("lm-plan");if(!box)return;
+  const h=studentPlanHtml(gs(document.getElementById("lm-sid")?.value));
+  box.innerHTML=h;box.style.display=h?"":"none";
+}
 function openStudentModal(id){
   editSid=id||null;
   const s=id?gs(id):null;
@@ -4540,6 +4599,7 @@ function openStudentModal(id){
   set("sm-dur",s?.dur??1);set("sm-rate",s?.rate??Math.round((s?.dur??1)*hourlyRate()));
   set("sm-ptype",s?.ptype??"postpay");set("sm-notes",s?.notes);
   set("sm-aliases",(s?.aliases??[]).join(", "));
+  fillStudentPlan(s);
   // Extra schedule slots
   const slotsList=document.getElementById("sm-slots-list");
   if(slotsList)slotsList.innerHTML="";
@@ -4685,7 +4745,7 @@ async function saveStudent(){
   }).filter(sl=>sl.sched);
   const customFields=collectCustomFieldsFromModal("sm-custom-fields");
   const rawRate=document.getElementById("sm-rate")?.value;
-  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*hourlyRate()),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields};
+  const obj={name:g("sm-name"),k:g("sm-korean"),parent:g("sm-parent"),contact:g("sm-contact"),sched:g("sm-sched"),freq:document.getElementById("sm-sched-biweekly")?.checked?"biweekly":"weekly",biweekFrom:document.getElementById("sm-sched-biweekly")?.checked?(document.getElementById("sm-biweek-from")?.value||""):"",firstLesson:document.getElementById("sm-firstlesson")?.value||"",birthday:document.getElementById("sm-birthday")?.value||"",startDate:document.getElementById("sm-startdate")?.value||"",endDate:document.getElementById("sm-enddate")?.value||"",archived:!!document.getElementById("sm-archived")?.checked,dur,rate:clampRate(rawRate)||Math.round(dur*hourlyRate()),ptype:document.getElementById("sm-ptype")?.value||"postpay",notes:g("sm-notes"),aliases:g("sm-aliases").split(",").map(a=>a.trim()).filter(Boolean),extraSlots,customFields,...readStudentPlan()};
   if(!obj.name){alert(tx("Name required"));return;}
   const isNew=!editSid;
   const prevStudents=students.slice(); // for rollback if the write fails
@@ -4774,6 +4834,7 @@ function openLessonModal(id){
   // week), so we can tell if the person has moved it elsewhere and show/save that accordingly.
   lessonNaturalDate=l?.movedFrom||l?.date||null;
   updateMovedNotice(gs(l?.sid),l);
+  renderLessonPlan();
   renderHomeworkCheck();
   setupSlotPickerForEdit(gs(l?.sid),l);
   setTime("lm-wbtime",l?.wbTime??20);setTime("lm-btime",l?.bTime??20);setTime("lm-shwtime",l?.shwTime??20);setTime("lm-brtime",l?.brTime??20);
@@ -6318,7 +6379,7 @@ function renderStudents(){
       :"";
     return `<div class="std-row${s.archived?" std-archived":""}" ondblclick="openStudentModal('${s.id}')" title="${tx("Double-click to edit")}">
     <div style="font-size:12px;color:var(--txt3);font-family:var(--mono)">${idx+1}</div>
-    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>${s.birthday?`<div class="cell-muted" title="${tx("Birthday")} ${s.birthday}${birthdayThisMonth(s.birthday)?" — "+tx("this month"):""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
+    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${PLAN_LEVELS.includes(s.group)?'<span class="lv-badge" title="'+tx("Level {l}",{l:s.group})+'">'+s.group+"</span>":""}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>${s.birthday?`<div class="cell-muted" title="${tx("Birthday")} ${s.birthday}${birthdayThisMonth(s.birthday)?" — "+tx("this month"):""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
     <div style="font-size:13px;color:var(--txt2)">${s.k}</div>
     <div><div style="font-size:12px;font-weight:500">${s.parent}</div><div class="cell-muted">${s.contact}</div></div>
     <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}${tenureLabel(s)?`<div class="cell-muted" title="${tx("First lesson")} ${studentSince(s)}">${tenureLabel(s)}</div>`:""}</div>
@@ -7118,7 +7179,7 @@ function renderPayments(){
   // Student rows
   document.getElementById("pm-rows").innerHTML=ss.map(({s,c})=>`<div class="pr">
     <div>
-      <div style="font-weight:600;font-size:13px">${s.name}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>
+      <div style="font-weight:600;font-size:13px">${s.name}${PLAN_LEVELS.includes(s.group)?'<span class="lv-badge" title="'+tx("Level {l}",{l:s.group})+'">'+s.group+"</span>":""}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>
       <div class="cell-muted">${s.k} · ${schedLabel(s.sched)}</div>
     </div>
     <div class="tm" style="text-align:center" title="${tx("lessons · hours")}" data-l="${tx("Lessons")}">${c.count}${c.hours?` · ${fmtHours(c.hours)}`:""}</div>
