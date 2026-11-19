@@ -234,6 +234,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 ```
 연한 배경 + 진한 같은 계열 글자. 배경만 진하게 칠하지 않는다.
 
+레벨 배지(v144): 학생 이름 옆의 `.lv-badge`는 상태가 아니라 분류라서 메인 컬러의 연한 쌍(`--pri-l` / `--pri-t`)을 쓴다. 수업 창 맨 위의 수업 설정 한 줄(`.lm-plan`)은 레벨 배지 하나와 `.tag` 칩으로 이루어지고, 값이 없으면 줄 자체를 숨긴다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
