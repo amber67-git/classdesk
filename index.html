@@ -509,6 +509,7 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .ltq-total b{font-size:20px;font-variant-numeric:tabular-nums}
 .ltq-total>span:last-child{display:flex;align-items:center;gap:8px}
 .ltq-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ltq-counts[hidden]{display:none}
 .lt-score{font-variant-numeric:tabular-nums;font-weight:600}
 .lt-trial{padding:6px 14px 10px;border-bottom:1px solid var(--bdr);background:var(--surf2)}
 .lt-trial .u-hint{margin:0 0 4px}
@@ -3611,6 +3612,8 @@ const I18N={ko:{
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
   // ── v149: sample tests, the 100-point sheet
+  "A count is a whole number from 0 to 999. Correct it or leave it empty.":"세는 숫자는 0부터 999까지의 정수입니다. 고치거나 비워 두세요.",
+  "That student has been archived. Choose another student.":"그 학생은 보관되었습니다. 다른 학생을 고르세요.",
   "Sample test":"샘플 테스트",
   "A test without a student — for a trial lesson, or to see the test yourself":"학생 없이 보는 테스트 — 시범 수업이나 직접 확인용",
   "Name (optional)":"이름 (선택)",
@@ -8153,7 +8156,7 @@ function ltStart(){
 let ltMoveId=null;
 function ltOpenMove(aid){
   const a=ltGet(aid),list=students.filter(s=>!s.archived);if(!a||!ltIsTrial(a.studentId))return;
-  if(!list.length){showToast(tx("Add the student first, then move the test."));return;}
+  if(!list.length){closeModal("mo-lt-move");showToast(tx("Add the student first, then move the test."));return;}
   ltMoveId=aid;
   document.getElementById("ltm-what").textContent=ltTrialName(a)+" · "+(a.date||fmtDate(new Date(a.startedAt)));
   document.getElementById("ltm-student").innerHTML=list.map(s=>`<option value="${escapeAttr(s.id)}">${escapeAttr(s.name||"")}</option>`).join("");
@@ -8162,6 +8165,8 @@ function ltOpenMove(aid){
 function ltMove(){
   const a=ltGet(ltMoveId),s=students.find(x=>ltSame(x.id,document.getElementById("ltm-student").value));
   if(!a||!ltIsTrial(a.studentId)||!s)return;
+  // The student may have been archived (here or on another device) while the window was open.
+  if(s.archived){ltOpenMove(a.id);showToast(tx("That student has been archived. Choose another student."));return;}
   if(a.status==="in_progress"&&ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   if(!ltCommit(a,()=>{a.studentId=s.id;delete a.guest;if(a.teacher)delete a.teacher.held;})){showToast(ltSaveFailed());return;}
   closeModal("mo-lt-move");
@@ -8666,7 +8671,14 @@ function ltSaveRate(){
     const n=LT_RUBRIC_IDS.filter(k=>LTR.rub[k]!=null).length;
     if(n&&!ltRubricOk(LTR.rub))return;                    // a sheet is all four or none
     if(n)entry.rubric=Object.fromEntries(LT_RUBRIC_IDS.map(k=>[k,LTR.rub[k]]));
-    [["words","ltq-c1"],["sentences","ltq-c2"]].forEach(([f,id])=>{const raw=document.getElementById(id).value.trim(),v=ltCount(Number(raw));if(raw!==""&&v!=null)entry[f]=v;});
+    // A count may be left empty. One that is typed must be a whole number from 0 to 999 — it is
+    // not dropped in silence: the window stays as it is and says so.
+    for(const [f,id] of [["words","ltq-c1"],["sentences","ltq-c2"]]){
+      const el=document.getElementById(id),raw=el.value.trim(),v=ltCount(Number(raw));
+      if(raw===""&&!el.validity.badInput)continue;
+      if(raw===""||v==null){showToast(tx("A count is a whole number from 0 to 999. Correct it or leave it empty."));el.focus();return;}
+      entry[f]=v;
+    }
   }
   all[d]=[...(Array.isArray(all[d])?all[d]:[]),entry];
   s.ratings=all;
