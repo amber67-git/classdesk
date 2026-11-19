@@ -496,7 +496,7 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .ltp-btns{display:flex;gap:6px;flex:1}
 .ltp-b{flex:1;min-height:44px;border:1px solid var(--bdr2);background:var(--surf);color:var(--txt);border-radius:8px;font-size:20px;padding:0;cursor:pointer;font-family:var(--font)}
 .ltp-b.blank{font-size:12px;color:var(--txt3);flex:1.2}
-.ltp-b.on{background:var(--grn);border-color:var(--grn);color:#fff}
+.ltp-b.on{background:var(--grn-l);border-color:var(--grn);color:var(--grn-t);font-weight:700}
 .ltsh-lv{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--bdr)}
 .ltsh-lv:first-child{border-top:0}
 .ltsh-sets{display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -3591,7 +3591,7 @@ const I18N={ko:{
   "The result is on the border. Check once more with the other set of the same level.":"결과가 경계에 있습니다. 같은 레벨의 다른 세트로 한 번 더 확인합니다.",
   "Next sheet: {lv}-{n}":"다음 시험지: {lv}-{n}","When the student has done that sheet, enter its answers here. You can leave now and continue later from the student's row.":"학생이 그 시험지를 푼 뒤 여기에 답을 입력하세요. 지금 나갔다가 학생 줄에서 나중에 이어서 할 수 있습니다.",
   "Enter that sheet now":"지금 이어서 입력","Sheet {n} of this test · {date}":"이 테스트의 {n}번째 시험지 · {date}","Sheet {lv}-{n}":"시험지 {lv}-{n}",
-  "Press the number the student circled. No answer, or two answers: press “Blank”.":"학생이 고른 번호를 누르세요. 답을 쓰지 않았거나 두 개를 골랐으면 “무응답”을 누릅니다.","Blank":"무응답","Answers entered":"입력 완료",
+  "Press the number the student circled. No answer, or two answers: press “Blank”. The sheet is saved when you press “Answers entered”.":"학생이 고른 번호를 누르세요. 답을 쓰지 않았거나 두 개를 골랐으면 “무응답”을 누릅니다. 시험지는 “입력 완료”를 눌러야 저장됩니다.","Blank":"무응답","Answers entered":"입력 완료",
   "{n} question(s) had no answer, or two.":"답을 쓰지 않았거나 두 개를 고른 문항이 {n}개 있습니다.",
   "The oral check did not show understanding. Think about confirming one level lower.":"구두 확인에서 이해가 확인되지 않았습니다. 한 단계 낮은 레벨로 확정하는 것을 검토하세요.",
   "Oral check (optional, one minute)":"구두 확인 (선택, 1분)","Show “{t}” again and ask. An answer in Korean counts.":"“{t}” 시험지를 다시 보여 주고 물어보세요. 한국어 대답도 인정합니다.",
@@ -8021,6 +8021,7 @@ function ltStart(){
   assessments.push(a);
   if(save()===false){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
   closeModal("mo-lt-start");
+  if(curPage==="leveltest")renderLevelTest();        // the row now offers "Continue", whatever happens next
   ltResume(a.id);
 }
 // Carry on with a test: the student's screen, or the answer entry for a test on paper.
@@ -8030,10 +8031,15 @@ function ltResume(aid){const a=ltGet(aid);if(!a||a.status!=="in_progress")return
 // The student does a printed sheet; the teacher enters which number was circled. The same engine
 // then says which sheet comes next (one level up, one down, or the other set of the same level).
 // Every change goes through ltCommit, like the on-screen test: nothing moves on unless it is saved.
-const LTP={aid:null,sel:{},next:null};
+// LTP.tid is the sheet the entries in LTP.sel were made for. They are only ever stored for that
+// sheet: if the record has moved to another one (the same test continued on another device),
+// they are dropped. Leaving the window and coming back in the same sitting keeps them; they are
+// not part of the record, so a reload or another device starts that sheet's entry afresh.
+const LTP={aid:null,tid:null,sel:{},next:null};
 function ltOpenPaper(aid){
   const a=ltGet(aid);if(!a||a.status!=="in_progress"||a.mode!=="paper")return;
-  LTP.aid=aid;LTP.sel={};LTP.next=null;
+  if(LTP.aid!==aid){LTP.sel={};LTP.tid=null;}
+  LTP.aid=aid;LTP.next=null;
   ltRenderPaper();openModal("mo-lt-paper");
 }
 function ltRenderPaper(){
@@ -8052,13 +8058,15 @@ function ltRenderPaper(){
     return;
   }
   LTP.next=null;
+  if(LTP.tid!==p.testlet){LTP.sel={};LTP.tid=p.testlet;}
+  const started=Object.keys(LTP.sel).length>0;          // once a number is entered the set stays
   const used=(a.levels[t.level]&&a.levels[t.level].forms)||[];
   const forms=AEA.formsAt(t.level).filter(id=>!used.includes(id));
   let h=`<p class="u-hint">${e(tx("Sheet {n} of this test · {date}",{n:a.path.length,date:a.paperDate||td()}))}</p><div class="fg"><label>${e(tx("Sheet {lv}-{n}",{lv:t.level,n:t.form}))}</label>`;
   h+=forms.length>1&&!p.responses.length
-    ?`<div class="seg ltp-forms">${forms.map(id=>`<button type="button" class="seg-btn${id===p.testlet?" active":""}" aria-pressed="${id===p.testlet}" onclick="ltPaperForm('${id}')">${e(tx("Set {n}",{n:AEA.TL[id].form}))} · ${e(AEA.TL[id].title)}</button>`).join("")}</div>`
+    ?`<div class="seg ltp-forms">${forms.map(id=>`<button type="button" class="seg-btn${id===p.testlet?" active":""}" aria-pressed="${id===p.testlet}"${started?" disabled":""} onclick="ltPaperForm('${id}')">${e(tx("Set {n}",{n:AEA.TL[id].form}))} · ${e(AEA.TL[id].title)}</button>`).join("")}</div>`
     :`<b>${e(t.title)}</b>`;
-  h+=`</div><p class="u-hint">${e(tx("Press the number the student circled. No answer, or two answers: press “Blank”."))}</p><div class="ltp-rows">`+
+  h+=`</div><p class="u-hint">${e(tx("Press the number the student circled. No answer, or two answers: press “Blank”. The sheet is saved when you press “Answers entered”."))}</p><div class="ltp-rows">`+
     t.items.map(it=>`<div class="ltp-row"><span class="ltp-n">${it.n}</span><span class="ltp-btns">`+[0,1,2,3,-1].map(k=>
       `<button type="button" class="ltp-b${LTP.sel[it.n]===k?" on":""}${k<0?" blank":""}" aria-pressed="${LTP.sel[it.n]===k}" data-n="${it.n}" data-k="${k}" onclick="ltPaperPick(${it.n},${k},this)">${k<0?e(tx("Blank")):LT_CIRC[k]}</button>`).join("")+`</span></div>`).join("")+`</div>`;
   body.innerHTML=h;
@@ -8068,6 +8076,7 @@ function ltRenderPaper(){
 // No re-render: the list keeps its scroll position and the pressed button keeps the focus.
 function ltPaperPick(n,k,btn){
   LTP.sel[n]=k;
+  document.querySelectorAll("#ltp-body .ltp-forms .seg-btn").forEach(b=>{b.disabled=true;});
   btn.parentNode.querySelectorAll(".ltp-b").forEach(b=>{const on=b===btn;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);});
   const a=ltGet(LTP.aid),foot=document.getElementById("ltp-done");
   if(a&&a.cur&&foot)foot.disabled=!AEA.TL[a.path[a.path.length-1].testlet].items.every(it=>LTP.sel[it.n]!=null);
@@ -8076,7 +8085,7 @@ function ltPaperPick(n,k,btn){
 function ltPaperForm(id){
   const a=ltGet(LTP.aid);if(!a||a.status!=="in_progress"||!a.cur)return;
   const p=a.path[a.path.length-1],t=AEA.TL[id];
-  if(!t||p.responses.length||t.level!==p.level||id===p.testlet)return;
+  if(!t||p.responses.length||Object.keys(LTP.sel).length||t.level!==p.level||id===p.testlet)return;
   if(!ltCommit(a,()=>{a.path.pop();AEA.beginTestlet(a,id);})){showToast(ltSaveFailed());return;}
   LTP.sel={};ltRenderPaper();
 }
@@ -8085,7 +8094,7 @@ function ltPaperDone(){
   if(LTP.next){LTP.next=null;LTP.sel={};ltRenderPaper();return;}
   const p=a.path[a.path.length-1],t=AEA.TL[p.testlet];
   // Entered already (the same test on another device)? Show where it stands; store nothing twice.
-  if(p.responses.length){LTP.sel={};ltRenderPaper();return;}
+  if(p.responses.length||LTP.tid!==p.testlet){LTP.sel={};ltRenderPaper();return;}
   if(!t.items.every(it=>LTP.sel[it.n]!=null))return;
   let r=null;
   const ok=ltCommit(a,()=>{
@@ -8121,24 +8130,28 @@ function ltSheetBlocks(ids,kind){
   });
   return B;
 }
-const LT_SHEET_CSS=`*{box-sizing:border-box}body{margin:0;background:#eef1f0;color:#16232A;font:14px/1.55 "Andika","Inter",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.toolbar{position:sticky;top:0;z-index:5;background:#16232A;color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center;font:13px system-ui,sans-serif}
-.toolbar button{font:inherit;padding:6px 14px;border-radius:8px;border:0;background:#fff;color:#16232A;font-weight:600;cursor:pointer}
-.paper{background:#fff;max-width:794px;margin:16px auto;padding:44px 52px;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+// A print window is its own document: it cannot see the app's colour tokens and it is always light
+// (it is paper). So it carries its own small token block, and its rules use only those.
+const LT_PRINT_TOKENS=`:root{--ink:#16232A;--muted:#5C6A72;--rule:#9AA5A3;--line:#D9E0DE;--bg:#F3F5F4;--desk:#eef1f0;--white:#FFFFFF;--brand:#1B5E66;--amber:#F2A81D;--amber-soft:#FFF4DC;--amber-ink:#7A5200;--cell:#FAFBFA;--shade:rgba(0,0,0,.12)}
+`;
+const LT_SHEET_CSS=LT_PRINT_TOKENS+`*{box-sizing:border-box}body{margin:0;background:var(--desk);color:var(--ink);font:14px/1.55 "Andika","Inter",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.toolbar{position:sticky;top:0;z-index:5;background:var(--ink);color:var(--white);padding:10px 14px;display:flex;gap:10px;align-items:center;font:13px system-ui,sans-serif}
+.toolbar button{font:inherit;padding:6px 14px;border-radius:8px;border:0;background:var(--white);color:var(--ink);font-weight:600;cursor:pointer}
+.paper{background:var(--white);max-width:794px;margin:16px auto;padding:44px 52px;box-shadow:0 2px 12px var(--shade)}
 .sh-page.brk{break-before:page;page-break-before:always;margin-top:40px}
-.sh-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:2px solid #16232A;padding-bottom:8px;margin-bottom:14px}
+.sh-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:14px}
 .sh-brand{font-size:14px;font-weight:700}.sh-title{font-weight:700;font-size:14px}.sh-name{font-size:13px}
-.sh-pass{border:1px solid #9AA5A3;border-radius:6px;padding:12px 16px 4px;margin-bottom:14px;font-size:14px;line-height:1.7}.sh-pass h3{font-size:16px;margin:0 0 6px}.sh-pass p{margin:0 0 8px}
+.sh-pass{border:1px solid var(--rule);border-radius:6px;padding:12px 16px 4px;margin-bottom:14px;font-size:14px;line-height:1.7}.sh-pass h3{font-size:16px;margin:0 0 6px}.sh-pass p{margin:0 0 8px}
 .sh-pass.lvB{font-size:16.5px;line-height:1.8}.sh-pass.lvC{font-size:15.5px}.sh-pass.lvD{font-size:13.5px;line-height:1.62}.sh-pass.lvE{font-size:13px;line-height:1.6;padding-top:10px}
 .sh-q{margin-bottom:12px;font-size:13.5px;line-height:1.5;break-inside:avoid}.sh-q.lvA{font-size:17px;margin-bottom:20px}.sh-q.lvB{font-size:15px;margin-bottom:12px}.sh-q.lvD,.sh-q.lvE{font-size:13px;line-height:1.42;margin-bottom:8px}.sh-q.lvC{font-size:14.5px}
-.g{color:#5C6A72;font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:.8em}
+.g{color:var(--muted);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:.8em}
 .sh-stim{font-size:34px;vertical-align:middle}.sh-word{font-weight:700;font-size:1.5em;margin-right:6px}
 .sh-opts{display:flex;flex-direction:column;gap:2px;margin:4px 0 0 18px}.sh-opts.inline{flex-direction:row;gap:36px}.sh-opts.two{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px}.sh-opts em{font-style:normal;font-size:30px;vertical-align:middle}
-.sh-guide{font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:12.5px;background:#F3F5F4;border-radius:6px;padding:8px 10px;margin-bottom:12px}
+.sh-guide{font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:12.5px;background:var(--bg);border-radius:6px;padding:8px 10px;margin-bottom:12px}
 .sh-key{font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;margin-bottom:14px;font-size:12.5px;break-inside:avoid}.sh-key h3{font-size:14px;margin:0 0 6px}.sh-key p{margin:4px 0 0}
-.sh-key table{border-collapse:collapse;width:100%}.sh-key th,.sh-key td{border:1px solid #9AA5A3;padding:4px 6px;text-align:center}.sh-key th{width:52px;background:#F3F5F4;font-weight:600}.sh-key td.k{font-size:17px;font-weight:700}.sh-key td.s{font-size:11px}
+.sh-key table{border-collapse:collapse;width:100%}.sh-key th,.sh-key td{border:1px solid var(--rule);padding:4px 6px;text-align:center}.sh-key th{width:52px;background:var(--bg);font-weight:600}.sh-key td.k{font-size:17px;font-weight:700}.sh-key td.s{font-size:11px}
 @page{size:A4;margin:12mm 15mm}
-@media print{body{background:#fff}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}.sh-page.brk{margin-top:0}}`;
+@media print{body{background:var(--white)}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}.sh-page.brk{margin-top:0}}`;
 function ltOpenSheets(){
   const box=document.getElementById("ltsh-list");if(!box)return;
   box.innerHTML=AEA.LEVELS.map(L=>`<div class="ltsh-lv">${ltLv(L)}<div class="ltsh-sets">`+AEA.formsAt(L).map(id=>
@@ -12592,6 +12605,7 @@ function afterRemoteApplied(key){
     setTimeout(showReloadPrompt,400);
   // A test that is on screen here was changed on another device: show where it stands now.
   if(key==="assessments"&&LT.aid)ltRenderTest();
+  if(key==="assessments"&&LTP.aid&&document.getElementById("mo-lt-paper")?.classList.contains("show"))ltRenderPaper();
   clearTimeout(_syncRerenderTimer);
   _syncRerenderTimer=setTimeout(()=>{rerenderCurrentPage();renderStorageGauge?.();},250);
 }
