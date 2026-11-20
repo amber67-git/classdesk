@@ -246,8 +246,6 @@ textarea.cs-ed.on{opacity:1;pointer-events:auto;caret-color:auto}
 #curr-body tr.cs-add:hover td{background:var(--surf)}
 .cs-drop{position:absolute;left:0;height:2px;background:var(--grn);z-index:25;pointer-events:none}
 .cs-sheetbar{display:flex;align-items:center;gap:4px;padding:6px 10px;border-bottom:1px solid var(--bdr);background:var(--surf);border-radius:var(--rl) var(--rl) 0 0}
-.cs-hint{margin-left:auto;font-size:11.5px;color:var(--txt3);white-space:nowrap;flex:none}
-@media(max-width:1240px){.cs-hint{display:none}}
 #page-curriculum .fbar{flex-wrap:wrap}
 #page-curriculum .fbar select{flex:0 0 auto!important;width:auto!important;min-width:112px!important}
 .cs-sheetbar .btn-sm{gap:4px}
@@ -497,12 +495,15 @@ thead[data-header-page] th:not(:last-child):hover::after{
 /* Student dialog: day · time · Bi-weekly. Wraps on a phone, where Bi-weekly was cut off the right edge. */
 .sm-sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 /* v148: the Details panel (skills + tests) and the rating window */
-.lt-prof{display:flex;flex-direction:column;margin:0 0 6px}
-.lt-prow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px solid var(--bdr)}
-.lt-prow:first-child{border-top:0}
-.lt-pname{display:flex;flex-direction:column;font-weight:500;font-size:var(--fs-sm)}
-.lt-pname small{font-weight:400;color:var(--txt3);font-size:11px}
-.lt-pval{display:flex;align-items:center;gap:8px;font-size:var(--fs-sm)}
+.lt-skills{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.lt-skill{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:2px 11px;border:1px solid var(--bdr);border-radius:99px;background:var(--surf);color:var(--txt);font-size:var(--fs-sm);font-family:var(--font)}
+button.lt-skill{cursor:pointer}
+button.lt-skill:hover{border-color:var(--bdr2)}
+.lt-skill .lt-lv{width:22px;height:22px;font-size:12px;border-radius:6px}
+.lt-skill .ti{color:var(--txt3)}
+.lt-sk-x{color:var(--txt2)}
+.lt-todo{border-color:var(--amb-bdr);background:var(--amb-l);color:var(--amb-t)}
+@media(max-width:600px){.lt-skill{min-height:44px}}
 .lt-ph{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin:8px 0 2px}
 #ltq-list{display:flex;flex-direction:column;gap:8px;margin:10px 0 12px}
 .ltq-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:2px solid var(--bdr);background:var(--surf);color:var(--txt);border-radius:10px;padding:10px;font-size:var(--fs-base);cursor:pointer;font-family:var(--font)}
@@ -522,7 +523,8 @@ thead[data-header-page] th:not(:last-child):hover::after{
 @media(max-width:600px){.curr-who{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cw-chip{min-height:44px;flex:none}.cw-label{flex:none}}
 /* v149: the 100-point sheet in the rating window; sample tests above the student rows */
 .ltq-rub{border-top:1px solid var(--bdr);margin-bottom:12px}
-.ltq-r{display:flex;flex-direction:column;gap:6px;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.ltq-r{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 10px;padding:6px 0;border-bottom:1px solid var(--bdr)}
+@media(max-width:600px){.ltq-r{grid-template-columns:1fr}}
 .ltq-rn{font-weight:500;font-size:var(--fs-sm);display:flex;flex-direction:column}
 .ltq-rn small{font-weight:400;color:var(--txt2);font-size:12px}
 .ltq-rb{display:flex;gap:6px;flex-wrap:wrap}
@@ -1612,7 +1614,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <button type="button" class="btn btn-sm cs-fclear" id="cs-filt-clear" onclick="csFilterClear()" hidden><i class="ti ti-filter-off"></i><span data-i18n>Clear filter</span></button>
         <button type="button" class="bic" onclick="csFindOpen()" title="Find and replace (Ctrl+H)" data-i18n-title><i class="ti ti-search"></i></button>
         <button type="button" class="bic" onclick="csRowsMenu(event)" title="Row height" data-i18n-title><i class="ti ti-line-height"></i></button>
-        <span class="cs-hint" data-i18n>Click a cell and type · Alt+↑↓ moves a row · right-click for more</span>
       </div>
       <div class="cs-find" id="cs-find" hidden>
         <input type="text" id="cs-fq" placeholder="Find" data-i18n-ph oninput="csFindInput()" onkeydown="csFindKey(event,'q')" autocomplete="off"/>
@@ -1706,7 +1707,6 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-leveltest" class="page">
   <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenTrial()" title="A test without a student — for a trial lesson, or to see the test yourself" data-i18n data-i18n-title><i class="ti ti-player-play"></i> Sample test</button><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button><button class="btn" onclick="openModal('mo-lt-export')" title="Save the test records as a spreadsheet file" data-i18n data-i18n-title><i class="ti ti-download"></i> Save as CSV</button></div></div>
 <div class="pc">
-  <p class="u-hint" style="margin:0 0 12px" data-i18n>A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.</p>
   <div class="card"><div id="lt-list"></div></div>
 </div>
 </div>
@@ -2204,6 +2204,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v153 · 2026-11-21</dt><dd><b>Simpler Level test, report and Curriculum.</b> The newer screens were busier than the rest of the app; they now say less. <b>Level test page:</b> the paragraph at the top is gone, the level counts list only levels that have students, and a row shows a button only when something waits for you — <b>Confirm result</b> after a test (results of confirmed tests are under <b>Details</b>). In Details the skills are one row of buttons: press Speaking, Writing, Phonics or Vocabulary to rate it. <b>Result window:</b> your decision comes right under the result; how the test went follows. <b>Start and rating windows:</b> shorter notes. <b>Parent report:</b> level, skills, strengths and next steps, goals, the three-month plan, the change since last time and your note — the list of test parts and the activity list are left out. <b>Curriculum:</b> the tip in the toolbar is gone.</dd>
           <dt>v152 · 2026-11-20</dt><dd><b>Menu order, and a tidier Curriculum table.</b> <b>Settings → Templates → Features → Menu order</b>: move the pages of the menu up and down with the arrows; the order follows you to your other devices, and <b>Back to the usual order</b> undoes it. On the Curriculum page the lines of the heading now meet the lines of the table, the row tools on the right have a clean edge, the year and month boxes are no longer cut off in a narrow window, the tip in the toolbar goes away when there is no room for it, and the table fills the height that is left under the student buttons.</dd>
           <dt>v151 · 2026-11-20</dt><dd><b>Curriculum: oldest first.</b> The Curriculum page used to put the newest year on top, so a plan that runs from one December to the next was split in two. It now runs by date from the oldest topic to the newest. This is done once, when you open the page: the years are turned round and the order inside each year stays exactly as you had it. <b>Sort</b> puts the rows shown in date order, oldest first, and new or imported topics take their place by date. To get to a year quickly, use the year box at the top.</dd>
           <dt>v150 · 2026-11-20</dt><dd><b>Curriculum: pick a student at the top.</b> The level dropdown on the Curriculum page is now a row of buttons above the sheet: <b>All levels</b>, the levels <b>A–E</b>, and every <b>student by name</b>. Press a student and the page shows only what that student does — the rows for their level (and the rows for everyone) and only the columns of the lesson parts ticked for them. A line under the buttons says which level and parts the page is going by, with <b>Level &amp; parts</b> to change them in the student's window and <b>Monthly note</b> for the message to the parents. Press the same button again to go back to everyone. The level is the one you confirm after a level test, or set by hand on the student.</dd>
@@ -2253,7 +2254,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v152</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v153</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2419,6 +2420,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v153 · 2026-11-21</dt><dd><b>더 단순해진 레벨테스트·리포트·커리큘럼.</b> 새로 생긴 화면들이 앱의 다른 화면보다 복잡해서 덜어 냈습니다. <b>레벨테스트 페이지:</b> 위쪽 설명 문단을 없앴고, 레벨별 인원은 학생이 있는 레벨만 보이며, 학생 줄에는 할 일이 있을 때만 버튼이 나옵니다(테스트 뒤의 <b>결과 확정</b>). 확정한 테스트의 결과는 <b>자세히</b> 안에 있습니다. 자세히에서는 영역이 버튼 한 줄로 나오고, Speaking·Writing·Phonics·Vocabulary를 누르면 평가합니다. <b>결과 창:</b> 결과 바로 아래에서 레벨을 확정하고, 테스트 진행 내용은 그 아래에 있습니다. <b>시작 창과 평가 창:</b> 안내 글을 줄였습니다. <b>학부모 리포트:</b> 레벨, 영역별 수준, 강점과 보완할 점, 학습 목표, 3개월 계획, 지난번과의 변화, 선생님 의견만 남기고 문항 진행 목록과 활동 목록은 뺐습니다. <b>커리큘럼:</b> 도구 모음의 안내 글을 없앴습니다.</dd>
           <dt>v152 · 2026-11-20</dt><dd><b>메뉴 순서, 그리고 더 깔끔한 커리큘럼 표.</b> <b>설정 → 템플릿 → 기능 → 메뉴 순서</b>에서 화살표로 메뉴의 페이지를 위아래로 옮길 수 있습니다. 순서는 다른 기기에도 그대로 적용되고, <b>원래 순서로</b>를 누르면 되돌아갑니다. 커리큘럼 페이지에서는 머리글의 세로선이 표의 세로선과 맞게 되었고, 오른쪽 줄 도구의 경계가 또렷해졌으며, 좁은 창에서 연도·월 칸이 잘리지 않고, 도구 모음의 안내 글은 자리가 없으면 숨고, 표가 학생 버튼 아래 남은 높이를 채웁니다.</dd>
           <dt>v151 · 2026-11-20</dt><dd><b>커리큘럼: 오래된 것부터.</b> 커리큘럼 페이지는 최신 연도가 맨 위에 오게 되어 있어서, 12월에 시작해 다음 해 12월까지 가는 수업안이 둘로 갈라져 보였습니다. 이제 가장 오래된 주제부터 최신 주제까지 날짜 순서로 나옵니다. 페이지를 열 때 한 번만 연도 순서를 뒤집고, 같은 연도 안의 순서는 정해 두신 그대로입니다. <b>정렬</b>은 보이는 줄을 날짜 순서(오래된 것부터)로 놓고, 새로 넣거나 가져온 주제도 날짜에 맞는 자리에 들어갑니다. 특정 연도로 바로 가려면 위쪽의 연도 칸을 쓰세요.</dd>
           <dt>v150 · 2026-11-20</dt><dd><b>커리큘럼: 위에서 학생을 고르기.</b> 커리큘럼 페이지의 레벨 드롭다운이 표 위의 버튼 줄로 바뀌었습니다. <b>모든 레벨</b>, 레벨 <b>A–E</b>, 그리고 <b>학생 이름</b>이 하나씩 나옵니다. 학생을 누르면 그 학생이 하는 내용만 보입니다. 그 학생 레벨의 줄(과 모두에게 해당하는 줄)만, 그리고 그 학생에게 체크한 수업 파트의 칸만 나옵니다. 버튼 아래에는 지금 어떤 레벨과 파트를 기준으로 보여 주는지 적혀 있고, <b>레벨·수업 파트</b>로 학생 창에서 바꾸거나 <b>월간 안내</b>로 부모님께 보낼 글을 만들 수 있습니다. 같은 버튼을 다시 누르면 전체로 돌아갑니다. 레벨은 레벨테스트 뒤에 확정한 값이거나 학생 창에서 직접 정한 값입니다.</dd>
@@ -2467,7 +2469,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v152</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v153</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3363,8 +3365,7 @@ const I18N={ko:{
   "Appearance":"화면 모드",
   "Undo (Ctrl+Z)":"실행 취소 (Ctrl+Z)","Redo (Ctrl+Y)":"다시 실행 (Ctrl+Y)","Merge cells":"셀 병합","Merge":"병합","Cell colour":"셀 색",
   "Put the rows shown in date order, oldest first":"보이는 줄을 날짜 순서로 정렬 (오래된 것부터)","Sort":"정렬","Add row":"줄 추가","Cell":"셀",
-  "Drag to move the row":"끌어서 줄 옮기기",
-  "Click a cell and type · Alt+↑↓ moves a row · right-click for more":"셀을 누르고 입력 · Alt+↑↓ 줄 이동 · 오른쪽 클릭으로 더 보기","Row":"줄","Nothing to undo":"취소할 작업이 없습니다","Nothing to redo":"다시 실행할 작업이 없습니다",
+  "Drag to move the row":"끌어서 줄 옮기기","Row":"줄","Nothing to undo":"취소할 작업이 없습니다","Nothing to redo":"다시 실행할 작업이 없습니다",
   "Some rows were changed on another device and were left as they are":"다른 기기에서 바뀐 줄은 그대로 두었습니다",
   "Type a month like MAY or 5":"MAY나 5처럼 월을 입력하세요","{n} rows deleted":"{n}줄을 지웠습니다","Sorted by date, oldest first":"날짜 순서로 정렬했습니다 (오래된 것부터)",
   "Select two or more cells to merge":"병합할 셀을 두 개 이상 선택하세요","A merge can't cross the frozen columns":"고정된 열과 나머지 열에 걸쳐 병합할 수는 없습니다",
@@ -3646,6 +3647,15 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v153: simpler level test, report and curriculum
+  "Last test {date} · {res}":"마지막 테스트 {date} · {res}",
+  "Confirm result":"결과 확정",
+  "Rated {date} — press to rate again":"{date} 평가 — 눌러서 다시 평가",
+  "Press to rate":"눌러서 평가",
+  "The test moves up or down with the answers. To stop in the middle, press and hold the lock at the top right.":"답에 따라 난이도가 오르내립니다. 중간에 멈추려면 오른쪽 위 자물쇠를 길게 누르세요.",
+  "When you have entered the answers, the app tells you which sheet comes next.":"답을 입력하면 다음에 볼 시험지를 앱이 알려 줍니다.",
+  "Not tied to a student. If the child joins, you can move the test to the student later.":"학생에 연결되지 않습니다. 아이가 등록하면 나중에 그 학생의 테스트로 옮길 수 있습니다.",
+  "0 to 5 each: 1 is level A above, 5 is level E, 0 is no response.":"각각 0~5: 1은 위 목록의 레벨 A, 5는 레벨 E, 0은 무반응입니다.",
   // ── v152: menu order
   "Menu order":"메뉴 순서",
   "Back to the usual order":"원래 순서로",
@@ -3665,10 +3675,8 @@ const I18N={ko:{
   "A test without a student — for a trial lesson, or to see the test yourself":"학생 없이 보는 테스트 — 시범 수업이나 직접 확인용",
   "Name (optional)":"이름 (선택)",
   "e.g. the child at a trial lesson":"예: 시범 수업에 온 아이 이름",
-  "A sample test belongs to no student. Use it for a trial lesson, or to see the test yourself. If the child joins, you can move the test to the student later.":"샘플 테스트는 어느 학생에도 연결되지 않습니다. 시범 수업 때나 테스트를 직접 확인할 때 쓰세요. 아이가 등록하면 나중에 그 학생의 테스트로 옮길 수 있습니다.",
   "Add a student first — the level test is started from the student's row here. To see the test without a student, press “Sample test” above.":"먼저 학생을 추가하세요. 레벨테스트는 여기 학생 줄에서 시작합니다. 학생 없이 테스트를 보려면 위의 “샘플 테스트”를 누르세요.",
   "Sample tests ({n})":"샘플 테스트 ({n})",
-  "Not tied to a student. Delete them when you are done, or move one to a student who has joined.":"학생에 연결되지 않은 테스트입니다. 다 보셨으면 지우거나, 등록한 학생에게 옮기세요.",
   "Make this one of a student's tests":"이 테스트를 학생의 테스트로 옮기기",
   "Move to a student":"학생에게 옮기기",
   "Move the sample test to a student":"샘플 테스트를 학생에게 옮기기",
@@ -3690,27 +3698,25 @@ const I18N={ko:{
   "How much they write that fits the topic":"주제에 맞는 내용을 얼마나 쓰는가",
   "Spelling and grammar do not get in the way of the meaning":"철자와 문법이 뜻을 방해하지 않는가",
   "The writing has an order and a shape":"글에 순서와 구성이 있는가",
-  "Words said in one minute (optional)":"1분 동안 말한 단어 수 (선택)",
-  "Full sentences said (optional)":"완전한 문장 수 (선택)",
-  "Words written (optional)":"쓴 단어 수 (선택)",
-  "Sentences written (optional)":"쓴 문장 수 (선택)",
+  "Words in one minute":"1분 동안 말한 단어 수",
+  "Full sentences":"완전한 문장 수",
+  "Words written":"쓴 단어 수",
+  "Sentences written":"쓴 문장 수",
   "Score sheet — 100 points (optional)":"채점표 — 100점 만점 (선택)",
-  "Give each of the four 0 to 5: 1 is level A in the list above, 5 is level E, and 0 is no response. Each step is 5 points.":"네 항목을 각각 0~5로 매기세요. 1은 위 목록의 레벨 A, 5는 레벨 E 수준이고, 0은 아무 반응이 없을 때입니다. 한 칸이 5점입니다.",
   "Score all four, or clear them.":"네 항목을 모두 매기거나 지우세요.",
   "Total|score":"합계",
   "Clear|score":"지우기",
   "Ratings and scores — one row per rating":"평가와 점수 — 평가 한 번에 한 줄",
   "There are no ratings yet.":"아직 평가 기록이 없습니다.",
   // ── v148: ratings, the parent report, CSV
-  "Save as CSV":"CSV 저장","Phonics":"파닉스","Skills":"영역별 수준","Reading|skill":"읽기","from the level test":"레벨테스트 결과","No record":"기록 없음","your rating · {date}":"선생님 평가 · {date}","your rating":"선생님 평가",
-  "Rate again":"다시 평가","Rate|skill":"평가하기","{name}: rating saved":"{name} 평가를 저장했습니다","Note (optional)":"메모 (선택)","Details":"자세히","Tests ({n})":"테스트 ({n})","No tests yet.":"아직 테스트 기록이 없습니다.",
+  "Save as CSV":"CSV 저장","Phonics":"파닉스","Skills":"영역별 수준","Reading|skill":"읽기","{name}: rating saved":"{name} 평가를 저장했습니다","Note (optional)":"메모 (선택)","Details":"자세히","Tests ({n})":"테스트 ({n})","No tests yet.":"아직 테스트 기록이 없습니다.",
   "Report|for parents":"리포트","Parent report":"학부모 리포트","The result as a report for the parents, to print or save as PDF":"결과를 학부모용 리포트로 열어 인쇄하거나 PDF로 저장",
   "Check the text, then print or save as PDF.":"내용을 확인한 뒤 인쇄하거나 PDF로 저장하세요.","Not confirmed yet — this report uses the app's result. Confirm the class level first if it should say yours.":"아직 확정 전이라 앱 결과로 만든 리포트입니다. 선생님이 정한 레벨로 나오게 하려면 먼저 수업 레벨을 확정하세요.",
   "Save the test records as a spreadsheet file":"테스트 기록을 스프레드시트 파일로 저장","Save test records as CSV":"테스트 기록을 CSV로 저장","A CSV file opens in Excel or Google Sheets. It holds student names, so keep it to yourself.":"CSV 파일은 엑셀이나 구글 스프레드시트에서 열립니다. 학생 이름이 들어 있으니 다른 사람에게 주지 마세요.",
   "Results — one row per test":"결과 — 테스트 한 번에 한 줄","Answers — one row per question":"답 — 문항 하나에 한 줄","There are no test records yet.":"아직 테스트 기록이 없습니다.",
   // ── v147: level test on paper
   "Print sheets":"시험지 인쇄","Test sheets and the answer key, for a test on paper":"종이로 보는 테스트용 시험지와 정답지","How the test is taken":"테스트 방법","The sheet the student did":"학생이 푼 시험지",
-  "Date of the test":"시험 본 날짜","Print the sheets with “Print sheets” on the Level test page. When you have entered the answers, the app tells you which sheet comes next.":"시험지는 레벨테스트 페이지의 “시험지 인쇄”로 뽑으세요. 답을 입력하면 다음에 풀 시험지를 알려 줍니다.",
+  "Date of the test":"시험 본 날짜",
   "Enter the answers":"답 입력하기","Answers of the paper test":"종이 시험 답 입력","Leave (continue later)":"나가기 (나중에 이어서)","Print test sheets":"시험지 인쇄",
   "Tick the sheets you need. Each level has two sets: a student who is checked again at a level gets the other one. The sheets open in a new window with a Print button.":"필요한 시험지를 체크하세요. 레벨마다 세트가 두 개 있어서, 같은 레벨을 다시 확인하는 학생은 다른 세트를 풉니다. 시험지는 인쇄 버튼이 있는 새 창으로 열립니다.",
   "Tick all":"모두 체크","Answer key":"정답지","Test sheets":"시험지","Tick at least one sheet.":"시험지를 하나 이상 체크하세요.","Set":"세트",
@@ -3732,9 +3738,7 @@ const I18N={ko:{
   "No lesson parts are ticked on this student, so every part is listed.":"이 학생에게 체크된 수업 부분이 없어서 모든 부분을 적었습니다.","Level {lv}":"레벨 {lv}","Show one level, or what one student does":"한 레벨만 보거나, 한 학생이 하는 내용만 보기","Leave empty when the row is for every level":"모든 레벨에 해당하는 줄이면 비워 두세요",
   // ── v145: level test
   "Level test":"레벨테스트","Reading level test on screen, the result and the class level you confirm":"화면으로 보는 읽기 레벨테스트, 결과, 선생님이 확정하는 수업 레벨",
-  "A reading test the student takes on this screen. It moves up or down with the answers and ends on a level from A to E. You look at the result and confirm the class level — only then does the student's level change.":"학생이 이 화면에서 푸는 읽기 테스트입니다. 답에 따라 위아래 레벨로 옮겨 가며 A–E 가운데 한 레벨로 끝납니다. 선생님이 결과를 보고 수업 레벨을 확정해야 학생의 레벨이 바뀝니다.",
   "Start the level test":"레벨테스트 시작","Start level":"시작 레벨","Korean help under the questions of level A and B":"A·B 레벨 문제 아래에 한국어 도움말 보여 주기",
-  "Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right.":"학생이 편하게 풀 수 있는 레벨에서 시작하세요. 잘하면 올라가고 어려우면 내려갑니다. 중간에 멈추려면 오른쪽 위 자물쇠를 길게 누르세요.",
   "Hand over and start":"학생에게 건네고 시작","Level test result":"레벨테스트 결과","Confirm the class level":"수업 레벨 확정",
   "Beginning stage":"시작 단계","Developing stage":"발전 단계","Secure stage":"안정 단계",
   "Has just started on texts at this level.":"이 레벨의 글을 막 시작한 상태입니다.","The level below is secure.":"아래 레벨은 안정적입니다.",
@@ -3745,7 +3749,7 @@ const I18N={ko:{
   "Enough to judge on":"판정 근거 충분","Fair basis to judge on":"판정 근거 보통","Thin basis · check again":"판정 근거 부족 · 재확인 권장",
   "Secure|test part":"안정","Borderline":"경계","Borderline → checked again":"경계 → 재확인","Hard|test part":"어려움",
   "No level yet":"레벨 미정",
-  "Not tested yet":"아직 테스트 전","Last test {date} · app result {res}":"최근 테스트 {date} · 앱 결과 {res}","confirmed {lv}":"확정 {lv}","Not confirmed":"확정 전","Retest due":"재테스트 시기",
+  "Not tested yet":"아직 테스트 전","confirmed {lv}":"확정 {lv}","Not confirmed":"확정 전","Retest due":"재테스트 시기",
   "Result":"결과","Continue test":"이어서 풀기","Start test":"테스트 시작","Delete this test record":"이 테스트 기록 삭제",
   "In progress — part {n}":"진행 중 — {n}번째 묶음","End here and judge":"여기서 끝내고 판정","Stopped before it could be judged":"판정할 만큼 풀기 전에 중단함",
   "Delete this test record? This cannot be undone.":"이 테스트 기록을 삭제할까요? 되돌릴 수 없습니다.",
@@ -3761,7 +3765,7 @@ const I18N={ko:{
   "{n} answer(s) came too fast for the text to have been read.":"읽기 어려울 만큼 빨리 답한 문항이 {n}개 있습니다.",
   "“I’m not sure” was chosen {n} time(s).":"“잘 모르겠어요”가 {n}개 있습니다.",
   "How the test went":"진행 경로","Not finished":"미완료","Set {n}":"세트 {n}","reading {n}s":"읽기 {n}초","Chose: {v}":"선택: {v}","not sure":"모름","{n}s":"{n}초","fast answer":"빠른 응답",
-  "By skill":"스킬별 기록","With so few questions per skill these numbers are a guide only.":"문항 수가 적어 스킬별 숫자는 참고용입니다.",
+  "By skill":"스킬별 기록",
   "Your decision":"선생님 확정","Class level":"수업 레벨","What you noticed (optional)":"관찰 메모 (선택)","Confirmed: {lv} · {date}":"확정함: {lv} · {date}",
   "This is not the app's result ({lv}). Both are kept, side by side.":"앱 결과({lv})와 다르게 확정합니다. 두 값은 따로 저장됩니다.",
   "Confirmed. Class level: {lv}":"확정했습니다. 수업 레벨: {lv}","Confirmed. The class level follows the newest test, so it was not changed.":"확정했습니다. 수업 레벨은 가장 최근 테스트를 따르므로 바꾸지 않았습니다.",
@@ -4252,7 +4256,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v152";
+const APP_VERSION="v153";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8119,7 +8123,7 @@ function renderLevelTest(){
   const counts={};
   list.forEach(s=>{const g=PLAN_LEVELS.includes(s.group)?s.group:"";counts[g]=(counts[g]||0)+1;});
   const sum=document.getElementById("lt-sum");
-  if(sum)sum.innerHTML=PLAN_LEVELS.map(L=>`<span class="tag"><b>${L}</b> ${counts[L]||0}</span>`).join("")+
+  if(sum)sum.innerHTML=PLAN_LEVELS.filter(L=>counts[L]).map(L=>`<span class="tag"><b>${L}</b> ${counts[L]}</span>`).join("")+
     (counts[""]?`<span class="tag">${escapeAttr(tx("No level yet"))} ${counts[""]}</span>`:"");
   if(!list.length){box.innerHTML=`<div class="lt-empty">${escapeAttr(tx("Add a student first — the level test is started from the student's row here. To see the test without a student, press “Sample test” above."))}</div>`+ltTrialHtml();return;}
   const today=td();
@@ -8127,14 +8131,14 @@ function renderLevelTest(){
     const sid=escapeAttr(s.id),all=ltOf(s.id),last=ltLatest(s.id),ip=ltInProgress(s.id);
     const lvl=PLAN_LEVELS.includes(s.group)?s.group:"";
     let sub=tx("Not tested yet");
-    if(last)sub=tx("Last test {date} · app result {res}",{date:last.date,res:last.result.level+" · "+LT_STAGE[last.result.stage]})+
-      (ltFinal(last)?" · "+tx("confirmed {lv}",{lv:ltFinal(last)}):"");
+    if(last)sub=tx("Last test {date} · {res}",{date:last.date,res:last.result.level+" · "+LT_STAGE[last.result.stage]});
     const badges=[];
     if(ip)badges.push(`<span class="badge bip">${escapeAttr(tx("In progress"))}</span>`);
-    if(last&&!ltFinal(last))badges.push(`<span class="badge bpa">${escapeAttr(tx("Not confirmed"))}</span>`);
     if(last&&today>=ltAddMonths(last.date,LT_RETEST_MONTHS))badges.push(`<span class="badge bpr">${escapeAttr(tx("Retest due"))}</span>`);
     const acts=[];
-    if(last)acts.push(`<button class="btn btn-sm" data-lt="review" data-aid="${escapeAttr(last.id)}">${escapeAttr(tx("Result"))}</button>`);
+    // The result of the newest test waits for the teacher: one button says so and opens it. Once it
+    // is confirmed the row is quiet; the result stays in Details.
+    if(last&&!ltFinal(last))acts.push(`<button class="btn btn-sm lt-todo" data-lt="review" data-aid="${escapeAttr(last.id)}">${escapeAttr(tx("Confirm result"))}</button>`);
     acts.push(`<button class="btn btn-sm" data-lt="hist" data-sid="${sid}" aria-expanded="${ltSame(ltOpenSid,s.id)}">${escapeAttr(tx("Details"))}</button>`);
     acts.push(ip
       ?`<button class="btn btn-sm btn-p" data-lt="resume" data-aid="${escapeAttr(ip.id)}">${escapeAttr(tx("Continue test"))}</button>`
@@ -8150,7 +8154,6 @@ function renderLevelTest(){
 function ltTrialHtml(){
   const list=ltTrials();if(!list.length)return "";
   return `<div class="lt-trial"><div class="lt-ph">${escapeAttr(tx("Sample tests ({n})",{n:list.length}))}</div>`+
-    `<p class="u-hint">${escapeAttr(tx("Not tied to a student. Delete them when you are done, or move one to a student who has joined."))}</p>`+
     list.map(a=>ltHistRow(a,true)).join("")+`</div>`;
 }
 function ltHistRow(a,trial){
@@ -8687,7 +8690,7 @@ const LT_RUBRIC_LOOK={
   writing:{content:tx("How much they write that fits the topic"),sentence:tx("How long the sentences are and how they are linked"),
     accuracy:tx("Spelling and grammar do not get in the way of the meaning"),flow:tx("The writing has an order and a shape")},
 };
-const LT_COUNT_LBL={speaking:[tx("Words said in one minute (optional)"),tx("Full sentences said (optional)")],writing:[tx("Words written (optional)"),tx("Sentences written (optional)")]};
+const LT_COUNT_LBL={speaking:[tx("Words in one minute"),tx("Full sentences")],writing:[tx("Words written"),tx("Sentences written")]};
 const LT_COUNT_KO={speaking:["1분 동안 말한 단어","완전한 문장"],writing:["쓴 단어","쓴 문장"]};
 const ltHasRubric=d=>!!LT_RUBRIC_LOOK[d];
 const ltRubricOk=x=>!!x&&typeof x==="object"&&LT_RUBRIC_IDS.every(k=>Number.isInteger(x[k])&&x[k]>=0&&x[k]<=5);
@@ -8711,12 +8714,12 @@ function ltRatingsFor(s,a){
 // What the Details panel of a student shows first: reading from the test, then the four ratings.
 function ltProfileHtml(s){
   const e=escapeAttr,last=ltLatest(s.id);
-  let h=`<div class="lt-ph">${e(tx("Skills"))}</div><div class="lt-prof"><div class="lt-prow"><span class="lt-pname">${e(tx("Reading|skill"))}<small>${e(tx("from the level test"))}</small></span><span class="lt-pval">${last?ltLv(last.result.level)+`<span>${e(LT_STAGE[last.result.stage])}</span>`:`<span class="cell-muted2">${e(tx("No record"))}</span>`}</span></div>`;
+  let h=`<div class="lt-ph">${e(tx("Skills"))}</div><div class="lt-skills"><span class="lt-skill">${e(tx("Reading|skill"))}`+
+    (last?ltLv(last.result.level)+`<span class="lt-sk-x">${e(LT_STAGE[last.result.stage])}</span>`:`<span class="lt-sk-x">–</span>`)+`</span>`;
   LT_DOMAIN_IDS.forEach(d=>{
-    const r=ltLastRating(s,d);
-    const sc=ltScore(r);
-    h+=`<div class="lt-prow"><span class="lt-pname">${e(LT_DOMAIN_NAME[d])}<small>${e(r?tx("your rating · {date}",{date:r.date}):tx("your rating"))}</small></span><span class="lt-pval">${r?ltLv(r.level):""}${sc!=null?`<span class="lt-score">${sc}/100</span>`:""}`+
-      `<button class="btn btn-xs" data-lt="rate" data-sid="${e(s.id)}" data-dom="${d}">${e(r?tx("Rate again"):tx("Rate|skill"))}</button></span></div>`;
+    const r=ltLastRating(s,d),sc=ltScore(r);
+    h+=`<button type="button" class="lt-skill" data-lt="rate" data-sid="${e(s.id)}" data-dom="${d}" title="${e(r?tx("Rated {date} — press to rate again",{date:r.date}):tx("Press to rate"))}">${e(LT_DOMAIN_NAME[d])}`+
+      (r?ltLv(r.level)+(sc!=null?`<span class="lt-score">${sc}/100</span>`:""):`<i class="ti ti-plus" aria-hidden="true"></i>`)+`</button>`;
   });
   return h+`</div>`;
 }
@@ -8742,7 +8745,7 @@ function ltRenderRate(){
   const n=LT_RUBRIC_IDS.filter(k=>LTR.rub[k]!=null).length,total=n===4?LT_RUBRIC_IDS.reduce((m,k)=>m+LTR.rub[k],0)*5:null;
   rub.hidden=!has;
   if(has)rub.innerHTML=`<div class="lt-ph">${e(tx("Score sheet — 100 points (optional)"))}</div>`+
-    `<p class="u-hint">${e(tx("Give each of the four 0 to 5: 1 is level A in the list above, 5 is level E, and 0 is no response. Each step is 5 points."))}</p>`+
+    `<p class="u-hint">${e(tx("0 to 5 each: 1 is level A above, 5 is level E, 0 is no response."))}</p>`+
     LT_RUBRIC_IDS.map(k=>`<div class="ltq-r"><span class="ltq-rn">${e(LT_RUBRIC_NAME[k])}<small>${e(LT_RUBRIC_LOOK[LTR.dom][k])}</small></span>`+
       `<span class="ltq-rb" role="group" aria-label="${e(LT_RUBRIC_NAME[k])}">`+[0,1,2,3,4,5].map(v=>
         `<button type="button" class="ltq-pt${LTR.rub[k]===v?" on":""}" aria-pressed="${LTR.rub[k]===v}" data-k="${k}" data-v="${v}" onclick="ltPickPoint('${k}',${v})">${v}</button>`).join("")+`</span></div>`).join("")+
@@ -8875,16 +8878,9 @@ function ltReportBlocks(s,a){
   B.push(`<div class="rp-sec"><h3>영역별 수준</h3><div class="rg${scored?" sc":""}"><div class="rg-row rg-head"><span></span>${LV.map(L=>`<span>${L}</span>`).join("")}${scored?"<span>점수</span>":""}</div>`+
     rows.map(x=>`<div class="rg-row"><span class="rg-name">${e(x[0])}<small>${x[1]}</small></span>${LV.map(L=>`<span class="rg-cell">${L===x[2]?`<i>${L}</i>`:""}</span>`).join("")}`+
       (scored?`<span class="rg-score">${x[3]!=null?`<b>${x[3]}</b>${x[4]!=null?`<small>지난번 ${x[4]}</small>`:""}`:""}</span>`:"")+`</div>`).join("")+
-    `</div><p class="rp-small">영역마다 레벨이 다를 수 있습니다. ${rows.length===1?"Speaking과 Writing은 수업 중 평가 후 추가됩니다.":"선생님 평가는 기준표에 따른 관찰 결과이며, 옆의 날짜는 평가한 날입니다."}`+
-    (scored?" 점수는 내용·문장·정확성·흐름을 25점씩 본 100점 만점이고, 레벨 A부터 E까지 전체가 기준입니다(네 항목이 모두 레벨 C 수준이면 60점).":"")+`</p></div>`);
+    `</div>`+(scored?`<p class="rp-small">점수는 100점 만점이며 레벨 A부터 E까지 전체가 기준입니다(네 항목이 모두 레벨 C 수준이면 60점).</p>`:"")+`</div>`);
   B.push(`<div class="rp-sec rp-two"><div><h3>강점</h3><ul>${fd.good.map(x=>`<li>${e(x)}</li>`).join("")}</ul></div><div><h3>보완할 점</h3><ul>${fd.need.map(x=>`<li>${e(x)}</li>`).join("")}</ul></div></div>`);
-  const pr=a.teacher&&a.teacher.probe;
-  B.push(`<div class="rp-sec"><h3>이번 평가에서 한 일</h3><p>${a.mode==="paper"?"종이 시험지로 진행했고, 결과에 따라 다음 시험지의 난이도를 조절했습니다.":"학생의 답에 따라 글의 난이도가 자동으로 조절되는 방식으로 진행했습니다."} 모두 ${r.items}문항을 풀었습니다.</p><ul>`+
-    a.path.filter(p=>p.responses.length&&AEA.TL[p.testlet]).map(p=>{const t=AEA.TL[p.testlet],c=p.responses.filter(x=>x.correct).length;
-      return `<li>레벨 ${p.level}${t.passage?` 글 “${e(t.title)}” (${t.words}단어)`:" 글자·단어 문제"}: ${p.responses.length}문항 중 ${c}문항 정답</li>`;}).join("")+
-    (pr&&[0,1,2].includes(pr.score)?`<li>읽은 내용을 말로 설명하는 확인 질문: ${["설명하기 어려워함","일부 설명함","충분히 설명함"][pr.score]}</li>`:"")+`</ul></div>`);
-  B.push(`<div class="rp-sec rp-two"><div><h3>지금 수준에 맞는 학습 목표</h3><ol>${rec.goals.map(x=>`<li>${e(x)}</li>`).join("")}</ol></div>`+
-    `<div><h3>추천 수업 활동과 읽기 자료</h3><ul>${rec.acts.map(x=>`<li>${e(x)}</li>`).join("")}<li>알맞은 읽기 자료: ${e(rec.reading)}</li></ul></div></div>`);
+  B.push(`<div class="rp-sec"><h3>지금 수준에 맞는 학습 목표</h3><ol>${rec.goals.map(x=>`<li>${e(x)}</li>`).join("")}</ol></div>`);
   B.push(`<div class="rp-sec"><h3>앞으로 3개월 계획</h3><div class="rp-plan">${rec.plan.map((x,i)=>`<div><b>${i+1}개월차</b><span>${e(x)}</span></div>`).join("")}</div><p class="rp-small">다음 정기 평가 예정: ${e(ltAddMonths(a.date,LT_RETEST_MONTHS))}</p></div>`);
   B.push(`<div class="rp-sec"><h3>성장 변화</h3>${prev?`<div class="rp-grow"><div><p>지난 평가(${e(prev.date)}) <b>${prev.result.level} · ${ST[prev.result.stage].ko}</b> → 이번 평가 <b>${r.level} · ${ST[r.stage].ko}</b></p><p class="rp-small">점의 높이는 레벨 안에서의 단계(시작·발전·안정)를 나타냅니다. 점수가 아닙니다.</p></div>`+ltGrowthSvg(before.concat([a]))+`</div>`:`<p>이번이 첫 평가입니다. 다음 평가부터 변화를 비교해 드립니다.</p>`}</div>`);
   if(a.teacher&&a.teacher.note)B.push(`<div class="rp-sec"><h3>선생님 의견</h3><p class="rp-note${String(a.teacher.note).length>300?" long":""}">${ltNoteHtml(a.teacher.note)}</p></div>`);
@@ -8996,6 +8992,12 @@ function ltRenderReview(){
   if(T.probe&&T.probe.score===0)flags.push(tx("The oral check did not show understanding. Think about confirming one level lower."));
   if(flags.length)h+=`<ul class="ltr-flags">${flags.map(f=>`<li>${e(f)}</li>`).join("")}</ul>`;
 
+  const fin=T.finalLevel||r.level;
+  h+=`<h3 class="ltr-h">${e(tx("Your decision"))}</h3><div class="fg"><label for="ltr-final">${e(tx("Class level"))}</label>`+
+    `<select id="ltr-final" onchange="ltReviewHint()">${AEA.LEVELS.map(L=>`<option value="${L}"${L===fin?" selected":""}>${L} · ${e(AEA.LEVEL_INFO[L].name)}</option>`).join("")}</select>`+
+    `<p class="u-hint" id="ltr-diff" hidden></p></div>`+
+    `<div class="fg"><label for="ltr-note">${e(tx("What you noticed (optional)"))}</label><textarea id="ltr-note" rows="3" maxlength="600">${e(T.note||"")}</textarea></div>`+
+    (T.reviewedAt?`<p class="u-hint">${e(tx("Confirmed: {lv} · {date}",{lv:T.finalLevel,date:fmtDate(new Date(T.reviewedAt))}))}</p>`:"");
   h+=`<h3 class="ltr-h">${e(tx("How the test went"))}</h3>`+a.path.map((p,pi)=>{
     const t=AEA.TL[p.testlet];if(!t)return "";
     let oc=p.done?(LT_OUTCOME[p.outcome]||LT_OUTCOME.low):[tx("Not finished"),"bc"];
@@ -9014,9 +9016,8 @@ function ltRenderReview(){
   h+=`<h3 class="ltr-h">${e(tx("By skill"))}</h3><div class="ltr-skills">`+Object.keys(LT_SKILL).filter(k=>r.skills&&r.skills[k]).map(k=>{
     const sk=r.skills[k];let d="";for(let i=0;i<sk.n;i++)d+=`<i class="${i<sk.c?"on":""}"></i>`;
     return `<div class="ltr-skill"><span>${e(LT_SKILL[k])}</span><span class="ltr-sdots">${d}</span><span class="cell-muted2">${sk.c}/${sk.n}</span></div>`;
-  }).join("")+`</div><p class="u-hint">${e(tx("With so few questions per skill these numbers are a guide only."))}</p>`;
+  }).join("")+`</div>`;
 
-  const fin=T.finalLevel||r.level;
   // One spoken question about the last part the student got mostly right — it tells understanding
   // from guessing, and reading from speaking (an answer in Korean counts). The question itself is
   // the bank's own script for the teacher, so it is shown as written.
@@ -9025,11 +9026,6 @@ function ltRenderReview(){
     `<div class="ltr-probe"><b>${e(pq.q)}</b><span class="cell-muted2">${e(pq.look)}</span></div><div class="ltr-pbtns">`+
     [[2,tx("Explained well")],[1,tx("Explained in part")],[0,tx("Could not explain")]].map(([sc,t])=>
       `<button type="button" class="btn btn-sm${pr.testlet===pt&&pr.score===sc?" on":""}" aria-pressed="${pr.testlet===pt&&pr.score===sc}" onclick="ltSetProbe('${pt}',${sc})">${e(t)}</button>`).join("")+`</div>`;
-  h+=`<h3 class="ltr-h">${e(tx("Your decision"))}</h3><div class="fg"><label for="ltr-final">${e(tx("Class level"))}</label>`+
-    `<select id="ltr-final" onchange="ltReviewHint()">${AEA.LEVELS.map(L=>`<option value="${L}"${L===fin?" selected":""}>${L} · ${e(AEA.LEVEL_INFO[L].name)}</option>`).join("")}</select>`+
-    `<p class="u-hint" id="ltr-diff" hidden></p></div>`+
-    `<div class="fg"><label for="ltr-note">${e(tx("What you noticed (optional)"))}</label><textarea id="ltr-note" rows="3" maxlength="600">${e(T.note||"")}</textarea></div>`+
-    (T.reviewedAt?`<p class="u-hint">${e(tx("Confirmed: {lv} · {date}",{lv:T.finalLevel,date:fmtDate(new Date(T.reviewedAt))}))}</p>`:"");
   body.innerHTML=h;
   ltReviewHint();
 }
@@ -14423,17 +14419,17 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-lt-start">
   <div class="mb" style="max-width:480px">
     <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <div class="fg" id="lts-guest-row" hidden><label for="lts-guest" data-i18n>Name (optional)</label><input id="lts-guest" type="text" maxlength="40" placeholder="e.g. the child at a trial lesson" data-i18n-ph/><p class="u-hint" data-i18n>A sample test belongs to no student. Use it for a trial lesson, or to see the test yourself. If the child joins, you can move the test to the student later.</p></div>
+    <div class="fg" id="lts-guest-row" hidden><label for="lts-guest" data-i18n>Name (optional)</label><input id="lts-guest" type="text" maxlength="40" placeholder="e.g. the child at a trial lesson" data-i18n-ph/><p class="u-hint" data-i18n>Not tied to a student. If the child joins, you can move the test to the student later.</p></div>
     <div class="fg"><label data-i18n>How the test is taken</label><div class="seg" id="lts-mode"></div></div>
     <div class="fg"><label id="lts-level-lbl"></label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
     <div id="lts-online">
       <label class="sw" style="white-space:normal"><input id="lts-ko" type="checkbox" checked/><span class="sw-track"></span><span data-i18n>Korean help under the questions of level A and B</span></label>
-      <p class="u-hint" style="margin-top:12px" data-i18n>Start at a level the student finds comfortable: the test moves up when it goes well and down when it is hard. To stop in the middle, press and hold the lock at the top right.</p>
+      <p class="u-hint" style="margin-top:12px" data-i18n>The test moves up or down with the answers. To stop in the middle, press and hold the lock at the top right.</p>
     </div>
     <div id="lts-paper" hidden>
       <div class="fg"><label data-i18n>Set</label><div class="seg ltp-forms" id="lts-forms"></div></div>
       <div class="fg"><label for="lts-date" data-i18n>Date of the test</label><input id="lts-date" type="date"/></div>
-      <p class="u-hint" data-i18n>Print the sheets with “Print sheets” on the Level test page. When you have entered the answers, the app tells you which sheet comes next.</p>
+      <p class="u-hint" data-i18n>When you have entered the answers, the app tells you which sheet comes next.</p>
     </div>
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-start')" data-i18n>Cancel</button><button class="btn btn-p" id="lts-go" onclick="ltStart()"></button></span></div>
   </div>
