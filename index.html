@@ -553,6 +553,9 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .ltsh-lv:first-child{border-top:0}
 .ltsh-sets{display:flex;flex-direction:column;gap:6px;min-width:0}
 .ltsh-set{display:flex;gap:8px;align-items:center;font-size:var(--fs-base);cursor:pointer}
+/* v153: the tick boxes took the size of a text input (36px squares) — they are tick boxes again */
+.ltsh-set input[type=checkbox]{width:18px;height:18px;min-width:18px;flex:0 0 18px;margin:0;padding:0;accent-color:var(--grn)}
+.ltsh-lv{min-height:44px}
 .ltr-probe{background:var(--surf2);border-radius:8px;padding:10px 12px;margin:6px 0 8px}
 .ltr-probe b{display:block;margin-bottom:4px}
 .ltr-pbtns{display:flex;gap:6px;flex-wrap:wrap}
@@ -3718,7 +3721,7 @@ const I18N={ko:{
   "Print sheets":"시험지 인쇄","Test sheets and the answer key, for a test on paper":"종이로 보는 테스트용 시험지와 정답지","How the test is taken":"테스트 방법","The sheet the student did":"학생이 푼 시험지",
   "Date of the test":"시험 본 날짜",
   "Enter the answers":"답 입력하기","Answers of the paper test":"종이 시험 답 입력","Leave (continue later)":"나가기 (나중에 이어서)","Print test sheets":"시험지 인쇄",
-  "Tick the sheets you need. Each level has two sets: a student who is checked again at a level gets the other one. The sheets open in a new window with a Print button.":"필요한 시험지를 체크하세요. 레벨마다 세트가 두 개 있어서, 같은 레벨을 다시 확인하는 학생은 다른 세트를 풉니다. 시험지는 인쇄 버튼이 있는 새 창으로 열립니다.",
+  "Tick the sheets you need. They open in a new window with a Print button.":"필요한 시험지를 체크하세요. 인쇄 버튼이 있는 새 창으로 열립니다.",
   "Tick all":"모두 체크","Answer key":"정답지","Test sheets":"시험지","Tick at least one sheet.":"시험지를 하나 이상 체크하세요.","Set":"세트",
   "Answer key — for the teacher only":"정답지 — 선생님용","Level A sheets have colour questions: print them in colour.":"레벨 A 시험지에는 색을 구분하는 문항이 있으니 컬러로 인쇄하세요.",
   "That level is secure. Next, check one level up.":"이 레벨은 안정적입니다. 한 단계 위를 확인합니다.","That level is still hard. Next, check one level down.":"이 레벨은 아직 어렵습니다. 한 단계 아래를 확인합니다.",
@@ -14479,7 +14482,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-lt-sheets">
   <div class="mb" style="max-width:480px">
     <div class="mt"><span data-i18n>Print test sheets</span><button class="bic" onclick="closeModal('mo-lt-sheets')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <p class="u-hint" style="margin-bottom:8px" data-i18n>Tick the sheets you need. Each level has two sets: a student who is checked again at a level gets the other one. The sheets open in a new window with a Print button.</p>
+    <p class="u-hint" style="margin-bottom:8px" data-i18n>Tick the sheets you need. They open in a new window with a Print button.</p>
     <div id="ltsh-list"></div>
     <div class="mf"><button class="btn btn-sm" onclick="ltSheetsAll()" data-i18n>Tick all</button><span style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn" onclick="ltPrintSheets('key')" data-i18n>Answer key</button><button class="btn btn-p" onclick="ltPrintSheets('test')" data-i18n>Test sheets</button></span></div>
   </div>
