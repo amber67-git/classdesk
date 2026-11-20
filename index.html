@@ -497,6 +497,19 @@ thead[data-header-page] th:not(:last-child):hover::after{
 #ltq-list{display:flex;flex-direction:column;gap:8px;margin:10px 0 12px}
 .ltq-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:2px solid var(--bdr);background:var(--surf);color:var(--txt);border-radius:10px;padding:10px;font-size:var(--fs-base);cursor:pointer;font-family:var(--font)}
 .ltq-opt.on{border-color:var(--grn);background:var(--grn-l)}
+/* v150: who the Curriculum page is shown for — everyone, a level, or one student */
+.curr-who{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px}
+.cw-chip{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border:1px solid var(--bdr);border-radius:99px;background:var(--surf);color:var(--txt);font-size:var(--fs-sm);font-family:var(--font);cursor:pointer;white-space:nowrap}
+.cw-chip:hover{border-color:var(--bdr2)}
+.cw-chip.on{border-color:var(--grn);background:var(--grn-l);color:var(--grn-t);font-weight:600}
+.cw-lv{font-size:11px;font-weight:700;color:var(--txt2)}
+.cw-chip.on .cw-lv{color:inherit}
+.cw-label{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin:0 2px 0 8px}
+.curr-who-info{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;background:var(--surf2);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-sm)}
+.curr-who-info[hidden]{display:none}
+.curr-who-info .cwi-main{flex:1 1 240px;min-width:0}
+.curr-who-info .cwi-acts{display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:600px){.curr-who{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cw-chip{min-height:44px;flex:none}.cw-label{flex:none}}
 /* v149: the 100-point sheet in the rating window; sample tests above the student rows */
 .ltq-rub{border-top:1px solid var(--bdr);margin-bottom:12px}
 .ltq-r{display:flex;flex-direction:column;gap:6px;padding:8px 0;border-bottom:1px solid var(--bdr)}
@@ -1564,11 +1577,12 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <option value="MAY">MAY</option><option value="JUN">JUN</option><option value="JUL">JUL</option><option value="AUG">AUG</option>
       <option value="SEP">SEP</option><option value="OCT">OCT</option><option value="NOV">NOV</option><option value="DEC">DEC</option>
     </select>
-    <select id="curr-lf" onchange="renderCurriculum()" class="u-w-120" title="Show one level, or what one student does" data-i18n-title></select>
     <input type="text" id="curr-sf" placeholder="Search…" data-i18n-ph oninput="renderCurriculum()" style="width:200px"/>
     <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" onclick="openCurrNote()" title="A month's plan for one student, as a message for the parents" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Monthly note</button><button class="btn" onclick="openCurrImport()" title="Bring in topics from a spreadsheet" data-i18n data-i18n-title><i class="ti ti-file-import"></i> Import</button><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
   </div>
   <div class="pc">
+    <div id="curr-who" class="curr-who" role="group"></div>
+    <div id="curr-who-info" class="curr-who-info" hidden></div>
     <div class="card">
       <!-- v138: spreadsheet tools (tablet / PC only) -->
       <div class="cs-sheetbar" role="toolbar" aria-label="Sheet">
@@ -2176,6 +2190,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v150 · 2026-11-20</dt><dd><b>Curriculum: pick a student at the top.</b> The level dropdown on the Curriculum page is now a row of buttons above the sheet: <b>All levels</b>, the levels <b>A–E</b>, and every <b>student by name</b>. Press a student and the page shows only what that student does — the rows for their level (and the rows for everyone) and only the columns of the lesson parts ticked for them. A line under the buttons says which level and parts the page is going by, with <b>Level &amp; parts</b> to change them in the student's window and <b>Monthly note</b> for the message to the parents. Press the same button again to go back to everyone. The level is the one you confirm after a level test, or set by hand on the student.</dd>
           <dt>v149 · 2026-11-19</dt><dd><b>New: sample tests and a 100-point score sheet.</b> <b>Sample test</b> (top of the Level test page) starts a test that belongs to no student — for a trial lesson, or to see the test yourself. Type a name if you like, choose on screen or on paper, and the result and the parent report work as usual. Sample tests are listed above the students; delete them when you are done, or use <b>Move to a student</b> when the child joins (the student's level still changes only when you confirm the result). When you rate <b>Speaking or Writing</b> there is now an optional <b>score sheet</b>: four things (content, sentences, accuracy, flow), each 0 to 5 where 1 to 5 mean levels A to E, 5 points a step, 100 in all — plus two counts you may add (words in one minute and sentences, or words and sentences written). The score shows in Details and in the parent report next to last time's, and <b>Save as CSV</b> has a third file with every rating and score.</dd>
           <dt>v148 · 2026-11-19</dt><dd><b>New: skill ratings, the parent report and CSV.</b> On the Level test page each student now has a <b>Details</b> button: it shows the reading level from the test and lets you <b>rate Speaking, Writing, Phonics and Vocabulary</b> against a five-step description (A–E), each rating kept with its date. A finished test has a <b>Parent report</b> (in the result window, and in Details): it opens in a new window to print or save as PDF, in Korean, with the class level, the level of each skill, strengths and points to work on, what the test did, goals, a three-month plan, the change since the last test and your note — and it says that these are the class's own levels, not an official score. <b>CSV</b> saves all test records as a spreadsheet file, one row per test or one row per answer.</dd>
           <dt>v147 · 2026-11-19</dt><dd><b>New: the level test on paper.</b> On the Level test page, <b>Print sheets</b> opens the test sheets you tick (two sets per level) and the <b>answer key</b> in a new window with a Print button. To record a paper test, press <b>Start test</b> on the student's row, choose <b>On paper</b>, pick the sheet the student did and the date, and enter the number they circled for each question; the app then says which sheet comes next (one level up, one down, or the other set), exactly as it would on screen, and you can leave and continue later. The <b>result</b> window also has an optional one-minute <b>oral check</b>: ask the question shown about the last part the student got mostly right — "could not explain" marks the result as needing a second look.</dd>
@@ -2222,7 +2237,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v149</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v150</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2387,6 +2402,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v150 · 2026-11-20</dt><dd><b>커리큘럼: 위에서 학생을 고르기.</b> 커리큘럼 페이지의 레벨 드롭다운이 표 위의 버튼 줄로 바뀌었습니다. <b>모든 레벨</b>, 레벨 <b>A–E</b>, 그리고 <b>학생 이름</b>이 하나씩 나옵니다. 학생을 누르면 그 학생이 하는 내용만 보입니다. 그 학생 레벨의 줄(과 모두에게 해당하는 줄)만, 그리고 그 학생에게 체크한 수업 파트의 칸만 나옵니다. 버튼 아래에는 지금 어떤 레벨과 파트를 기준으로 보여 주는지 적혀 있고, <b>레벨·수업 파트</b>로 학생 창에서 바꾸거나 <b>월간 안내</b>로 부모님께 보낼 글을 만들 수 있습니다. 같은 버튼을 다시 누르면 전체로 돌아갑니다. 레벨은 레벨테스트 뒤에 확정한 값이거나 학생 창에서 직접 정한 값입니다.</dd>
           <dt>v149 · 2026-11-19</dt><dd><b>새 기능: 샘플 테스트와 100점 채점표.</b> 레벨테스트 페이지 위쪽의 <b>샘플 테스트</b>는 어느 학생에도 연결되지 않는 테스트를 시작합니다. 시범 수업 때나 선생님이 테스트를 직접 확인할 때 쓰세요. 이름은 적어도 되고 안 적어도 되며, 화면으로도 종이로도 볼 수 있고, 결과와 학부모 리포트도 그대로 나옵니다. 샘플 테스트는 학생 목록 위에 모여 있습니다. 다 보셨으면 지우고, 아이가 등록하면 <b>학생에게 옮기기</b>로 그 학생의 테스트로 만드세요(학생의 레벨은 결과를 확정할 때만 바뀝니다). <b>Speaking과 Writing</b>을 평가할 때는 <b>채점표</b>(선택)가 생겼습니다. 내용·문장·정확성·흐름 네 항목을 각각 0~5로 매기는데, 1~5는 레벨 A~E와 같은 뜻이고 한 칸이 5점이라 합계가 100점 만점입니다. 1분 동안 말한 단어 수와 문장 수(쓰기는 쓴 단어 수와 문장 수)도 함께 적을 수 있습니다. 점수는 자세히와 학부모 리포트에 지난번 점수와 나란히 나오고, <b>CSV 저장</b>에 모든 평가와 점수를 담은 세 번째 파일이 생겼습니다.</dd>
           <dt>v148 · 2026-11-19</dt><dd><b>새 기능: 영역별 평가, 학부모 리포트, CSV.</b> 레벨테스트 페이지의 학생마다 <b>자세히</b> 버튼이 생겼습니다. 테스트로 나온 읽기 레벨을 보여 주고, <b>Speaking·Writing·Phonics·Vocabulary</b>를 다섯 단계 설명(A–E)에 맞춰 평가할 수 있으며, 평가는 날짜와 함께 쌓입니다. 끝난 테스트에는 <b>학부모 리포트</b>가 있습니다(결과 창과 자세히 안). 새 창으로 열려 인쇄하거나 PDF로 저장할 수 있고, 한국어로 수업 레벨, 영역별 수준, 강점과 보완할 점, 이번 평가에서 한 일, 학습 목표, 3개월 계획, 지난 평가와의 변화, 선생님 의견이 들어갑니다. 자체 기준의 레벨이며 공식 점수가 아니라는 안내도 함께 나옵니다. <b>CSV</b>는 모든 테스트 기록을 스프레드시트 파일로 저장합니다(테스트 한 번에 한 줄, 또는 문항 하나에 한 줄).</dd>
           <dt>v147 · 2026-11-19</dt><dd><b>새 기능: 종이로 보는 레벨테스트.</b> 레벨테스트 페이지의 <b>시험지 인쇄</b>에서 체크한 시험지(레벨마다 세트 두 개)와 <b>정답지</b>를 인쇄 버튼이 있는 새 창으로 엽니다. 종이 시험을 기록하려면 학생 줄의 <b>테스트 시작</b>에서 <b>종이 시험</b>을 고르고, 학생이 푼 시험지와 날짜를 정한 뒤 문항마다 학생이 고른 번호를 누르세요. 화면 테스트와 똑같이 다음에 풀 시험지(한 단계 위, 아래, 또는 같은 레벨의 다른 세트)를 알려 주며, 나갔다가 나중에 이어서 입력할 수 있습니다. <b>결과</b> 창에는 선택 사항인 1분짜리 <b>구두 확인</b>도 생겼습니다. 학생이 대체로 맞힌 마지막 묶음에 대해 화면에 나온 질문을 하고, "설명 못함"이면 결과에 재확인 표시가 붙습니다.</dd>
@@ -2432,7 +2448,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v149</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v150</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3611,6 +3627,11 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v150: the Curriculum page by student
+  "No level yet, so every level is shown":"아직 레벨이 없어 모든 레벨이 보입니다",
+  "no lesson parts ticked, so every column is shown":"수업 파트를 고르지 않아 모든 칸이 보입니다",
+  "Change this student's level and lesson parts":"이 학생의 레벨과 수업 파트 바꾸기",
+  "Level & parts":"레벨·수업 파트",
   // ── v149: sample tests, the 100-point sheet
   "A count is a whole number from 0 to 999. Correct it or leave it empty.":"세는 숫자는 0부터 999까지의 정수입니다. 고치거나 비워 두세요.",
   "That student has been archived. Choose another student.":"그 학생은 보관되었습니다. 다른 학생을 고르세요.",
@@ -4150,7 +4171,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v149";
+const APP_VERSION="v150";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -5113,6 +5134,7 @@ async function saveStudent(){
   // If storage is full the save silently did nothing — don't close the modal and pretend it worked.
   if(!save()){students=prevStudents;return;}
   closeModal("mo-student");popSelects();renderStudents();
+  if(curPage==="curriculum")renderCurriculum();          // the level and parts the page goes by may have changed
 }
 async function delStudent(id){if(!confirm(tx("Delete student?")))return;deleteWithUndo("students",id,()=>{popSelects();renderStudents();});}
 
@@ -9203,7 +9225,7 @@ function renderCurriculum(){
     }
     yf.style.display=years.length?"":"none";
   }
-  currLevelOptions();
+  currWhoRender();
   // v138: the order is the sheet's own (see currOrdered) — moving a row moves it, nothing re-sorts.
   // v140: the sheet's column filters (tablet / PC) apply on top of the bar's filters.
   const base=currBaseFilter(),sheet=!csPhone();
@@ -9220,9 +9242,12 @@ const currLevelsOf=v=>[...new Set(String(v||"").toUpperCase().match(/[A-E]/g)||[
 // "a, b" / "AB" / "A·B" → "A·B". Text with no level letter in it is kept as typed.
 function currLevelText(v){const t=String(v||"").trim();if(!t)return "";const l=currLevelsOf(/^[\sA-Ea-e·,.&/+~-]+$/.test(t)?t:"");return l.length?l.join("·"):t;}
 const currForLevel=(c,lv)=>{const l=currLevelsOf(c.level);return !l.length||l.includes(lv);};
-function currViewStudent(){const v=document.getElementById("curr-lf")?.value||"";return v.startsWith("s:")?students.find(x=>String(x.id)===v.slice(2))||null:null;}
+// Who the page is shown for (v150): "" everyone, a level letter, or "s:<student id>". It used to
+// sit in a dropdown; it is now a row of buttons above the sheet, with the students by name.
+let currWho="";
+function currViewStudent(){return currWho.startsWith("s:")?students.find(x=>!x.archived&&String(x.id)===currWho.slice(2))||null:null;}
 function currViewLevel(){
-  const v=document.getElementById("curr-lf")?.value||"";
+  const v=currWho;
   if(v.startsWith("s:")){const s=currViewStudent();return s&&PLAN_LEVELS.includes(s.group)?s.group:"";}
   return PLAN_LEVELS.includes(v)?v:"";
 }
@@ -9234,17 +9259,37 @@ function currHiddenNow(){
   if(mods.length)for(const k in CURR_PART_COL)if(!mods.includes(k))h.add(CURR_PART_COL[k]);
   return h;
 }
-function currLevelOptions(){
-  const sel=document.getElementById("curr-lf");if(!sel)return;
-  const studs=students.filter(x=>!x.archived);
-  const want=JSON.stringify(studs.map(x=>[x.id,x.name,x.group]));
-  if(sel.dataset.opts===want)return;
-  const cur=sel.value;
-  sel.innerHTML=`<option value="">${escapeAttr(tx("All levels"))}</option>`+PLAN_LEVELS.map(L=>`<option value="${L}">${escapeAttr(tx("Level {lv}",{lv:L}))}</option>`).join("")+
-    (studs.length?`<optgroup label="${escapeAttr(tx("Students"))}">`+studs.map(x=>`<option value="s:${escapeAttr(x.id)}">${escapeAttr(x.name||"")}${PLAN_LEVELS.includes(x.group)?" · "+x.group:""}</option>`).join("")+`</optgroup>`:"");
-  sel.dataset.opts=want;
-  if([...sel.options].some(o=>o.value===cur))sel.value=cur;
+function currPick(v){
+  v=String(v||"");
+  currWho=PLAN_LEVELS.includes(v)||(v.startsWith("s:")&&students.some(x=>!x.archived&&String(x.id)===v.slice(2)))?v:"";
+  renderCurriculum();
 }
+// The buttons, and under them a line about the student who is picked: the level and the lesson
+// parts the page is going by, with the way to change them and to the month's note for the parents.
+function currWhoRender(){
+  const box=document.getElementById("curr-who"),info=document.getElementById("curr-who-info");if(!box||!info)return;
+  const e=escapeAttr,studs=students.filter(x=>!x.archived);
+  if(currWho.startsWith("s:")&&!currViewStudent())currWho="";
+  const chip=(v,html)=>`<button type="button" class="cw-chip${currWho===v?" on":""}" aria-pressed="${currWho===v}" data-who="${e(v)}">${html}</button>`;
+  box.setAttribute("aria-label",tx("Show one level, or what one student does"));
+  box.innerHTML=chip("",e(tx("All levels")))+PLAN_LEVELS.map(L=>chip(L,e(L))).join("")+
+    (studs.length?`<span class="cw-label">${e(tx("Students"))}</span>`+studs.map(x=>chip("s:"+x.id,e(x.name||"")+(PLAN_LEVELS.includes(x.group)?`<span class="cw-lv">${e(x.group)}</span>`:""))).join(""):"");
+  const s=currViewStudent();
+  info.hidden=!s;
+  if(!s){info.innerHTML="";return;}
+  const mods=Array.isArray(s.mods)?s.mods:[];
+  const lvl=PLAN_LEVELS.includes(s.group)?tx("Level {lv}",{lv:s.group}):tx("No level yet, so every level is shown");
+  const parts=mods.length?PLAN_MODS.filter(([k])=>mods.includes(k)).map(([,label])=>tx(label)).join(", "):tx("no lesson parts ticked, so every column is shown");
+  info.innerHTML=`<span class="cwi-main"><b>${e(s.name||"")}</b> · ${e(lvl)} · ${e(parts)}</span><span class="cwi-acts">`+
+    `<button type="button" class="btn btn-sm" onclick="openStudentModal('${e(s.id)}')" title="${e(tx("Change this student's level and lesson parts"))}"><i class="ti ti-adjustments"></i> ${e(tx("Level & parts"))}</button>`+
+    `<button type="button" class="btn btn-sm" onclick="openCurrNote()"><i class="ti ti-message-2"></i> ${e(tx("Monthly note"))}</button></span>`;
+}
+document.addEventListener("click",ev=>{
+  const b=ev.target.closest?ev.target.closest("#curr-who [data-who]"):null;if(!b)return;
+  const v=b.dataset.who;
+  currPick(currWho===v?"":v);                         // pressing the picked one again goes back to everyone
+  document.querySelector(`#curr-who [data-who="${CSS.escape(currWho)}"]`)?.focus();
+});
 // ── A month's plan for one student, as a message for the parents (v146) ──
 // Built from the rows of that month that are for the student's level (rows with no level are for
 // everyone), one block per week; a topic's own row and its level row are folded together. Only the
