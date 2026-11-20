@@ -3736,7 +3736,7 @@ const I18N={ko:{
   // ── v146: curriculum by level
   "All levels":"모든 레벨","Monthly note":"월간 안내","Copy":"복사","Copied":"복사했습니다","A month's plan for one student, as a message for the parents":"한 학생의 한 달 수업 계획을 학부모께 보낼 메시지로 만들기",
   "Monthly note for parents":"학부모께 보내는 월간 안내","Written in":"작성 언어","Message":"메시지","Add a student first.":"먼저 학생을 추가하세요.",
-  "You can edit the text here before copying. It is made from the Curriculum rows of that month for this student's level, and lists only the lesson parts ticked on the student.":"복사하기 전에 여기서 글을 고칠 수 있습니다. 그 달 커리큘럼에서 이 학생 레벨에 해당하는 줄로 만들고, 학생에게 체크된 수업 부분만 적습니다.",
+  "You can edit the text before copying.":"복사하기 전에 글을 고칠 수 있습니다.",
   "This student has no level yet, so only the rows meant for every level are listed. Set the level on the student, or confirm a level test.":"이 학생은 아직 레벨이 없어서 모든 레벨 공통 줄만 적었습니다. 학생 창에서 레벨을 정하거나 레벨테스트를 확정하세요.",
   "No lesson parts are ticked on this student, so every part is listed.":"이 학생에게 체크된 수업 부분이 없어서 모든 부분을 적었습니다.","Level {lv}":"레벨 {lv}","Show one level, or what one student does":"한 레벨만 보거나, 한 학생이 하는 내용만 보기","Leave empty when the row is for every level":"모든 레벨에 해당하는 줄이면 비워 두세요",
   // ── v145: level test
@@ -14413,7 +14413,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     </div>
     <p class="u-hint" id="cn-hint"></p>
     <div class="fg"><label for="cn-text" data-i18n>Message</label><textarea id="cn-text" rows="14" style="width:100%"></textarea></div>
-    <p class="u-hint" data-i18n>You can edit the text here before copying. It is made from the Curriculum rows of that month for this student's level, and lists only the lesson parts ticked on the student.</p>
+    <p class="u-hint" data-i18n>You can edit the text before copying.</p>
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-currnote')" data-i18n>Close</button><button class="btn btn-p" onclick="currNoteCopy()" data-i18n><i class="ti ti-copy"></i> Copy</button></span></div>
   </div>
 </div>
