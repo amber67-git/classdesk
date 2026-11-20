@@ -4008,12 +4008,13 @@ function renderNavOrder(){
   }).join("");
   const rs=document.getElementById("nav-order-reset");if(rs)rs.hidden=!Array.isArray(settings.navOrder)||!settings.navOrder.length;
 }
-// Move a page one place among the pages that are shown; pages turned off keep their place.
+// Move a page one place among the pages that are shown: it changes places with its neighbour, so a
+// page that is turned off between them keeps the place it had.
 function navMove(page,dir){
   const order=navOrderNow(),shown=order.filter(pageEnabled),i=shown.indexOf(page),j=i+dir;
   if(i<0||j<0||j>=shown.length)return;
   const a=order.indexOf(page),b=order.indexOf(shown[j]);
-  order.splice(a,1);order.splice(b,0,page);
+  [order[a],order[b]]=[order[b],order[a]];
   navOrderSave(order);
   document.querySelector(`#nav-order .nav-ord-row[data-page="${page}"] [data-nav="${dir}"]:not([disabled]),#nav-order .nav-ord-row[data-page="${page}"] [data-nav]:not([disabled])`)?.focus();
 }
@@ -9617,19 +9618,33 @@ function currOrdered(cmp){
 }
 // v151, once per workspace: the years are turned round — oldest first — and nothing else moves.
 // The rows keep the places they had inside their year (the teacher's own arrangement); only the
-// blocks of years change order. settings.currAsc records that it was done, so a row moved by hand
-// afterwards stays where it was put.
+// blocks of years change order, and rows held together by a vertical merge move as one block (by
+// their first row), so no merge is split. settings.currAsc records that it was done, so a row moved
+// by hand afterwards stays where it was put — and it is recorded only once the new places are saved.
+// Signed in, it waits for the first read of the cloud's settings and curriculum: stamping settings
+// before that could overwrite newer settings saved on another device (see moveLocalFieldSetups).
+function currAscReady(){return feeAuthKnown&&(!syncUser||(!!syncSettled.settings&&!!syncSettled.curriculum));}
 function currYearsAscOnce(){
-  if(settings.currAsc)return;
+  if(settings.currAsc||!currAscReady())return;
   const full=currOrdered(currNewestFirstCmp);
   if(full.some(csHasOrd)){
+    const was=full.map(r=>({r,had:"ord" in r,ord:r.ord,hadU:"_u" in r,u:r._u}));
     csFixOrder(full);
     const slots=full.map(r=>r.ord).sort((a,b)=>a-b);
-    full.slice().sort((a,b)=>csYearKey(a)-csYearKey(b)).forEach((r,i)=>{r.ord=slots[i];});
+    const units=[];
+    full.forEach((r,i)=>{const p=full[i-1];const tied=p&&Object.entries(r.mv||{}).some(([c,g])=>p.mv&&p.mv[c]===g);if(tied)units[units.length-1].push(r);else units.push([r]);});
+    units.map((u,i)=>({u,i})).sort((A,B)=>(csYearKey(A.u[0])-csYearKey(B.u[0]))||(A.i-B.i)).flatMap(x=>x.u).forEach((r,i)=>{r.ord=slots[i];});
+    if(!saveKey("curriculum")){   // not saved: put everything back and try again the next time the page opens
+      was.forEach(w=>{if(w.had)w.r.ord=w.ord;else delete w.r.ord;if(w.hadU)w.r._u=w.u;else delete w.r._u;});
+      return;
+    }
   }
   settings.currAsc=1;
   save();
 }
+// The sign-in state has become known, or the first cloud read has finished: the page on screen may
+// still show the old order.
+function currAscKick(){if(!settings.currAsc&&curPage==="curriculum"&&currAscReady())renderCurriculum();}
 // Give the topics an ord that matches what is on screen. The first time (no ords yet) every topic
 // gets one; after that only newcomers (Add form, Import, an older app) get a value between their
 // neighbours, so only they are written.
@@ -13972,6 +13987,7 @@ async function onSyncSnapshot(key,ev){
     // Last month's figures are only trustworthy once every collection has really been reconciled.
     if(FEE_SYNC_KEYS.every(k=>syncSettled[k]))checkFeeReminder();
     if(key==="assessments"||key==="students")ltApplyHeld();
+    if(key==="settings"||key==="curriculum")currAscKick();
   }
   if(!ev.fromCache&&_syncInFlight<=0)syncStatusIdle();
 }
@@ -14337,7 +14353,7 @@ function initAuthListener(){
     // Now it's known whether this device is signed in. Signed out: local data is the truth, so
     // check straight away. Signed in: onSyncSnapshot checks once every collection has settled.
     feeAuthKnown=true;
-    if(!user)checkFeeReminder();
+    if(!user){checkFeeReminder();currAscKick();}
   });
 }
 window.addEventListener("firebase-ready",initAuthListener);
@@ -14358,7 +14374,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   checkBackupReminder();
   // The first check normally comes from the auth callback (signed out) or the end of the first
   // cloud read (signed in). This is only the fallback for when Firebase never loads at all.
-  setTimeout(()=>{if(!feeAuthKnown){feeAuthKnown=true;checkFeeReminder();}},20000);
+  setTimeout(()=>{if(!feeAuthKnown){feeAuthKnown=true;checkFeeReminder();currAscKick();}},20000);
   // The app is often left open for days as an installed PWA, where startup alone would never
   // reach the 5-day repeat. Six hours is far finer than that interval and costs nothing.
   setInterval(checkFeeReminder,6*3600000);
