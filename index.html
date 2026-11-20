@@ -205,12 +205,13 @@ tbody tr:hover td{background:var(--row-hover)}
 @media(min-width:641px){
   #page-curriculum .tw{overflow:auto;max-height:calc(100vh - 192px);max-height:calc(100dvh - 192px);position:relative}
   #curr-table{table-layout:fixed;border-collapse:separate;border-spacing:0;min-width:0!important}
-  #curr-table th{position:sticky;top:0;z-index:5;padding:9px 10px;border-right:1px solid var(--bdr);overflow:hidden;text-overflow:ellipsis}
+  #curr-table th{position:sticky;top:0;z-index:5;padding:9px 10px;border-right:1px solid var(--bdr2);overflow:hidden;text-overflow:ellipsis}
   #curr-table td{vertical-align:top;padding:10px 12px;line-height:1.55;font-size:12.5px;border-right:1px solid var(--bdr);overflow-wrap:anywhere;background:var(--surf)}
   #curr-table tbody tr:hover td{background:var(--row-hover)}
   #curr-table th:last-child,#curr-table td:last-child{border-right:0}
   #curr-table th.cur-act-h{padding:4px 6px;text-align:right}
-  #curr-table thead th:not(:last-child)::after{background:linear-gradient(to right,transparent 3px,var(--bdr2) 3px,var(--bdr2) 4px,transparent 4px);right:-5px;width:11px}
+  /* v152: the grip is drawn on the cell's own right border (it used to sit 2–3px to its left, which read as a second, crooked line) */
+  #curr-table thead th:not(:last-child)::after{background:none;right:-5px;width:11px}
   #curr-table thead th:not(:last-child):hover::after{background:linear-gradient(to right,transparent 3px,var(--grn) 3px,var(--grn) 6px,transparent 6px)}
   .cur-guide{position:absolute;top:0;width:2px;background:var(--grn);z-index:20;pointer-events:none}
 }
@@ -232,7 +233,7 @@ textarea.cs-ed.on{opacity:1;pointer-events:auto;caret-color:auto}
 #curr-body td.cs-tools{padding:4px 6px;vertical-align:middle}
 @media(min-width:641px){
   /* the row tools (⠿ and ⋮) stay at the right edge while the sheet scrolls sideways */
-  #curr-table thead th:last-child,#curr-body td.cs-tools{position:sticky;right:0;box-shadow:-6px 0 8px -6px var(--pin-shade)}
+  #curr-table thead th:last-child,#curr-body td.cs-tools{position:sticky;right:0;border-left:1px solid var(--bdr2);box-shadow:none}
   #curr-body td.cs-tools{z-index:3}
   #curr-table thead th:last-child{z-index:7}
 }
@@ -245,7 +246,10 @@ textarea.cs-ed.on{opacity:1;pointer-events:auto;caret-color:auto}
 #curr-body tr.cs-add:hover td{background:var(--surf)}
 .cs-drop{position:absolute;left:0;height:2px;background:var(--grn);z-index:25;pointer-events:none}
 .cs-sheetbar{display:flex;align-items:center;gap:4px;padding:6px 10px;border-bottom:1px solid var(--bdr);background:var(--surf);border-radius:var(--rl) var(--rl) 0 0}
-.cs-hint{margin-left:auto;font-size:11.5px;color:var(--txt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cs-hint{margin-left:auto;font-size:11.5px;color:var(--txt3);white-space:nowrap;flex:none}
+@media(max-width:1240px){.cs-hint{display:none}}
+#page-curriculum .fbar{flex-wrap:wrap}
+#page-curriculum .fbar select{flex:0 0 auto!important;width:auto!important;min-width:112px!important}
 .cs-sheetbar .btn-sm{gap:4px}
 .cs-vsep{width:1px;height:20px;background:var(--bdr);margin:0 4px}
 .cs-menu{position:fixed;z-index:4000;background:var(--surf);border:1px solid var(--bdr);border-radius:10px;box-shadow:var(--shl);padding:6px;min-width:230px}
@@ -476,6 +480,12 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .feat-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 24px}
 .feat-h{font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin:4px 0 6px}
 .feat-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--bdr);cursor:pointer}
+/* v152: Settings → Features → Menu order */
+.nav-ord{max-width:360px}
+.nav-ord-row{display:flex;align-items:center;gap:10px;padding:3px 0;border-bottom:1px solid var(--bdr);font-size:var(--fs-sm)}
+.nav-ord-row>i{color:var(--txt2);font-size:16px}
+.nav-ord-row>span{flex:1;min-width:0}
+.nav-ord-row .bic[disabled]{opacity:.3;cursor:default}
 .feat-row:last-child{border-bottom:none}
 .feat-row input{margin-top:2px;flex-shrink:0;width:16px;height:16px;accent-color:var(--grn)}
 .feat-row b{display:block;font-size:13px}
@@ -498,8 +508,8 @@ thead[data-header-page] th:not(:last-child):hover::after{
 .ltq-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:2px solid var(--bdr);background:var(--surf);color:var(--txt);border-radius:10px;padding:10px;font-size:var(--fs-base);cursor:pointer;font-family:var(--font)}
 .ltq-opt.on{border-color:var(--grn);background:var(--grn-l)}
 /* v150: who the Curriculum page is shown for — everyone, a level, or one student */
-.curr-who{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px}
-.cw-chip{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border:1px solid var(--bdr);border-radius:99px;background:var(--surf);color:var(--txt);font-size:var(--fs-sm);font-family:var(--font);cursor:pointer;white-space:nowrap}
+.curr-who{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:0 0 10px}
+.cw-chip{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 11px;border:1px solid var(--bdr);border-radius:99px;background:var(--surf);color:var(--txt);font-size:var(--fs-sm);font-family:var(--font);cursor:pointer;white-space:nowrap}
 .cw-chip:hover{border-color:var(--bdr2)}
 .cw-chip.on{border-color:var(--grn);background:var(--grn-l);color:var(--grn-t);font-weight:600}
 .cw-lv{font-size:11px;font-weight:700;color:var(--txt2)}
@@ -1779,6 +1789,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <div><div class="feat-h" data-i18n>Pages</div><div id="feat-pages"></div></div>
           <div><div class="feat-h" data-i18n>Lesson card sections</div><div id="feat-sections"></div></div>
         </div>
+        <div class="feat-h" style="margin-top:16px" data-i18n>Menu order</div>
+        <div id="nav-order" class="nav-ord"></div>
+        <button class="btn btn-sm" id="nav-order-reset" style="margin-top:8px" onclick="navOrderSave(null)" hidden data-i18n>Back to the usual order</button>
       </div>
     </div>
     <!-- App logo (sidebar + favicon + iOS home-screen icon) -->
@@ -2168,6 +2181,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
           <dt>I don't teach reading — can I hide Reading and Books?</dt><dd>Settings → Templates → <b>Features</b> → <b>Any subject</b>. The Reading and Books pages leave the menu, the lesson card loses its "Books read" section, and the Curriculum columns become Unit, Materials and Homework (Books and Grammar hidden). You can also switch each page and lesson section on its own. Nothing is deleted: switch it back on and everything is still there.</dd>
+          <dt>Can I change the order of the menu?</dt><dd>Settings → Templates → <b>Features</b> → <b>Menu order</b>. The arrows move a page up or down; the menu changes at once and the order follows you to your other devices. <b>Back to the usual order</b> undoes it.</dd>
           <dt>Can I use another currency or change the default fee?</dt><dd>Settings → Templates → <b>Workspace</b>. The <b>default hourly fee</b> is filled in for a new student or lesson (each student's own rate still wins). <b>Currency</b> only changes how amounts are shown (₩, $, £, €, ¥ …) — numbers already saved are not converted. Changing the currency or time zone reloads the app.</dd>
           <dt>A field is missing in the edit dialog</dt><dd>The edit dialog always shows every field. Custom Fields hiding only applies to list columns. If it's still missing, check whether the file is an old version.</dd>
           <dt>What happens to my data when I replace the file with a new version?</dt><dd>It stays, as long as it's the same computer and browser — data lives in the browser, not in the file. With cloud sync on, there's a copy in the cloud too. To be safe, Export before replacing.</dd>
@@ -2190,6 +2204,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v152 · 2026-11-20</dt><dd><b>Menu order, and a tidier Curriculum table.</b> <b>Settings → Templates → Features → Menu order</b>: move the pages of the menu up and down with the arrows; the order follows you to your other devices, and <b>Back to the usual order</b> undoes it. On the Curriculum page the lines of the heading now meet the lines of the table, the row tools on the right have a clean edge, the year and month boxes are no longer cut off in a narrow window, the tip in the toolbar goes away when there is no room for it, and the table fills the height that is left under the student buttons.</dd>
           <dt>v151 · 2026-11-20</dt><dd><b>Curriculum: oldest first.</b> The Curriculum page used to put the newest year on top, so a plan that runs from one December to the next was split in two. It now runs by date from the oldest topic to the newest. This is done once, when you open the page: the years are turned round and the order inside each year stays exactly as you had it. <b>Sort</b> puts the rows shown in date order, oldest first, and new or imported topics take their place by date. To get to a year quickly, use the year box at the top.</dd>
           <dt>v150 · 2026-11-20</dt><dd><b>Curriculum: pick a student at the top.</b> The level dropdown on the Curriculum page is now a row of buttons above the sheet: <b>All levels</b>, the levels <b>A–E</b>, and every <b>student by name</b>. Press a student and the page shows only what that student does — the rows for their level (and the rows for everyone) and only the columns of the lesson parts ticked for them. A line under the buttons says which level and parts the page is going by, with <b>Level &amp; parts</b> to change them in the student's window and <b>Monthly note</b> for the message to the parents. Press the same button again to go back to everyone. The level is the one you confirm after a level test, or set by hand on the student.</dd>
           <dt>v149 · 2026-11-19</dt><dd><b>New: sample tests and a 100-point score sheet.</b> <b>Sample test</b> (top of the Level test page) starts a test that belongs to no student — for a trial lesson, or to see the test yourself. Type a name if you like, choose on screen or on paper, and the result and the parent report work as usual. Sample tests are listed above the students; delete them when you are done, or use <b>Move to a student</b> when the child joins (the student's level still changes only when you confirm the result). When you rate <b>Speaking or Writing</b> there is now an optional <b>score sheet</b>: four things (content, sentences, accuracy, flow), each 0 to 5 where 1 to 5 mean levels A to E, 5 points a step, 100 in all — plus two counts you may add (words in one minute and sentences, or words and sentences written). The score shows in Details and in the parent report next to last time's, and <b>Save as CSV</b> has a third file with every rating and score.</dd>
@@ -2238,7 +2253,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v151</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v152</b> · FAQ current as of: <b>2026-11-19</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2381,6 +2396,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
           <dt>리딩 수업이 아닌데 독서와 도서를 숨길 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>모든 과목</b>. 독서와 도서 화면이 메뉴에서 빠지고, 수업 카드에서 "읽은 책" 항목이 사라지며, 커리큘럼 열은 단원·자료·숙제가 됩니다(도서·문법 열은 숨김). 화면과 수업 항목을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없으니 다시 켜면 그대로 있습니다.</dd>
+          <dt>메뉴 순서를 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>메뉴 순서</b>. 화살표로 페이지를 위아래로 옮기면 메뉴가 바로 바뀌고, 다른 기기에도 같은 순서가 적용됩니다. <b>원래 순서로</b>를 누르면 되돌아갑니다.</dd>
           <dt>다른 통화를 쓰거나 기본 수업료를 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>작업 공간</b>. <b>기본 시간당 수업료</b>는 새 학생이나 새 수업에 미리 채워집니다(학생마다 정한 수업료가 있으면 그것이 우선). <b>통화</b>는 금액을 보여 주는 방식(₩, $, £, €, ¥ …)만 바꾸고, 이미 저장된 숫자는 환산하지 않습니다. 통화나 시간대를 바꾸면 앱이 다시 열립니다.</dd>
           <dt>편집 창에 항목이 없어요</dt><dd>편집 창에는 항상 모든 항목이 나옵니다. 사용자 항목의 숨기기는 목록의 열에만 적용됩니다. 그래도 없다면 파일이 옛 버전인지 확인하세요.</dd>
           <dt>파일을 새 버전으로 바꾸면 데이터는 어떻게 되나요?</dt><dd>같은 컴퓨터, 같은 브라우저라면 그대로 남습니다 — 데이터는 파일이 아니라 브라우저에 있습니다. 클라우드 동기화를 켜 두었다면 클라우드에도 사본이 있습니다. 안전하게 바꾸기 전에 내보내기를 해 두세요.</dd>
@@ -2403,6 +2419,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v152 · 2026-11-20</dt><dd><b>메뉴 순서, 그리고 더 깔끔한 커리큘럼 표.</b> <b>설정 → 템플릿 → 기능 → 메뉴 순서</b>에서 화살표로 메뉴의 페이지를 위아래로 옮길 수 있습니다. 순서는 다른 기기에도 그대로 적용되고, <b>원래 순서로</b>를 누르면 되돌아갑니다. 커리큘럼 페이지에서는 머리글의 세로선이 표의 세로선과 맞게 되었고, 오른쪽 줄 도구의 경계가 또렷해졌으며, 좁은 창에서 연도·월 칸이 잘리지 않고, 도구 모음의 안내 글은 자리가 없으면 숨고, 표가 학생 버튼 아래 남은 높이를 채웁니다.</dd>
           <dt>v151 · 2026-11-20</dt><dd><b>커리큘럼: 오래된 것부터.</b> 커리큘럼 페이지는 최신 연도가 맨 위에 오게 되어 있어서, 12월에 시작해 다음 해 12월까지 가는 수업안이 둘로 갈라져 보였습니다. 이제 가장 오래된 주제부터 최신 주제까지 날짜 순서로 나옵니다. 페이지를 열 때 한 번만 연도 순서를 뒤집고, 같은 연도 안의 순서는 정해 두신 그대로입니다. <b>정렬</b>은 보이는 줄을 날짜 순서(오래된 것부터)로 놓고, 새로 넣거나 가져온 주제도 날짜에 맞는 자리에 들어갑니다. 특정 연도로 바로 가려면 위쪽의 연도 칸을 쓰세요.</dd>
           <dt>v150 · 2026-11-20</dt><dd><b>커리큘럼: 위에서 학생을 고르기.</b> 커리큘럼 페이지의 레벨 드롭다운이 표 위의 버튼 줄로 바뀌었습니다. <b>모든 레벨</b>, 레벨 <b>A–E</b>, 그리고 <b>학생 이름</b>이 하나씩 나옵니다. 학생을 누르면 그 학생이 하는 내용만 보입니다. 그 학생 레벨의 줄(과 모두에게 해당하는 줄)만, 그리고 그 학생에게 체크한 수업 파트의 칸만 나옵니다. 버튼 아래에는 지금 어떤 레벨과 파트를 기준으로 보여 주는지 적혀 있고, <b>레벨·수업 파트</b>로 학생 창에서 바꾸거나 <b>월간 안내</b>로 부모님께 보낼 글을 만들 수 있습니다. 같은 버튼을 다시 누르면 전체로 돌아갑니다. 레벨은 레벨테스트 뒤에 확정한 값이거나 학생 창에서 직접 정한 값입니다.</dd>
           <dt>v149 · 2026-11-19</dt><dd><b>새 기능: 샘플 테스트와 100점 채점표.</b> 레벨테스트 페이지 위쪽의 <b>샘플 테스트</b>는 어느 학생에도 연결되지 않는 테스트를 시작합니다. 시범 수업 때나 선생님이 테스트를 직접 확인할 때 쓰세요. 이름은 적어도 되고 안 적어도 되며, 화면으로도 종이로도 볼 수 있고, 결과와 학부모 리포트도 그대로 나옵니다. 샘플 테스트는 학생 목록 위에 모여 있습니다. 다 보셨으면 지우고, 아이가 등록하면 <b>학생에게 옮기기</b>로 그 학생의 테스트로 만드세요(학생의 레벨은 결과를 확정할 때만 바뀝니다). <b>Speaking과 Writing</b>을 평가할 때는 <b>채점표</b>(선택)가 생겼습니다. 내용·문장·정확성·흐름 네 항목을 각각 0~5로 매기는데, 1~5는 레벨 A~E와 같은 뜻이고 한 칸이 5점이라 합계가 100점 만점입니다. 1분 동안 말한 단어 수와 문장 수(쓰기는 쓴 단어 수와 문장 수)도 함께 적을 수 있습니다. 점수는 자세히와 학부모 리포트에 지난번 점수와 나란히 나오고, <b>CSV 저장</b>에 모든 평가와 점수를 담은 세 번째 파일이 생겼습니다.</dd>
@@ -2450,7 +2467,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v151</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v152</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3629,6 +3646,13 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v152: menu order
+  "Menu order":"메뉴 순서",
+  "Back to the usual order":"원래 순서로",
+  "Move up":"위로",
+  "Move down":"아래로",
+  "Move {name} up":"{name} 위로 옮기기",
+  "Move {name} down":"{name} 아래로 옮기기",
   // ── v150: the Curriculum page by student
   "No level yet, so every level is shown":"아직 레벨이 없어 모든 레벨이 보입니다",
   "no lesson parts ticked, so every column is shown":"수업 파트를 고르지 않아 모든 칸이 보입니다",
@@ -3948,7 +3972,61 @@ function featCurrentPreset(){
   return Object.keys(FEATURE_PRESETS).find(name=>all.every(k=>featureOn(k)===(FEATURE_PRESETS[name][k]!==false)))||"";
 }
 // Hide what is off: menu items, lesson-card sections. A page that is off is never shown.
+// ── Menu order (v152) ──
+// The pages of the menu in the order the teacher wants them (settings.navOrder, synced). A page the
+// list does not know — one added by a later version — keeps its usual place after the one before it.
+const NAV_DEFAULT=[...document.querySelectorAll(".sb-nav .ni[data-page]")].map(n=>n.dataset.page);
+function navOrderNow(){
+  const saved=(Array.isArray(settings.navOrder)?settings.navOrder:[]).filter((p,i,a)=>NAV_DEFAULT.includes(p)&&a.indexOf(p)===i);
+  const out=saved.slice();
+  NAV_DEFAULT.forEach((p,i)=>{
+    if(out.includes(p))return;
+    const before=NAV_DEFAULT.slice(0,i).reverse().find(x=>out.includes(x));
+    out.splice(before?out.indexOf(before)+1:0,0,p);
+  });
+  return out;
+}
+function applyNavOrder(){
+  const nav=document.querySelector(".sb-nav");if(!nav)return;
+  navOrderNow().forEach(p=>{const n=nav.querySelector(`.ni[data-page="${p}"]`);if(n)nav.appendChild(n);});
+}
+function renderNavOrder(){
+  const box=document.getElementById("nav-order");if(!box)return;
+  const list=navOrderNow().filter(pageEnabled);
+  box.innerHTML=list.map((p,i)=>{
+    const n=document.querySelector(`.sb-nav .ni[data-page="${p}"]`),name=n?n.textContent.trim():p,icon=n&&n.querySelector("i")?n.querySelector("i").className:"ti ti-point";
+    return `<div class="nav-ord-row" data-page="${p}"><i class="${escapeAttr(icon)}"></i><span>${escapeHTMLBasic(name)}</span>`+
+      `<button type="button" class="bic" data-nav="-1" ${i===0?"disabled":""} title="${escapeAttr(tx("Move up"))}" aria-label="${escapeAttr(tx("Move {name} up",{name}))}"><i class="ti ti-chevron-up"></i></button>`+
+      `<button type="button" class="bic" data-nav="1" ${i===list.length-1?"disabled":""} title="${escapeAttr(tx("Move down"))}" aria-label="${escapeAttr(tx("Move {name} down",{name}))}"><i class="ti ti-chevron-down"></i></button></div>`;
+  }).join("");
+  const rs=document.getElementById("nav-order-reset");if(rs)rs.hidden=!Array.isArray(settings.navOrder)||!settings.navOrder.length;
+}
+// Move a page one place among the pages that are shown; pages turned off keep their place.
+function navMove(page,dir){
+  const order=navOrderNow(),shown=order.filter(pageEnabled),i=shown.indexOf(page),j=i+dir;
+  if(i<0||j<0||j>=shown.length)return;
+  const a=order.indexOf(page),b=order.indexOf(shown[j]);
+  order.splice(a,1);order.splice(b,0,page);
+  navOrderSave(order);
+  document.querySelector(`#nav-order .nav-ord-row[data-page="${page}"] [data-nav="${dir}"]:not([disabled]),#nav-order .nav-ord-row[data-page="${page}"] [data-nav]:not([disabled])`)?.focus();
+}
+function navOrderSave(order){
+  const had=Object.prototype.hasOwnProperty.call(settings,"navOrder"),prev=settings.navOrder,prevU=settings._u;
+  if(order)settings.navOrder=order;else delete settings.navOrder;
+  save();
+  if(saveFailedKeys.includes("settings")){
+    if(had)settings.navOrder=prev;else delete settings.navOrder;
+    if(prevU===undefined)delete settings._u;else settings._u=prevU;
+    showToast(tx("Could not save — the device's storage may be full. Nothing was changed; try again."));
+  }
+  applyNavOrder();renderNavOrder();
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest?e.target.closest("#nav-order [data-nav]"):null;if(!b)return;
+  navMove(b.closest(".nav-ord-row").dataset.page,+b.dataset.nav);
+});
 function applyFeatures(){
+  applyNavOrder();
   document.querySelectorAll(".ni[data-page]").forEach(n=>{n.hidden=!pageEnabled(n.dataset.page);});
   document.querySelectorAll("[data-feature]").forEach(el=>{el.hidden=!featureOn(el.dataset.feature);});
   if(typeof curPage!=="undefined"&&curPage&&!pageEnabled(curPage))showPage("dashboard");
@@ -3957,6 +4035,7 @@ function renderFeatures(){
   const box=(id,list)=>{const el=document.getElementById(id);if(!el)return;
     el.innerHTML=list.map(f=>`<label class="feat-row"><input type="checkbox" ${featureOn(f.k)?"checked":""} onchange="featSet('${f.k}',this.checked)"/><div><b>${escapeHTMLBasic(f.name)}</b><span>${escapeHTMLBasic(f.hint)}</span></div></label>`).join("");};
   box("feat-pages",FEATURE_PAGES);box("feat-sections",FEATURE_SECTIONS);
+  renderNavOrder();
   const cur=featCurrentPreset();
   document.querySelectorAll(".feat-presets .btn[data-preset]").forEach(b=>b.classList.toggle("on",b.dataset.preset===cur));
   const now=document.getElementById("feat-preset-now");if(now)now.textContent=cur?"":tx("Custom mix");
@@ -4173,7 +4252,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v151";
+const APP_VERSION="v152";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -9235,7 +9314,18 @@ function renderCurriculum(){
   const fl=currOrdered().filter(c=>base(c)&&(!sheet||csFilterPass(c)));
   csRender(fl);
   csMarkFilters();
+  csFitBox();
 }
+// The sheet scrolls inside its own box. The box takes the height left under the bar, the student
+// buttons and the line about the picked student — however many rows of buttons there are — so the
+// page itself does not scroll as well.
+function csFitBox(){
+  const tw=document.querySelector("#page-curriculum .tw");if(!tw)return;
+  if(csPhone()||curPage!=="curriculum"){tw.style.maxHeight="";return;}
+  const top=tw.getBoundingClientRect().top+window.scrollY;
+  tw.style.maxHeight=Math.max(260,window.innerHeight-top-44)+"px";   // 44: the card's edge and the page's bottom padding
+}
+window.addEventListener("resize",()=>{if(typeof curPage!=="undefined"&&curPage==="curriculum")csFitBox();});
 // ── Levels (v146) ──────────────────────────────────────────────────────────
 // A row may say which levels it is for ("A·B", "C", "D·E"); no level = for everyone. The same topic
 // can so have one row for all (book, activity) and one row per level (writing, speaking, grammar).
