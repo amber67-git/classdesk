@@ -14392,7 +14392,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-income">
   <div class="mb" style="max-width:420px">
     <div class="mt"><span id="im-title" data-i18n>Other income</span><button class="bic" onclick="closeModal('mo-income')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <div style="padding:14px 16px 0">
+    <div>
       <p class="u-hint" style="margin-bottom:12px" data-i18n>Money you were paid that is not a lesson fee — a platform bonus, for example. It is treated as already received, so it adds to both Expected and Collected and never appears as outstanding.</p>
       <div class="fg"><label data-i18n>Month</label><input id="im-month" type="month"/></div>
       <div class="fg"><label data-i18n>Amount ({cur})</label><input id="im-amt" type="number" data-money min="0" placeholder="30000"/></div>
@@ -14500,7 +14500,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-feealert">
   <div class="mb" style="max-width:440px">
     <div class="mt"><span><span data-i18n>⚠️ Unpaid fees</span> · <span id="fa-month"></span></span><button class="bic" onclick="closeModal('mo-feealert')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <div id="fa-body" style="padding:14px 16px 0"></div>
+    <div id="fa-body"></div>
     <div class="mf mf-right">
       <button class="btn" onclick="closeModal('mo-feealert')" data-i18n>Remind me in 5 days</button>
       <button class="btn btn-p" onclick="feeAlertOpenPayments()" data-i18n><i class="ti ti-cash"></i> Open Payments</button>
@@ -14511,7 +14511,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-schedfrom" style="z-index:2600">
   <div class="mb" style="max-width:340px">
     <div class="mt"><span data-i18n>New schedule start date</span><button class="bic" onclick="schedFromCancel()" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <div style="padding:14px 16px 16px">
+    <div>
       <p class="u-hint" style="margin-bottom:10px" data-i18n>The new schedule and rate apply from the date you click. Up to the day before, the old schedule stays in effect.</p>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <button class="bic" onclick="schedFromNav(-1)" title="Previous month" data-i18n-title><i class="ti ti-chevron-left"></i></button>
