@@ -2182,6 +2182,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
+          <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
           <dt>I don't teach reading — can I hide Reading and Books?</dt><dd>Settings → Templates → <b>Features</b> → <b>Any subject</b>. The Reading and Books pages leave the menu, the lesson card loses its "Books read" section, and the Curriculum columns become Unit, Materials and Homework (Books and Grammar hidden). You can also switch each page and lesson section on its own. Nothing is deleted: switch it back on and everything is still there.</dd>
           <dt>Can I change the order of the menu?</dt><dd>Settings → Templates → <b>Features</b> → <b>Menu order</b>. The arrows move a page up or down; the menu changes at once and the order follows you to your other devices. <b>Back to the usual order</b> undoes it.</dd>
@@ -2207,6 +2208,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v154 · 2026-11-21</dt><dd><b>Level test: four sets per level.</b> Every level (A–E) now has <b>four sets</b> instead of two — ten new sets, 64 new questions. Sets 3 and 4 are built like sets 1 and 2 of their level: the same number of questions, the same skills in the same order, passages of the same length. So a student tested every quarter can meet a new passage each time. Nothing changes in how you use it: the test still starts with the set the student met longest ago (or never), a borderline score still brings a second set of the same level, and on paper you tick the new sets under <b>Print sheets</b> and choose them when you enter the answers. The first two sets and every earlier result are untouched. New sets:<br/>A — Letters and Words 3 · 4<br/>B — Lily’s Hat · Soccer in the Rain<br/>C — The Library Book · Two Puddles<br/>D — Why Do Leaves Change Color? · The New Goalkeeper<br/>E — A Trophy for Everyone? · Lost Without the Map</dd>
           <dt>v153 · 2026-11-21</dt><dd><b>Simpler Level test, report and Curriculum.</b> The newer screens were busier than the rest of the app; they now say less. <b>Level test page:</b> the paragraph at the top is gone, the level counts list only levels that have students, and a row shows a button only when something waits for you — <b>Confirm result</b> after a test (results of confirmed tests are under <b>Details</b>). In Details the skills are one row of buttons: press Speaking, Writing, Phonics or Vocabulary to rate it. <b>Result window:</b> your decision comes right under the result; how the test went follows. <b>Start and rating windows:</b> shorter notes. <b>Parent report:</b> level, skills, strengths and next steps, goals, the three-month plan, the change since last time and your note — the list of test parts and the activity list are left out. <b>Curriculum:</b> the tip in the toolbar is gone.</dd>
           <dt>v152 · 2026-11-20</dt><dd><b>Menu order, and a tidier Curriculum table.</b> <b>Settings → Templates → Features → Menu order</b>: move the pages of the menu up and down with the arrows; the order follows you to your other devices, and <b>Back to the usual order</b> undoes it. On the Curriculum page the lines of the heading now meet the lines of the table, the row tools on the right have a clean edge, the year and month boxes are no longer cut off in a narrow window, the tip in the toolbar goes away when there is no room for it, and the table fills the height that is left under the student buttons.</dd>
           <dt>v151 · 2026-11-20</dt><dd><b>Curriculum: oldest first.</b> The Curriculum page used to put the newest year on top, so a plan that runs from one December to the next was split in two. It now runs by date from the oldest topic to the newest. This is done once, when you open the page: the years are turned round and the order inside each year stays exactly as you had it. <b>Sort</b> puts the rows shown in date order, oldest first, and new or imported topics take their place by date. To get to a year quickly, use the year box at the top.</dd>
@@ -2257,7 +2259,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v153</b> · FAQ current as of: <b>2026-11-19</b><br/>
+          Guide written against version: <b>v154</b> · FAQ current as of: <b>2026-11-21</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2398,6 +2400,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
+          <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
           <dt>리딩 수업이 아닌데 독서와 도서를 숨길 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>모든 과목</b>. 독서와 도서 화면이 메뉴에서 빠지고, 수업 카드에서 "읽은 책" 항목이 사라지며, 커리큘럼 열은 단원·자료·숙제가 됩니다(도서·문법 열은 숨김). 화면과 수업 항목을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없으니 다시 켜면 그대로 있습니다.</dd>
           <dt>메뉴 순서를 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>메뉴 순서</b>. 화살표로 페이지를 위아래로 옮기면 메뉴가 바로 바뀌고, 다른 기기에도 같은 순서가 적용됩니다. <b>원래 순서로</b>를 누르면 되돌아갑니다.</dd>
@@ -2423,6 +2426,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v154 · 2026-11-21</dt><dd><b>레벨테스트: 레벨마다 세트 4개.</b> 모든 레벨(A–E)의 세트가 두 개에서 <b>네 개</b>로 늘었습니다 — 새 세트 10개, 새 문항 64개. 3·4번 세트는 같은 레벨의 1·2번 세트와 똑같이 만들었습니다: 문항 수, 스킬의 종류와 순서, 지문 길이가 같습니다. 그래서 분기마다 테스트해도 매번 새 지문을 만날 수 있습니다. 쓰는 방법은 그대로입니다: 테스트는 여전히 학생이 가장 오래전에 본(또는 본 적 없는) 세트로 시작하고, 점수가 애매하면 같은 레벨의 다른 세트가 한 번 더 나오며, 종이 시험은 <b>시험지 인쇄</b>에서 새 세트를 체크하고 답을 입력할 때 고르면 됩니다. 1·2번 세트와 지금까지의 결과는 바뀌지 않았습니다. 새 세트:<br/>A — Letters and Words 3 · 4<br/>B — Lily’s Hat · Soccer in the Rain<br/>C — The Library Book · Two Puddles<br/>D — Why Do Leaves Change Color? · The New Goalkeeper<br/>E — A Trophy for Everyone? · Lost Without the Map</dd>
           <dt>v153 · 2026-11-21</dt><dd><b>더 단순해진 레벨테스트·리포트·커리큘럼.</b> 새로 생긴 화면들이 앱의 다른 화면보다 복잡해서 덜어 냈습니다. <b>레벨테스트 페이지:</b> 위쪽 설명 문단을 없앴고, 레벨별 인원은 학생이 있는 레벨만 보이며, 학생 줄에는 할 일이 있을 때만 버튼이 나옵니다(테스트 뒤의 <b>결과 확정</b>). 확정한 테스트의 결과는 <b>자세히</b> 안에 있습니다. 자세히에서는 영역이 버튼 한 줄로 나오고, Speaking·Writing·Phonics·Vocabulary를 누르면 평가합니다. <b>결과 창:</b> 결과 바로 아래에서 레벨을 확정하고, 테스트 진행 내용은 그 아래에 있습니다. <b>시작 창과 평가 창:</b> 안내 글을 줄였습니다. <b>학부모 리포트:</b> 레벨, 영역별 수준, 강점과 보완할 점, 학습 목표, 3개월 계획, 지난번과의 변화, 선생님 의견만 남기고 문항 진행 목록과 활동 목록은 뺐습니다. <b>커리큘럼:</b> 도구 모음의 안내 글을 없앴습니다.</dd>
           <dt>v152 · 2026-11-20</dt><dd><b>메뉴 순서, 그리고 더 깔끔한 커리큘럼 표.</b> <b>설정 → 템플릿 → 기능 → 메뉴 순서</b>에서 화살표로 메뉴의 페이지를 위아래로 옮길 수 있습니다. 순서는 다른 기기에도 그대로 적용되고, <b>원래 순서로</b>를 누르면 되돌아갑니다. 커리큘럼 페이지에서는 머리글의 세로선이 표의 세로선과 맞게 되었고, 오른쪽 줄 도구의 경계가 또렷해졌으며, 좁은 창에서 연도·월 칸이 잘리지 않고, 도구 모음의 안내 글은 자리가 없으면 숨고, 표가 학생 버튼 아래 남은 높이를 채웁니다.</dd>
           <dt>v151 · 2026-11-20</dt><dd><b>커리큘럼: 오래된 것부터.</b> 커리큘럼 페이지는 최신 연도가 맨 위에 오게 되어 있어서, 12월에 시작해 다음 해 12월까지 가는 수업안이 둘로 갈라져 보였습니다. 이제 가장 오래된 주제부터 최신 주제까지 날짜 순서로 나옵니다. 페이지를 열 때 한 번만 연도 순서를 뒤집고, 같은 연도 안의 순서는 정해 두신 그대로입니다. <b>정렬</b>은 보이는 줄을 날짜 순서(오래된 것부터)로 놓고, 새로 넣거나 가져온 주제도 날짜에 맞는 자리에 들어갑니다. 특정 연도로 바로 가려면 위쪽의 연도 칸을 쓰세요.</dd>
@@ -2472,7 +2476,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v153</b> · 자주 묻는 질문 기준일: <b>2026-11-19</b><br/>
+          설명서 기준 버전: <b>v154</b> · 자주 묻는 질문 기준일: <b>2026-11-21</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -4260,7 +4264,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v153";
+const APP_VERSION="v154";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -7826,6 +7830,144 @@ var TESTLETS = [
       { skill: 'inference', q: 'What does the author mean in the first sentence of paragraph 2?', opts: ['Plastic lasts a long time, which is both its strength and its danger.', 'Plastic is cheap, so people buy too much of it.', 'Plastic is light, so the wind carries it into the ocean.', 'Plastic can be shaped easily, so it hurts animals.'], d: 3 },
       { skill: 'critical', q: 'Which new fact would most weaken the author’s argument against a complete ban?', opts: ['A new material is as safe, light, and cheap as plastic but breaks down within a year.', 'Most plastic waste comes from things used only once.', 'Hospitals use more plastic today than they did before.', 'Many people already carry cloth bags when they shop.'], d: 3 },
       { skill: 'apply', q: 'Which use of plastic would the author most likely want to stop?', opts: ['plastic forks used once at a picnic', 'a plastic part inside a hospital machine', 'a plastic tube used during surgery', 'a plastic bike helmet used for years'], d: 2 }
+    ] },
+
+  /* ───────── Sets 3 and 4 (v154) — same blueprint as sets 1 and 2 of each level ───────── */
+  /* ───────── Level A ───────── */
+  { id: 'A3', level: 'A', form: 3, title: 'Letters and Words 3', passage: null,
+    probe: { q: '단어 카드 3개(van, big, hot)를 보여 주고 소리 내어 읽게 합니다.', look: '글자 소리를 하나씩 내고 합쳐서 읽는지 봅니다.' },
+    items: [
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🐷', say: 'pig', opts: ['p', 'b', 'd', 'q'], d: 1 },
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🦁', say: 'lion', opts: ['l', 't', 'r', 'n'], d: 1 },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'bus', pic: true, opts: ['🚌', '🐛', '🐻', '⚽'], d: 2, note: '오답이 모두 b로 시작: bug, bear, ball' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'hen', pic: true, opts: ['🐔', '🎩', '🏠', '🐴'], d: 2, note: '오답이 모두 h로 시작: hat, house, horse' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'fox', pic: true, opts: ['🦊', '🐟', '🐸', '🔥'], d: 2, note: '오답이 모두 f로 시작: fish, frog, fire' },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'a green apple', pic: true, opts: ['🍏', '🍎', '🍐', '🐸'], d: 2 },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'I see three dogs.', pic: true, opts: ['🐶🐶🐶', '🐶🐶', '🐱🐱🐱', '🐶'], d: 3 },
+      { skill: 'sentence', q: 'Look at the picture. Which one is right?', ko: '그림에 맞는 문장을 고르세요.', stim: '🐱', opts: ['It is a cat.', 'It is a hat.', 'It is a cap.', 'It is a can.'], d: 3 }
+    ] },
+  { id: 'A4', level: 'A', form: 4, title: 'Letters and Words 4', passage: null,
+    probe: { q: '단어 카드 3개(jam, wig, nut)를 보여 주고 소리 내어 읽게 합니다.', look: '글자 소리를 하나씩 내고 합쳐서 읽는지 봅니다.' },
+    items: [
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🐯', say: 'tiger', opts: ['t', 'f', 'l', 'd'], d: 1 },
+      { skill: 'phonics', q: 'What is the first letter?', ko: '그림 이름의 첫 글자를 고르세요.', stim: '🐴', say: 'horse', opts: ['h', 'n', 'b', 'r'], d: 1 },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'cat', pic: true, opts: ['🐱', '☕', '🚗', '🐮'], d: 2, note: '오답이 모두 c로 시작: cup, car, cow' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'pen', pic: true, opts: ['🖊️', '🐷', '🍕', '🐧'], d: 2, note: '오답이 모두 p로 시작: pig, pizza, penguin' },
+      { skill: 'decode', q: 'Read the word. Tap the picture.', ko: '단어를 읽고 알맞은 그림을 고르세요.', text: 'box', pic: true, opts: ['📦', '🚌', '🐝', '📚'], d: 2, note: '오답이 모두 b로 시작: bus, bee, book' },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'a red car', pic: true, opts: ['🚗', '🚙', '🚒', '🚲'], d: 2 },
+      { skill: 'sentence', q: 'Read. Tap the picture.', ko: '읽고 알맞은 그림을 고르세요.', text: 'I see two birds.', pic: true, opts: ['🐦🐦', '🐦', '🐟🐟', '🐦🐦🐦'], d: 3 },
+      { skill: 'sentence', q: 'Look at the picture. Which one is right?', ko: '그림에 맞는 문장을 고르세요.', stim: '🐛', opts: ['It is a bug.', 'It is a rug.', 'It is a bag.', 'It is a bus.'], d: 3 }
+    ] },
+
+  /* ───────── Level B ───────── */
+  { id: 'B3', level: 'B', form: 3, title: 'Lily’s Hat',
+    passage: ['Lily has a new hat. It is big and yellow.',
+              'Today, Lily walks to the beach with her dad. The wind is strong. It takes her hat! The hat flies up into a tree. Lily cannot get it. Her dad is tall. He gets the hat for her. Now Lily holds her hat with one hand.'],
+    probe: { q: '“이 이야기에서 무슨 일이 있었는지 말해 줄래? 한국어로 해도 돼.”', look: '바람이 모자를 날림 → 모자가 나무에 걸림 → 아빠가 꺼내 줌. 세 가지 중 두 가지 이상이면 2점.' },
+    items: [
+      { skill: 'literal', q: 'What color is the hat?', ko: '모자는 무슨 색인가요?', opts: ['yellow', 'red', 'blue', 'green'], d: 1 },
+      { skill: 'literal', q: 'Where do Lily and her dad go?', ko: 'Lily와 아빠는 어디에 가나요?', opts: ['to the beach', 'to a school', 'to a farm', 'to a shop'], d: 1 },
+      { skill: 'vocab', q: '“It takes her hat!” What is “It”?', ko: '여기서 “It”은 무엇을 말하나요?', opts: ['the wind', 'the tree', 'the beach', 'her dad'], d: 2 },
+      { skill: 'sequence', q: 'What happens after the wind takes the hat?', ko: '바람이 모자를 가져간 다음에 무슨 일이 일어나나요?', opts: ['The hat flies up into a tree.', 'Lily walks to the beach.', 'Lily gets a new hat.', 'Her dad goes home.'], d: 2 },
+      { skill: 'inference', q: 'Why does Lily hold her hat with one hand at the end?', ko: '마지막에 Lily는 왜 한 손으로 모자를 잡고 있나요?', opts: ['She does not want the wind to take it again.', 'Her hat is too small.', 'Her hand is cold.', 'She wants to give it to her dad.'], d: 3 },
+      { skill: 'evidence', dep: 4, q: 'Which sentence helps you answer Question 5?', ko: '5번 문제의 답을 알려 주는 문장은 무엇인가요?', opts: ['The wind is strong.', 'It is big and yellow.', 'Her dad is tall.', 'Today, Lily walks to the beach with her dad.'], d: 3 }
+    ] },
+  { id: 'B4', level: 'B', form: 4, title: 'Soccer in the Rain',
+    passage: ['Ben wants to play soccer with his friends. He gets his ball and his shoes. But then it starts to rain. He is sad.',
+              'His sister Amy has an idea. They make a small goal with two chairs. They play soccer in the living room with a soft ball. Ben laughs. “This is fun!” he says.'],
+    probe: { q: '“이 이야기에서 무슨 일이 있었는지 말해 줄래? 한국어로 해도 돼.”', look: '비가 와서 밖에서 못 놂 → 슬픔 → Amy와 거실에서 축구를 함. 세 가지 중 두 가지 이상이면 2점.' },
+    items: [
+      { skill: 'literal', q: 'What does Ben want to play?', ko: 'Ben은 무엇을 하고 싶어 하나요?', opts: ['soccer', 'basketball', 'tennis', 'baseball'], d: 1 },
+      { skill: 'literal', q: 'Where do Ben and Amy play?', ko: 'Ben과 Amy는 어디에서 노나요?', opts: ['in the living room', 'at the park', 'at school', 'in the kitchen'], d: 1 },
+      { skill: 'vocab', q: '“They play soccer in the living room with a soft ball.” What does “soft” mean?', ko: '“soft”는 무슨 뜻일까요?', opts: ['not hard', 'very big', 'very old', 'not clean'], d: 2 },
+      { skill: 'sequence', q: 'What happens first in the story?', ko: '이야기에서 가장 먼저 일어나는 일은 무엇인가요?', opts: ['Ben gets his ball and his shoes.', 'It starts to rain.', 'Amy has an idea.', 'Ben laughs.'], d: 2 },
+      { skill: 'inference', q: 'Why is Ben sad?', ko: 'Ben은 왜 슬픈가요?', opts: ['He cannot play outside in the rain.', 'He cannot find his ball.', 'Amy takes his shoes.', 'His friends do not like soccer.'], d: 2 },
+      { skill: 'evidence', dep: 4, q: 'Which sentence helps you answer Question 5?', ko: '5번 문제의 답을 알려 주는 문장은 무엇인가요?', opts: ['But then it starts to rain.', 'He gets his ball and his shoes.', 'Ben laughs.', 'His sister Amy has an idea.'], d: 3 }
+    ] },
+
+  /* ───────── Level C ───────── */
+  { id: 'C3', level: 'C', form: 3, title: 'The Library Book',
+    passage: ['On Friday, Mina could not find her library book. It was due that day. She looked under her bed, in her school bag, and behind the sofa. It was not there.',
+              'Mina was worried. She did not want to tell the librarian, Mr. Park, that she had lost it. Her brother said, “Just tell him the truth. He will understand.”',
+              'At the library, Mina took a deep breath and explained everything. Mr. Park smiled and pointed to a shelf behind his desk. “A boy found it on the playground yesterday,” he said. Mina laughed. She had worried all morning for nothing.'],
+    probe: { q: '“Mina는 왜 걱정했을까? 그리고 결국 어떻게 됐어? 한국어로 설명해도 돼.”', look: '책을 잃어버렸다고 말하기가 겁났다는 점과, 사실대로 말했더니 책이 이미 도서관에 와 있었다는 점을 말하면 2점. 하나만 말하면 1점.' },
+    items: [
+      { skill: 'literal', q: 'What could Mina not find?', opts: ['her library book', 'her school bag', 'her lunch box', 'her brother'], d: 1 },
+      { skill: 'vocab', q: '“It was due that day.” What does “due” mean here?', opts: ['It had to be returned.', 'It was very old.', 'It was her favorite.', 'It was too heavy.'], d: 2 },
+      { skill: 'sequence', q: 'What did Mina do after her brother talked to her?', opts: ['She told Mr. Park what had happened.', 'She looked under her bed.', 'She found the book on the playground.', 'She bought a new book.'], d: 2 },
+      { skill: 'inference', q: 'Why did Mina take a deep breath before she spoke?', opts: ['She was nervous.', 'She had run to the library.', 'She was angry at her brother.', 'She wanted to read aloud.'], d: 2 },
+      { skill: 'evidence', dep: 3, q: 'Which sentence best supports your answer to Question 4?', opts: ['She did not want to tell the librarian, Mr. Park, that she had lost it.', 'It was due that day.', 'Mr. Park smiled and pointed to a shelf behind his desk.', 'On Friday, Mina could not find her library book.'], d: 3 },
+      { skill: 'main', q: 'What is this story mostly about?', opts: ['A girl is afraid to say she lost a book, but all is well when she tells the truth.', 'A girl who does not like reading.', 'A boy who takes books from the library.', 'A librarian who is angry about a lost book.'], d: 3 }
+    ] },
+  { id: 'C4', level: 'C', form: 4, title: 'Two Puddles',
+    passage: ['After the rain stopped on Monday, our class went outside. We found two puddles of about the same size. One puddle was in the sunny part of the playground. The other was in the shade under a big tree. We drew a chalk line around each one.',
+              'After lunch, we checked again. The sunny puddle was much smaller than its chalk line. The shady puddle had hardly changed.',
+              'By the end of the day, the sunny puddle was gone. “The water is not gone,” our teacher said. “The sun’s heat turned it into a gas in the air. Water dries up faster where it is warm.”'],
+    probe: { q: '“두 웅덩이가 왜 다르게 변했는지 설명해 줄래? 한국어로 해도 돼.”', look: '처음 크기는 비슷했고 햇빛(열)이 달랐다는 두 가지를 모두 말하면 2점. 햇빛만 말하면 1점.' },
+    items: [
+      { skill: 'literal', q: 'Where was the second puddle?', opts: ['under a big tree', 'in the sunny part', 'next to the classroom door', 'on the street'], d: 1 },
+      { skill: 'vocab', q: '“The shady puddle had hardly changed.” What does “hardly” mean here?', opts: ['almost not at all', 'very quickly', 'in a difficult way', 'completely'], d: 3 },
+      { skill: 'literal', q: 'What was the same about the two puddles at the start?', opts: ['They were about the same size.', 'They were both in the sun.', 'They were both under a tree.', 'They were both very deep.'], d: 2 },
+      { skill: 'inference', q: 'Why did the class draw a chalk line around each puddle?', opts: ['to see later how much each puddle had changed', 'to keep children from stepping in the water', 'to make the playground look nice', 'to show where the rain had stopped'], d: 2 },
+      { skill: 'evidence', dep: 3, q: 'Which sentence best supports your answer to Question 4?', opts: ['The sunny puddle was much smaller than its chalk line.', 'We found two puddles of about the same size.', 'After the rain stopped on Monday, our class went outside.', 'The other was in the shade under a big tree.'], d: 3 },
+      { skill: 'main', q: 'What did the class learn from the puddles?', opts: ['Water dries up faster where it is warm.', 'Puddles are bigger under trees.', 'Rain always stops on Mondays.', 'Chalk makes water disappear.'], d: 2 }
+    ] },
+
+  /* ───────── Level D ───────── */
+  { id: 'D3', level: 'D', form: 3, title: 'Why Do Leaves Change Color?',
+    passage: ['Every autumn, the leaves of many trees turn from green to yellow, orange, and red. Many people think that cold weather paints the leaves with new colors. In fact, the yellow and orange colors are inside the leaves all year, but we cannot see them.',
+              'During spring and summer, leaves are full of a green substance called chlorophyll. Chlorophyll uses sunlight to make food for the tree, and there is so much of it that it hides every other color. When the days grow shorter in autumn, the tree receives less sunlight. It stops making chlorophyll. The green fades, and the hidden colors finally appear.',
+              'Weather still matters, though. Sunny days and cool nights produce the brightest reds, while a cloudy, rainy autumn gives duller colors. Soon afterward, the tree drops its leaves. Without them, it loses less water during the winter.'],
+    probe: { q: '“나뭇잎 색이 바뀌는 진짜 이유가 뭐라고 했지? 추위가 색을 칠하는 게 아니라는 건 어떻게 알 수 있어? 한국어로 설명해도 돼.”', look: '초록(엽록소)이 사라지면서 숨어 있던 색이 드러난다는 점과, 노랑·주황은 일 년 내내 잎 안에 있다는(또는 햇빛이 줄어 엽록소를 만들지 않는다는) 근거를 말하면 2점. 하나만 말하면 1점.' },
+    items: [
+      { skill: 'main', q: 'What is the main idea of the passage?', opts: ['Leaves change color mainly because the green fades and shows colors that were hidden.', 'Cold weather adds new colors to leaves.', 'Trees drop their leaves to save water.', 'Rainy autumns make the brightest leaves.'], d: 2 },
+      { skill: 'literal', q: 'According to the passage, what do many people think?', opts: ['Cold weather paints the leaves with new colors.', 'Leaves are yellow in summer.', 'Trees make more food in autumn.', 'Rain washes the green out of leaves.'], d: 1 },
+      { skill: 'vocab', q: '“The green fades, and the hidden colors finally appear.” What does “fades” mean here?', opts: ['slowly disappears', 'suddenly becomes brighter', 'falls to the ground', 'turns into food'], d: 2 },
+      { skill: 'apply', q: 'In one place, the days are long and sunny in every month of the year. Based on the passage, what would the leaves there most likely do in autumn?', opts: ['stay green, because the trees keep making chlorophyll', 'turn yellow, because it is autumn', 'turn red, because the nights are cool', 'fall off, because the trees need rest'], d: 3 },
+      { skill: 'evidence', dep: 3, q: 'Which sentence best supports your answer to Question 4?', opts: ['When the days grow shorter in autumn, the tree receives less sunlight.', 'Weather still matters, though.', 'Soon afterward, the tree drops its leaves.', 'Every autumn, the leaves of many trees turn from green to yellow, orange, and red.'], d: 3 },
+      { skill: 'inference', q: 'Why does the author write “Weather still matters, though” in the last paragraph?', opts: ['to show that weather affects how bright the colors are, but does not create them', 'to show that the first paragraph was wrong', 'to explain why trees need chlorophyll', 'to say that leaves change color only in cold places'], d: 3 }
+    ] },
+  { id: 'D4', level: 'D', form: 4, title: 'The New Goalkeeper',
+    passage: ['When Coach Lee announced that Noah would be the goalkeeper for Saturday’s game, Noah’s stomach dropped. He was the fastest runner on the team and had always played forward. Standing in the goal felt like a punishment.',
+              'At practice, he hardly moved. Balls rolled past him while he watched the forwards at the other end. His friend Jisoo finally jogged over. “You think the coach put you here because you’re not good enough,” she said. “Ask her.”',
+              'After practice, Noah did. Coach Lee looked surprised. “Our last goalkeeper was slow, and the other team scores on fast breaks,” she explained. “I need someone quick enough to reach the ball first. That’s you.”',
+              'On Saturday, Noah ran out of the goal three times and kicked the ball away before the other team could shoot. He still missed scoring goals, but he no longer thought of the goal as a punishment.'],
+    probe: { q: '“Noah는 처음에 왜 골키퍼가 싫었을까? 그리고 나중에 생각이 어떻게 바뀌었어? 한국어로 설명해도 돼.”', look: '실력이 부족해서(벌처럼) 맡긴 줄 알았다는 점과, 코치에게 물어보니 빨라서 뽑힌 것임을 알고 생각이 바뀌었다는 점을 말하면 2점. 하나만 말하면 1점.' },
+    items: [
+      { skill: 'literal', q: 'What position had Noah always played?', opts: ['forward', 'goalkeeper', 'defender', 'midfielder'], d: 1 },
+      { skill: 'vocab', q: '“Noah’s stomach dropped.” What does this expression mean here?', opts: ['He suddenly felt worried and unhappy.', 'He suddenly felt very hungry.', 'He fell down on the field.', 'He felt sick from running.'], d: 3 },
+      { skill: 'inference', q: 'Why did Noah hardly move at practice?', opts: ['He believed he had been put in the goal because he was not good enough.', 'He was tired from running too much.', 'He did not understand the rules.', 'He wanted Jisoo to play in the goal.'], d: 2 },
+      { skill: 'evidence', dep: 2, q: 'Which sentence best supports your answer to Question 3?', opts: ['Standing in the goal felt like a punishment.', 'He was the fastest runner on the team and had always played forward.', 'Coach Lee looked surprised.', 'His friend Jisoo finally jogged over.'], d: 3 },
+      { skill: 'inference', q: 'What did Noah learn from Coach Lee’s answer?', opts: ['He had been chosen because of a strength, not a weakness.', 'The coach wanted to punish him.', 'Jisoo was a better forward than he was.', 'The other team was not very good.'], d: 3 },
+      { skill: 'main', q: 'What lesson does Noah take from this experience?', opts: ['It is better to ask than to assume the worst about someone’s decision.', 'Fast players should always be goalkeepers.', 'Winning is the only thing that matters.', 'Friends should not give advice.'], d: 2 }
+    ] },
+
+  /* ───────── Level E ───────── */
+  { id: 'E3', level: 'E', form: 3, title: 'A Trophy for Everyone?',
+    passage: ['In many children’s sports leagues, every player now receives a trophy at the end of the season, whether the team won or lost. Supporters say this protects young children from feeling like failures. A six-year-old who goes home with nothing, they argue, may decide that sports are not for her and never return.',
+              'Critics are not convinced. If everyone gets the same reward, they say, the reward means nothing. Children are not fooled; they know who scored the goals. Worse, they may learn that effort does not matter, because the result is the same either way.',
+              'Both sides, however, assume that a trophy must be either for winning or for simply showing up. There is a third possibility. A coach can praise something specific that each child actually did. One player improved the most; another never missed a practice; a third encouraged a nervous teammate. Such awards are not given for nothing, yet they do not depend on being the most talented. The useful question is not whether every child should get a prize, but what we want a prize to say.'],
+    probe: { q: '“글쓴이는 모두에게 트로피를 주자는 쪽이야, 이긴 팀만 주자는 쪽이야? 왜 그렇게 생각해? 한국어로 설명해도 돼.”', look: '어느 쪽도 아니고 아이마다 실제로 한 일을 구체적으로 인정하는 상을 주자는 입장을 말하고, 3문단의 예(가장 많이 발전한 선수 등)를 근거로 들면 2점. 입장만 말하면 1점.' },
+    items: [
+      { skill: 'main', q: 'Which statement best expresses the author’s own position?', opts: ['An award should name something real that the child has done.', 'Every child should receive the same trophy.', 'Only the winning team should receive trophies.', 'Children’s sports should not give any awards.'], d: 2 },
+      { skill: 'evidence', dep: 0, q: 'Which sentence best shows the position you chose in Question 1?', opts: ['A coach can praise something specific that each child actually did.', 'Critics are not convinced.', 'Supporters say this protects young children from feeling like failures.', 'If everyone gets the same reward, they say, the reward means nothing.'], d: 2 },
+      { skill: 'vocab', q: '“Critics are not convinced.” What does “convinced” mean here?', opts: ['sure that it is true', 'allowed to speak', 'interested in sports', 'worried about children'], d: 2 },
+      { skill: 'inference', q: 'In paragraph 2, why do the critics say “Children are not fooled; they know who scored the goals”?', opts: ['to argue that children can tell a trophy given to everyone was not earned', 'to show that children dislike playing sports', 'to explain why coaches should keep score', 'to suggest that children forget results quickly'], d: 2 },
+      { skill: 'critical', q: 'Which finding would most weaken the supporters’ argument in paragraph 1?', opts: ['Young children who receive no trophy are just as likely to sign up again the next season.', 'Trophies cost leagues a lot of money.', 'Some parents keep their children’s trophies for years.', 'Older players prefer medals to trophies.'], d: 3 },
+      { skill: 'apply', q: 'Which award would the author most likely approve of?', opts: ['a certificate for the player whose passing improved the most', 'a gold trophy for the top scorer only', 'the same medal for every child in the league', 'no awards at all for any player'], d: 3 }
+    ] },
+  { id: 'E4', level: 'E', form: 4, title: 'Lost Without the Map',
+    passage: ['Twenty years ago, travelers unfolded paper maps, asked strangers for directions, and still got lost. Today a phone tells us exactly where to turn. Navigation apps save time, reduce stress, and help ambulances and delivery drivers reach the right door.',
+              'Yet the convenience has a cost. Researchers have found that people who always follow turn-by-turn directions remember far less about the places they pass through. Because the app does the thinking, the brain never builds its own picture of the area. Some drivers have even followed their screens onto closed roads, trusting the device over their own eyes.',
+              'This does not mean we should throw our phones away, as a few critics suggest. Nobody benefits when an ambulance arrives late. A wiser habit is to choose when to rely on the app. On an urgent trip, follow it. On a relaxed walk through your own neighborhood, look at the whole map first, then put the phone in your pocket and find the way yourself. The goal is not to reject the tool but to keep the skill it replaces.'],
+    probe: { q: '“글쓴이는 내비게이션 앱을 쓰지 말자는 의견에 찬성해? 왜 그렇게 생각해? 한국어로 설명해도 돼.”', look: '완전히 버리는 데는 반대하고, 급할 때는 쓰되 여유 있을 때는 스스로 길을 찾자는 입장을 말하고, 구급차·동네 산책의 예를 근거로 들면 2점. 입장만 말하면 1점.' },
+    items: [
+      { skill: 'main', q: 'Which statement best expresses the author’s position?', opts: ['We should use navigation apps when we need them but still practice finding our own way.', 'People should stop using navigation apps.', 'Navigation apps have no real disadvantages.', 'Paper maps are better than phones.'], d: 2 },
+      { skill: 'evidence', dep: 0, q: 'Which sentence best shows the position you chose in Question 1?', opts: ['The goal is not to reject the tool but to keep the skill it replaces.', 'Today a phone tells us exactly where to turn.', 'Yet the convenience has a cost.', 'Nobody benefits when an ambulance arrives late.'], d: 2 },
+      { skill: 'vocab', q: '“On an urgent trip, follow it.” What does “urgent” mean here?', opts: ['needing to be done quickly', 'long and tiring', 'planned far in advance', 'taken for fun'], d: 2 },
+      { skill: 'inference', q: 'What does the author mean by “Because the app does the thinking, the brain never builds its own picture of the area”?', opts: ['People who only follow directions do not learn how places connect.', 'Apps show pictures that are hard to understand.', 'The brain works faster when a phone is nearby.', 'Drivers look at their phones instead of taking photos.'], d: 3 },
+      { skill: 'critical', q: 'Which new fact would most weaken the author’s argument in paragraph 2?', opts: ['People who follow turn-by-turn directions remember routes as well as people who read maps.', 'Most drivers use navigation apps every day.', 'New phones have larger screens than old ones.', 'Paper maps are no longer sold in many shops.'], d: 3 },
+      { skill: 'apply', q: 'Which situation would the author most likely call a good time to put the phone away?', opts: ['walking to a friend’s house in your own neighborhood', 'driving a sick person to the hospital', 'delivering a package to an unfamiliar address on time', 'finding a train station five minutes before departure'], d: 2 }
     ] }
 ];
 
