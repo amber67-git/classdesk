@@ -626,6 +626,16 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-dots i.lt-done{background:var(--lt-brand)}
 #lt-screen .lt-dots i.lt-now{background:var(--lt-amber)}
 #lt-screen .lt-lock{border:0;background:none;color:var(--lt-lock);width:44px;height:44px;display:grid;place-items:center;border-radius:8px}
+/* v155: Korean help on or off, from the test itself — a small switch left of the lock */
+#lt-screen .lt-ko{flex:none;border:0;background:none;height:44px;padding:0 4px;display:flex;align-items:center;gap:6px;font:700 13px var(--font);color:var(--lt-muted);border-radius:8px}
+#lt-screen .lt-ko i{position:relative;width:34px;height:20px;border-radius:10px;background:var(--lt-lock);transition:background .15s}
+#lt-screen .lt-ko i::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--lt-surface);transition:transform .15s}
+#lt-screen .lt-ko.on{color:var(--lt-brand)}
+#lt-screen .lt-ko.on i{background:var(--lt-brand)}
+#lt-screen .lt-ko.on i::after{transform:translateX(14px)}
+#lt-screen .lt-tbar .lt-ko+.lt-lock{margin-left:-8px}
+#lt-screen .lt-qko[hidden]{display:none}
+@media(prefers-reduced-motion:reduce){#lt-screen .lt-ko i,#lt-screen .lt-ko i::after{transition:none}}
 #lt-screen [data-hold]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 #lt-screen .lt-passage{font-family:var(--lt-read);font-size:18px;line-height:1.75}
 #lt-screen .lt-passage h2{font:700 19px/1.3 var(--lt-read);margin-bottom:8px}
@@ -2182,6 +2192,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
+          <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. It shows the question in Korean under the English one; the passage and the choices stay in English. If nobody presses it, the Korean line shows only at levels A and B (when the start window has it on). A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
           <dt>I don't teach reading — can I hide Reading and Books?</dt><dd>Settings → Templates → <b>Features</b> → <b>Any subject</b>. The Reading and Books pages leave the menu, the lesson card loses its "Books read" section, and the Curriculum columns become Unit, Materials and Homework (Books and Grammar hidden). You can also switch each page and lesson section on its own. Nothing is deleted: switch it back on and everything is still there.</dd>
@@ -2208,6 +2219,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v155 · 2026-11-22</dt><dd><b>Level test: a Korean switch on the test screen.</b> At the top right of the student's screen, left of the lock, there is now a small <b>한글</b> switch. It shows or hides the Korean line under the question, and it can be pressed at any time during the test — by you or by the student. It works at <b>every level</b>: the questions of levels C, D and E now have a Korean line too (the question only — the passage and the choices stay in English, and a word that is being asked about is left in English). Unless someone presses it, everything is as before: the line shows at levels A and B when the start window says so, and not above. Once pressed, the choice holds for the rest of that test at every level, and the result window notes that the Korean help was switched on or off during the test. Pressing it does not redraw the question, so the answer time and the place in the passage are kept.</dd>
           <dt>v154 · 2026-11-21</dt><dd><b>Level test: four sets per level.</b> Every level (A–E) now has <b>four sets</b> instead of two — ten new sets, 64 new questions. Sets 3 and 4 are built like sets 1 and 2 of their level: the same number of questions, the same skills in the same order, passages of the same length. So a student tested every quarter can meet a new passage each time. Nothing changes in how you use it: the test still starts with the set the student met longest ago (or never), a borderline score still brings a second set of the same level, and on paper you tick the new sets under <b>Print sheets</b> and choose them when you enter the answers. The first two sets and every earlier result are untouched. New sets:<br/>A — Letters and Words 3 · 4<br/>B — Lily’s Hat · Soccer in the Rain<br/>C — The Library Book · Two Puddles<br/>D — Why Do Leaves Change Color? · The New Goalkeeper<br/>E — A Trophy for Everyone? · Lost Without the Map</dd>
           <dt>v153 · 2026-11-21</dt><dd><b>Simpler Level test, report and Curriculum.</b> The newer screens were busier than the rest of the app; they now say less. <b>Level test page:</b> the paragraph at the top is gone, the level counts list only levels that have students, and a row shows a button only when something waits for you — <b>Confirm result</b> after a test (results of confirmed tests are under <b>Details</b>). In Details the skills are one row of buttons: press Speaking, Writing, Phonics or Vocabulary to rate it. <b>Result window:</b> your decision comes right under the result; how the test went follows. <b>Start and rating windows:</b> shorter notes. <b>Parent report:</b> level, skills, strengths and next steps, goals, the three-month plan, the change since last time and your note — the list of test parts and the activity list are left out. <b>Curriculum:</b> the tip in the toolbar is gone.</dd>
           <dt>v152 · 2026-11-20</dt><dd><b>Menu order, and a tidier Curriculum table.</b> <b>Settings → Templates → Features → Menu order</b>: move the pages of the menu up and down with the arrows; the order follows you to your other devices, and <b>Back to the usual order</b> undoes it. On the Curriculum page the lines of the heading now meet the lines of the table, the row tools on the right have a clean edge, the year and month boxes are no longer cut off in a narrow window, the tip in the toolbar goes away when there is no room for it, and the table fills the height that is left under the student buttons.</dd>
@@ -2259,7 +2271,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v154</b> · FAQ current as of: <b>2026-11-21</b><br/>
+          Guide written against version: <b>v155</b> · FAQ current as of: <b>2026-11-22</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2400,6 +2412,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
+          <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 영어 문제 아래에 문제를 한국어로 보여 주며, 지문과 보기는 영어 그대로입니다. 아무도 누르지 않으면 한국어 도움말은 A·B 레벨에서만 보입니다(시작 창에서 켜 두었을 때). 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
           <dt>리딩 수업이 아닌데 독서와 도서를 숨길 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>모든 과목</b>. 독서와 도서 화면이 메뉴에서 빠지고, 수업 카드에서 "읽은 책" 항목이 사라지며, 커리큘럼 열은 단원·자료·숙제가 됩니다(도서·문법 열은 숨김). 화면과 수업 항목을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없으니 다시 켜면 그대로 있습니다.</dd>
@@ -2426,6 +2439,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v155 · 2026-11-22</dt><dd><b>레벨테스트: 테스트 화면의 한글 스위치.</b> 학생 화면 오른쪽 위, 자물쇠 왼쪽에 작은 <b>한글</b> 스위치가 생겼습니다. 문제 아래의 한국어 도움말을 보이거나 숨기며, 테스트 중 언제든 선생님이나 학생이 누를 수 있습니다. <b>모든 레벨</b>에서 됩니다: C·D·E 레벨 문제에도 한국어 도움말이 생겼습니다(문제만 한국어로 보여 주고 지문과 보기는 영어 그대로이며, 뜻을 묻는 단어는 영어로 둡니다). 아무도 누르지 않으면 전과 같습니다: 시작 창에서 켜 두었을 때 A·B 레벨에서만 보이고 그 위 레벨에서는 보이지 않습니다. 한 번 누르면 그 테스트가 끝날 때까지 모든 레벨에 그대로 적용되고, 결과 창에 테스트 중 한국어 도움말을 켰는지 껐는지가 적힙니다. 눌러도 문제를 다시 그리지 않으므로 답한 시간과 지문에서 읽던 자리가 그대로 남습니다.</dd>
           <dt>v154 · 2026-11-21</dt><dd><b>레벨테스트: 레벨마다 세트 4개.</b> 모든 레벨(A–E)의 세트가 두 개에서 <b>네 개</b>로 늘었습니다 — 새 세트 10개, 새 문항 64개. 3·4번 세트는 같은 레벨의 1·2번 세트와 똑같이 만들었습니다: 문항 수, 스킬의 종류와 순서, 지문 길이가 같습니다. 그래서 분기마다 테스트해도 매번 새 지문을 만날 수 있습니다. 쓰는 방법은 그대로입니다: 테스트는 여전히 학생이 가장 오래전에 본(또는 본 적 없는) 세트로 시작하고, 점수가 애매하면 같은 레벨의 다른 세트가 한 번 더 나오며, 종이 시험은 <b>시험지 인쇄</b>에서 새 세트를 체크하고 답을 입력할 때 고르면 됩니다. 1·2번 세트와 지금까지의 결과는 바뀌지 않았습니다. 새 세트:<br/>A — Letters and Words 3 · 4<br/>B — Lily’s Hat · Soccer in the Rain<br/>C — The Library Book · Two Puddles<br/>D — Why Do Leaves Change Color? · The New Goalkeeper<br/>E — A Trophy for Everyone? · Lost Without the Map</dd>
           <dt>v153 · 2026-11-21</dt><dd><b>더 단순해진 레벨테스트·리포트·커리큘럼.</b> 새로 생긴 화면들이 앱의 다른 화면보다 복잡해서 덜어 냈습니다. <b>레벨테스트 페이지:</b> 위쪽 설명 문단을 없앴고, 레벨별 인원은 학생이 있는 레벨만 보이며, 학생 줄에는 할 일이 있을 때만 버튼이 나옵니다(테스트 뒤의 <b>결과 확정</b>). 확정한 테스트의 결과는 <b>자세히</b> 안에 있습니다. 자세히에서는 영역이 버튼 한 줄로 나오고, Speaking·Writing·Phonics·Vocabulary를 누르면 평가합니다. <b>결과 창:</b> 결과 바로 아래에서 레벨을 확정하고, 테스트 진행 내용은 그 아래에 있습니다. <b>시작 창과 평가 창:</b> 안내 글을 줄였습니다. <b>학부모 리포트:</b> 레벨, 영역별 수준, 강점과 보완할 점, 학습 목표, 3개월 계획, 지난번과의 변화, 선생님 의견만 남기고 문항 진행 목록과 활동 목록은 뺐습니다. <b>커리큘럼:</b> 도구 모음의 안내 글을 없앴습니다.</dd>
           <dt>v152 · 2026-11-20</dt><dd><b>메뉴 순서, 그리고 더 깔끔한 커리큘럼 표.</b> <b>설정 → 템플릿 → 기능 → 메뉴 순서</b>에서 화살표로 메뉴의 페이지를 위아래로 옮길 수 있습니다. 순서는 다른 기기에도 그대로 적용되고, <b>원래 순서로</b>를 누르면 되돌아갑니다. 커리큘럼 페이지에서는 머리글의 세로선이 표의 세로선과 맞게 되었고, 오른쪽 줄 도구의 경계가 또렷해졌으며, 좁은 창에서 연도·월 칸이 잘리지 않고, 도구 모음의 안내 글은 자리가 없으면 숨고, 표가 학생 버튼 아래 남은 높이를 채웁니다.</dd>
@@ -2476,7 +2490,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v154</b> · 자주 묻는 질문 기준일: <b>2026-11-21</b><br/>
+          설명서 기준 버전: <b>v155</b> · 자주 묻는 질문 기준일: <b>2026-11-22</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3654,6 +3668,9 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v155: Korean help switch on the test screen
+  "Korean help was switched on during the test — it may have shown at levels C–E too.":"테스트 중에 한국어 도움말을 켰습니다 — C–E 레벨 문제에도 보였을 수 있습니다.",
+  "Korean help was switched off during the test.":"테스트 중에 한국어 도움말을 껐습니다.",
   // ── v153: simpler level test, report and curriculum
   "Last test {date} · {res}":"마지막 테스트 {date} · {res}",
   "Confirm result":"결과 확정",
@@ -4264,7 +4281,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v154";
+const APP_VERSION="v155";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8600,7 +8617,8 @@ function ltSetProbe(tid,score){
 // ── The student's screen ──────────────────────────────────────────────────
 // Full screen and always light. What the child reads here is the test itself, so its wording is
 // fixed (Korean with English) whatever language the teacher's screens use. Only the teacher's
-// menu behind the lock follows the language setting.
+// menu behind the lock follows the language setting. The 한글 switch in the bar (v155) shows or
+// hides the Korean line under the question; it changes nothing else on the screen.
 const LT={aid:null,screen:"intro",sel:null,itemKey:"",t0:0,readKey:"",r0:0,menu:false};
 const LT_LOCK_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2" fill="currentColor"/></svg>';
 // The rest of the app is made inert for as long as the test is on screen, so Tab cannot walk out
@@ -8634,11 +8652,54 @@ function ltCloseTest(){
   ltLockBackground(false);
   if(curPage==="leveltest")renderLevelTest();
 }
+// v155: the Korean line under a question. Levels A and B carry it in the bank (item.ko); for C–E
+// it lives here, outside the bank, so the bank stays as it is. Only the question is put into
+// Korean — never the passage or the choices — and a word that is being asked about stays English.
+const LT_QKO_EV=n=>n+"번 문제의 답을 가장 잘 뒷받침하는 문장은 무엇인가요?";
+const LT_QKO_POS="1번에서 고른 입장을 가장 잘 보여 주는 문장은 무엇인가요?";
+const LT_QKO={
+  "C1-1":"Jin은 덤불 아래에서 무엇을 보았나요?","C1-2":"여기서 “shaking”은 무슨 뜻일까요?","C1-3":"엄마가 기다리라고 한 다음에 Jin은 무엇을 했나요?",
+  "C1-4":"큰 회색 고양이는 누구였을까요?","C1-5":LT_QKO_EV(4),"C1-6":"이 이야기는 주로 무엇에 대한 내용인가요?",
+  "C2-1":"Leo는 컵을 어디에 두었나요?","C2-2":"여기서 “pale”은 무슨 뜻일까요?","C2-3":"두 식물에게 똑같았던 것은 무엇인가요?",
+  "C2-4":"Leo의 식물은 왜 벽장 문 쪽으로 휘어졌을까요?","C2-5":LT_QKO_EV(4),"C2-6":"반 친구들은 이 활동에서 무엇을 배웠나요?",
+  "C3-1":"Mina는 무엇을 찾지 못했나요?","C3-2":"여기서 “due”는 무슨 뜻일까요?","C3-3":"Mina는 brother의 말을 들은 다음에 무엇을 했나요?",
+  "C3-4":"Mina는 말하기 전에 왜 숨을 크게 쉬었을까요?","C3-5":LT_QKO_EV(4),"C3-6":"이 이야기는 주로 무엇에 대한 내용인가요?",
+  "C4-1":"두 번째 웅덩이는 어디에 있었나요?","C4-2":"여기서 “hardly”는 무슨 뜻일까요?","C4-3":"처음에 두 웅덩이는 무엇이 같았나요?",
+  "C4-4":"반 친구들은 왜 웅덩이마다 둘레에 분필로 선을 그렸을까요?","C4-5":LT_QKO_EV(4),"C4-6":"반 친구들은 웅덩이를 보고 무엇을 배웠나요?",
+  "D1-1":"이 글의 중심 생각은 무엇인가요?","D1-2":"글에 따르면, 사람들은 오랫동안 무엇을 믿었나요?","D1-3":"여기서 “confuse”는 무슨 뜻일까요?",
+  "D1-4":"어떤 공원에는 겨울 내내 씨앗과 곤충이 많지만 날씨는 아주 춥습니다. 글을 바탕으로 볼 때, 그곳의 새들은 어떻게 할 가능성이 가장 높을까요?",
+  "D1-5":LT_QKO_EV(4),"D1-6":"글쓴이는 마지막 문단에서 왜 “Even so”라고 썼을까요?",
+  "D2-1":"Eric은 무엇을 만들었나요?","D2-2":"여기서 “plain”은 무슨 뜻일까요?","D2-3":"심사위원들이 왔을 때 Dana의 목소리는 왜 그렇게 작았을까요?",
+  "D2-4":LT_QKO_EV(3),"D2-5":"Dana는 Eric의 말에서 무엇을 알게 되었나요?","D2-6":"Dana는 과학 박람회에서 어떤 교훈을 얻었나요?",
+  "D3-1":"이 글의 중심 생각은 무엇인가요?","D3-2":"글에 따르면, 많은 사람들은 어떻게 생각하나요?","D3-3":"여기서 “fades”는 무슨 뜻일까요?",
+  "D3-4":"어떤 곳은 일 년 내내 낮이 길고 햇빛이 잘 듭니다. 글을 바탕으로 볼 때, 그곳의 나뭇잎은 가을에 어떻게 될 가능성이 가장 높을까요?",
+  "D3-5":LT_QKO_EV(4),"D3-6":"글쓴이는 마지막 문단에서 왜 “Weather still matters, though”라고 썼을까요?",
+  "D4-1":"Noah는 늘 어떤 포지션에서 뛰었나요?","D4-2":"여기서 이 표현은 무슨 뜻일까요?","D4-3":"Noah는 연습 때 왜 거의 움직이지 않았을까요?",
+  "D4-4":LT_QKO_EV(3),"D4-5":"Noah는 Lee 코치의 대답에서 무엇을 알게 되었나요?","D4-6":"Noah는 이 일에서 어떤 교훈을 얻었나요?",
+  "E1-1":"글쓴이 자신의 입장을 가장 잘 나타낸 것은 무엇인가요?","E1-2":LT_QKO_POS,"E1-3":"여기서 “in the long run”은 무슨 뜻일까요?",
+  "E1-4":"글쓴이는 왜 “copying the same word twenty times”를 언급했을까요?","E1-5":"다음 중 어떤 연구 결과가 2문단의 주장을 가장 약하게 만들까요?","E1-6":"글쓴이가 가장 좋다고 할 만한 숙제는 무엇인가요?",
+  "E2-1":"글쓴이의 입장을 가장 잘 나타낸 것은 무엇인가요?","E2-2":LT_QKO_POS,"E2-3":"여기서 “ignores”는 무슨 뜻일까요?",
+  "E2-4":"2문단의 첫 문장에서 글쓴이가 말하려는 것은 무엇인가요?","E2-5":"다음 중 어떤 새로운 사실이 완전 금지에 반대하는 글쓴이의 주장을 가장 약하게 만들까요?","E2-6":"글쓴이가 가장 그만두게 하고 싶어 할 플라스틱 사용은 무엇인가요?",
+  "E3-1":"글쓴이 자신의 입장을 가장 잘 나타낸 것은 무엇인가요?","E3-2":LT_QKO_POS,"E3-3":"여기서 “convinced”는 무슨 뜻일까요?",
+  "E3-4":"2문단에서 비판하는 사람들은 왜 “Children are not fooled; they know who scored the goals”라고 말할까요?",
+  "E3-5":"다음 중 어떤 연구 결과가 1문단에 나온 찬성하는 사람들의 주장을 가장 약하게 만들까요?","E3-6":"글쓴이가 가장 좋다고 할 만한 상은 무엇인가요?",
+  "E4-1":"글쓴이의 입장을 가장 잘 나타낸 것은 무엇인가요?","E4-2":LT_QKO_POS,"E4-3":"여기서 “urgent”는 무슨 뜻일까요?",
+  "E4-4":"글쓴이가 “Because the app does the thinking, the brain never builds its own picture of the area”라고 한 것은 무슨 뜻일까요?",
+  "E4-5":"다음 중 어떤 새로운 사실이 2문단에 나온 글쓴이의 주장을 가장 약하게 만들까요?","E4-6":"글쓴이가 휴대폰을 넣어 두기에 좋은 때라고 할 만한 상황은 무엇인가요?"
+};
+const ltQKo=it=>it.ko||LT_QKO[it.id]||"";
+// Is the Korean line showing? Until the switch on the test screen is pressed it is as before:
+// on at levels A and B when the start window says so, off above. Once pressed (a.koSet), that
+// choice holds for the rest of the test, at every level.
+function ltKoOn(a,level){return typeof a.koSet==="boolean"?a.koSet:!!a.koHelp&&(level==="A"||level==="B");}
+function ltKoLevel(a){const p=a.path&&a.path[a.path.length-1];return p?p.level:a.startLevel;}
 function ltPassageHtml(t){return `<article class="lt-passage"><h2>${escapeAttr(t.title)}</h2>${t.passage.map(p=>`<p>${escapeAttr(p)}</p>`).join("")}</article>`;}
 function ltBar(a,t){
   const p=a.path[a.path.length-1];let dots="";
   if(t)for(let i=0;i<t.items.length;i++)dots+=`<i class="${i<p.responses.length?"lt-done":i===p.responses.length&&a.cur&&a.cur.phase==="item"?"lt-now":""}"></i>`;
+  const ko=ltKoOn(a,ltKoLevel(a));
   return `<div class="lt-tbar"><span class="lt-part">Part ${a.path.length}</span><span class="lt-dots">${dots}</span>`+
+    `<button type="button" class="lt-ko${ko?" on":""}" data-act="koToggle" role="switch" aria-checked="${ko}" aria-label="한국어 도움말">한글<i></i></button>`+
     `<button type="button" class="lt-lock" data-hold="menu" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
 }
 function ltTestHtml(a,s){
@@ -8662,7 +8723,7 @@ function ltTestHtml(a,s){
   }
   const it=t.items[a.cur.idx];
   if(LT.itemKey!==it.id){LT.itemKey=it.id;LT.t0=performance.now();LT.sel=null;}
-  const ko=a.koHelp&&it.ko?`<p class="lt-qko">${escapeAttr(it.ko)}</p>`:"";
+  const koText=ltQKo(it),ko=koText?`<p class="lt-qko"${ltKoOn(a,t.level)?"":" hidden"}>${escapeAttr(koText)}</p>`:"";
   // it.order: display position → option index in the bank. Pictures (emoji) and the stimulus are the bank's own markup.
   const opts=it.order.map((o,k)=>`<button type="button" class="lt-opt${LT.sel===k?" lt-sel":""}" data-act="pick" data-pos="${k}">`+
     (it.pic?`<span class="lt-optpic">${it.opts[o]}</span>`:`<span class="lt-ol">${LT_CIRC[k]}</span><span class="lt-ot">${escapeAttr(it.opts[o])}</span>`)+`</button>`).join("");
@@ -8704,6 +8765,13 @@ const LT_ACTS={
     LT.sel=Number(el.dataset.pos);
     document.querySelectorAll("#lt-screen .lt-opt,#lt-screen .lt-idk").forEach(x=>x.classList.toggle("lt-sel",x===el));
     const nb=document.getElementById("lt-next");if(nb)nb.disabled=false;
+  },
+  koToggle(el){
+    const a=ltGet(LT.aid);if(!a||a.status!=="in_progress")return;
+    const on=!ltKoOn(a,ltKoLevel(a));
+    if(!ltCommit(a,()=>{a.koSet=on;})){ltHint(ltSaveFailed());return;}
+    el.classList.toggle("on",on);el.setAttribute("aria-checked",String(on));
+    const q=document.querySelector("#lt-screen .lt-qko");if(q)q.hidden=!on;
   },
   passToggle(el){
     const on=document.querySelector("#lt-screen .lt-tscreen").classList.toggle("lt-full");
@@ -9135,6 +9203,7 @@ function ltRenderReview(){
   if(r.unsupported)flags.push(tx("{n} answer(s) were right although the sentence that supports them was not found — possibly guessed.",{n:r.unsupported}));
   if(r.rapid)flags.push(tx("{n} answer(s) came too fast for the text to have been read.",{n:r.rapid}));
   if(r.idk)flags.push(a.mode==="paper"?tx("{n} question(s) had no answer, or two.",{n:r.idk}):tx("“I’m not sure” was chosen {n} time(s).",{n:r.idk}));
+  if(typeof a.koSet==="boolean")flags.push(a.koSet?tx("Korean help was switched on during the test — it may have shown at levels C–E too."):tx("Korean help was switched off during the test."));
   if(T.probe&&T.probe.score===0)flags.push(tx("The oral check did not show understanding. Think about confirming one level lower."));
   if(flags.length)h+=`<ul class="ltr-flags">${flags.map(f=>`<li>${e(f)}</li>`).join("")}</ul>`;
 
