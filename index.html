@@ -531,6 +531,17 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .ltq-sec-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
 .ltq-sec-row .seg-btn{min-width:36px;justify-content:center}
 .ltq-or{margin:0 0 6px}
+/* v160: book checks in a student's Details — one line of bands, then the checks */
+.lt-bk-sum{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;font-size:var(--fs-sm);margin:2px 0 4px}
+.lt-bk-sum>span{min-width:0;overflow-wrap:anywhere}
+.lt-bk-band{display:inline-flex;align-items:center;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.lt-bk-band.easy{background:var(--grn-l);color:var(--grn-t)}
+.lt-bk-band.learn{background:var(--amb-l);color:var(--amb-t)}
+.lt-bk-band.hard{background:var(--red-l);color:var(--red-t)}
+.lt-bk-add{padding:4px 0 2px;display:flex;flex-wrap:wrap;gap:8px}
+.ltb-res{font-size:var(--fs-sm);color:var(--txt2);margin:0 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;min-height:24px}
+.ltb-res b{color:var(--txt);font-size:var(--fs-base)}
+#mo-lt-book .u-hint{margin:0 0 12px}
 #curr-body tr.cs-flash,#curr-body tr.cs-flash>td{background:var(--amb-l)!important}
 .curr-who-info{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;background:var(--surf2);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-sm)}
 .curr-who-info[hidden]{display:none}
@@ -2218,6 +2229,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
           <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only the rows for that level show; press <b>All levels</b> to see everything. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
+          <dt>How do I find out which books a student can read?</dt><dd>Level test → the student's <b>Details</b> → <b>Add a book check</b>. Pick a book, mark about 100 words in the middle, have the student read them aloud and count the words they miss or need help with; then ask what it was about. 5 or fewer missed in 100 is a book to read alone, 6 to 10 a book for lessons, more is too hard for now — and one band down if they could not say what it was about. Try an easier or a harder book until you have one of each: the lists at the top of the block are the range. Use the same pages for every student if you want to compare them, and avoid a book the student already knows.</dd>
           <dt>How do I check Listening and Grammar, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b> or <b>Grammar</b> → <b>Start the questions</b>. For Listening you read the script aloud (print it with <b>Script and answers</b>, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
@@ -2246,6 +2258,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v160 · 2026-11-23</dt><dd><b>Level test: book checks.</b> A student's <b>Details</b> has a new block, <b>Book checks</b>, for finding out which real books a student can read. Press <b>Add a book check</b>, have the student read about 100 words aloud from a book they have not read, and type the title, the words read, the words missed and whether they could say what it was about. ClassDesk works out the share read right and a band: <b>Comfortable alone</b> (95% or more — 5 or fewer missed in 100), <b>Right for lessons</b> (90% or more — 6 to 10 missed) or <b>Too hard for now</b>. A student who could not say what it was about goes one band down. The top of the block lists the books by band, each by its newest check — that is the student's range, in books you own — and the checks are kept with their dates. The title box suggests books from your Books page.</dd>
           <dt>v159 · 2026-11-23</dt><dd><b>Curriculum: the full level test twice a year, a short check in between.</b> In the 2027 plan the full level test is now in <b>June and December</b>; <b>March and September</b> have a short <b>speaking and writing check</b> instead (one minute of speaking, five to ten minutes of writing) — all in the second week. Three topics were renamed for this: March and September are now "Speaking &amp; Writing Check 1 / 2", and December's test is "Level Test 3". If the plan is already in your app, the Curriculum page shows the line <b>The 2027 plan has changed</b> again: <b>Update my plan</b> renames those topics, puts their weeks right and adds nothing; an Activities text you rewrote yourself is kept, and Undo takes it all back. <b>Keep mine</b> leaves your plan as it is.</dd>
           <dt>v158 · 2026-11-23</dt><dd><b>Level test: Listening and Grammar.</b> A student's <b>Details</b> has two more skills to rate, <b>Listening</b> and <b>Grammar</b>, and each comes with its own short questions. Press the skill, choose the level to start at and press <b>Start the questions</b>: they open on the student's screen. <b>Listening</b> has 5 questions a level — you read the script aloud and the student taps the answer (pictures only at level A; from level B the question is on the screen as well; at levels C–E you read a short text first, then the questions). <b>Script and answers</b> prints everything you read, with the answers; with one device, hold the lock on the student's screen and the teacher's menu shows what to read now. <b>Grammar</b> has 8 questions a level: the student picks the words that fit the blank. 4 or more right out of 5 (7 out of 8) goes on to the level above, 2 or fewer (4 or fewer) to the level below. It moves one way only — it stops at A or E, or when a score no longer points that way (a low score after going up gives the level before) — and the result is saved as the rating together with the scores — it shows in Details, in the parent report and in the ratings CSV. <b>Paper sheet</b> prints the questions of one level for a student to circle; mark it with the key and pick the level yourself. Picking a level by hand, without the questions, works as before. <b>Curriculum: level tests in the second week.</b> In the 2027 plan the level tests of March, June, September and December moved from the first week to the second. If the plan is already in your app, the Curriculum page shows one line — <b>The 2027 plan has changed</b> — with <b>Update my plan</b> (moves those rows to the plan's weeks and adds nothing; Undo takes it back) and <b>Keep mine</b>.</dd>
           <dt>v157 · 2026-11-23</dt><dd><b>Curriculum: the 2027 plan in one press, and the page goes to it.</b> While the app has no topic for 2027, the Curriculum page shows one line above the sheet: <b>The 2027 plan is not in the app yet · Load the 2027 plan</b>. Press the button once and the plan (December 2026 – December 2027) is in; the message that follows has <b>Undo</b>. Because the list runs oldest first, 2027 sits at the far end — so after an import (from this button or from the Import window) the page now <b>moves to the first row that came in</b> and marks it for a moment. The line disappears once 2027 is there. To see only that year at any time, choose <b>2027</b> in the year box at the top.</dd>
@@ -2302,7 +2315,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v159</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v160</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2326,7 +2339,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>독서</dt><dd>수업 기록에서 모은 학생별 읽은 책 — AR 추이와 인쇄용 학부모 보고서.</dd>
           <dt>수업료</dt><dd>수업료 관리 — 수납 달력과 학생별 월 요약, 수업료 안내 메시지, 수업료가 아닌 기타 수입, 미납 알림.</dd>
           <dt>보고서</dt><dd>학생별 월간 수치: 진행한 수업, 시간, 수업료, 시간표 대비 취소 횟수, 그리고 학습 보고서와 숙제 확인.</dd>
-          <dt>레벨테스트</dt><dd>학생이 이 화면에서 푸는 읽기 레벨테스트: 학생 줄에서 시작하고, 결과(레벨 A–E, 단계, 스킬)를 본 뒤 수업 레벨을 확정합니다. <b>상세</b>에서는 나머지 영역 — 말하기, 쓰기, 듣기, 문법, 파닉스, 어휘 — 을 평가합니다. 듣기와 문법은 짧은 문항이 따로 있습니다.</dd>
+          <dt>레벨테스트</dt><dd>학생이 이 화면에서 푸는 읽기 레벨테스트: 학생 줄에서 시작하고, 결과(레벨 A–E, 단계, 스킬)를 본 뒤 수업 레벨을 확정합니다. <b>자세히</b>에서는 나머지 영역 — 말하기, 쓰기, 듣기, 문법, 파닉스, 어휘 — 을 평가합니다. 듣기와 문법은 짧은 문항이 따로 있습니다.</dd>
           <dt>커리큘럼</dt><dd>연도·월·주별 수업 계획: 주제, 카테고리, 워크북, 글쓰기 과제, 책, 활동, 문법, 메모, 그리고 여러 레벨을 가르칠 때 쓰는 레벨과 말하기. 연도와 월로 거르거나 검색할 수 있습니다. 표 위의 버튼(<b>모든 레벨</b>, <b>A–E</b>, 학생 이름)을 누르면 한 레벨이나 한 학생이 하는 내용(그 학생의 레벨과, 학생에게 체크된 수업 부분의 열)만 볼 수 있고, 고른 버튼을 다시 누르면 전체로 돌아갑니다. 주제는 날짜 순서로, 오래된 것부터 나옵니다. <b>월간 안내</b>는 한 학생의 한 달 계획을 학부모께 보낼 메시지로 만들어 줍니다. <b>가져오기</b>로 스프레드시트의 계획 전체를 한 번에 불러옵니다(자주 묻는 질문 참고). 태블릿이나 컴퓨터에서는 표가 Google 스프레드시트처럼 동작합니다. 셀을 누르고 입력하면 바로 저장됩니다(자주 묻는 질문 "커리큘럼을 스프레드시트처럼 고치기" 참고). 휴대폰에서는 ✎를 눌러 고칩니다.</dd>
           <dt>교재</dt><dd>교재 관리 — 표지, 진도, 학생별 배정.</dd>
           <dt>도서</dt><dd>영어 도서 목록 — 아래 "도서 자세히 보기" 참고. 이 앱의 핵심 화면입니다.</dd>
@@ -2444,7 +2457,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
           <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨 줄만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
-          <dt>듣기와 문법은 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>상세</b> → <b>듣기</b> 또는 <b>문법</b> → <b>문항 시작</b>. 듣기는 선생님이 대본을 읽어 주고(<b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요.</dd>
+          <dt>학생이 어떤 책까지 읽을 수 있는지 어떻게 알아보나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>책 읽기 확인 추가</b>. 책을 고르고 중간쯤에서 100단어 정도를 표시해 둔 뒤, 소리 내어 읽게 하면서 틀리거나 도와준 단어를 세세요. 다 읽으면 무슨 내용이었는지 물어봅니다. 100단어 중 5개 이하로 틀리면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책이고, 내용을 말하지 못했으면 한 단계 낮춥니다. 더 쉬운 책이나 더 어려운 책으로 바꿔 가며 각각 하나씩 나오면, 맨 위의 목록이 그 학생의 범위입니다. 학생끼리 비교하려면 같은 쪽을 읽히고, 이미 아는 책은 피하세요.</dd>
+          <dt>듣기와 문법은 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b> 또는 <b>문법</b> → <b>문항 시작</b>. 듣기는 선생님이 대본을 읽어 주고(<b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
@@ -2472,8 +2486,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v160 · 2026-11-23</dt><dd><b>레벨테스트: 책 읽기 확인.</b> 학생의 <b>자세히</b>에 <b>책 읽기 확인</b>이 생겼습니다. 학생이 실제로 어떤 책까지 읽을 수 있는지 알아보는 기록입니다. <b>책 읽기 확인 추가</b>를 누르고, 학생이 읽어 보지 않은 책에서 100단어쯤을 소리 내어 읽게 한 뒤 책 제목, 읽은 단어 수, 틀린 단어 수, 내용을 말했는지를 적으세요. ClassDesk가 정확도와 구분을 계산합니다: <b>혼자 읽기 편함</b>(95% 이상 — 100단어 중 5개 이하 틀림), <b>수업용으로 알맞음</b>(90% 이상 — 6~10개 틀림), <b>아직 어려움</b>. 내용을 말하지 못했으면 한 단계 낮춥니다. 맨 위에는 책이 구분별로 정리되어 나오며(책마다 가장 최근 확인 기준), 이것이 가지고 계신 책으로 본 그 학생의 범위입니다. 확인 기록은 날짜와 함께 남습니다. 책 제목 칸에는 도서 화면의 책이 추천으로 뜹니다.</dd>
           <dt>v159 · 2026-11-23</dt><dd><b>커리큘럼: 전체 레벨테스트는 일 년에 두 번, 그 사이에는 짧은 확인.</b> 2027 계획에서 전체 레벨테스트는 <b>6월과 12월</b>에 보고, <b>3월과 9월</b>에는 <b>말하기·쓰기만 짧게 확인</b>합니다(말하기 1분, 쓰기 5~10분) — 모두 둘째 주입니다. 이를 위해 주제 세 개의 이름이 바뀌었습니다: 3월과 9월은 "말하기·쓰기 확인 ①·②", 12월 테스트는 "레벨테스트 ③"입니다. 계획을 이미 가져오셨다면 커리큘럼 페이지에 <b>2027 계획이 바뀌었습니다</b> 줄이 다시 나옵니다. <b>내 계획에 반영</b>을 누르면 그 주제들의 이름과 주를 맞추고 새로 추가하지는 않습니다. 직접 고쳐 쓴 활동 내용은 그대로 두며, 되돌리기로 모두 취소할 수 있습니다. <b>그대로 두기</b>는 계획을 그대로 둡니다.</dd>
-          <dt>v158 · 2026-11-23</dt><dd><b>레벨테스트: 듣기와 문법.</b> 학생의 <b>상세</b>에 평가할 영역이 두 개 늘었습니다 — <b>듣기</b>와 <b>문법</b>. 둘 다 짧은 문항이 함께 들어 있습니다. 영역을 누르고 시작 레벨을 고른 뒤 <b>문항 시작</b>을 누르면 학생 화면에 문항이 열립니다. <b>듣기</b>는 레벨마다 5문항입니다 — 선생님이 대본을 읽어 주고 학생이 답을 누릅니다(레벨 A는 그림만, 레벨 B부터는 질문도 화면에 나오고, 레벨 C~E는 짧은 글을 먼저 읽어 준 뒤 질문을 읽어 줍니다). <b>대본과 정답</b>을 누르면 읽어 줄 내용과 정답이 모두 인쇄용으로 열립니다. 기기가 한 대뿐이면 학생 화면의 자물쇠를 길게 누르세요. 선생님 메뉴에 지금 읽어 줄 내용이 나옵니다. <b>문법</b>은 레벨마다 8문항이고, 빈칸에 알맞은 말을 고릅니다. 5문항 중 4개 이상(8문항 중 7개 이상) 맞으면 위 레벨로, 2개 이하(4개 이하)면 아래 레벨로 넘어갑니다. 한 방향으로만 움직이며 A나 E에 닿거나 점수가 그 방향이 아니면 끝나고(올라간 뒤 점수가 낮으면 바로 아래 레벨), 그 결과가 점수와 함께 평가로 저장됩니다 — 상세, 학부모 리포트, 평가 CSV에 나옵니다. <b>종이 시험지</b>는 한 레벨의 문항을 학생이 동그라미 칠 수 있게 인쇄합니다. 정답지로 채점한 뒤 레벨을 직접 고르면 됩니다. 문항 없이 레벨을 직접 고르는 것도 전과 같이 됩니다. <b>커리큘럼: 레벨테스트를 둘째 주로.</b> 2027 계획에서 3·6·9·12월의 레벨테스트가 첫째 주에서 둘째 주로 옮겨졌습니다. 계획을 이미 가져오셨다면 커리큘럼 페이지에 <b>2027 계획이 바뀌었습니다</b> 한 줄이 나옵니다 — <b>내 계획에 반영</b>(해당 행을 계획의 주로 옮기고 새로 추가하지는 않습니다. 되돌리기로 취소할 수 있습니다)과 <b>그대로 두기</b> 중에서 고르세요.</dd>
+          <dt>v158 · 2026-11-23</dt><dd><b>레벨테스트: 듣기와 문법.</b> 학생의 <b>자세히</b>에 평가할 영역이 두 개 늘었습니다 — <b>듣기</b>와 <b>문법</b>. 둘 다 짧은 문항이 함께 들어 있습니다. 영역을 누르고 시작 레벨을 고른 뒤 <b>문항 시작</b>을 누르면 학생 화면에 문항이 열립니다. <b>듣기</b>는 레벨마다 5문항입니다 — 선생님이 대본을 읽어 주고 학생이 답을 누릅니다(레벨 A는 그림만, 레벨 B부터는 질문도 화면에 나오고, 레벨 C~E는 짧은 글을 먼저 읽어 준 뒤 질문을 읽어 줍니다). <b>대본과 정답</b>을 누르면 읽어 줄 내용과 정답이 모두 인쇄용으로 열립니다. 기기가 한 대뿐이면 학생 화면의 자물쇠를 길게 누르세요. 선생님 메뉴에 지금 읽어 줄 내용이 나옵니다. <b>문법</b>은 레벨마다 8문항이고, 빈칸에 알맞은 말을 고릅니다. 5문항 중 4개 이상(8문항 중 7개 이상) 맞으면 위 레벨로, 2개 이하(4개 이하)면 아래 레벨로 넘어갑니다. 한 방향으로만 움직이며 A나 E에 닿거나 점수가 그 방향이 아니면 끝나고(올라간 뒤 점수가 낮으면 바로 아래 레벨), 그 결과가 점수와 함께 평가로 저장됩니다 — 자세히, 학부모 리포트, 평가 CSV에 나옵니다. <b>종이 시험지</b>는 한 레벨의 문항을 학생이 동그라미 칠 수 있게 인쇄합니다. 정답지로 채점한 뒤 레벨을 직접 고르면 됩니다. 문항 없이 레벨을 직접 고르는 것도 전과 같이 됩니다. <b>커리큘럼: 레벨테스트를 둘째 주로.</b> 2027 계획에서 3·6·9·12월의 레벨테스트가 첫째 주에서 둘째 주로 옮겨졌습니다. 계획을 이미 가져오셨다면 커리큘럼 페이지에 <b>2027 계획이 바뀌었습니다</b> 한 줄이 나옵니다 — <b>내 계획에 반영</b>(해당 행을 계획의 주로 옮기고 새로 추가하지는 않습니다. 되돌리기로 취소할 수 있습니다)과 <b>그대로 두기</b> 중에서 고르세요.</dd>
           <dt>v157 · 2026-11-23</dt><dd><b>커리큘럼: 2027 계획을 한 번에 불러오고, 그 자리로 이동합니다.</b> 앱에 2027 주제가 하나도 없는 동안에는 커리큘럼 페이지의 표 위에 한 줄이 나옵니다: <b>2027 계획이 아직 앱에 없습니다 · 2027 계획 불러오기</b>. 버튼을 한 번 누르면 계획(2026년 12월 – 2027년 12월)이 들어오고, 이어서 나오는 안내에 <b>실행 취소</b>가 있습니다. 목록이 오래된 것부터라 2027은 맨 끝에 있습니다 — 그래서 이제 가져오기를 하면(이 버튼이든 가져오기 창이든) 페이지가 <b>새로 들어온 첫 줄로 이동</b>하고 그 줄을 잠깐 표시합니다. 2027이 들어오면 그 한 줄은 사라집니다. 그 해만 보려면 언제든 위쪽 연도 칸에서 <b>2027</b>을 고르세요.</dd>
           <dt>v156 · 2026-11-22</dt><dd><b>레벨테스트: 한글 스위치가 화면 전체를 바꿉니다.</b> 스위치를 <b>끄면</b> 학생 화면이 <b>영어로만</b> 나옵니다: 첫 화면의 인사와 안내, 읽기 안내, 버튼(Start, I’m ready, Next, I’m not sure, Show the text larger, Continue), 끝 화면까지 — 문제 아래 한 줄만이 아닙니다. <b>켜면</b> 전과 같습니다: 한국어와 영어가 함께 나오고 문제 아래에 한국어 도움말이 보입니다. 누르기 전의 상태는 그대로입니다 — 시작 창에서 켜 두었을 때 A·B 레벨에서 켜져 있고 그 위 레벨에서는 꺼져 있습니다. 그래서 C–E 레벨 테스트는 이제 영어 전용 화면으로 시작하며, 한 번 누르면 화면 전체가 한국어로 바뀝니다. 시작 창의 스위치 이름은 <b>A·B 레벨에서 테스트 화면에 한국어 보여 주기</b>로 바뀌었습니다. 글자만 그 자리에서 바뀌므로 화면을 다시 그리지 않고 답한 시간도 그대로입니다.<br/><b>함께 추가: A·B 레벨의 연습 문제.</b> A·B 레벨의 첫 문제 전에 어떻게 푸는지 보여 주는 <b>연습 문제</b>가 하나 나옵니다 — A 레벨: 단어를 읽고 그림 고르기, B 레벨: 한 문장을 읽고 질문에 답하기. 실제 테스트와 달리 연습 문제는 맞았는지 알려 주고("잘했어요" / "다시 한번 골라 볼까요?"), <b>잘 모르겠어요</b> 버튼이 무엇인지 설명하며, 맞는 답을 골라야 다음으로 넘어갑니다. 점수에 들어가지 않습니다: 연습 문제의 답은 기록도 채점도 되지 않고, 첫 실제 문제의 시간은 연습이 끝난 뒤부터 잽니다. 레벨마다 테스트 한 번에 한 번만 나오며(A에서 B로 올라가거나 C에서 B로 내려오면 그때 B의 연습 문제가 나옵니다), 이어서 볼 때는 다시 나오지 않습니다. C–E 레벨에는 없고, 종이 시험지는 그대로입니다.<br/><b>함께 추가: 2027 계획을 버튼 하나로.</b> 커리큘럼 → <b>가져오기</b>에 <b>2027 계획 불러오기</b> 버튼이 생겼습니다. 구글 드라이브나 파일 없이 2026년 12월 – 2027년 12월 계획(57주, 주마다 A·B, C, D·E 레벨 줄)을 가져옵니다: 버튼을 누르고 미리보기를 확인한 뒤 가져오기를 누르세요. 이미 있는 주제는 두 번 들어가지 않으므로 나중에 다시 눌러도 안전합니다. 다만 이미 있는 주제에 비어 있는 칸(교재, 도서, 문법 등)이 있고 계획에 그 내용이 있으면, 가져오기를 누를 때 그 빈칸만 채우고 직접 적어 둔 내용은 그대로 둡니다 — 몇 개인지는 미리보기에 나옵니다.</dd>
           <dt>v155 · 2026-11-22</dt><dd><b>레벨테스트: 테스트 화면의 한글 스위치.</b> 학생 화면 오른쪽 위, 자물쇠 왼쪽에 작은 <b>한글</b> 스위치가 생겼습니다. 문제 아래의 한국어 도움말을 보이거나 숨기며, 테스트 중 언제든 선생님이나 학생이 누를 수 있습니다. <b>모든 레벨</b>에서 됩니다: C·D·E 레벨 문제에도 한국어 도움말이 생겼습니다(문제만 한국어로 보여 주고 지문과 보기는 영어 그대로이며, 뜻을 묻는 단어는 영어로 둡니다). 아무도 누르지 않으면 전과 같습니다: 시작 창에서 켜 두었을 때 A·B 레벨에서만 보이고 그 위 레벨에서는 보이지 않습니다. 한 번 누르면 그 테스트가 끝날 때까지 모든 레벨에 그대로 적용되고, 결과 창에 테스트 중 한국어 도움말을 켰는지 껐는지가 적힙니다. 눌러도 문제를 다시 그리지 않으므로 답한 시간과 지문에서 읽던 자리가 그대로 남습니다.</dd>
@@ -2527,7 +2542,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v159</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v160</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3706,6 +3721,15 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v160: book checks
+  "Have the student read about 100 words aloud from a book they have not read. Count the words they miss or need help with, then ask what it was about.":"학생이 읽어 보지 않은 책에서 100단어쯤을 소리 내어 읽게 합니다. 틀리거나 도와준 단어를 세고, 읽은 뒤 무슨 내용이었는지 물어봅니다.",
+  "Book title":"책 제목","Words read":"읽은 단어 수","Words missed":"틀린 단어 수","Told what it was about":"내용을 말했나요","Not asked":"안 물어봄",
+  "Comfortable alone":"혼자 읽기 편함","Right for lessons":"수업용으로 알맞음","Too hard for now":"아직 어려움",
+  "Told it well":"잘 말함","Told it with help":"도와주면 말함","Could not tell it":"못 말함",
+  "Book checks ({n})":"책 읽기 확인 ({n})","Book check":"책 읽기 확인","Add a book check":"책 읽기 확인 추가","({w} words, {m} missed)":"({w}단어 중 {m}개 틀림)",
+  "Show all ({n})":"모두 보기 ({n})","Show fewer":"접기","Book check saved: {band}":"책 읽기 확인을 저장했습니다: {band}","Delete this book check?":"이 책 읽기 확인을 지울까요?",
+  "One step down: could not say what it was about.":"한 단계 낮춤: 내용을 말하지 못했습니다.",
+  "In 100 words: 5 or fewer missed is a book to read alone, 6 to 10 a book for lessons, more is too hard for now.":"100단어 기준: 틀린 단어가 5개 이하면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책입니다.",
   // ── v158: Listening and Grammar, the plan's weeks
   "Last rated {date}: level {level}":"마지막 평가 {date}: 레벨 {level}","questions {score}":"문항 {score}","Check with questions":"문항으로 확인하기",
   "{n} questions a level. You read the script aloud; the student's screen shows only the choices (from level B, the question too).":"레벨마다 {n}문항입니다. 선생님이 대본을 읽어 주고, 학생 화면에는 보기만 나옵니다(레벨 B부터는 질문도 나옵니다).",
@@ -4336,7 +4360,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v159";
+const APP_VERSION="v160";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8404,6 +8428,9 @@ document.addEventListener("click",e=>{
   else if(act==="report")ltOpenReport(aid);
   else if(act==="rate")ltOpenRate(sid,b.dataset.dom);
   else if(act==="move")ltOpenMove(aid);
+  else if(act==="book")ltOpenBook(sid);
+  else if(act==="bookdel")ltDelBook(sid,b.dataset.cid);
+  else if(act==="bookall"){ltBkAll=ltSame(ltBkAll,sid)?null:sid;renderLevelTest();}
 });
 function ltDelete(aid){
   const i=assessments.findIndex(a=>a.id===aid);if(i<0)return;
@@ -9076,7 +9103,99 @@ function ltProfileHtml(s){
     h+=`<button type="button" class="lt-skill" data-lt="rate" data-sid="${e(s.id)}" data-dom="${d}" title="${e(r?tx("Rated {date} — press to rate again",{date:r.date}):tx("Press to rate"))}">${e(LT_DOMAIN_NAME[d])}`+
       (r?ltLv(r.level)+(sc!=null?`<span class="lt-score">${sc}/100</span>`:""):`<i class="ti ti-plus" aria-hidden="true"></i>`)+`</button>`;
   });
-  return h+`</div>`;
+  return h+`</div>`+ltBooksHtml(s);
+}
+// ── Book checks (v160) ────────────────────────────────────────────────────
+// Which real books a student can read. The teacher has the student read about 100 words aloud from
+// a book, counts the words missed and asks what it was about; the check is kept on the student:
+// student.bookChecks = [{id,date,book,words,errors,retell?,note}]. From the share of words read
+// right comes a band — 95% or more is a book to read alone, 90% or more a book for lessons, less
+// is too hard for now — and a student who could not say what it was about goes one band down.
+// The band is worked out, never stored. The newest check of each book makes the three lists at the
+// top of the block: that is the student's range, in books the teacher owns.
+const LT_BK_BANDS=["easy","learn","hard"];
+const LT_BK_NAME={easy:tx("Comfortable alone"),learn:tx("Right for lessons"),hard:tx("Too hard for now")};
+const LT_BK_RETELL={2:tx("Told it well"),1:tx("Told it with help"),0:tx("Could not tell it")};
+const LT_BK_SHOWN=5;
+let ltBkAll=null;
+const ltBkOk=c=>!!c&&typeof c.book==="string"&&c.book.trim()!==""&&Number.isInteger(c.words)&&c.words>=1&&c.words<=999&&Number.isInteger(c.errors)&&c.errors>=0&&c.errors<=c.words;
+const ltBkAcc=c=>Math.floor((c.words-c.errors)/c.words*100);       // never rounded up into the next band
+function ltBkBand(c){
+  const acc=(c.words-c.errors)/c.words;
+  let i=acc>=0.95?0:acc>=0.9?1:2;
+  if(c.retell===0&&i<2)i++;
+  return LT_BK_BANDS[i];
+}
+// Newest first; checks of one day in the order they were made, newest first too.
+const ltBookChecks=s=>(s&&Array.isArray(s.bookChecks)?s.bookChecks:[]).filter(ltBkOk).map((c,i)=>({c,i}))
+  .sort((A,B)=>String(B.c.date||"").localeCompare(String(A.c.date||""))||(B.i-A.i)).map(x=>x.c);
+function ltBooksHtml(s){
+  if(s.trial)return "";
+  const e=escapeAttr,all=ltBookChecks(s),sid=e(s.id);
+  let h=`<div class="lt-ph">${e(tx("Book checks ({n})",{n:all.length}))}</div>`;
+  if(all.length){
+    const seen=new Set(),by={easy:[],learn:[],hard:[]};
+    all.forEach(c=>{const k=c.book.trim().toLowerCase();if(seen.has(k))return;seen.add(k);by[ltBkBand(c)].push(c.book.trim());});
+    h+=`<div class="lt-bk-sum">`+LT_BK_BANDS.filter(b=>by[b].length).map(b=>`<span><span class="lt-bk-band ${b}">${e(LT_BK_NAME[b])}</span> ${e(by[b].join(", "))}</span>`).join("")+`</div>`;
+    const open=ltSame(ltBkAll,s.id);
+    h+=all.slice(0,open?all.length:LT_BK_SHOWN).map(c=>`<div class="lt-hrow"><span class="lt-hdate">${e(c.date||"")}</span><span class="lt-htext"><b>${e(c.book.trim())}</b> · ${ltBkAcc(c)}% `+
+      `<span class="cell-muted2">${e(tx("({w} words, {m} missed)",{w:c.words,m:c.errors}))}</span>${LT_BK_RETELL[c.retell]?" · "+e(LT_BK_RETELL[c.retell]):""}${c.note?` <span class="cell-muted2">· ${e(c.note)}</span>`:""}</span>`+
+      `<span class="lt-hacts"><span class="lt-bk-band ${ltBkBand(c)}">${e(LT_BK_NAME[ltBkBand(c)])}</span><button type="button" class="bic" data-lt="bookdel" data-sid="${sid}" data-cid="${e(c.id||"")}" title="${e(tx("Delete"))}"><i class="ti ti-trash"></i></button></span></div>`).join("");
+    if(all.length>LT_BK_SHOWN)h+=`<div class="lt-bk-add"><button type="button" class="btn btn-sm" data-lt="bookall" data-sid="${sid}" aria-expanded="${open}">${e(open?tx("Show fewer"):tx("Show all ({n})",{n:all.length}))}</button></div>`;
+  }
+  return h+`<div class="lt-bk-add"><button type="button" class="btn btn-sm" data-lt="book" data-sid="${sid}"><i class="ti ti-plus"></i> ${e(tx("Add a book check"))}</button></div>`;
+}
+// Put a new value in one field of a student and save. False, and nothing changed, if it could not
+// be saved (the stamp goes back too — see ltPushRating).
+function ltStudentPut(s,key,value){
+  const had=Object.prototype.hasOwnProperty.call(s,key),before=s[key],hadU=Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s._u;
+  s[key]=value;
+  if(saveKey("students"))return true;
+  if(had)s[key]=before;else delete s[key];
+  if(hadU)s._u=oldU;else delete s._u;
+  return false;
+}
+const LTB={sid:null};
+function ltOpenBook(sid){
+  const s=ltStudent(sid);if(!s||s.trial)return;
+  LTB.sid=s.id;
+  const g=id=>document.getElementById(id),e=escapeAttr;
+  g("ltb-title").textContent=tx("Book check")+" · "+(s.name||"");
+  g("ltb-book").value="";g("ltb-words").value="100";g("ltb-errors").value="";g("ltb-note").value="";
+  g("ltb-retell").innerHTML=`<option value="">${e(tx("Not asked"))}</option>`+[2,1,0].map(v=>`<option value="${v}">${e(LT_BK_RETELL[v])}</option>`).join("");
+  // suggestions: books this student was checked on, then the Books library
+  const titles=[...new Set([...ltBookChecks(s).map(c=>c.book.trim()),...(Array.isArray(bookLib)?bookLib:[]).map(b=>b&&typeof b.title==="string"?b.title.trim():"")].filter(Boolean))].slice(0,400);
+  g("ltb-books").innerHTML=titles.map(t=>`<option value="${e(t)}"></option>`).join("");
+  ltBookLive();openModal("mo-lt-book");
+}
+// What is typed in the window as a check, or null while it is not complete. A count is a whole
+// number: 1 to 999 words, and no more words missed than were read.
+function ltBookRead(){
+  const g=id=>document.getElementById(id),num=id=>{const el=g(id),raw=el.value.trim();return raw===""||el.validity.badInput?NaN:Number(raw);};
+  const c={book:g("ltb-book").value.trim(),words:num("ltb-words"),errors:num("ltb-errors")};
+  const r=g("ltb-retell").value;if(r!=="")c.retell=Number(r);
+  return ltBkOk(c)?c:null;
+}
+function ltBookLive(){
+  const c=ltBookRead(),el=document.getElementById("ltb-res"),e=escapeAttr;
+  el.innerHTML=c?`<b>${ltBkAcc(c)}%</b><span class="lt-bk-band ${ltBkBand(c)}">${e(LT_BK_NAME[ltBkBand(c)])}</span>`+(c.retell===0?`<span>${e(tx("One step down: could not say what it was about."))}</span>`:"")
+    :`<span>${e(tx("In 100 words: 5 or fewer missed is a book to read alone, 6 to 10 a book for lessons, more is too hard for now."))}</span>`;
+  document.getElementById("ltb-save").disabled=!c;
+}
+function ltSaveBook(){
+  const s=ltStudent(LTB.sid),c=ltBookRead();if(!s||s.trial||!c)return;
+  const entry={id:uid(),date:td(),book:c.book,words:c.words,errors:c.errors,note:(document.getElementById("ltb-note").value||"").trim()};
+  if("retell" in c)entry.retell=c.retell;
+  if(!ltStudentPut(s,"bookChecks",[...(Array.isArray(s.bookChecks)?s.bookChecks:[]),entry])){showToast(ltSaveFailed());return;}
+  closeModal("mo-lt-book");
+  if(curPage==="leveltest")renderLevelTest();
+  showToast(tx("Book check saved: {band}",{band:LT_BK_NAME[ltBkBand(entry)]}));
+}
+function ltDelBook(sid,cid){
+  const s=ltStudent(sid);if(!s||!cid||!Array.isArray(s.bookChecks)||!s.bookChecks.some(c=>c&&c.id===cid))return;
+  if(!confirm(tx("Delete this book check?")))return;
+  if(!ltStudentPut(s,"bookChecks",s.bookChecks.filter(c=>!c||c.id!==cid)))showToast(ltSaveFailed());
+  renderLevelTest();
 }
 const LTR={sid:null,dom:null,level:"",manual:false,rub:{},start:""};
 function ltOpenRate(sid,dom){
@@ -15323,6 +15442,21 @@ document.addEventListener("DOMContentLoaded",()=>{
     </div>
     <div class="fg"><label for="ltq-note" data-i18n>Note (optional)</label><textarea id="ltq-note" rows="2" maxlength="300"></textarea></div>
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-rate')" data-i18n>Cancel</button><button class="btn btn-p" id="ltq-save" onclick="ltSaveRate()" data-i18n>Save</button></span></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-book">
+  <div class="mb" style="max-width:480px">
+    <div class="mt"><span id="ltb-title"></span><button class="bic" onclick="closeModal('mo-lt-book')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p class="u-hint" data-i18n>Have the student read about 100 words aloud from a book they have not read. Count the words they miss or need help with, then ask what it was about.</p>
+    <div class="fg"><label for="ltb-book" data-i18n>Book title</label><input id="ltb-book" type="text" maxlength="120" list="ltb-books" autocomplete="off" oninput="ltBookLive()"/><datalist id="ltb-books"></datalist></div>
+    <div class="ltq-counts">
+      <div class="fg"><label for="ltb-words" data-i18n>Words read</label><input id="ltb-words" type="number" min="1" max="999" step="1" inputmode="numeric" oninput="ltBookLive()"/></div>
+      <div class="fg"><label for="ltb-errors" data-i18n>Words missed</label><input id="ltb-errors" type="number" min="0" max="999" step="1" inputmode="numeric" oninput="ltBookLive()"/></div>
+    </div>
+    <div class="fg"><label for="ltb-retell" data-i18n>Told what it was about</label><select id="ltb-retell" onchange="ltBookLive()"></select></div>
+    <p class="ltb-res" id="ltb-res" role="status"></p>
+    <div class="fg"><label for="ltb-note" data-i18n>Note (optional)</label><textarea id="ltb-note" rows="2" maxlength="300"></textarea></div>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-book')" data-i18n>Cancel</button><button class="btn btn-p" id="ltb-save" onclick="ltSaveBook()" data-i18n>Save</button></span></div>
   </div>
 </div>
 <div class="mo" id="mo-lt-move">
