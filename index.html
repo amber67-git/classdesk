@@ -524,7 +524,8 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .curr-plan-btns{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px}
 .curr-plan-btns .btn{margin-left:0}
 /* v158: Listening and Grammar — the questions block and the last rating in the rating window */
-.ltq-last{font-size:var(--fs-sm);color:var(--txt2);margin:0 0 8px}
+.ltq-last{font-size:var(--fs-sm);color:var(--txt2);margin:8px 0}
+.ltq-last.new{background:var(--grn-l);color:var(--grn-t);border-radius:8px;padding:8px 10px;font-weight:600;font-size:var(--fs-base)}
 .ltq-last[hidden],.ltq-sec[hidden]{display:none}
 .ltq-sec{border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;margin:8px 0 12px;background:var(--surf2)}
 .ltq-sec .u-hint{margin:2px 0 0}
@@ -539,6 +540,7 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .lt-bk-band.learn{background:var(--amb-l);color:var(--amb-t)}
 .lt-bk-band.hard{background:var(--red-l);color:var(--red-t)}
 .lt-bk-add{padding:4px 0 2px;display:flex;flex-wrap:wrap;gap:8px}
+.lt-bk-x{color:var(--txt2)}
 .ltb-res{font-size:var(--fs-sm);color:var(--txt2);margin:0 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;min-height:24px}
 .ltb-res b{color:var(--txt);font-size:var(--fs-base)}
 #mo-lt-book .u-hint{margin:0 0 12px}
@@ -3731,10 +3733,10 @@ const I18N={ko:{
   "One step down: could not say what it was about.":"한 단계 낮춤: 내용을 말하지 못했습니다.",
   "In 100 words: 5 or fewer missed is a book to read alone, 6 to 10 a book for lessons, more is too hard for now.":"100단어 기준: 틀린 단어가 5개 이하면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책입니다.",
   // ── v158: Listening and Grammar, the plan's weeks
-  "Last rated {date}: level {level}":"마지막 평가 {date}: 레벨 {level}","questions {score}":"문항 {score}","Check with questions":"문항으로 확인하기",
-  "{n} questions a level. You read the script aloud; the student's screen shows only the choices (from level B, the question too).":"레벨마다 {n}문항입니다. 선생님이 대본을 읽어 주고, 학생 화면에는 보기만 나옵니다(레벨 B부터는 질문도 나옵니다).",
-  "{n} questions a level: the student picks the words that fit the blank.":"레벨마다 {n}문항입니다. 학생이 빈칸에 알맞은 말을 고릅니다.",
-  "{up} or more right goes on to the level above, {down} or fewer to the level below. It moves one way only: it stops at A or E, or when a score no longer points that way (a low score after going up gives the level before). The result is saved as the rating.":"{up}개 이상 맞으면 위 레벨로, {down}개 이하면 아래 레벨로 넘어갑니다. 한 방향으로만 움직입니다: A나 E에 닿거나 점수가 그 방향이 아니면 끝나고(올라간 뒤 점수가 낮으면 바로 아래 레벨), 그 결과가 평가로 저장됩니다.",
+  "Last rated {date}: level {level}":"마지막 평가 {date}: 레벨 {level}","Saved: level {level}":"저장됨: 레벨 {level}","questions {score}":"문항 {score}","Check with questions":"문항으로 확인하기",
+  "{n} questions a level. You read the script aloud.":"레벨마다 {n}문항이고, 선생님이 대본을 읽어 줍니다.",
+  "{n} questions a level.":"레벨마다 {n}문항입니다.",
+  "{up} or more right goes up a level, {down} or fewer goes down — one way only, stopping at A or E. The result is saved as the rating.":"{up}개 이상 맞으면 위 레벨로, {down}개 이하면 아래 레벨로 갑니다(한 방향으로만, A·E에서 멈춤). 결과가 평가로 저장됩니다.",
   "Start at level":"시작 레벨","Start the questions":"문항 시작","Script and answers":"대본과 정답","Paper sheet · level {level}":"종이 시험지 · 레벨 {level}","Or pick the level yourself":"또는 레벨을 직접 고르기",
   "Read aloud":"읽어 줄 내용","Stop and leave (nothing is saved)":"그만하고 나가기 (저장되지 않습니다)",
   "The 2027 plan has changed: the level test is in June and December, and March and September have a short speaking and writing check — all in the second week.":"2027 계획이 바뀌었습니다: 레벨테스트는 6·12월에 보고, 3·9월에는 말하기·쓰기만 짧게 확인합니다 — 모두 둘째 주입니다.",
@@ -9000,13 +9002,13 @@ const LT_HOLD_MS=1200;
 // v158: Listening and Grammar join them. The bank rates four skills, so the Korean descriptions of
 // these two live here, and LT_RD is the bank's four plus these two.
 const LT_RD=Object.assign({},AEA.RATING_DOMAINS,{
-  listening:{ko:"Listening",task:"‘문항 시작’을 누르면 레벨마다 5문항이 나옵니다. 선생님이 대본을 읽어 주고 학생이 답을 고릅니다. 수업에서 본 모습으로 가장 가까운 설명을 직접 골라도 됩니다.",levels:{
+  listening:{ko:"Listening",task:"문항으로 확인하거나, 수업에서 본 모습으로 가장 가까운 설명을 직접 고릅니다.",levels:{
     A:"짧은 지시나 익숙한 단어를 듣고 알맞은 그림을 고릅니다. (예: “dog”, “It is raining.”)",
     B:"쉬운 문장 두세 개를 듣고 누가, 무엇을, 어디에서를 답합니다.",
     C:"네다섯 문장의 짧은 이야기를 듣고 일어난 순서와 이유를 답합니다.",
     D:"1분쯤 되는 안내나 설명을 듣고 중심 내용과 세부 정보를 구분해 답합니다.",
     E:"의견이 담긴 말을 듣고 말하는 사람의 입장과 이유, 직접 말하지 않은 뜻을 파악합니다."}},
-  grammar:{ko:"Grammar",task:"‘문항 시작’을 누르면 레벨마다 8문항이 나옵니다. 학생이 쓴 글에서 본 모습으로 가장 가까운 설명을 직접 골라도 됩니다.",levels:{
+  grammar:{ko:"Grammar",task:"문항으로 확인하거나, 학생이 쓴 글을 보고 가장 가까운 설명을 직접 고릅니다.",levels:{
     A:"문장을 대문자로 시작하고 마침표로 끝냅니다. I am, It is 같은 틀을 씁니다.",
     B:"be동사, 복수형, 대명사(he, she, they), have와 has를 쉬운 문장에서 바르게 씁니다.",
     C:"현재형의 -s, 현재진행형, 규칙 과거형, 시간과 장소의 전치사를 씁니다.",
@@ -9027,13 +9029,13 @@ const LT_DOMAINS_EN={
     C:"Writes 4–6 connected sentences on one topic. Uses and, but, because and some past tense.",
     D:"Writes a paragraph with a topic sentence, support and an ending, giving an opinion and a reason.",
     E:"Develops an argument over several paragraphs with evidence, examples and linking words."}},
-  listening:{task:"Press Start the questions for five questions at each level: you read the script aloud and the student chooses. Or pick the closest description yourself from what you see in class.",levels:{
+  listening:{task:"Check with the questions, or pick the closest description yourself from what you see in class.",levels:{
     A:"Hears a short instruction or a familiar word and picks the right picture. (“dog”, “It is raining.”)",
     B:"Hears two or three easy sentences and answers who, what and where.",
     C:"Hears a short story of four or five sentences and answers about the order of events and the reasons.",
     D:"Hears an announcement or explanation of about a minute and tells the main point from the details.",
     E:"Hears someone give an opinion and works out their position, their reasons and what is meant but not said."}},
-  grammar:{task:"Press Start the questions for eight questions at each level. Or pick the closest description yourself from the student's writing.",levels:{
+  grammar:{task:"Check with the questions, or pick the closest description yourself from the student's writing.",levels:{
     A:"Starts a sentence with a capital and ends it with a full stop. Uses frames such as I am and It is.",
     B:"Uses be, plurals, pronouns (he, she, they) and have / has correctly in easy sentences.",
     C:"Uses the present -s, the present continuous, the regular past and prepositions of time and place.",
@@ -9153,7 +9155,7 @@ function ltBooksHtml(s){
     h+=`<div class="lt-bk-sum">`+LT_BK_BANDS.filter(b=>by[b].length).map(b=>`<span><span class="lt-bk-band ${b}">${e(LT_BK_NAME[b])}</span> ${e(by[b].join(", "))}</span>`).join("")+`</div>`;
     const open=ltSame(ltBkAll,s.id);
     h+=all.slice(0,open?all.length:LT_BK_SHOWN).map(c=>`<div class="lt-hrow"><span class="lt-hdate">${e(c.date||"")}</span><span class="lt-htext"><b>${e(c.book.trim())}</b> · ${ltBkAcc(c)}% `+
-      `<span class="cell-muted2">${e(tx("({w} words, {m} missed)",{w:c.words,m:c.errors}))}</span>${LT_BK_RETELL[c.retell]?" · "+e(LT_BK_RETELL[c.retell]):""}${c.note?` <span class="cell-muted2">· ${e(c.note)}</span>`:""}</span>`+
+      `<span class="lt-bk-x">${e(tx("({w} words, {m} missed)",{w:c.words,m:c.errors}))}</span>${LT_BK_RETELL[c.retell]?" · "+e(LT_BK_RETELL[c.retell]):""}${c.note?` <span class="lt-bk-x">· ${e(c.note)}</span>`:""}</span>`+
       `<span class="lt-hacts"><span class="lt-bk-band ${ltBkBand(c)}">${e(LT_BK_NAME[ltBkBand(c)])}</span><button type="button" class="bic" data-lt="bookdel" data-sid="${sid}" data-cid="${e(c.id||"")}" title="${e(tx("Delete"))}"><i class="ti ti-trash"></i></button></span></div>`).join("");
     if(all.length>LT_BK_SHOWN)h+=`<div class="lt-bk-add"><button type="button" class="btn btn-sm" data-lt="bookall" data-sid="${sid}" aria-expanded="${open}">${e(open?tx("Show fewer"):tx("Show all ({n})",{n:all.length}))}</button></div>`;
   }
@@ -9212,18 +9214,22 @@ function ltDelBook(sid,cid){
   renderLevelTest();
 }
 const LTR={sid:null,dom:null,level:"",manual:false,rub:{},start:""};
-function ltOpenRate(sid,dom){
+// opt.fresh — straight after the questions: the window shows what was just saved and nothing is
+// picked, so a press on Save cannot store the same rating a second time.
+function ltOpenRate(sid,dom,opt){
+  const fresh=!!(opt&&opt.fresh);
   const s=ltStudent(sid);if(!s||!LT_DOMAIN_IDS.includes(dom))return;
   const r=ltLastRating(s,dom);
   if(s.trial)return;
-  LTR.sid=s.id;LTR.dom=dom;LTR.level=r?r.level:"";LTR.manual=false;LTR.rub={};
+  LTR.sid=s.id;LTR.dom=dom;LTR.level=r&&!fresh?r.level:"";LTR.manual=false;LTR.rub={};
   // Where the questions start (Listening, Grammar): the last rating of this skill, or else the
   // reading level from the newest test, or else B.
   const lastTest=ltLatest(s.id);
   LTR.start=r?r.level:lastTest?(ltFinal(lastTest)||lastTest.result.level):"B";
   const lastEl=document.getElementById("ltq-last"),secTxt=ltSecText(r);
-  lastEl.hidden=!r;
-  lastEl.textContent=r?tx("Last rated {date}: level {level}",{date:r.date||"–",level:r.level})+(secTxt?" · "+tx("questions {score}",{score:secTxt}):""):"";
+  lastEl.hidden=!r;lastEl.classList.toggle("new",fresh&&!!r);
+  lastEl.textContent=r?(fresh?tx("Saved: level {level}",{level:r.level}):tx("Last rated {date}: level {level}",{date:r.date||"–",level:r.level}))+(secTxt?" · "+tx("questions {score}",{score:secTxt}):""):"";
+  document.getElementById("ltq-cancel").textContent=fresh?tx("Close"):tx("Cancel");
   const has=ltHasRubric(dom),g=id=>document.getElementById(id);
   g("ltq-counts").hidden=!has;g("ltq-c1").value="";g("ltq-c2").value="";
   if(has){g("ltq-c1l").textContent=LT_COUNT_LBL[dom][0];g("ltq-c2l").textContent=LT_COUNT_LBL[dom][1];}
@@ -9239,8 +9245,8 @@ function ltRenderRate(){
   if(hasSec){
     const x=escapeAttr,n=LT_SEC[LTR.dom].A.items.length,R=LT_SEC_RULE[LTR.dom];
     sec.innerHTML=`<div class="lt-ph">${x(tx("Check with questions"))}</div>`+
-      `<p class="u-hint">${x(lis?tx("{n} questions a level. You read the script aloud; the student's screen shows only the choices (from level B, the question too).",{n}):tx("{n} questions a level: the student picks the words that fit the blank.",{n}))} `+
-      `${x(tx("{up} or more right goes on to the level above, {down} or fewer to the level below. It moves one way only: it stops at A or E, or when a score no longer points that way (a low score after going up gives the level before). The result is saved as the rating.",{up:R.up,down:R.down}))}</p>`+
+      `<p class="u-hint">${x(lis?tx("{n} questions a level. You read the script aloud.",{n}):tx("{n} questions a level.",{n}))} `+
+      `${x(tx("{up} or more right goes up a level, {down} or fewer goes down — one way only, stopping at A or E. The result is saved as the rating.",{up:R.up,down:R.down}))}</p>`+
       `<div class="ltq-sec-row"><span>${x(tx("Start at level"))}</span><span class="seg" role="group" aria-label="${x(tx("Start at level"))}">`+
       AEA.LEVELS.map(L=>`<button type="button" class="seg-btn${LTR.start===L?" active":""}" aria-pressed="${LTR.start===L}" onclick="ltPickStart('${L}')">${L}</button>`).join("")+`</span></div>`+
       `<div class="ltq-sec-row"><button type="button" class="btn btn-p" id="ltq-go" onclick="ltxOpen(LTR.sid,LTR.dom,LTR.start)"><i class="ti ti-player-play"></i> ${x(tx("Start the questions"))}</button>`+
@@ -9509,7 +9515,7 @@ function ltxDone(){
   if(!ltStudent(LTX.sid)){ltxClose();return;}               // deleted on another device: nothing to save to
   if(!ltxSave()){ltHint(ltSaveFailed());return;}
   const sid=LTX.sid,dom=LTX.dom;
-  ltxClose();ltOpenRate(sid,dom);
+  ltxClose();ltOpenRate(sid,dom,{fresh:true});
   showToast(tx("{name}: rating saved",{name:LT_DOMAIN_NAME[dom]}));
 }
 Object.assign(LT_ACTS,{
@@ -15460,7 +15466,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       <div class="fg"><label for="ltq-c2" id="ltq-c2l"></label><input id="ltq-c2" type="number" min="0" max="999" step="1" inputmode="numeric"/></div>
     </div>
     <div class="fg"><label for="ltq-note" data-i18n>Note (optional)</label><textarea id="ltq-note" rows="2" maxlength="300"></textarea></div>
-    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-rate')" data-i18n>Cancel</button><button class="btn btn-p" id="ltq-save" onclick="ltSaveRate()" data-i18n>Save</button></span></div>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" id="ltq-cancel" onclick="closeModal('mo-lt-rate')" data-i18n>Cancel</button><button class="btn btn-p" id="ltq-save" onclick="ltSaveRate()" data-i18n>Save</button></span></div>
   </div>
 </div>
 <div class="mo" id="mo-lt-book">
