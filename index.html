@@ -12857,13 +12857,14 @@ function currPlanSeen(){
   if((+settings.currPlanRev||1)>=CURR_PLAN_REV||!currAscReady())return false;
   settings.currPlanRev=CURR_PLAN_REV;return true;
 }
-function currImportPreview(){
+function currImportWork(){
   const text=document.getElementById("ci-text")?.value||"";
   const r=currParseInput(text);
   const isPlan=currIsPlanText(text);
   currImportPlan=r.items.length?currPlan(r.items,{align:isPlan,base:isPlan?_currPlanBase:null}):null;
-  currImportShow(r.error,r.items);
+  return r;
 }
+function currImportPreview(){const r=currImportWork();currImportShow(r.error,r.items);}
 // v156: the plan for 2027 (December 2026 – December 2027) ships with the app as a file of its own,
 // plans/2027.csv — the rows of the plan sheet as they are. It is read only when this button is
 // pressed and then goes the same way as a chosen file: preview first, nothing changes until Import.
@@ -12919,16 +12920,17 @@ function currPlanRevKeep(){
 // (v171: every field an update of the plan may write — its cells, the merges and marks that go with
 // them, and the year and month of a topic that moves.)
 const CURR_PLAN_KEPT=["topic","cat","year","month","wb","books","acts","note",...CURR_LV_FIELDS,"mh","fill"];
+const currPlanRowSig=r=>JSON.stringify([...CURR_PLAN_KEPT,"week","level"].map(k=>r[k]==null?"":r[k]));
 function currPlacesKeep(named){
   const was=curriculum.map(r=>({r,id:r.id,week:r.week,had:csHasOrd(r),ord:r.ord,
     txt:named&&named.has(r)?Object.fromEntries(CURR_PLAN_KEPT.map(k=>[k,[k in r,r[k]&&typeof r[k]==="object"?Object.assign({},r[k]):r[k]]])):null}));
   // mark(): call once the update is applied. back() then puts a field back only while it still
   // reads as the update left it — a cell the teacher has typed in since (a note, say) is hers.
   let after=null;
-  return {mark(){after=new Map(was.filter(w=>w.txt).map(w=>[w.id,Object.fromEntries(Object.keys(w.txt).map(k=>[k,JSON.stringify(w.r[k])]))]));},
+  return {mark(){after=new Map(was.filter(w=>w.txt).map(w=>[w,Object.fromEntries(Object.keys(w.txt).map(k=>[k,JSON.stringify(w.r[k])]))]));},
    back(){was.forEach(w=>{
     const r=curriculum.includes(w.r)?w.r:curriculum.find(c=>c.id===w.id);if(!r)return;
-    const left=after&&after.get(w.id);
+    const left=after&&after.get(w);   // by row, not by id: two rows may share an id
     if(w.txt)Object.entries(w.txt).forEach(([k,[had,v]])=>{if(left&&JSON.stringify(r[k])!==left[k])return;if(had)r[k]=v;else delete r[k];});
     if(r.week!==w.week)r.week=w.week;
     if(w.had){if(r.ord!==w.ord)r.ord=w.ord;}else if("ord" in r)delete r.ord;
@@ -12953,6 +12955,9 @@ async function currPlanUpdate(){
     currApplyRenames(p.edit);currApplyShifts(p.shift);
     currApplyRenames(p.rename);currApplyRenames(p.gram);currApplyMoves(p.move);
     places.mark();
+    // What each new row holds as it comes in. Undo removes a row only while it still reads so: one
+    // the teacher has typed in since is hers and stays.
+    const born=new Map(added.map(n=>[n,currPlanRowSig(n)]));
     // The topics first, the revision only once they are stored: save() writes every key it can,
     // so setting both at once could leave "seen" stored next to weeks that were not.
     if(!saveKey("curriculum")){curriculum.splice(0,curriculum.length,...snapshot);return;}   // in place: the sync layer holds this array
@@ -12962,9 +12967,12 @@ async function currPlanUpdate(){
     renderCurriculum();
     // Undo takes back what the update did and nothing else: the rows that came in go, and the cells,
     // weeks, months and places it changed are what they were. An edit made since then to another
-    // cell stays.
+    // cell stays, and so does a row that came in and has been typed in since.
     showUndoToast(tx("{n} rows brought in line with the plan",{n:touched.size}),()=>{
-      added.forEach(n=>{const i=curriculum.findIndex(c=>c===n||c.id===n.id);if(i>=0)curriculum.splice(i,1);});   // in place: the sync layer holds this array
+      added.forEach(n=>{
+        const i=curriculum.findIndex(c=>c===n||c.id===n.id);
+        if(i>=0&&currPlanRowSig(curriculum[i])===born.get(n))curriculum.splice(i,1);   // in place: the sync layer holds this array
+      });
       places.back();rev.back();save();renderCurriculum();});
   }finally{_currPlanBusy=false;currPlanBar();}
 }
@@ -12990,7 +12998,7 @@ async function currPlanQuick(){
     const p=r.items.length?currPlan(r.items,{align:true,base:_currPlanBase}):null;
     if(!p){showToast(tx("Could not load the plan — check the connection and try again."));return;}
     if(!currPlanAny(p)){showToast(tx("The 2027 plan is already in the app."));currPlanBar();return;}
-    currImportPlan=p;currImportApply();
+    currImportPlan=p;currImportApply(true);
   }finally{_currPlanBusy=false;if(btn)btn.disabled=false;}
 }
 // The rows an import has just brought in, waiting to be shown. While a cell is being typed in, the
@@ -13048,8 +13056,15 @@ function currImportShow(error,items){
     <p class="u-hint" style="margin:0 0 10px">${tx("New: {a} · already in the app: {b} (empty fields filled in for {c})",{a:p.add.length,b:p.fill.length+p.same.length,c:p.fill.length})}${p.move.length?"<br>"+tx("{n} rows are in another week in the plan now — they move to that week.",{n:p.move.length}):""}${p.rename.length?"<br>"+tx("{n} topics have a new name in the plan — they are renamed.",{n:p.rename.length}):""}${p.gram.length?"<br>"+tx("{n} rows get Grammar by level.",{n:p.gram.length}):""}${p.edit.length||p.shift.length?"<br>"+tx("{n} rows follow what the plan changed — cells you have changed stay as they are.",{n:new Set([...p.edit,...p.shift].map(x=>x.ex)).size}):""}</p>
     ${sample}${items.length>6?`<div class="u-hint" style="padding:6px 0">${tx("…and {n} more",{n:items.length-6})}</div>`:""}`;
 }
-function currImportApply(){
+// `fresh`: the plan was worked out this very moment (currPlanQuick). From the Import window it may
+// be minutes old — the preview — and a row may have changed since (another device, say). So it is
+// worked out again from the list as it is now: what is written is what the preview would say now.
+function currImportApply(fresh){
   if(currColsWait())return;
+  if(!fresh&&document.getElementById("mo-currimport")?.classList.contains("show")){
+    const r=currImportWork();
+    if(!currPlanAny(currImportPlan)){currImportShow(r.error,r.items);return;}
+  }
   const p=currImportPlan;if(!currPlanAny(p))return;
   const snapshot=JSON.parse(JSON.stringify(curriculum)),rev=currPlanRevKeep();
   const touched=new Set();
