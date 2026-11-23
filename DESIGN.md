@@ -254,6 +254,10 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 커리큘럼의 계획 불러오기 줄(v157): 할 일이 있을 때만 나오는 한 줄 `.curr-plan` — `--amb-l` 바탕, `--amb-bdr` 테두리, `--amb-t` 글자, 오른쪽 끝에 작은 주 버튼 하나. 설명 문단이 아니라 "없다 + 버튼"만 적는다. 가져온 줄 표시 `.cs-flash`는 같은 `--amb-l` 바탕을 2.6초 동안 준다(셀에 칠해 둔 색보다 우선).
 
+계획 줄의 두 번째 상태(v158): 실린 계획이 바뀌었을 때 같은 `.curr-plan` 줄에 버튼 두 개가 `.curr-plan-btns`(오른쪽 정렬, 간격 8px)로 묶여 나온다 — 보조 버튼 "그대로 두기", 주 버튼 "내 계획에 반영". 색과 높이는 첫 상태와 같다.
+
+듣기·문법 문항(v158): 평가 창 안의 `.ltq-sec`은 `--surf2` 바탕, `--bdr` 테두리, 반경 10px의 한 덩어리로 — 제목(`.lt-ph`), 한 문단 설명(`.u-hint`), 시작 레벨 `.seg`(선택은 `.seg-btn.active`), 버튼 줄(`.ltq-sec-row`: 주 버튼 "문항 시작" 하나 + 보조 버튼 둘). 그 아래 직접 고르기 목록 앞에는 `.lt-ph.ltq-or` 제목만 둔다. 마지막 평가 한 줄 `.ltq-last`는 `--txt2`, `--fs-sm`. 학생 화면은 읽기 테스트의 틀을 그대로 쓴다(`.lt-tbar`의 "Listening B"/"Grammar B", 점 진행 표시, `.lt-opt`, `.lt-idk`, `.lt-tfoot`); 새로 생긴 것은 선생님 메뉴 안의 대본 상자 `.lt-xscript`(읽기용 글꼴 16px/1.6, `--lt-line` 테두리)뿐이다. 인쇄물은 `LT_SHEET_CSS`에 `LT_SEC_CSS`(대본 `.sh-say`, 문항 목록 `.sh-says`)만 더한다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
