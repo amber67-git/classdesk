@@ -260,6 +260,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 책 읽기 확인(v160): 학생 자세히 패널 안에서 영역 칩 다음에 오는 블록. 제목은 `.lt-ph`, 그 아래 구분별 책 목록 `.lt-bk-sum`(작은 알약 `.lt-bk-band` + 책 제목들), 기록 행은 테스트 기록과 같은 `.lt-hrow`(날짜 `.lt-hdate`, 내용 `.lt-htext`, 오른쪽에 알약과 휴지통 `.bic`), 맨 아래 `.lt-bk-add`에 작은 버튼. 알약 색은 뜻과 묶여 있다 — 혼자 읽기 편함 `--grn-l`/`--grn-t`, 수업용 `--amb-l`/`--amb-t`, 아직 어려움 `--red-l`/`--red-t` — 다크 모드에서도 같은 토큰을 쓴다. 입력 창은 평가 창과 같은 틀(`.fg`, 두 칸 `.ltq-counts`)이고 결과 줄 `.ltb-res`가 정확도(굵게)와 알약을 바로 보여 준다.
 
+레벨별 과제와 인쇄 목록(v161): 말하기·쓰기 평가 창의 과제 블록은 듣기·문법의 `.ltq-sec`을 그대로 쓴다 — 레벨 `.seg`, 과제 한 문단 `.ltq-task`(아래 작은 글씨로 한국어나 물어볼 질문), 주 버튼 "과제 보여 주기"와 보조 버튼 하나. 학생 화면의 과제는 읽기용 글꼴 26px 굵게 가운데(`.lt-xtask`), 그림은 84px(`.lt-xpics`), 따라 쓸 문장은 점선 상자(`.lt-xmodel`). 시험지 인쇄 목록은 레벨 줄마다 읽기 세트 뒤에 네 영역 체크박스가 이어지고, 레벨 표시는 `.bic` 버튼(한 묶음 선택)이다. 인쇄물은 `LT_SEC_CSS`에 과제 상자 `.sh-task`, 따라 쓸 문장 `.sh-model`, 그림 `.sh-pics`, 줄 `.sh-lines`(36px 간격)을 더했다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
