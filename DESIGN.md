@@ -252,6 +252,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 레벨테스트 학생 화면의 한글 스위치(v155): 위 막대 오른쪽, 자물쇠 바로 왼쪽에 `.lt-ko` — 글자 "한글"(13px, 굵게)과 34×20px 트랙. 꺼짐은 트랙 `--lt-lock`, 글자 `--lt-muted`; 켜짐(`.on`)은 트랙과 글자 `--lt-brand`, 손잡이(16px, `--lt-surface`)가 오른쪽으로 14px. 누르는 영역 높이는 자물쇠와 같은 44px. 학생 화면이므로 앱의 색 토큰이 아니라 `--lt-*` 토큰만 쓴다. 움직임 줄이기 설정에서는 전환 효과가 없다. v156부터 이 스위치는 화면의 모든 고정 문구도 바꾼다: 켜짐은 버튼이 한국어+영어("다음 · Next", "글 크게 보기 · Show the text larger")이고 안내 문장은 한국어, 꺼짐은 모두 영어만("Next"). 학생 화면에 새 문구를 넣을 때는 반드시 두 형태를 함께 준다(`ltL`). 연습 문제 화면(v156)은 문제 화면과 같은 틀에 표시 세 가지만 더한다: 꼬리표 `.lt-extag`(알약 모양, `--lt-amber-soft` 바탕 · `--lt-amber-ink` 글자), 안내 한 줄 `.lt-exlead`(`--lt-muted`), 고른 뒤의 말 `.lt-exmsg`(맞으면 `--lt-brand`, 다시 고르라는 말은 `.lt-retry` = `--lt-amber-ink`; 높이 44px을 미리 잡아 화면이 밀리지 않게 한다). 틀렸다는 표시에 빨강은 쓰지 않는다.
 
+커리큘럼의 계획 불러오기 줄(v157): 할 일이 있을 때만 나오는 한 줄 `.curr-plan` — `--amb-l` 바탕, `--amb-bdr` 테두리, `--amb-t` 글자, 오른쪽 끝에 작은 주 버튼 하나. 설명 문단이 아니라 "없다 + 버튼"만 적는다. 가져온 줄 표시 `.cs-flash`는 같은 `--amb-l` 바탕을 2.6초 동안 준다(셀에 칠해 둔 색보다 우선).
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
