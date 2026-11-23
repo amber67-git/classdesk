@@ -272,6 +272,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 영역 사이 창(v166, `#mo-lt-all`): 일곱 영역을 한 상자 안의 줄(`.lta-list`, 줄 높이 44px 이상, 줄 사이 `--bdr`)로 보여 준다. 끝난 줄은 초록 체크와 레벨 배지, 다음 차례는 `--grn-l` 바탕에 굵은 글씨와 ▶, 건너뛴 줄은 `--txt3`와 –, 남은 줄은 빈 동그라미. 아래에 "다음: 듣기"(17px 굵게)와 한두 줄 안내, 바닥 왼쪽에 여기서 마치기, 오른쪽에 건너뛰기와 주 버튼 시작. 상태는 색만이 아니라 아이콘과 글자로도 구분한다.
 
+리포트의 영역별 다음 목표(v167, `.rp-goal`): 책 읽기 줄(`.rp-bk`)과 같은 두 칸 격자 — 왼쪽 104px에 영역 이름(굵게), 오른쪽에 목표 문장, 13.5px. 아래에 작은 회색 안내 한 줄(`.rp-small`). 긴 메모와 목표 문장은 `overflow-wrap:anywhere`로 좁은 화면에서도 넘치지 않는다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
