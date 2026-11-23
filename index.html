@@ -540,6 +540,27 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .ltq-or{margin:0 0 6px}
 /* v161: the task of a level in the Speaking / Writing window; a level's whole pack in the print list */
 .ltq-task{font-size:var(--fs-base);margin:8px 0 0;overflow-wrap:anywhere}
+/* v165: recordings (Speaking) and photos (Writing) kept with the student */
+.ltq-media .u-hint{margin:4px 0 0}
+.ltm-list{display:grid;gap:8px;margin-top:8px}
+.ltm-item{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ltm-item audio{flex:1 1 220px;min-width:0;height:40px;max-width:100%}
+.ltm-pics{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+.ltm-pic{display:grid;gap:4px;justify-items:start}
+.ltm-pic .ltm-foot{display:flex;align-items:center;gap:4px;justify-content:space-between;width:100%}
+.ltm-thumb{display:block;width:100%;aspect-ratio:1;padding:0;border:1px solid var(--bdr2);border-radius:8px;overflow:hidden;background:var(--surf);cursor:zoom-in}
+.ltm-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ltm-state{margin:8px 0 0;font-size:var(--fs-sm);color:var(--txt2)}
+.ltm-state.err{color:var(--red-t)}
+.ltm-rec{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--red-t)}
+.ltm-dot{width:10px;height:10px;border-radius:50%;background:currentColor;animation:ltm-blink 1.2s steps(2,start) infinite}
+@keyframes ltm-blink{to{visibility:hidden}}
+@media(prefers-reduced-motion:reduce){.ltm-dot{animation:none}}
+.lt-sk-m{display:inline-flex;align-items:center;gap:2px;font-size:var(--fs-sm);color:var(--txt3)}
+.ltph-box{max-height:70vh;overflow:auto;border:1px solid var(--bdr);border-radius:8px;background:var(--surf2);text-align:center}
+.ltph-box img{max-width:100%;height:auto;display:block;margin:0 auto}
+#lt-screen .lt-recdot{font:600 12px var(--font);color:#B42318;display:inline-flex;align-items:center;gap:4px;margin-left:8px}
+#lt-screen .lt-recdot::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
 /* v162: the teacher's script on the screen — read from a phone while the students hold the paper */
 #ltsc-top{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:10px}
 #ltsc-top .seg{max-width:100%;flex-wrap:wrap;height:auto;min-height:34px}
@@ -2270,6 +2291,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
           <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only that level's columns show; press <b>All levels</b> to see every column. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
           <dt>How do I find out which books a student can read?</dt><dd>Level test → the student's <b>Details</b> → <b>Add a book check</b>. Pick a book, mark about 100 words in the middle, have the student read them aloud and count the words they miss or need help with; then ask what it was about. 5 or fewer missed in 100 is a book to read alone, 6 to 10 a book for lessons, more is too hard for now — and one band down if they could not say what it was about. Try an easier or a harder book until you have one of each: the lists at the top of the block are the range. Use the same pages for every student if you want to compare them, and avoid a book the student already knows.</dd>
+          <dt>Can I keep what a student said or wrote?</dt><dd>Yes. Level test → the student's <b>Details</b> → <b>Speaking</b>: press <b>Record</b> to record in the app (it goes on while the task is on the student's screen, and <b>Stop and keep</b> saves it), or <b>Add a recording file</b> for one you made with the phone's own recorder. <b>Writing</b>: <b>Add photos</b> takes or picks photos of the paper; large photos are made smaller first. They are kept with the student, apart from the rating, so they can be added later and a rating can be saved without them. The files go to your Google account's storage (the same place as book covers), so you need to be signed in, and they show on your other devices. A recording stops by itself after five minutes; a file can be up to 25 MB, a photo 15 MB. Deleting one removes the file for good.</dd>
           <dt>How do I check Listening, Grammar, Phonics and Vocabulary, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b>, <b>Grammar</b>, <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>. Phonics works like Listening (you say a word, the student picks it among look-alikes — 6 a level); Vocabulary like Grammar (the student alone — 8 a level). For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
@@ -2299,6 +2321,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v165 · 2026-11-23</dt><dd><b>Level test: keep a recording and photos.</b> The <b>Speaking</b> window has a <b>Recordings</b> block: <b>Record</b> records in the app — it goes on while the task is on the student's screen (the screen says REC), and <b>Stop and keep</b> saves it — and <b>Add a recording file</b> takes a recording made with the phone's own recorder. The <b>Writing</b> window has <b>Photos of the writing</b>: <b>Add photos</b> takes or picks one or several photos, and a press on a thumbnail shows it larger. Recordings can be played right in the window. They are kept with the student, apart from the rating, so today's recordings can be added tomorrow. The skill buttons in a student's Details show how many are kept. The files go to your Google account's storage, like book covers, so this needs you to be signed in; signed out, the buttons are off and say so. If an upload fails, the file is kept in hand and <b>Try again</b> sends it. Deleting asks first and removes the file for good.</dd>
           <dt>v164 · 2026-11-23</dt><dd><b>Level test: questions for Phonics and Vocabulary.</b> Until now these two skills could only be rated by picking a description. Both now have questions at every level, built like Listening and Grammar. <b>Phonics</b> (6 a level): you say a word and the student picks it among look-alike words — first letters and short-vowel words at A, sh / ch / th and magic e at B, vowel teams and two-syllable words at C, prefixes and suffixes at D, long words at E. 5 or more right goes up, 3 or fewer goes down. <b>Vocabulary</b> (8 a level, the student alone): a word and four pictures at A, everyday words in a sentence at B, meaning from context at C, new words and words with several meanings at D, academic words at E. 7 or more right goes up, 4 or fewer goes down. Open them from a student's <b>Details</b> → <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>; the result is saved as the rating, and you can still pick the level yourself. They are also in <b>Sample test</b>, in <b>Print sheets</b> (a sheet a level, and the key) and in <b>Teacher's script</b> (the words to say for Phonics, the answers for Vocabulary). A level's whole pack is now seven sheets.</dd>
           <dt>v163 · 2026-11-23</dt><dd><b>Curriculum: a week is one row.</b> Until now a topic had one row for everyone and one more for each level, so a week took four rows. Now <b>a week is one row</b>, and what differs by level sits side by side: <b>Writing</b>, <b>Speaking</b> and <b>Grammar</b> each have three columns — <b>A·B</b>, <b>C</b>, <b>D·E</b>. The Level column is gone, and Books now comes before Workbook. A text that is the same for every level is one wide cell across the three columns. <b>Your rows are converted the first time you open the Curriculum page</b>: each level row moves into its week, what you typed is kept, and the rows as they were are kept as a copy on that device. Open the page on your other devices too, so they all use the new layout. <b>Level and student buttons</b> now pick columns instead of rows: every week stays, and only that level's Writing, Speaking and Grammar show. The <b>monthly note</b> reads the student's level column. <b>The topic window</b> has a box for each level. <b>Import</b> reads a sheet with a column per level (see the FAQ) and still reads the older layout. <b>2027 plan:</b> Grammar now has a line for each level — the week's point for C, a simpler step for A·B and a further one for D·E; the five review weeks keep one line for everyone. A line above the sheet offers <b>Update my plan</b> (only rows that still show the plan's own Grammar are changed, with Undo) or <b>Keep mine</b>.</dd>
           <dt>v162 · 2026-11-23</dt><dd><b>Level test: the teacher's script on the screen.</b> The Level test page has a new button, <b>Teacher's script</b>. Pick a level (A–E) and a skill and read straight from your phone while the students hold the printed sheets: <b>Listening</b> shows what to read aloud, each question and its answer (levels C–E start with the passage); <b>Speaking</b> the questions to ask; <b>Writing</b> the task; <b>Grammar</b> the answers. Under Listening and Grammar is the rule for the next level and where it ends, and <b>Hide the answers</b> takes the answers off while a student can see your screen. The same view opens from a student's Listening or Grammar window with <b>Script on this screen</b> / <b>Answers on this screen</b>, at the level picked there. Nothing is stored by looking. On phones the buttons at the top of the Level test page now wrap onto a second row.</dd>
@@ -2360,7 +2383,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v164</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v165</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2503,6 +2526,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
           <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨의 칸만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
           <dt>학생이 어떤 책까지 읽을 수 있는지 어떻게 알아보나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>책 읽기 확인 추가</b>. 책을 고르고 중간쯤에서 100단어 정도를 표시해 둔 뒤, 소리 내어 읽게 하면서 틀리거나 도와준 단어를 세세요. 다 읽으면 무슨 내용이었는지 물어봅니다. 100단어 중 5개 이하로 틀리면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책이고, 내용을 말하지 못했으면 한 단계 낮춥니다. 더 쉬운 책이나 더 어려운 책으로 바꿔 가며 각각 하나씩 나오면, 맨 위의 목록이 그 학생의 범위입니다. 학생끼리 비교하려면 같은 쪽을 읽히고, 이미 아는 책은 피하세요.</dd>
+          <dt>학생이 말한 것과 쓴 것을 보관할 수 있나요?</dt><dd>네. 레벨테스트 → 학생의 <b>자세히</b> → <b>말하기</b>: <b>녹음하기</b>를 누르면 앱에서 바로 녹음합니다(과제를 학생 화면에 띄운 동안에도 계속 녹음되고, <b>멈추고 저장</b>을 누르면 저장됩니다). 핸드폰 녹음기로 따로 녹음한 파일은 <b>녹음 파일 올리기</b>로 올립니다. <b>쓰기</b>: <b>사진 올리기</b>로 종이를 찍거나 앨범에서 고릅니다. 큰 사진은 먼저 작게 줄여서 올립니다. 평가와 따로 학생에게 보관되므로, 나중에 올려도 되고 녹음·사진 없이 평가만 저장해도 됩니다. 파일은 선생님 Google 계정의 저장소(책 표지와 같은 곳)에 올라가므로 로그인이 필요하고, 다른 기기에서도 보입니다. 녹음은 5분이 되면 스스로 멈추고, 파일은 25 MB, 사진은 15 MB까지 올릴 수 있습니다. 삭제하면 파일이 완전히 지워집니다.</dd>
           <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
@@ -2532,6 +2556,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v165 · 2026-11-23</dt><dd><b>레벨테스트: 녹음과 사진 보관.</b> <b>말하기</b> 창에 <b>녹음</b> 칸이 생겼습니다. <b>녹음하기</b>는 앱에서 바로 녹음합니다 — 과제를 학생 화면에 띄운 동안에도 계속 녹음되고(화면에 REC 표시), <b>멈추고 저장</b>을 누르면 저장됩니다. <b>녹음 파일 올리기</b>로는 핸드폰 녹음기로 따로 녹음한 파일을 올립니다. <b>쓰기</b> 창에는 <b>쓴 글 사진</b> 칸이 생겼습니다. <b>사진 올리기</b>로 한 장 또는 여러 장을 찍거나 고르고, 작은 사진을 누르면 크게 보입니다. 녹음은 창에서 바로 들을 수 있습니다. 평가와 따로 학생에게 보관되므로 오늘 녹음한 것을 내일 올려도 됩니다. 학생 자세히의 영역 버튼에 보관된 개수가 표시됩니다. 파일은 책 표지처럼 선생님 Google 계정의 저장소에 올라가므로 로그인이 필요하고, 로그아웃 상태에서는 버튼이 꺼지고 그 이유를 알려 줍니다. 올리기에 실패하면 파일을 그대로 들고 있다가 <b>다시 시도</b>로 다시 보냅니다. 삭제는 먼저 물어본 뒤 파일을 완전히 지웁니다.</dd>
           <dt>v164 · 2026-11-23</dt><dd><b>레벨테스트: 파닉스와 어휘 문항.</b> 지금까지 이 두 영역은 설명을 골라 평가할 수만 있었습니다. 이제 둘 다 모든 레벨에 문항이 있고, 듣기·문법과 같은 방식입니다. <b>파닉스</b>(레벨마다 6문항): 선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — A는 첫 글자와 단모음 낱말, B는 sh·ch·th와 magic e, C는 모음 조합과 두 음절 낱말, D는 접두사·접미사, E는 긴 낱말. 5개 이상 맞으면 위로, 3개 이하면 아래로 갑니다. <b>어휘</b>(레벨마다 8문항, 학생 혼자): A는 낱말과 그림 네 개, B는 문장 속 일상 낱말, C는 문맥으로 뜻 짐작하기, D는 새 낱말과 여러 뜻을 가진 낱말, E는 학습 어휘. 7개 이상 맞으면 위로, 4개 이하면 아래로 갑니다. 학생의 <b>자세히</b> → <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>으로 열며, 결과는 평가로 저장되고 레벨을 직접 고를 수도 있습니다. <b>샘플 테스트</b>, <b>시험지 인쇄</b>(레벨별 시험지와 정답지), <b>선생님 대본</b>(파닉스는 읽어 줄 낱말, 어휘는 정답)에도 들어 있습니다. 레벨 한 세트는 이제 시험지 일곱 장입니다.</dd>
           <dt>v163 · 2026-11-23</dt><dd><b>커리큘럼: 한 주가 한 줄입니다.</b> 지금까지는 주제마다 공통 줄 하나와 레벨별 줄이 따로 있어 한 주가 네 줄이었습니다. 이제 <b>한 주가 한 줄</b>이고, 레벨마다 다른 내용은 옆으로 나란히 놓입니다: <b>쓰기</b>, <b>말하기</b>, <b>문법</b>이 각각 <b>A·B</b>, <b>C</b>, <b>D·E</b> 세 칸입니다. 레벨 열은 없어졌고, 도서가 교재 앞으로 왔습니다. 모든 레벨에 같은 내용은 세 칸에 걸친 넓은 한 칸입니다. <b>기존 줄은 커리큘럼 페이지를 처음 열 때 자동으로 바뀝니다</b>: 레벨별 줄이 그 주의 줄로 합쳐지고, 직접 쓴 내용은 그대로 남으며, 바꾸기 전 모습은 그 기기에 사본으로 보관됩니다. 다른 기기에서도 페이지를 한 번 열어 모두 새 표를 쓰게 해 주세요. <b>레벨·학생 버튼</b>은 이제 줄이 아니라 칸을 고릅니다: 모든 주가 그대로 보이고, 그 레벨의 쓰기·말하기·문법 칸만 보입니다. <b>월간 안내</b>는 학생 레벨의 칸을 읽습니다. <b>주제 창</b>에는 레벨마다 칸이 있습니다. <b>가져오기</b>는 레벨마다 열이 있는 시트를 읽고(자주 묻는 질문 참고), 예전 방식의 시트도 그대로 읽습니다. <b>2027 계획:</b> 문법이 레벨별로 한 줄씩 생겼습니다 — C는 그 주의 문법, A·B는 더 쉬운 단계, D·E는 한 단계 더 나아간 내용이며, 복습 주 다섯 번은 모두 같은 한 줄입니다. 표 위의 줄에서 <b>내 계획에 반영</b>(계획의 문법을 그대로 두고 있던 줄만 바뀌며 되돌릴 수 있습니다) 또는 <b>그대로 두기</b>를 고르세요.</dd>
           <dt>v162 · 2026-11-23</dt><dd><b>레벨테스트: 선생님 대본을 화면에서 봅니다.</b> 레벨테스트 페이지에 <b>선생님 대본</b> 버튼이 생겼습니다. 레벨(A–E)과 영역을 고르면, 학생이 인쇄한 시험지를 들고 있는 동안 핸드폰을 보며 바로 읽어 줄 수 있습니다. <b>듣기</b>는 읽어 줄 말과 질문, 정답이 문항마다 나오고(레벨 C–E는 글이 먼저 나옵니다), <b>말하기</b>는 물어볼 질문, <b>쓰기</b>는 과제, <b>문법</b>은 정답이 나옵니다. 듣기와 문법 아래에는 다음 레벨과 끝나는 조건을 정하는 기준이 있고, 학생이 화면을 볼 수 있을 때는 <b>정답 가리기</b>로 정답을 숨길 수 있습니다. 학생의 듣기·문법 창에서도 <b>화면에서 대본 보기</b> / <b>화면에서 정답 보기</b>로 같은 화면이 그 창에서 고른 레벨로 열립니다. 보기만 하는 화면이라 저장되는 것은 없습니다. 핸드폰에서는 레벨테스트 페이지 위쪽 버튼이 두 줄로 나뉩니다.</dd>
@@ -2592,7 +2617,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v164</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v165</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3873,6 +3898,15 @@ const I18N={ko:{
   "Date of the test":"시험 본 날짜",
   "Enter the answers":"답 입력하기","Answers of the paper test":"종이 시험 답 입력","Leave (continue later)":"나가기 (나중에 이어서)","Print test sheets":"시험지 인쇄",
   "Tick the sheets you need. They open in a new window with a Print button.":"필요한 시험지를 체크하세요. 인쇄 버튼이 있는 새 창으로 열립니다.",
+  "Recordings":"녹음","Photos of the writing":"쓴 글 사진","No recording yet.":"아직 녹음이 없습니다.","No photo yet.":"아직 사진이 없습니다.",
+  "Record":"녹음하기","Add a recording file":"녹음 파일 올리기","Add photos":"사진 올리기","Stop and keep":"멈추고 저장","Throw away":"버리기","Uploading…":"올리는 중…",
+  "Show larger":"크게 보기","Photo {n}":"사진 {n}","Photo of the writing":"쓴 글 사진","Open in a new tab":"새 탭에서 열기","Recording kept":"녹음을 저장했습니다","Photo kept":"사진을 저장했습니다",
+  "Sign in with your Google Account (Settings → Account) to keep recordings and photos.":"녹음과 사진을 저장하려면 Google 계정으로 로그인하세요 (설정 → 계정).",
+  "This browser cannot record. Add a recording file instead.":"이 브라우저에서는 녹음할 수 없습니다. 녹음 파일을 올려 주세요.",
+  "The microphone could not be used. Allow it for this site, or add a recording file instead.":"마이크를 쓸 수 없습니다. 이 사이트에 마이크를 허용하거나 녹음 파일을 올려 주세요.",
+  "That file is too large (over {n} MB).":"파일이 너무 큽니다 ({n} MB 초과).","It could not be uploaded. Check the connection and try again.":"올리지 못했습니다. 인터넷 연결을 확인하고 다시 시도하세요.",
+  "That picture cannot be shown here. Save it as a JPEG and add it again.":"이 사진 형식은 여기서 볼 수 없습니다. JPEG로 저장해 다시 올려 주세요.","That is not a sound file.":"소리 파일이 아닙니다.",
+  "Delete this recording? The file is removed for good.":"이 녹음을 삭제할까요? 파일이 완전히 지워집니다.","Delete this photo? The file is removed for good.":"이 사진을 삭제할까요? 파일이 완전히 지워집니다.",
   "Teacher's script":"선생님 대본","What to read aloud and the answers, on this screen":"읽어 줄 대본과 정답을 이 화면에서 봅니다","Show the answers":"정답 보기","Hide the answers":"정답 가리기",
   "Script on this screen":"화면에서 대본 보기","Answers on this screen":"화면에서 정답 보기","Skill":"영역",
   "Read each one twice, slowly.":"문항마다 두 번씩 또박또박 읽어 줍니다.","Read each one twice, then its question.":"문항마다 두 번씩 읽고, 질문도 읽어 줍니다.",
@@ -4424,7 +4458,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v164";
+const APP_VERSION="v165";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -5061,7 +5095,7 @@ function showPage(p){
 // ═══════════════════════════════════════════════
 // MODALS
 // ═══════════════════════════════════════════════
-function closeModal(id){document.getElementById(id)?.classList.remove("show");if(id==="mo-lesson")swResetAll();}
+function closeModal(id){document.getElementById(id)?.classList.remove("show");if(id==="mo-lesson")swResetAll();if(id==="mo-lt-rate"&&typeof ltRecGuard==="function")ltRecGuard();}
 let topModalZ=999;
 function openModal(id){
   const m=document.getElementById(id);if(!m)return;topModalZ++;m.style.zIndex=topModalZ;m.classList.add("show");
@@ -9272,7 +9306,8 @@ function ltProfileHtml(s){
   LT_DOMAIN_IDS.forEach(d=>{
     const r=ltLastRating(s,d),sc=ltScore(r);
     h+=`<button type="button" class="lt-skill" data-lt="rate" data-sid="${e(s.id)}" data-dom="${d}" title="${e(r?tx("Rated {date} — press to rate again",{date:r.date}):tx("Press to rate"))}">${e(LT_DOMAIN_NAME[d])}`+
-      (r?ltLv(r.level)+(sc!=null?`<span class="lt-score">${sc}/100</span>`:""):`<i class="ti ti-plus" aria-hidden="true"></i>`)+`</button>`;
+      (r?ltLv(r.level)+(sc!=null?`<span class="lt-score">${sc}/100</span>`:""):`<i class="ti ti-plus" aria-hidden="true"></i>`)+
+      (ltMedia(s,d).length?`<span class="lt-sk-m" title="${e(LT_MEDIA_KIND[d]==="audio"?tx("Recordings"):tx("Photos of the writing"))}"><i class="ti ${LT_MEDIA_KIND[d]==="audio"?"ti-microphone":"ti-photo"}" aria-hidden="true"></i>${ltMedia(s,d).length}</span>`:"")+`</button>`;
   });
   return h+`</div>`+ltBooksHtml(s);
 }
@@ -9397,6 +9432,139 @@ function ltDelBook(sid,cid){
     if(curPage==="leveltest")renderLevelTest();
   });
 }
+// ── Recordings and photos (v165) ──────────────────────────────────────────
+// What a student said and wrote can be kept next to the rating: a recording for Speaking, photos
+// of the paper for Writing. The file goes to the account's file storage (the same place as book
+// covers) and the student keeps a short entry: student.media = [{id,dom,kind,date,url,path,mime,
+// size,dur?,name?}]. They stand on their own — added or removed at any time, whether or not a
+// rating is saved — so a recording made on the phone today can be added tomorrow.
+// Files need the account: signed out there is nowhere to put them (the browser's own storage is
+// far too small), and the buttons say so.
+const LT_MEDIA_KIND={speaking:"audio",writing:"image"};
+const LT_MEDIA_MAX_MB={audio:25,image:15};
+const LT_MEDIA_EXT={"audio/mp4":"m4a","audio/x-m4a":"m4a","audio/aac":"aac","audio/mpeg":"mp3","audio/mp3":"mp3","audio/wav":"wav","audio/x-wav":"wav","audio/ogg":"ogg","audio/webm":"webm",
+  "image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif"};
+const LT_REC_MAX_S=300;                                    // a recording stops by itself after five minutes
+const LT_REC_TYPES=["audio/mp4;codecs=mp4a.40.2","audio/mp4","audio/webm;codecs=opus","audio/webm"];
+const LTM={rec:null,stream:null,chunks:[],t0:0,timer:null,keep:true,who:null,busy:0,err:"",pending:null};
+const ltMedia=(s,d)=>(s&&Array.isArray(s.media)?s.media:[]).filter(m=>m&&m.dom===d&&LT_MEDIA_KIND[d]===m.kind&&typeof m.url==="string"&&/^https:\/\//.test(m.url)&&typeof m.id==="string");
+const ltMediaCanStore=()=>!!(syncUser&&window.__uploadAsset);
+const ltMediaHere=(sid,dom)=>ltSame(LTR.sid,sid)&&LTR.dom===dom&&document.getElementById("mo-lt-rate").classList.contains("show");
+const ltClock=sec=>Math.floor(sec/60)+":"+String(Math.floor(sec%60)).padStart(2,"0");
+function ltRenderMedia(){
+  const box=document.getElementById("ltq-media");if(!box)return;
+  const kind=LT_MEDIA_KIND[LTR.dom],s=ltStudent(LTR.sid);
+  box.hidden=!kind||!s||!!s.trial;if(box.hidden)return;
+  const e=escapeAttr,audio=kind==="audio",items=ltMedia(s,LTR.dom),can=ltMediaCanStore(),off=can&&!LTM.busy?"":" disabled";
+  const recHere=!!LTM.rec&&LTM.who&&ltSame(LTM.who.sid,LTR.sid)&&LTM.who.dom===LTR.dom;
+  const del=m=>`<button type="button" class="bic" onclick="ltMediaDel('${e(m.id)}')" title="${e(tx("Delete"))}" aria-label="${e(tx("Delete"))}"${off}><i class="ti ti-trash"></i></button>`;
+  const list=!items.length?`<p class="u-hint">${e(audio?tx("No recording yet."):tx("No photo yet."))}</p>`
+    :audio?`<div class="ltm-list">${items.map(m=>`<div class="ltm-item"><span class="lt-hdate">${e(m.date||"")}${m.dur?" · "+ltClock(m.dur):""}</span><audio controls preload="none" src="${e(m.url)}"></audio>${del(m)}</div>`).join("")}</div>`
+    :`<div class="ltm-list ltm-pics">${items.map((m,i)=>`<div class="ltm-pic"><button type="button" class="ltm-thumb" onclick="ltMediaView('${e(m.id)}')" title="${e(tx("Show larger"))}"><img src="${e(m.url)}" alt="${e(tx("Photo {n}",{n:i+1}))}" loading="lazy"/></button><span class="ltm-foot"><span class="lt-hdate">${e(m.date||"")}</span>${del(m)}</span></div>`).join("")}</div>`;
+  const state=LTM.busy?`<p class="ltm-state" role="status">${e(tx("Uploading…"))}</p>`
+    :LTM.err?`<p class="ltm-state err" role="alert">${e(LTM.err)}${LTM.pending&&can?` <button type="button" class="btn btn-xs" onclick="ltMediaRetry()">${e(tx("Try again"))}</button>`:""}</p>`:"";
+  const btns=recHere
+    ?`<span class="ltm-rec"><i class="ltm-dot" aria-hidden="true"></i><span id="ltm-time">${ltClock((Date.now()-LTM.t0)/1000)}</span></span>`+
+      `<button type="button" class="btn btn-p" onclick="ltRecStop()"><i class="ti ti-player-stop"></i> ${e(tx("Stop and keep"))}</button><button type="button" class="btn" onclick="ltRecCancel()">${e(tx("Throw away"))}</button>`
+    :audio?`<button type="button" class="btn" onclick="ltRecStart()"${off||(LTM.rec?" disabled":"")}><i class="ti ti-microphone"></i> ${e(tx("Record"))}</button>`+
+      `<button type="button" class="btn" onclick="document.getElementById('ltq-file-audio').click()"${off}><i class="ti ti-upload"></i> ${e(tx("Add a recording file"))}</button>`
+    :`<button type="button" class="btn" onclick="document.getElementById('ltq-file-image').click()"${off}><i class="ti ti-camera"></i> ${e(tx("Add photos"))}</button>`;
+  box.innerHTML=`<div class="lt-ph">${e(audio?tx("Recordings"):tx("Photos of the writing"))}</div>`+list+state+`<div class="ltq-sec-row">${btns}</div>`+
+    (can?"":`<p class="u-hint">${e(tx("Sign in with your Google Account (Settings → Account) to keep recordings and photos."))}</p>`);
+}
+// Recording in the app. It goes on while the task is on the student's screen, and is kept when
+// the teacher stops it — or leaves both the window and that screen with it still running.
+async function ltRecStart(){
+  if(LTM.rec||LTM.busy||!ltMediaCanStore()||LT_MEDIA_KIND[LTR.dom]!=="audio")return;
+  const sid=LTR.sid,dom=LTR.dom;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){LTM.err=tx("This browser cannot record. Add a recording file instead.");ltRenderMedia();return;}
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}
+  catch(e){LTM.err=tx("The microphone could not be used. Allow it for this site, or add a recording file instead.");ltRenderMedia();return;}
+  if(LTM.rec||!ltMediaHere(sid,dom)){stream.getTracks().forEach(t=>t.stop());return;}   // the window moved on while the browser asked
+  const mime=LT_REC_TYPES.find(t=>{try{return MediaRecorder.isTypeSupported(t);}catch(e){return false;}})||"";
+  let rec;
+  try{rec=new MediaRecorder(stream,mime?{mimeType:mime,audioBitsPerSecond:64000}:{});}
+  catch(e){stream.getTracks().forEach(t=>t.stop());LTM.err=tx("This browser cannot record. Add a recording file instead.");ltRenderMedia();return;}
+  Object.assign(LTM,{rec,stream,chunks:[],t0:Date.now(),keep:true,who:{sid,dom},err:"",pending:null});
+  rec.ondataavailable=ev=>{if(ev.data&&ev.data.size)LTM.chunks.push(ev.data);};
+  rec.onstop=()=>{
+    const keep=LTM.keep,chunks=LTM.chunks,who=LTM.who,dur=Math.max(1,Math.round((Date.now()-LTM.t0)/1000)),type=(rec.mimeType||mime||"audio/webm");
+    clearInterval(LTM.timer);stream.getTracks().forEach(t=>t.stop());
+    Object.assign(LTM,{rec:null,stream:null,chunks:[],timer:null,who:null});
+    if(LTX.sid&&LTX.screen==="task")ltxRender();
+    if(keep&&chunks.length)ltMediaAdd(who.sid,who.dom,new Blob(chunks,{type}),{dur});else ltRenderMedia();
+  };
+  rec.start(1000);
+  LTM.timer=setInterval(()=>{const sec=(Date.now()-LTM.t0)/1000,el=document.getElementById("ltm-time");if(el)el.textContent=ltClock(sec);if(sec>=LT_REC_MAX_S)ltRecStop();},500);
+  ltRenderMedia();
+}
+function ltRecStop(){if(LTM.rec&&LTM.rec.state!=="inactive")LTM.rec.stop();}
+function ltRecCancel(){LTM.keep=false;ltRecStop();}
+// Left with a recording still running (the window closed and no task on the student's screen):
+// it is stopped and kept. Called a moment after either closes, so going from one to the other is not "leaving".
+function ltRecGuard(){
+  setTimeout(()=>{if(!LTM.rec)return;
+    const win=document.getElementById("mo-lt-rate").classList.contains("show"),scr=!!LTX.sid&&LTX.screen==="task";
+    if(!win&&!scr)ltRecStop();},0);
+}
+const ltBlobDataUrl=blob=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result));r.onerror=()=>no(r.error||new Error("read"));r.readAsDataURL(blob);});
+// One file to the account's storage and onto the student. Whatever goes wrong, the file is kept
+// in hand (LTM.pending) so Try again does not need it picked or recorded a second time.
+async function ltMediaAdd(sid,dom,blob,meta){
+  const kind=LT_MEDIA_KIND[dom];if(!kind||!blob)return false;
+  const fail=(msg,keep)=>{LTM.err=msg;LTM.pending=keep?{sid,dom,blob,meta}:null;ltRenderMedia();return false;};
+  if(blob.size>LT_MEDIA_MAX_MB[kind]*1024*1024)return fail(tx("That file is too large (over {n} MB).",{n:LT_MEDIA_MAX_MB[kind]}),false);
+  if(!ltMediaCanStore())return fail(tx("Sign in with your Google Account (Settings → Account) to keep recordings and photos."),true);
+  LTM.busy++;LTM.err="";LTM.pending=null;ltRenderMedia();
+  let ok=false,path="";const uidNow=syncUser.uid;
+  try{
+    let data=await ltBlobDataUrl(blob);
+    if(kind==="image")data=await compressImageDataUrl(data,1800,0.82);
+    const mime=((data.match(/^data:([^;,]+)/)||[])[1]||blob.type||"").toLowerCase();
+    if(kind==="image"&&!/^image\/(jpeg|png|webp|gif)$/.test(mime))throw Object.assign(new Error("format"),{ltFormat:true});
+    if(kind==="audio"&&!/^(audio|video)\//.test(mime))throw Object.assign(new Error("format"),{ltFormat:true});
+    const id=uid();path=`leveltest/${String(sid).replace(/[^\w-]/g,"_")}/${id}.${LT_MEDIA_EXT[mime]||(kind==="audio"?"m4a":"jpg")}`;
+    const url=await window.__uploadAsset(uidNow,path,data);
+    const s=ltStudent(sid);
+    if(!s||s.trial)throw new Error("student gone");
+    const item={id,dom,kind,date:td(),url,path,mime,size:blob.size};
+    if(meta&&meta.dur)item.dur=meta.dur;
+    if(meta&&meta.name)item.name=String(meta.name).slice(0,80);
+    if(!ltStudentPut(s,"media",[...(Array.isArray(s.media)?s.media:[]),item]))throw Object.assign(new Error("save"),{ltSave:true});
+    ok=true;
+  }catch(e){
+    console.error("Level test file not kept",e);
+    if(path&&window.__deleteAsset)window.__deleteAsset(uidNow,path);          // not on a student: do not leave it behind
+    LTM.err=e&&e.ltFormat?(kind==="image"?tx("That picture cannot be shown here. Save it as a JPEG and add it again."):tx("That is not a sound file."))
+      :e&&e.ltSave?ltSaveFailed():tx("It could not be uploaded. Check the connection and try again.");
+    LTM.pending=e&&e.ltFormat?null:{sid,dom,blob,meta};
+  }
+  LTM.busy--;
+  ltRenderMedia();
+  if(ok){if(curPage==="leveltest")renderLevelTest();showToast(kind==="audio"?tx("Recording kept"):tx("Photo kept"));}
+  return ok;
+}
+function ltMediaRetry(){const p=LTM.pending;if(!p||LTM.busy)return;ltMediaAdd(p.sid,p.dom,p.blob,p.meta);}
+async function ltMediaFiles(input){
+  const files=[...(input.files||[])],sid=LTR.sid,dom=LTR.dom;input.value="";
+  for(const f of files)await ltMediaAdd(sid,dom,f,{name:f.name});
+}
+function ltMediaDel(id){
+  const s=ltStudent(LTR.sid);if(!s||LTM.busy||!ltMediaCanStore())return;
+  const m=ltMedia(s,LTR.dom).find(x=>x.id===id);if(!m)return;
+  if(!confirm(m.kind==="audio"?tx("Delete this recording? The file is removed for good."):tx("Delete this photo? The file is removed for good.")))return;
+  if(!ltStudentPut(s,"media",s.media.filter(x=>x!==m))){showToast(ltSaveFailed());return;}
+  if(m.path&&window.__deleteAsset)window.__deleteAsset(syncUser.uid,m.path);
+  ltRenderMedia();if(curPage==="leveltest")renderLevelTest();
+}
+function ltMediaView(id){
+  const s=ltStudent(LTR.sid),m=s&&ltMedia(s,LTR.dom).find(x=>x.id===id);if(!m)return;
+  document.getElementById("ltph-title").textContent=(s.name||"")+" · "+LT_DOMAIN_NAME[m.dom]+" · "+(m.date||"");
+  const img=document.getElementById("ltph-img");img.src=m.url;img.alt=tx("Photo of the writing");
+  document.getElementById("ltph-open").href=m.url;
+  openModal("mo-lt-photo");
+}
 const LTR={sid:null,dom:null,level:"",manual:false,rub:{},start:""};
 // opt.fresh — straight after the questions: the window shows what was just saved and nothing is
 // picked, so a press on Save cannot store the same rating a second time.
@@ -9420,7 +9588,8 @@ function ltOpenRate(sid,dom,opt){
   document.getElementById("ltq-title").textContent=LT_DOMAIN_NAME[dom]+" · "+(s.name||"");
   document.getElementById("ltq-task").textContent=ltDomTask(dom);
   document.getElementById("ltq-note").value="";
-  ltRenderRate();openModal("mo-lt-rate");
+  if(!LTM.busy){LTM.err="";LTM.pending=null;}
+  ltRenderRate();ltRenderMedia();openModal("mo-lt-rate");
 }
 function ltRenderRate(){
   if(!LT_DOMAIN_IDS.includes(LTR.dom))return;
@@ -9781,6 +9950,7 @@ function ltxOpen(sid,dom,level,opt){
 }
 function ltxClose(){
   LTX.sid=null;LTX.menu=false;LTX.sample=false;
+  ltRecGuard();
   document.getElementById("lt-hint")?.remove();
   const scr=document.getElementById("lt-screen");scr.hidden=true;scr.innerHTML="";
   document.body.classList.remove("lt-testing");
@@ -9790,7 +9960,7 @@ function ltxClose(){
 function ltxBar(){
   const n=LTX.screen==="task"?0:ltxSet().items.length,ko=ltxKo();let dots="";
   for(let i=0;i<n;i++)dots+=`<i class="${LTX.screen==="end"||i<LTX.idx?"lt-done":i===LTX.idx&&LTX.screen==="run"?"lt-now":""}"></i>`;
-  return `<div class="lt-tbar"><span class="lt-part">${LT_SEC_EN[LTX.dom]} ${LTX.level}</span><span class="lt-dots">${dots}</span>`+
+  return `<div class="lt-tbar"><span class="lt-part">${LT_SEC_EN[LTX.dom]} ${LTX.level}${LTM.rec&&LTX.screen==="task"?`<span class="lt-recdot">REC</span>`:""}</span><span class="lt-dots">${dots}</span>`+
     `<button type="button" class="lt-ko${ko?" on":""}" data-act="xKo" role="switch" aria-checked="${ko}" aria-label="한국어로 보기">한글<i></i></button>`+
     `<button type="button" class="lt-lock" data-hold="menu" title="${escapeAttr(tx("Teacher's menu: press and hold"))}" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
 }
@@ -16010,6 +16180,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     <p class="u-hint" id="ltq-task"></p>
     <p class="ltq-last" id="ltq-last" hidden></p>
     <div id="ltq-sec" class="ltq-sec" hidden></div>
+    <div id="ltq-media" class="ltq-sec ltq-media" hidden></div>
+    <input type="file" id="ltq-file-audio" accept="audio/*,.m4a,.mp3,.wav,.aac,.ogg,.webm" hidden style="display:none" tabindex="-1" aria-hidden="true" onchange="ltMediaFiles(this)"/>
+    <input type="file" id="ltq-file-image" accept="image/*" multiple hidden style="display:none" tabindex="-1" aria-hidden="true" onchange="ltMediaFiles(this)"/>
     <div id="ltq-list"></div>
     <div id="ltq-rub" class="ltq-rub" hidden></div>
     <div id="ltq-counts" class="ltq-counts" hidden>
@@ -16018,6 +16191,13 @@ document.addEventListener("DOMContentLoaded",()=>{
     </div>
     <div class="fg"><label for="ltq-note" data-i18n>Note (optional)</label><textarea id="ltq-note" rows="2" maxlength="300"></textarea></div>
     <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" id="ltq-cancel" onclick="closeModal('mo-lt-rate')" data-i18n>Cancel</button><button class="btn btn-p" id="ltq-save" onclick="ltSaveRate()" data-i18n>Save</button></span></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-photo">
+  <div class="mb" style="max-width:900px">
+    <div class="mt"><span id="ltph-title"></span><button class="bic" onclick="closeModal('mo-lt-photo')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <div class="ltph-box"><img id="ltph-img" alt=""/></div>
+    <div class="mf"><a class="btn" id="ltph-open" target="_blank" rel="noopener" data-i18n>Open in a new tab</a><button class="btn" onclick="closeModal('mo-lt-photo')" data-i18n>Close</button></div>
   </div>
 </div>
 <div class="mo" id="mo-lt-book">

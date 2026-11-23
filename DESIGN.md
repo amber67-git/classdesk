@@ -268,6 +268,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 파닉스·어휘 문항(v164): 학생 화면은 듣기·문법과 같은 틀이다. 낱말 하나만 묻는 문항(어휘 A의 "apple")은 읽기용 글꼴 32px 굵게 가운데(`.lt-qword`)로 크게 보여 준다. 선생님 대본 창의 영역 버튼은 여섯 개라 좁은 화면에서 두 줄로 줄바꿈한다(`#ltsc-top .seg`의 `flex-wrap`).
 
+녹음·사진 칸(v165, `#ltq-media`): 평가 창의 과제 칸과 같은 상자(`.ltq-sec`)를 쓴다. 녹음은 한 줄에 날짜·길이, 브라우저 기본 재생기(높이 40px), 휴지통. 사진은 정사각 썸네일 격자(`.ltm-pics`, 최소 96px, 모서리 8px, `object-fit:cover`) 아래에 날짜와 휴지통. 녹음 중에는 빨간 점(`.ltm-dot`, 깜박임 — `prefers-reduced-motion`에서는 멈춤)과 시계(`--red-t`, tabular-nums), 주 버튼은 "멈추고 저장". 상태 줄(`.ltm-state`)은 작은 글씨, 오류는 `--red-t`. 파일 선택 input은 화면에 두지 않고 버튼이 연다. 크게 보기 창은 사진을 70vh 안에서 스크롤한다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
