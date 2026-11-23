@@ -3729,7 +3729,7 @@ const I18N={ko:{
   "Comfortable alone":"혼자 읽기 편함","Right for lessons":"수업용으로 알맞음","Too hard for now":"아직 어려움",
   "Told it well":"잘 말함","Told it with help":"도와주면 말함","Could not tell it":"못 말함",
   "Book checks ({n})":"책 읽기 확인 ({n})","Book check":"책 읽기 확인","Add a book check":"책 읽기 확인 추가","({w} words, {m} missed)":"({w}단어 중 {m}개 틀림)",
-  "Show all ({n})":"모두 보기 ({n})","Show fewer":"접기","Book check saved: {band}":"책 읽기 확인을 저장했습니다: {band}","Delete this book check?":"이 책 읽기 확인을 지울까요?",
+  "Show all ({n})":"모두 보기 ({n})","Show fewer":"접기","Book check saved: {band}":"책 읽기 확인을 저장했습니다: {band}","Delete this book check?":"이 책 읽기 확인을 지울까요?","Book check deleted":"책 읽기 확인을 지웠습니다",
   "One step down: could not say what it was about.":"한 단계 낮춤: 내용을 말하지 못했습니다.",
   "In 100 words: 5 or fewer missed is a book to read alone, 6 to 10 a book for lessons, more is too hard for now.":"100단어 기준: 틀린 단어가 5개 이하면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책입니다.",
   // ── v158: Listening and Grammar, the plan's weeks
@@ -9121,10 +9121,12 @@ const LT_BK_RETELL={2:tx("Told it well"),1:tx("Told it with help"),0:tx("Could n
 const LT_BK_SHOWN=5;
 let ltBkAll=null;
 const ltBkOk=c=>!!c&&typeof c.book==="string"&&c.book.trim()!==""&&Number.isInteger(c.words)&&c.words>=1&&c.words<=999&&Number.isInteger(c.errors)&&c.errors>=0&&c.errors<=c.words;
-const ltBkAcc=c=>Math.floor((c.words-c.errors)/c.words*100);       // never rounded up into the next band
+// Whole numbers throughout — multiply first, then divide once — so 58 right in 100 is 58%, not
+// 57.99…; and the percentage is never rounded up into the next band.
+const ltBkAcc=c=>Math.floor((c.words-c.errors)*100/c.words);
 function ltBkBand(c){
-  const acc=(c.words-c.errors)/c.words;
-  let i=acc>=0.95?0:acc>=0.9?1:2;
+  const right=(c.words-c.errors)*100;
+  let i=right>=95*c.words?0:right>=90*c.words?1:2;
   if(c.retell===0&&i<2)i++;
   return LT_BK_BANDS[i];
 }
@@ -9207,11 +9209,24 @@ function ltSaveBook(){
   if(curPage==="leveltest")renderLevelTest();
   showToast(tx("Book check saved: {band}",{band:LT_BK_NAME[ltBkBand(entry)]}));
 }
+// Delete: confirm, delete at once, then an Undo for a few seconds (the app's rule for deletes).
+// The list on the student is replaced, not edited in place — like the ratings — so a save that
+// fails simply gets the old list back.
 function ltDelBook(sid,cid){
-  const s=ltStudent(sid);if(!s||!cid||!Array.isArray(s.bookChecks)||!s.bookChecks.some(c=>c&&c.id===cid))return;
+  const s=ltStudent(sid);if(!s||!cid||!Array.isArray(s.bookChecks))return;
+  const at=s.bookChecks.findIndex(c=>c&&c.id===cid);if(at<0)return;
   if(!confirm(tx("Delete this book check?")))return;
-  if(!ltStudentPut(s,"bookChecks",s.bookChecks.filter(c=>!c||c.id!==cid)))showToast(ltSaveFailed());
+  const gone=s.bookChecks[at];
+  if(!ltStudentPut(s,"bookChecks",s.bookChecks.filter((c,i)=>i!==at))){showToast(ltSaveFailed());renderLevelTest();return;}
   renderLevelTest();
+  showUndoToast(tx("Book check deleted"),()=>{
+    const t=ltStudent(sid);if(!t)return;
+    const now=Array.isArray(t.bookChecks)?t.bookChecks.slice():[];
+    if(now.some(c=>c&&c.id===gone.id))return;                 // already back (another device)
+    now.splice(Math.min(at,now.length),0,gone);
+    if(!ltStudentPut(t,"bookChecks",now))showToast(ltSaveFailed());
+    if(curPage==="leveltest")renderLevelTest();
+  });
 }
 const LTR={sid:null,dom:null,level:"",manual:false,rub:{},start:""};
 // opt.fresh — straight after the questions: the window shows what was just saved and nothing is
