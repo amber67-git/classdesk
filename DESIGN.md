@@ -270,6 +270,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 녹음·사진 칸(v165, `#ltq-media`): 평가 창의 과제 칸과 같은 상자(`.ltq-sec`)를 쓴다. 녹음은 한 줄에 날짜·길이, 브라우저 기본 재생기(높이 40px), 휴지통. 사진은 정사각 썸네일 격자(`.ltm-pics`, 최소 96px, 모서리 8px, `object-fit:cover`) 아래에 날짜와 휴지통. 녹음 중에는 빨간 점(`.ltm-dot`, 깜박임 — `prefers-reduced-motion`에서는 멈춤)과 시계(`--red-t`, tabular-nums), 주 버튼은 "멈추고 저장". 상태 줄(`.ltm-state`)은 작은 글씨, 오류는 `--red-t`. 파일 선택 input은 화면에 두지 않고 버튼이 연다. 크게 보기 창은 사진을 70vh 안에서 스크롤한다.
 
+영역 사이 창(v166, `#mo-lt-all`): 일곱 영역을 한 상자 안의 줄(`.lta-list`, 줄 높이 44px 이상, 줄 사이 `--bdr`)로 보여 준다. 끝난 줄은 초록 체크와 레벨 배지, 다음 차례는 `--grn-l` 바탕에 굵은 글씨와 ▶, 건너뛴 줄은 `--txt3`와 –, 남은 줄은 빈 동그라미. 아래에 "다음: 듣기"(17px 굵게)와 한두 줄 안내, 바닥 왼쪽에 여기서 마치기, 오른쪽에 건너뛰기와 주 버튼 시작. 상태는 색만이 아니라 아이콘과 글자로도 구분한다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
