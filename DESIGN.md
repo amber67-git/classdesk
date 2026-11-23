@@ -262,6 +262,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 레벨별 과제와 인쇄 목록(v161): 말하기·쓰기 평가 창의 과제 블록은 듣기·문법의 `.ltq-sec`을 그대로 쓴다 — 레벨 `.seg`, 과제 한 문단 `.ltq-task`(아래 작은 글씨로 한국어나 물어볼 질문), 주 버튼 "과제 보여 주기"와 보조 버튼 하나. 학생 화면의 과제는 읽기용 글꼴 26px 굵게 가운데(`.lt-xtask`), 그림은 84px(`.lt-xpics`), 따라 쓸 문장은 점선 상자(`.lt-xmodel`). 시험지 인쇄 목록은 레벨 줄마다 읽기 세트 뒤에 네 영역 체크박스가 이어지고, 레벨 표시는 `.bic` 버튼(한 묶음 선택)이다. 인쇄물은 `LT_SEC_CSS`에 과제 상자 `.sh-task`, 따라 쓸 문장 `.sh-model`, 그림 `.sh-pics`, 줄 `.sh-lines`(36px 간격)을 더했다.
 
+선생님 대본 창(v162, `#mo-lt-script`): 위에 `.seg` 두 개(레벨, 영역 — 터치 기기에서는 높이 44px, 버튼 38px·너비 44px 이상), 아래에 읽을 글. 읽어 줄 글은 읽기용 글꼴 17px/1.7(`.ltsc-say`), 긴 글은 `--surf2` 상자(`.ltsc-pass`), 문항은 번호가 왼쪽 칸에 있는 목록(`.ltsc-list`, 줄 사이 `--bdr` 선), 정답은 문항 아래 작은 초록 글씨(`.ltsc-ans`, `--grn-t`). 색은 모두 앱 토큰이라 다크 모드를 그대로 따른다(학생 화면 `#lt-screen`의 고정 색과 다르다). 바닥 왼쪽의 정답 가리기는 정답이 없는 영역에서 자리를 지킨 채 숨는다(`visibility`). 페이지 위쪽 버튼 줄은 `#page-leveltest`에서만 900px 이하에서 줄바꿈한다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
