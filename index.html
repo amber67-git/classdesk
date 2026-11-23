@@ -9988,20 +9988,25 @@ const LT_RDRAFT_KEY="cd_lt_rdraft";
 function ltRateDrafts(){try{const d=JSON.parse(localStorage.getItem(LT_RDRAFT_KEY)||"{}");return d&&typeof d==="object"&&!Array.isArray(d)?d:{};}catch(e){return {};}}
 function ltRateDraftWrite(all){try{if(Object.keys(all).length)localStorage.setItem(LT_RDRAFT_KEY,JSON.stringify(all));else localStorage.removeItem(LT_RDRAFT_KEY);}catch(e){}}
 function ltRateDraftGet(sid,dom){
-  const d=ltRateDrafts()[ltDraftId(sid,dom)];
+  const d=ltIsTrial(sid)?(ltGuestNotes(sid,"rdraft")||{})[dom]:ltRateDrafts()[ltDraftId(sid,dom)];
   if(!d||typeof d!=="object"||!(Date.now()-(+d.t||0)<LT_DRAFT_DAYS*864e5))return null;
   const rub={};if(d.rub&&typeof d.rub==="object")LT_RUBRIC_IDS.forEach(k=>{if(Number.isInteger(d.rub[k])&&d.rub[k]>=0&&d.rub[k]<=5)rub[k]=d.rub[k];});
   const str=v=>typeof v==="string"?v.slice(0,300):"";
   const o={level:AEA.LEVELS.includes(d.level)?d.level:"",manual:!!d.manual,rub,note:str(d.note),c1:str(d.c1).slice(0,3),c2:str(d.c2).slice(0,3)};
   return o.level||Object.keys(rub).length||o.note||o.c1||o.c2?o:null;
 }
-function ltRateDraftDrop(sid,dom){const all=ltRateDrafts(),k=ltDraftId(sid,dom);if(!(k in all))return;delete all[k];ltRateDraftWrite(all);}
+function ltRateDraftDrop(sid,dom){
+  if(ltIsTrial(sid)){const m=ltGuestNotes(sid,"rdraft");if(m)delete m[dom];return;}
+  const all=ltRateDrafts(),k=ltDraftId(sid,dom);if(!(k in all))return;delete all[k];ltRateDraftWrite(all);
+}
 function ltRateDraftPut(){
   if(LTR.sid==null||!LT_DOMAIN_IDS.includes(LTR.dom))return;
-  const g=id=>document.getElementById(id).value,all=ltRateDrafts(),k=ltDraftId(LTR.sid,LTR.dom);
+  const mem=ltIsTrial(LTR.sid)?ltGuestNotes(LTR.sid,"rdraft"):null;       // a sample: on its stand-in, not on the device
+  if(ltIsTrial(LTR.sid)&&!mem)return;
+  const g=id=>document.getElementById(id).value,all=mem||ltRateDrafts(),k=mem?LTR.dom:ltDraftId(LTR.sid,LTR.dom);
   const d={level:LTR.level,manual:LTR.manual,rub:Object.assign({},LTR.rub),note:g("ltq-note"),c1:g("ltq-c1"),c2:g("ltq-c2"),t:Date.now()};
   if(d.level||Object.keys(d.rub).length||d.note.trim()||d.c1||d.c2)all[k]=d;else delete all[k];
-  ltRateDraftWrite(all);
+  if(!mem)ltRateDraftWrite(all);
 }
 function ltRateDraftClear(){
   if(LTR.sid==null)return;
@@ -10322,8 +10327,12 @@ function ltDraftWrite(all){
   try{if(Object.keys(all).length)localStorage.setItem(LT_DRAFT_KEY,JSON.stringify(all));else localStorage.removeItem(LT_DRAFT_KEY);return true;}catch(e){return false;}
 }
 const ltDraftId=(sid,dom)=>String(sid)+"|"+dom;
+// v169: a sample keeps nothing on the device but its reading test. What it leaves part-way — the
+// answers of a skill, the choices in a rating window — is held on its stand-in (LT_GUESTS) for as
+// long as the app is open. `kind` is "draft" (answers) or "rdraft" (a rating window).
+function ltGuestNotes(sid,kind){const g=ltIsTrial(sid)?ltStudent(sid):null;if(!g)return null;const n=g.notes||(g.notes={draft:{},rdraft:{}});return n[kind];}
 function ltDraftGet(sid,dom){
-  const d=ltDrafts()[ltDraftId(sid,dom)],bank=LT_SEC[dom];
+  const d=ltIsTrial(sid)?(ltGuestNotes(sid,"draft")||{})[dom]:ltDrafts()[ltDraftId(sid,dom)],bank=LT_SEC[dom];
   if(!d||!bank||!AEA.LEVELS.includes(d.level)||!(Date.now()-(+d.t||0)<LT_DRAFT_DAYS*864e5))return null;
   const items=bank[d.level].items,ans=Array.isArray(d.ans)?d.ans:null,parts=Array.isArray(d.parts)?d.parts:null;
   if(!ans||!parts||ans.length>items.length||!ans.every((k,i)=>Number.isInteger(k)&&k>=-1&&k<items[i].opts.length))return null;
@@ -10333,19 +10342,24 @@ function ltDraftGet(sid,dom){
   return {level:d.level,start:AEA.LEVELS.includes(d.start)?d.start:d.level,ans:ans.slice(),parts:parts.map(p=>({level:p.level,correct:p.correct,total:p.total})),final:fin,ko:typeof d.ko==="boolean"?d.ko:null,t:+d.t};
 }
 const ltDraftAny=sid=>LT_SEC_IDS.some(k=>!!ltDraftGet(sid,k));
-function ltDraftDrop(sid,dom){const all=ltDrafts(),k=ltDraftId(sid,dom);if(!(k in all))return;delete all[k];ltDraftWrite(all);}
+function ltDraftDrop(sid,dom){
+  if(ltIsTrial(sid)){const m=ltGuestNotes(sid,"draft");if(m)delete m[dom];return;}
+  const all=ltDrafts(),k=ltDraftId(sid,dom);if(!(k in all))return;delete all[k];ltDraftWrite(all);
+}
 // Note where the student's screen stands. Called after every answer; false when the device could
 // not store it (the questions go on all the same — only the way back would be missing).
 function ltDraftPut(){
   if(!LTX.sid||LTX.sample||LTX.screen==="task"||LTX.saved||!LT_SEC[LTX.dom])return true;
-  const all=ltDrafts(),k=ltDraftId(LTX.sid,LTX.dom),now=Date.now();
+  const mem=ltIsTrial(LTX.sid)?ltGuestNotes(LTX.sid,"draft"):null;        // a sample: on its stand-in, not on the device
+  if(ltIsTrial(LTX.sid)&&!mem)return true;
+  const all=mem||ltDrafts(),k=mem?LTX.dom:ltDraftId(LTX.sid,LTX.dom),now=Date.now();
   for(const id in all)if(!(now-(+(all[id]&&all[id].t)||0)<LT_DRAFT_DAYS*864e5))delete all[id];   // old notes go
   // "Answered, the result waits to be stored" is only true on the last screen. After End here and
   // judge could not be stored, LTX.final is set while the questions go on — those answers are kept.
   const done=LTX.screen==="end"&&!!LTX.final;
   if(!done&&!LTX.ans.length&&!LTX.parts.length)delete all[k];
   else all[k]={level:LTX.level,start:LTX.start||LTX.level,ans:done?[]:LTX.ans.slice(),parts:LTX.parts.map(p=>({level:p.level,correct:p.correct,total:p.total})),final:done?LTX.final:"",ko:typeof LTX.ko==="boolean"?LTX.ko:null,t:now};
-  return ltDraftWrite(all);
+  return mem?true:ltDraftWrite(all);
 }
 const ltxKo=()=>typeof LTX.ko==="boolean"?LTX.ko:(LTX.level==="A"||LTX.level==="B");
 const ltxSet=()=>(LT_SEC[LTX.dom]||{})[LTX.level]||{items:[]};
