@@ -10477,10 +10477,17 @@ function currFoldRows(list){
       if(!gen&&!lvT.some(Boolean))continue;
       if(!lvT.some(Boolean)&&!cols.some(f=>txt(r[f]))){
         r[cols[0]]=gen;r.mh=Object.assign({},r.mh,{[cols[0]]:cols.length});
-      }else cols.forEach((f,i)=>{
-        const add=[gen,lvT[i]].filter(Boolean).join("\n"),cur=txt(r[f]);
-        if(add&&!cur.includes(add))r[f]=cur?cur+"\n"+add:add;
-      });
+      }else{
+        // A text that runs across the levels is first written into each column it covers — what is
+        // added to one level would otherwise sit unseen under the merged cell.
+        cols.forEach((f,i)=>{const n=r.mh&&+r.mh[f]||0;if(n<2)return;
+          const t=txt(r[f]);for(let k=1;k<n&&i+k<cols.length;k++)if(!txt(r[cols[i+k]]))r[cols[i+k]]=t;
+          delete r.mh[f];});
+        cols.forEach((f,i)=>{
+          const add=[gen,lvT[i]].filter(Boolean).join("\n"),cur=txt(r[f]);
+          if(add&&!cur.includes(add))r[f]=cur?cur+"\n"+add:add;
+        });
+      }
       changed=true;
     }
     CURR_OLD_FIELDS.forEach(k=>{if(k in r){delete r[k];changed=true;}});
@@ -10492,6 +10499,7 @@ function currFoldRows(list){
         if(to&&(k==="fill"||k==="fmt"||k==="cn")&&!(to in o))o[to]=o[c];
         delete o[c];changed=true;});
       if(!Object.keys(o).length)delete r[k];});
+    if(r.mh&&!Object.keys(r.mh).length)delete r.mh;
   });
   return {gone,changed};
 }
