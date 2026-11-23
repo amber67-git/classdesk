@@ -258,6 +258,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 듣기·문법 문항(v158): 평가 창 안의 `.ltq-sec`은 `--surf2` 바탕, `--bdr` 테두리, 반경 10px의 한 덩어리로 — 제목(`.lt-ph`), 한 문단 설명(`.u-hint`), 시작 레벨 `.seg`(선택은 `.seg-btn.active`), 버튼 줄(`.ltq-sec-row`: 주 버튼 "문항 시작" 하나 + 보조 버튼 둘). 그 아래 직접 고르기 목록 앞에는 `.lt-ph.ltq-or` 제목만 둔다. 마지막 평가 한 줄 `.ltq-last`는 `--txt2`, `--fs-sm`. 학생 화면은 읽기 테스트의 틀을 그대로 쓴다(`.lt-tbar`의 "Listening B"/"Grammar B", 점 진행 표시, `.lt-opt`, `.lt-idk`, `.lt-tfoot`); 새로 생긴 것은 선생님 메뉴 안의 대본 상자 `.lt-xscript`(읽기용 글꼴 16px/1.6, `--lt-line` 테두리)뿐이다. 인쇄물은 `LT_SHEET_CSS`에 `LT_SEC_CSS`(대본 `.sh-say`, 문항 목록 `.sh-says`)만 더한다.
 
+책 읽기 확인(v160): 학생 자세히 패널 안에서 영역 칩 다음에 오는 블록. 제목은 `.lt-ph`, 그 아래 구분별 책 목록 `.lt-bk-sum`(작은 알약 `.lt-bk-band` + 책 제목들), 기록 행은 테스트 기록과 같은 `.lt-hrow`(날짜 `.lt-hdate`, 내용 `.lt-htext`, 오른쪽에 알약과 휴지통 `.bic`), 맨 아래 `.lt-bk-add`에 작은 버튼. 알약 색은 뜻과 묶여 있다 — 혼자 읽기 편함 `--grn-l`/`--grn-t`, 수업용 `--amb-l`/`--amb-t`, 아직 어려움 `--red-l`/`--red-t` — 다크 모드에서도 같은 토큰을 쓴다. 입력 창은 평가 창과 같은 틀(`.fg`, 두 칸 `.ltq-counts`)이고 결과 줄 `.ltb-res`가 정확도(굵게)와 알약을 바로 보여 준다.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}
