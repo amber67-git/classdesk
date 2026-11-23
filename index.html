@@ -8492,6 +8492,7 @@ function ltRenderStart(){
   if(sec)LTS.mode="online";
   const L=LTS.level,info=AEA.LEVEL_INFO[L],paper=LTS.mode==="paper",g=id=>document.getElementById(id);
   g("lts-what-row").hidden=!LTS.trial;g("lts-mode-row").hidden=sec;
+  g("lts-guest-hint").hidden=sec;                          // a Listening / Grammar sample stores nothing, so there is nothing to move later
   g("lts-what").innerHTML=[["reading",tx("Reading|skill")],["listening",tx("Listening")],["grammar",tx("Grammar")]].map(([k,t])=>
     `<button type="button" class="seg-btn${k===LTS.what?" active":""}" aria-pressed="${k===LTS.what}" onclick="ltSetStartWhat('${k}')">${escapeAttr(t)}</button>`).join("");
   if(!AEA.formsAt(L).includes(LTS.form))LTS.form=ltPickForm(LTS.sid,L);
@@ -9542,7 +9543,11 @@ function ltxOpen(sid,dom,level,opt){
   const s=sample?{id:LTX_SAMPLE}:ltStudent(sid);
   if(!s||s.trial||!AEA.LEVELS.includes(level)||LT.aid||LTX.sid)return;
   if(task?!(LT_TASKS[dom]&&!sample):!LT_SEC[dom])return;
-  Object.assign(LTX,{sid:s.id,dom:dom,level:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:null,final:"",saved:false,sample:sample,name:sample?String(opt.name||""):""});
+  // A task is shown from the rating window: what the teacher has already picked or typed there is
+  // kept and put back when the task ends (ltxTaskDone).
+  const g=id=>document.getElementById(id);
+  const draft=task&&ltSame(LTR.sid,s.id)&&LTR.dom===dom?{level:LTR.level,manual:LTR.manual,rub:Object.assign({},LTR.rub),note:g("ltq-note").value,c1:g("ltq-c1").value,c2:g("ltq-c2").value}:null;
+  Object.assign(LTX,{sid:s.id,dom:dom,level:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:null,final:"",saved:false,sample:sample,name:sample?String(opt.name||""):"",draft:draft});
   closeModal("mo-lt-rate");
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -9675,8 +9680,15 @@ Object.assign(LT_ACTS,{
 // The task has been shown: back to the rating window of that skill, where the teacher rates.
 function ltxTaskDone(){
   if(!LTX.sid||LTX.screen!=="task")return;
-  const sid=LTX.sid,dom=LTX.dom;
+  const sid=LTX.sid,dom=LTX.dom,level=LTX.level,d=LTX.draft;
   ltxClose();ltOpenRate(sid,dom);
+  if(!ltSame(LTR.sid,sid)||LTR.dom!==dom)return;            // the window did not open (the student is gone)
+  LTR.start=level;                                        // the level whose task was just shown
+  if(d){
+    Object.assign(LTR,{level:d.level,manual:d.manual,rub:d.rub});
+    const g=id=>document.getElementById(id);g("ltq-note").value=d.note;g("ltq-c1").value=d.c1;g("ltq-c2").value=d.c2;
+  }
+  ltRenderRate();
 }
 function ltPickStart(L){if(AEA.LEVELS.includes(L)){LTR.start=L;ltRenderRate();}}
 // The printed side of the questions: the sheet a student writes on (one level), or the teacher's
@@ -15597,7 +15609,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="mo" id="mo-lt-start">
   <div class="mb" style="max-width:480px">
     <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
-    <div class="fg" id="lts-guest-row" hidden><label for="lts-guest" data-i18n>Name (optional)</label><input id="lts-guest" type="text" maxlength="40" placeholder="e.g. the child at a trial lesson" data-i18n-ph/><p class="u-hint" data-i18n>Not tied to a student. If the child joins, you can move the test to the student later.</p></div>
+    <div class="fg" id="lts-guest-row" hidden><label for="lts-guest" data-i18n>Name (optional)</label><input id="lts-guest" type="text" maxlength="40" placeholder="e.g. the child at a trial lesson" data-i18n-ph/><p class="u-hint" id="lts-guest-hint" data-i18n>Not tied to a student. If the child joins, you can move the test to the student later.</p></div>
     <div class="fg" id="lts-what-row" hidden><label data-i18n>What to try</label><div class="seg" id="lts-what"></div></div>
     <div class="fg" id="lts-mode-row"><label data-i18n>How the test is taken</label><div class="seg" id="lts-mode"></div></div>
     <div class="fg"><label id="lts-level-lbl"></label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
