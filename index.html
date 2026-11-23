@@ -286,6 +286,12 @@ textarea.cs-ed.on~.cs-fh,textarea.cs-ed.on~.cs-notetip{display:none!important}
 .cs-fcount{font-size:12px;color:var(--txt3);min-width:64px;white-space:nowrap}
 .cs-sheetbar .cs-fclear[hidden]{display:none}
 .cs-sheetbar .cs-fclear{color:var(--grn-t);border-color:var(--grn)}
+/* v163: a week is one row; Writing, Speaking and Grammar each have a column per level group */
+#curr-table thead th .cs-sub{margin-left:6px;vertical-align:1px}
+#curr-table thead th.cs-g1{box-shadow:inset 2px 0 0 var(--bdr2)}
+.cm-lv{display:grid;gap:6px}
+.cm-lv>label{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;gap:8px;margin:0}
+.cm-lv>label>span{font-size:var(--fs-sm);font-weight:600;color:var(--txt2)}
 #curr-table thead th.cs-filt{color:var(--grn-t);box-shadow:inset 0 -2px 0 var(--grn)}
 .cs-fpop{width:270px}
 .cs-fp-h{font-size:12px;font-weight:600;color:var(--txt2);padding:4px 10px 6px}
@@ -1710,7 +1716,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       </div>
       <div class="tw">
         <table id="curr-table">
-          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="wb" data-i18n>Workbook</th><th data-col="writing" data-i18n>Writing</th><th data-col="books" data-i18n>Books</th><th data-col="acts" data-i18n>Activities</th><th data-col="grammar" data-i18n>Grammar</th><th data-col="note" data-i18n>Notes</th><th data-col="level" data-i18n>Level</th><th data-col="speaking" data-i18n>Speaking</th><th class="cur-act-h"><button class="bic" onclick="currResetCols()" title="Reset column widths" data-i18n-title><i class="ti ti-arrows-horizontal"></i></button></th></tr></thead>
+          <thead data-header-page="curriculum"><tr><th data-i18n>Month</th><th data-i18n>Wk</th><th data-col="cat" data-i18n>Category</th><th data-col="topic" data-i18n>Topic</th><th data-col="books" data-i18n>Books</th><th data-col="wb" data-i18n>Workbook</th><th class="cs-g1"><span data-col="writing" data-i18n>Writing</span><span class="lv-badge cs-sub">A·B</span></th><th><span data-col="writing" data-i18n>Writing</span><span class="lv-badge cs-sub">C</span></th><th><span data-col="writing" data-i18n>Writing</span><span class="lv-badge cs-sub">D·E</span></th><th class="cs-g1"><span data-col="speaking" data-i18n>Speaking</span><span class="lv-badge cs-sub">A·B</span></th><th><span data-col="speaking" data-i18n>Speaking</span><span class="lv-badge cs-sub">C</span></th><th><span data-col="speaking" data-i18n>Speaking</span><span class="lv-badge cs-sub">D·E</span></th><th class="cs-g1"><span data-col="grammar" data-i18n>Grammar</span><span class="lv-badge cs-sub">A·B</span></th><th><span data-col="grammar" data-i18n>Grammar</span><span class="lv-badge cs-sub">C</span></th><th><span data-col="grammar" data-i18n>Grammar</span><span class="lv-badge cs-sub">D·E</span></th><th class="cs-g1" data-col="acts" data-i18n>Activities</th><th data-col="note" data-i18n>Notes</th><th class="cur-act-h"><button class="bic" onclick="currResetCols()" title="Reset column widths" data-i18n-title><i class="ti ti-arrows-horizontal"></i></button></th></tr></thead>
           <tbody id="curr-body"></tbody>
         </table>
       </div>
@@ -2261,7 +2267,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
-          <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only the rows for that level show; press <b>All levels</b> to see everything. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
+          <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only that level's columns show; press <b>All levels</b> to see every column. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
           <dt>How do I find out which books a student can read?</dt><dd>Level test → the student's <b>Details</b> → <b>Add a book check</b>. Pick a book, mark about 100 words in the middle, have the student read them aloud and count the words they miss or need help with; then ask what it was about. 5 or fewer missed in 100 is a book to read alone, 6 to 10 a book for lessons, more is too hard for now — and one band down if they could not say what it was about. Try an easier or a harder book until you have one of each: the lists at the top of the block are the range. Use the same pages for every student if you want to compare them, and avoid a book the student already knows.</dd>
           <dt>How do I check Listening and Grammar, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b> or <b>Grammar</b> → <b>Start the questions</b>. For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
@@ -2280,7 +2286,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Can I lock the Payments page on the tablet?</dt><dd>Yes — Settings → Account → <b>Payments PIN</b>. Once set, tablets and phones ask for the PIN before Payments opens or hidden amounts are revealed, and Payments locks again the moment you leave it. PCs never ask. The PIN is shared by every device signed in with your account, so set it once on the PC.</dd>
           <dt>A curriculum column is too narrow to read</dt><dd>Drag the thin line on the right edge of that column's heading — like Google Sheets. Double-click the line to fit the column to its text; the ↔ button at the right end of the heading row resets all widths. Each device remembers its own widths.</dd>
           <dt>Editing the curriculum like a spreadsheet</dt><dd>On a tablet or computer: click a cell and type to replace it, or press Enter / F2 / double-click to change what is there (<kbd>Alt</kbd>+<kbd>Enter</kbd> starts a new line, <kbd>Esc</kbd> cancels). Enter, Tab and the arrow keys move; Shift+arrows or dragging selects several cells. <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>V</kbd> copy and paste — blocks from Google Sheets or Excel fill the cells, and rows past the end are added. Delete clears, <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd> undo and redo. <b>Rows:</b> <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> or drag ⠿ to move a row; right-click (or ⋮) to insert, duplicate or delete. <b>Merge</b> joins the selected cells (all, vertically or horizontally); a merged cell keeps the top-left text, and in a vertical merge every week in it shares that text. Moving a row never cuts a merge in half. The palette button colours cells, and <b>Sort</b> puts the rows shown in date order, oldest first. <b>Style:</b> <kbd>Ctrl</kbd>+<kbd>B</kbd> bold, <kbd>Ctrl</kbd>+<kbd>I</kbd> italic, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> strikethrough (or the B / I / S buttons). <b>Notes:</b> <kbd>Shift</kbd>+<kbd>F2</kbd> or right-click → Insert note; a cell with a note has a small corner mark and shows the note when selected. <b>Find and replace:</b> <kbd>Ctrl</kbd>+<kbd>F</kbd> / <kbd>H</kbd> or 🔍 — matches are outlined, Enter goes to the next one, and Replace all can be undone in one step (month and week cells are found but not replaced). <b>Filter</b> hides rows by a column's values (only on this device, until you leave the page) and sorts the rows A → Z or Z → A by that column; rows held by a vertical merge stay together. <b>Fill handle:</b> drag the small green square at the corner of the selection down or up to repeat the cells with their colour and style; two week numbers (1, 2) carry on as 3, 4, 5. The line-height button clips each row to 3 lines or 1 line on this device. Every change is saved and synced straight away.</dd>
-          <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note, and — if you teach several levels — Level and Speaking. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. A row with a <b>Level</b> (A·B, C, D·E…) and an <b>empty topic cell</b> is that level's row of the topic above it: it takes that topic's name, month and week. A year row or three empty rows end that, so put each level row directly under its topic. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
+          <dt>Writing, Speaking and Grammar have three columns each. How do I write one text for every level?</dt><dd>A week is one row, and the three columns are the levels <b>A·B</b>, <b>C</b> and <b>D·E</b>. For a text that is the same for everyone, select the three cells and press <b>Merge → Merge horizontally</b>: they become one wide cell. In the topic window (the pencil), typing the same text in all three boxes does the same. To give the levels their own texts again, press <b>Merge → Unmerge</b> or change one of the boxes. With a level or a student picked above the sheet, only that level's column shows — and a text for every level still shows there.</dd>
+          <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Speaking, Note. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. <b>If you teach several levels</b>, give Writing, Speaking and Grammar a column for each level: headings such as <b>Writing A·B</b>, <b>Writing C</b>, <b>Writing D·E</b> — or one heading <b>Writing</b> across three columns with <b>A·B | C | D·E</b> in the row under it. One plain <b>Grammar</b> column (no level in the heading) is read as a text for every level. A sheet in the older layout — a <b>Level</b> column and a row for each level under its topic, the topic cell left empty — is still read: those rows are folded into their week. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
           <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. Since v129 this Guide has a Korean version too and switches with the rest of the app.</dd>
           <dt>Can I use a dark screen?</dt><dd>Settings → Templates → <b>Appearance</b>: "Match the device" (the default — dark when the phone or computer is set to dark, and it changes along with it), Light or Dark. It is set per device, so the classroom PC can stay light while your phone is dark. It is not part of a backup, and printed labels and reports always come out light.</dd>
           <dt>Can I change the app icon to my own logo?</dt><dd>Settings → Templates → <b>App logo</b>. It changes the sidebar logo and browser-tab icon on every signed-in device. On iPhone/iPad it also becomes the home-screen icon if you add the app <i>after</i> setting it. The Android home-screen icon is fixed at install time.</dd>
@@ -2291,6 +2298,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v163 · 2026-11-23</dt><dd><b>Curriculum: a week is one row.</b> Until now a topic had one row for everyone and one more for each level, so a week took four rows. Now <b>a week is one row</b>, and what differs by level sits side by side: <b>Writing</b>, <b>Speaking</b> and <b>Grammar</b> each have three columns — <b>A·B</b>, <b>C</b>, <b>D·E</b>. The Level column is gone, and Books now comes before Workbook. A text that is the same for every level is one wide cell across the three columns. <b>Your rows are converted the first time you open the Curriculum page</b>: each level row moves into its week, what you typed is kept, and the rows as they were are kept as a copy on that device. Open the page on your other devices too, so they all use the new layout. <b>Level and student buttons</b> now pick columns instead of rows: every week stays, and only that level's Writing, Speaking and Grammar show. The <b>monthly note</b> reads the student's level column. <b>The topic window</b> has a box for each level. <b>Import</b> reads a sheet with a column per level (see the FAQ) and still reads the older layout. <b>2027 plan:</b> Grammar now has a line for each level — the week's point for C, a simpler step for A·B and a further one for D·E; the five review weeks keep one line for everyone. A line above the sheet offers <b>Update my plan</b> (only rows that still show the plan's own Grammar are changed, with Undo) or <b>Keep mine</b>.</dd>
           <dt>v162 · 2026-11-23</dt><dd><b>Level test: the teacher's script on the screen.</b> The Level test page has a new button, <b>Teacher's script</b>. Pick a level (A–E) and a skill and read straight from your phone while the students hold the printed sheets: <b>Listening</b> shows what to read aloud, each question and its answer (levels C–E start with the passage); <b>Speaking</b> the questions to ask; <b>Writing</b> the task; <b>Grammar</b> the answers. Under Listening and Grammar is the rule for the next level and where it ends, and <b>Hide the answers</b> takes the answers off while a student can see your screen. The same view opens from a student's Listening or Grammar window with <b>Script on this screen</b> / <b>Answers on this screen</b>, at the level picked there. Nothing is stored by looking. On phones the buttons at the top of the Level test page now wrap onto a second row.</dd>
           <dt>v161 · 2026-11-23</dt><dd><b>Level test: everything ready by level.</b> <b>Samples of Listening and Grammar:</b> <b>Sample test</b> now asks what to try — Reading, Listening or Grammar. The Listening and Grammar samples run exactly like the real questions but belong to no student: nothing is saved, and the last screen shows the result. <b>Speaking and Writing tasks:</b> each level (A–E) has a ready task. In a student's Details press <b>Speaking</b> or <b>Writing</b>, choose the level and press <b>Show the task</b> to put it on the student's screen (hold the lock for the questions to ask; hold the button at the bottom to finish and rate), or print it — a picture or question card for Speaking, a sheet with lines for Writing. <b>Print sheets</b> now lists everything by level: under each level its reading sets and its Listening, Grammar, Speaking and Writing sheets. Press the level's badge to tick one of each — a whole pack for one student — and <b>Answer key</b> prints the matching answers, the listening script, and for Speaking and Writing the questions to ask and what each level looks like. The Listening questions no longer need colour (the red apple is now a banana); only level A reading sheets still do.</dd>
           <dt>v160 · 2026-11-23</dt><dd><b>Level test: book checks.</b> A student's <b>Details</b> has a new block, <b>Book checks</b>, for finding out which real books a student can read. Press <b>Add a book check</b>, have the student read about 100 words aloud from a book they have not read, and type the title, the words read, the words missed and whether they could say what it was about. ClassDesk works out the share read right and a band: <b>Comfortable alone</b> (95% or more — 5 or fewer missed in 100), <b>Right for lessons</b> (90% or more — 6 to 10 missed) or <b>Too hard for now</b>. A student who could not say what it was about goes one band down. The top of the block lists the books by band, each by its newest check — that is the student's range, in books you own — and the checks are kept with their dates. The title box suggests books from your Books page. The <b>parent report</b> has a new section, <b>책 읽기</b>, with the same three lists. <b>Retest due</b> now shows six months after a test instead of three, and the report gives the next test six months on — the full test is taken twice a year.</dd>
@@ -2350,7 +2358,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v162</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v163</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2491,7 +2499,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
-          <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨 줄만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
+          <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨의 칸만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
           <dt>학생이 어떤 책까지 읽을 수 있는지 어떻게 알아보나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>책 읽기 확인 추가</b>. 책을 고르고 중간쯤에서 100단어 정도를 표시해 둔 뒤, 소리 내어 읽게 하면서 틀리거나 도와준 단어를 세세요. 다 읽으면 무슨 내용이었는지 물어봅니다. 100단어 중 5개 이하로 틀리면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책이고, 내용을 말하지 못했으면 한 단계 낮춥니다. 더 쉬운 책이나 더 어려운 책으로 바꿔 가며 각각 하나씩 나오면, 맨 위의 목록이 그 학생의 범위입니다. 학생끼리 비교하려면 같은 쪽을 읽히고, 이미 아는 책은 피하세요.</dd>
           <dt>듣기와 문법은 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b> 또는 <b>문법</b> → <b>문항 시작</b>. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
@@ -2510,7 +2518,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>태블릿에서 수업료 화면을 잠글 수 있나요?</dt><dd>네 — 설정 → 계정 → <b>수업료 PIN</b>. 설정하면 태블릿과 휴대폰에서는 수업료 화면을 열거나 가려진 금액을 볼 때 PIN을 묻고, 수업료 화면을 떠나는 순간 다시 잠깁니다. PC에서는 묻지 않습니다. PIN은 내 계정으로 로그인한 모든 기기가 함께 쓰므로 PC에서 한 번만 설정하면 됩니다.</dd>
           <dt>커리큘럼 열이 좁아서 잘 안 보여요</dt><dd>그 열 제목 오른쪽 끝의 가는 선을 끌어 넓히세요 — Google 스프레드시트처럼요. 선을 두 번 누르면 글에 맞게 너비가 맞춰지고, 제목 줄 오른쪽 끝의 ↔ 버튼은 모든 너비를 처음으로 되돌립니다. 너비는 기기마다 따로 기억합니다.</dd>
           <dt>커리큘럼을 스프레드시트처럼 고치기</dt><dd>태블릿이나 컴퓨터에서: 셀을 누르고 입력하면 내용이 바뀌고, Enter·F2·두 번 누르기로는 있던 내용을 고칩니다(<kbd>Alt</kbd>+<kbd>Enter</kbd>는 줄 바꿈, <kbd>Esc</kbd>는 취소). Enter·Tab·방향키로 이동하고, Shift+방향키나 끌기로 여러 셀을 고릅니다. <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>V</kbd>로 복사·붙여넣기를 하며, Google 스프레드시트나 엑셀에서 복사한 칸을 붙이면 셀이 채워지고 모자란 줄은 새로 생깁니다. Delete는 지우기, <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd>는 실행 취소와 다시 실행입니다. <b>줄:</b> <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>나 ⠿를 끌어 줄을 옮기고, 오른쪽 클릭(또는 ⋮)으로 삽입·복제·삭제합니다. <b>병합</b>은 고른 셀을 하나로 합칩니다(모두·세로·가로). 병합한 셀에는 왼쪽 맨 위 내용이 남고, 세로로 병합하면 그 안의 모든 주가 같은 내용을 씁니다. 줄을 옮겨도 병합이 반으로 잘리지 않습니다. 팔레트 버튼은 셀에 색을 칠하고, <b>정렬</b>은 보이는 줄을 날짜 순서(오래된 것부터)로 놓습니다. <b>글자 모양:</b> <kbd>Ctrl</kbd>+<kbd>B</kbd> 굵게, <kbd>Ctrl</kbd>+<kbd>I</kbd> 기울임, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> 취소선(또는 B·I·S 버튼). <b>메모:</b> <kbd>Shift</kbd>+<kbd>F2</kbd>나 오른쪽 클릭 → 메모 넣기. 메모가 있는 셀은 모서리에 작은 표시가 있고, 셀을 고르면 메모가 보입니다. <b>찾기 및 바꾸기:</b> <kbd>Ctrl</kbd>+<kbd>F</kbd> / <kbd>H</kbd> 또는 🔍. 찾은 셀에 테두리가 생기고 Enter로 다음으로 가며, 모두 바꾸기도 실행 취소 한 번으로 되돌립니다(월·주 칸은 찾기만 하고 바꾸지 않습니다). <b>필터</b>는 한 열의 값으로 줄을 숨기고(이 기기에서, 페이지를 떠날 때까지), 그 열 기준으로 오름차순·내림차순 정렬도 합니다. 세로 병합으로 묶인 줄은 함께 움직입니다. <b>채우기 핸들:</b> 고른 칸 모서리의 작은 초록 네모를 아래나 위로 끌면 색과 글자 모양까지 그대로 반복됩니다. 주차 두 개(1, 2)를 끌면 3, 4, 5로 이어집니다. 줄 높이 버튼은 이 기기에서 줄마다 3줄이나 1줄까지만 보이게 합니다. 바꾼 내용은 바로 저장되고 동기화됩니다.</dd>
-          <dt>스프레드시트에 있는 커리큘럼을 가져오려면요?</dt><dd>커리큘럼 → <b>가져오기</b>. Google 스프레드시트에서 제목 줄까지 포함해 행을 선택하고 복사(Ctrl+C)한 뒤 상자에 붙여 넣거나, 파일 → 다운로드 → CSV로 받은 파일을 고르세요. 열은 제목으로 찾습니다: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Note, 그리고 여러 레벨을 가르친다면 Level과 Speaking. 연도만 있는 행(2025)이 그 연도의 시작이 되고, 주제 칸 맨 앞의 "[과학]" 같은 표시는 카테고리가 됩니다. <b>Level</b>(A·B, C, D·E…)이 있고 <b>주제 칸이 빈</b> 행은 바로 위 주제의 그 레벨 줄이 되어, 그 주제의 이름·월·주차를 물려받습니다. 연도 행이나 빈 행 세 줄이 나오면 그 연결이 끊기므로, 레벨 줄은 주제 바로 아래에 두세요. 바꾸기 전에 찾은 내용을 창에서 먼저 보여 주고, 앱에 이미 있는 주제는 빈 칸만 채우며(중복으로 만들지 않음), 가져온 직후에는 되돌리기도 할 수 있습니다.</dd>
+          <dt>쓰기·말하기·문법이 세 칸씩인데, 모든 레벨에 같은 내용은 어떻게 쓰나요?</dt><dd>한 주가 한 줄이고, 세 칸은 레벨 <b>A·B</b>, <b>C</b>, <b>D·E</b>입니다. 모두에게 같은 내용이면 세 칸을 선택하고 <b>병합 → 가로로 병합</b>을 누르세요. 넓은 한 칸이 됩니다. 주제 창(연필)에서 세 칸에 같은 내용을 쓰면 똑같이 됩니다. 레벨마다 다르게 쓰려면 <b>병합 → 병합 해제</b>를 누르거나 한 칸의 내용을 바꾸세요. 표 위에서 레벨이나 학생을 고르면 그 레벨의 칸만 보이며, 모든 레벨 공통 내용은 그때도 보입니다.</dd>
+          <dt>스프레드시트에 있는 커리큘럼을 가져오려면요?</dt><dd>커리큘럼 → <b>가져오기</b>. Google 스프레드시트에서 제목 줄까지 포함해 행을 선택하고 복사(Ctrl+C)한 뒤 상자에 붙여 넣거나, 파일 → 다운로드 → CSV로 받은 파일을 고르세요. 열은 제목으로 찾습니다: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Speaking, Note. 연도만 있는 행(2025)이 그 연도의 시작이 되고, 주제 칸 맨 앞의 "[과학]" 같은 표시는 카테고리가 됩니다. <b>여러 레벨을 가르친다면</b> 쓰기·말하기·문법에 레벨마다 열을 하나씩 두세요: 제목을 <b>Writing A·B</b>, <b>Writing C</b>, <b>Writing D·E</b>처럼 쓰거나, 제목 <b>Writing</b> 하나를 세 열에 걸쳐 두고 바로 아래 줄에 <b>A·B | C | D·E</b>를 적으면 됩니다. 레벨 표시 없이 <b>Grammar</b> 열 하나만 있으면 모든 레벨 공통 내용으로 읽습니다. 예전 방식(<b>Level</b> 열이 있고, 주제 아래에 주제 칸을 비운 레벨별 행을 둔 시트)도 그대로 읽어서 그 행들을 해당 주에 합칩니다. 바꾸기 전에 찾은 내용을 창에서 먼저 보여 주고, 앱에 이미 있는 주제는 빈 칸만 채우며(중복으로 만들지 않음), 가져온 직후에는 되돌리기도 할 수 있습니다.</dd>
           <dt>앱을 한국어로 쓸 수 있나요?</dt><dd>설정 → 템플릿 → <b>언어</b>: "기기 언어에 맞춤"(기본), English, 한국어 중에서 고릅니다. 고르면 앱이 새 언어로 다시 열립니다. 앱의 말만 바뀌고, 학생 이름·메모·메시지 템플릿은 입력한 그대로 남습니다. v129부터는 이 설명서도 한국어로 바뀝니다.</dd>
           <dt>어두운 화면으로 쓸 수 있나요?</dt><dd>설정 → 템플릿 → <b>화면 모드</b>: "기기 설정에 맞춤"(기본 — 휴대폰이나 컴퓨터가 어두운 모드면 어둡게, 기기 설정이 바뀌면 함께 바뀝니다), 밝게, 어둡게. 기기마다 따로 정하므로 교실 PC는 밝게, 휴대폰은 어둡게 둘 수 있습니다. 백업 파일에는 들어가지 않고, 인쇄하는 라벨과 보고서는 항상 밝게 나옵니다.</dd>
           <dt>앱 아이콘을 내 로고로 바꿀 수 있나요?</dt><dd>설정 → 템플릿 → <b>앱 로고</b>. 로그인한 모든 기기에서 사이드바 로고와 브라우저 탭 아이콘이 바뀝니다. 아이폰/아이패드에서는 로고를 정한 <i>뒤에</i> 앱을 홈 화면에 추가하면 홈 화면 아이콘도 바뀝니다. 안드로이드 홈 화면 아이콘은 설치할 때 정해집니다.</dd>
@@ -2521,6 +2530,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v163 · 2026-11-23</dt><dd><b>커리큘럼: 한 주가 한 줄입니다.</b> 지금까지는 주제마다 공통 줄 하나와 레벨별 줄이 따로 있어 한 주가 네 줄이었습니다. 이제 <b>한 주가 한 줄</b>이고, 레벨마다 다른 내용은 옆으로 나란히 놓입니다: <b>쓰기</b>, <b>말하기</b>, <b>문법</b>이 각각 <b>A·B</b>, <b>C</b>, <b>D·E</b> 세 칸입니다. 레벨 열은 없어졌고, 도서가 교재 앞으로 왔습니다. 모든 레벨에 같은 내용은 세 칸에 걸친 넓은 한 칸입니다. <b>기존 줄은 커리큘럼 페이지를 처음 열 때 자동으로 바뀝니다</b>: 레벨별 줄이 그 주의 줄로 합쳐지고, 직접 쓴 내용은 그대로 남으며, 바꾸기 전 모습은 그 기기에 사본으로 보관됩니다. 다른 기기에서도 페이지를 한 번 열어 모두 새 표를 쓰게 해 주세요. <b>레벨·학생 버튼</b>은 이제 줄이 아니라 칸을 고릅니다: 모든 주가 그대로 보이고, 그 레벨의 쓰기·말하기·문법 칸만 보입니다. <b>월간 안내</b>는 학생 레벨의 칸을 읽습니다. <b>주제 창</b>에는 레벨마다 칸이 있습니다. <b>가져오기</b>는 레벨마다 열이 있는 시트를 읽고(자주 묻는 질문 참고), 예전 방식의 시트도 그대로 읽습니다. <b>2027 계획:</b> 문법이 레벨별로 한 줄씩 생겼습니다 — C는 그 주의 문법, A·B는 더 쉬운 단계, D·E는 한 단계 더 나아간 내용이며, 복습 주 다섯 번은 모두 같은 한 줄입니다. 표 위의 줄에서 <b>내 계획에 반영</b>(계획의 문법을 그대로 두고 있던 줄만 바뀌며 되돌릴 수 있습니다) 또는 <b>그대로 두기</b>를 고르세요.</dd>
           <dt>v162 · 2026-11-23</dt><dd><b>레벨테스트: 선생님 대본을 화면에서 봅니다.</b> 레벨테스트 페이지에 <b>선생님 대본</b> 버튼이 생겼습니다. 레벨(A–E)과 영역을 고르면, 학생이 인쇄한 시험지를 들고 있는 동안 핸드폰을 보며 바로 읽어 줄 수 있습니다. <b>듣기</b>는 읽어 줄 말과 질문, 정답이 문항마다 나오고(레벨 C–E는 글이 먼저 나옵니다), <b>말하기</b>는 물어볼 질문, <b>쓰기</b>는 과제, <b>문법</b>은 정답이 나옵니다. 듣기와 문법 아래에는 다음 레벨과 끝나는 조건을 정하는 기준이 있고, 학생이 화면을 볼 수 있을 때는 <b>정답 가리기</b>로 정답을 숨길 수 있습니다. 학생의 듣기·문법 창에서도 <b>화면에서 대본 보기</b> / <b>화면에서 정답 보기</b>로 같은 화면이 그 창에서 고른 레벨로 열립니다. 보기만 하는 화면이라 저장되는 것은 없습니다. 핸드폰에서는 레벨테스트 페이지 위쪽 버튼이 두 줄로 나뉩니다.</dd>
           <dt>v161 · 2026-11-23</dt><dd><b>레벨테스트: 레벨별로 모두 준비되어 있습니다.</b> <b>듣기·문법 샘플:</b> <b>샘플 테스트</b>에서 읽기, 듣기, 문법 중 무엇을 해 볼지 고릅니다. 듣기·문법 샘플은 실제 문항과 똑같이 진행되지만 어느 학생에게도 연결되지 않습니다. 저장되는 것은 없고, 마지막 화면에 결과가 나옵니다. <b>말하기·쓰기 과제:</b> 레벨(A–E)마다 과제가 준비되어 있습니다. 학생의 자세히에서 <b>말하기</b>나 <b>쓰기</b>를 누르고 레벨을 고른 뒤 <b>과제 보여 주기</b>를 누르면 학생 화면에 과제가 나옵니다(자물쇠를 길게 누르면 물어볼 질문이 나오고, 아래 버튼을 길게 누르면 마치고 평가로 넘어갑니다). 종이로도 인쇄할 수 있습니다 — 말하기는 그림·질문 카드, 쓰기는 줄이 있는 시험지입니다. <b>시험지 인쇄</b>에는 이제 레벨별로 모든 것이 나옵니다: 레벨마다 읽기 세트와 듣기, 문법, 말하기, 쓰기 시험지. 레벨 표시를 누르면 하나씩 한 묶음이 선택되고 — 학생 한 명분입니다 — <b>정답지</b>를 누르면 그에 맞는 정답, 듣기 대본, 말하기·쓰기의 질문과 레벨별 모습이 인쇄됩니다. 듣기 문항은 이제 색을 구분할 필요가 없습니다(빨간 사과를 바나나로 바꿨습니다). 컬러 인쇄가 필요한 것은 읽기 레벨 A 시험지뿐입니다.</dd>
           <dt>v160 · 2026-11-23</dt><dd><b>레벨테스트: 책 읽기 확인.</b> 학생의 <b>자세히</b>에 <b>책 읽기 확인</b>이 생겼습니다. 학생이 실제로 어떤 책까지 읽을 수 있는지 알아보는 기록입니다. <b>책 읽기 확인 추가</b>를 누르고, 학생이 읽어 보지 않은 책에서 100단어쯤을 소리 내어 읽게 한 뒤 책 제목, 읽은 단어 수, 틀린 단어 수, 내용을 말했는지를 적으세요. ClassDesk가 정확도와 구분을 계산합니다: <b>혼자 읽기 편함</b>(95% 이상 — 100단어 중 5개 이하 틀림), <b>수업용으로 알맞음</b>(90% 이상 — 6~10개 틀림), <b>아직 어려움</b>. 내용을 말하지 못했으면 한 단계 낮춥니다. 맨 위에는 책이 구분별로 정리되어 나오며(책마다 가장 최근 확인 기준), 이것이 가지고 계신 책으로 본 그 학생의 범위입니다. 확인 기록은 날짜와 함께 남습니다. 책 제목 칸에는 도서 화면의 책이 추천으로 뜹니다. <b>학부모 리포트</b>에도 같은 세 목록이 <b>책 읽기</b>로 들어갑니다. <b>재테스트 시기</b> 표시는 이제 테스트 후 3개월이 아니라 6개월 뒤에 나오고, 리포트의 다음 평가 예정일도 6개월 뒤입니다 — 전체 테스트를 일 년에 두 번 보기 때문입니다.</dd>
@@ -2579,7 +2589,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v162</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v163</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3162,16 +3172,11 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
       <div class="fg"><label data-col="wb" data-i18n>Workbook</label><input id="cm-wb" type="text"/></div>
       <div class="fg"><label data-col="books" data-i18n>Books</label><input id="cm-books" type="text"/></div>
     </div>
-    <div class="fg"><label data-col="writing" data-i18n>Writing</label><input id="cm-writing" type="text"/></div>
-    <div class="fr c2">
-      <div class="fg"><label data-col="grammar" data-i18n>Grammar</label><input id="cm-grammar" type="text"/></div>
-      <div class="fg"><label data-col="acts" data-i18n>Activities</label><input id="cm-acts" type="text"/></div>
-    </div>
+    <div class="fg"><label data-col="acts" data-i18n>Activities</label><input id="cm-acts" type="text"/></div>
+    <div class="fg"><label data-col="writing" data-i18n>Writing</label><div class="cm-lv"><label><span>A·B</span><input id="cm-wAB" type="text"/></label><label><span>C</span><input id="cm-wC" type="text"/></label><label><span>D·E</span><input id="cm-wDE" type="text"/></label></div></div>
+    <div class="fg"><label data-col="speaking" data-i18n>Speaking</label><div class="cm-lv"><label><span>A·B</span><input id="cm-sAB" type="text"/></label><label><span>C</span><input id="cm-sC" type="text"/></label><label><span>D·E</span><input id="cm-sDE" type="text"/></label></div></div>
+    <div class="fg"><label data-col="grammar" data-i18n>Grammar</label><div class="cm-lv"><label><span>A·B</span><input id="cm-gAB" type="text"/></label><label><span>C</span><input id="cm-gC" type="text"/></label><label><span>D·E</span><input id="cm-gDE" type="text"/></label></div></div>
     <div class="fg"><label data-col="note" data-i18n>Notes</label><input id="cm-note" type="text"/></div>
-    <div class="fr c2">
-      <div class="fg"><label data-col="level" data-i18n>Level</label><input id="cm-level" type="text" maxlength="12" placeholder="A·B" title="Leave empty when the row is for every level" data-i18n-title/></div>
-      <div class="fg"><label data-col="speaking" data-i18n>Speaking</label><input id="cm-speaking" type="text"/></div>
-    </div>
     <div id="cm-custom-fields"></div>
     <div class="mf"><button class="btn" onclick="closeModal('mo-curr')" data-i18n>Cancel</button><button class="btn btn-p" onclick="saveCurr()" data-i18n>Save topic</button></div>
   </div>
@@ -3230,17 +3235,18 @@ const t0=new Date();
 const dAgo=n=>{const d=new Date(t0);d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);};
 const DL=[];
 const DHW=[];
+// (v163: Writing and Grammar that are the same for every level sit in the first level column, merged across the three)
 const DC=[
-  {id:"c1",month:"APR",week:1,cat:"역사",topic:"교통의 변화",wb:"",writing:"",books:"Oxford RAD L5: Transportation",acts:"",grammar:"",note:""},
-  {id:"c2",month:"APR",week:1,cat:"디지털",topic:"오스모 코딩",wb:"Osmo",writing:"",books:"",acts:"Coding Awbie",grammar:"",note:""},
-  {id:"c3",month:"APR",week:2,cat:"역할극",topic:"Being a Kid",wb:"Write Right 1",writing:"Paragraph to Essay",books:"Role-play situations",acts:"",grammar:"",note:""},
-  {id:"c4",month:"MAY",week:1,cat:"생각 나누기",topic:"아낌없이 주는 나무",wb:"",writing:"Opinion writing",books:"THE GIVING TREE",acts:"Discussion",grammar:"",note:""},
-  {id:"c5",month:"MAY",week:2,cat:"동화",topic:"Hercules",wb:"",writing:"",books:"Usborne Young Reading 2-03",acts:"",grammar:"",note:""},
-  {id:"c6",month:"MAY",week:3,cat:"과학",topic:"How Dinosaurs Fossils Are Made?",wb:"",writing:"Explain how fossils form",books:"",acts:"",grammar:"",note:""},
-  {id:"c7",month:"MAY",week:4,cat:"",topic:"Sophie's Masterpiece",wb:"",writing:"",books:"Sophie's Masterpiece",acts:"",grammar:"Scholastic G1&4",note:""},
-  {id:"c8",month:"JUN",week:1,cat:"",topic:"My Plan for Summer",wb:"Write Right 2",writing:"Explain your plan",books:"",acts:"",grammar:"",note:""},
-  {id:"c9",month:"JUN",week:2,cat:"동화",topic:"The Fox and the Grapes",wb:"",writing:"Opinion writing",books:"",acts:"",grammar:"",note:""},
-  {id:"c10",month:"JUN",week:3,cat:"",topic:"Where Is the Hummingbird?",wb:"Write Right 2",writing:"Descriptive writing",books:"",acts:"",grammar:"",note:""},
+  {id:"c1",month:"APR",week:1,cat:"역사",topic:"교통의 변화",wb:"",books:"Oxford RAD L5: Transportation",acts:"",note:""},
+  {id:"c2",month:"APR",week:1,cat:"디지털",topic:"오스모 코딩",wb:"Osmo",books:"",acts:"Coding Awbie",note:""},
+  {id:"c3",month:"APR",week:2,cat:"역할극",topic:"Being a Kid",wb:"Write Right 1",books:"Role-play situations",acts:"",note:"",wAB:"Paragraph to Essay",mh:{wAB:3}},
+  {id:"c4",month:"MAY",week:1,cat:"생각 나누기",topic:"아낌없이 주는 나무",wb:"",books:"THE GIVING TREE",acts:"Discussion",note:"",wAB:"Opinion writing",mh:{wAB:3}},
+  {id:"c5",month:"MAY",week:2,cat:"동화",topic:"Hercules",wb:"",books:"Usborne Young Reading 2-03",acts:"",note:""},
+  {id:"c6",month:"MAY",week:3,cat:"과학",topic:"How Dinosaurs Fossils Are Made?",wb:"",books:"",acts:"",note:"",wAB:"Explain how fossils form",mh:{wAB:3}},
+  {id:"c7",month:"MAY",week:4,cat:"",topic:"Sophie's Masterpiece",wb:"",books:"Sophie's Masterpiece",acts:"",note:"",gAB:"Scholastic G1&4",mh:{gAB:3}},
+  {id:"c8",month:"JUN",week:1,cat:"",topic:"My Plan for Summer",wb:"Write Right 2",books:"",acts:"",note:"",wAB:"Explain your plan",mh:{wAB:3}},
+  {id:"c9",month:"JUN",week:2,cat:"동화",topic:"The Fox and the Grapes",wb:"",books:"",acts:"",note:"",wAB:"Opinion writing",mh:{wAB:3}},
+  {id:"c10",month:"JUN",week:3,cat:"",topic:"Where Is the Hummingbird?",wb:"Write Right 2",books:"",acts:"",note:"",wAB:"Descriptive writing",mh:{wAB:3}},
 ];
 const WB_CATS=["Reading","Writing","Speaking","Listening","Other"];
 
@@ -3778,7 +3784,8 @@ const I18N={ko:{
   "{up} or more right goes up a level, {down} or fewer goes down — one way only, stopping at A or E. The result is saved as the rating.":"{up}개 이상 맞으면 위 레벨로, {down}개 이하면 아래 레벨로 갑니다(한 방향으로만, A·E에서 멈춤). 결과가 평가로 저장됩니다.",
   "Start at level":"시작 레벨","Start the questions":"문항 시작","Script and answers":"대본과 정답","Paper sheet · level {level}":"종이 시험지 · 레벨 {level}","Or pick the level yourself":"또는 레벨을 직접 고르기",
   "Read aloud":"읽어 줄 내용","Stop and leave (nothing is saved)":"그만하고 나가기 (저장되지 않습니다)",
-  "The 2027 plan has changed: the level test is in June and December, and March and September have a short speaking and writing check — all in the second week.":"2027 계획이 바뀌었습니다: 레벨테스트는 6·12월에 보고, 3·9월에는 말하기·쓰기만 짧게 확인합니다 — 모두 둘째 주입니다.",
+  "The 2027 plan has changed: Grammar now has a line for each level, and the level test is in June and December with a short speaking and writing check in March and September.":"2027 계획이 바뀌었습니다: 문법이 레벨별로 나뉘었고, 레벨테스트는 6·12월에 보며 3·9월에는 말하기·쓰기만 짧게 확인합니다.",
+  "{n} rows get Grammar by level.":"{n}행의 문법이 레벨별로 나뉩니다.",
   "Keep mine":"그대로 두기","Update my plan":"내 계획에 반영","Nothing to change — your plan already matches.":"바꿀 것이 없습니다 — 이미 계획과 같습니다.",
   "{n} rows brought in line with the plan":"{n}행을 계획에 맞췄습니다","Update {n} rows":"{n}행 고치기",
   "{n} topics have a new name in the plan — they are renamed.":"주제 {n}개는 계획에서 이름이 바뀌었습니다 — 새 이름으로 바뀝니다.",
@@ -3892,7 +3899,7 @@ const I18N={ko:{
   "Monthly note for parents":"학부모께 보내는 월간 안내","Written in":"작성 언어","Message":"메시지","Add a student first.":"먼저 학생을 추가하세요.",
   "You can edit the text before copying.":"복사하기 전에 글을 고칠 수 있습니다.",
   "This student has no level yet, so only the rows meant for every level are listed. Set the level on the student, or confirm a level test.":"이 학생은 아직 레벨이 없어서 모든 레벨 공통 줄만 적었습니다. 학생 창에서 레벨을 정하거나 레벨테스트를 확정하세요.",
-  "No lesson parts are ticked on this student, so every part is listed.":"이 학생에게 체크된 수업 부분이 없어서 모든 부분을 적었습니다.","Level {lv}":"레벨 {lv}","Show one level, or what one student does":"한 레벨만 보거나, 한 학생이 하는 내용만 보기","Leave empty when the row is for every level":"모든 레벨에 해당하는 줄이면 비워 두세요",
+  "No lesson parts are ticked on this student, so every part is listed.":"이 학생에게 체크된 수업 부분이 없어서 모든 부분을 적었습니다.","Level {lv}":"레벨 {lv}","Show one level, or what one student does":"한 레벨만 보거나, 한 학생이 하는 내용만 보기",
   // ── v145: level test
   "Level test":"레벨테스트","Reading level test on screen, the result and the class level you confirm":"화면으로 보는 읽기 레벨테스트, 결과, 선생님이 확정하는 수업 레벨",
   "Start the level test":"레벨테스트 시작","Start level":"시작 레벨","Korean on the test screen at levels A and B":"A·B 레벨에서 테스트 화면에 한국어 보여 주기",
@@ -4414,7 +4421,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v162";
+const APP_VERSION="v163";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -6071,8 +6078,9 @@ function openCurrModal(id){
   {const dl=document.getElementById("cm-cat-list");if(dl)dl.innerHTML=currCategories().map(x=>`<option value="${escapeAttr(x)}"></option>`).join("");}
   set("cm-month",c?.month||"MAY");set("cm-week",c?.week||1);set("cm-cat",c?.cat);
   set("cm-topic",c?.topic);set("cm-wb",c?.wb);set("cm-books",c?.books);
-  set("cm-writing",c?.writing);set("cm-grammar",c?.grammar);set("cm-acts",c?.acts);set("cm-note",c?.note);
-  set("cm-level",c?.level);set("cm-speaking",c?.speaking);
+  set("cm-acts",c?.acts);set("cm-note",c?.note);
+  // a text that runs across the three levels (a horizontal merge) shows in each box; saving it unchanged keeps the merge
+  CURR_LV_FIELDS.forEach(f=>set("cm-"+f,c?csRaw(c,f):""));
   reorderModalFields("curriculum");
   renderCustomFieldsIntoModal("cm-custom-fields","curriculum",c);
   openModal("mo-curr");
@@ -6081,10 +6089,25 @@ function saveCurr(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
   const customFields=collectCustomFieldsFromModal("cm-custom-fields");
   const yr=parseInt(g("cm-year"),10);
-  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),writing:g("cm-writing"),grammar:g("cm-grammar"),acts:g("cm-acts"),note:g("cm-note"),level:currLevelText(g("cm-level")),speaking:g("cm-speaking"),customFields};
+  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),acts:g("cm-acts"),note:g("cm-note"),customFields};
   if(!obj.topic){alert(tx("Topic required"));return;}
-  if(editCid){const i=curriculum.findIndex(c=>c.id===editCid);if(i>=0)curriculum[i]={...curriculum[i],...obj};}
-  else curriculum.push({id:uid(),...obj});
+  const old=editCid?curriculum.find(c=>c.id===editCid):null;
+  // The level boxes. Where the row has one text across the levels and the boxes still all say it,
+  // nothing changes. The same text in all three boxes is kept once, across the three columns
+  // (what the sheet shows as one wide cell); otherwise each level keeps its own box.
+  let mh=null;
+  for(const sk in CURR_LVCOLS){
+    const cols=CURR_LVCOLS[sk],v=cols.map(f=>g("cm-"+f)),merged=old&&cols.some((f,i)=>i>0&&currAnchor(old,f)!==f);
+    if(merged&&cols.every((f,i)=>v[i]===csRaw(old,f)))continue;
+    mh=mh||Object.assign({},old&&old.mh);cols.forEach(f=>{delete mh[f];});
+    if(v[0]&&v.every(t=>t===v[0])){cols.forEach((f,i)=>{obj[f]=i?"":v[0];});mh[cols[0]]=cols.length;}
+    else cols.forEach((f,i)=>{obj[f]=v[i];});
+  }
+  if(mh)obj.mh=mh;
+  let rec=null;
+  if(editCid){const i=curriculum.findIndex(c=>c.id===editCid);if(i>=0)rec=curriculum[i]={...curriculum[i],...obj};}
+  else curriculum.push(rec={id:uid(),...obj});
+  if(rec&&rec.mh&&!Object.keys(rec.mh).length)delete rec.mh;
   save();closeModal("mo-curr");renderCurriculum();
 }
 async function delCurr(id){if(!confirm(tx("Delete this topic?")))return;const i=curriculum.findIndex(c=>c.id===id);if(i>=0)curriculum.splice(i,1);save();renderCurriculum();}
@@ -10351,6 +10374,7 @@ function currText(v){
   return escapeHTMLBasic(String(v||"")).replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u.replace(/"/g,"&quot;")}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--grn);word-break:break-all">${u.length>48?u.slice(0,45)+"…":u}</a>`);
 }
 function renderCurriculum(){
+  currColsOnce();
   currYearsAscOnce();
   currPlanBar();
   applyCustomLabelsToHeader("curriculum");
@@ -10397,7 +10421,94 @@ window.addEventListener("resize",()=>{if(typeof curPage!=="undefined"&&curPage==
 const currLevelsOf=v=>[...new Set(String(v||"").toUpperCase().match(/[A-E]/g)||[])].sort();
 // "a, b" / "AB" / "A·B" → "A·B". Text with no level letter in it is kept as typed.
 function currLevelText(v){const t=String(v||"").trim();if(!t)return "";const l=currLevelsOf(/^[\sA-Ea-e·,.&/+~-]+$/.test(t)?t:"");return l.length?l.join("·"):t;}
-const currForLevel=(c,lv)=>{const l=currLevelsOf(c.level);return !l.length||l.includes(lv);};
+// v163 — a week is ONE row. What differs by level sits side by side: Writing, Speaking and Grammar
+// each have three columns, for levels A·B, C and D·E (the owner's own sheet). The fields are
+// wAB wC wDE · sAB sC sDE · gAB gC gDE. A text that is the same for every level is written once, in
+// the first column, with a horizontal merge across the three (mh) — currAnchor finds it from the
+// columns it covers, so it still shows when a level button hides the first column.
+// Rows of the old shape (a "level" field, one row per level; or the single writing / speaking /
+// grammar fields) are folded into this shape by currFoldRows — on this device's list once
+// (currColsOnce) and on anything that is imported.
+const CURR_GROUPS=["AB","C","DE"],CURR_GROUP_NAME={AB:"A·B",C:"C",DE:"D·E"};
+const CURR_SKILLS={writing:"w",speaking:"s",grammar:"g"};
+const CURR_LVCOLS={},CURR_SUB={};
+for(const sk in CURR_SKILLS){CURR_LVCOLS[sk]=CURR_GROUPS.map(g=>CURR_SKILLS[sk]+g);CURR_LVCOLS[sk].forEach((c,i)=>{CURR_SUB[c]=[sk,CURR_GROUPS[i]];});}
+const CURR_LV_FIELDS=Object.keys(CURR_SUB);
+const CURR_OLD_FIELDS=["writing","speaking","grammar","level"];
+const currGroupOf=L=>L==="A"||L==="B"?"AB":L==="C"?"C":L==="D"||L==="E"?"DE":"";
+function currAnchor(rec,col){
+  const sub=CURR_SUB[col];if(!sub||!rec||!rec.mh)return col;
+  const cols=CURR_LVCOLS[sub[0]],i=cols.indexOf(col);
+  for(let k=0;k<i;k++)if((+rec.mh[cols[k]]||0)>i-k)return cols[k];
+  return col;
+}
+const currLvText=(rec,skill,group)=>{const v=rec[currAnchor(rec,CURR_SKILLS[skill]+group)];return v==null?"":String(v);};
+// Fold rows of the old shape into week rows. `list` is in sheet order; the records are changed in
+// place and the level rows that went into their topic's row are returned in `gone`.
+//  • a level row joins the row of the same year, month, week and topic that has no level; if there
+//    is none it becomes the week's row itself;
+//  • its writing / speaking / grammar go to the columns of its level group(s);
+//  • the single writing / speaking / grammar of a row for everyone: alone, it is written once and
+//    merged across the three levels; next to level texts it fills the levels that have none and
+//    stands above the others.
+function currFoldRows(list){
+  const gone=new Set(),bags=new Map();let changed=false;
+  const lvOf=r=>currLevelsOf(r.level),txt=v=>typeof v==="string"?v.trim():"";
+  const key=r=>String(r.year||"")+"|"+(r.month||"")+"|"+(+r.week||"")+"|"+currNorm(r.topic);
+  const mains=new Map();
+  list.forEach(r=>{if(r&&!lvOf(r).length&&!mains.has(key(r)))mains.set(key(r),r);});
+  list.forEach(r=>{
+    if(!r)return;
+    const lv=lvOf(r);if(!lv.length)return;
+    const groups=[...new Set(lv.map(currGroupOf))].filter(Boolean);
+    let m=mains.get(key(r));
+    if(!m){m=r;mains.set(key(r),r);}
+    else{gone.add(r);["cat","wb","books","acts","note"].forEach(k=>{if(txt(r[k])&&!txt(m[k]))m[k]=r[k];});}
+    const bag=bags.get(m)||bags.set(m,{}).get(m);
+    for(const sk in CURR_SKILLS){const t=txt(r[sk]);if(!t)continue;
+      groups.forEach(g=>{const f=CURR_SKILLS[sk]+g;bag[f]=bag[f]||[];if(!bag[f].includes(t))bag[f].push(t);});}
+    changed=true;
+  });
+  list.forEach(r=>{
+    if(!r||gone.has(r))return;
+    const own=lvOf(r).length>0,bag=bags.get(r)||{};       // own: a level row that stayed — its texts are in the bag
+    for(const sk in CURR_SKILLS){
+      const cols=CURR_LVCOLS[sk],gen=own?"":txt(r[sk]),lvT=cols.map(f=>(bag[f]||[]).join("\n"));
+      if(!gen&&!lvT.some(Boolean))continue;
+      if(!lvT.some(Boolean)&&!cols.some(f=>txt(r[f]))){
+        r[cols[0]]=gen;r.mh=Object.assign({},r.mh,{[cols[0]]:cols.length});
+      }else cols.forEach((f,i)=>{
+        const add=[gen,lvT[i]].filter(Boolean).join("\n"),cur=txt(r[f]);
+        if(add&&!cur.includes(add))r[f]=cur?cur+"\n"+add:add;
+      });
+      changed=true;
+    }
+    CURR_OLD_FIELDS.forEach(k=>{if(k in r){delete r[k];changed=true;}});
+    // What a cell carried besides its text — bold or colour, a fill, a note — goes with the text to
+    // the first level column. Merges of the old columns do not carry over: the cells are other cells now.
+    ["mv","mh","fill","fmt","cn"].forEach(k=>{const o=r[k];if(!o||typeof o!=="object")return;
+      CURR_OLD_FIELDS.forEach(c=>{if(!(c in o))return;
+        const to=CURR_SKILLS[c]&&CURR_LVCOLS[c][0];
+        if(to&&(k==="fill"||k==="fmt"||k==="cn")&&!(to in o))o[to]=o[c];
+        delete o[c];changed=true;});
+      if(!Object.keys(o).length)delete r[k];});
+  });
+  return {gone,changed};
+}
+// This device's list, once. It waits for the first read of the cloud (like currYearsAscOnce), keeps a
+// copy of the list as it was on this device (CURR_COLS_BACKUP — not synced, and never overwritten)
+// and only then folds; if the result cannot be stored everything is put back and it tries again later.
+const CURR_COLS_BACKUP="mc_curriculum_before_v163";
+const currColsNeeded=()=>curriculum.some(c=>c&&CURR_OLD_FIELDS.some(k=>k in c));
+function currColsOnce(){
+  if(!currColsNeeded()||!currAscReady())return;
+  const snapshot=JSON.parse(JSON.stringify(curriculum));
+  try{if(!localStorage.getItem(CURR_COLS_BACKUP))localStorage.setItem(CURR_COLS_BACKUP,JSON.stringify(snapshot));}
+  catch(e){console.error("No room for the copy of the curriculum; the new layout waits",e);return;}
+  const {gone}=currFoldRows(currOrdered());
+  for(let i=curriculum.length-1;i>=0;i--)if(gone.has(curriculum[i]))curriculum.splice(i,1);   // in place: the sync layer holds this array
+  if(!saveKey("curriculum"))curriculum.splice(0,curriculum.length,...snapshot);
+}
 // Who the page is shown for (v150): "" everyone, a level letter, or "s:<student id>". It used to
 // sit in a dropdown; it is now a row of buttons above the sheet, with the students by name.
 let currWho="";
@@ -10413,6 +10524,10 @@ function currHiddenNow(){
   const h=new Set(getHiddenFields("curriculum").filter(id=>id!=="topic"));
   const s=currViewStudent(),mods=s&&Array.isArray(s.mods)?s.mods:[];
   if(mods.length)for(const k in CURR_PART_COL)if(!mods.includes(k))h.add(CURR_PART_COL[k]);
+  // v163: Writing, Speaking and Grammar are three columns each — hidden together; and with a level
+  // (or a student of a level) picked, only that level's column of each stays.
+  const g=currGroupOf(currViewLevel());
+  for(const sk in CURR_LVCOLS)CURR_LVCOLS[sk].forEach(c=>{if(h.has(sk)||(g&&CURR_SUB[c][1]!==g))h.add(c);});
   return h;
 }
 function currPick(v){
@@ -10467,15 +10582,18 @@ function currNoteText(s,ym,lang){
   const lv=PLAN_LEVELS.includes(s.group)?s.group:"";
   const mods=Array.isArray(s.mods)?s.mods:[],off=new Set(getHiddenFields("curriculum"));
   if(mods.length)for(const k in CURR_PART_COL)if(!mods.includes(k))off.add(CURR_PART_COL[k]);
-  // A student with no level gets the rows that are for everyone, not every level's rows at once.
-  const rows=currOrdered().filter(c=>c.month===mon&&(!c.year||!y||+c.year===y)&&(lv?currForLevel(c,lv):!currLevelsOf(c.level).length));
+  // v163: the student's level picks the column of Writing, Speaking and Grammar. A student with no
+  // level gets only what is the same for every level.
+  const grp=currGroupOf(lv);
+  const lvVal=(c,col)=>{if(grp)return currLvText(c,col,grp);const a=CURR_GROUPS.map(x=>currLvText(c,col,x));return a.every(x=>x===a[0])?a[0]:"";};
+  const rows=currOrdered().filter(c=>c.month===mon&&(!c.year||!y||+c.year===y));
   const weeks=[];
   rows.forEach(c=>{
     const key=(c.week||"")+"|"+currNorm(c.topic);
     let g=weeks.find(x=>x.key===key);
     if(!g){g={key,week:c.week,topic:c.topic,v:{}};weeks.push(g);}
     CURR_NOTE_COLS.forEach(col=>{
-      const t=String(c[col]||"").replace(/\*\*|~~|__/g,"").split(/\n+/).map(x=>x.trim()).filter(Boolean).join(" / ");
+      const t=String((CURR_SKILLS[col]?lvVal(c,col):c[col])||"").replace(/\*\*|~~|__/g,"").split(/\n+/).map(x=>x.trim()).filter(Boolean).join(" / ");
       if(t&&!off.has(col)&&!(g.v[col]||[]).includes(t))(g.v[col]=g.v[col]||[]).push(t);
     });
   });
@@ -10523,13 +10641,11 @@ function currBaseFilter(){
   const yv=document.getElementById("curr-yf")?.value||"";
   const mf=document.getElementById("curr-mf")?.value||"";
   const sf=(document.getElementById("curr-sf")?.value||"").toLowerCase();
-  const lv=currViewLevel();
   return c=>{
-    if(lv&&!currForLevel(c,lv))return false;
     if(yv==="none"&&c.year)return false;
     if(yv&&yv!=="none"&&String(c.year||"")!==yv)return false;
     if(mf&&c.month!==mf)return false;
-    if(sf&&![c.topic,c.cat,c.books,c.wb,c.writing,c.acts,c.grammar,c.note,c.speaking,c.level].join(" ").toLowerCase().includes(sf))return false;
+    if(sf&&![c.topic,c.cat,c.books,c.wb,c.acts,c.note,...CURR_LV_FIELDS.map(f=>c[f])].join(" ").toLowerCase().includes(sf))return false;
     return true;
   };
 }
@@ -10541,21 +10657,21 @@ function currBaseFilter(){
 // grows or shrinks (its box scrolls sideways), exactly like a spreadsheet. Double-click an edge to fit
 // the column to its text; the ↔ button in the header corner puts every width back. Widths are kept
 // per device in mc_colwidths.tbl_curriculum, so a phone and a PC can differ.
-const CURR_COL_DEFAULT=[76,56,100,190,200,300,220,160,130,190,76,280,52];
+const CURR_COL_DEFAULT=[76,56,96,180,170,170, 190,190,190, 190,190,190, 150,150,150, 180,180,52];
 const CURR_FREEZE=4;               // Month, Wk, Category, Topic — the columns the owner's sheet freezes
 function currColWidths(){
   const rec=lg(COLW_KEY,{}).tbl_curriculum;
   const w=CURR_COL_DEFAULT.slice();
   if(rec&&Array.isArray(rec.w)&&rec.n===CURR_COL_DEFAULT.length)rec.w.forEach((v,i)=>{if(+v>0)w[i]=Math.round(+v);});
-  // Widths saved before v146 (11 columns): the first ten are the same columns; Level and Speaking are new.
-  else if(rec&&Array.isArray(rec.w)&&rec.n===11)rec.w.slice(0,10).forEach((v,i)=>{if(+v>0)w[i]=Math.round(+v);});
+  // Widths saved for an older set of columns (11 before v146, 13 until v162) start afresh: the
+  // columns are not the same ones any more.
   return w;
 }
 function saveCurrColWidths(w){
   const m=lg(COLW_KEY,{});m.tbl_curriculum={n:w.length,tpl:"table",w};return ls(COLW_KEY,m);
 }
 // Column ids of the curriculum table, in order (the last one is the actions column).
-const CURR_COL_IDS=["month","week","cat","topic","wb","writing","books","acts","grammar","note","level","speaking",null];
+const CURR_COL_IDS=["month","week","cat","topic","books","wb","wAB","wC","wDE","sAB","sC","sDE","gAB","gC","gDE","acts","note",null];
 function applyCurrColWidths(w){
   w=w||currColWidths();
   // Columns unticked in Settings → Custom Fields (v132) are left out everywhere — table and phone
@@ -10707,7 +10823,7 @@ function currYearsAscOnce(){
 }
 // The sign-in state has become known, or the first cloud read has finished: the page on screen may
 // still show the old order.
-function currAscKick(){if(!settings.currAsc&&curPage==="curriculum"&&currAscReady())renderCurriculum();}
+function currAscKick(){if((!settings.currAsc||currColsNeeded())&&curPage==="curriculum"&&currAscReady())renderCurriculum();}
 // Give the topics an ord that matches what is on screen. The first time (no ords yet) every topic
 // gets one; after that only newcomers (Add form, Import, an older app) get a value between their
 // neighbours, so only they are written.
@@ -10741,21 +10857,21 @@ const CS={vis:[],cols:[],grid:[],span:[],r:0,c:0,ar:0,ac:0,edit:null,undo:[],red
 const csPhone=()=>window.matchMedia&&matchMedia("(max-width:640px)").matches;
 const csShown=()=>{const h=currHiddenNow();return CS_COLS.filter(id=>!h.has(id));};
 function csRaw(rec,col){
-  const v=rec[col];
+  const v=rec[currAnchor(rec,col)];
   return v==null?"":String(v);
 }
 function csDisplay(rec,col){
-  const v=rec[col];
+  const v=rec[currAnchor(rec,col)];
   if(col==="month")return `${v?tx(v):"—"}${rec.year?`<span class="cell-muted cur-year">${rec.year}</span>`:""}`;
   if(col==="week")return v?escapeHTMLBasic(String(v)):"";
   if(col==="cat")return v?`<span class="cs-pill">${escapeHTMLBasic(v)}</span>`:"";
-  // A row for one level shows it next to the name, so the rows of one topic can be told apart
-  // without scrolling to the Level column.
-  if(col==="topic")return escapeHTMLBasic(v||"")+(rec.level?` <span class="lv-badge">${escapeHTMLBasic(String(rec.level))}</span>`:"");
-  if(col==="level")return v?`<span class="lv-badge cs-lv">${escapeHTMLBasic(String(v))}</span>`:"";
+  if(col==="topic")return escapeHTMLBasic(v||"");
   return v?currText(v):"";
 }
-const CS_LABEL={wb:"Workbook",writing:"Writing",books:"Books",acts:"Activities",grammar:"Grammar",note:"Notes",level:"Level",speaking:"Speaking"};
+const CS_LABEL={wb:"Workbook",books:"Books",acts:"Activities",note:"Notes",writing:"Writing",speaking:"Speaking",grammar:"Grammar"};
+CURR_LV_FIELDS.forEach(f=>{CS_LABEL[f]=CS_LABEL[CURR_SUB[f][0]];});
+// A column's name as the teacher named it; a level column is its skill's name and the level group.
+const csLabelOf=col=>{const sub=CURR_SUB[col];return sub?labelFor("curriculum",sub[0],tx(CS_LABEL[col]))+" "+CURR_GROUP_NAME[sub[1]]:labelFor("curriculum",col,tx(CS_LABEL[col]));};
 
 // ── render ──
 function csRender(fl){
@@ -10787,8 +10903,10 @@ function csRender(fl){
   }
   const td=(r,c)=>{
     const rec=fl[r],col=cols[c],[rs,cs]=CS.span[r][c];
-    const lab=CS_LABEL[col]?` data-l="${escapeAttr(labelFor("curriculum",col,tx(CS_LABEL[col])))}"`:"";
-    const empty=CS_LABEL[col]&&!rec[col]?" cur-empty":"";
+    // On a phone card a text that runs across the three levels is one line under the skill's own name.
+    const whole=phone&&CURR_SUB[col]&&CURR_LVCOLS[CURR_SUB[col][0]].every(f=>currAnchor(rec,f)===col);
+    const lab=CS_LABEL[col]?` data-l="${escapeAttr(whole?csLabelOf(CURR_SUB[col][0]):csLabelOf(col))}"`:"";
+    const empty=CS_LABEL[col]&&!csRaw(rec,col)?" cur-empty":"";
     const f=rec.fill&&CS_FILLS[rec.fill[col]]?` style="background:${CS_FILLS[rec.fill[col]]}"`:"";
     // v140: bold / italic / strikethrough (fmt) and a note (cn) per cell; on a tablet or PC the text
     // sits in a wrapper so the "row height" setting can clip it to 1 or 3 lines.
@@ -10799,9 +10917,11 @@ function csRender(fl){
     return `<td class="${cls}" data-c="${CS_COLS.indexOf(col)}" data-r="${r}" data-k="${c}"${rs>1?` rowspan="${rs}"`:""}${cs>1?` colspan="${cs}"`:""}${lab}${f}${tip}>${phone?csDisplay(rec,col):`<div class="cs-v">${csDisplay(rec,col)}</div>`}</td>`;
   };
   const tools=rec=>`<td class="cs-tools" data-c="${CS_COLS.length}"><div class="cs-desk"><span class="cs-grip" title="${tx("Drag to move the row")}"><i class="ti ti-grip-vertical"></i></span><button class="bic" onclick="csRowMenu(event,'${rec.id}')" title="${tx("Row")}"><i class="ti ti-dots-vertical"></i></button></div><div class="cs-phone"><button class="bic" onclick="openCurrModal('${rec.id}')" title="${tx("Edit")}"><i class="ti ti-pencil"></i></button><button class="bic text-red" onclick="delCurr('${rec.id}')" title="${tx("Delete")}"><i class="ti ti-trash"></i></button></div></td>`;
-  const addRow=phone?"":`<tr class="cs-add"><td colspan="11"><button type="button" class="btn btn-sm" onclick="csAddRow()"><i class="ti ti-plus"></i> ${tx("Add row")}</button></td></tr>`;
-  body.innerHTML=(R?fl.map((rec,r)=>`<tr data-id="${rec.id}">${cols.map((_,c)=>CS.grid[r][c][0]===r&&CS.grid[r][c][1]===c?td(r,c):"").join("")}${tools(rec)}</tr>`).join("")
-    :`<tr><td colspan="11"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`)+addRow;
+  const addRow=phone?"":`<tr class="cs-add"><td colspan="${CS_COLS.length+1}"><button type="button" class="btn btn-sm" onclick="csAddRow()"><i class="ti ti-plus"></i> ${tx("Add row")}</button></td></tr>`;
+  // (phone cards have no merged cells: a level column that only repeats a merged text is left out)
+  const drawn=(rec,r,c)=>CS.grid[r][c][0]===r&&CS.grid[r][c][1]===c&&!(phone&&currAnchor(rec,cols[c])!==cols[c]&&cols.includes(currAnchor(rec,cols[c])));
+  body.innerHTML=(R?fl.map((rec,r)=>`<tr data-id="${rec.id}">${cols.map((_,c)=>drawn(rec,r,c)?td(r,c):"").join("")}${tools(rec)}</tr>`).join("")
+    :`<tr><td colspan="${CS_COLS.length+1}"><div class="empty"><i class="ti ti-books"></i><p>${tx("No curriculum items found")}</p></div></td></tr>`)+addRow;
   // put the cursor back
   const ri=id=>fl.findIndex(x=>x.id===id),ci=col=>cols.indexOf(col);
   if(keepSel&&R){
@@ -10917,6 +11037,7 @@ function csNormalise(col,val,rec){
 }
 // One cell. A vertically merged cell writes every row of its group.
 function csWrite(rec,col,val){
+  col=currAnchor(rec,col);                              // a cell under a merge across the levels writes the merged text
   const v=csNormalise(col,val,rec);
   const out=col==="week"?(v?+v:""):v;
   const g=rec.mv&&rec.mv[col];
@@ -11055,7 +11176,7 @@ function csPaste(text){
 }
 
 // ── rows ──
-const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:ref?.week||"",cat:"",topic:"",wb:"",books:"",writing:"",grammar:"",acts:"",note:"",level:"",speaking:""});
+const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:ref?.week||"",cat:"",topic:"",wb:"",books:"",acts:"",note:""});
 function csSelRows(){const q=csRect();return q?CS.vis.slice(q.r0,q.r1+1):[];}
 function csInsert(where){
   const rows=csSelRows();const ref=where<0?rows[0]:rows[rows.length-1];if(!ref&&CS.vis.length)return;
@@ -11311,7 +11432,7 @@ const csSetMap=(rec,key,col,v)=>{
   if(rec[key]&&rec[key][col]!=null){const o=Object.assign({},rec[key]);delete o[col];if(Object.keys(o).length)rec[key]=o;else delete rec[key];}
 };
 const CS_COLNAME={month:"Month",week:"Week",cat:"Category",topic:"Topic",...CS_LABEL};
-const csColName=col=>labelFor("curriculum",col,tx(CS_COLNAME[col]||col));
+const csColName=col=>CS_LABEL[col]?csLabelOf(col):labelFor("curriculum",col,tx(CS_COLNAME[col]||col));
 
 // ── text style ──
 function csFmt(flag){
@@ -11437,7 +11558,7 @@ document.addEventListener("pointerdown",e=>{if(e.target.id==="cs-fh")csFillDrag(
 
 // ── find & replace ──
 const CSF={open:false,q:"",rep:"",mc:false};
-const CS_REPL=new Set(["cat","topic","wb","writing","books","acts","grammar","note","speaking"]);
+const CS_REPL=new Set(["cat","topic","wb","books","acts","note",...CURR_LV_FIELDS]);
 function csFindOpen(){
   const p=document.getElementById("cs-find");if(!p||csPhone())return;
   if(CS.edit)csCommit(0,0);
@@ -11638,11 +11759,31 @@ function parseDelimited(text,delim){
 const CURR_HEAD={
   year:/^(year|연도|년도)$/i, month:/^(month|월)$/i, week:/^(wk|week|주차|주)$/i,
   cat:/^(category|cat|카테고리|분류)$/i, ko:/^(주제|제목)$/i, topic:/^(topics?|title)$/i,
-  wb:/^(workbooks?|교재)$/i, writing:/^(writing|writing instructions?|쓰기)$/i,
+  wb:/^(workbooks?|교재)$/i, writing:/^(?:\(?w\.?\s?b\.?\)?\s*)?(writing|writing instructions?|쓰기)$/i,
   books:/^(books?|reading books?|reading|도서|책)$/i, acts:/^(activit(y|ies)|활동)$/i,
   ort:/^ort$/i, grammar:/^(grammar|문법)$/i, note:/^(notes?|memo|메모|비고)/i,
   level:/^(levels?|레벨|수준)$/i, speaking:/^(speaking|스피킹|말하기)$/i,
 };
+// v163: a sheet in the new shape has a column per level — "Writing A·B", "쓰기 C", "Grammar (D·E)".
+const CURR_HEAD_LV={AB:"a\\s*[·,.&+~-]?\\s*b",C:"c",DE:"d\\s*[·,.&+~-]?\\s*e"};
+{const names={writing:"writing|writing instructions?|쓰기",speaking:"speaking|스피킹|말하기",grammar:"grammar|문법"};
+  for(const sk in names)CURR_GROUPS.forEach(g=>{CURR_HEAD[CURR_SKILLS[sk]+g]=new RegExp("^(?:"+names[sk]+")\\s*[(\\[:-]?\\s*(?:"+CURR_HEAD_LV[g]+")\\s*[)\\]]?$","i");});}
+// The same sheet with a heading of two rows: "Writing" over three columns and "A·B | C | D·E" in the
+// row under it (how a sheet with merged heading cells copies). Returns true when the row under the
+// heading is such a row, after pointing the level columns at it.
+function currSubHead(map,row){
+  if(!row)return false;
+  const cell=i=>String(row[i]??"").trim(),which=t=>CURR_GROUPS.find(g=>new RegExp("^(?:"+CURR_HEAD_LV[g]+")$","i").test(t))||"";
+  let found=false;
+  for(const sk in CURR_SKILLS){
+    const ci=map[sk];if(ci===undefined)continue;
+    const got=[0,1,2].map(k=>which(cell(ci+k)));
+    if(got.filter(Boolean).length<2||new Set(got.filter(Boolean)).size!==got.filter(Boolean).length)continue;
+    got.forEach((g,k)=>{if(g)map[CURR_SKILLS[sk]+g]=ci+k;});
+    delete map[sk];found=true;
+  }
+  return found;
+}
 function currMonthOf(v){
   const t=String(v||"").trim().split(/\s|\n/)[0].toUpperCase();
   if(!t)return "";
@@ -11661,6 +11802,7 @@ function currRowsToItems(rows){
     if((m.topic!==undefined||m.ko!==undefined)&&(m.month!==undefined||m.year!==undefined)){hi=r;map=m;}
   }
   if(hi<0)return {items:[],error:tx("No heading row found. The first rows need a Month and a Topic (or 주제) column.")};
+  if(currSubHead(map,rows[hi+1]))hi++;
   const get=(row,k)=>map[k]===undefined?"":clean(row[map[k]]);
   const items=[];let year="",month="",blank=0,main=null;const weeks={};
   for(let r=hi+1;r<rows.length;r++){
@@ -11683,6 +11825,7 @@ function currRowsToItems(rows){
     const ort=get(row,"ort"),bk=get(row,"books");
     const rest={wb:get(row,"wb"),writing:get(row,"writing"),books:[bk,ort?"ORT: "+ort:""].filter(Boolean).join("\n"),
       acts:get(row,"acts"),grammar:get(row,"grammar"),note:get(row,"note"),speaking:get(row,"speaking")};
+    CURR_LV_FIELDS.forEach(f=>{const v=get(row,f);if(v)rest[f]=v;});
     if(!topic){
       // v146: a row with a level but no topic belongs to the topic above it — that level's writing,
       // speaking and so on. It takes the topic's name, month and week so it can stand on its own.
@@ -11694,16 +11837,19 @@ function currRowsToItems(rows){
     main={year,month,week:wk>0?wk:(month?weeks[key]:""),cat,topic,ko,en,level,...rest};
     items.push(main);
   }
-  return {items,error:items.length?"":tx("No topics found under the heading row.")};
+  return {items:currFoldItems(items),error:items.length?"":tx("No topics found under the heading row.")};
 }
+// Whatever is imported comes out in the week shape: its level rows are folded into their topic's row.
+function currFoldItems(items){const {gone}=currFoldRows(items);return items.filter(x=>!gone.has(x));}
 function currJsonToItems(text){
   let d;try{d=JSON.parse(String(text).replace(/^\uFEFF/,""));}catch(e){return {items:[],error:tx("This file isn't valid JSON.")};}
   if(d&&d.app==="classdesk"&&d.data&&d.data.mc_curriculum){try{d=JSON.parse(d.data.mc_curriculum);}catch(e){d=null;}}
   else if(d&&!Array.isArray(d)&&Array.isArray(d.curriculum))d=d.curriculum;
   if(!Array.isArray(d))return {items:[],error:tx("No curriculum topics in this file.")};
   const items=d.filter(x=>x&&x.topic).map(x=>({year:+x.year||"",month:currMonthOf(x.month),week:+x.week||"",cat:x.cat||"",topic:String(x.topic),ko:"",en:"",
-    wb:x.wb||"",writing:x.writing||"",books:x.books||"",acts:x.acts||"",grammar:x.grammar||"",note:x.note||"",level:currLevelText(x.level),speaking:x.speaking||""}));
-  return {items,error:items.length?"":tx("No curriculum topics in this file.")};
+    wb:x.wb||"",writing:x.writing||"",books:x.books||"",acts:x.acts||"",grammar:x.grammar||"",note:x.note||"",level:currLevelText(x.level),speaking:x.speaking||"",
+    ...Object.fromEntries(CURR_LV_FIELDS.filter(f=>x[f]).map(f=>[f,String(x[f])])),...(x.mh&&typeof x.mh==="object"?{mh:Object.fromEntries(CURR_LV_FIELDS.filter(f=>+x.mh[f]>1).map(f=>[f,+x.mh[f]]))}:{})}));
+  return {items:currFoldItems(items),error:items.length?"":tx("No curriculum topics in this file.")};
 }
 function currParseInput(text){
   const t=String(text||"").trim();
@@ -11715,7 +11861,7 @@ function currParseInput(text){
 // Match each incoming topic to one already in the app: same month and year (either side may be
 // blank), and the same title — in full, or its Korean or English half, or a title that starts with
 // the existing one ("Sophie's Masterpiece" ← "Sophie's Masterpiece: A Spider's Tale").
-const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note","speaking"];
+const CURR_FILL=["year","cat","wb","books","acts","note",...CURR_LV_FIELDS];
 // v158, opt.align — only for the plan that ships with the app: a topic that is already in the app
 // (with a week of its own) but in another week than the plan now gives it is listed in `move`, so a change of weeks in the
 // plan (the level tests went from the first to the second week) can follow into a plan that was
@@ -11723,7 +11869,7 @@ const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note","sp
 function currPlan(items,opt){
   // v142: "used" holds the topic records themselves, not their ids — two topics that an older version
   // gave the same id must still each be matchable, or a re-import added a stray copy.
-  const used=new Set(),add=[],fill=[],same=[],move=[],rename=[],align=!!(opt&&opt.align);
+  const used=new Set(),add=[],fill=[],same=[],move=[],rename=[],gram=[],align=!!(opt&&opt.align);
   for(const it of items){
     const names=[it.topic,it.ko,it.en].map(currNorm).filter(Boolean);
     let ex=curriculum.find(e=>{
@@ -11739,11 +11885,25 @@ function currPlan(items,opt){
     if(!ex&&!was){add.push(it);continue;}
     if(was){ex=was.ex;rename.push(was);}
     used.add(ex);
+    // v163, revision 4 of the plan: Grammar has a line for each level. A row that still shows the
+    // plan's one grammar point across the three levels gets the three texts; a cell the teacher
+    // has split or rewritten is left alone.
+    if(align){
+      const gc=CURR_LVCOLS.grammar;
+      if(it[gc[0]]&&it[gc[1]]&&!(it.mh&&it.mh[gc[0]])&&currAnchor(ex,gc[2])===gc[0]&&currNorm(ex[gc[0]])===currNorm(it[gc[1]])){
+        const mh=Object.assign({},ex.mh);delete mh[gc[0]];
+        const ch={mh};gc.forEach(f=>{ch[f]=it[f];});
+        gram.push({ex,changes:ch});
+      }
+    }
     if(align&&+it.week>0&&+ex.week>0&&+ex.week!==+it.week)move.push({ex,week:+it.week});
-    const changes={};CURR_FILL.forEach(k=>{if(!ex[k]&&it[k])changes[k]=it[k];});
+    // a level column counts as empty only when nothing shows in it (a merged text shows in all three)
+    const changes={};CURR_FILL.forEach(k=>{if(!(CURR_SUB[k]?csRaw(ex,k):ex[k])&&it[k])changes[k]=it[k];});
+    // a text the plan has across the three levels arrives with its merge, where the row has none of them
+    if(it.mh)for(const f in it.mh)if(changes[f]&&CURR_SUB[f]&&CURR_LVCOLS[CURR_SUB[f][0]].every(c=>!csRaw(ex,c)))(changes.mh=changes.mh||Object.assign({},ex.mh))[f]=it.mh[f];
     if(Object.keys(changes).length)fill.push({ex,changes});else same.push(ex);
   }
-  return {add,fill,same,move,rename,plan:align,total:items.length};
+  return {add,fill,same,move,rename,gram,plan:align,total:items.length};
 }
 // Topics the shipped plan has renamed: [year, month, title before, title now]. With these a plan
 // that was imported earlier follows: the topic takes its new name and category, and its Activities
@@ -11767,13 +11927,13 @@ function currPlanWas(it,used){
   return {ex,changes};
 }
 // What a load of the shipped plan would change in topics that are already in the app.
-const currPlanTouched=p=>new Set([...p.move,...p.rename].map(x=>x.ex));
-const currPlanAny=p=>!!p&&!!(p.add.length||p.fill.length||p.move.length||p.rename.length);
+const currPlanTouched=p=>new Set([...p.move,...p.rename,...p.gram].map(x=>x.ex));
+const currPlanAny=p=>!!p&&!!(p.add.length||p.fill.length||p.move.length||p.rename.length||p.gram.length);
 // Give the moved topics their new week, then put the rows of each month that was touched back in
 // week order. Only rows that have a week take part and they share out the places they already
 // held, so rows without a week and the rows of other months stay exactly where they are; rows of
 // one week keep the order they had (a topic and its level rows stay together).
-function currApplyRenames(list){list.forEach(({ex,changes})=>Object.assign(ex,changes));}
+function currApplyRenames(list){list.forEach(({ex,changes})=>{Object.assign(ex,changes);if(ex.mh&&!Object.keys(ex.mh).length)delete ex.mh;});}
 function currApplyMoves(moves){
   if(!moves.length)return;
   const key=r=>(r.year||"")+"|"+(r.month||""),keys=new Set();
@@ -11811,7 +11971,8 @@ function currImportPreview(){
 // moves as part of its preview.
 // v159, revision 3: the full level test is in June and December; March and September have a short
 // speaking and writing check instead (three topics renamed — see CURR_PLAN_WAS).
-const CURR_PLAN_YEAR=2027,CURR_PLAN_REV=3;
+// v163, revision 4: Grammar is set out by level (see `gram` in currPlan).
+const CURR_PLAN_YEAR=2027,CURR_PLAN_REV=4;
 let _currPlanText=null,_currPlanBusy=false;
 const currPlanNorm=t=>String(t||"").replace(/\r\n?/g,"\n").trim();
 const currIsPlanText=t=>_currPlanText!=null&&currPlanNorm(t)===_currPlanText;
@@ -11825,7 +11986,7 @@ function currPlanBar(){
   el.hidden=!st;
   el.innerHTML=!st?"":st==="load"
     ?`<span>${e(tx("The 2027 plan is not in the app yet."))}</span><button type="button" class="btn btn-sm btn-p" id="curr-plan-btn" onclick="currPlanQuick()"${dis}><i class="ti ti-calendar-event"></i> ${e(tx("Load the 2027 plan"))}</button>`
-    :`<span>${e(tx("The 2027 plan has changed: the level test is in June and December, and March and September have a short speaking and writing check — all in the second week."))}</span><span class="curr-plan-btns">`+
+    :`<span>${e(tx("The 2027 plan has changed: Grammar now has a line for each level, and the level test is in June and December with a short speaking and writing check in March and September."))}</span><span class="curr-plan-btns">`+
       `<button type="button" class="btn btn-sm" id="curr-plan-skip" onclick="currPlanSkip()"${dis}>${e(tx("Keep mine"))}</button>`+
       `<button type="button" class="btn btn-sm btn-p" id="curr-plan-btn" onclick="currPlanUpdate()"${dis}>${e(tx("Update my plan"))}</button></span>`;
 }
@@ -11845,7 +12006,7 @@ function currPlanRevKeep(){
 // to what it was and leaves everything else — a later edit to a note or a cell — as it is.
 function currPlacesKeep(named){
   const was=curriculum.map(r=>({r,id:r.id,week:r.week,had:csHasOrd(r),ord:r.ord,
-    txt:named&&named.has(r)?Object.fromEntries(["topic","cat","acts"].map(k=>[k,[k in r,r[k]]])):null}));
+    txt:named&&named.has(r)?Object.fromEntries(["topic","cat","acts","gAB","gC","gDE","mh"].map(k=>[k,[k in r,r[k]&&typeof r[k]==="object"?Object.assign({},r[k]):r[k]]])):null}));
   return {back(){was.forEach(w=>{
     const r=curriculum.includes(w.r)?w.r:curriculum.find(c=>c.id===w.id);if(!r)return;
     if(w.txt)Object.entries(w.txt).forEach(([k,[had,v]])=>{if(had)r[k]=v;else delete r[k];});
@@ -11862,9 +12023,9 @@ async function currPlanUpdate(){
     catch(e){console.error("Plan not loaded",e);showToast(tx("Could not load the plan — check the connection and try again."));return;}
     const r=currParseInput(text),p=r.items.length?currPlan(r.items,{align:true}):null;
     if(!p){showToast(tx("Could not load the plan — check the connection and try again."));return;}
-    const snapshot=JSON.parse(JSON.stringify(curriculum)),rev=currPlanRevKeep(),places=currPlacesKeep(new Set(p.rename.map(x=>x.ex)));
+    const snapshot=JSON.parse(JSON.stringify(curriculum)),rev=currPlanRevKeep(),places=currPlacesKeep(new Set([...p.rename,...p.gram].map(x=>x.ex)));
     const touched=currPlanTouched(p);
-    currApplyRenames(p.rename);currApplyMoves(p.move);
+    currApplyRenames(p.rename);currApplyRenames(p.gram);currApplyMoves(p.move);
     // The topics first, the revision only once they are stored: save() writes every key it can,
     // so setting both at once could leave "seen" stored next to weeks that were not.
     if(!saveKey("curriculum")){curriculum.splice(0,curriculum.length,...snapshot);return;}   // in place: the sync layer holds this array
@@ -11947,7 +12108,7 @@ function currImportShow(error,items){
   const yrs=Object.keys(byYear).sort().reverse().map(k=>`<span class="u-badge">${escapeHTMLBasic(String(k))} · ${byYear[k]}</span>`).join(" ");
   const sample=items.slice(0,6).map(it=>`<div class="inc-row"><div class="cell-main">${escapeHTMLBasic([it.year,it.month?tx(it.month):"",it.week?tx("Wk")+" "+it.week:""].filter(Boolean).join(" "))}</div><div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.cat?`<span class="u-badge">${escapeHTMLBasic(it.cat)}</span> `:""}${escapeHTMLBasic(it.topic)}</div><span></span></div>`).join("");
   box.innerHTML=`<p style="font-size:13px;margin:0 0 6px">${tx("{n} topics found",{n:p.total})} ${yrs}</p>
-    <p class="u-hint" style="margin:0 0 10px">${tx("New: {a} · already in the app: {b} (empty fields filled in for {c})",{a:p.add.length,b:p.fill.length+p.same.length,c:p.fill.length})}${p.move.length?"<br>"+tx("{n} rows are in another week in the plan now — they move to that week.",{n:p.move.length}):""}${p.rename.length?"<br>"+tx("{n} topics have a new name in the plan — they are renamed.",{n:p.rename.length}):""}</p>
+    <p class="u-hint" style="margin:0 0 10px">${tx("New: {a} · already in the app: {b} (empty fields filled in for {c})",{a:p.add.length,b:p.fill.length+p.same.length,c:p.fill.length})}${p.move.length?"<br>"+tx("{n} rows are in another week in the plan now — they move to that week.",{n:p.move.length}):""}${p.rename.length?"<br>"+tx("{n} topics have a new name in the plan — they are renamed.",{n:p.rename.length}):""}${p.gram.length?"<br>"+tx("{n} rows get Grammar by level.",{n:p.gram.length}):""}</p>
     ${sample}${items.length>6?`<div class="u-hint" style="padding:6px 0">${tx("…and {n} more",{n:items.length-6})}</div>`:""}`;
 }
 function currImportApply(){
@@ -11958,7 +12119,7 @@ function currImportApply(){
   if(!touched.size)currPlanTouched(p).forEach(ex=>touched.add(ex.id));
   if(!touched.size)p.fill.forEach(({ex})=>touched.add(ex.id));
   p.fill.forEach(({ex,changes})=>Object.assign(ex,changes));
-  currApplyRenames(p.rename);currApplyMoves(p.move);
+  currApplyRenames(p.rename);currApplyRenames(p.gram);currApplyMoves(p.move);
   if(!saveKey("curriculum")){
     // Not stored: the list goes back to what it was (in place — the sync layer holds this array)
     // and the preview is worked out again, since the old one points at rows that are gone.
@@ -11973,7 +12134,7 @@ function currImportApply(){
   // renderCurriculum does the jump once the rows are really drawn (see currJumpPending).
   _currJumpIds=touched;
   renderCurriculum();
-  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:new Set([...p.fill,...p.move,...p.rename].map(x=>x.ex)).size}),()=>{
+  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:new Set([...p.fill,...p.move,...p.rename,...p.gram].map(x=>x.ex)).size}),()=>{
     curriculum.splice(0,curriculum.length,...snapshot);   // in place: the sync layer holds this array
     rev.back();
     save();renderCurriculum();
