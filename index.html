@@ -9607,6 +9607,7 @@ function renderCurriculum(){
   csRender(fl);
   csMarkFilters();
   csFitBox();
+  currJumpPending();
 }
 // The sheet scrolls inside its own box. The box takes the height left under the bar, the student
 // buttons and the line about the picked student — however many rows of buttons there are — so the
@@ -11004,6 +11005,15 @@ async function currPlanQuick(){
     currImportPlan=p;currImportApply();
   }finally{_currPlanBusy=false;if(btn)btn.disabled=false;}
 }
+// The rows an import has just brought in, waiting to be shown. While a cell is being typed in, the
+// sheet is not redrawn (csRender), so the jump waits too and happens with the redraw that follows
+// the edit. Whatever is found then — or nothing, after an Undo — the wish is used up.
+let _currJumpIds=null;
+function currJumpPending(){
+  if(!_currJumpIds||CS.edit||CS.pending)return;
+  const ids=_currJumpIds;_currJumpIds=null;
+  const first=(CS.vis||[]).find(c=>ids.has(c.id));if(first)currJumpTo(first.id);
+}
 // Bring a row into view and mark it for a moment. Rows hidden by a filter are simply not there.
 function currJumpTo(id){
   const tr=id&&document.querySelector(`#curr-body tr[data-id="${id}"]`);if(!tr)return false;
@@ -11060,9 +11070,10 @@ function currImportApply(){
   if(save()===false)return;
   closeModal("mo-currimport");
   const yf=document.getElementById("curr-yf");if(yf)yf.value="";
-  renderCurriculum();
   // The list runs oldest first, so what was just imported may be far down: show where it starts.
-  const first=(CS.vis||[]).find(c=>touched.has(c.id));if(first)currJumpTo(first.id);
+  // renderCurriculum does the jump once the rows are really drawn (see currJumpPending).
+  _currJumpIds=touched;
+  renderCurriculum();
   showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:p.fill.length}),()=>{
     curriculum.splice(0,curriculum.length,...snapshot);   // in place: the sync layer holds this array
     save();renderCurriculum();
