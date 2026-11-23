@@ -542,7 +542,7 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .ltq-task{font-size:var(--fs-base);margin:8px 0 0;overflow-wrap:anywhere}
 /* v162: the teacher's script on the screen — read from a phone while the students hold the paper */
 #ltsc-top{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:10px}
-#ltsc-top .seg{max-width:100%}
+#ltsc-top .seg{max-width:100%;flex-wrap:wrap;height:auto;min-height:34px}
 #ltsc-top .seg-btn{min-width:40px;justify-content:center}
 #ltsc-body{font-size:var(--fs-base)}
 #ltsc-body .u-hint{margin:0 0 10px}
@@ -559,7 +559,7 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .ltsc-look{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--bdr);color:var(--txt2)}
 .ltsc-look b{display:block;font-size:var(--fs-sm);color:var(--txt3);font-weight:600}
 .ltsc-rule{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--bdr)}
-@media(pointer:coarse){#ltsc-top .seg{height:44px}#ltsc-top .seg-btn{height:38px;min-width:44px;font-size:13px}}
+@media(pointer:coarse){#ltsc-top .seg{min-height:44px}#ltsc-top .seg-btn{height:38px;min-width:44px;font-size:13px}}
 /* four buttons do not fit one phone row: they wrap instead of pushing the page wider */
 @media(max-width:900px){#page-leveltest .fbar{flex-wrap:wrap}#page-leveltest .fbar-right{flex-wrap:wrap;white-space:normal;flex-shrink:1}}
 @media(max-width:640px){#page-leveltest .fbar-right{margin-left:0}}
@@ -703,6 +703,7 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-xscript{border:1px solid var(--lt-line);border-radius:10px;padding:10px 12px;margin:0 0 12px;font:16px/1.6 var(--lt-read)}
 #lt-screen .lt-xscript b{display:block;font:600 12px var(--font);color:var(--lt-muted);margin-bottom:2px}
 #lt-screen .lt-xscript p{margin:0 0 6px}#lt-screen .lt-xscript p:last-child{margin-bottom:0}
+#lt-screen .lt-qword{font:700 32px/1.3 var(--lt-read);text-align:center;margin:6px 0 14px}
 #lt-screen .lt-xtask{font:600 26px/1.4 var(--lt-read);text-align:center;margin:0 0 10px}
 #lt-screen .lt-xpics{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;font-size:84px;line-height:1.1;margin:8px 0}
 #lt-screen .lt-xmodel{font:400 26px/1.5 var(--lt-read);text-align:center;border:1px dashed var(--lt-line);border-radius:10px;padding:8px 14px;margin:8px auto;max-width:520px}
@@ -2269,7 +2270,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
           <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only that level's columns show; press <b>All levels</b> to see every column. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
           <dt>How do I find out which books a student can read?</dt><dd>Level test → the student's <b>Details</b> → <b>Add a book check</b>. Pick a book, mark about 100 words in the middle, have the student read them aloud and count the words they miss or need help with; then ask what it was about. 5 or fewer missed in 100 is a book to read alone, 6 to 10 a book for lessons, more is too hard for now — and one band down if they could not say what it was about. Try an easier or a harder book until you have one of each: the lists at the top of the block are the range. Use the same pages for every student if you want to compare them, and avoid a book the student already knows.</dd>
-          <dt>How do I check Listening and Grammar, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b> or <b>Grammar</b> → <b>Start the questions</b>. For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
+          <dt>How do I check Listening, Grammar, Phonics and Vocabulary, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b>, <b>Grammar</b>, <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>. Phonics works like Listening (you say a word, the student picks it among look-alikes — 6 a level); Vocabulary like Grammar (the student alone — 8 a level). For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
@@ -2298,6 +2299,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v164 · 2026-11-23</dt><dd><b>Level test: questions for Phonics and Vocabulary.</b> Until now these two skills could only be rated by picking a description. Both now have questions at every level, built like Listening and Grammar. <b>Phonics</b> (6 a level): you say a word and the student picks it among look-alike words — first letters and short-vowel words at A, sh / ch / th and magic e at B, vowel teams and two-syllable words at C, prefixes and suffixes at D, long words at E. 5 or more right goes up, 3 or fewer goes down. <b>Vocabulary</b> (8 a level, the student alone): a word and four pictures at A, everyday words in a sentence at B, meaning from context at C, new words and words with several meanings at D, academic words at E. 7 or more right goes up, 4 or fewer goes down. Open them from a student's <b>Details</b> → <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>; the result is saved as the rating, and you can still pick the level yourself. They are also in <b>Sample test</b>, in <b>Print sheets</b> (a sheet a level, and the key) and in <b>Teacher's script</b> (the words to say for Phonics, the answers for Vocabulary). A level's whole pack is now seven sheets.</dd>
           <dt>v163 · 2026-11-23</dt><dd><b>Curriculum: a week is one row.</b> Until now a topic had one row for everyone and one more for each level, so a week took four rows. Now <b>a week is one row</b>, and what differs by level sits side by side: <b>Writing</b>, <b>Speaking</b> and <b>Grammar</b> each have three columns — <b>A·B</b>, <b>C</b>, <b>D·E</b>. The Level column is gone, and Books now comes before Workbook. A text that is the same for every level is one wide cell across the three columns. <b>Your rows are converted the first time you open the Curriculum page</b>: each level row moves into its week, what you typed is kept, and the rows as they were are kept as a copy on that device. Open the page on your other devices too, so they all use the new layout. <b>Level and student buttons</b> now pick columns instead of rows: every week stays, and only that level's Writing, Speaking and Grammar show. The <b>monthly note</b> reads the student's level column. <b>The topic window</b> has a box for each level. <b>Import</b> reads a sheet with a column per level (see the FAQ) and still reads the older layout. <b>2027 plan:</b> Grammar now has a line for each level — the week's point for C, a simpler step for A·B and a further one for D·E; the five review weeks keep one line for everyone. A line above the sheet offers <b>Update my plan</b> (only rows that still show the plan's own Grammar are changed, with Undo) or <b>Keep mine</b>.</dd>
           <dt>v162 · 2026-11-23</dt><dd><b>Level test: the teacher's script on the screen.</b> The Level test page has a new button, <b>Teacher's script</b>. Pick a level (A–E) and a skill and read straight from your phone while the students hold the printed sheets: <b>Listening</b> shows what to read aloud, each question and its answer (levels C–E start with the passage); <b>Speaking</b> the questions to ask; <b>Writing</b> the task; <b>Grammar</b> the answers. Under Listening and Grammar is the rule for the next level and where it ends, and <b>Hide the answers</b> takes the answers off while a student can see your screen. The same view opens from a student's Listening or Grammar window with <b>Script on this screen</b> / <b>Answers on this screen</b>, at the level picked there. Nothing is stored by looking. On phones the buttons at the top of the Level test page now wrap onto a second row.</dd>
           <dt>v161 · 2026-11-23</dt><dd><b>Level test: everything ready by level.</b> <b>Samples of Listening and Grammar:</b> <b>Sample test</b> now asks what to try — Reading, Listening or Grammar. The Listening and Grammar samples run exactly like the real questions but belong to no student: nothing is saved, and the last screen shows the result. <b>Speaking and Writing tasks:</b> each level (A–E) has a ready task. In a student's Details press <b>Speaking</b> or <b>Writing</b>, choose the level and press <b>Show the task</b> to put it on the student's screen (hold the lock for the questions to ask; hold the button at the bottom to finish and rate), or print it — a picture or question card for Speaking, a sheet with lines for Writing. <b>Print sheets</b> now lists everything by level: under each level its reading sets and its Listening, Grammar, Speaking and Writing sheets. Press the level's badge to tick one of each — a whole pack for one student — and <b>Answer key</b> prints the matching answers, the listening script, and for Speaking and Writing the questions to ask and what each level looks like. The Listening questions no longer need colour (the red apple is now a banana); only level A reading sheets still do.</dd>
@@ -2358,7 +2360,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v163</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v164</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2501,7 +2503,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
           <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨의 칸만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
           <dt>학생이 어떤 책까지 읽을 수 있는지 어떻게 알아보나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>책 읽기 확인 추가</b>. 책을 고르고 중간쯤에서 100단어 정도를 표시해 둔 뒤, 소리 내어 읽게 하면서 틀리거나 도와준 단어를 세세요. 다 읽으면 무슨 내용이었는지 물어봅니다. 100단어 중 5개 이하로 틀리면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책이고, 내용을 말하지 못했으면 한 단계 낮춥니다. 더 쉬운 책이나 더 어려운 책으로 바꿔 가며 각각 하나씩 나오면, 맨 위의 목록이 그 학생의 범위입니다. 학생끼리 비교하려면 같은 쪽을 읽히고, 이미 아는 책은 피하세요.</dd>
-          <dt>듣기와 문법은 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b> 또는 <b>문법</b> → <b>문항 시작</b>. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
+          <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
@@ -2530,6 +2532,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v164 · 2026-11-23</dt><dd><b>레벨테스트: 파닉스와 어휘 문항.</b> 지금까지 이 두 영역은 설명을 골라 평가할 수만 있었습니다. 이제 둘 다 모든 레벨에 문항이 있고, 듣기·문법과 같은 방식입니다. <b>파닉스</b>(레벨마다 6문항): 선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — A는 첫 글자와 단모음 낱말, B는 sh·ch·th와 magic e, C는 모음 조합과 두 음절 낱말, D는 접두사·접미사, E는 긴 낱말. 5개 이상 맞으면 위로, 3개 이하면 아래로 갑니다. <b>어휘</b>(레벨마다 8문항, 학생 혼자): A는 낱말과 그림 네 개, B는 문장 속 일상 낱말, C는 문맥으로 뜻 짐작하기, D는 새 낱말과 여러 뜻을 가진 낱말, E는 학습 어휘. 7개 이상 맞으면 위로, 4개 이하면 아래로 갑니다. 학생의 <b>자세히</b> → <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>으로 열며, 결과는 평가로 저장되고 레벨을 직접 고를 수도 있습니다. <b>샘플 테스트</b>, <b>시험지 인쇄</b>(레벨별 시험지와 정답지), <b>선생님 대본</b>(파닉스는 읽어 줄 낱말, 어휘는 정답)에도 들어 있습니다. 레벨 한 세트는 이제 시험지 일곱 장입니다.</dd>
           <dt>v163 · 2026-11-23</dt><dd><b>커리큘럼: 한 주가 한 줄입니다.</b> 지금까지는 주제마다 공통 줄 하나와 레벨별 줄이 따로 있어 한 주가 네 줄이었습니다. 이제 <b>한 주가 한 줄</b>이고, 레벨마다 다른 내용은 옆으로 나란히 놓입니다: <b>쓰기</b>, <b>말하기</b>, <b>문법</b>이 각각 <b>A·B</b>, <b>C</b>, <b>D·E</b> 세 칸입니다. 레벨 열은 없어졌고, 도서가 교재 앞으로 왔습니다. 모든 레벨에 같은 내용은 세 칸에 걸친 넓은 한 칸입니다. <b>기존 줄은 커리큘럼 페이지를 처음 열 때 자동으로 바뀝니다</b>: 레벨별 줄이 그 주의 줄로 합쳐지고, 직접 쓴 내용은 그대로 남으며, 바꾸기 전 모습은 그 기기에 사본으로 보관됩니다. 다른 기기에서도 페이지를 한 번 열어 모두 새 표를 쓰게 해 주세요. <b>레벨·학생 버튼</b>은 이제 줄이 아니라 칸을 고릅니다: 모든 주가 그대로 보이고, 그 레벨의 쓰기·말하기·문법 칸만 보입니다. <b>월간 안내</b>는 학생 레벨의 칸을 읽습니다. <b>주제 창</b>에는 레벨마다 칸이 있습니다. <b>가져오기</b>는 레벨마다 열이 있는 시트를 읽고(자주 묻는 질문 참고), 예전 방식의 시트도 그대로 읽습니다. <b>2027 계획:</b> 문법이 레벨별로 한 줄씩 생겼습니다 — C는 그 주의 문법, A·B는 더 쉬운 단계, D·E는 한 단계 더 나아간 내용이며, 복습 주 다섯 번은 모두 같은 한 줄입니다. 표 위의 줄에서 <b>내 계획에 반영</b>(계획의 문법을 그대로 두고 있던 줄만 바뀌며 되돌릴 수 있습니다) 또는 <b>그대로 두기</b>를 고르세요.</dd>
           <dt>v162 · 2026-11-23</dt><dd><b>레벨테스트: 선생님 대본을 화면에서 봅니다.</b> 레벨테스트 페이지에 <b>선생님 대본</b> 버튼이 생겼습니다. 레벨(A–E)과 영역을 고르면, 학생이 인쇄한 시험지를 들고 있는 동안 핸드폰을 보며 바로 읽어 줄 수 있습니다. <b>듣기</b>는 읽어 줄 말과 질문, 정답이 문항마다 나오고(레벨 C–E는 글이 먼저 나옵니다), <b>말하기</b>는 물어볼 질문, <b>쓰기</b>는 과제, <b>문법</b>은 정답이 나옵니다. 듣기와 문법 아래에는 다음 레벨과 끝나는 조건을 정하는 기준이 있고, 학생이 화면을 볼 수 있을 때는 <b>정답 가리기</b>로 정답을 숨길 수 있습니다. 학생의 듣기·문법 창에서도 <b>화면에서 대본 보기</b> / <b>화면에서 정답 보기</b>로 같은 화면이 그 창에서 고른 레벨로 열립니다. 보기만 하는 화면이라 저장되는 것은 없습니다. 핸드폰에서는 레벨테스트 페이지 위쪽 버튼이 두 줄로 나뉩니다.</dd>
           <dt>v161 · 2026-11-23</dt><dd><b>레벨테스트: 레벨별로 모두 준비되어 있습니다.</b> <b>듣기·문법 샘플:</b> <b>샘플 테스트</b>에서 읽기, 듣기, 문법 중 무엇을 해 볼지 고릅니다. 듣기·문법 샘플은 실제 문항과 똑같이 진행되지만 어느 학생에게도 연결되지 않습니다. 저장되는 것은 없고, 마지막 화면에 결과가 나옵니다. <b>말하기·쓰기 과제:</b> 레벨(A–E)마다 과제가 준비되어 있습니다. 학생의 자세히에서 <b>말하기</b>나 <b>쓰기</b>를 누르고 레벨을 고른 뒤 <b>과제 보여 주기</b>를 누르면 학생 화면에 과제가 나옵니다(자물쇠를 길게 누르면 물어볼 질문이 나오고, 아래 버튼을 길게 누르면 마치고 평가로 넘어갑니다). 종이로도 인쇄할 수 있습니다 — 말하기는 그림·질문 카드, 쓰기는 줄이 있는 시험지입니다. <b>시험지 인쇄</b>에는 이제 레벨별로 모든 것이 나옵니다: 레벨마다 읽기 세트와 듣기, 문법, 말하기, 쓰기 시험지. 레벨 표시를 누르면 하나씩 한 묶음이 선택되고 — 학생 한 명분입니다 — <b>정답지</b>를 누르면 그에 맞는 정답, 듣기 대본, 말하기·쓰기의 질문과 레벨별 모습이 인쇄됩니다. 듣기 문항은 이제 색을 구분할 필요가 없습니다(빨간 사과를 바나나로 바꿨습니다). 컬러 인쇄가 필요한 것은 읽기 레벨 A 시험지뿐입니다.</dd>
@@ -2589,7 +2592,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v163</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v164</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -4421,7 +4424,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v163";
+const APP_VERSION="v164";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8554,7 +8557,7 @@ function ltRenderStart(){
   const L=LTS.level,info=AEA.LEVEL_INFO[L],paper=LTS.mode==="paper",g=id=>document.getElementById(id);
   g("lts-what-row").hidden=!LTS.trial;g("lts-mode-row").hidden=sec;
   g("lts-guest-hint").hidden=sec;                          // a Listening / Grammar sample stores nothing, so there is nothing to move later
-  g("lts-what").innerHTML=[["reading",tx("Reading|skill")],["listening",tx("Listening")],["grammar",tx("Grammar")]].map(([k,t])=>
+  g("lts-what").innerHTML=[["reading",tx("Reading|skill")],...LT_SEC_IDS.map(k=>[k,LT_DOMAIN_NAME[k]])].map(([k,t])=>
     `<button type="button" class="seg-btn${k===LTS.what?" active":""}" aria-pressed="${k===LTS.what}" onclick="ltSetStartWhat('${k}')">${escapeAttr(t)}</button>`).join("");
   if(!AEA.formsAt(L).includes(LTS.form))LTS.form=ltPickForm(LTS.sid,L);
   g("lts-mode").innerHTML=[["online",tx("On screen")],["paper",tx("On paper")]].map(([k,t])=>
@@ -8751,12 +8754,12 @@ function ltOpenSheets(){
     LT_SHEET_MORE.map(d=>`<label class="ltsh-set"><input type="checkbox" value="${d}:${L}"/> ${escapeAttr(LT_DOMAIN_NAME[d])}</label>`).join("")+`</div></div>`).join("");
   openModal("mo-lt-sheets");
 }
-const LT_SHEET_MORE=["listening","grammar","speaking","writing"];
+const LT_SHEET_MORE=["listening","grammar","vocabulary","phonics","speaking","writing"];
 // v162: the teacher's copy on the screen. The students hold the printed sheets and the teacher
 // reads from a phone: what to say for Listening, the questions for Speaking, the task for Writing
 // and the answers for Grammar — a level at a time. Nothing is stored; it only shows the bank.
 const LTC={level:"B",dom:"listening",hide:false};
-const LT_SCRIPT_DOMS=["listening","speaking","writing","grammar"];
+const LT_SCRIPT_DOMS=["listening","speaking","writing","grammar","vocabulary","phonics"];
 function ltOpenScript(level,dom){
   if(AEA.LEVELS.includes(level))LTC.level=level;
   if(LT_SCRIPT_DOMS.includes(dom))LTC.dom=dom;
@@ -8783,13 +8786,13 @@ function ltScriptRender(){
     return `<p class="u-hint ltsc-rule">${x(t[0])}<br>${x(t[1])}</p>`;};
   const look=()=>`<p class="ltsc-look"><b>${x(tx("What this level looks like"))}</b>${x(ltDomLevel(d,L))}</p>`;
   let h="";
-  if(d==="listening"){
-    const set=LT_SEC.listening[L];
+  if(LT_SEC_ALOUD.has(d)){
+    const set=LT_SEC[d][L];
     h=`<p class="u-hint">${x(set.passage?tx("Read the passage twice, then the questions one at a time."):set.items.some(it=>it.q)?tx("Read each one twice, then its question."):tx("Read each one twice, slowly."))}</p>`+
       (set.passage?`<p class="ltsc-say ltsc-pass">${x(set.passage)}</p>`:"")+
       `<ol class="ltsc-list">${set.items.map(it=>`<li>${it.say?`<b class="ltsc-say">${x(it.say)}</b>`:""}${it.q?`<span class="ltsc-say">${x(it.q)}</span>`:""}${ans(it)}</li>`).join("")}</ol>`+rule();
-  }else if(d==="grammar"){
-    const set=LT_SEC.grammar[L];
+  }else if(LT_SEC[d]){
+    const set=LT_SEC[d][L];
     h=`<p class="u-hint">${x(tx("The students read and circle by themselves. Nothing is read aloud."))}</p>`+
       `<ol class="ltsc-list">${set.items.map(it=>`<li><span class="ltsc-say">${x(it.q)}</span>${ans(it)}</li>`).join("")}</ol>`+rule();
   }else{
@@ -8822,7 +8825,7 @@ function ltPrintSheets(kind){
     const B=ids.length?ltSheetBlocks(ids,kind):[];
     if(kind==="key"){
       if(B.length)B.push(`<div class="sh-gap"></div>`);
-      ["listening","grammar"].forEach(d=>{if(more[d].length)B.push(...ltSecBlocks(d,"key","",more[d]),`<div class="sh-gap"></div>`);});
+      LT_SEC_IDS.forEach(d=>{if(more[d].length)B.push(...ltSecBlocks(d,"key","",more[d]),`<div class="sh-gap"></div>`);});
       ["speaking","writing"].forEach(d=>{if(more[d].length)B.push(...ltTaskBlocks(d,"key",more[d]),`<div class="sh-gap"></div>`);});
     }else AEA.LEVELS.forEach(L=>LT_SHEET_MORE.forEach(d=>{if(!more[d].includes(L))return;
       B.push(...(LT_SEC[d]?ltSecBlocks(d,"sheet",L):ltTaskBlocks(d,"sheet",[L])));}));
@@ -9177,6 +9180,9 @@ const LT_RD=Object.assign({},AEA.RATING_DOMAINS,{
     C:"현재형의 -s, 현재진행형, 규칙 과거형, 시간과 장소의 전치사를 씁니다.",
     D:"불규칙 과거형, 미래 표현, 비교급과 최상급, because와 so로 이은 문장을 씁니다.",
     E:"현재완료, 수동태, 관계사절, 조건문을 이해하고 씁니다."}},
+  // v164: both have questions now; the bank's own way of checking stays as the other way
+  phonics:Object.assign({},AEA.RATING_DOMAINS.phonics,{task:"문항으로 확인하거나, 처음 보는 단어 목록을 소리 내어 읽게 한 뒤 가장 가까운 설명을 직접 고릅니다."}),
+  vocabulary:Object.assign({},AEA.RATING_DOMAINS.vocabulary,{task:"문항으로 확인하거나, 최근에 배운 단어 다섯 개로 문장을 말하거나 쓰게 한 뒤 가장 가까운 설명을 직접 고릅니다."}),
 });
 const LT_DOMAIN_NAME={speaking:tx("Speaking"),writing:tx("Writing"),listening:tx("Listening"),grammar:tx("Grammar"),phonics:tx("Phonics"),vocabulary:tx("Vocabulary")};
 const LT_DOMAINS_EN={
@@ -9204,13 +9210,13 @@ const LT_DOMAINS_EN={
     C:"Uses the present -s, the present continuous, the regular past and prepositions of time and place.",
     D:"Uses the irregular past, the future, comparatives and superlatives, and sentences joined with because and so.",
     E:"Understands and uses the present perfect, the passive, relative clauses and conditionals."}},
-  phonics:{task:"Have the student read a list of unseen words aloud, then pick the closest description.",levels:{
+  phonics:{task:"Check with the questions, or have the student read a list of unseen words aloud and pick the closest description yourself.",levels:{
     A:"Knows most letter sounds and blends CVC words (cat, sun).",
     B:"Reads words with sh, ch, th and magic e.",
     C:"Reads vowel teams (ai, ea, oa) and two-syllable words, and works out new words by the rules.",
     D:"Reads long words and words with prefixes and suffixes accurately.",
     E:"Reads unfamiliar long words smoothly by breaking them into syllables and parts."}},
-  vocabulary:{task:"Have the student say or write sentences with five recently learned words, then pick the closest description.",levels:{
+  vocabulary:{task:"Check with the questions, or have the student say or write sentences with five recently learned words and pick the closest description yourself.",levels:{
     A:"Knows basic nouns, colours, numbers and action words that go with a picture.",
     B:"Understands common everyday words inside a sentence.",
     C:"Uses learned words in their own sentences and guesses some meanings from context.",
@@ -9418,7 +9424,7 @@ function ltOpenRate(sid,dom,opt){
 }
 function ltRenderRate(){
   if(!LT_DOMAIN_IDS.includes(LTR.dom))return;
-  const sec=document.getElementById("ltq-sec"),hasSec=!!LT_SEC[LTR.dom],lis=LTR.dom==="listening";
+  const sec=document.getElementById("ltq-sec"),hasSec=!!LT_SEC[LTR.dom],lis=LT_SEC_ALOUD.has(LTR.dom);
   sec.hidden=!hasSec;
   if(hasSec){
     const x=escapeAttr,n=LT_SEC[LTR.dom].A.items.length,R=LT_SEC_RULE[LTR.dom];
@@ -9596,8 +9602,113 @@ const LT_SEC={
 };
 // Enough right moves on to the level above, too few to the level below, in between is this level.
 // (Grammar's 8 follow the test's own rule for 8 questions.)
-const LT_SEC_RULE={listening:{up:4,down:2},grammar:{up:7,down:4}};
-const LT_SEC_EN={listening:"Listening",grammar:"Grammar",speaking:"Speaking",writing:"Writing"};
+// v164: Phonics and Vocabulary have questions too. Phonics is heard: the teacher says a word and
+// the student picks it among look-alikes (level A starts with first letters). Vocabulary is read:
+// a word and its picture at level A, then words inside sentences, meanings from context, words with
+// several meanings and academic words. Same shape as Listening and Grammar, so the screen, the
+// paper sheets, the teacher's script and the rule all take them as they are.
+Object.assign(LT_SEC,{
+  phonics:{
+    A:{items:[
+      {say:"sun",q:"Which letter does it start with?",opts:["z","c","s","x"],ans:2},
+      {say:"map",q:"Which letter does it start with?",opts:["n","m","w","h"],ans:1},
+      {say:"cat",opts:["cot","cut","cat","cap"],ans:2},
+      {say:"pin",opts:["pin","pen","pan","bin"],ans:0},
+      {say:"hot",opts:["hat","hit","hut","hot"],ans:3},
+      {say:"bed",opts:["bad","bed","bud","beg"],ans:1}]},
+    B:{items:[
+      {say:"ship",opts:["chip","sip","ship","shop"],ans:2},
+      {say:"chin",opts:["chin","shin","thin","tin"],ans:0},
+      {say:"thick",opts:["tick","sick","chick","thick"],ans:3},
+      {say:"tape",opts:["tap","tape","top","type"],ans:1},
+      {say:"hope",opts:["hop","hip","hope","heap"],ans:2},
+      {say:"fine",opts:["fin","fan","fun","fine"],ans:3}]},
+    C:{items:[
+      {say:"rain",opts:["ran","run","rain","ruin"],ans:2},
+      {say:"boat",opts:["boat","bot","boot","bat"],ans:0},
+      {say:"seat",opts:["set","sit","sat","seat"],ans:3},
+      {say:"feet",opts:["fit","feet","fat","fate"],ans:1},
+      {say:"rabbit",opts:["rabbit","ribbon","robot","rapid"],ans:0},
+      {say:"window",opts:["winter","widow","wonder","window"],ans:3}]},
+    D:{items:[
+      {say:"unhappy",opts:["unhappy","unhappily","happy","happiness"],ans:0},
+      {say:"careful",opts:["careless","caring","careful","carefully"],ans:2},
+      {say:"replay",opts:["display","replay","player","played"],ans:1},
+      {say:"quickly",opts:["quicker","quickest","quick","quickly"],ans:3},
+      {say:"important",opts:["impatient","impossible","important","imported"],ans:2},
+      {say:"different",opts:["difficult","different","difference","differ"],ans:1}]},
+    E:{items:[
+      {say:"information",opts:["inflammation","invitation","information","formation"],ans:2},
+      {say:"photograph",opts:["photograph","photography","photographer","paragraph"],ans:0},
+      {say:"environment",opts:["entertainment","environment","environmental","enjoyment"],ans:1},
+      {say:"responsibility",opts:["responsible","possibility","responsibly","responsibility"],ans:3},
+      {say:"microscope",opts:["microphone","microwave","microscope","telescope"],ans:2},
+      {say:"temperature",opts:["temperature","temporary","temper","literature"],ans:0}]},
+  },
+  vocabulary:{
+    A:{items:[
+      {q:"apple",opts:["🍌","🍎","🍇","🍞"],ans:1,pic:1},
+      {q:"fish",opts:["🐟","🐦","🐱","🐴"],ans:0,pic:1},
+      {q:"three",opts:["1","5","3","8"],ans:2},
+      {q:"run",opts:["🏊","😴","🍽️","🏃"],ans:3,pic:1},
+      {q:"book",opts:["✏️","📖","🎒","✂️"],ans:1,pic:1},
+      {q:"sleep",opts:["😴","🏃","✍️","🎤"],ans:0,pic:1},
+      {q:"seven",opts:["2","4","6","7"],ans:3},
+      {q:"hat",opts:["👟","🧦","🎩","👕"],ans:2,pic:1}]},
+    B:{items:[
+      {q:"I drink ___ in the morning.",opts:["milk","bread","rice","eggs"],ans:0},
+      {q:"It is cold. I wear a ___.",opts:["shorts","sandals","coat","sunglasses"],ans:2},
+      {q:"I sleep in my ___.",opts:["kitchen","bathroom","garden","bedroom"],ans:3},
+      {q:"A ___ can fly.",opts:["fish","bird","dog","cow"],ans:1},
+      {q:"I brush my ___ every night.",opts:["teeth","shoes","books","toys"],ans:0},
+      {q:"My mother's mother is my ___.",opts:["aunt","sister","grandmother","cousin"],ans:2},
+      {q:"After Monday comes ___.",opts:["Sunday","Tuesday","Friday","Wednesday"],ans:1},
+      {q:"I am ___. I want some water.",opts:["hungry","sleepy","thirsty","angry"],ans:2}]},
+    C:{items:[
+      {q:"The box was so ___ that I could not lift it.",opts:["light","empty","heavy","soft"],ans:2},
+      {q:"She was ___ because she lost her favorite toy.",opts:["proud","upset","excited","brave"],ans:1},
+      {q:"Please be ___. The baby is sleeping.",opts:["noisy","quick","quiet","late"],ans:2},
+      {q:"We ___ the bus, so we had to walk.",opts:["caught","missed","rode","found"],ans:1},
+      {q:"The opposite of “early” is ___.",opts:["late","fast","soon","young"],ans:0},
+      {q:"He was starving, so he ate three sandwiches. “Starving” means ___.",opts:["very tired","very hungry","very happy","very cold"],ans:1},
+      {q:"The puppy was tiny. It could sit in my hand. “Tiny” means ___.",opts:["very small","very loud","very old","very fast"],ans:0},
+      {q:"Mina ___ her friend to her birthday party.",opts:["borrowed","answered","visited","invited"],ans:3}]},
+    D:{items:[
+      {q:"The desert is arid; it almost never rains there. “Arid” means ___.",opts:["very dry","very cold","crowded","colorful"],ans:0},
+      {q:"He was reluctant to jump into the cold water and stood at the edge for a long time. “Reluctant” means ___.",opts:["excited","not willing","very fast","careless"],ans:1},
+      {q:"The bank of the river was muddy. Here, “bank” means ___.",opts:["a place for money","a kind of boat","the side of a river","a small bridge"],ans:2},
+      {q:"She can't bear loud noises. Here, “bear” means ___.",opts:["a large animal","to carry","to stand or accept","to give birth"],ans:2},
+      {q:"The teacher asked us to ___ the two stories and find what is different.",opts:["compare","repeat","borrow","decorate"],ans:0},
+      {q:"The medicine had no ___; he still felt sick.",opts:["reason","habit","cost","effect"],ans:3},
+      {q:"It was an ancient city, built thousands of years ago. “Ancient” means ___.",opts:["very busy","very rich","very small","very old"],ans:3},
+      {q:"I need to book a hotel room. Here, “book” means ___.",opts:["something to read","to reserve","to write","to pay"],ans:1}]},
+    E:{items:[
+      {q:"Scientists need ___ to support their ideas.",opts:["evidence","opinions","rumors","wishes"],ans:0},
+      {q:"“To analyze” means ___.",opts:["to copy something exactly","to study something carefully in parts","to forget something quickly","to guess without thinking"],ans:1},
+      {q:"The two results were ___; they did not agree at all.",opts:["similar","identical","contradictory","accurate"],ans:2},
+      {q:"A “consequence” is ___.",opts:["a reason for doing something","a plan for the future","a kind of promise","a result of an action"],ans:3},
+      {q:"The new rule will ___ everyone in the school, not just the teachers.",opts:["affect","effect","accept","expect"],ans:0},
+      {q:"Her explanation was ___: short, clear and easy to follow.",opts:["vague","concise","complicated","irrelevant"],ans:1},
+      {q:"“Significant” is closest in meaning to ___.",opts:["noisy","ordinary","important","hidden"],ans:2},
+      {q:"The writer's main ___ is that reading should be free for everyone.",opts:["paragraph","summary","grammar","argument"],ans:3}]},
+  },
+});
+const LT_SEC_RULE={listening:{up:4,down:2},grammar:{up:7,down:4},phonics:{up:5,down:3},vocabulary:{up:7,down:4}};
+const LT_SEC_EN={listening:"Listening",grammar:"Grammar",speaking:"Speaking",writing:"Writing",phonics:"Phonics",vocabulary:"Vocabulary"};
+// Skills whose questions the teacher reads aloud (the others the student reads alone), and what the
+// student is told to do: [Korean with English, English] on the screen, one line on the paper sheet.
+const LT_SEC_ALOUD=new Set(["listening","phonics"]);
+const LT_SEC_IDS=Object.keys(LT_SEC);
+const LT_SEC_LEAD={
+  listening:{intro:["선생님이 읽어 주는 말을 잘 듣고 알맞은 답을 골라요.","Listen to your teacher, then choose the answer."],run:["잘 듣고 골라요 · Listen and choose","Listen and choose."],
+    sheet:"Listen to your teacher and circle the answer. · 선생님이 읽어 주는 말을 잘 듣고 알맞은 답에 동그라미 하세요."},
+  grammar:{intro:["빈칸에 들어갈 알맞은 말을 골라요.","Choose the words that fit in the blank."],run:["빈칸에 알맞은 말을 골라요.","Choose the words that fit in the blank."],
+    sheet:"Circle the words that fit in the blank. · 빈칸에 알맞은 말에 동그라미 하세요."},
+  phonics:{intro:["선생님이 읽어 주는 낱말을 잘 듣고 그 낱말을 골라요.","Listen to your teacher, then choose the word you hear."],run:["잘 듣고 골라요 · Listen and choose","Listen and choose."],
+    sheet:"Listen to your teacher and circle the word you hear. · 선생님이 읽어 주는 낱말을 잘 듣고 그 낱말에 동그라미 하세요."},
+  vocabulary:{intro:["낱말의 뜻에 맞는 답을 골라요.","Choose the answer that fits the word."],run:["알맞은 답을 골라요 · Choose the best answer","Choose the best answer."],
+    sheet:"Circle the best answer. · 알맞은 답에 동그라미 하세요."},
+};
 // ── Speaking and Writing: one task per level (v161) ───────────────────────
 // What to ask (Speaking) or to set (Writing) at each level, so nothing has to be made up before
 // the lesson. `q` is what the student sees — on the screen or on paper — with `ko` under it when
@@ -9684,7 +9795,7 @@ function ltxBar(){
     `<button type="button" class="lt-lock" data-hold="menu" title="${escapeAttr(tx("Teacher's menu: press and hold"))}" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
 }
 function ltxHtml(s){
-  const K=ltxKo(),e=escapeAttr,lis=LTX.dom==="listening",set=ltxSet();
+  const K=ltxKo(),e=escapeAttr,lead=LT_SEC_LEAD[LTX.dom]||LT_SEC_LEAD.grammar,set=ltxSet();
   if(LTX.screen==="task"){
     const t=LT_TASKS[LTX.dom][LTX.level],wr=LTX.dom==="writing";
     return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><p class="lt-xtask">${e(t.q)}</p><p class="lt-qko"${K?"":" hidden"}>${e(t.ko)}</p>`+
@@ -9696,7 +9807,7 @@ function ltxHtml(s){
     `<p class="lt-muted">${e(tx("Nothing was saved."))}</p></div><div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xLeave">${e(tx("Close"))}</button></div></div>`;
   if(LTX.screen==="end")return `<div class="lt-tscreen lt-mid"><div class="lt-tmsg"><div class="lt-tbig">All done!</div><p${ltL(K,"끝까지 잘 풀었어요. 수고했어요!","You answered to the end. Well done!")}</p><p class="lt-muted"${ltL(K,"선생님께 기기를 돌려주세요.","Please give the device back to your teacher.")}</p></div>`+
     `<div class="lt-tfoot"><button type="button" class="lt-btn lt-big" data-hold="xdone"${ltL(K,"선생님: 길게 눌러 결과 확인","Teacher: press and hold to see the result")}</button></div></div>`;
-  if(LTX.screen==="intro")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Hi${s&&s.name?", "+e(s.name):""}!</div><p${lis?ltL(K,"선생님이 읽어 주는 말을 잘 듣고 알맞은 답을 골라요.","Listen to your teacher, then choose the answer."):ltL(K,"빈칸에 들어갈 알맞은 말을 골라요.","Choose the words that fit in the blank.")}</p>`+
+  if(LTX.screen==="intro")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Hi${s&&s.name?", "+e(s.name):""}!</div><p${ltL(K,lead.intro[0],lead.intro[1])}</p>`+
     `<ul class="lt-tips"><li${ltL(K,"모르는 문제는 <b>잘 모르겠어요</b>를 눌러도 괜찮아요.","If you do not know an answer, you can tap <b>I’m not sure</b>.")}</li><li${ltL(K,"점수를 매기는 시험이 아니에요. 지금 무엇을 배우면 좋을지 알아보는 거예요.","This is not a test with a score. It shows us what to learn next.")}</li></ul></div>`+
     `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xStart"${ltL(K,"시작 · Start","Start")}</button></div></div>`;
   if(LTX.screen==="break")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Good job!</div><p${ltL(K,"잘하고 있어요. 몇 문제만 더 풀어 볼게요.","You are doing well. Let’s try a few more.")}</p></div>`+
@@ -9707,8 +9818,8 @@ function ltxHtml(s){
   const opts=it.opts.map((o,k)=>`<button type="button" class="lt-opt${LTX.sel===k?" lt-sel":""}" data-act="xPick" data-pos="${k}">`+
     (it.pic?`<span class="lt-optpic">${o}</span>`:`<span class="lt-ol">${LT_CIRC[k]}</span><span class="lt-ot">${e(o)}</span>`)+`</button>`).join("");
   return `<div class="lt-tscreen lt-nopass">${ltxBar()}<div class="lt-qwrap"><div class="lt-qn">Question ${LTX.idx+1}</div>`+
-    (lis?`<p class="lt-exlead"${ltL(K,"잘 듣고 골라요 · Listen and choose","Listen and choose.")}</p>`:`<p class="lt-exlead"${ltL(K,"빈칸에 알맞은 말을 골라요.","Choose the words that fit in the blank.")}</p>`)+
-    (it.q?`<p class="lt-qtext">${e(it.q)}</p>`:`<div class="lt-stim">👂</div>`)+
+    `<p class="lt-exlead"${ltL(K,lead.run[0],lead.run[1])}</p>`+
+    (it.q?`<p class="lt-qtext${/^\S{1,12}$/.test(it.q)?" lt-qword":""}">${e(it.q)}</p>`:`<div class="lt-stim">👂</div>`)+
     `<div class="lt-opts${it.pic?" lt-pic":""}">${opts}</div>`+
     `<button type="button" class="lt-idk${LTX.sel===-1?" lt-sel":""}" data-act="xPick" data-pos="-1"${ltL(K,"잘 모르겠어요 · I’m not sure","I’m not sure")}</button></div>`+
     `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" id="lt-next" data-act="xNext"${LTX.sel==null?" disabled":""}${ltL(K,"다음 · Next","Next")}</button></div></div>`;
@@ -9724,7 +9835,7 @@ function ltxMenuHtml(){
       `<div class="lt-stack"><button type="button" class="lt-btn lt-primary" data-act="xMenuClose">${e(tx("Keep going"))}</button>`+
       `<button type="button" class="lt-btn" data-act="xTaskDone">${e(tx("Finish and rate"))}</button></div></div>`;
   }
-  const script=LTX.dom==="listening"&&(LTX.screen==="run"||LTX.screen==="hear")?`<div class="lt-xscript"><b>${e(tx("Read aloud"))}</b>`+
+  const script=LT_SEC_ALOUD.has(LTX.dom)&&(LTX.screen==="run"||LTX.screen==="hear")?`<div class="lt-xscript"><b>${e(tx("Read aloud"))}</b>`+
     (set.passage?`<p>${e(set.passage)}</p>`+(LTX.screen==="run"?`<p>${LTX.idx+1}. ${e(it.q)}</p>`:""):`<p>${LTX.idx+1}. ${e(it.say)}${it.q?" — "+e(it.q):""}</p>`)+`</div>`:"";
   return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${e(tx("Teacher's menu"))}</h2>${script}<div class="lt-stack">`+
     `<button type="button" class="lt-btn lt-primary" data-act="xMenuClose">${e(tx("Keep going"))}</button>`+
@@ -9808,12 +9919,13 @@ function ltPickStart(L){if(AEA.LEVELS.includes(L)){LTR.start=L;ltRenderRate();}}
 // The printed side of the questions: the sheet a student writes on (one level), or the teacher's
 // copy — what to read aloud, the answers and the rule (all levels). Paper, so its wording is fixed.
 function ltSecBlocks(dom,kind,level,levels){
-  const e=escapeAttr,B=[],lis=dom==="listening",R=LT_SEC_RULE[dom],name=LT_SEC_EN[dom];
+  const e=escapeAttr,B=[],lis=LT_SEC_ALOUD.has(dom),R=LT_SEC_RULE[dom],name=LT_SEC_EN[dom];
   if(kind==="key"){
     const n=LT_SEC[dom].A.items.length;
     B.push(`<div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">${lis?"대본과 정답":"정답지"} · 선생님용</div></div>`);
     B.push(`<div class="sh-guide"><b>다음 레벨 정하기</b> ${n}문항 중 ${R.up}개 이상 맞으면 한 레벨 위 문항을, ${R.down}개 이하면 한 레벨 아래 문항을 풉니다. 그 사이면 그 레벨입니다. 위로 올라갔다가 ${R.down}개 이하가 나오면 바로 아래 레벨, 아래로 내려갔다가 ${R.up}개 이상이 나오면 그 레벨입니다. 앱에서 풀면 자동으로 넘어갑니다.`+
-      (lis?` <b>읽는 방법</b> 레벨 A·B는 문항마다 두 번씩 또박또박 읽어 줍니다(B는 질문도 읽어 줍니다). 레벨 C~E는 글을 두 번 읽어 준 뒤 질문을 하나씩 읽어 줍니다.`:"")+`</div>`);
+      (dom==="listening"?` <b>읽는 방법</b> 레벨 A·B는 문항마다 두 번씩 또박또박 읽어 줍니다(B는 질문도 읽어 줍니다). 레벨 C~E는 글을 두 번 읽어 준 뒤 질문을 하나씩 읽어 줍니다.`
+        :lis?` <b>읽는 방법</b> 낱말을 문항마다 두 번씩 또박또박 읽어 줍니다. 레벨 A의 1·2번은 낱말을 읽어 준 뒤 질문도 읽어 줍니다.`:"")+`</div>`);
     (levels||AEA.LEVELS).forEach(L=>{const set=LT_SEC[dom][L];
       B.push(`<div class="sh-key"><h3>${name} · 레벨 ${L}</h3>`+(set.passage?`<p class="sh-say">${e(set.passage)}</p>`:"")+
         (lis?`<ol class="sh-says">${set.items.map(it=>`<li>${it.say?`<span class="sh-say">${e(it.say)}</span>`:""}${it.q?` ${e(it.q)}`:""} <b>${LT_CIRC[it.ans]}</b> <span class="g">${it.pic?it.opts[it.ans]:e(it.opts[it.ans])}</span></li>`).join("")}</ol>`
@@ -9822,7 +9934,7 @@ function ltSecBlocks(dom,kind,level,levels){
   }
   const set=LT_SEC[dom][level];
   B.push(`<section class="sh-page"><div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">${name[0]}-${level}</div><div class="sh-name">Name ______________ &nbsp; Date ____________</div></div>`+
-    `<div class="sh-guide">${lis?"Listen to your teacher and circle the answer. · 선생님이 읽어 주는 말을 잘 듣고 알맞은 답에 동그라미 하세요.":"Circle the words that fit in the blank. · 빈칸에 알맞은 말에 동그라미 하세요."}</div>`+
+    `<div class="sh-guide">${LT_SEC_LEAD[dom].sheet}</div>`+
     set.items.map((it,i)=>`<div class="sh-q lv${level}"><div class="sh-qt"><b>${i+1}.</b> ${it.q?e(it.q):""}</div>`+
       `<div class="sh-opts${it.pic?" pic inline":it.opts.every(o=>o.length<=12)?" inline":it.opts.every(o=>o.length<=30)?" two":""}">${it.opts.map((o,k)=>`<span>${LT_CIRC[k]} ${it.pic?`<em>${o}</em>`:e(o)}</span>`).join("")}</div></div>`).join("")+`</section>`);
   return B;
