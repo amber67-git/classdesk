@@ -532,6 +532,10 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .ltq-sec-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
 .ltq-sec-row .seg-btn{min-width:36px;justify-content:center}
 .ltq-or{margin:0 0 6px}
+/* v161: the task of a level in the Speaking / Writing window; a level's whole pack in the print list */
+.ltq-task{font-size:var(--fs-base);margin:8px 0 0;overflow-wrap:anywhere}
+.ltq-task small{display:block;color:var(--txt2);font-size:var(--fs-sm);margin-top:2px}
+.ltsh-x{color:var(--txt2)}
 /* v160: book checks in a student's Details — one line of bands, then the checks */
 .lt-bk-sum{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;font-size:var(--fs-sm);margin:2px 0 4px}
 .lt-bk-sum>span{min-width:0;overflow-wrap:anywhere}
@@ -670,6 +674,10 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-xscript{border:1px solid var(--lt-line);border-radius:10px;padding:10px 12px;margin:0 0 12px;font:16px/1.6 var(--lt-read)}
 #lt-screen .lt-xscript b{display:block;font:600 12px var(--font);color:var(--lt-muted);margin-bottom:2px}
 #lt-screen .lt-xscript p{margin:0 0 6px}#lt-screen .lt-xscript p:last-child{margin-bottom:0}
+#lt-screen .lt-xtask{font:600 26px/1.4 var(--lt-read);text-align:center;margin:0 0 10px}
+#lt-screen .lt-xpics{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;font-size:84px;line-height:1.1;margin:8px 0}
+#lt-screen .lt-xmodel{font:400 26px/1.5 var(--lt-read);text-align:center;border:1px dashed var(--lt-line);border-radius:10px;padding:8px 14px;margin:8px auto;max-width:520px}
+@media(max-width:600px){#lt-screen .lt-xtask{font-size:21px}#lt-screen .lt-xpics{font-size:64px;gap:12px}}
 #lt-screen .lt-exmsg{min-height:44px;margin:0;font-size:15px;font-weight:600;color:var(--lt-brand)}
 #lt-screen .lt-exmsg.lt-retry{color:var(--lt-amber-ink)}
 @media(prefers-reduced-motion:reduce){#lt-screen .lt-ko i,#lt-screen .lt-ko i::after{transition:none}}
@@ -2260,6 +2268,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v161 · 2026-11-23</dt><dd><b>Level test: everything ready by level.</b> <b>Samples of Listening and Grammar:</b> <b>Sample test</b> now asks what to try — Reading, Listening or Grammar. The Listening and Grammar samples run exactly like the real questions but belong to no student: nothing is saved, and the last screen shows the result. <b>Speaking and Writing tasks:</b> each level (A–E) has a ready task. In a student's Details press <b>Speaking</b> or <b>Writing</b>, choose the level and press <b>Show the task</b> to put it on the student's screen (hold the lock for the questions to ask; hold the button at the bottom to finish and rate), or print it — a picture or question card for Speaking, a sheet with lines for Writing. <b>Print sheets</b> now lists everything by level: under each level its reading sets and its Listening, Grammar, Speaking and Writing sheets. Press the level's badge to tick one of each — a whole pack for one student — and <b>Answer key</b> prints the matching answers, the listening script, and for Speaking and Writing the questions to ask and what each level looks like. The Listening questions no longer need colour (the red apple is now a banana); only level A reading sheets still do.</dd>
           <dt>v160 · 2026-11-23</dt><dd><b>Level test: book checks.</b> A student's <b>Details</b> has a new block, <b>Book checks</b>, for finding out which real books a student can read. Press <b>Add a book check</b>, have the student read about 100 words aloud from a book they have not read, and type the title, the words read, the words missed and whether they could say what it was about. ClassDesk works out the share read right and a band: <b>Comfortable alone</b> (95% or more — 5 or fewer missed in 100), <b>Right for lessons</b> (90% or more — 6 to 10 missed) or <b>Too hard for now</b>. A student who could not say what it was about goes one band down. The top of the block lists the books by band, each by its newest check — that is the student's range, in books you own — and the checks are kept with their dates. The title box suggests books from your Books page. The <b>parent report</b> has a new section, <b>책 읽기</b>, with the same three lists. <b>Retest due</b> now shows six months after a test instead of three, and the report gives the next test six months on — the full test is taken twice a year.</dd>
           <dt>v159 · 2026-11-23</dt><dd><b>Curriculum: the full level test twice a year, a short check in between.</b> In the 2027 plan the full level test is now in <b>June and December</b>; <b>March and September</b> have a short <b>speaking and writing check</b> instead (one minute of speaking, five to ten minutes of writing) — all in the second week. Three topics were renamed for this: March and September are now "Speaking &amp; Writing Check 1 / 2", and December's test is "Level Test 3". If the plan is already in your app, the Curriculum page shows the line <b>The 2027 plan has changed</b> again: <b>Update my plan</b> renames those topics, puts their weeks right and adds nothing; an Activities text you rewrote yourself is kept, and Undo takes it all back. <b>Keep mine</b> leaves your plan as it is.</dd>
           <dt>v158 · 2026-11-23</dt><dd><b>Level test: Listening and Grammar.</b> A student's <b>Details</b> has two more skills to rate, <b>Listening</b> and <b>Grammar</b>, and each comes with its own short questions. Press the skill, choose the level to start at and press <b>Start the questions</b>: they open on the student's screen. <b>Listening</b> has 5 questions a level — you read the script aloud and the student taps the answer (pictures only at level A; from level B the question is on the screen as well; at levels C–E you read a short text first, then the questions). <b>Script and answers</b> prints everything you read, with the answers; with one device, hold the lock on the student's screen and the teacher's menu shows what to read now. <b>Grammar</b> has 8 questions a level: the student picks the words that fit the blank. 4 or more right out of 5 (7 out of 8) goes on to the level above, 2 or fewer (4 or fewer) to the level below. It moves one way only — it stops at A or E, or when a score no longer points that way (a low score after going up gives the level before) — and the result is saved as the rating together with the scores — it shows in Details, in the parent report and in the ratings CSV. <b>Paper sheet</b> prints the questions of one level for a student to circle; mark it with the key and pick the level yourself. Picking a level by hand, without the questions, works as before. <b>Curriculum: level tests in the second week.</b> In the 2027 plan the level tests of March, June, September and December moved from the first week to the second. If the plan is already in your app, the Curriculum page shows one line — <b>The 2027 plan has changed</b> — with <b>Update my plan</b> (moves those rows to the plan's weeks and adds nothing; Undo takes it back) and <b>Keep mine</b>.</dd>
@@ -2317,7 +2326,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v160</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v161</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2488,6 +2497,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v161 · 2026-11-23</dt><dd><b>레벨테스트: 레벨별로 모두 준비되어 있습니다.</b> <b>듣기·문법 샘플:</b> <b>샘플 테스트</b>에서 읽기, 듣기, 문법 중 무엇을 해 볼지 고릅니다. 듣기·문법 샘플은 실제 문항과 똑같이 진행되지만 어느 학생에게도 연결되지 않습니다. 저장되는 것은 없고, 마지막 화면에 결과가 나옵니다. <b>말하기·쓰기 과제:</b> 레벨(A–E)마다 과제가 준비되어 있습니다. 학생의 자세히에서 <b>말하기</b>나 <b>쓰기</b>를 누르고 레벨을 고른 뒤 <b>과제 보여 주기</b>를 누르면 학생 화면에 과제가 나옵니다(자물쇠를 길게 누르면 물어볼 질문이 나오고, 아래 버튼을 길게 누르면 마치고 평가로 넘어갑니다). 종이로도 인쇄할 수 있습니다 — 말하기는 그림·질문 카드, 쓰기는 줄이 있는 시험지입니다. <b>시험지 인쇄</b>에는 이제 레벨별로 모든 것이 나옵니다: 레벨마다 읽기 세트와 듣기, 문법, 말하기, 쓰기 시험지. 레벨 표시를 누르면 하나씩 한 묶음이 선택되고 — 학생 한 명분입니다 — <b>정답지</b>를 누르면 그에 맞는 정답, 듣기 대본, 말하기·쓰기의 질문과 레벨별 모습이 인쇄됩니다. 듣기 문항은 이제 색을 구분할 필요가 없습니다(빨간 사과를 바나나로 바꿨습니다). 컬러 인쇄가 필요한 것은 읽기 레벨 A 시험지뿐입니다.</dd>
           <dt>v160 · 2026-11-23</dt><dd><b>레벨테스트: 책 읽기 확인.</b> 학생의 <b>자세히</b>에 <b>책 읽기 확인</b>이 생겼습니다. 학생이 실제로 어떤 책까지 읽을 수 있는지 알아보는 기록입니다. <b>책 읽기 확인 추가</b>를 누르고, 학생이 읽어 보지 않은 책에서 100단어쯤을 소리 내어 읽게 한 뒤 책 제목, 읽은 단어 수, 틀린 단어 수, 내용을 말했는지를 적으세요. ClassDesk가 정확도와 구분을 계산합니다: <b>혼자 읽기 편함</b>(95% 이상 — 100단어 중 5개 이하 틀림), <b>수업용으로 알맞음</b>(90% 이상 — 6~10개 틀림), <b>아직 어려움</b>. 내용을 말하지 못했으면 한 단계 낮춥니다. 맨 위에는 책이 구분별로 정리되어 나오며(책마다 가장 최근 확인 기준), 이것이 가지고 계신 책으로 본 그 학생의 범위입니다. 확인 기록은 날짜와 함께 남습니다. 책 제목 칸에는 도서 화면의 책이 추천으로 뜹니다. <b>학부모 리포트</b>에도 같은 세 목록이 <b>책 읽기</b>로 들어갑니다. <b>재테스트 시기</b> 표시는 이제 테스트 후 3개월이 아니라 6개월 뒤에 나오고, 리포트의 다음 평가 예정일도 6개월 뒤입니다 — 전체 테스트를 일 년에 두 번 보기 때문입니다.</dd>
           <dt>v159 · 2026-11-23</dt><dd><b>커리큘럼: 전체 레벨테스트는 일 년에 두 번, 그 사이에는 짧은 확인.</b> 2027 계획에서 전체 레벨테스트는 <b>6월과 12월</b>에 보고, <b>3월과 9월</b>에는 <b>말하기·쓰기만 짧게 확인</b>합니다(말하기 1분, 쓰기 5~10분) — 모두 둘째 주입니다. 이를 위해 주제 세 개의 이름이 바뀌었습니다: 3월과 9월은 "말하기·쓰기 확인 ①·②", 12월 테스트는 "레벨테스트 ③"입니다. 계획을 이미 가져오셨다면 커리큘럼 페이지에 <b>2027 계획이 바뀌었습니다</b> 줄이 다시 나옵니다. <b>내 계획에 반영</b>을 누르면 그 주제들의 이름과 주를 맞추고 새로 추가하지는 않습니다. 직접 고쳐 쓴 활동 내용은 그대로 두며, 되돌리기로 모두 취소할 수 있습니다. <b>그대로 두기</b>는 계획을 그대로 둡니다.</dd>
           <dt>v158 · 2026-11-23</dt><dd><b>레벨테스트: 듣기와 문법.</b> 학생의 <b>자세히</b>에 평가할 영역이 두 개 늘었습니다 — <b>듣기</b>와 <b>문법</b>. 둘 다 짧은 문항이 함께 들어 있습니다. 영역을 누르고 시작 레벨을 고른 뒤 <b>문항 시작</b>을 누르면 학생 화면에 문항이 열립니다. <b>듣기</b>는 레벨마다 5문항입니다 — 선생님이 대본을 읽어 주고 학생이 답을 누릅니다(레벨 A는 그림만, 레벨 B부터는 질문도 화면에 나오고, 레벨 C~E는 짧은 글을 먼저 읽어 준 뒤 질문을 읽어 줍니다). <b>대본과 정답</b>을 누르면 읽어 줄 내용과 정답이 모두 인쇄용으로 열립니다. 기기가 한 대뿐이면 학생 화면의 자물쇠를 길게 누르세요. 선생님 메뉴에 지금 읽어 줄 내용이 나옵니다. <b>문법</b>은 레벨마다 8문항이고, 빈칸에 알맞은 말을 고릅니다. 5문항 중 4개 이상(8문항 중 7개 이상) 맞으면 위 레벨로, 2개 이하(4개 이하)면 아래 레벨로 넘어갑니다. 한 방향으로만 움직이며 A나 E에 닿거나 점수가 그 방향이 아니면 끝나고(올라간 뒤 점수가 낮으면 바로 아래 레벨), 그 결과가 점수와 함께 평가로 저장됩니다 — 자세히, 학부모 리포트, 평가 CSV에 나옵니다. <b>종이 시험지</b>는 한 레벨의 문항을 학생이 동그라미 칠 수 있게 인쇄합니다. 정답지로 채점한 뒤 레벨을 직접 고르면 됩니다. 문항 없이 레벨을 직접 고르는 것도 전과 같이 됩니다. <b>커리큘럼: 레벨테스트를 둘째 주로.</b> 2027 계획에서 3·6·9·12월의 레벨테스트가 첫째 주에서 둘째 주로 옮겨졌습니다. 계획을 이미 가져오셨다면 커리큘럼 페이지에 <b>2027 계획이 바뀌었습니다</b> 한 줄이 나옵니다 — <b>내 계획에 반영</b>(해당 행을 계획의 주로 옮기고 새로 추가하지는 않습니다. 되돌리기로 취소할 수 있습니다)과 <b>그대로 두기</b> 중에서 고르세요.</dd>
@@ -2544,7 +2554,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v160</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v161</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3723,6 +3733,10 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v161: samples of Listening and Grammar, tasks by level, a level's pack to print
+  "What to try":"무엇을 해 볼까요","Sample: level {level} · questions {score}":"샘플: 레벨 {level} · 문항 {score}","Nothing was saved.":"저장된 것은 없습니다.",
+  "Questions to ask":"물어볼 질문","Finish and rate":"마치고 평가하기","Task by level":"레벨별 과제","Show the task":"과제 보여 주기",
+  "Tick one of each for level {level}":"레벨 {level} 한 묶음 선택","Level A reading sheets have colour questions: print them in colour.":"읽기 레벨 A 시험지는 색을 구분하는 문항이 있으니 컬러로 인쇄하세요.",
   // ── v160: book checks
   "Have the student read about 100 words aloud from a book they have not read. Count the words they miss or need help with, then ask what it was about.":"학생이 읽어 보지 않은 책에서 100단어쯤을 소리 내어 읽게 합니다. 틀리거나 도와준 단어를 세고, 읽은 뒤 무슨 내용이었는지 물어봅니다.",
   "Book title":"책 제목","Words read":"읽은 단어 수","Words missed":"틀린 단어 수","Told what it was about":"내용을 말했나요","Not asked":"안 물어봄",
@@ -4362,7 +4376,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v160";
+const APP_VERSION="v161";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8443,10 +8457,10 @@ function ltDelete(aid){
 }
 
 // ── Start ────────────────────────────────────────────────────────────────
-const LTS={sid:null,level:"B",mode:"online",form:"",trial:false};
+const LTS={sid:null,level:"B",mode:"online",form:"",trial:false,what:"reading"};
 // The same start window without a student: a new sample test with its own id.
 function ltOpenTrial(){
-  LTS.sid=LT_TRIAL+uid();LTS.trial=true;LTS.mode="online";LTS.form="";LTS.level="B";
+  LTS.sid=LT_TRIAL+uid();LTS.trial=true;LTS.mode="online";LTS.form="";LTS.level="B";LTS.what="reading";
   document.getElementById("lts-name").textContent=tx("Sample test");
   document.getElementById("lts-guest-row").hidden=false;document.getElementById("lts-guest").value="";
   document.getElementById("lts-ko").checked=true;
@@ -8458,7 +8472,7 @@ function ltOpenStart(sid){
   const s=ltStudent(sid);if(!s||s.trial)return;
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   const last=ltLatest(s.id);
-  LTS.sid=s.id;LTS.trial=false;LTS.mode="online";LTS.form="";
+  LTS.sid=s.id;LTS.trial=false;LTS.mode="online";LTS.form="";LTS.what="reading";
   document.getElementById("lts-guest-row").hidden=true;
   LTS.level=(last&&last.result.level)||(PLAN_LEVELS.includes(s.group)?s.group:"")||"B";
   document.getElementById("lts-name").textContent=s.name||"";
@@ -8473,24 +8487,35 @@ function ltPickForm(sid,L){
   return AEA.formsAt(L).slice().sort((x,y)=>seen.lastIndexOf(x)-seen.lastIndexOf(y)||(x<y?-1:1))[0]||"";
 }
 function ltRenderStart(){
+  // v161: a sample can also be the Listening or the Grammar questions — on screen, nothing stored.
+  const sec=LTS.trial&&!!LT_SEC[LTS.what];
+  if(sec)LTS.mode="online";
   const L=LTS.level,info=AEA.LEVEL_INFO[L],paper=LTS.mode==="paper",g=id=>document.getElementById(id);
+  g("lts-what-row").hidden=!LTS.trial;g("lts-mode-row").hidden=sec;
+  g("lts-what").innerHTML=[["reading",tx("Reading|skill")],["listening",tx("Listening")],["grammar",tx("Grammar")]].map(([k,t])=>
+    `<button type="button" class="seg-btn${k===LTS.what?" active":""}" aria-pressed="${k===LTS.what}" onclick="ltSetStartWhat('${k}')">${escapeAttr(t)}</button>`).join("");
   if(!AEA.formsAt(L).includes(LTS.form))LTS.form=ltPickForm(LTS.sid,L);
   g("lts-mode").innerHTML=[["online",tx("On screen")],["paper",tx("On paper")]].map(([k,t])=>
     `<button type="button" class="seg-btn${k===LTS.mode?" active":""}" aria-pressed="${k===LTS.mode}" onclick="ltSetStartMode('${k}')">${escapeAttr(t)}</button>`).join("");
   g("lts-level-lbl").textContent=paper?tx("The sheet the student did"):tx("Start level");
   g("lts-levels").innerHTML=AEA.LEVELS.map(x=>
     `<button type="button" class="seg-btn${x===L?" active":""}" aria-pressed="${x===L}" onclick="ltSetStartLevel('${x}')">${x}</button>`).join("");
-  g("lts-info").textContent=L+" · "+info.name+(LANG==="ko"?" — "+info.ko:"")+
+  g("lts-info").textContent=sec?ltDomLevel(LTS.what,L):L+" · "+info.name+(LANG==="ko"?" — "+info.ko:"")+
     (L==="A"?" "+tx("In the first-letter questions of level A you may say the picture's name aloud (dog, sun)."):"");
   g("lts-forms").innerHTML=AEA.formsAt(L).map(id=>
     `<button type="button" class="seg-btn${id===LTS.form?" active":""}" aria-pressed="${id===LTS.form}" onclick="ltSetStartForm('${id}')">${escapeAttr(tx("Set {n}",{n:AEA.TL[id].form}))} · ${escapeAttr(AEA.TL[id].title)}</button>`).join("");
-  g("lts-paper").hidden=!paper;g("lts-online").hidden=paper;
+  g("lts-paper").hidden=!paper;g("lts-online").hidden=paper||sec;
   g("lts-go").textContent=paper?tx("Enter the answers"):tx("Hand over and start");
 }
 function ltSetStartLevel(L){if(AEA.LEVELS.includes(L)){LTS.level=L;ltRenderStart();}}
 function ltSetStartMode(m){if(m==="online"||m==="paper"){LTS.mode=m;ltRenderStart();}}
+function ltSetStartWhat(k){if(LTS.trial&&(k==="reading"||LT_SEC[k])){LTS.what=k;ltRenderStart();}}
 function ltSetStartForm(id){if(AEA.TL[id]&&AEA.TL[id].level===LTS.level){LTS.form=id;ltRenderStart();}}
 function ltStart(){
+  if(LTS.trial&&LT_SEC[LTS.what]){
+    const name=(document.getElementById("lts-guest").value||"").trim().slice(0,40);
+    closeModal("mo-lt-start");ltxOpen(null,LTS.what,LTS.level,{sample:true,name:name});return;
+  }
   const s=LTS.trial?(ltIsTrial(LTS.sid)?{id:LTS.sid}:null):ltStudent(LTS.sid);if(!s)return;
   if(ltInProgress(s.id)){showToast(tx("There is an unfinished test. Continue it or end it first."));return;}
   const paper=LTS.mode==="paper";
@@ -8657,17 +8682,40 @@ const LT_SHEET_CSS=LT_PRINT_TOKENS+`*{box-sizing:border-box}body{margin:0;backgr
 @media print{body{background:var(--white)}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}.sh-page.brk{margin-top:0}}`;
 function ltOpenSheets(){
   const box=document.getElementById("ltsh-list");if(!box)return;
-  box.innerHTML=AEA.LEVELS.map(L=>`<div class="ltsh-lv">${ltLv(L)}<div class="ltsh-sets">`+AEA.formsAt(L).map(id=>
-    `<label class="ltsh-set"><input type="checkbox" value="${id}"/> ${escapeAttr(tx("Set {n}",{n:AEA.TL[id].form}))} · ${escapeAttr(AEA.TL[id].title)}</label>`).join("")+`</div></div>`).join("");
+  // v161: under the reading sets of a level, its Listening, Grammar, Speaking and Writing sheets —
+  // and the level's badge ticks one of each (the first reading set), a whole pack for one student.
+  box.innerHTML=AEA.LEVELS.map(L=>`<div class="ltsh-lv"><button type="button" class="bic" onclick="ltSheetsLevel('${L}')" title="${escapeAttr(tx("Tick one of each for level {level}",{level:L}))}">${ltLv(L)}</button><div class="ltsh-sets">`+AEA.formsAt(L).map(id=>
+    `<label class="ltsh-set"><input type="checkbox" value="${id}"/> ${escapeAttr(tx("Reading|skill"))} · ${escapeAttr(tx("Set {n}",{n:AEA.TL[id].form}))} <span class="ltsh-x">· ${escapeAttr(AEA.TL[id].title)}</span></label>`).join("")+
+    LT_SHEET_MORE.map(d=>`<label class="ltsh-set"><input type="checkbox" value="${d}:${L}"/> ${escapeAttr(LT_DOMAIN_NAME[d])}</label>`).join("")+`</div></div>`).join("");
   openModal("mo-lt-sheets");
+}
+const LT_SHEET_MORE=["listening","grammar","speaking","writing"];
+function ltSheetsLevel(L){
+  const row=[...document.querySelectorAll("#ltsh-list input[type=checkbox]")].filter(b=>b.value===AEA.formsAt(L)[0]||b.value.endsWith(":"+L));
+  const all=row.every(b=>b.checked);row.forEach(b=>{b.checked=!all;});
 }
 function ltSheetsAll(){
   const boxes=[...document.querySelectorAll("#ltsh-list input[type=checkbox]")],all=boxes.every(b=>b.checked);
   boxes.forEach(b=>{b.checked=!all;});
 }
 function ltPrintSheets(kind){
-  const ids=[...document.querySelectorAll("#ltsh-list input:checked")].map(x=>x.value).filter(id=>AEA.TL[id]);
-  if(!ids.length){showToast(tx("Tick at least one sheet."));return;}
+  const ticked=[...document.querySelectorAll("#ltsh-list input:checked")].map(x=>x.value);
+  const ids=ticked.filter(id=>AEA.TL[id]);
+  const more={};LT_SHEET_MORE.forEach(d=>{more[d]=AEA.LEVELS.filter(L=>ticked.includes(d+":"+L));});
+  if(!ids.length&&!LT_SHEET_MORE.some(d=>more[d].length)){showToast(tx("Tick at least one sheet."));return;}
+  if(LT_SHEET_MORE.some(d=>more[d].length)){
+    // Reading first, then each level's other sheets in the order of the list; every sheet a page.
+    const B=ids.length?ltSheetBlocks(ids,kind):[];
+    if(kind==="key"){
+      if(B.length)B.push(`<div class="sh-gap"></div>`);
+      ["listening","grammar"].forEach(d=>{if(more[d].length)B.push(...ltSecBlocks(d,"key","",more[d]),`<div class="sh-gap"></div>`);});
+      ["speaking","writing"].forEach(d=>{if(more[d].length)B.push(...ltTaskBlocks(d,"key",more[d]),`<div class="sh-gap"></div>`);});
+    }else AEA.LEVELS.forEach(L=>LT_SHEET_MORE.forEach(d=>{if(!more[d].includes(L))return;
+      B.push(...(LT_SEC[d]?ltSecBlocks(d,"sheet",L):ltTaskBlocks(d,"sheet",[L])));}));
+    const body=kind==="key"?B:B.map(x=>x.replace(/<section class="sh-page( brk)?">/,`<section class="sh-page">`));
+    ltPrintDoc((kind==="key"?"answer-key-":"test-")+ticked.join("_").replace(/:/g,"-"),kind==="key"?tx("Answer key — for the teacher only"):tx("Level A reading sheets have colour questions: print them in colour."),body);
+    return;
+  }
   // Open the window inside the click, or popup blockers stop it.
   const w=window.open("","_blank");
   if(!w){alert(tx("Popup blocked. Please allow popups for this site."));return;}
@@ -8974,6 +9022,7 @@ const LT_HOLD_MS=1200;
       if(b.dataset.hold==="menu"){if(LTX.sid){LTX.menu=true;ltxRender();}else{LT.menu=true;ltRenderTest();}}
       else if(b.dataset.hold==="review"){const aid=LT.aid;ltCloseTest();ltOpenReview(aid);}
       else if(b.dataset.hold==="xdone")ltxDone();
+      else if(b.dataset.hold==="xtask")ltxTaskDone();
     },LT_HOLD_MS);
   };
   // Let go too soon: nothing happens, and a note says to hold longer.
@@ -9268,6 +9317,16 @@ function ltRenderRate(){
       `<button type="button" class="btn" onclick="ltSecPrint('key')"><i class="ti ti-printer"></i> ${x(lis?tx("Script and answers"):tx("Answer key"))}</button>`+
       `<button type="button" class="btn" onclick="ltSecPrint('sheet')"><i class="ti ti-file-text"></i> ${x(tx("Paper sheet · level {level}",{level:LTR.start}))}</button></div>`;
   }
+  if(!hasSec&&LT_TASKS[LTR.dom]){
+    const x=escapeAttr,t=LT_TASKS[LTR.dom][LTR.start]||LT_TASKS[LTR.dom].B;
+    sec.hidden=false;
+    sec.innerHTML=`<div class="lt-ph">${x(tx("Task by level"))}</div>`+
+      `<div class="ltq-sec-row"><span>${x(tx("Level"))}</span><span class="seg" role="group" aria-label="${x(tx("Level"))}">`+
+      AEA.LEVELS.map(L=>`<button type="button" class="seg-btn${LTR.start===L?" active":""}" aria-pressed="${LTR.start===L}" onclick="ltPickStart('${L}')">${L}</button>`).join("")+`</span></div>`+
+      `<p class="ltq-task">${x(t.q)}${t.pics?" "+t.pics.join(" "):""}<small>${x(LANG==="ko"?t.ko:(t.ask||[]).join(" "))}</small></p>`+
+      `<div class="ltq-sec-row"><button type="button" class="btn btn-p" id="ltq-go" onclick="ltxOpen(LTR.sid,LTR.dom,LTR.start,{task:true})"><i class="ti ti-player-play"></i> ${x(tx("Show the task"))}</button>`+
+      `<button type="button" class="btn" onclick="ltTaskPrint()"><i class="ti ti-printer"></i> ${x(tx("Paper sheet · level {level}",{level:LTR.start}))}</button></div>`;
+  }
   document.getElementById("ltq-list").innerHTML=(hasSec?`<div class="lt-ph ltq-or">${escapeAttr(tx("Or pick the level yourself"))}</div>`:"")+AEA.LEVELS.map(L=>
     `<button type="button" class="ltq-opt${LTR.level===L?" on":""}" aria-pressed="${LTR.level===L}" onclick="ltPickRate('${L}')">${ltLv(L)}<span>${escapeAttr(ltDomLevel(LTR.dom,L))}</span></button>`).join("");
   const rub=document.getElementById("ltq-rub"),has=ltHasRubric(LTR.dom),e=escapeAttr;
@@ -9343,7 +9402,7 @@ const LT_SEC={
   listening:{
     A:{items:[
       {say:"dog",opts:["🐱","🐶","🐟","🐦"],ans:1,pic:1},
-      {say:"a red apple",opts:["🍌","🍏","🍇","🍎"],ans:3,pic:1},
+      {say:"a banana",opts:["🍎","🍇","🍉","🍌"],ans:3,pic:1},
       {say:"It is raining.",opts:["🌧️","☀️","⛄","🌈"],ans:0,pic:1},
       {say:"She is happy.",opts:["😢","😠","😀","😴"],ans:2,pic:1},
       {say:"I go to school by bus.",opts:["🚗","🚌","🚲","✈️"],ans:1,pic:1}]},
@@ -9423,7 +9482,28 @@ const LT_SEC={
 // Enough right moves on to the level above, too few to the level below, in between is this level.
 // (Grammar's 8 follow the test's own rule for 8 questions.)
 const LT_SEC_RULE={listening:{up:4,down:2},grammar:{up:7,down:4}};
-const LT_SEC_EN={listening:"Listening",grammar:"Grammar"};
+const LT_SEC_EN={listening:"Listening",grammar:"Grammar",speaking:"Speaking",writing:"Writing"};
+// ── Speaking and Writing: one task per level (v161) ───────────────────────
+// What to ask (Speaking) or to set (Writing) at each level, so nothing has to be made up before
+// the lesson. `q` is what the student sees — on the screen or on paper — with `ko` under it when
+// Korean is on; `ask` are the teacher's questions, shown in the teacher's menu and in the key.
+// The rating itself stays the teacher's: these are prompts, not questions with a right answer.
+const LT_TASKS={
+  speaking:{
+    A:{q:"What is this?",ko:"이게 뭐예요?",pics:["🐶","🍎","🚌","⚽"],ask:["Point to each picture: “What is this?”","Point to the dog: “Is this a cat?”","“Do you like apples?”"]},
+    B:{q:"What do you like to eat?",ko:"무엇을 먹는 걸 좋아해요?",ask:["“What do you like to eat?”","“Who is in your family?”","“What do you do after school?”"]},
+    C:{q:"What did you do yesterday?",ko:"어제 무엇을 했어요?",ask:["“What did you do yesterday?”","“Who were you with?”","“Did you like it? Why?”"]},
+    D:{q:"Which do you like better, summer or winter? Why?",ko:"여름과 겨울 중 어느 쪽이 더 좋아요? 왜 그런가요?",ask:["“Which do you like better, summer or winter? Why?”","“Tell me about a book or a movie you like. What happens in it?”","“What would you say to a friend who does not like it?”"]},
+    E:{q:"Should students have homework every day? Give two reasons.",ko:"학생들에게 매일 숙제가 있어야 할까요? 이유를 두 가지 말해 보세요.",ask:["“Should students have homework every day? Give two reasons.”","“Some people think the opposite. What would you say to them?”","“Can you give an example from your own life?”"]},
+  },
+  writing:{
+    A:{q:"Copy the sentence. Then write the word for each picture.",ko:"문장을 따라 쓰고, 그림에 맞는 단어를 써 보세요.",model:"I like my dog.",pics:["🐱","☀️","🚌","🐷"],lines:5},
+    B:{q:"My favorite food. Write 3 sentences.",ko:"내가 좋아하는 음식에 대해 세 문장을 써 보세요.",model:"I like ______.",lines:6},
+    C:{q:"My favorite day. Write 4 to 6 sentences. Use and, but or because.",ko:"내가 가장 좋아하는 날에 대해 4~6문장을 써 보세요. and, but, because를 써 보세요.",lines:10},
+    D:{q:"Which is the better pet, a dog or a cat? Write one paragraph: your opinion, two reasons and an ending.",ko:"개와 고양이 중 어느 쪽이 더 좋은 반려동물일까요? 의견, 이유 두 가지, 맺음말이 있는 한 문단을 써 보세요.",lines:14},
+    E:{q:"Should children have a smartphone? Write two or three paragraphs. Give reasons and examples.",ko:"어린이에게 스마트폰이 필요할까요? 이유와 예를 들어 두세 문단으로 써 보세요.",lines:20},
+  },
+};
 const ltSecOutcome=(dom,correct)=>correct>=LT_SEC_RULE[dom].up?"up":correct<=LT_SEC_RULE[dom].down?"down":"stay";
 // After a finished part: {next:"C"} — go on with that level — or {level:"B"} — that is the result.
 // The questions only ever move one way: up while the score is high, or down while it is low.
@@ -9449,12 +9529,20 @@ const ltSecText=r=>r&&ltSecOk(r.sec)?r.sec.parts.map(p=>p.level+" "+p.correct+"/
 
 // The questions on the student's screen. Nothing is stored until a result is reached (they take a
 // few minutes); then it is saved as a rating like any other, with the score of each part (sec).
-const LTX={sid:null,dom:null,level:"",idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false};
+// v161 — opt.sample: the same questions for no student (a trial lesson, or the teacher trying them):
+// nothing is stored and the last screen shows the result itself. opt.task: no questions at all —
+// the screen shows the Speaking or Writing task of a level (LT_TASKS) for the student to see.
+const LTX={sid:null,dom:null,level:"",idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false,sample:false,name:""};
+const LTX_SAMPLE="sample";
 const ltxKo=()=>typeof LTX.ko==="boolean"?LTX.ko:(LTX.level==="A"||LTX.level==="B");
-const ltxSet=()=>LT_SEC[LTX.dom][LTX.level];
-function ltxOpen(sid,dom,level){
-  const s=ltStudent(sid);if(!s||s.trial||!LT_SEC[dom]||!AEA.LEVELS.includes(level)||LT.aid)return;
-  Object.assign(LTX,{sid:s.id,dom:dom,level:level,idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false});
+const ltxSet=()=>(LT_SEC[LTX.dom]||{})[LTX.level]||{items:[]};
+const ltxWho=()=>LTX.sample?{id:LTX_SAMPLE,name:LTX.name}:ltStudent(LTX.sid);
+function ltxOpen(sid,dom,level,opt){
+  const sample=!!(opt&&opt.sample),task=!!(opt&&opt.task);
+  const s=sample?{id:LTX_SAMPLE}:ltStudent(sid);
+  if(!s||s.trial||!AEA.LEVELS.includes(level)||LT.aid||LTX.sid)return;
+  if(task?!(LT_TASKS[dom]&&!sample):!LT_SEC[dom])return;
+  Object.assign(LTX,{sid:s.id,dom:dom,level:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:null,final:"",saved:false,sample:sample,name:sample?String(opt.name||""):""});
   closeModal("mo-lt-rate");
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -9462,7 +9550,7 @@ function ltxOpen(sid,dom,level){
   ltxRender();
 }
 function ltxClose(){
-  LTX.sid=null;LTX.menu=false;
+  LTX.sid=null;LTX.menu=false;LTX.sample=false;
   document.getElementById("lt-hint")?.remove();
   const scr=document.getElementById("lt-screen");scr.hidden=true;scr.innerHTML="";
   document.body.classList.remove("lt-testing");
@@ -9470,7 +9558,7 @@ function ltxClose(){
   if(curPage==="leveltest")renderLevelTest();
 }
 function ltxBar(){
-  const n=ltxSet().items.length,ko=ltxKo();let dots="";
+  const n=LTX.screen==="task"?0:ltxSet().items.length,ko=ltxKo();let dots="";
   for(let i=0;i<n;i++)dots+=`<i class="${LTX.screen==="end"||i<LTX.idx?"lt-done":i===LTX.idx&&LTX.screen==="run"?"lt-now":""}"></i>`;
   return `<div class="lt-tbar"><span class="lt-part">${LT_SEC_EN[LTX.dom]} ${LTX.level}</span><span class="lt-dots">${dots}</span>`+
     `<button type="button" class="lt-ko${ko?" on":""}" data-act="xKo" role="switch" aria-checked="${ko}" aria-label="한국어로 보기">한글<i></i></button>`+
@@ -9478,9 +9566,18 @@ function ltxBar(){
 }
 function ltxHtml(s){
   const K=ltxKo(),e=escapeAttr,lis=LTX.dom==="listening",set=ltxSet();
+  if(LTX.screen==="task"){
+    const t=LT_TASKS[LTX.dom][LTX.level],wr=LTX.dom==="writing";
+    return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><p class="lt-xtask">${e(t.q)}</p><p class="lt-qko"${K?"":" hidden"}>${e(t.ko)}</p>`+
+      (t.model?`<p class="lt-xmodel">${e(t.model)}</p>`:"")+(t.pics?`<div class="lt-xpics">${t.pics.map(x=>`<span>${x}</span>`).join("")}</div>`:"")+
+      (wr?`<p class="lt-muted"${ltL(K,"종이에 써 보세요.","Write on your paper.")}</p>`:"")+`</div>`+
+      `<div class="lt-tfoot"><button type="button" class="lt-btn lt-big" data-hold="xtask"${ltL(K,"선생님: 길게 눌러 마치기","Teacher: press and hold to finish")}</button></div></div>`;
+  }
+  if(LTX.screen==="result")return `<div class="lt-tscreen lt-mid"><div class="lt-tmsg"><div class="lt-tbig">${e(LT_SEC_EN[LTX.dom])} · ${e(LTX.final)}</div><p>${e(tx("Sample: level {level} · questions {score}",{level:LTX.final,score:LTX.parts.map(p=>p.level+" "+p.correct+"/"+p.total).join(" · ")}))}</p>`+
+    `<p class="lt-muted">${e(tx("Nothing was saved."))}</p></div><div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xLeave">${e(tx("Close"))}</button></div></div>`;
   if(LTX.screen==="end")return `<div class="lt-tscreen lt-mid"><div class="lt-tmsg"><div class="lt-tbig">All done!</div><p${ltL(K,"끝까지 잘 풀었어요. 수고했어요!","You answered to the end. Well done!")}</p><p class="lt-muted"${ltL(K,"선생님께 기기를 돌려주세요.","Please give the device back to your teacher.")}</p></div>`+
     `<div class="lt-tfoot"><button type="button" class="lt-btn lt-big" data-hold="xdone"${ltL(K,"선생님: 길게 눌러 결과 확인","Teacher: press and hold to see the result")}</button></div></div>`;
-  if(LTX.screen==="intro")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Hi, ${e(s?s.name||"":"")}!</div><p${lis?ltL(K,"선생님이 읽어 주는 말을 잘 듣고 알맞은 답을 골라요.","Listen to your teacher, then choose the answer."):ltL(K,"빈칸에 들어갈 알맞은 말을 골라요.","Choose the words that fit in the blank.")}</p>`+
+  if(LTX.screen==="intro")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Hi${s&&s.name?", "+e(s.name):""}!</div><p${lis?ltL(K,"선생님이 읽어 주는 말을 잘 듣고 알맞은 답을 골라요.","Listen to your teacher, then choose the answer."):ltL(K,"빈칸에 들어갈 알맞은 말을 골라요.","Choose the words that fit in the blank.")}</p>`+
     `<ul class="lt-tips"><li${ltL(K,"모르는 문제는 <b>잘 모르겠어요</b>를 눌러도 괜찮아요.","If you do not know an answer, you can tap <b>I’m not sure</b>.")}</li><li${ltL(K,"점수를 매기는 시험이 아니에요. 지금 무엇을 배우면 좋을지 알아보는 거예요.","This is not a test with a score. It shows us what to learn next.")}</li></ul></div>`+
     `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xStart"${ltL(K,"시작 · Start","Start")}</button></div></div>`;
   if(LTX.screen==="break")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Good job!</div><p${ltL(K,"잘하고 있어요. 몇 문제만 더 풀어 볼게요.","You are doing well. Let’s try a few more.")}</p></div>`+
@@ -9501,6 +9598,13 @@ function ltxHtml(s){
 // device is enough: hold the lock, read, press Keep going, hand the device back.
 function ltxMenuHtml(){
   const e=escapeAttr,set=ltxSet(),it=set.items[Math.min(LTX.idx,set.items.length-1)];
+  if(LTX.screen==="task"){
+    const t=LT_TASKS[LTX.dom][LTX.level];
+    return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${e(tx("Teacher's menu"))}</h2>`+
+      (t.ask?`<div class="lt-xscript"><b>${e(tx("Questions to ask"))}</b>${t.ask.map(x=>`<p>${e(x)}</p>`).join("")}</div>`:"")+
+      `<div class="lt-stack"><button type="button" class="lt-btn lt-primary" data-act="xMenuClose">${e(tx("Keep going"))}</button>`+
+      `<button type="button" class="lt-btn" data-act="xTaskDone">${e(tx("Finish and rate"))}</button></div></div>`;
+  }
   const script=LTX.dom==="listening"&&(LTX.screen==="run"||LTX.screen==="hear")?`<div class="lt-xscript"><b>${e(tx("Read aloud"))}</b>`+
     (set.passage?`<p>${e(set.passage)}</p>`+(LTX.screen==="run"?`<p>${LTX.idx+1}. ${e(it.q)}</p>`:""):`<p>${LTX.idx+1}. ${e(it.say)}${it.q?" — "+e(it.q):""}</p>`)+`</div>`:"";
   return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${e(tx("Teacher's menu"))}</h2>${script}<div class="lt-stack">`+
@@ -9510,7 +9614,7 @@ function ltxMenuHtml(){
 }
 function ltxRender(){
   const scr=document.getElementById("lt-screen");if(!scr||scr.hidden||!LTX.sid)return;
-  const s=ltStudent(LTX.sid);
+  const s=ltxWho();
   if(!s){ltxClose();return;}                               // the student was deleted on another device
   scr.innerHTML=ltxHtml(s)+(LTX.menu?ltxMenuHtml():"");
   const ts=scr.querySelector(".lt-tscreen");if(ts)ts.inert=LTX.menu;
@@ -9518,7 +9622,7 @@ function ltxRender(){
   else if(!scr.contains(document.activeElement))scr.focus();
 }
 function ltxSave(){
-  if(LTX.saved)return true;
+  if(LTX.saved||LTX.sample)return true;                    // a sample stores nothing
   const s=ltStudent(LTX.sid);if(!s||!AEA.LEVELS.includes(LTX.final))return false;
   const ok=ltPushRating(s,LTX.dom,{date:td(),level:LTX.final,note:"",sec:{parts:LTX.parts.map(p=>({level:p.level,correct:p.correct,total:p.total}))}});
   if(ok)LTX.saved=true;
@@ -9527,6 +9631,7 @@ function ltxSave(){
 // Out of the student's screen and into the rating window, which shows what was just saved.
 function ltxDone(){
   if(!LTX.sid)return;
+  if(LTX.sample){LTX.menu=false;LTX.screen="result";ltxRender();return;}   // the result, on this screen, and that is all
   if(!ltStudent(LTX.sid)){ltxClose();return;}               // deleted on another device: nothing to save to
   if(!ltxSave()){ltHint(ltSaveFailed());return;}
   const sid=LTX.sid,dom=LTX.dom;
@@ -9557,6 +9662,7 @@ Object.assign(LT_ACTS,{
   },
   xMenuClose(){LTX.menu=false;ltxRender();},
   xLeave(){ltxClose();},
+  xTaskDone(){ltxTaskDone();},
   xEndEarly(){
     if(!LTX.sid)return;
     // Judged afresh on every press: after a save that failed the teacher may have gone on, and a
@@ -9566,17 +9672,23 @@ Object.assign(LT_ACTS,{
     LTX.menu=false;ltxRender();ltxDone();
   },
 });
+// The task has been shown: back to the rating window of that skill, where the teacher rates.
+function ltxTaskDone(){
+  if(!LTX.sid||LTX.screen!=="task")return;
+  const sid=LTX.sid,dom=LTX.dom;
+  ltxClose();ltOpenRate(sid,dom);
+}
 function ltPickStart(L){if(AEA.LEVELS.includes(L)){LTR.start=L;ltRenderRate();}}
 // The printed side of the questions: the sheet a student writes on (one level), or the teacher's
 // copy — what to read aloud, the answers and the rule (all levels). Paper, so its wording is fixed.
-function ltSecBlocks(dom,kind,level){
+function ltSecBlocks(dom,kind,level,levels){
   const e=escapeAttr,B=[],lis=dom==="listening",R=LT_SEC_RULE[dom],name=LT_SEC_EN[dom];
   if(kind==="key"){
     const n=LT_SEC[dom].A.items.length;
     B.push(`<div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">${lis?"대본과 정답":"정답지"} · 선생님용</div></div>`);
     B.push(`<div class="sh-guide"><b>다음 레벨 정하기</b> ${n}문항 중 ${R.up}개 이상 맞으면 한 레벨 위 문항을, ${R.down}개 이하면 한 레벨 아래 문항을 풉니다. 그 사이면 그 레벨입니다. 위로 올라갔다가 ${R.down}개 이하가 나오면 바로 아래 레벨, 아래로 내려갔다가 ${R.up}개 이상이 나오면 그 레벨입니다. 앱에서 풀면 자동으로 넘어갑니다.`+
-      (lis?` <b>읽는 방법</b> 레벨 A·B는 문항마다 두 번씩 또박또박 읽어 줍니다(B는 질문도 읽어 줍니다). 레벨 C~E는 글을 두 번 읽어 준 뒤 질문을 하나씩 읽어 줍니다. 레벨 A는 그림 색을 구분하는 문항이 있어 학생용은 컬러로 인쇄하세요.`:"")+`</div>`);
-    AEA.LEVELS.forEach(L=>{const set=LT_SEC[dom][L];
+      (lis?` <b>읽는 방법</b> 레벨 A·B는 문항마다 두 번씩 또박또박 읽어 줍니다(B는 질문도 읽어 줍니다). 레벨 C~E는 글을 두 번 읽어 준 뒤 질문을 하나씩 읽어 줍니다.`:"")+`</div>`);
+    (levels||AEA.LEVELS).forEach(L=>{const set=LT_SEC[dom][L];
       B.push(`<div class="sh-key"><h3>${name} · 레벨 ${L}</h3>`+(set.passage?`<p class="sh-say">${e(set.passage)}</p>`:"")+
         (lis?`<ol class="sh-says">${set.items.map(it=>`<li>${it.say?`<span class="sh-say">${e(it.say)}</span>`:""}${it.q?` ${e(it.q)}`:""} <b>${LT_CIRC[it.ans]}</b> <span class="g">${it.pic?it.opts[it.ans]:e(it.opts[it.ans])}</span></li>`).join("")}</ol>`
           :`<table><tr><th>문항</th>${set.items.map((it,i)=>`<td>${i+1}</td>`).join("")}</tr><tr><th>정답</th>${set.items.map(it=>`<td class="k">${LT_CIRC[it.ans]}</td>`).join("")}</tr><tr><th></th>${set.items.map(it=>`<td class="s">${e(it.opts[it.ans])}</td>`).join("")}</tr></table>`)+`</div>`);});
@@ -9589,6 +9701,40 @@ function ltSecBlocks(dom,kind,level){
       `<div class="sh-opts${it.pic?" pic inline":it.opts.every(o=>o.length<=12)?" inline":it.opts.every(o=>o.length<=30)?" two":""}">${it.opts.map((o,k)=>`<span>${LT_CIRC[k]} ${it.pic?`<em>${o}</em>`:e(o)}</span>`).join("")}</div></div>`).join("")+`</section>`);
   return B;
 }
+// The paper side of a Speaking or Writing task: the card or sheet for the student, and for the
+// teacher the questions to ask and what each level looks like.
+function ltTaskBlocks(dom,kind,levels){
+  const e=escapeAttr,B=[],name=LT_SEC_EN[dom],wr=dom==="writing";
+  if(kind==="key"){
+    B.push(`<div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">과제와 평가 기준 · 선생님용</div></div>`);
+    B.push(`<div class="sh-guide">${wr?"과제를 주고 5~10분 동안 쓰게 한 뒤, 아래 설명 중 가장 가까운 레벨을 앱에서 고릅니다.":"질문을 차례로 하며 1~2분 이야기하게 한 뒤, 아래 설명 중 가장 가까운 레벨을 앱에서 고릅니다."} 학생이 쉽게 해내면 한 레벨 위 과제를, 어려워하면 한 레벨 아래 과제를 써 보세요.</div>`);
+    levels.forEach(L=>{const t=LT_TASKS[dom][L];
+      B.push(`<div class="sh-key"><h3>${name} · 레벨 ${L}</h3>`+(t.ask?`<ol class="sh-says">${t.ask.map(x=>`<li><span class="sh-say">${e(x)}</span></li>`).join("")}</ol>`:`<p class="sh-say">${e(t.q)}</p>`)+
+        `<p><b>이 레벨의 모습</b> <span class="g">${e(LT_RD[dom].levels[L])}</span></p></div>`);});
+    return B;
+  }
+  levels.forEach(L=>{const t=LT_TASKS[dom][L];
+    B.push(`<section class="sh-page"><div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">${name[0]}-${L}</div><div class="sh-name">Name ______________ &nbsp; Date ____________</div></div>`+
+      `<div class="sh-task"><b>${e(t.q)}</b><span class="g">${e(t.ko)}</span></div>`+(t.model?`<p class="sh-model">${e(t.model)}</p>`:"")+
+      (t.pics?`<div class="sh-pics${wr?" w":""}">${t.pics.map(x=>`<span><em>${x}</em>${wr?`<i></i>`:""}</span>`).join("")}</div>`:"")+
+      (wr?`<div class="sh-lines">${"<i></i>".repeat(t.lines)}</div>`:"")+`</section>`);});
+  return B;
+}
+function ltPrintDoc(title,note,blocks){
+  const w=window.open("","_blank");                       // inside the click, or popup blockers stop it
+  if(!w){alert(tx("Popup blocked. Please allow popups for this site."));return;}
+  // every sheet after the first starts a new page
+  let n=0;const body=blocks.join("").replace(/<section class="sh-page">/g,m=>n++?`<section class="sh-page brk">`:m);
+  w.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title>`+
+    `<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet"/><style>${LT_SHEET_CSS}${LT_SEC_CSS}</style></head><body>`+
+    `<div class="toolbar"><button onclick="window.print()">${escapeAttr(tx("Print"))}</button><span>${escapeAttr(note)}</span></div>`+
+    `<div class="paper">${body}</div></body></html>`);
+  w.document.close();
+}
+function ltTaskPrint(){
+  const dom=LTR.dom,level=LTR.start;if(!LT_TASKS[dom]||!AEA.LEVELS.includes(level))return;
+  ltPrintDoc(dom+"-"+level,LT_DOMAIN_NAME[dom]+" · "+level,ltTaskBlocks(dom,"sheet",[level]));
+}
 function ltSecPrint(kind){
   const dom=LTR.dom,level=LTR.start;if(!LT_SEC[dom]||(kind!=="key"&&!AEA.LEVELS.includes(level)))return;
   const w=window.open("","_blank");                       // inside the click, or popup blockers stop it
@@ -9600,7 +9746,12 @@ function ltSecPrint(kind){
     `<div class="paper">${ltSecBlocks(dom,kind,level).join("")}</div></body></html>`);
   w.document.close();
 }
-const LT_SEC_CSS=`.sh-say{font-family:"Andika","Inter",system-ui,sans-serif;font-size:14.5px;line-height:1.6;color:var(--ink)}p.sh-say{border:1px solid var(--rule);border-radius:6px;padding:8px 12px;margin:0 0 8px}
+const LT_SEC_CSS=`.sh-task{border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:17px;line-height:1.5}.sh-task b{display:block;font-weight:700}.sh-task .g{display:block;font-size:12.5px;margin-top:2px}
+.sh-model{font-size:22px;margin:6px 0 14px;padding:6px 14px;border:1px dashed var(--rule);border-radius:6px;display:inline-block}
+.sh-pics{display:flex;flex-wrap:wrap;gap:28px;margin:10px 0 18px}.sh-pics em{font-style:normal;font-size:64px;line-height:1.1}.sh-pics.w span{display:flex;flex-direction:column;align-items:center;gap:4px}.sh-pics.w em{font-size:44px}.sh-pics.w i{display:block;width:120px;height:26px;border-bottom:1.5px solid var(--ink)}
+.sh-lines i{display:block;height:36px;border-bottom:1px solid var(--rule)}
+.sh-gap{height:18px;border-bottom:2px solid var(--ink);margin-bottom:18px}
+.sh-say{font-family:"Andika","Inter",system-ui,sans-serif;font-size:14.5px;line-height:1.6;color:var(--ink)}p.sh-say{border:1px solid var(--rule);border-radius:6px;padding:8px 12px;margin:0 0 8px}
 .sh-says{margin:4px 0 0;padding-left:22px;font-size:13px;line-height:1.7}.sh-says b{font-size:15px;margin-left:4px}.sh-says .g{font-size:.95em}`;
 
 
@@ -15447,7 +15598,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   <div class="mb" style="max-width:480px">
     <div class="mt"><span><span data-i18n>Start the level test</span> · <span id="lts-name"></span></span><button class="bic" onclick="closeModal('mo-lt-start')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <div class="fg" id="lts-guest-row" hidden><label for="lts-guest" data-i18n>Name (optional)</label><input id="lts-guest" type="text" maxlength="40" placeholder="e.g. the child at a trial lesson" data-i18n-ph/><p class="u-hint" data-i18n>Not tied to a student. If the child joins, you can move the test to the student later.</p></div>
-    <div class="fg"><label data-i18n>How the test is taken</label><div class="seg" id="lts-mode"></div></div>
+    <div class="fg" id="lts-what-row" hidden><label data-i18n>What to try</label><div class="seg" id="lts-what"></div></div>
+    <div class="fg" id="lts-mode-row"><label data-i18n>How the test is taken</label><div class="seg" id="lts-mode"></div></div>
     <div class="fg"><label id="lts-level-lbl"></label><div class="seg" id="lts-levels"></div><p class="u-hint" id="lts-info"></p></div>
     <div id="lts-online">
       <label class="sw" style="white-space:normal"><input id="lts-ko" type="checkbox" checked/><span class="sw-track"></span><span data-i18n>Korean on the test screen at levels A and B</span></label>
