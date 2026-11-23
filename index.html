@@ -9586,7 +9586,7 @@ const LT_MEDIA_EXT={"audio/mp4":"m4a","audio/x-m4a":"m4a","audio/aac":"aac","aud
 const LT_REC_MAX_S=300;                                    // a recording stops by itself after five minutes
 const LT_REC_TYPES=["audio/mp4;codecs=mp4a.40.2","audio/mp4","audio/webm;codecs=opus","audio/webm"];
 const LTM={rec:null,stream:null,chunks:[],t0:0,timer:null,keep:true,who:null,busy:0,err:"",pending:null};
-const ltMedia=(s,d)=>(s&&Array.isArray(s.media)?s.media:[]).filter(m=>m&&m.dom===d&&LT_MEDIA_KIND[d]===m.kind&&typeof m.url==="string"&&/^https:\/\//.test(m.url)&&typeof m.id==="string");
+const ltMedia=(s,d)=>(s&&Array.isArray(s.media)?s.media:[]).filter(m=>m&&m.dom===d&&LT_MEDIA_KIND[d]===m.kind&&typeof m.url==="string"&&/^https:\/\//.test(m.url)&&typeof m.id==="string"&&/^[\w-]+$/.test(m.id));   // the id goes into a button's handler: plain characters only
 const ltMediaCanStore=()=>!!(syncUser&&window.__uploadAsset);
 const ltMediaHere=(sid,dom)=>ltSame(LTR.sid,sid)&&LTR.dom===dom&&document.getElementById("mo-lt-rate").classList.contains("show");
 const ltClock=sec=>Math.floor(sec/60)+":"+String(Math.floor(sec%60)).padStart(2,"0");
