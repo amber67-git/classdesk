@@ -728,7 +728,7 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-lockt{font:700 12px var(--font);white-space:nowrap;color:var(--lt-muted)}
 #lt-screen .lt-tabs{flex:none;display:flex;gap:4px;padding:4px 8px;overflow-x:auto;border-bottom:1px solid var(--lt-line);scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #lt-screen .lt-tabs::-webkit-scrollbar{display:none}
-#lt-screen .lt-tab{flex:1 0 auto;min-height:40px;padding:0 10px;border:0;border-radius:8px;background:none;color:var(--lt-muted);font:700 13px var(--font);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:4px}
+#lt-screen .lt-tab{flex:1 0 auto;min-height:44px;padding:0 10px;border:0;border-radius:8px;background:none;color:var(--lt-muted);font:700 13px var(--font);white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:4px}
 #lt-screen .lt-tab.on{background:var(--lt-brand-soft);color:var(--lt-brand)}
 #lt-screen .lt-tab.done::after{content:"✓";font-size:12px;color:var(--lt-brand)}
 #lt-screen .lt-tab.run::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--lt-amber)}
@@ -8624,7 +8624,8 @@ function ltHistRow(a,trial){
       `<button class="btn btn-xs" data-lt="end" data-aid="${aid}">${escapeAttr(tx("End here and judge"))}</button>`;
   }else text=tx("Stopped before it could be judged");
   if(trial){
-    acts+=`<button class="btn btn-xs" data-lt="all" data-sid="${escapeAttr(a.studentId)}">${escapeAttr(tx("All skills"))}</button>`;
+    // the list of skills, for a sample of today (the other levels live only as long as the app is open)
+    if(a.status==="in_progress"||a.date===td())acts+=`<button class="btn btn-xs" data-lt="all" data-sid="${escapeAttr(a.studentId)}">${escapeAttr(tx("All skills"))}</button>`;
     text=ltTrialName(a)+" · "+text;
     if(students.some(s=>!s.archived))acts+=`<button class="btn btn-xs" data-lt="move" data-aid="${aid}" title="${escapeAttr(tx("Make this one of a student's tests"))}">${escapeAttr(tx("Move to a student"))}</button>`;
   }
@@ -9703,6 +9704,9 @@ function ltTabGo(k){
   const sid=LTX.sid!=null?LTX.sid:(ltGet(LT.aid)||{}).studentId,s=sid!=null?ltStudent(sid):null;
   if(!s||!ltAllOn(s.id)||!LT_ALL_STEPS.includes(k)||LTX.sample)return;
   if(k===(LTX.sid!=null?LTX.dom:"reading"))return;
+  // A recording belongs to the task that is on the screen: it ends here and is kept, so that it
+  // does not run on into the next skill (going from Speaking to Writing shows a task again).
+  if(LTM.rec)ltRecStop();
   if(LTX.sid!=null)ltxClose();else ltCloseTest();
   LTALL.skip.delete(k);
   ltTabOpen(s,k);
