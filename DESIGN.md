@@ -274,6 +274,8 @@ AI 코딩 도구에 "이 문서의 규격대로 만들어줘"라고 주면 됩�
 
 리포트의 영역별 다음 목표(v167, `.rp-goal`): 책 읽기 줄(`.rp-bk`)과 같은 두 칸 격자 — 왼쪽 104px에 영역 이름(굵게), 오른쪽에 목표 문장, 13.5px. 아래에 작은 회색 안내 한 줄(`.rp-small`). 긴 메모와 목표 문장은 `overflow-wrap:anywhere`로 좁은 화면에서도 넘치지 않는다.
 
+학생 화면의 자물쇠(v168, `.lt-lock`): 아이콘만 있던 44px 버튼에 "선생님" 글자(`.lt-lockt`, 12px 굵게, `--lt-muted`)를 붙였다 — 누가 누르는 것인지 보이게. 누르는 영역은 그대로 44px 이상이고, 360px 미만에서는 글자를 숨겨 윗줄이 넘치지 않는다. 아이콘 색은 전과 같은 `--lt-lock`(학생 눈에 띄지 않는 회색). 레벨테스트 페이지의 "이 기기는 로그인되어 있지 않습니다" 줄(`#lt-nosync`)은 커리큘럼의 계획 알림과 같은 `.curr-plan`(연한 호박색 띠 + 작은 버튼)을 그대로 쓴다 — 새 스타일 없음.
+
 ### Switch (on/off) — 체크박스 대신 항상 이것
 ```css
 .sw{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer}

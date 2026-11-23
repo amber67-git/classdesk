@@ -724,7 +724,9 @@ body.lt-testing{overflow:hidden}
 #lt-screen .lt-dots i{width:100%;max-width:36px;height:8px;border-radius:4px;background:var(--lt-line)}
 #lt-screen .lt-dots i.lt-done{background:var(--lt-brand)}
 #lt-screen .lt-dots i.lt-now{background:var(--lt-amber)}
-#lt-screen .lt-lock{border:0;background:none;color:var(--lt-lock);width:44px;height:44px;display:grid;place-items:center;border-radius:8px}
+#lt-screen .lt-lock{flex:none;border:0;background:none;color:var(--lt-lock);min-width:44px;height:44px;padding:0 8px;display:flex;align-items:center;justify-content:center;gap:4px;border-radius:8px}
+#lt-screen .lt-lockt{font:700 12px var(--font);white-space:nowrap;color:var(--lt-muted)}
+@media(max-width:359px){#lt-screen .lt-lockt{display:none}}
 /* v155: Korean help on or off, from the test itself — a small switch left of the lock */
 #lt-screen .lt-ko{flex:none;border:0;background:none;height:44px;padding:0 4px;display:flex;align-items:center;gap:6px;font:700 13px var(--font);color:var(--lt-muted);border-radius:8px}
 #lt-screen .lt-ko i{position:relative;width:34px;height:20px;border-radius:10px;background:var(--lt-lock);transition:background .15s}
@@ -1833,6 +1835,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 <div id="page-leveltest" class="page">
   <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenTrial()" title="A test without a student — for a trial lesson, or to see the test yourself" data-i18n data-i18n-title><i class="ti ti-player-play"></i> Sample test</button><button class="btn" onclick="ltOpenScript()" title="What to read aloud and the answers, on this screen" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Teacher's script</button><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button><button class="btn" onclick="openModal('mo-lt-export')" title="Save the test records as a spreadsheet file" data-i18n data-i18n-title><i class="ti ti-download"></i> Save as CSV</button></div></div>
 <div class="pc">
+  <div class="curr-plan" id="lt-nosync" hidden></div>
   <div class="card"><div id="lt-list"></div></div>
 </div>
 </div>
@@ -2309,6 +2312,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>How do I find out which books a student can read?</dt><dd>Level test → the student's <b>Details</b> → <b>Add a book check</b>. Pick a book, mark about 100 words in the middle, have the student read them aloud and count the words they miss or need help with; then ask what it was about. 5 or fewer missed in 100 is a book to read alone, 6 to 10 a book for lessons, more is too hard for now — and one band down if they could not say what it was about. Try an easier or a harder book until you have one of each: the lists at the top of the block are the range. Use the same pages for every student if you want to compare them, and avoid a book the student already knows.</dd>
           <dt>How do I test every skill in one go?</dt><dd>Level test → <b>Start test</b> on the student's row. <b>All skills</b> is picked: the reading test comes first, and when it ends a small window lists the seven skills — Reading, Listening, Grammar, Vocabulary, Phonics, Speaking, Writing — with what is done and what comes next. Press <b>Start</b> for the next skill, <b>Skip</b> to leave it for now, or <b>Stop here</b>. Listening, Grammar, Vocabulary and Phonics open on the student's screen from the reading level (on paper they open their window, to pick the level from the marked sheet); Speaking and Writing open their window, where you can record or add a photo and pick the level. At the end, <b>Reading result</b> opens the result to confirm the class level. If you stop in the middle, the student's <b>Details</b> → <b>All skills</b> picks the run up from where today's results stand. To test reading alone, pick <b>Reading only</b> in the start window.</dd>
           <dt>Can I keep what a student said or wrote?</dt><dd>Yes. Level test → the student's <b>Details</b> → <b>Speaking</b>: press <b>Record</b> to record in the app (it goes on while the task is on the student's screen, and <b>Stop and keep</b> saves it), or <b>Add a recording file</b> for one you made with the phone's own recorder. <b>Writing</b>: <b>Add photos</b> takes or picks photos of the paper; large photos are made smaller first. They are kept with the student, apart from the rating, so they can be added later and a rating can be saved without them. The files go to your Google account's storage (the same place as book covers), so you need to be signed in, and they show on your other devices. A recording stops by itself after five minutes; a file can be up to 25 MB, a photo 15 MB. Deleting asks first and offers Undo for a few seconds; after that the file is gone for good.</dd>
+          <dt>How do I stop in the middle of a test, and what is kept?</dt><dd>On the student's screen, hold the lock at the top right (marked <b>Teacher</b>) for a second and choose <b>Stop and leave (continue later)</b>. Everything answered so far is kept: the reading test in your data, the questions of Listening, Grammar, Vocabulary and Phonics on that device. To go on, press <b>Continue test</b> on the student's row. If the app was simply closed, it opens again on that student's test. Two things are not kept: a Speaking or Writing window you have not saved yet, and a sample test. Because the answers of an unfinished skill stay on the device, finish it on the same device. And check that the device is signed in: if the Level test page shows "This device is not signed in", what you do there is not shared with your other devices.</dd>
           <dt>How do I check Listening, Grammar, Phonics and Vocabulary, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b>, <b>Grammar</b>, <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>. Phonics works like Listening (you say a word, the student picks it among look-alikes — 6 a level); Vocabulary like Grammar (the student alone — 8 a level). For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
@@ -2338,6 +2342,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v168 · 2026-11-24</dt><dd><b>Level test: nothing is lost when the app is closed in the middle.</b> Until now the questions of <b>Listening, Grammar, Vocabulary and Phonics</b> were kept only once the skill had its result — closing the app part-way threw the answers away. Now <b>every answer is kept as it is given</b> (on the device the student is using). Open the skill again and it goes on from the next question; for Listening you read the story once more first. <b>Coming back:</b> if the app is closed during a test, it opens again on the Level test page with that student's list of skills — the unfinished one is marked <b>In progress</b>, with <b>Continue</b>. The student's row says In progress too, and its button is <b>Continue test</b>. <b>Leaving on purpose:</b> the lock at the top of the student's screen is now marked <b>Teacher</b>; hold it for a second, then <b>Stop and leave (continue later)</b>. <b>Start this skill again</b> in the same menu throws the answers away. <b>Back</b> (the tablet's button or a swipe from the edge) no longer takes the student out of the test — a note says how the teacher leaves. The reading test already kept every answer; a sample still keeps nothing. <b>A device that is not signed in:</b> the Level test page now says so in a line above the list — a test taken there stays on that device only until you sign in (it also says when sync has stopped).</dd>
           <dt>v167 · 2026-11-23</dt><dd><b>Parent report: a plan to the next test, and the next goal of each skill.</b> The full test is now taken every six months, so the plan in the report is <b>the next six months</b> (steps of two months) instead of three. A new section, <b>Next goals by skill</b> (영역별 다음 목표), lists every skill you have rated — Speaking, Writing, Listening, Grammar, Phonics, Vocabulary — with what one level up looks like, in the same words as the level descriptions. It shows no level letters (the table above has them) and says that it is a direction, not a deadline. A skill at level E gets "keep it up on wider topics". Skills you have not rated are left out, and with no rating at all the section is not shown. A long note without spaces no longer runs off the side on a phone.</dd>
           <dt>v166 · 2026-11-23</dt><dd><b>Level test: every skill in one go.</b> <b>Start test</b> now runs the whole test, not just reading. The start window has a new choice, <b>All skills</b> (picked) or <b>Reading only</b>. With All skills, the reading test comes first; when it ends, a window lists the seven skills — Reading, Listening, Grammar, Vocabulary, Phonics, Speaking, Writing — with the level of each one that is done and the one that comes next: <b>Start</b>, <b>Skip</b> or <b>Stop here</b>. Listening, Grammar, Vocabulary and Phonics start on the student's screen from the level the reading test gave, and when each ends the list comes straight back (no window in between); Speaking and Writing open their window to record, add a photo and pick the level. At the end, <b>Reading result</b> opens the result to confirm the class level, and skipped skills can be gone back to. Nothing extra is stored for a run: a skill is done when it has a result dated today, so a run that was left can be picked up again with <b>All skills</b> in the student's Details, on any device. A run on paper opens each skill's window instead of the student's screen.</dd>
           <dt>v165 · 2026-11-23</dt><dd><b>Level test: keep a recording and photos.</b> The <b>Speaking</b> window has a <b>Recordings</b> block: <b>Record</b> records in the app — it goes on while the task is on the student's screen (the screen says REC), and <b>Stop and keep</b> saves it — and <b>Add a recording file</b> takes a recording made with the phone's own recorder. The <b>Writing</b> window has <b>Photos of the writing</b>: <b>Add photos</b> takes or picks one or several photos, and a press on a thumbnail shows it larger. Recordings can be played right in the window. They are kept with the student, apart from the rating, so today's recordings can be added tomorrow. The skill buttons in a student's Details show how many are kept. The files go to your Google account's storage, like book covers, so this needs you to be signed in; signed out, the buttons are off and say so. If an upload fails, the file is kept in hand — also if you close the window — and <b>Try again</b> sends it. Deleting asks first, then offers Undo; the file itself is removed when the time for Undo is over.</dd>
@@ -2402,7 +2407,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v167</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v168</b> · FAQ current as of: <b>2026-11-24</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2547,6 +2552,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>학생이 어떤 책까지 읽을 수 있는지 어떻게 알아보나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>책 읽기 확인 추가</b>. 책을 고르고 중간쯤에서 100단어 정도를 표시해 둔 뒤, 소리 내어 읽게 하면서 틀리거나 도와준 단어를 세세요. 다 읽으면 무슨 내용이었는지 물어봅니다. 100단어 중 5개 이하로 틀리면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책이고, 내용을 말하지 못했으면 한 단계 낮춥니다. 더 쉬운 책이나 더 어려운 책으로 바꿔 가며 각각 하나씩 나오면, 맨 위의 목록이 그 학생의 범위입니다. 학생끼리 비교하려면 같은 쪽을 읽히고, 이미 아는 책은 피하세요.</dd>
           <dt>모든 영역을 한 번에 테스트하려면요?</dt><dd>레벨테스트 → 학생 줄의 <b>테스트 시작</b>. <b>모든 영역</b>이 선택되어 있습니다: 읽기 테스트를 먼저 보고, 끝나면 작은 창에 일곱 영역(읽기, 듣기, 문법, 어휘, 파닉스, 말하기, 쓰기)이 끝난 것과 다음 차례와 함께 나옵니다. 다음 영역은 <b>시작</b>, 지금은 넘어가려면 <b>건너뛰기</b>, 그만하려면 <b>여기서 마치기</b>를 누르세요. 듣기·문법·어휘·파닉스는 읽기 결과 레벨부터 학생 화면에서 열리고(종이 시험이면 채점한 시험지를 보고 레벨을 고르는 창이 열립니다), 말하기·쓰기는 녹음이나 사진을 올리고 레벨을 고르는 창이 열립니다. 마지막에 <b>읽기 결과</b>를 누르면 결과 창에서 수업 레벨을 확정할 수 있습니다. 중간에 멈췄다면 학생의 <b>자세히</b> → <b>모든 영역</b>을 누르면 오늘 한 곳부터 이어집니다. 읽기만 보려면 시작 창에서 <b>읽기만</b>을 고르세요.</dd>
           <dt>학생이 말한 것과 쓴 것을 보관할 수 있나요?</dt><dd>네. 레벨테스트 → 학생의 <b>자세히</b> → <b>말하기</b>: <b>녹음하기</b>를 누르면 앱에서 바로 녹음합니다(과제를 학생 화면에 띄운 동안에도 계속 녹음되고, <b>멈추고 저장</b>을 누르면 저장됩니다). 핸드폰 녹음기로 따로 녹음한 파일은 <b>녹음 파일 올리기</b>로 올립니다. <b>쓰기</b>: <b>사진 올리기</b>로 종이를 찍거나 앨범에서 고릅니다. 큰 사진은 먼저 작게 줄여서 올립니다. 평가와 따로 학생에게 보관되므로, 나중에 올려도 되고 녹음·사진 없이 평가만 저장해도 됩니다. 파일은 선생님 Google 계정의 저장소(책 표지와 같은 곳)에 올라가므로 로그인이 필요하고, 다른 기기에서도 보입니다. 녹음은 5분이 되면 스스로 멈추고, 파일은 25 MB, 사진은 15 MB까지 올릴 수 있습니다. 삭제는 먼저 물어보고 몇 초 동안 되돌리기를 보여 줍니다. 그 뒤에는 파일이 완전히 지워집니다.</dd>
+          <dt>테스트 도중에 멈추려면 어떻게 하고, 무엇이 남나요?</dt><dd>학생 화면 오른쪽 위의 자물쇠(<b>선생님</b>이라고 적힌 것)를 1초쯤 길게 누르고 <b>멈추고 나가기 (나중에 이어서)</b>를 고릅니다. 그때까지 푼 것은 모두 남습니다. 읽기 테스트는 데이터에, 듣기·문법·어휘·파닉스 문항은 그 기기에 남습니다. 이어서 하려면 학생 줄의 <b>이어서 풀기</b>를 누르세요. 앱이 그냥 닫혔다면 다시 열 때 그 학생의 테스트가 바로 뜹니다. 남지 않는 것은 두 가지입니다. 아직 저장을 누르지 않은 말하기·쓰기 창과 샘플 테스트입니다. 풀다 만 영역의 답은 그 기기에만 있으므로, 같은 기기에서 마저 끝내 주세요. 그 기기가 로그인되어 있는지도 확인하세요. 레벨테스트 페이지에 "이 기기는 로그인되어 있지 않습니다"가 보이면, 거기서 한 것은 다른 기기에 나타나지 않습니다.</dd>
           <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
@@ -2576,6 +2582,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v168 · 2026-11-24</dt><dd><b>레벨테스트: 도중에 앱을 닫아도 사라지지 않습니다.</b> 지금까지 <b>듣기·문법·어휘·파닉스</b> 문항은 그 영역의 결과가 나와야만 저장되어, 풀다가 앱을 닫으면 답이 사라졌습니다. 이제 <b>문제를 풀 때마다 저장</b>됩니다(학생이 쓰는 그 기기에). 같은 영역을 다시 열면 다음 문제부터 이어지고, 듣기는 이야기를 한 번 더 읽어 준 뒤 이어집니다. <b>다시 들어왔을 때:</b> 테스트 도중 앱이 닫혔다면, 다시 열 때 레벨테스트 페이지의 그 학생 영역 목록이 바로 뜹니다. 풀다 만 영역에 <b>진행 중</b>이 표시되고 <b>이어서 하기</b>를 누르면 됩니다. 학생 줄에도 진행 중이 보이고 버튼이 <b>이어서 풀기</b>로 바뀝니다. <b>일부러 나갈 때:</b> 학생 화면 위쪽 자물쇠에 <b>선생님</b>이라고 적혀 있습니다. 1초쯤 길게 누른 뒤 <b>멈추고 나가기 (나중에 이어서)</b>를 누르세요. 같은 메뉴의 <b>이 영역 처음부터 다시</b>는 푼 답을 버리고 새로 시작합니다. <b>뒤로가기</b>(태블릿의 버튼이나 화면 가장자리 밀기)를 눌러도 테스트에서 나가지지 않고, 나가는 방법을 알려 주는 글이 잠깐 뜹니다. 읽기 테스트는 전부터 문제마다 저장되었고, 샘플 테스트는 전처럼 아무것도 남기지 않습니다. <b>로그인하지 않은 기기:</b> 레벨테스트 페이지 목록 위에 한 줄로 알려 줍니다. 그 기기에서 본 테스트는 로그인하기 전까지 그 기기에만 남습니다(동기화가 멈췄을 때도 알려 줍니다).</dd>
           <dt>v167 · 2026-11-23</dt><dd><b>학부모 리포트: 다음 테스트까지의 계획과 영역별 다음 목표.</b> 전체 테스트를 6개월마다 보게 되어, 리포트의 계획도 3개월이 아니라 <b>앞으로 6개월</b>(두 달씩 세 단계)로 바뀌었습니다. 새 항목 <b>영역별 다음 목표</b>에는 평가한 영역(Speaking, Writing, Listening, Grammar, Phonics, Vocabulary)마다 한 단계 위의 모습이 레벨 설명과 같은 문장으로 나옵니다. 레벨 글자는 적지 않고(위의 표에 있습니다), 기한이 아니라 방향이라는 안내가 함께 들어갑니다. 레벨 E인 영역은 "지금 수준을 더 넓은 주제에서 이어 가기"로 나옵니다. 평가하지 않은 영역은 빠지고, 평가한 영역이 하나도 없으면 이 항목은 나오지 않습니다. 띄어쓰기 없이 긴 메모가 폰 화면에서 옆으로 넘치던 것도 고쳤습니다.</dd>
           <dt>v166 · 2026-11-23</dt><dd><b>레벨테스트: 모든 영역을 한 번에.</b> <b>테스트 시작</b>이 이제 읽기만이 아니라 전체 테스트를 진행합니다. 시작 창에 <b>모든 영역</b>(기본)과 <b>읽기만</b> 선택이 생겼습니다. 모든 영역을 고르면 읽기 테스트를 먼저 보고, 끝나면 일곱 영역(읽기, 듣기, 문법, 어휘, 파닉스, 말하기, 쓰기)이 끝난 영역의 레벨, 다음 차례와 함께 창에 나옵니다: <b>시작</b>, <b>건너뛰기</b>, <b>여기서 마치기</b>. 듣기·문법·어휘·파닉스는 읽기 테스트에서 나온 레벨부터 학생 화면에서 시작하고, 끝나면 바로 목록으로 돌아옵니다(중간에 다른 창이 뜨지 않습니다). 말하기·쓰기는 녹음, 사진, 레벨 선택을 하는 창이 열립니다. 마지막에 <b>읽기 결과</b>로 결과 창을 열어 수업 레벨을 확정하고, 건너뛴 영역으로 돌아갈 수도 있습니다. 전체 진행을 위해 따로 저장하는 것은 없습니다: 오늘 날짜의 결과가 있으면 그 영역은 끝난 것으로 보므로, 중간에 멈춘 뒤에도 학생 자세히의 <b>모든 영역</b>으로 어느 기기에서나 이어서 할 수 있습니다. 종이 시험으로 진행하면 학생 화면 대신 영역별 창이 열립니다.</dd>
           <dt>v165 · 2026-11-23</dt><dd><b>레벨테스트: 녹음과 사진 보관.</b> <b>말하기</b> 창에 <b>녹음</b> 칸이 생겼습니다. <b>녹음하기</b>는 앱에서 바로 녹음합니다 — 과제를 학생 화면에 띄운 동안에도 계속 녹음되고(화면에 REC 표시), <b>멈추고 저장</b>을 누르면 저장됩니다. <b>녹음 파일 올리기</b>로는 핸드폰 녹음기로 따로 녹음한 파일을 올립니다. <b>쓰기</b> 창에는 <b>쓴 글 사진</b> 칸이 생겼습니다. <b>사진 올리기</b>로 한 장 또는 여러 장을 찍거나 고르고, 작은 사진을 누르면 크게 보입니다. 녹음은 창에서 바로 들을 수 있습니다. 평가와 따로 학생에게 보관되므로 오늘 녹음한 것을 내일 올려도 됩니다. 학생 자세히의 영역 버튼에 보관된 개수가 표시됩니다. 파일은 책 표지처럼 선생님 Google 계정의 저장소에 올라가므로 로그인이 필요하고, 로그아웃 상태에서는 버튼이 꺼지고 그 이유를 알려 줍니다. 올리기에 실패하면 파일을 그대로 들고 있다가(창을 닫아도 유지) <b>다시 시도</b>로 다시 보냅니다. 삭제는 먼저 물어본 뒤 되돌리기를 보여 주고, 되돌릴 시간이 지나면 파일을 실제로 지웁니다.</dd>
@@ -2639,7 +2646,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v167</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v168</b> · 자주 묻는 질문 기준일: <b>2026-11-24</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3994,7 +4001,16 @@ const I18N={ko:{
   "There is an unfinished test. Continue it or end it first.":"끝나지 않은 테스트가 있습니다. 이어서 하거나 먼저 끝내 주세요.",
   "In the first-letter questions of level A you may say the picture's name aloud (dog, sun).":"A 레벨의 첫 글자 문제는 그림 이름(dog, sun)을 말해 줘도 됩니다.",
   "Teacher's menu: press and hold":"선생님 메뉴: 길게 누르기","Teacher's menu":"선생님 메뉴","The answers so far are saved.":"지금까지의 답은 저장되어 있습니다.",
-  "Keep going":"계속 풀기","Stop and leave (continue later)":"멈추고 나가기 (나중에 이어서)","Too few answers to judge — recorded as stopped.":"판정할 만큼 풀지 않아 중단으로 기록했습니다.",
+  "Keep going":"계속 풀기","Stop and leave (continue later)":"멈추고 나가기 (나중에 이어서)",
+  "The answers so far are kept on this device.":"지금까지 푼 답은 이 기기에 남아 있습니다.",
+  "This device could not keep the last answer (its storage may be full). Finish this skill before you leave.":"이 기기가 방금 답을 저장하지 못했습니다(저장 공간이 가득 찼을 수 있습니다). 이 영역을 끝까지 푼 뒤에 나가 주세요.",
+  "This device is not signed in. A test taken here stays on this device only — sign in under Settings → Account to keep it with your other devices.":"이 기기는 로그인되어 있지 않습니다. 여기서 본 테스트는 이 기기에만 남습니다. 다른 기기에서도 보려면 설정 → 계정에서 로그인하세요.",
+  "Sync is not working on this device right now. What you do here stays on this device until it works again — Settings → Account shows why.":"지금 이 기기에서 동기화가 되지 않고 있습니다. 여기서 한 것은 동기화가 다시 될 때까지 이 기기에만 남습니다. 이유는 설정 → 계정에 나옵니다.","Start this skill again":"이 영역 처음부터 다시",
+  "Continue the questions":"문항 이어서 풀기","Left part-way — press to continue":"풀다가 멈춤 — 눌러서 이어 하기","Teacher|lock":"선생님",
+  "Teacher: hold the lock at the top to open the menu and leave.":"선생님: 위쪽 자물쇠를 길게 누르면 메뉴가 열리고, 거기서 나갈 수 있습니다.",
+  "Left part-way at level {level}, after question {n}. It goes on from the next question.":"레벨 {level}의 {n}번 문제까지 풀고 멈췄습니다. 다음 문제부터 이어집니다.",
+  "Left part-way: level {level} comes next.":"풀다가 멈췄습니다. 레벨 {level}부터 이어집니다.",
+  "The questions are answered — the result still has to be stored. Open it and hold the button on the last screen.":"문제는 다 풀었고, 결과 저장만 남았습니다. 열어서 마지막 화면의 버튼을 길게 눌러 주세요.","Too few answers to judge — recorded as stopped.":"판정할 만큼 풀지 않아 중단으로 기록했습니다.",
   "Teacher: keep it pressed a little longer":"선생님: 조금 더 길게 눌러 주세요","Deleted student":"삭제된 학생","On paper":"종이 시험","On screen":"화면 테스트","{n} questions":"{n}문항",
   "App result — class level for reading":"앱 결과 — 읽기 수업 레벨","Levels passed securely: {lv}":"안정적으로 통과한 레벨: {lv}",
   "This test was ended early. It is judged only on what was answered.":"중간에 끝낸 테스트입니다. 지금까지 푼 내용으로만 판정했습니다.",
@@ -4501,7 +4517,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v167";
+const APP_VERSION="v168";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8519,8 +8535,20 @@ function ltSyncSure(){return !syncUser||(navigator.onLine!==false&&!!syncSettled
 
 // ── The page: one row per student ─────────────────────────────────────────
 let ltOpenSid=null;       // the student whose history is unfolded
+// v168 — a test taken on a device that is not signed in (or whose sync has stopped) is on that
+// device only, and nothing on the page said so: the teacher looked for it on another device. One
+// line above the list says it. Not for the built-in samples, and not before the sign-in state is known.
+function ltSyncNotice(){
+  const el=document.getElementById("lt-nosync");if(!el)return;
+  const e=escapeAttr,out=feeAuthKnown&&!syncUser&&!localIsSample(),err=!!syncUser&&syncTone==="err";
+  el.hidden=!(out||err);
+  el.innerHTML=el.hidden?"":`<span>${e(out?tx("This device is not signed in. A test taken here stays on this device only — sign in under Settings → Account to keep it with your other devices.")
+    :tx("Sync is not working on this device right now. What you do here stays on this device until it works again — Settings → Account shows why."))}</span>`+
+    `<button type="button" class="btn btn-sm" onclick="showPage('settings')">${e(tx("Settings"))}</button>`;
+}
 function renderLevelTest(){
   const box=document.getElementById("lt-list");if(!box)return;
+  ltSyncNotice();
   const list=students.filter(s=>!s.archived);
   const counts={};
   list.forEach(s=>{const g=PLAN_LEVELS.includes(s.group)?s.group:"";counts[g]=(counts[g]||0)+1;});
@@ -8530,12 +8558,12 @@ function renderLevelTest(){
   if(!list.length){box.innerHTML=`<div class="lt-empty">${escapeAttr(tx("Add a student first — the level test is started from the student's row here. To see the test without a student, press “Sample test” above."))}</div>`+ltTrialHtml();return;}
   const today=td();
   box.innerHTML=ltTrialHtml()+list.map(s=>{
-    const sid=escapeAttr(s.id),all=ltOf(s.id),last=ltLatest(s.id),ip=ltInProgress(s.id);
+    const sid=escapeAttr(s.id),all=ltOf(s.id),last=ltLatest(s.id),ip=ltInProgress(s.id),left=!ip&&ltDraftAny(s.id);
     const lvl=PLAN_LEVELS.includes(s.group)?s.group:"";
     let sub=tx("Not tested yet");
     if(last)sub=tx("Last test {date} · {res}",{date:last.date,res:last.result.level+" · "+LT_STAGE[last.result.stage]});
     const badges=[];
-    if(ip)badges.push(`<span class="badge bip">${escapeAttr(tx("In progress"))}</span>`);
+    if(ip||left)badges.push(`<span class="badge bip">${escapeAttr(tx("In progress"))}</span>`);
     if(last&&today>=ltAddMonths(last.date,LT_RETEST_MONTHS))badges.push(`<span class="badge bpr">${escapeAttr(tx("Retest due"))}</span>`);
     const acts=[];
     // The result of the newest test waits for the teacher: one button says so and opens it. Once it
@@ -8544,6 +8572,8 @@ function renderLevelTest(){
     acts.push(`<button class="btn btn-sm" data-lt="hist" data-sid="${sid}" aria-expanded="${ltSame(ltOpenSid,s.id)}">${escapeAttr(tx("Details"))}</button>`);
     acts.push(ip
       ?`<button class="btn btn-sm btn-p" data-lt="resume" data-aid="${escapeAttr(ip.id)}">${escapeAttr(tx("Continue test"))}</button>`
+      // v168: a skill left part-way (ltDraftGet) — the window of every skill opens on it
+      :left?`<button class="btn btn-sm btn-p" data-lt="all" data-sid="${sid}">${escapeAttr(tx("Continue test"))}</button>`
       :`<button class="btn btn-sm btn-p" data-lt="start" data-sid="${sid}">${escapeAttr(tx("Start test"))}</button>`);
     let h=`<div class="lt-row">${ltLv(lvl)}<div class="lt-main"><div class="lt-name">${escapeAttr(s.name||"")}${s.k?` <span class="cell-muted2">${escapeAttr(s.k)}</span>`:""}</div>`+
       `<div class="lt-sub">${escapeAttr(sub)}</div></div><div class="lt-acts">${badges.join("")}${acts.join("")}</div></div>`;
@@ -8970,14 +9000,48 @@ function ltLockBackground(on){
     _ltFocusBack=document.activeElement;
     _ltInert=[...document.body.children].filter(el=>el.id!=="lt-screen"&&el.id!=="lt-hint"&&!el.inert&&!/^(SCRIPT|STYLE|LINK)$/.test(el.tagName));
     _ltInert.forEach(el=>{el.inert=true;});
+    ltBackGuard();
   }else{
     _ltInert.forEach(el=>{el.inert=false;});_ltInert=[];
     const f=_ltFocusBack;_ltFocusBack=null;
     if(f&&document.contains(f)&&typeof f.focus==="function"){try{f.focus();}catch(e){}}
   }
 }
+// v168 — Back (the tablet's button or a swipe from the edge) must not take the student out of the
+// app in the middle of a test. While the student's screen is open one entry of the browser's
+// history stands in front of the app; Back uses it up, the entry is put back and a note says how
+// the teacher leaves. The entry is left where it is when the test closes (taking it away would
+// arrive late, in the middle of the next skill): the first Back after a test then does nothing.
+function ltBackGuard(){try{if(!(history.state&&history.state.ltTest))history.pushState({ltTest:1},"");}catch(e){}}
+window.addEventListener("popstate",()=>{
+  const scr=document.getElementById("lt-screen");if(!scr||scr.hidden)return;
+  ltBackGuard();
+  ltHint(tx("Teacher: hold the lock at the top to open the menu and leave."));
+});
+// The student whose test is on this device right now (cd_lt_open = {sid,t}), so that the app, when
+// it is closed in the middle and opened again, comes back to that student's test and not to the
+// dashboard (ltOpenAgain). null takes the note away.
+const LT_OPEN_KEY="cd_lt_open",LT_OPEN_HOURS=12;
+function ltOpenNote(sid){
+  try{
+    if(sid==null)localStorage.removeItem(LT_OPEN_KEY);
+    else localStorage.setItem(LT_OPEN_KEY,JSON.stringify(Object.assign({sid:sid,t:Date.now()},ltAllOn(sid)?{mode:LTALL.mode,level:LTALL.level}:{})));
+  }catch(e){}
+}
+function ltOpenAgain(){
+  let n=null;try{n=JSON.parse(localStorage.getItem(LT_OPEN_KEY)||"null");}catch(e){}
+  if(!n||typeof n!=="object")return false;
+  const s=n.sid!=null&&Date.now()-(+n.t||0)<LT_OPEN_HOURS*36e5?ltStudent(n.sid):null;
+  // Only when something is really unfinished: a reading test in progress or a skill left part-way.
+  if(!s||s.trial||s.archived||!pageEnabled("leveltest")||!(ltInProgress(s.id)||ltDraftAny(s.id))){ltOpenNote(null);return false;}
+  showPage("leveltest");ltOpenSid=s.id;
+  ltAllBegin(s.id,n.mode,AEA.LEVELS.includes(n.level)?n.level:LTALL.level);   // the run as it was: on paper or on screen, and its start level
+  ltAllShow();
+  return true;
+}
 function ltOpenTest(aid){
   const a=ltGet(aid);if(!a||a.status!=="in_progress"||a.mode==="paper"||LTX.sid)return;
+  if(!ltIsTrial(a.studentId))ltOpenNote(a.studentId);
   Object.assign(LT,{aid:aid,screen:"intro",sel:null,itemKey:"",readKey:"",menu:false});
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -8986,6 +9050,7 @@ function ltOpenTest(aid){
 }
 function ltCloseTest(){
   LT.aid=null;LT.menu=false;
+  if(LTALL.sid==null)ltOpenNote(null);
   ltAllTick();
   document.getElementById("lt-hint")?.remove();
   const scr=document.getElementById("lt-screen");scr.hidden=true;scr.innerHTML="";
@@ -9079,7 +9144,7 @@ function ltBar(a,t){
   const ko=ltKoOn(a,ltKoLevel(a));
   return `<div class="lt-tbar"><span class="lt-part">Part ${a.path.length}</span><span class="lt-dots">${dots}</span>`+
     `<button type="button" class="lt-ko${ko?" on":""}" data-act="koToggle" role="switch" aria-checked="${ko}" aria-label="한국어로 보기">한글<i></i></button>`+
-    `<button type="button" class="lt-lock" data-hold="menu" title="${escapeAttr(tx("Teacher's menu: press and hold"))}" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
+    `<button type="button" class="lt-lock" data-hold="menu" title="${escapeAttr(tx("Teacher's menu: press and hold"))}" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}<span class="lt-lockt">${escapeAttr(tx("Teacher|lock"))}</span></button></div>`;
 }
 function ltTestHtml(a,s){
   const scr=LT.screen,K=ltKoOn(a,ltKoLevel(a));
@@ -9364,6 +9429,7 @@ function ltProfileHtml(s){
     const r=ltLastRating(s,d),sc=ltScore(r);
     h+=`<button type="button" class="lt-skill" data-lt="rate" data-sid="${e(s.id)}" data-dom="${d}" title="${e(r?tx("Rated {date} — press to rate again",{date:r.date}):tx("Press to rate"))}">${e(LT_DOMAIN_NAME[d])}`+
       (r?ltLv(r.level)+(sc!=null?`<span class="lt-score">${sc}/100</span>`:""):`<i class="ti ti-plus" aria-hidden="true"></i>`)+
+      (ltDraftGet(s.id,d)?`<span class="lt-sk-m" title="${e(tx("Left part-way — press to continue"))}"><i class="ti ti-player-pause" aria-hidden="true"></i></span>`:"")+
       (ltMedia(s,d).length?`<span class="lt-sk-m" title="${e(LT_MEDIA_KIND[d]==="audio"?tx("Recordings"):tx("Photos of the writing"))}"><i class="ti ${LT_MEDIA_KIND[d]==="audio"?"ti-microphone":"ti-photo"}" aria-hidden="true"></i>${ltMedia(s,d).length}</span>`:"")+`</button>`;
   });
   return h+`</div>`+ltBooksHtml(s);
@@ -9504,7 +9570,7 @@ function ltAllBegin(sid,mode,level){
   if(!ltAllOn(sid))LTALL.skip=new Set();
   LTALL.sid=sid;LTALL.mode=mode==="paper"?"paper":"online";LTALL.level=AEA.LEVELS.includes(level)?level:"B";
 }
-function ltAllEnd(){LTALL.sid=null;LTALL.next=null;LTALL.skip=new Set();closeModal("mo-lt-all");}
+function ltAllEnd(){LTALL.sid=null;LTALL.next=null;LTALL.skip=new Set();closeModal("mo-lt-all");ltOpenNote(null);}
 // The reading test of today: finished (the newest one dated today) or still going.
 function ltAllReading(s){
   const run=ltInProgress(s.id);if(run)return {st:"run",a:run};
@@ -9513,7 +9579,11 @@ function ltAllReading(s){
 }
 function ltAllState(s,k){
   if(k==="reading"){const r=ltAllReading(s);if(r)return r;}
-  else{const r=ltRatings(s,k).filter(x=>x.date===td()).pop();if(r)return {st:"done",level:r.level};}
+  else{
+    const r=ltRatings(s,k).filter(x=>x.date===td()).pop();if(r)return {st:"done",level:r.level};
+    // v168: left part-way on this device — it comes first, like an unfinished reading test, unless skipped
+    const left=LT_SEC[k]&&LTALL.mode!=="paper"?ltDraftGet(s.id,k):null;if(left&&!LTALL.skip.has(k))return {st:"run",left};
+  }
   return {st:LTALL.skip.has(k)?"skip":"todo"};
 }
 // Where a skill starts: today's reading level if there is one, else the last rating of the skill,
@@ -9560,17 +9630,24 @@ function ltAllShow(){
     const k=next.k,paper=LTALL.mode==="paper",L=k==="reading"?"":ltAllLevel(s,k);
     const how=k==="reading"?(next.st==="run"?tx("The reading test is not finished. Continue it, or end it from the lock."):tx("The reading test comes first."))
       :LT_SEC[k]?(paper?tx("Mark the sheet with the answer key, then pick the level in the window that opens.")
+        :next.st==="run"?ltLeftText(next.left)
         :LT_SEC_ALOUD.has(k)?tx("On the student's screen, from level {level}. You read aloud: hold the lock to see what to say, or use Teacher's script on your phone.",{level:L})
         :tx("On the student's screen, from level {level}. The student answers alone.",{level:L}))
       :k==="speaking"?tx("Ask the questions of level {level} (or show the task), record if you like, then pick the closest description.",{level:L})
       :tx("Give the task of level {level}, add a photo of the paper if you like, then pick the closest description.",{level:L});
     box.innerHTML=`<p class="lta-h">${e(tx("Next: {name}",{name:ltAllName(k)}))}</p><p class="u-hint">${e(how)}</p>`;
     foot.innerHTML=`<button type="button" class="btn" onclick="ltAllEnd()">${e(tx("Stop here"))}</button>`+
-      `<span class="lta-r">${next.st==="run"?"":`<button type="button" class="btn" onclick="ltAllSkip()">${e(tx("Skip"))}</button>`}`+
+      `<span class="lta-r">${next.st==="run"&&k==="reading"?"":`<button type="button" class="btn" onclick="ltAllSkip()">${e(tx("Skip"))}</button>`}`+
       `<button type="button" class="btn btn-p" id="lta-go" onclick="ltAllGo()"><i class="ti ti-player-play"></i> ${e(next.st==="run"?tx("Continue|all skills"):tx("Start"))}</button></span>`;
   }
   openModal("mo-lt-all");
   if(curPage==="leveltest")renderLevelTest();
+}
+// Where a skill that was left part-way stands, in words.
+function ltLeftText(left){
+  return left.final?tx("The questions are answered — the result still has to be stored. Open it and hold the button on the last screen.")
+    :left.ans.length?tx("Left part-way at level {level}, after question {n}. It goes on from the next question.",{level:left.level,n:left.ans.length})
+    :tx("Left part-way: level {level} comes next.",{level:left.level});
 }
 function ltAllSkip(){if(LTALL.sid==null||!LTALL.next)return;LTALL.skip.add(LTALL.next);ltAllShow();}
 function ltAllUnskip(){if(LTALL.sid==null)return;LTALL.skip=new Set();ltAllShow();}
@@ -9781,13 +9858,14 @@ function ltRenderRate(){
   const sec=document.getElementById("ltq-sec"),hasSec=!!LT_SEC[LTR.dom],lis=LT_SEC_ALOUD.has(LTR.dom);
   sec.hidden=!hasSec;
   if(hasSec){
-    const x=escapeAttr,n=LT_SEC[LTR.dom].A.items.length,R=LT_SEC_RULE[LTR.dom];
+    const x=escapeAttr,n=LT_SEC[LTR.dom].A.items.length,R=LT_SEC_RULE[LTR.dom],left=ltDraftGet(LTR.sid,LTR.dom);
     sec.innerHTML=`<div class="lt-ph">${x(tx("Check with questions"))}</div>`+
       `<p class="u-hint">${x(lis?tx("{n} questions a level. You read the script aloud.",{n}):tx("{n} questions a level.",{n}))} `+
       `${x(tx("{up} or more right goes up a level, {down} or fewer goes down — one way only, stopping at A or E. The result is saved as the rating.",{up:R.up,down:R.down}))}</p>`+
       `<div class="ltq-sec-row"><span>${x(tx("Start at level"))}</span><span class="seg" role="group" aria-label="${x(tx("Start at level"))}">`+
       AEA.LEVELS.map(L=>`<button type="button" class="seg-btn${LTR.start===L?" active":""}" aria-pressed="${LTR.start===L}" onclick="ltPickStart('${L}')">${L}</button>`).join("")+`</span></div>`+
-      `<div class="ltq-sec-row"><button type="button" class="btn btn-p" id="ltq-go" onclick="ltxOpen(LTR.sid,LTR.dom,LTR.start)"><i class="ti ti-player-play"></i> ${x(tx("Start the questions"))}</button>`+
+      (left?`<p class="u-hint ltq-left">${x(ltLeftText(left))}</p>`:"")+
+      `<div class="ltq-sec-row"><button type="button" class="btn btn-p" id="ltq-go" onclick="ltxOpen(LTR.sid,LTR.dom,LTR.start)"><i class="ti ti-player-play"></i> ${x(left?tx("Continue the questions"):tx("Start the questions"))}</button>`+
       `<button type="button" class="btn" onclick="ltOpenScript(LTR.start,LTR.dom)"><i class="ti ti-message-2"></i> ${x(lis?tx("Script on this screen"):tx("Answers on this screen"))}</button>`+
       `<button type="button" class="btn" onclick="ltSecPrint('key')"><i class="ti ti-printer"></i> ${x(lis?tx("Script and answers"):tx("Answer key"))}</button>`+
       `<button type="button" class="btn" onclick="ltSecPrint('sheet')"><i class="ti ti-file-text"></i> ${x(tx("Paper sheet · level {level}",{level:LTR.start}))}</button></div>`;
@@ -9858,7 +9936,7 @@ function ltPushRating(s,d,entry){
   const all=before&&typeof before==="object"&&!Array.isArray(before)?{...before}:{};
   all[d]=[...(Array.isArray(all[d])?all[d]:[]),entry];
   s.ratings=all;
-  if(saveKey("students"))return true;
+  if(saveKey("students")){ltDraftDrop(s.id,d);return true;}   // v168: the skill has its rating — what was left part-way is over
   // save() stamps a record before it writes it. The student goes back to the stored copy, so the
   // stamp goes back too — a newer stamp on old content would turn away a change from another device.
   if(before===undefined)delete s.ratings;else s.ratings=before;
@@ -10112,8 +10190,45 @@ const ltSecText=r=>r&&ltSecOk(r.sec)?r.sec.parts.map(p=>p.level+" "+p.correct+"/
 // v161 — opt.sample: the same questions for no student (a trial lesson, or the teacher trying them):
 // nothing is stored and the last screen shows the result itself. opt.task: no questions at all —
 // the screen shows the Speaking or Writing task of a level (LT_TASKS) for the student to see.
-const LTX={sid:null,dom:null,level:"",idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false,sample:false,name:""};
+const LTX={sid:null,dom:null,level:"",start:"",idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false,sample:false,name:"",rehear:false};
 const LTX_SAMPLE="sample";
+// v168 — a part that was left before its result. Until now nothing of these questions was kept
+// until the result was reached, so closing the app in the middle (there is no Back button on the
+// student's screen, and a tablet is easily put down) threw the answers away. Every answer is now
+// noted on this device: cd_lt_draft = {"<student>|<skill>": {level,start,ans,parts,final,ko,t}}.
+// Opening the same skill for the same student goes on from the next question. The note goes when
+// the skill gets a rating (the result, or one the teacher picks), when the teacher starts the skill
+// again, and by itself after a week. Device bookkeeping like cd_tomb, not data: it is not synced
+// and Export / Import leave it alone. A sample stores nothing, as before.
+const LT_DRAFT_KEY="cd_lt_draft",LT_DRAFT_DAYS=7;
+function ltDrafts(){try{const d=JSON.parse(localStorage.getItem(LT_DRAFT_KEY)||"{}");return d&&typeof d==="object"&&!Array.isArray(d)?d:{};}catch(e){return {};}}
+function ltDraftWrite(all){
+  try{if(Object.keys(all).length)localStorage.setItem(LT_DRAFT_KEY,JSON.stringify(all));else localStorage.removeItem(LT_DRAFT_KEY);return true;}catch(e){return false;}
+}
+const ltDraftId=(sid,dom)=>String(sid)+"|"+dom;
+function ltDraftGet(sid,dom){
+  const d=ltDrafts()[ltDraftId(sid,dom)],bank=LT_SEC[dom];
+  if(!d||!bank||!AEA.LEVELS.includes(d.level)||!(Date.now()-(+d.t||0)<LT_DRAFT_DAYS*864e5))return null;
+  const items=bank[d.level].items,ans=Array.isArray(d.ans)?d.ans:null,parts=Array.isArray(d.parts)?d.parts:null;
+  if(!ans||!parts||ans.length>items.length||!ans.every((k,i)=>Number.isInteger(k)&&k>=-1&&k<items[i].opts.length))return null;
+  if(!parts.every(p=>p&&AEA.LEVELS.includes(p.level)&&Number.isInteger(p.correct)&&Number.isInteger(p.total)&&p.total>0&&p.correct>=0&&p.correct<=p.total))return null;
+  const fin=AEA.LEVELS.includes(d.final)?d.final:"";
+  if(fin?!parts.length:(ans.length>=items.length||(!ans.length&&!parts.length)))return null;   // nothing answered, or a state that cannot be
+  return {level:d.level,start:AEA.LEVELS.includes(d.start)?d.start:d.level,ans:ans.slice(),parts:parts.map(p=>({level:p.level,correct:p.correct,total:p.total})),final:fin,ko:typeof d.ko==="boolean"?d.ko:null,t:+d.t};
+}
+const ltDraftAny=sid=>LT_SEC_IDS.some(k=>!!ltDraftGet(sid,k));
+function ltDraftDrop(sid,dom){const all=ltDrafts(),k=ltDraftId(sid,dom);if(!(k in all))return;delete all[k];ltDraftWrite(all);}
+// Note where the student's screen stands. Called after every answer; false when the device could
+// not store it (the questions go on all the same — only the way back would be missing).
+function ltDraftPut(){
+  if(!LTX.sid||LTX.sample||LTX.screen==="task"||LTX.saved||!LT_SEC[LTX.dom])return true;
+  const all=ltDrafts(),k=ltDraftId(LTX.sid,LTX.dom),now=Date.now();
+  for(const id in all)if(!(now-(+(all[id]&&all[id].t)||0)<LT_DRAFT_DAYS*864e5))delete all[id];   // old notes go
+  const done=!!LTX.final;
+  if(!done&&!LTX.ans.length&&!LTX.parts.length)delete all[k];
+  else all[k]={level:LTX.level,start:LTX.start||LTX.level,ans:done?[]:LTX.ans.slice(),parts:LTX.parts.map(p=>({level:p.level,correct:p.correct,total:p.total})),final:done?LTX.final:"",ko:typeof LTX.ko==="boolean"?LTX.ko:null,t:now};
+  return ltDraftWrite(all);
+}
 const ltxKo=()=>typeof LTX.ko==="boolean"?LTX.ko:(LTX.level==="A"||LTX.level==="B");
 const ltxSet=()=>(LT_SEC[LTX.dom]||{})[LTX.level]||{items:[]};
 const ltxWho=()=>LTX.sample?{id:LTX_SAMPLE,name:LTX.name}:ltStudent(LTX.sid);
@@ -10126,7 +10241,12 @@ function ltxOpen(sid,dom,level,opt){
   // kept and put back when the task ends (ltxTaskDone).
   const g=id=>document.getElementById(id);
   const draft=task&&ltSame(LTR.sid,s.id)&&LTR.dom===dom?{level:LTR.level,manual:LTR.manual,rub:Object.assign({},LTR.rub),note:g("ltq-note").value,c1:g("ltq-c1").value,c2:g("ltq-c2").value}:null;
-  Object.assign(LTX,{sid:s.id,dom:dom,level:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:null,final:"",saved:false,sample:sample,name:sample?String(opt.name||""):"",draft:draft});
+  Object.assign(LTX,{sid:s.id,dom:dom,level:level,start:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:null,final:"",saved:false,sample:sample,name:sample?String(opt.name||""):"",draft:draft,rehear:false,lost:false});
+  // v168: this skill was left part-way on this device — on from the next question (see ltDraftGet).
+  // What was read aloud is read once more, and a result that could not be stored waits to be stored.
+  const left=!sample&&!task?ltDraftGet(s.id,dom):null;
+  if(left)Object.assign(LTX,{level:left.level,start:left.start,idx:left.final?0:left.ans.length,ans:left.ans,parts:left.parts,ko:left.ko,final:left.final,screen:left.final?"end":"break",rehear:!left.final&&left.ans.length>0});
+  if(!sample&&!task)ltOpenNote(s.id);
   closeModal("mo-lt-rate");
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -10134,6 +10254,7 @@ function ltxOpen(sid,dom,level,opt){
   ltxRender();
 }
 function ltxClose(){
+  if(LTALL.sid==null&&!LTX.sample)ltOpenNote(null);
   LTX.sid=null;LTX.menu=false;LTX.sample=false;
   ltRecGuard();ltAllTick();
   document.getElementById("lt-hint")?.remove();
@@ -10147,7 +10268,7 @@ function ltxBar(){
   for(let i=0;i<n;i++)dots+=`<i class="${LTX.screen==="end"||i<LTX.idx?"lt-done":i===LTX.idx&&LTX.screen==="run"?"lt-now":""}"></i>`;
   return `<div class="lt-tbar"><span class="lt-part">${LT_SEC_EN[LTX.dom]} ${LTX.level}${LTM.rec&&LTX.screen==="task"?`<span class="lt-recdot">REC</span>`:""}</span><span class="lt-dots">${dots}</span>`+
     `<button type="button" class="lt-ko${ko?" on":""}" data-act="xKo" role="switch" aria-checked="${ko}" aria-label="한국어로 보기">한글<i></i></button>`+
-    `<button type="button" class="lt-lock" data-hold="menu" title="${escapeAttr(tx("Teacher's menu: press and hold"))}" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
+    `<button type="button" class="lt-lock" data-hold="menu" title="${escapeAttr(tx("Teacher's menu: press and hold"))}" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}<span class="lt-lockt">${escapeAttr(tx("Teacher|lock"))}</span></button></div>`;
 }
 function ltxHtml(s){
   const K=ltxKo(),e=escapeAttr,lead=LT_SEC_LEAD[LTX.dom]||LT_SEC_LEAD.grammar,set=ltxSet();
@@ -10192,10 +10313,15 @@ function ltxMenuHtml(){
   }
   const script=LT_SEC_ALOUD.has(LTX.dom)&&(LTX.screen==="run"||LTX.screen==="hear")?`<div class="lt-xscript"><b>${e(tx("Read aloud"))}</b>`+
     (set.passage?`<p>${e(set.passage)}</p>`+(LTX.screen==="run"?`<p>${LTX.idx+1}. ${e(it.q)}</p>`:""):`<p>${LTX.idx+1}. ${e(it.say)}${it.q?" — "+e(it.q):""}</p>`)+`</div>`:"";
-  return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${e(tx("Teacher's menu"))}</h2>${script}<div class="lt-stack">`+
+  // v168: leaving keeps the answers (on this device) and the skill goes on from there; a sample
+  // stores nothing, as before. Start again is the way to throw them away.
+  const some=LTX.ans.length>0||LTX.parts.length>0;
+  return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${e(tx("Teacher's menu"))}</h2>${script}`+
+    (LTX.sample?"":`<p class="lt-muted">${e(LTX.lost?tx("This device could not keep the last answer (its storage may be full). Finish this skill before you leave."):tx("The answers so far are kept on this device."))}</p>`)+`<div class="lt-stack">`+
     `<button type="button" class="lt-btn lt-primary" data-act="xMenuClose">${e(tx("Keep going"))}</button>`+
     (LTX.parts.length?`<button type="button" class="lt-btn" data-act="xEndEarly">${e(tx("End here and judge"))}</button>`:"")+
-    `<button type="button" class="lt-btn" data-act="xLeave">${e(tx("Stop and leave (nothing is saved)"))}</button></div></div>`;
+    `<button type="button" class="lt-btn" data-act="xLeave">${e(LTX.sample?tx("Stop and leave (nothing is saved)"):tx("Stop and leave (continue later)"))}</button>`+
+    (!LTX.sample&&some&&LTX.screen!=="end"?`<button type="button" class="lt-btn" data-act="xRestart">${e(tx("Start this skill again"))}</button>`:"")+`</div></div>`;
 }
 function ltxRender(){
   const scr=document.getElementById("lt-screen");if(!scr||scr.hidden||!LTX.sid)return;
@@ -10225,7 +10351,7 @@ function ltxDone(){
   showToast(tx("{name}: rating saved",{name:LT_DOMAIN_NAME[dom]}));
 }
 Object.assign(LT_ACTS,{
-  xStart(){if(!LTX.sid)return;LTX.screen=ltxSet().passage&&LTX.idx===0?"hear":"run";ltxRender();},
+  xStart(){if(!LTX.sid)return;LTX.screen=ltxSet().passage&&(LTX.idx===0||LTX.rehear)?"hear":"run";LTX.rehear=false;ltxRender();},
   xHeard(){if(!LTX.sid)return;LTX.screen="run";ltxRender();},
   xKo(){if(!LTX.sid)return;LTX.ko=!ltxKo();ltxRender();},
   xPick(el){
@@ -10238,16 +10364,23 @@ Object.assign(LT_ACTS,{
     if(!LTX.sid||LTX.screen!=="run"||LTX.sel==null)return;
     const set=ltxSet();
     LTX.ans.push(LTX.sel);LTX.sel=null;
-    if(LTX.ans.length<set.items.length){LTX.idx=LTX.ans.length;ltxRender();return;}
+    if(LTX.ans.length<set.items.length){LTX.idx=LTX.ans.length;LTX.lost=!ltDraftPut();ltxRender();return;}
     LTX.parts.push({level:LTX.level,correct:LTX.ans.filter((k,i)=>k===set.items[i].ans).length,total:set.items.length});
     const st=ltSecStep(LTX.dom,LTX.parts);
-    if(st.next){Object.assign(LTX,{level:st.next,idx:0,ans:[],screen:"break"});ltxRender();return;}
+    if(st.next){Object.assign(LTX,{level:st.next,idx:0,ans:[],screen:"break"});LTX.lost=!ltDraftPut();ltxRender();return;}
     LTX.final=st.level;LTX.screen="end";
-    if(!ltxSave())ltHint(ltSaveFailed());                // the hold on the last screen tries again
+    if(!ltxSave()){ltDraftPut();ltHint(ltSaveFailed());}  // the hold on the last screen tries again — and so does opening the skill again
     ltxRender();
   },
   xMenuClose(){LTX.menu=false;ltxRender();},
   xLeave(){ltxClose();},
+  // Throw the answers away and begin the skill afresh, at the level it was started at.
+  xRestart(){
+    if(!LTX.sid||LTX.sample)return;
+    ltDraftDrop(LTX.sid,LTX.dom);
+    Object.assign(LTX,{level:LTX.start||LTX.level,idx:0,sel:null,ans:[],parts:[],final:"",screen:"intro",menu:false,rehear:false,lost:false});
+    ltxRender();
+  },
   xTaskDone(){ltxTaskDone();},
   xEndEarly(){
     if(!LTX.sid)return;
@@ -15098,6 +15231,7 @@ function makeCollapseBtn(section,total){
 //   • Legacy whole-collection data (pre-v58) is migrated once, the first time a signed-in device
 //     finds a collection empty in the new format. The old data is left in place as a backup.
 let syncUser=null;            // current signed-in user, or null
+let syncTone="";              // "err" while the status line shows an error (see ltSyncNotice)
 let syncUnwatchers=[];        // detach functions for the per-collection listeners
 let syncApplyingRemote=false; // true while remote changes are being written into local state
 const cloudSeen={};           // key → Map id → {u,d}: every record the cloud has told us about
@@ -15118,6 +15252,7 @@ function setSyncStatus(text,tone){
   }
   el.textContent=text;
   el.style.color=tone==="err"?"#dc2626":tone==="ok"?"#16a34a":"var(--txt3)";
+  if(syncTone!==(tone||"")){syncTone=tone||"";if(typeof ltSyncNotice==="function")ltSyncNotice();}
 }
 // Collections whose cloud listener failed (key → message). A failed listener gets no more
 // snapshots, so its error must stay on screen: without this, the next good answer from any OTHER
@@ -16313,6 +16448,7 @@ function initAuthListener(){
     // Now it's known whether this device is signed in. Signed out: local data is the truth, so
     // check straight away. Signed in: onSyncSnapshot checks once every collection has settled.
     feeAuthKnown=true;
+    ltSyncNotice();
     if(!user){checkFeeReminder();currAscKick();}
   });
 }
@@ -16330,11 +16466,12 @@ document.addEventListener("DOMContentLoaded",()=>{
     m.addEventListener("click",e=>{if(downOnBackdrop&&e.target===m)m.classList.remove("show");downOnBackdrop=false;});
   });
   showPage("dashboard");
+  ltOpenAgain();            // v168: closed in the middle of a level test — back to that student's test
   showOnboarding();
   checkBackupReminder();
   // The first check normally comes from the auth callback (signed out) or the end of the first
   // cloud read (signed in). This is only the fallback for when Firebase never loads at all.
-  setTimeout(()=>{if(!feeAuthKnown){feeAuthKnown=true;checkFeeReminder();currAscKick();}},20000);
+  setTimeout(()=>{if(!feeAuthKnown){feeAuthKnown=true;checkFeeReminder();currAscKick();ltSyncNotice();}},20000);
   // The app is often left open for days as an installed PWA, where startup alone would never
   // reach the 5-day repeat. Six hours is far finer than that interval and costs nothing.
   setInterval(checkFeeReminder,6*3600000);
