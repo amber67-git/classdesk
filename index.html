@@ -526,7 +526,7 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 /* v158: Listening and Grammar — the questions block and the last rating in the rating window */
 .ltq-last{font-size:var(--fs-sm);color:var(--txt2);margin:0 0 8px}
 .ltq-last[hidden],.ltq-sec[hidden]{display:none}
-.ltq-sec{border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;margin:0 0 12px;background:var(--surf2)}
+.ltq-sec{border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;margin:8px 0 12px;background:var(--surf2)}
 .ltq-sec .u-hint{margin:2px 0 0}
 .ltq-sec-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
 .ltq-sec-row .seg-btn{min-width:36px;justify-content:center}
@@ -9370,6 +9370,7 @@ function ltxSave(){
 // Out of the student's screen and into the rating window, which shows what was just saved.
 function ltxDone(){
   if(!LTX.sid)return;
+  if(!ltStudent(LTX.sid)){ltxClose();return;}               // deleted on another device: nothing to save to
   if(!ltxSave()){ltHint(ltSaveFailed());return;}
   const sid=LTX.sid,dom=LTX.dom;
   ltxClose();ltOpenRate(sid,dom);
