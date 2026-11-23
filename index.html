@@ -516,6 +516,11 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .cw-lv{font-size:11px;font-weight:700;color:var(--txt2)}
 .cw-chip.on .cw-lv{color:inherit}
 .cw-label{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin:0 2px 0 8px}
+/* v157: the 2027 plan in one press — a single line above the sheet while the app has no 2027 topic */
+.curr-plan{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--amb-l);border:1px solid var(--amb-bdr);color:var(--amb-t);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-base)}
+.curr-plan[hidden]{display:none}
+.curr-plan .btn{margin-left:auto}
+#curr-body tr.cs-flash,#curr-body tr.cs-flash>td{background:var(--amb-l)!important}
 .curr-who-info{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;background:var(--surf2);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-sm)}
 .curr-who-info[hidden]{display:none}
 .curr-who-info .cwi-main{flex:1 1 240px;min-width:0}
@@ -1611,6 +1616,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" onclick="openCurrNote()" title="A month's plan for one student, as a message for the parents" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Monthly note</button><button class="btn" onclick="openCurrImport()" title="Bring in topics from a spreadsheet" data-i18n data-i18n-title><i class="ti ti-file-import"></i> Import</button><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
   </div>
   <div class="pc">
+    <div id="curr-plan" class="curr-plan" hidden><span data-i18n>The 2027 plan is not in the app yet.</span><button type="button" class="btn btn-sm btn-p" id="curr-plan-btn" onclick="currPlanQuick()" data-i18n><i class="ti ti-calendar-event"></i> Load the 2027 plan</button></div>
     <div id="curr-who" class="curr-who" role="group"></div>
     <div id="curr-who-info" class="curr-who-info" hidden></div>
     <div class="card">
@@ -2197,6 +2203,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">Other</p>
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
+          <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only the rows for that level show; press <b>All levels</b> to see everything. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
@@ -2224,6 +2231,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v157 · 2026-11-23</dt><dd><b>Curriculum: the 2027 plan in one press, and the page goes to it.</b> While the app has no topic for 2027, the Curriculum page shows one line above the sheet: <b>The 2027 plan is not in the app yet · Load the 2027 plan</b>. Press the button once and the plan (December 2026 – December 2027) is in; the message that follows has <b>Undo</b>. Because the list runs oldest first, 2027 sits at the far end — so after an import (from this button or from the Import window) the page now <b>moves to the first row that came in</b> and marks it for a moment. The line disappears once 2027 is there. To see only that year at any time, choose <b>2027</b> in the year box at the top.</dd>
           <dt>v156 · 2026-11-22</dt><dd><b>Level test: the 한글 switch now changes the whole screen.</b> With the switch <b>off</b>, the student's screen is in <b>English only</b>: the welcome and its tips, the reading hint, the buttons (Start, I’m ready, Next, I’m not sure, Show the text larger, Continue) and the end screen — not just the line under the question. With it <b>on</b>, everything is as it always was: Korean with English, plus the Korean line under the question. As before, until someone presses it the switch is on at levels A and B (when the start window has it on) and off above — so a test at levels C–E now starts in English only; one press turns the whole screen to Korean. The switch in the start window is now called <b>Korean on the test screen at levels A and B</b>. Texts change in place, so nothing is redrawn and the answer time is kept.<br/><b>Also new: an example at levels A and B.</b> Before the first question of level A or B the student now gets one <b>example</b> that shows how to answer — level A: read a word and tap its picture; level B: read one sentence and answer a question about it. Unlike the test itself, the example says whether the pick was right ("Well done" / "Try once more"), explains the <b>I’m not sure</b> button, and lets the student go on only after the right answer. It does not count: nothing from it is recorded or scored, and the clock for the first real question starts after it. Each level's example is shown once per test (a test that moves from A to B, or drops from C to B, gets B's example at that point), not again when a test is resumed. Levels C–E have none, and the printed sheets are unchanged.<br/><b>Also new: the 2027 plan in one press.</b> Curriculum → <b>Import</b> now has a <b>Load the 2027 plan</b> button. It brings in the plan for December 2026 – December 2027 (57 weeks, each with its rows for levels A·B, C and D·E) without Google Drive or a file: press it, look at the preview, then press Import. Topics you already have are not added twice, so it is safe to press again later; where such a topic has an empty field that the plan fills (a workbook, a book, the grammar), Import fills it in and leaves what you wrote as it is — the preview says how many.</dd>
           <dt>v155 · 2026-11-22</dt><dd><b>Level test: a Korean switch on the test screen.</b> At the top right of the student's screen, left of the lock, there is now a small <b>한글</b> switch. It shows or hides the Korean line under the question, and it can be pressed at any time during the test — by you or by the student. It works at <b>every level</b>: the questions of levels C, D and E now have a Korean line too (the question only — the passage and the choices stay in English, and a word that is being asked about is left in English). Unless someone presses it, everything is as before: the line shows at levels A and B when the start window says so, and not above. Once pressed, the choice holds for the rest of that test at every level, and the result window notes that the Korean help was switched on or off during the test. Pressing it does not redraw the question, so the answer time and the place in the passage are kept.</dd>
           <dt>v154 · 2026-11-21</dt><dd><b>Level test: four sets per level.</b> Every level (A–E) now has <b>four sets</b> instead of two — ten new sets, 64 new questions. Sets 3 and 4 are built like sets 1 and 2 of their level: the same number of questions, the same skills in the same order, passages of the same length. So a student tested every quarter can meet a new passage each time. Nothing changes in how you use it: the test still starts with the set the student met longest ago (or never), a borderline score still brings a second set of the same level, and on paper you tick the new sets under <b>Print sheets</b> and choose them when you enter the answers. The first two sets and every earlier result are untouched. New sets:<br/>A — Letters and Words 3 · 4<br/>B — Lily’s Hat · Soccer in the Rain<br/>C — The Library Book · Two Puddles<br/>D — Why Do Leaves Change Color? · The New Goalkeeper<br/>E — A Trophy for Everyone? · Lost Without the Map</dd>
@@ -2277,7 +2285,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v156</b> · FAQ current as of: <b>2026-11-22</b><br/>
+          Guide written against version: <b>v157</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2418,6 +2426,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <p style="font-weight:700;margin-bottom:4px">기타</p>
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
+          <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨 줄만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
@@ -2445,6 +2454,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v157 · 2026-11-23</dt><dd><b>커리큘럼: 2027 계획을 한 번에 불러오고, 그 자리로 이동합니다.</b> 앱에 2027 주제가 하나도 없는 동안에는 커리큘럼 페이지의 표 위에 한 줄이 나옵니다: <b>2027 계획이 아직 앱에 없습니다 · 2027 계획 불러오기</b>. 버튼을 한 번 누르면 계획(2026년 12월 – 2027년 12월)이 들어오고, 이어서 나오는 안내에 <b>실행 취소</b>가 있습니다. 목록이 오래된 것부터라 2027은 맨 끝에 있습니다 — 그래서 이제 가져오기를 하면(이 버튼이든 가져오기 창이든) 페이지가 <b>새로 들어온 첫 줄로 이동</b>하고 그 줄을 잠깐 표시합니다. 2027이 들어오면 그 한 줄은 사라집니다. 그 해만 보려면 언제든 위쪽 연도 칸에서 <b>2027</b>을 고르세요.</dd>
           <dt>v156 · 2026-11-22</dt><dd><b>레벨테스트: 한글 스위치가 화면 전체를 바꿉니다.</b> 스위치를 <b>끄면</b> 학생 화면이 <b>영어로만</b> 나옵니다: 첫 화면의 인사와 안내, 읽기 안내, 버튼(Start, I’m ready, Next, I’m not sure, Show the text larger, Continue), 끝 화면까지 — 문제 아래 한 줄만이 아닙니다. <b>켜면</b> 전과 같습니다: 한국어와 영어가 함께 나오고 문제 아래에 한국어 도움말이 보입니다. 누르기 전의 상태는 그대로입니다 — 시작 창에서 켜 두었을 때 A·B 레벨에서 켜져 있고 그 위 레벨에서는 꺼져 있습니다. 그래서 C–E 레벨 테스트는 이제 영어 전용 화면으로 시작하며, 한 번 누르면 화면 전체가 한국어로 바뀝니다. 시작 창의 스위치 이름은 <b>A·B 레벨에서 테스트 화면에 한국어 보여 주기</b>로 바뀌었습니다. 글자만 그 자리에서 바뀌므로 화면을 다시 그리지 않고 답한 시간도 그대로입니다.<br/><b>함께 추가: A·B 레벨의 연습 문제.</b> A·B 레벨의 첫 문제 전에 어떻게 푸는지 보여 주는 <b>연습 문제</b>가 하나 나옵니다 — A 레벨: 단어를 읽고 그림 고르기, B 레벨: 한 문장을 읽고 질문에 답하기. 실제 테스트와 달리 연습 문제는 맞았는지 알려 주고("잘했어요" / "다시 한번 골라 볼까요?"), <b>잘 모르겠어요</b> 버튼이 무엇인지 설명하며, 맞는 답을 골라야 다음으로 넘어갑니다. 점수에 들어가지 않습니다: 연습 문제의 답은 기록도 채점도 되지 않고, 첫 실제 문제의 시간은 연습이 끝난 뒤부터 잽니다. 레벨마다 테스트 한 번에 한 번만 나오며(A에서 B로 올라가거나 C에서 B로 내려오면 그때 B의 연습 문제가 나옵니다), 이어서 볼 때는 다시 나오지 않습니다. C–E 레벨에는 없고, 종이 시험지는 그대로입니다.<br/><b>함께 추가: 2027 계획을 버튼 하나로.</b> 커리큘럼 → <b>가져오기</b>에 <b>2027 계획 불러오기</b> 버튼이 생겼습니다. 구글 드라이브나 파일 없이 2026년 12월 – 2027년 12월 계획(57주, 주마다 A·B, C, D·E 레벨 줄)을 가져옵니다: 버튼을 누르고 미리보기를 확인한 뒤 가져오기를 누르세요. 이미 있는 주제는 두 번 들어가지 않으므로 나중에 다시 눌러도 안전합니다. 다만 이미 있는 주제에 비어 있는 칸(교재, 도서, 문법 등)이 있고 계획에 그 내용이 있으면, 가져오기를 누를 때 그 빈칸만 채우고 직접 적어 둔 내용은 그대로 둡니다 — 몇 개인지는 미리보기에 나옵니다.</dd>
           <dt>v155 · 2026-11-22</dt><dd><b>레벨테스트: 테스트 화면의 한글 스위치.</b> 학생 화면 오른쪽 위, 자물쇠 왼쪽에 작은 <b>한글</b> 스위치가 생겼습니다. 문제 아래의 한국어 도움말을 보이거나 숨기며, 테스트 중 언제든 선생님이나 학생이 누를 수 있습니다. <b>모든 레벨</b>에서 됩니다: C·D·E 레벨 문제에도 한국어 도움말이 생겼습니다(문제만 한국어로 보여 주고 지문과 보기는 영어 그대로이며, 뜻을 묻는 단어는 영어로 둡니다). 아무도 누르지 않으면 전과 같습니다: 시작 창에서 켜 두었을 때 A·B 레벨에서만 보이고 그 위 레벨에서는 보이지 않습니다. 한 번 누르면 그 테스트가 끝날 때까지 모든 레벨에 그대로 적용되고, 결과 창에 테스트 중 한국어 도움말을 켰는지 껐는지가 적힙니다. 눌러도 문제를 다시 그리지 않으므로 답한 시간과 지문에서 읽던 자리가 그대로 남습니다.</dd>
           <dt>v154 · 2026-11-21</dt><dd><b>레벨테스트: 레벨마다 세트 4개.</b> 모든 레벨(A–E)의 세트가 두 개에서 <b>네 개</b>로 늘었습니다 — 새 세트 10개, 새 문항 64개. 3·4번 세트는 같은 레벨의 1·2번 세트와 똑같이 만들었습니다: 문항 수, 스킬의 종류와 순서, 지문 길이가 같습니다. 그래서 분기마다 테스트해도 매번 새 지문을 만날 수 있습니다. 쓰는 방법은 그대로입니다: 테스트는 여전히 학생이 가장 오래전에 본(또는 본 적 없는) 세트로 시작하고, 점수가 애매하면 같은 레벨의 다른 세트가 한 번 더 나오며, 종이 시험은 <b>시험지 인쇄</b>에서 새 세트를 체크하고 답을 입력할 때 고르면 됩니다. 1·2번 세트와 지금까지의 결과는 바뀌지 않았습니다. 새 세트:<br/>A — Letters and Words 3 · 4<br/>B — Lily’s Hat · Soccer in the Rain<br/>C — The Library Book · Two Puddles<br/>D — Why Do Leaves Change Color? · The New Goalkeeper<br/>E — A Trophy for Everyone? · Lost Without the Map</dd>
@@ -2497,7 +2507,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v156</b> · 자주 묻는 질문 기준일: <b>2026-11-22</b><br/>
+          설명서 기준 버전: <b>v157</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3676,6 +3686,8 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v157: the 2027 plan in one press
+  "The 2027 plan is not in the app yet.":"2027 계획이 아직 앱에 없습니다.","The 2027 plan is already in the app.":"2027 계획은 이미 앱에 있습니다.",
   // ── v156: the 2027 plan from the Import window
   "Load the 2027 plan":"2027 계획 불러오기","2027 plan":"2027 계획",
   "Could not load the plan — check the connection and try again.":"계획을 불러오지 못했습니다 — 인터넷 연결을 확인하고 다시 해 보세요.",
@@ -4292,7 +4304,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v156";
+const APP_VERSION="v157";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -9570,6 +9582,7 @@ function currText(v){
 }
 function renderCurriculum(){
   currYearsAscOnce();
+  currPlanBar();
   applyCustomLabelsToHeader("curriculum");
   applyCurrColWidths();
   // Year filter: every year that has topics, newest first, plus "No year" for topics without one.
@@ -10962,13 +10975,47 @@ function currImportPreview(){
 // v156: the plan for 2027 (December 2026 – December 2027) ships with the app as a file of its own,
 // plans/2027.csv — the rows of the plan sheet as they are. It is read only when this button is
 // pressed and then goes the same way as a chosen file: preview first, nothing changes until Import.
+// v157: the same plan in one press, from the Curriculum page itself. The line with the button shows
+// only while the app has no topic for 2027. Pressing it fetches the plan and imports it straight
+// away — the Undo in the message that follows takes it back — then brings the first new row into
+// view (the list runs oldest first, so 2027 is at the far end).
+const CURR_PLAN_YEAR=2027;
+function currPlanBar(){
+  const el=document.getElementById("curr-plan");if(el)el.hidden=curriculum.some(c=>+c.year===CURR_PLAN_YEAR);
+}
+async function currPlanFetch(){
+  const res=await fetch("plans/2027.csv",{cache:"no-cache"});
+  if(!res.ok)throw new Error("HTTP "+res.status);
+  return res.text();
+}
+let _currPlanBusy=false;
+async function currPlanQuick(){
+  if(_currPlanBusy)return;
+  _currPlanBusy=true;
+  const btn=document.getElementById("curr-plan-btn");if(btn)btn.disabled=true;
+  try{
+    let text;
+    try{text=await currPlanFetch();}
+    catch(e){console.error("Plan not loaded",e);showToast(tx("Could not load the plan — check the connection and try again."));return;}
+    const r=currParseInput(text);
+    const p=r.items.length?currPlan(r.items):null;
+    if(!p){showToast(tx("Could not load the plan — check the connection and try again."));return;}
+    if(!(p.add.length||p.fill.length)){showToast(tx("The 2027 plan is already in the app."));currPlanBar();return;}
+    currImportPlan=p;currImportApply();
+  }finally{_currPlanBusy=false;if(btn)btn.disabled=false;}
+}
+// Bring a row into view and mark it for a moment. Rows hidden by a filter are simply not there.
+function currJumpTo(id){
+  const tr=id&&document.querySelector(`#curr-body tr[data-id="${id}"]`);if(!tr)return false;
+  tr.scrollIntoView({block:"center"});
+  tr.classList.add("cs-flash");setTimeout(()=>tr.classList.remove("cs-flash"),2600);
+  return true;
+}
 async function currLoadPlan(){
   const btn=document.getElementById("ci-plan");if(btn)btn.disabled=true;
   const t=document.getElementById("ci-text"),was=t?t.value:"";
   try{
-    const res=await fetch("plans/2027.csv",{cache:"no-cache"});
-    if(!res.ok)throw new Error("HTTP "+res.status);
-    const text=await res.text();
+    const text=await currPlanFetch();
     // Something was pasted or typed while the file was on its way: that is the newer wish — keep it.
     if(!t||t.value!==was)return;
     t.value=text;
@@ -11006,12 +11053,16 @@ function currImportShow(error,items){
 function currImportApply(){
   const p=currImportPlan;if(!p||!(p.add.length||p.fill.length))return;
   const snapshot=JSON.parse(JSON.stringify(curriculum));
-  p.add.forEach(it=>{const {ko,en,...rec}=it;curriculum.push({id:uid(),...rec});});
+  const touched=new Set();
+  p.add.forEach(it=>{const {ko,en,...rec}=it;const n={id:uid(),...rec};curriculum.push(n);touched.add(n.id);});
+  if(!touched.size)p.fill.forEach(({ex})=>touched.add(ex.id));
   p.fill.forEach(({ex,changes})=>Object.assign(ex,changes));
   if(save()===false)return;
   closeModal("mo-currimport");
   const yf=document.getElementById("curr-yf");if(yf)yf.value="";
   renderCurriculum();
+  // The list runs oldest first, so what was just imported may be far down: show where it starts.
+  const first=(CS.vis||[]).find(c=>touched.has(c.id));if(first)currJumpTo(first.id);
   showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:p.fill.length}),()=>{
     curriculum.splice(0,curriculum.length,...snapshot);   // in place: the sync layer holds this array
     save();renderCurriculum();
