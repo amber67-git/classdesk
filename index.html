@@ -12681,7 +12681,7 @@ function currRowsToItems(rows){
     const key=year+"|"+month;weeks[key]=(weeks[key]||0)+1;
     const wk=parseInt(get(row,"week"),10);
     main={year,month,week:wk>0?wk:(month?weeks[key]:""),cat,topic,ko,en,level,...rest};
-    // v169: a reminder the sheet marks with ⚠ ("⚠ 준비물: …") arrives with the red fill, so it stands out
+    // v171: a reminder the sheet marks with ⚠ ("⚠ 준비물: …") arrives with the red fill, so it stands out
     const mark={};["wb","books","acts","note"].forEach(k=>{if(/^⚠/.test(rest[k]||""))mark[k]="r";});
     if(Object.keys(mark).length)main.fill=mark;
     items.push(main);
@@ -12715,7 +12715,7 @@ const CURR_FILL=["year","cat","wb","books","acts","note",...CURR_LV_FIELDS];
 // (with a week of its own) but in another week than the plan now gives it is listed in `move`, so a change of weeks in the
 // plan (the level tests went from the first to the second week) can follow into a plan that was
 // imported earlier. A file or a paste of the teacher's own never moves anything.
-// v169, opt.base — the shipped plan as it was one revision ago (plans/2027-rev4.csv), read next to
+// v171, opt.base — the shipped plan as it was one revision ago (plans/2027-rev4.csv), read next to
 // the plan as it is now. With the two, a plan that was imported earlier can follow what the plan
 // itself changed, cell by cell, and nothing else: a cell follows only while it still reads as the
 // plan wrote it (`edit`); a topic the plan moved to another month or year moves with all it holds
@@ -12880,7 +12880,7 @@ function currImportPreview(){
 // v159, revision 3: the full level test is in June and December; March and September have a short
 // speaking and writing check instead (three topics renamed — see CURR_PLAN_WAS).
 // v163, revision 4: Grammar is set out by level (see `gram` in currPlan).
-// v169, revision 5: a two-week project in February, May, August and November; At the Supermarket in
+// v171, revision 5: a two-week project in February, May, August and November; At the Supermarket in
 // September; Forces in July; a debate line for levels D·E; eight topics wait under 2028. The plan
 // as it was before (CURR_PLAN_BASE) is read with it, so only what the plan changed is changed
 // (see opt.base in currPlan).
@@ -12946,7 +12946,7 @@ async function currPlanUpdate(){
     if(!p){showToast(tx("Could not load the plan — check the connection and try again."));return;}
     const snapshot=JSON.parse(JSON.stringify(curriculum)),rev=currPlanRevKeep(),places=currPlacesKeep(new Set([...p.rename,...p.gram,...p.edit,...p.shift].map(x=>x.ex)));
     const touched=currPlanTouched(p);
-    // v169: topics that are new in the plan come in; cells and months the plan changed follow.
+    // v171: topics that are new in the plan come in; cells and months the plan changed follow.
     // (A topic of the old plan that is not in the app any more — deleted here — is not brought back.)
     const added=[];
     (p.holds?p.fresh:[]).forEach(it=>{const {ko,en,...rec}=it;const n={id:uid(),...rec};curriculum.push(n);touched.add(n);added.push(n);});
