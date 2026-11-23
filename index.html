@@ -8538,9 +8538,12 @@ let ltOpenSid=null;       // the student whose history is unfolded
 // v168 — a test taken on a device that is not signed in (or whose sync has stopped) is on that
 // device only, and nothing on the page said so: the teacher looked for it on another device. One
 // line above the list says it. Not for the built-in samples, and not before the sign-in state is known.
+// The samples are judged as the data is NOW (localIsSample() is what the app started on and stays
+// fixed for the sync): a student added, or a test taken, in this sitting makes it real data at once.
+const ltOnSamples=()=>JSON.stringify(students)===JSON.stringify(DS)&&lessons.length===0;
 function ltSyncNotice(){
   const el=document.getElementById("lt-nosync");if(!el)return;
-  const e=escapeAttr,out=feeAuthKnown&&!syncUser&&!localIsSample(),err=!!syncUser&&syncTone==="err";
+  const e=escapeAttr,out=feeAuthKnown&&!syncUser&&!ltOnSamples(),err=!!syncUser&&syncTone==="err";
   el.hidden=!(out||err);
   el.innerHTML=el.hidden?"":`<span>${e(out?tx("This device is not signed in. A test taken here stays on this device only — sign in under Settings → Account to keep it with your other devices.")
     :tx("Sync is not working on this device right now. What you do here stays on this device until it works again — Settings → Account shows why."))}</span>`+
@@ -9580,9 +9583,10 @@ function ltAllReading(s){
 function ltAllState(s,k){
   if(k==="reading"){const r=ltAllReading(s);if(r)return r;}
   else{
-    const r=ltRatings(s,k).filter(x=>x.date===td()).pop();if(r)return {st:"done",level:r.level};
-    // v168: left part-way on this device — it comes first, like an unfinished reading test, unless skipped
+    // v168: left part-way on this device — it comes first, like an unfinished reading test, unless
+    // skipped. Before today's rating too: a skill that was rated and then begun again is in progress.
     const left=LT_SEC[k]&&LTALL.mode!=="paper"?ltDraftGet(s.id,k):null;if(left&&!LTALL.skip.has(k))return {st:"run",left};
+    const r=ltRatings(s,k).filter(x=>x.date===td()).pop();if(r)return {st:"done",level:r.level};
   }
   return {st:LTALL.skip.has(k)?"skip":"todo"};
 }
@@ -10224,7 +10228,9 @@ function ltDraftPut(){
   if(!LTX.sid||LTX.sample||LTX.screen==="task"||LTX.saved||!LT_SEC[LTX.dom])return true;
   const all=ltDrafts(),k=ltDraftId(LTX.sid,LTX.dom),now=Date.now();
   for(const id in all)if(!(now-(+(all[id]&&all[id].t)||0)<LT_DRAFT_DAYS*864e5))delete all[id];   // old notes go
-  const done=!!LTX.final;
+  // "Answered, the result waits to be stored" is only true on the last screen. After End here and
+  // judge could not be stored, LTX.final is set while the questions go on — those answers are kept.
+  const done=LTX.screen==="end"&&!!LTX.final;
   if(!done&&!LTX.ans.length&&!LTX.parts.length)delete all[k];
   else all[k]={level:LTX.level,start:LTX.start||LTX.level,ans:done?[]:LTX.ans.slice(),parts:LTX.parts.map(p=>({level:p.level,correct:p.correct,total:p.total})),final:done?LTX.final:"",ko:typeof LTX.ko==="boolean"?LTX.ko:null,t:now};
   return ltDraftWrite(all);
