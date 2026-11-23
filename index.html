@@ -520,6 +520,17 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .curr-plan{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--amb-l);border:1px solid var(--amb-bdr);color:var(--amb-t);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-base)}
 .curr-plan[hidden]{display:none}
 .curr-plan .btn{margin-left:auto}
+/* v158: the same line when the shipped plan has changed — two buttons, kept together at the right */
+.curr-plan-btns{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px}
+.curr-plan-btns .btn{margin-left:0}
+/* v158: Listening and Grammar — the questions block and the last rating in the rating window */
+.ltq-last{font-size:var(--fs-sm);color:var(--txt2);margin:0 0 8px}
+.ltq-last[hidden],.ltq-sec[hidden]{display:none}
+.ltq-sec{border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;margin:0 0 12px;background:var(--surf2)}
+.ltq-sec .u-hint{margin:2px 0 0}
+.ltq-sec-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.ltq-sec-row .seg-btn{min-width:36px;justify-content:center}
+.ltq-or{margin:0 0 6px}
 #curr-body tr.cs-flash,#curr-body tr.cs-flash>td{background:var(--amb-l)!important}
 .curr-who-info{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;background:var(--surf2);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-sm)}
 .curr-who-info[hidden]{display:none}
@@ -643,6 +654,9 @@ body.lt-testing{overflow:hidden}
 /* v156: the example before the first question of levels A and B */
 #lt-screen .lt-extag{align-self:flex-start;font:700 13px var(--font);color:var(--lt-amber-ink);background:var(--lt-amber-soft);border-radius:999px;padding:3px 10px}
 #lt-screen .lt-exlead{font-size:14px;color:var(--lt-muted);margin:0}
+#lt-screen .lt-xscript{border:1px solid var(--lt-line);border-radius:10px;padding:10px 12px;margin:0 0 12px;font:16px/1.6 var(--lt-read)}
+#lt-screen .lt-xscript b{display:block;font:600 12px var(--font);color:var(--lt-muted);margin-bottom:2px}
+#lt-screen .lt-xscript p{margin:0 0 6px}#lt-screen .lt-xscript p:last-child{margin-bottom:0}
 #lt-screen .lt-exmsg{min-height:44px;margin:0;font-size:15px;font-weight:600;color:var(--lt-brand)}
 #lt-screen .lt-exmsg.lt-retry{color:var(--lt-amber-ink)}
 @media(prefers-reduced-motion:reduce){#lt-screen .lt-ko i,#lt-screen .lt-ko i::after{transition:none}}
@@ -1616,7 +1630,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" onclick="openCurrNote()" title="A month's plan for one student, as a message for the parents" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Monthly note</button><button class="btn" onclick="openCurrImport()" title="Bring in topics from a spreadsheet" data-i18n data-i18n-title><i class="ti ti-file-import"></i> Import</button><button class="btn btn-p" onclick="openCurrModal()" data-i18n><i class="ti ti-plus"></i> Add topic</button></div>
   </div>
   <div class="pc">
-    <div id="curr-plan" class="curr-plan" hidden><span data-i18n>The 2027 plan is not in the app yet.</span><button type="button" class="btn btn-sm btn-p" id="curr-plan-btn" onclick="currPlanQuick()" data-i18n><i class="ti ti-calendar-event"></i> Load the 2027 plan</button></div>
+    <div id="curr-plan" class="curr-plan" hidden></div>
     <div id="curr-who" class="curr-who" role="group"></div>
     <div id="curr-who-info" class="curr-who-info" hidden></div>
     <div class="card">
@@ -2086,7 +2100,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Reading</dt><dd>Books read per student, drawn from the lesson records — AR trend and a printable parent report.</dd>
           <dt>Payments</dt><dd>Tuition management — a payment calendar and a monthly summary per student, the payment-request message, other income that is not a lesson fee, and the unpaid-fee reminder.</dd>
           <dt>Reports</dt><dd>Monthly figures per student: lessons held, hours, fees, cancellations counted against the timetable, plus a Learning report and homework checking.</dd>
-          <dt>Level test</dt><dd>The reading level test your students take on this screen: start it from a student's row, look at the result (level A–E, stage, skills) and confirm the class level.</dd>
+          <dt>Level test</dt><dd>The reading level test your students take on this screen: start it from a student's row, look at the result (level A–E, stage, skills) and confirm the class level. In <b>Details</b> you rate the other skills — Speaking, Writing, Listening, Grammar, Phonics and Vocabulary; Listening and Grammar have their own short questions.</dd>
           <dt>Curriculum</dt><dd>Your lesson plan by year, month and week: topic, category, workbook, writing task, books, activities, grammar, notes, and — for classes taught at several levels — level and speaking. Filter by year and month, or search. The buttons above the table — <b>All levels</b>, <b>A–E</b> and each student's name — show one level, or what one student does (their level, and only the columns of the lesson parts ticked on them); press the picked one again to go back to everything. Topics run by date, oldest first. <b>Monthly note</b> turns a month's plan for one student into a message for the parents. <b>Import</b> brings in a whole plan from a spreadsheet (see the FAQ). On a tablet or computer the table works like Google Sheets: click a cell and type, and it saves at once (see the FAQ "Editing the curriculum like a spreadsheet"). On a phone, tap ✎ to edit a topic.</dd>
           <dt>Workbooks</dt><dd>Workbook management — covers, progress, per-student assignment.</dd>
           <dt>Books</dt><dd>Your English book library — see "Books in depth" below. The core page of this app.</dd>
@@ -2204,6 +2218,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>Dates and weekdays differ from my computer's clock</dt><dd>ClassDesk counts "today" in the workspace time zone — Korea (KST) unless you change it in Settings → Templates → <b>Workspace</b>. Opened abroad or on a computer set to another zone, class days, the payment months and Google Calendar times still follow that zone.</dd>
           <dt>I imported the 2027 plan but I can't see it on the Curriculum page.</dt><dd>The list runs oldest first, so 2027 comes after every earlier year — at the far end. Choose <b>2027</b> in the year box at the top of the page to see only that year. If a student or a level is picked above the sheet, only the rows for that level show; press <b>All levels</b> to see everything. If the line "The 2027 plan is not in the app yet" is still there, the plan has not been brought in: press <b>Load the 2027 plan</b> on that line.</dd>
+          <dt>How do I check Listening and Grammar, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b> or <b>Grammar</b> → <b>Start the questions</b>. For Listening you read the script aloud (print it with <b>Script and answers</b>, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself.</dd>
           <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
@@ -2231,6 +2246,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v158 · 2026-11-23</dt><dd><b>Level test: Listening and Grammar.</b> A student's <b>Details</b> has two more skills to rate, <b>Listening</b> and <b>Grammar</b>, and each comes with its own short questions. Press the skill, choose the level to start at and press <b>Start the questions</b>: they open on the student's screen. <b>Listening</b> has 5 questions a level — you read the script aloud and the student taps the answer (pictures only at level A; from level B the question is on the screen as well; at levels C–E you read a short text first, then the questions). <b>Script and answers</b> prints everything you read, with the answers; with one device, hold the lock on the student's screen and the teacher's menu shows what to read now. <b>Grammar</b> has 8 questions a level: the student picks the words that fit the blank. 4 or more right out of 5 (7 out of 8) goes on to the level above, 2 or fewer (4 or fewer) to the level below, and the level it ends on is saved as the rating together with the scores — it shows in Details, in the parent report and in the ratings CSV. <b>Paper sheet</b> prints the questions of one level for a student to circle; mark it with the key and pick the level yourself. Picking a level by hand, without the questions, works as before. <b>Curriculum: level tests in the second week.</b> In the 2027 plan the level tests of March, June, September and December moved from the first week to the second. If the plan is already in your app, the Curriculum page shows one line — <b>The 2027 plan has changed</b> — with <b>Update my plan</b> (moves those rows to the plan's weeks and adds nothing; Undo takes it back) and <b>Keep mine</b>.</dd>
           <dt>v157 · 2026-11-23</dt><dd><b>Curriculum: the 2027 plan in one press, and the page goes to it.</b> While the app has no topic for 2027, the Curriculum page shows one line above the sheet: <b>The 2027 plan is not in the app yet · Load the 2027 plan</b>. Press the button once and the plan (December 2026 – December 2027) is in; the message that follows has <b>Undo</b>. Because the list runs oldest first, 2027 sits at the far end — so after an import (from this button or from the Import window) the page now <b>moves to the first row that came in</b> and marks it for a moment. The line disappears once 2027 is there. To see only that year at any time, choose <b>2027</b> in the year box at the top.</dd>
           <dt>v156 · 2026-11-22</dt><dd><b>Level test: the 한글 switch now changes the whole screen.</b> With the switch <b>off</b>, the student's screen is in <b>English only</b>: the welcome and its tips, the reading hint, the buttons (Start, I’m ready, Next, I’m not sure, Show the text larger, Continue) and the end screen — not just the line under the question. With it <b>on</b>, everything is as it always was: Korean with English, plus the Korean line under the question. As before, until someone presses it the switch is on at levels A and B (when the start window has it on) and off above — so a test at levels C–E now starts in English only; one press turns the whole screen to Korean. The switch in the start window is now called <b>Korean on the test screen at levels A and B</b>. Texts change in place, so nothing is redrawn and the answer time is kept.<br/><b>Also new: an example at levels A and B.</b> Before the first question of level A or B the student now gets one <b>example</b> that shows how to answer — level A: read a word and tap its picture; level B: read one sentence and answer a question about it. Unlike the test itself, the example says whether the pick was right ("Well done" / "Try once more"), explains the <b>I’m not sure</b> button, and lets the student go on only after the right answer. It does not count: nothing from it is recorded or scored, and the clock for the first real question starts after it. Each level's example is shown once per test (a test that moves from A to B, or drops from C to B, gets B's example at that point), not again when a test is resumed. Levels C–E have none, and the printed sheets are unchanged.<br/><b>Also new: the 2027 plan in one press.</b> Curriculum → <b>Import</b> now has a <b>Load the 2027 plan</b> button. It brings in the plan for December 2026 – December 2027 (57 weeks, each with its rows for levels A·B, C and D·E) without Google Drive or a file: press it, look at the preview, then press Import. Topics you already have are not added twice, so it is safe to press again later; where such a topic has an empty field that the plan fills (a workbook, a book, the grammar), Import fills it in and leaves what you wrote as it is — the preview says how many.</dd>
           <dt>v155 · 2026-11-22</dt><dd><b>Level test: a Korean switch on the test screen.</b> At the top right of the student's screen, left of the lock, there is now a small <b>한글</b> switch. It shows or hides the Korean line under the question, and it can be pressed at any time during the test — by you or by the student. It works at <b>every level</b>: the questions of levels C, D and E now have a Korean line too (the question only — the passage and the choices stay in English, and a word that is being asked about is left in English). Unless someone presses it, everything is as before: the line shows at levels A and B when the start window says so, and not above. Once pressed, the choice holds for the rest of that test at every level, and the result window notes that the Korean help was switched on or off during the test. Pressing it does not redraw the question, so the answer time and the place in the passage are kept.</dd>
@@ -2285,7 +2301,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v157</b> · FAQ current as of: <b>2026-11-23</b><br/>
+          Guide written against version: <b>v158</b> · FAQ current as of: <b>2026-11-23</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2309,7 +2325,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>독서</dt><dd>수업 기록에서 모은 학생별 읽은 책 — AR 추이와 인쇄용 학부모 보고서.</dd>
           <dt>수업료</dt><dd>수업료 관리 — 수납 달력과 학생별 월 요약, 수업료 안내 메시지, 수업료가 아닌 기타 수입, 미납 알림.</dd>
           <dt>보고서</dt><dd>학생별 월간 수치: 진행한 수업, 시간, 수업료, 시간표 대비 취소 횟수, 그리고 학습 보고서와 숙제 확인.</dd>
-          <dt>레벨테스트</dt><dd>학생이 이 화면에서 푸는 읽기 레벨테스트: 학생 줄에서 시작하고, 결과(레벨 A–E, 단계, 스킬)를 본 뒤 수업 레벨을 확정합니다.</dd>
+          <dt>레벨테스트</dt><dd>학생이 이 화면에서 푸는 읽기 레벨테스트: 학생 줄에서 시작하고, 결과(레벨 A–E, 단계, 스킬)를 본 뒤 수업 레벨을 확정합니다. <b>상세</b>에서는 나머지 영역 — 말하기, 쓰기, 듣기, 문법, 파닉스, 어휘 — 을 평가합니다. 듣기와 문법은 짧은 문항이 따로 있습니다.</dd>
           <dt>커리큘럼</dt><dd>연도·월·주별 수업 계획: 주제, 카테고리, 워크북, 글쓰기 과제, 책, 활동, 문법, 메모, 그리고 여러 레벨을 가르칠 때 쓰는 레벨과 말하기. 연도와 월로 거르거나 검색할 수 있습니다. 표 위의 버튼(<b>모든 레벨</b>, <b>A–E</b>, 학생 이름)을 누르면 한 레벨이나 한 학생이 하는 내용(그 학생의 레벨과, 학생에게 체크된 수업 부분의 열)만 볼 수 있고, 고른 버튼을 다시 누르면 전체로 돌아갑니다. 주제는 날짜 순서로, 오래된 것부터 나옵니다. <b>월간 안내</b>는 한 학생의 한 달 계획을 학부모께 보낼 메시지로 만들어 줍니다. <b>가져오기</b>로 스프레드시트의 계획 전체를 한 번에 불러옵니다(자주 묻는 질문 참고). 태블릿이나 컴퓨터에서는 표가 Google 스프레드시트처럼 동작합니다. 셀을 누르고 입력하면 바로 저장됩니다(자주 묻는 질문 "커리큘럼을 스프레드시트처럼 고치기" 참고). 휴대폰에서는 ✎를 눌러 고칩니다.</dd>
           <dt>교재</dt><dd>교재 관리 — 표지, 진도, 학생별 배정.</dd>
           <dt>도서</dt><dd>영어 도서 목록 — 아래 "도서 자세히 보기" 참고. 이 앱의 핵심 화면입니다.</dd>
@@ -2427,6 +2443,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <dl>
           <dt>날짜와 요일이 컴퓨터 시계와 달라요</dt><dd>ClassDesk는 "오늘"을 작업 공간 시간대로 셉니다 — 설정 → 템플릿 → <b>작업 공간</b>에서 바꾸지 않았다면 한국 시간(KST)입니다. 해외에서 열거나 다른 시간대로 맞춘 컴퓨터에서도 수업 요일, 수업료 달, Google 캘린더 시간은 그 시간대를 따릅니다.</dd>
           <dt>2027 계획을 가져왔는데 커리큘럼 페이지에 안 보여요.</dt><dd>목록이 오래된 것부터라 2027은 앞선 해들 뒤, 맨 끝에 있습니다. 페이지 위쪽 연도 칸에서 <b>2027</b>을 고르면 그 해만 보입니다. 표 위에서 학생이나 레벨이 선택되어 있으면 그 레벨 줄만 보이니 <b>모든 레벨</b>을 눌러 보세요. "2027 계획이 아직 앱에 없습니다" 줄이 아직 보인다면 계획이 들어오지 않은 것입니다: 그 줄의 <b>2027 계획 불러오기</b>를 누르세요.</dd>
+          <dt>듣기와 문법은 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>상세</b> → <b>듣기</b> 또는 <b>문법</b> → <b>문항 시작</b>. 듣기는 선생님이 대본을 읽어 주고(<b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
@@ -2454,6 +2471,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v158 · 2026-11-23</dt><dd><b>레벨테스트: 듣기와 문법.</b> 학생의 <b>상세</b>에 평가할 영역이 두 개 늘었습니다 — <b>듣기</b>와 <b>문법</b>. 둘 다 짧은 문항이 함께 들어 있습니다. 영역을 누르고 시작 레벨을 고른 뒤 <b>문항 시작</b>을 누르면 학생 화면에 문항이 열립니다. <b>듣기</b>는 레벨마다 5문항입니다 — 선생님이 대본을 읽어 주고 학생이 답을 누릅니다(레벨 A는 그림만, 레벨 B부터는 질문도 화면에 나오고, 레벨 C~E는 짧은 글을 먼저 읽어 준 뒤 질문을 읽어 줍니다). <b>대본과 정답</b>을 누르면 읽어 줄 내용과 정답이 모두 인쇄용으로 열립니다. 기기가 한 대뿐이면 학생 화면의 자물쇠를 길게 누르세요. 선생님 메뉴에 지금 읽어 줄 내용이 나옵니다. <b>문법</b>은 레벨마다 8문항이고, 빈칸에 알맞은 말을 고릅니다. 5문항 중 4개 이상(8문항 중 7개 이상) 맞으면 위 레벨로, 2개 이하(4개 이하)면 아래 레벨로 넘어가며, 끝난 레벨이 점수와 함께 평가로 저장됩니다 — 상세, 학부모 리포트, 평가 CSV에 나옵니다. <b>종이 시험지</b>는 한 레벨의 문항을 학생이 동그라미 칠 수 있게 인쇄합니다. 정답지로 채점한 뒤 레벨을 직접 고르면 됩니다. 문항 없이 레벨을 직접 고르는 것도 전과 같이 됩니다. <b>커리큘럼: 레벨테스트를 둘째 주로.</b> 2027 계획에서 3·6·9·12월의 레벨테스트가 첫째 주에서 둘째 주로 옮겨졌습니다. 계획을 이미 가져오셨다면 커리큘럼 페이지에 <b>2027 계획이 바뀌었습니다</b> 한 줄이 나옵니다 — <b>내 계획에 반영</b>(해당 행을 계획의 주로 옮기고 새로 추가하지는 않습니다. 되돌리기로 취소할 수 있습니다)과 <b>그대로 두기</b> 중에서 고르세요.</dd>
           <dt>v157 · 2026-11-23</dt><dd><b>커리큘럼: 2027 계획을 한 번에 불러오고, 그 자리로 이동합니다.</b> 앱에 2027 주제가 하나도 없는 동안에는 커리큘럼 페이지의 표 위에 한 줄이 나옵니다: <b>2027 계획이 아직 앱에 없습니다 · 2027 계획 불러오기</b>. 버튼을 한 번 누르면 계획(2026년 12월 – 2027년 12월)이 들어오고, 이어서 나오는 안내에 <b>실행 취소</b>가 있습니다. 목록이 오래된 것부터라 2027은 맨 끝에 있습니다 — 그래서 이제 가져오기를 하면(이 버튼이든 가져오기 창이든) 페이지가 <b>새로 들어온 첫 줄로 이동</b>하고 그 줄을 잠깐 표시합니다. 2027이 들어오면 그 한 줄은 사라집니다. 그 해만 보려면 언제든 위쪽 연도 칸에서 <b>2027</b>을 고르세요.</dd>
           <dt>v156 · 2026-11-22</dt><dd><b>레벨테스트: 한글 스위치가 화면 전체를 바꿉니다.</b> 스위치를 <b>끄면</b> 학생 화면이 <b>영어로만</b> 나옵니다: 첫 화면의 인사와 안내, 읽기 안내, 버튼(Start, I’m ready, Next, I’m not sure, Show the text larger, Continue), 끝 화면까지 — 문제 아래 한 줄만이 아닙니다. <b>켜면</b> 전과 같습니다: 한국어와 영어가 함께 나오고 문제 아래에 한국어 도움말이 보입니다. 누르기 전의 상태는 그대로입니다 — 시작 창에서 켜 두었을 때 A·B 레벨에서 켜져 있고 그 위 레벨에서는 꺼져 있습니다. 그래서 C–E 레벨 테스트는 이제 영어 전용 화면으로 시작하며, 한 번 누르면 화면 전체가 한국어로 바뀝니다. 시작 창의 스위치 이름은 <b>A·B 레벨에서 테스트 화면에 한국어 보여 주기</b>로 바뀌었습니다. 글자만 그 자리에서 바뀌므로 화면을 다시 그리지 않고 답한 시간도 그대로입니다.<br/><b>함께 추가: A·B 레벨의 연습 문제.</b> A·B 레벨의 첫 문제 전에 어떻게 푸는지 보여 주는 <b>연습 문제</b>가 하나 나옵니다 — A 레벨: 단어를 읽고 그림 고르기, B 레벨: 한 문장을 읽고 질문에 답하기. 실제 테스트와 달리 연습 문제는 맞았는지 알려 주고("잘했어요" / "다시 한번 골라 볼까요?"), <b>잘 모르겠어요</b> 버튼이 무엇인지 설명하며, 맞는 답을 골라야 다음으로 넘어갑니다. 점수에 들어가지 않습니다: 연습 문제의 답은 기록도 채점도 되지 않고, 첫 실제 문제의 시간은 연습이 끝난 뒤부터 잽니다. 레벨마다 테스트 한 번에 한 번만 나오며(A에서 B로 올라가거나 C에서 B로 내려오면 그때 B의 연습 문제가 나옵니다), 이어서 볼 때는 다시 나오지 않습니다. C–E 레벨에는 없고, 종이 시험지는 그대로입니다.<br/><b>함께 추가: 2027 계획을 버튼 하나로.</b> 커리큘럼 → <b>가져오기</b>에 <b>2027 계획 불러오기</b> 버튼이 생겼습니다. 구글 드라이브나 파일 없이 2026년 12월 – 2027년 12월 계획(57주, 주마다 A·B, C, D·E 레벨 줄)을 가져옵니다: 버튼을 누르고 미리보기를 확인한 뒤 가져오기를 누르세요. 이미 있는 주제는 두 번 들어가지 않으므로 나중에 다시 눌러도 안전합니다. 다만 이미 있는 주제에 비어 있는 칸(교재, 도서, 문법 등)이 있고 계획에 그 내용이 있으면, 가져오기를 누를 때 그 빈칸만 채우고 직접 적어 둔 내용은 그대로 둡니다 — 몇 개인지는 미리보기에 나옵니다.</dd>
           <dt>v155 · 2026-11-22</dt><dd><b>레벨테스트: 테스트 화면의 한글 스위치.</b> 학생 화면 오른쪽 위, 자물쇠 왼쪽에 작은 <b>한글</b> 스위치가 생겼습니다. 문제 아래의 한국어 도움말을 보이거나 숨기며, 테스트 중 언제든 선생님이나 학생이 누를 수 있습니다. <b>모든 레벨</b>에서 됩니다: C·D·E 레벨 문제에도 한국어 도움말이 생겼습니다(문제만 한국어로 보여 주고 지문과 보기는 영어 그대로이며, 뜻을 묻는 단어는 영어로 둡니다). 아무도 누르지 않으면 전과 같습니다: 시작 창에서 켜 두었을 때 A·B 레벨에서만 보이고 그 위 레벨에서는 보이지 않습니다. 한 번 누르면 그 테스트가 끝날 때까지 모든 레벨에 그대로 적용되고, 결과 창에 테스트 중 한국어 도움말을 켰는지 껐는지가 적힙니다. 눌러도 문제를 다시 그리지 않으므로 답한 시간과 지문에서 읽던 자리가 그대로 남습니다.</dd>
@@ -2507,7 +2525,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v157</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
+          설명서 기준 버전: <b>v158</b> · 자주 묻는 질문 기준일: <b>2026-11-23</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3686,6 +3704,17 @@ const I18N={ko:{
   "Set for an English reading class — everything is on, Curriculum columns as at the start":"영어 리딩 수업용으로 설정했습니다 — 모두 켜져 있고, 커리큘럼 열은 처음 그대로입니다",
   "\"Any subject\" also names the Curriculum columns Unit, Materials and Homework and hides Books and Grammar; \"English reading class\" puts them back. Columns you renamed yourself are only replaced if you say so.":"\"모든 과목\"은 커리큘럼 열 이름을 단원·자료·숙제로 바꾸고 도서·문법 열을 숨깁니다. \"영어 리딩 수업\"은 원래대로 되돌립니다. 직접 이름을 바꾼 열은 확인을 받은 뒤에만 바꿉니다.",
   "type above and press Enter":"위에 적고 Enter를 누르세요",
+  // ── v158: Listening and Grammar, the plan's weeks
+  "Last rated {date}: level {level}":"마지막 평가 {date}: 레벨 {level}","questions {score}":"문항 {score}","Check with questions":"문항으로 확인하기",
+  "{n} questions a level. You read the script aloud; the student's screen shows only the choices (from level B, the question too).":"레벨마다 {n}문항입니다. 선생님이 대본을 읽어 주고, 학생 화면에는 보기만 나옵니다(레벨 B부터는 질문도 나옵니다).",
+  "{n} questions a level: the student picks the words that fit the blank.":"레벨마다 {n}문항입니다. 학생이 빈칸에 알맞은 말을 고릅니다.",
+  "{up} or more right goes on to the level above, {down} or fewer to the level below; the level it ends on is saved as the rating.":"{up}개 이상 맞으면 위 레벨로, {down}개 이하면 아래 레벨로 넘어가고, 끝난 레벨이 평가로 저장됩니다.",
+  "Start at level":"시작 레벨","Start the questions":"문항 시작","Script and answers":"대본과 정답","Paper sheet · level {level}":"종이 시험지 · 레벨 {level}","Or pick the level yourself":"또는 레벨을 직접 고르기",
+  "Read aloud":"읽어 줄 내용","Stop and leave (nothing is saved)":"그만하고 나가기 (저장되지 않습니다)",
+  "The 2027 plan has changed: the level tests are now in the second week of March, June, September and December.":"2027 계획이 바뀌었습니다: 레벨테스트가 3·6·9·12월 둘째 주로 옮겨졌습니다.",
+  "Keep mine":"그대로 두기","Update my plan":"내 계획에 반영","Nothing to move — your plan already has these weeks.":"옮길 것이 없습니다 — 이미 같은 주로 되어 있습니다.",
+  "{n} rows moved to the plan's weeks":"{n}행을 계획의 주로 옮겼습니다","Move {n} rows":"{n}행 옮기기",
+  "{n} rows are in another week in the plan now — they move to that week.":"{n}행은 계획에서 주가 바뀌었습니다 — 그 주로 옮겨집니다.",
   // ── v157: the 2027 plan in one press
   "The 2027 plan is not in the app yet.":"2027 계획이 아직 앱에 없습니다.","The 2027 plan is already in the app.":"2027 계획은 이미 앱에 있습니다.",
   // ── v156: the 2027 plan from the Import window
@@ -4304,7 +4333,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v157";
+const APP_VERSION="v158";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8661,7 +8690,7 @@ function ltLockBackground(on){
   }
 }
 function ltOpenTest(aid){
-  const a=ltGet(aid);if(!a||a.status!=="in_progress"||a.mode==="paper")return;
+  const a=ltGet(aid);if(!a||a.status!=="in_progress"||a.mode==="paper"||LTX.sid)return;
   Object.assign(LT,{aid:aid,screen:"intro",sel:null,itemKey:"",readKey:"",menu:false});
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -8805,7 +8834,7 @@ function ltMenuHtml(){
     `<button type="button" class="lt-btn" data-act="endEarly">${escapeAttr(tx("End here and judge"))}</button></div></div>`;
 }
 function ltRenderTest(){
-  const scr=document.getElementById("lt-screen");if(!scr||scr.hidden)return;
+  const scr=document.getElementById("lt-screen");if(!scr||scr.hidden||LTX.sid)return;   // LTX: the screen is showing Listening / Grammar questions
   const a=ltGet(LT.aid);
   if(!a||a.status==="aborted"){ltCloseTest();return;}      // deleted, or ended without a result, on another device
   scr.innerHTML=ltTestHtml(a,ltStudent(a.studentId))+(LT.menu?ltMenuHtml():"");
@@ -8910,8 +8939,9 @@ const LT_HOLD_MS=1200;
     timer=setTimeout(()=>{
       timer=null;
       if(!document.contains(b))return;
-      if(b.dataset.hold==="menu"){LT.menu=true;ltRenderTest();}
+      if(b.dataset.hold==="menu"){if(LTX.sid){LTX.menu=true;ltxRender();}else{LT.menu=true;ltRenderTest();}}
       else if(b.dataset.hold==="review"){const aid=LT.aid;ltCloseTest();ltOpenReview(aid);}
+      else if(b.dataset.hold==="xdone")ltxDone();
     },LT_HOLD_MS);
   };
   // Let go too soon: nothing happens, and a note says to hold longer.
@@ -8937,7 +8967,23 @@ const LT_HOLD_MS=1200;
 // Reading comes from the test. These four the teacher rates against the bank's can-do scale (A–E);
 // every rating is kept with its date on the student: student.ratings[domain] = [{date,level,note}].
 // The Korean descriptions are the bank's own (AEA.RATING_DOMAINS); the English ones below say the same.
-const LT_DOMAIN_NAME={speaking:tx("Speaking"),writing:tx("Writing"),phonics:tx("Phonics"),vocabulary:tx("Vocabulary")};
+// v158: Listening and Grammar join them. The bank rates four skills, so the Korean descriptions of
+// these two live here, and LT_RD is the bank's four plus these two.
+const LT_RD=Object.assign({},AEA.RATING_DOMAINS,{
+  listening:{ko:"Listening",task:"‘문항 시작’을 누르면 레벨마다 5문항이 나옵니다. 선생님이 대본을 읽어 주고 학생이 답을 고릅니다. 수업에서 본 모습으로 가장 가까운 설명을 직접 골라도 됩니다.",levels:{
+    A:"짧은 지시나 익숙한 단어를 듣고 알맞은 그림을 고릅니다. (예: “dog”, “It is raining.”)",
+    B:"쉬운 문장 두세 개를 듣고 누가, 무엇을, 어디에서를 답합니다.",
+    C:"네다섯 문장의 짧은 이야기를 듣고 일어난 순서와 이유를 답합니다.",
+    D:"1분쯤 되는 안내나 설명을 듣고 중심 내용과 세부 정보를 구분해 답합니다.",
+    E:"의견이 담긴 말을 듣고 말하는 사람의 입장과 이유, 직접 말하지 않은 뜻을 파악합니다."}},
+  grammar:{ko:"Grammar",task:"‘문항 시작’을 누르면 레벨마다 8문항이 나옵니다. 학생이 쓴 글에서 본 모습으로 가장 가까운 설명을 직접 골라도 됩니다.",levels:{
+    A:"문장을 대문자로 시작하고 마침표로 끝냅니다. I am, It is 같은 틀을 씁니다.",
+    B:"be동사, 복수형, 대명사(he, she, they), have와 has를 쉬운 문장에서 바르게 씁니다.",
+    C:"현재형의 -s, 현재진행형, 규칙 과거형, 시간과 장소의 전치사를 씁니다.",
+    D:"불규칙 과거형, 미래 표현, 비교급과 최상급, because와 so로 이은 문장을 씁니다.",
+    E:"현재완료, 수동태, 관계사절, 조건문을 이해하고 씁니다."}},
+});
+const LT_DOMAIN_NAME={speaking:tx("Speaking"),writing:tx("Writing"),listening:tx("Listening"),grammar:tx("Grammar"),phonics:tx("Phonics"),vocabulary:tx("Vocabulary")};
 const LT_DOMAINS_EN={
   speaking:{task:"Have the student talk for 1–2 minutes about a picture or about yesterday, then pick the closest description.",levels:{
     A:"Answers with words or short memorised phrases. (“Dog.” “I like pizza.”)",
@@ -8951,6 +8997,18 @@ const LT_DOMAINS_EN={
     C:"Writes 4–6 connected sentences on one topic. Uses and, but, because and some past tense.",
     D:"Writes a paragraph with a topic sentence, support and an ending, giving an opinion and a reason.",
     E:"Develops an argument over several paragraphs with evidence, examples and linking words."}},
+  listening:{task:"Press Start the questions for five questions at each level: you read the script aloud and the student chooses. Or pick the closest description yourself from what you see in class.",levels:{
+    A:"Hears a short instruction or a familiar word and picks the right picture. (“dog”, “It is raining.”)",
+    B:"Hears two or three easy sentences and answers who, what and where.",
+    C:"Hears a short story of four or five sentences and answers about the order of events and the reasons.",
+    D:"Hears an announcement or explanation of about a minute and tells the main point from the details.",
+    E:"Hears someone give an opinion and works out their position, their reasons and what is meant but not said."}},
+  grammar:{task:"Press Start the questions for eight questions at each level. Or pick the closest description yourself from the student's writing.",levels:{
+    A:"Starts a sentence with a capital and ends it with a full stop. Uses frames such as I am and It is.",
+    B:"Uses be, plurals, pronouns (he, she, they) and have / has correctly in easy sentences.",
+    C:"Uses the present -s, the present continuous, the regular past and prepositions of time and place.",
+    D:"Uses the irregular past, the future, comparatives and superlatives, and sentences joined with because and so.",
+    E:"Understands and uses the present perfect, the passive, relative clauses and conditionals."}},
   phonics:{task:"Have the student read a list of unseen words aloud, then pick the closest description.",levels:{
     A:"Knows most letter sounds and blends CVC words (cat, sun).",
     B:"Reads words with sh, ch, th and magic e.",
@@ -8964,9 +9022,9 @@ const LT_DOMAINS_EN={
     D:"Infers the meaning of new words from context and tells apart words with several meanings.",
     E:"Understands abstract and academic words and uses them accurately in speech and writing."}},
 };
-const LT_DOMAIN_IDS=Object.keys(LT_DOMAINS_EN).filter(d=>AEA.RATING_DOMAINS[d]);
-const ltDomTask=d=>LANG==="ko"?AEA.RATING_DOMAINS[d].task:LT_DOMAINS_EN[d].task;
-const ltDomLevel=(d,L)=>LANG==="ko"?AEA.RATING_DOMAINS[d].levels[L]:LT_DOMAINS_EN[d].levels[L];
+const LT_DOMAIN_IDS=Object.keys(LT_DOMAINS_EN).filter(d=>LT_RD[d]);
+const ltDomTask=d=>LANG==="ko"?LT_RD[d].task:LT_DOMAINS_EN[d].task;
+const ltDomLevel=(d,L)=>LANG==="ko"?LT_RD[d].levels[L]:LT_DOMAINS_EN[d].levels[L];
 const ltRatings=(s,d)=>(s&&s.ratings&&Array.isArray(s.ratings[d]))?s.ratings[d].filter(r=>r&&AEA.LEVELS.includes(r.level)):[];
 const ltLastRating=(s,d)=>{const r=ltRatings(s,d);return r.length?r[r.length-1]:null;};
 // ── The 100-point sheet for Speaking and Writing (v149) ──────────────────
@@ -9005,7 +9063,7 @@ function ltRatingsFor(s,a){
   LT_DOMAIN_IDS.forEach(d=>{const r=ltRatings(s,d).filter(x=>!next||String(x.date||"")<next.date);o[d]=r.length?r[r.length-1]:null;});
   return o;
 }
-// What the Details panel of a student shows first: reading from the test, then the four ratings.
+// What the Details panel of a student shows first: reading from the test, then the ratings.
 function ltProfileHtml(s){
   const e=escapeAttr,last=ltLatest(s.id);
   let h=`<div class="lt-ph">${e(tx("Skills"))}</div><div class="lt-skills"><span class="lt-skill">${e(tx("Reading|skill"))}`+
@@ -9017,12 +9075,19 @@ function ltProfileHtml(s){
   });
   return h+`</div>`;
 }
-const LTR={sid:null,dom:null,level:"",manual:false,rub:{}};
+const LTR={sid:null,dom:null,level:"",manual:false,rub:{},start:""};
 function ltOpenRate(sid,dom){
   const s=ltStudent(sid);if(!s||!LT_DOMAIN_IDS.includes(dom))return;
   const r=ltLastRating(s,dom);
   if(s.trial)return;
   LTR.sid=s.id;LTR.dom=dom;LTR.level=r?r.level:"";LTR.manual=false;LTR.rub={};
+  // Where the questions start (Listening, Grammar): the last rating of this skill, or else the
+  // reading level from the newest test, or else B.
+  const lastTest=ltLatest(s.id);
+  LTR.start=r?r.level:lastTest?(ltFinal(lastTest)||lastTest.result.level):"B";
+  const lastEl=document.getElementById("ltq-last"),secTxt=ltSecText(r);
+  lastEl.hidden=!r;
+  lastEl.textContent=r?tx("Last rated {date}: level {level}",{date:r.date||"–",level:r.level})+(secTxt?" · "+tx("questions {score}",{score:secTxt}):""):"";
   const has=ltHasRubric(dom),g=id=>document.getElementById(id);
   g("ltq-counts").hidden=!has;g("ltq-c1").value="";g("ltq-c2").value="";
   if(has){g("ltq-c1l").textContent=LT_COUNT_LBL[dom][0];g("ltq-c2l").textContent=LT_COUNT_LBL[dom][1];}
@@ -9033,7 +9098,20 @@ function ltOpenRate(sid,dom){
 }
 function ltRenderRate(){
   if(!LT_DOMAIN_IDS.includes(LTR.dom))return;
-  document.getElementById("ltq-list").innerHTML=AEA.LEVELS.map(L=>
+  const sec=document.getElementById("ltq-sec"),hasSec=!!LT_SEC[LTR.dom],lis=LTR.dom==="listening";
+  sec.hidden=!hasSec;
+  if(hasSec){
+    const x=escapeAttr,n=LT_SEC[LTR.dom].A.items.length,R=LT_SEC_RULE[LTR.dom];
+    sec.innerHTML=`<div class="lt-ph">${x(tx("Check with questions"))}</div>`+
+      `<p class="u-hint">${x(lis?tx("{n} questions a level. You read the script aloud; the student's screen shows only the choices (from level B, the question too).",{n}):tx("{n} questions a level: the student picks the words that fit the blank.",{n}))} `+
+      `${x(tx("{up} or more right goes on to the level above, {down} or fewer to the level below; the level it ends on is saved as the rating.",{up:R.up,down:R.down}))}</p>`+
+      `<div class="ltq-sec-row"><span>${x(tx("Start at level"))}</span><span class="seg" role="group" aria-label="${x(tx("Start at level"))}">`+
+      AEA.LEVELS.map(L=>`<button type="button" class="seg-btn${LTR.start===L?" active":""}" aria-pressed="${LTR.start===L}" onclick="ltPickStart('${L}')">${L}</button>`).join("")+`</span></div>`+
+      `<div class="ltq-sec-row"><button type="button" class="btn btn-p" id="ltq-go" onclick="ltxOpen(LTR.sid,LTR.dom,LTR.start)"><i class="ti ti-player-play"></i> ${x(tx("Start the questions"))}</button>`+
+      `<button type="button" class="btn" onclick="ltSecPrint('key')"><i class="ti ti-printer"></i> ${x(lis?tx("Script and answers"):tx("Answer key"))}</button>`+
+      `<button type="button" class="btn" onclick="ltSecPrint('sheet')"><i class="ti ti-file-text"></i> ${x(tx("Paper sheet · level {level}",{level:LTR.start}))}</button></div>`;
+  }
+  document.getElementById("ltq-list").innerHTML=(hasSec?`<div class="lt-ph ltq-or">${escapeAttr(tx("Or pick the level yourself"))}</div>`:"")+AEA.LEVELS.map(L=>
     `<button type="button" class="ltq-opt${LTR.level===L?" on":""}" aria-pressed="${LTR.level===L}" onclick="ltPickRate('${L}')">${ltLv(L)}<span>${escapeAttr(ltDomLevel(LTR.dom,L))}</span></button>`).join("");
   const rub=document.getElementById("ltq-rub"),has=ltHasRubric(LTR.dom),e=escapeAttr;
   const n=LT_RUBRIC_IDS.filter(k=>LTR.rub[k]!=null).length,total=n===4?LT_RUBRIC_IDS.reduce((m,k)=>m+LTR.rub[k],0)*5:null;
@@ -9063,9 +9141,6 @@ function ltPickPoint(k,v){
 function ltClearPoints(){LTR.rub={};ltRenderRate();}
 function ltSaveRate(){
   const s=ltStudent(LTR.sid),d=LTR.dom;if(!s||s.trial||!LT_DOMAIN_IDS.includes(d)||!AEA.LEVELS.includes(LTR.level))return;
-  const before=s.ratings,hadU=Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s._u;
-  // a new object and a new list, so a failed save can simply put the old ones back
-  const all=before&&typeof before==="object"&&!Array.isArray(before)?{...before}:{};
   const entry={date:td(),level:LTR.level,note:(document.getElementById("ltq-note").value||"").trim()};
   if(ltHasRubric(d)){
     const n=LT_RUBRIC_IDS.filter(k=>LTR.rub[k]!=null).length;
@@ -9080,19 +9155,294 @@ function ltSaveRate(){
       entry[f]=v;
     }
   }
-  all[d]=[...(Array.isArray(all[d])?all[d]:[]),entry];
-  s.ratings=all;
-  if(!saveKey("students")){
-    // save() stamps a record before it writes it. The student goes back to the stored copy, so the
-    // stamp goes back too — a newer stamp on old content would turn away a change from another device.
-    if(before===undefined)delete s.ratings;else s.ratings=before;
-    if(hadU)s._u=oldU;else delete s._u;
-    showToast(ltSaveFailed());return;
-  }
+  if(!ltPushRating(s,d,entry)){showToast(ltSaveFailed());return;}
   closeModal("mo-lt-rate");
   if(curPage==="leveltest")renderLevelTest();
   showToast(tx("{name}: rating saved",{name:LT_DOMAIN_NAME[d]}));
 }
+// Add one rating to a student and save. False, and nothing changed, if it could not be saved.
+function ltPushRating(s,d,entry){
+  const before=s.ratings,hadU=Object.prototype.hasOwnProperty.call(s,"_u"),oldU=s._u;
+  // a new object and a new list, so a failed save can simply put the old ones back
+  const all=before&&typeof before==="object"&&!Array.isArray(before)?{...before}:{};
+  all[d]=[...(Array.isArray(all[d])?all[d]:[]),entry];
+  s.ratings=all;
+  if(saveKey("students"))return true;
+  // save() stamps a record before it writes it. The student goes back to the stored copy, so the
+  // stamp goes back too — a newer stamp on old content would turn away a change from another device.
+  if(before===undefined)delete s.ratings;else s.ratings=before;
+  if(hadU)s._u=oldU;else delete s._u;
+  return false;
+}
+
+// ── Listening and Grammar (v158) ──────────────────────────────────────────
+// Each has a short set of questions per level that can stand in for the teacher's own judgement.
+// Listening: 5 a level. The teacher reads the script aloud — `say` for one question (levels A and
+// B), `passage` for a whole level (C–E, where the questions are read aloud too) — and the student's
+// screen shows only the choices and, from level B, the question. Grammar: 8 a level, fill the gap.
+// `ans` is a position in `opts` as written: the order on screen and on paper is the order here.
+// Like the test itself, the wording of the questions does not follow the language setting.
+const LT_SEC={
+  listening:{
+    A:{items:[
+      {say:"dog",opts:["🐱","🐶","🐟","🐦"],ans:1,pic:1},
+      {say:"a red apple",opts:["🍌","🍏","🍇","🍎"],ans:3,pic:1},
+      {say:"It is raining.",opts:["🌧️","☀️","⛄","🌈"],ans:0,pic:1},
+      {say:"She is happy.",opts:["😢","😠","😀","😴"],ans:2,pic:1},
+      {say:"I go to school by bus.",opts:["🚗","🚌","🚲","✈️"],ans:1,pic:1}]},
+    B:{items:[
+      {say:"This is Tom. Tom has a white cat.",q:"What does Tom have?",opts:["a dog","a cat","a bird","a fish"],ans:1},
+      {say:"The cat is under the bed.",q:"Where is the cat?",opts:["on the bed","in the box","under the bed","on the chair"],ans:2},
+      {say:"Anna is at the park. She is riding her bike.",q:"What is Anna doing?",opts:["riding a bike","flying a kite","eating lunch","reading a book"],ans:0},
+      {say:"It is seven o'clock. Ben eats breakfast with his dad.",q:"Who eats with Ben?",opts:["his mom","his sister","his friend","his dad"],ans:3},
+      {say:"Mia likes apples, but she does not like bananas.",q:"What does Mia like?",opts:["bananas","grapes","apples","oranges"],ans:2}]},
+    C:{passage:"Last Saturday, Minho went fishing with his uncle. They got up early and drove to a lake. At first, Minho caught nothing, and he felt sad. Then his uncle showed him how to wait quietly. At last, Minho caught a big fish, and they cooked it for dinner.",items:[
+      {q:"Who went fishing with Minho?",opts:["his father","his uncle","his friend","his teacher"],ans:1},
+      {q:"Where did they go?",opts:["to a river","to the sea","to a lake","to a pool"],ans:2},
+      {q:"How did Minho feel at first?",opts:["sad","angry","sleepy","happy"],ans:0},
+      {q:"What did his uncle show him?",opts:["how to swim","how to cook","how to drive","how to wait quietly"],ans:3},
+      {q:"What happened at the end?",opts:["They went home with nothing.","Minho caught a big fish.","His uncle fell into the water.","It started to rain."],ans:1}]},
+    D:{passage:"Good morning, everyone. I have some news about our field trip. Next Friday, we are going to the science museum, not the zoo, because the zoo is closed for repairs. The bus leaves at 8:15, so please be at school by 8 o'clock. You need to bring a packed lunch and a bottle of water. You do not need any money, because the school has already paid for the tickets. In the afternoon, we will watch a short film about space, and then each group will make a poster about what they learned. If it rains, do not worry: everything is indoors.",items:[
+      {q:"What is the announcement mainly about?",opts:["a new science teacher","a change of lunch time","a field trip next Friday","a school film festival"],ans:2},
+      {q:"Why are they not going to the zoo?",opts:["It is closed for repairs.","It is too far away.","The tickets cost too much.","It is going to rain."],ans:0},
+      {q:"What time does the bus leave?",opts:["8:00","8:15","8:50","9:15"],ans:1},
+      {q:"Why don't the students need money?",opts:["Lunch is free at the museum.","Their parents will pay later.","The museum is free on Fridays.","The school has already paid for the tickets."],ans:3},
+      {q:"What will each group do after the film?",opts:["take a test","make a poster","visit the zoo","eat lunch"],ans:1}]},
+    E:{passage:"Some parents pay their children for doing chores, such as washing the dishes or taking out the trash. I used to think this was a good idea. After all, adults get paid for their work, so why shouldn't children? But I have changed my mind. When my little brother started getting money for chores, he began to ask, \"How much will you give me?\" every time our mother needed help. He even refused to set the table because it was \"not on the list.\" A home is not a company. We help each other because we live together, not because someone pays us. I still think children should learn about money, but pocket money should be given separately, and chores should simply be part of family life.",items:[
+      {q:"What is the speaker's opinion now?",opts:["Children should be paid for every chore.","Chores should not be paid work.","Children should not get pocket money.","Parents should do all the chores."],ans:1},
+      {q:"What made the speaker change their mind?",opts:["what happened with a little brother","a book about money","a teacher who disagreed","chores that became harder"],ans:0},
+      {q:"What does the speaker mean by \"A home is not a company\"?",opts:["Homes are smaller than companies.","Parents should not work at home.","Children cannot work in companies.","Family members should help without being paid."],ans:3},
+      {q:"Why does the speaker talk about the brother and the table?",opts:["to show that he was too young to help","to show that the list was too long","to show that being paid made him less willing to help","to show that he did not like dinner"],ans:2},
+      {q:"Which idea would the speaker most likely agree with?",opts:["Give pocket money, but keep it apart from chores.","Stop teaching children about money.","Pay more for harder chores.","Let children choose their own chores."],ans:0}]},
+  },
+  grammar:{
+    A:{items:[
+      {q:"I ___ Mina.",opts:["am","is","are","be"],ans:0},
+      {q:"It ___ a cat.",opts:["am","are","is","be"],ans:2},
+      {q:"This is ___ apple.",opts:["a","an","two","it"],ans:1},
+      {q:"I ___ two hands.",opts:["has","am","is","have"],ans:3},
+      {q:"Which one is right?",opts:["i like milk.","I like milk.","I like milk","i Like milk"],ans:1},
+      {q:"I like ___.",opts:["apple","a apples","apples","an apples"],ans:2},
+      {q:"You ___ my friend.",opts:["am","is","are","be"],ans:2},
+      {q:"I can ___.",opts:["runs","run","running","ran"],ans:1}]},
+    B:{items:[
+      {q:"They ___ my friends.",opts:["is","am","are","be"],ans:2},
+      {q:"I have two ___.",opts:["box","boxes","boxs","a box"],ans:1},
+      {q:"This is my sister. ___ is seven.",opts:["He","It","She","They"],ans:2},
+      {q:"Tom ___ a red bike.",opts:["have","has","haves","are"],ans:1},
+      {q:"___ are my shoes.",opts:["This","That","It","These"],ans:3},
+      {q:"I ___ like carrots.",opts:["don't","doesn't","isn't","am not"],ans:0},
+      {q:"___ you swim?",opts:["Are","Can","Is","Has"],ans:1},
+      {q:"The books are ___ the bag.",opts:["in","to","of","at"],ans:0}]},
+    C:{items:[
+      {q:"My dad ___ to work by bus every day.",opts:["go","goes","going","is go"],ans:1},
+      {q:"Look! The baby ___.",opts:["sleeps","sleep","is sleeping","slept"],ans:2},
+      {q:"Yesterday we ___ soccer after school.",opts:["play","plays","playing","played"],ans:3},
+      {q:"___ your brother like pizza?",opts:["Does","Do","Is","Are"],ans:0},
+      {q:"My birthday is ___ May.",opts:["on","at","in","to"],ans:2},
+      {q:"There ___ three eggs in the box.",opts:["is","are","am","be"],ans:1},
+      {q:"She ___ watching TV now.",opts:["isn't","doesn't","don't","aren't"],ans:0},
+      {q:"He ___ late for school.",opts:["always is","is always","always be","be always"],ans:1}]},
+    D:{items:[
+      {q:"We ___ to Busan last summer.",opts:["go","goed","went","gone"],ans:2},
+      {q:"An elephant is ___ than a horse.",opts:["big","bigger","biggest","more big"],ans:1},
+      {q:"It's cloudy. I think it ___ rain soon.",opts:["will","is","was","did"],ans:0},
+      {q:"I was tired, ___ I went to bed early.",opts:["because","but","or","so"],ans:3},
+      {q:"This is the ___ interesting book in the library.",opts:["more","most","much","very"],ans:1},
+      {q:"How ___ water do you drink every day?",opts:["many","long","often","much"],ans:3},
+      {q:"She ___ her homework when I called her.",opts:["was doing","is doing","does","were doing"],ans:0},
+      {q:"You ___ wear a helmet when you ride a bike.",opts:["are","did","should","would"],ans:2}]},
+    E:{items:[
+      {q:"I ___ my keys. I can't find them anywhere.",opts:["have lost","lose","was losing","am losing"],ans:0},
+      {q:"This bridge ___ in 1990.",opts:["built","was built","has built","is building"],ans:1},
+      {q:"The girl ___ lives next door is my classmate.",opts:["which","whose","who","where"],ans:2},
+      {q:"If it ___ tomorrow, we will stay at home.",opts:["will rain","rained","rains","would rain"],ans:2},
+      {q:"If I ___ a bird, I would fly to school.",opts:["were","am","will be","have been"],ans:0},
+      {q:"She has lived in Seoul ___ 2020.",opts:["for","during","from","since"],ans:3},
+      {q:"He enjoys ___ comic books.",opts:["read","to read","reading","reads"],ans:2},
+      {q:"The teacher asked us ___ quiet.",opts:["be","being","that be","to be"],ans:3}]},
+  },
+};
+// Enough right moves on to the level above, too few to the level below, in between is this level.
+// (Grammar's 8 follow the test's own rule for 8 questions.)
+const LT_SEC_RULE={listening:{up:4,down:2},grammar:{up:7,down:4}};
+const LT_SEC_EN={listening:"Listening",grammar:"Grammar"};
+const ltSecOutcome=(dom,correct)=>correct>=LT_SEC_RULE[dom].up?"up":correct<=LT_SEC_RULE[dom].down?"down":"stay";
+// After a finished part: {next:"C"} — go on with that level — or {level:"B"} — that is the result.
+// The questions only ever move one way: up while the score is high, or down while it is low.
+function ltSecStep(dom,parts){
+  const LV=AEA.LEVELS,last=parts[parts.length-1],i=LV.indexOf(last.level),o=ltSecOutcome(dom,last.correct);
+  const dir=parts.length>1?(i>LV.indexOf(parts[parts.length-2].level)?"up":"down"):"";
+  if(o==="stay")return {level:last.level};
+  if(o==="up")return dir==="down"||i===LV.length-1?{level:last.level}:{next:LV[i+1]};
+  if(dir==="up")return {level:LV[i-1]};
+  return i===0?{level:LV[0]}:{next:LV[i-1]};
+}
+// Ended by the teacher part-way: judge from the parts that are complete. A level that was reached
+// but not finished does not count: after a high score the result is the level just done, after a
+// low one the level below it.
+function ltSecJudge(dom,parts){
+  if(!parts.length)return "";
+  const st=ltSecStep(dom,parts),last=parts[parts.length-1];
+  return st.level||(ltSecOutcome(dom,last.correct)==="up"?last.level:st.next);
+}
+const ltSecOk=x=>!!x&&Array.isArray(x.parts)&&x.parts.length>0&&x.parts.every(p=>p&&AEA.LEVELS.includes(p.level)&&Number.isInteger(p.correct)&&Number.isInteger(p.total)&&p.total>0&&p.correct>=0&&p.correct<=p.total);
+// "B 4/5 · C 2/5" for a rating that came from the questions, "" for one the teacher picked.
+const ltSecText=r=>r&&ltSecOk(r.sec)?r.sec.parts.map(p=>p.level+" "+p.correct+"/"+p.total).join(" · "):"";
+
+// The questions on the student's screen. Nothing is stored until a result is reached (they take a
+// few minutes); then it is saved as a rating like any other, with the score of each part (sec).
+const LTX={sid:null,dom:null,level:"",idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false};
+const ltxKo=()=>typeof LTX.ko==="boolean"?LTX.ko:(LTX.level==="A"||LTX.level==="B");
+const ltxSet=()=>LT_SEC[LTX.dom][LTX.level];
+function ltxOpen(sid,dom,level){
+  const s=ltStudent(sid);if(!s||s.trial||!LT_SEC[dom]||!AEA.LEVELS.includes(level)||LT.aid)return;
+  Object.assign(LTX,{sid:s.id,dom:dom,level:level,idx:0,sel:null,ans:[],parts:[],screen:"intro",menu:false,ko:null,final:"",saved:false});
+  closeModal("mo-lt-rate");
+  document.getElementById("lt-screen").hidden=false;
+  document.body.classList.add("lt-testing");
+  ltLockBackground(true);
+  ltxRender();
+}
+function ltxClose(){
+  LTX.sid=null;LTX.menu=false;
+  document.getElementById("lt-hint")?.remove();
+  const scr=document.getElementById("lt-screen");scr.hidden=true;scr.innerHTML="";
+  document.body.classList.remove("lt-testing");
+  ltLockBackground(false);
+  if(curPage==="leveltest")renderLevelTest();
+}
+function ltxBar(){
+  const n=ltxSet().items.length,ko=ltxKo();let dots="";
+  for(let i=0;i<n;i++)dots+=`<i class="${LTX.screen==="end"||i<LTX.idx?"lt-done":i===LTX.idx&&LTX.screen==="run"?"lt-now":""}"></i>`;
+  return `<div class="lt-tbar"><span class="lt-part">${LT_SEC_EN[LTX.dom]} ${LTX.level}</span><span class="lt-dots">${dots}</span>`+
+    `<button type="button" class="lt-ko${ko?" on":""}" data-act="xKo" role="switch" aria-checked="${ko}" aria-label="한국어로 보기">한글<i></i></button>`+
+    `<button type="button" class="lt-lock" data-hold="menu" aria-label="${escapeAttr(tx("Teacher's menu: press and hold"))}">${LT_LOCK_SVG}</button></div>`;
+}
+function ltxHtml(s){
+  const K=ltxKo(),e=escapeAttr,lis=LTX.dom==="listening",set=ltxSet();
+  if(LTX.screen==="end")return `<div class="lt-tscreen lt-mid"><div class="lt-tmsg"><div class="lt-tbig">All done!</div><p${ltL(K,"끝까지 잘 풀었어요. 수고했어요!","You answered to the end. Well done!")}</p><p class="lt-muted"${ltL(K,"선생님께 기기를 돌려주세요.","Please give the device back to your teacher.")}</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-big" data-hold="xdone"${ltL(K,"선생님: 길게 눌러 결과 확인","Teacher: press and hold to see the result")}</button></div></div>`;
+  if(LTX.screen==="intro")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Hi, ${e(s?s.name||"":"")}!</div><p${lis?ltL(K,"선생님이 읽어 주는 말을 잘 듣고 알맞은 답을 골라요.","Listen to your teacher, then choose the answer."):ltL(K,"빈칸에 들어갈 알맞은 말을 골라요.","Choose the words that fit in the blank.")}</p>`+
+    `<ul class="lt-tips"><li${ltL(K,"모르는 문제는 <b>잘 모르겠어요</b>를 눌러도 괜찮아요.","If you do not know an answer, you can tap <b>I’m not sure</b>.")}</li><li${ltL(K,"점수를 매기는 시험이 아니에요. 지금 무엇을 배우면 좋을지 알아보는 거예요.","This is not a test with a score. It shows us what to learn next.")}</li></ul></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xStart"${ltL(K,"시작 · Start","Start")}</button></div></div>`;
+  if(LTX.screen==="break")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-tbig">Good job!</div><p${ltL(K,"잘하고 있어요. 몇 문제만 더 풀어 볼게요.","You are doing well. Let’s try a few more.")}</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xStart"${ltL(K,"계속하기 · Continue","Continue")}</button></div></div>`;
+  if(LTX.screen==="hear")return `<div class="lt-tscreen lt-mid">${ltxBar()}<div class="lt-tmsg"><div class="lt-stim">👂</div><p${ltL(K,"선생님이 이야기를 읽어 줄 거예요. 잘 들어 보세요.","Your teacher will read to you. Listen carefully.")}</p></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" data-act="xHeard"${ltL(K,"다 들었어요 · I’m ready","I’m ready")}</button></div></div>`;
+  const it=set.items[LTX.idx];
+  const opts=it.opts.map((o,k)=>`<button type="button" class="lt-opt${LTX.sel===k?" lt-sel":""}" data-act="xPick" data-pos="${k}">`+
+    (it.pic?`<span class="lt-optpic">${o}</span>`:`<span class="lt-ol">${LT_CIRC[k]}</span><span class="lt-ot">${e(o)}</span>`)+`</button>`).join("");
+  return `<div class="lt-tscreen lt-nopass">${ltxBar()}<div class="lt-qwrap"><div class="lt-qn">Question ${LTX.idx+1}</div>`+
+    (lis?`<p class="lt-exlead"${ltL(K,"잘 듣고 골라요 · Listen and choose","Listen and choose.")}</p>`:`<p class="lt-exlead"${ltL(K,"빈칸에 알맞은 말을 골라요.","Choose the words that fit in the blank.")}</p>`)+
+    (it.q?`<p class="lt-qtext">${e(it.q)}</p>`:`<div class="lt-stim">👂</div>`)+
+    `<div class="lt-opts${it.pic?" lt-pic":""}">${opts}</div>`+
+    `<button type="button" class="lt-idk${LTX.sel===-1?" lt-sel":""}" data-act="xPick" data-pos="-1"${ltL(K,"잘 모르겠어요 · I’m not sure","I’m not sure")}</button></div>`+
+    `<div class="lt-tfoot"><button type="button" class="lt-btn lt-primary lt-big" id="lt-next" data-act="xNext"${LTX.sel==null?" disabled":""}${ltL(K,"다음 · Next","Next")}</button></div></div>`;
+}
+// The teacher's menu, behind the lock. For Listening it also shows what to read aloud now, so one
+// device is enough: hold the lock, read, press Keep going, hand the device back.
+function ltxMenuHtml(){
+  const e=escapeAttr,set=ltxSet(),it=set.items[Math.min(LTX.idx,set.items.length-1)];
+  const script=LTX.dom==="listening"&&(LTX.screen==="run"||LTX.screen==="hear")?`<div class="lt-xscript"><b>${e(tx("Read aloud"))}</b>`+
+    (set.passage?`<p>${e(set.passage)}</p>`+(LTX.screen==="run"?`<p>${LTX.idx+1}. ${e(it.q)}</p>`:""):`<p>${LTX.idx+1}. ${e(it.say)}${it.q?" — "+e(it.q):""}</p>`)+`</div>`:"";
+  return `<div class="lt-backdrop"></div><div class="lt-sheet" role="dialog" aria-modal="true"><h2>${e(tx("Teacher's menu"))}</h2>${script}<div class="lt-stack">`+
+    `<button type="button" class="lt-btn lt-primary" data-act="xMenuClose">${e(tx("Keep going"))}</button>`+
+    (LTX.parts.length?`<button type="button" class="lt-btn" data-act="xEndEarly">${e(tx("End here and judge"))}</button>`:"")+
+    `<button type="button" class="lt-btn" data-act="xLeave">${e(tx("Stop and leave (nothing is saved)"))}</button></div></div>`;
+}
+function ltxRender(){
+  const scr=document.getElementById("lt-screen");if(!scr||scr.hidden||!LTX.sid)return;
+  const s=ltStudent(LTX.sid);
+  if(!s){ltxClose();return;}                               // the student was deleted on another device
+  scr.innerHTML=ltxHtml(s)+(LTX.menu?ltxMenuHtml():"");
+  const ts=scr.querySelector(".lt-tscreen");if(ts)ts.inert=LTX.menu;
+  if(LTX.menu)scr.querySelector(".lt-sheet .lt-btn")?.focus();
+  else if(!scr.contains(document.activeElement))scr.focus();
+}
+function ltxSave(){
+  if(LTX.saved)return true;
+  const s=ltStudent(LTX.sid);if(!s||!AEA.LEVELS.includes(LTX.final))return false;
+  const ok=ltPushRating(s,LTX.dom,{date:td(),level:LTX.final,note:"",sec:{parts:LTX.parts.map(p=>({level:p.level,correct:p.correct,total:p.total}))}});
+  if(ok)LTX.saved=true;
+  return ok;
+}
+// Out of the student's screen and into the rating window, which shows what was just saved.
+function ltxDone(){
+  if(!LTX.sid)return;
+  if(!ltxSave()){ltHint(ltSaveFailed());return;}
+  const sid=LTX.sid,dom=LTX.dom;
+  ltxClose();ltOpenRate(sid,dom);
+  showToast(tx("{name}: rating saved",{name:LT_DOMAIN_NAME[dom]}));
+}
+Object.assign(LT_ACTS,{
+  xStart(){if(!LTX.sid)return;LTX.screen=ltxSet().passage&&LTX.idx===0?"hear":"run";ltxRender();},
+  xHeard(){if(!LTX.sid)return;LTX.screen="run";ltxRender();},
+  xKo(){if(!LTX.sid)return;LTX.ko=!ltxKo();ltxRender();},
+  xPick(el){
+    if(!LTX.sid||LTX.screen!=="run")return;
+    LTX.sel=Number(el.dataset.pos);
+    document.querySelectorAll("#lt-screen .lt-opt,#lt-screen .lt-idk").forEach(x=>x.classList.toggle("lt-sel",x===el));
+    const nb=document.getElementById("lt-next");if(nb)nb.disabled=false;
+  },
+  xNext(){
+    if(!LTX.sid||LTX.screen!=="run"||LTX.sel==null)return;
+    const set=ltxSet();
+    LTX.ans.push(LTX.sel);LTX.sel=null;
+    if(LTX.ans.length<set.items.length){LTX.idx=LTX.ans.length;ltxRender();return;}
+    LTX.parts.push({level:LTX.level,correct:LTX.ans.filter((k,i)=>k===set.items[i].ans).length,total:set.items.length});
+    const st=ltSecStep(LTX.dom,LTX.parts);
+    if(st.next){Object.assign(LTX,{level:st.next,idx:0,ans:[],screen:"break"});ltxRender();return;}
+    LTX.final=st.level;LTX.screen="end";
+    if(!ltxSave())ltHint(ltSaveFailed());                // the hold on the last screen tries again
+    ltxRender();
+  },
+  xMenuClose(){LTX.menu=false;ltxRender();},
+  xLeave(){ltxClose();},
+  xEndEarly(){
+    if(!LTX.sid)return;
+    if(!LTX.final)LTX.final=ltSecJudge(LTX.dom,LTX.parts);
+    if(!LTX.final){ltxClose();return;}
+    LTX.menu=false;ltxDone();
+  },
+});
+function ltPickStart(L){if(AEA.LEVELS.includes(L)){LTR.start=L;ltRenderRate();}}
+// The printed side of the questions: the sheet a student writes on (one level), or the teacher's
+// copy — what to read aloud, the answers and the rule (all levels). Paper, so its wording is fixed.
+function ltSecBlocks(dom,kind,level){
+  const e=escapeAttr,B=[],lis=dom==="listening",R=LT_SEC_RULE[dom],name=LT_SEC_EN[dom];
+  if(kind==="key"){
+    const n=LT_SEC[dom].A.items.length;
+    B.push(`<div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">${lis?"대본과 정답":"정답지"} · 선생님용</div></div>`);
+    B.push(`<div class="sh-guide"><b>다음 레벨 정하기</b> ${n}문항 중 ${R.up}개 이상 맞으면 한 레벨 위 문항을, ${R.down}개 이하면 한 레벨 아래 문항을 풉니다. 그 사이면 그 레벨입니다. 위로 올라갔다가 ${R.down}개 이하가 나오면 바로 아래 레벨, 아래로 내려갔다가 ${R.up}개 이상이 나오면 그 레벨입니다. 앱에서 풀면 자동으로 넘어갑니다.`+
+      (lis?` <b>읽는 방법</b> 레벨 A·B는 문항마다 두 번씩 또박또박 읽어 줍니다(B는 질문도 읽어 줍니다). 레벨 C~E는 글을 두 번 읽어 준 뒤 질문을 하나씩 읽어 줍니다. 레벨 A는 그림 색을 구분하는 문항이 있어 학생용은 컬러로 인쇄하세요.`:"")+`</div>`);
+    AEA.LEVELS.forEach(L=>{const set=LT_SEC[dom][L];
+      B.push(`<div class="sh-key"><h3>${name} · 레벨 ${L}</h3>`+(set.passage?`<p class="sh-say">${e(set.passage)}</p>`:"")+
+        (lis?`<ol class="sh-says">${set.items.map(it=>`<li>${it.say?`<span class="sh-say">${e(it.say)}</span>`:""}${it.q?` ${e(it.q)}`:""} <b>${LT_CIRC[it.ans]}</b> <span class="g">${it.pic?it.opts[it.ans]:e(it.opts[it.ans])}</span></li>`).join("")}</ol>`
+          :`<table><tr><th>문항</th>${set.items.map((it,i)=>`<td>${i+1}</td>`).join("")}</tr><tr><th>정답</th>${set.items.map(it=>`<td class="k">${LT_CIRC[it.ans]}</td>`).join("")}</tr><tr><th></th>${set.items.map(it=>`<td class="s">${e(it.opts[it.ans])}</td>`).join("")}</tr></table>`)+`</div>`);});
+    return B;
+  }
+  const set=LT_SEC[dom][level];
+  B.push(`<section class="sh-page"><div class="sh-head"><div class="sh-brand">Level test · ${name}</div><div class="sh-title">${name[0]}-${level}</div><div class="sh-name">Name ______________ &nbsp; Date ____________</div></div>`+
+    `<div class="sh-guide">${lis?"Listen to your teacher and circle the answer. · 선생님이 읽어 주는 말을 잘 듣고 알맞은 답에 동그라미 하세요.":"Circle the words that fit in the blank. · 빈칸에 알맞은 말에 동그라미 하세요."}</div>`+
+    set.items.map((it,i)=>`<div class="sh-q lv${level}"><div class="sh-qt"><b>${i+1}.</b> ${it.q?e(it.q):""}</div>`+
+      `<div class="sh-opts${it.pic?" pic inline":it.opts.every(o=>o.length<=12)?" inline":it.opts.every(o=>o.length<=30)?" two":""}">${it.opts.map((o,k)=>`<span>${LT_CIRC[k]} ${it.pic?`<em>${o}</em>`:e(o)}</span>`).join("")}</div></div>`).join("")+`</section>`);
+  return B;
+}
+function ltSecPrint(kind){
+  const dom=LTR.dom,level=LTR.start;if(!LT_SEC[dom]||(kind!=="key"&&!AEA.LEVELS.includes(level)))return;
+  const w=window.open("","_blank");                       // inside the click, or popup blockers stop it
+  if(!w){alert(tx("Popup blocked. Please allow popups for this site."));return;}
+  const title=dom+(kind==="key"?"-teacher":"-"+level);
+  w.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title>`+
+    `<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet"/><style>${LT_SHEET_CSS}${LT_SEC_CSS}</style></head><body>`+
+    `<div class="toolbar"><button onclick="window.print()">${escapeAttr(tx("Print"))}</button><span>${escapeAttr(kind==="key"?tx("Answer key — for the teacher only"):LT_DOMAIN_NAME[dom]+" · "+level)}</span></div>`+
+    `<div class="paper">${ltSecBlocks(dom,kind,level).join("")}</div></body></html>`);
+  w.document.close();
+}
+const LT_SEC_CSS=`.sh-say{font-family:"Andika","Inter",system-ui,sans-serif;font-size:14.5px;line-height:1.6;color:var(--ink)}p.sh-say{border:1px solid var(--rule);border-radius:6px;padding:8px 12px;margin:0 0 8px}
+.sh-says{margin:4px 0 0;padding-left:22px;font-size:13px;line-height:1.7}.sh-says b{font-size:15px;margin-left:4px}.sh-says .g{font-size:.95em}`;
+
 
 // ── The report for parents (v148) ─────────────────────────────────────────
 // Opens in a new window with a Print button, like the test sheets. It is written for the parents,
@@ -9128,7 +9478,7 @@ function ltFindings(a,rated){
   if(!need.length)Object.keys(r.skills||{}).filter(k=>r.skills[k].c===0).slice(0,2).forEach(k=>need.push(SK[k].need));
   const ri=AEA.LEVELS.indexOf(ltFinal(a)||r.level);
   ["speaking","writing"].forEach(d=>{
-    const x=rated[d];if(!x)return;const gap=ri-AEA.LEVELS.indexOf(x.level),nm=AEA.RATING_DOMAINS[d].ko;
+    const x=rated[d];if(!x)return;const gap=ri-AEA.LEVELS.indexOf(x.level),nm=LT_RD[d].ko;
     if(gap>=1)need.push(`Reading에 비해 ${nm}이 낮은 편입니다. 읽은 내용을 ${d==="speaking"?"말로":"글로"} 표현하는 활동을 늘리면 좋습니다.`);
     else if(gap<=-1)good.push(`${nm}이 Reading보다 앞서 있습니다.`);
   });
@@ -9162,11 +9512,12 @@ function ltReportBlocks(s,a){
   LT_DOMAIN_IDS.forEach(d=>{
     const x=rated[d];if(!x)return;
     const sc=ltScore(x),pv=sc!=null?ltPrevScored(s,d,x):null;
-    let sub="선생님 평가 · "+e(x.date||"");
+    const secTxt=ltSecText(x);
+    let sub=(secTxt?"문항 확인 · ":"선생님 평가 · ")+e(x.date||"")+(secTxt?" · "+e(secTxt):"");
     if(sc!=null)sub+=" · "+LT_RUBRIC_IDS.map(k=>LT_RUBRIC_KO[k]+" "+x.rubric[k]*5).join(" · ");
     const cnt=LT_COUNT_KO[d]?[["words",0],["sentences",1]].filter(([f])=>ltCount(x[f])!=null).map(([f,i])=>LT_COUNT_KO[d][i]+" "+x[f]+"개"):[];
     if(cnt.length)sub+="<br>"+cnt.join(" · ");
-    rows.push([AEA.RATING_DOMAINS[d].ko,sub,x.level,sc,pv?ltScore(pv):null]);
+    rows.push([LT_RD[d].ko,sub,x.level,sc,pv?ltScore(pv):null]);
   });
   const scored=rows.some(x=>x[3]!=null);
   B.push(`<div class="rp-sec"><h3>영역별 수준</h3><div class="rg${scored?" sc":""}"><div class="rg-row rg-head"><span></span>${LV.map(L=>`<span>${L}</span>`).join("")}${scored?"<span>점수</span>":""}</div>`+
@@ -9236,9 +9587,9 @@ function ltCsv(kind){
   const all=assessments.slice().sort((a,b)=>a.startedAt-b.startedAt),rows=[],ST=AEA.STAGES,nm=a=>{const s=ltStudent(a.studentId);return s?s.name||"":"";};
   const basis={high:"판정 근거 충분",medium:"판정 근거 보통",low:"판정 근거 부족"};
   if(kind==="ratings"){
-    rows.push(["학생","영역","평가일","레벨","점수","내용","문장","정확성","흐름","단어수","문장수","메모"]);
+    rows.push(["학생","영역","평가일","레벨","점수","내용","문장","정확성","흐름","단어수","문장수","메모","문항 결과"]);
     students.forEach(s=>LT_DOMAIN_IDS.forEach(d=>ltRatings(s,d).forEach(x=>{const sc=ltScore(x);
-      rows.push([s.name||"",AEA.RATING_DOMAINS[d].ko,x.date||"",x.level,sc??"",...LT_RUBRIC_IDS.map(k=>sc!=null?x.rubric[k]*5:""),ltCount(x.words)??"",ltCount(x.sentences)??"",x.note||""]);})));
+      rows.push([s.name||"",LT_RD[d].ko,x.date||"",x.level,sc??"",...LT_RUBRIC_IDS.map(k=>sc!=null?x.rubric[k]*5:""),ltCount(x.words)??"",ltCount(x.sentences)??"",x.note||"",ltSecText(x)]);})));
   }else if(kind==="answers"){
     rows.push(["학생","평가일","세트","문항","스킬","선택번호","정답여부","응답시간ms","빠른응답"]);
     all.forEach(a=>(a.path||[]).forEach(p=>{const t=AEA.TL[p.testlet];if(!t)return;
@@ -10946,10 +11297,14 @@ function currParseInput(text){
 // blank), and the same title — in full, or its Korean or English half, or a title that starts with
 // the existing one ("Sophie's Masterpiece" ← "Sophie's Masterpiece: A Spider's Tale").
 const CURR_FILL=["year","cat","wb","writing","books","acts","grammar","note","speaking"];
-function currPlan(items){
+// v158, opt.align — only for the plan that ships with the app: a topic that is already in the app
+// but in another week than the plan now gives it is listed in `move`, so a change of weeks in the
+// plan (the level tests went from the first to the second week) can follow into a plan that was
+// imported earlier. A file or a paste of the teacher's own never moves anything.
+function currPlan(items,opt){
   // v142: "used" holds the topic records themselves, not their ids — two topics that an older version
   // gave the same id must still each be matchable, or a re-import added a stray copy.
-  const used=new Set(),add=[],fill=[],same=[];
+  const used=new Set(),add=[],fill=[],same=[],move=[],align=!!(opt&&opt.align);
   for(const it of items){
     const names=[it.topic,it.ko,it.en].map(currNorm).filter(Boolean);
     const ex=curriculum.find(e=>{
@@ -10962,15 +11317,36 @@ function currPlan(items){
     });
     if(!ex){add.push(it);continue;}
     used.add(ex);
+    if(align&&+it.week>0&&(+ex.week||0)!==+it.week)move.push({ex,week:+it.week});
     const changes={};CURR_FILL.forEach(k=>{if(!ex[k]&&it[k])changes[k]=it[k];});
     if(Object.keys(changes).length)fill.push({ex,changes});else same.push(ex);
   }
-  return {add,fill,same,total:items.length};
+  return {add,fill,same,move,plan:align,total:items.length};
+}
+// Give the moved topics their new week, then put the rows of each month that was touched back in
+// week order. Only rows that have a week take part and they share out the places they already
+// held, so rows without a week and the rows of other months stay exactly where they are; rows of
+// one week keep the order they had (a topic and its level rows stay together).
+function currApplyMoves(moves){
+  if(!moves.length)return;
+  const key=r=>(r.year||"")+"|"+(r.month||""),keys=new Set();
+  moves.forEach(({ex,week})=>{ex.week=week;keys.add(key(ex));});
+  const full=currOrdered();csFixOrder(full);
+  keys.forEach(k=>{
+    const rows=full.filter(r=>key(r)===k&&+r.week>0),slots=rows.map(r=>r.ord).sort((a,b)=>a-b);
+    rows.map((r,i)=>({r,i})).sort((A,B)=>(+A.r.week-+B.r.week)||(A.i-B.i)).forEach((x,i)=>{x.r.ord=slots[i];});
+  });
+}
+// The plan that ships with the app has a revision number; settings.currPlanRev is the one this
+// workspace has seen. It is only written once the cloud's settings have been read (see currAscReady).
+function currPlanSeen(){
+  if((+settings.currPlanRev||1)>=CURR_PLAN_REV||!currAscReady())return false;
+  settings.currPlanRev=CURR_PLAN_REV;return true;
 }
 function currImportPreview(){
   const text=document.getElementById("ci-text")?.value||"";
   const r=currParseInput(text);
-  currImportPlan=r.items.length?currPlan(r.items):null;
+  currImportPlan=r.items.length?currPlan(r.items,{align:currIsPlanText(text)}):null;
   currImportShow(r.error,r.items);
 }
 // v156: the plan for 2027 (December 2026 – December 2027) ships with the app as a file of its own,
@@ -10980,16 +11356,59 @@ function currImportPreview(){
 // only while the app has no topic for 2027. Pressing it fetches the plan and imports it straight
 // away — the Undo in the message that follows takes it back — then brings the first new row into
 // view (the list runs oldest first, so 2027 is at the far end).
-const CURR_PLAN_YEAR=2027;
+// v158: the plan changed (revision 2: the level tests are in the second week of March, June,
+// September and December). A workspace that already holds 2027 topics and has not seen this
+// revision gets the same line with two buttons: Update my plan moves the topics that are in the
+// app to the plan's weeks — nothing is added, nothing else is touched, Undo takes it back — and
+// Keep mine only notes that the revision was seen. The Import window's plan button does the same
+// moves as part of its preview.
+const CURR_PLAN_YEAR=2027,CURR_PLAN_REV=2;
+let _currPlanText=null,_currPlanBusy=false;
+const currPlanNorm=t=>String(t||"").replace(/\r\n?/g,"\n").trim();
+const currIsPlanText=t=>_currPlanText!=null&&currPlanNorm(t)===_currPlanText;
+function currPlanState(){
+  if(!curriculum.some(c=>+c.year===CURR_PLAN_YEAR))return "load";
+  return (+settings.currPlanRev||1)<CURR_PLAN_REV&&currAscReady()?"update":"";
+}
 function currPlanBar(){
-  const el=document.getElementById("curr-plan");if(el)el.hidden=curriculum.some(c=>+c.year===CURR_PLAN_YEAR);
+  const el=document.getElementById("curr-plan");if(!el)return;
+  const st=currPlanState(),e=escapeAttr,dis=_currPlanBusy?" disabled":"";
+  el.hidden=!st;
+  el.innerHTML=!st?"":st==="load"
+    ?`<span>${e(tx("The 2027 plan is not in the app yet."))}</span><button type="button" class="btn btn-sm btn-p" id="curr-plan-btn" onclick="currPlanQuick()"${dis}><i class="ti ti-calendar-event"></i> ${e(tx("Load the 2027 plan"))}</button>`
+    :`<span>${e(tx("The 2027 plan has changed: the level tests are now in the second week of March, June, September and December."))}</span><span class="curr-plan-btns">`+
+      `<button type="button" class="btn btn-sm" id="curr-plan-skip" onclick="currPlanSkip()"${dis}>${e(tx("Keep mine"))}</button>`+
+      `<button type="button" class="btn btn-sm btn-p" id="curr-plan-btn" onclick="currPlanUpdate()"${dis}>${e(tx("Update my plan"))}</button></span>`;
+}
+function currPlanSkip(){
+  if(_currPlanBusy)return;
+  if(currPlanSeen())save();
+  currPlanBar();
+}
+async function currPlanUpdate(){
+  if(_currPlanBusy)return;
+  _currPlanBusy=true;currPlanBar();
+  try{
+    let text;
+    try{text=await currPlanFetch();}
+    catch(e){console.error("Plan not loaded",e);showToast(tx("Could not load the plan — check the connection and try again."));return;}
+    const r=currParseInput(text),p=r.items.length?currPlan(r.items,{align:true}):null;
+    if(!p){showToast(tx("Could not load the plan — check the connection and try again."));return;}
+    const snapshot=JSON.parse(JSON.stringify(curriculum)),hadRev=Object.prototype.hasOwnProperty.call(settings,"currPlanRev"),oldRev=settings.currPlanRev;
+    const back=()=>{curriculum.splice(0,curriculum.length,...snapshot);if(hadRev)settings.currPlanRev=oldRev;else delete settings.currPlanRev;};
+    currApplyMoves(p.move);currPlanSeen();
+    if(save()===false){back();return;}
+    if(!p.move.length){showToast(tx("Nothing to move — your plan already has these weeks."));return;}
+    _currJumpIds=new Set(p.move.map(m=>m.ex.id));
+    renderCurriculum();
+    showUndoToast(tx("{n} rows moved to the plan's weeks",{n:p.move.length}),()=>{back();save();renderCurriculum();});
+  }finally{_currPlanBusy=false;currPlanBar();}
 }
 async function currPlanFetch(){
   const res=await fetch("plans/2027.csv",{cache:"no-cache"});
   if(!res.ok)throw new Error("HTTP "+res.status);
   return res.text();
 }
-let _currPlanBusy=false;
 async function currPlanQuick(){
   if(_currPlanBusy)return;
   _currPlanBusy=true;
@@ -10999,9 +11418,9 @@ async function currPlanQuick(){
     try{text=await currPlanFetch();}
     catch(e){console.error("Plan not loaded",e);showToast(tx("Could not load the plan — check the connection and try again."));return;}
     const r=currParseInput(text);
-    const p=r.items.length?currPlan(r.items):null;
+    const p=r.items.length?currPlan(r.items,{align:true}):null;
     if(!p){showToast(tx("Could not load the plan — check the connection and try again."));return;}
-    if(!(p.add.length||p.fill.length)){showToast(tx("The 2027 plan is already in the app."));currPlanBar();return;}
+    if(!(p.add.length||p.fill.length||p.move.length)){showToast(tx("The 2027 plan is already in the app."));currPlanBar();return;}
     currImportPlan=p;currImportApply();
   }finally{_currPlanBusy=false;if(btn)btn.disabled=false;}
 }
@@ -11028,7 +11447,7 @@ async function currLoadPlan(){
     const text=await currPlanFetch();
     // Something was pasted or typed while the file was on its way: that is the newer wish — keep it.
     if(!t||t.value!==was)return;
-    t.value=text;
+    t.value=text;_currPlanText=currPlanNorm(t.value);
     const f=document.getElementById("ci-file");if(f)f.value="";
     const n=document.getElementById("ci-fname");if(n)n.textContent=tx("2027 plan");
     currImportPreview();
@@ -11049,24 +11468,27 @@ function currImportShow(error,items){
   const box=document.getElementById("ci-preview"),btn=document.getElementById("ci-apply"),lbl=document.getElementById("ci-apply-lbl");
   if(!box)return;
   const p=currImportPlan;
-  if(btn)btn.disabled=!p||!(p.add.length||p.fill.length);
-  if(lbl)lbl.textContent=p&&(p.add.length||p.fill.length)?tx("Import {n} topics",{n:p.add.length+p.fill.length}):tx("Import");
+  if(btn)btn.disabled=!p||!(p.add.length||p.fill.length||p.move.length);
+  if(lbl)lbl.textContent=p&&(p.add.length||p.fill.length)?tx("Import {n} topics",{n:p.add.length+p.fill.length}):p&&p.move.length?tx("Move {n} rows",{n:p.move.length}):tx("Import");
   if(error){box.innerHTML=`<p class="u-hint" style="color:var(--red)">${escapeHTMLBasic(error)}</p>`;return;}
   if(!p){box.innerHTML="";return;}
   const byYear={};items.forEach(it=>{const k=it.year||tx("No year");byYear[k]=(byYear[k]||0)+1;});
   const yrs=Object.keys(byYear).sort().reverse().map(k=>`<span class="u-badge">${escapeHTMLBasic(String(k))} · ${byYear[k]}</span>`).join(" ");
   const sample=items.slice(0,6).map(it=>`<div class="inc-row"><div class="cell-main">${escapeHTMLBasic([it.year,it.month?tx(it.month):"",it.week?tx("Wk")+" "+it.week:""].filter(Boolean).join(" "))}</div><div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.cat?`<span class="u-badge">${escapeHTMLBasic(it.cat)}</span> `:""}${escapeHTMLBasic(it.topic)}</div><span></span></div>`).join("");
   box.innerHTML=`<p style="font-size:13px;margin:0 0 6px">${tx("{n} topics found",{n:p.total})} ${yrs}</p>
-    <p class="u-hint" style="margin:0 0 10px">${tx("New: {a} · already in the app: {b} (empty fields filled in for {c})",{a:p.add.length,b:p.fill.length+p.same.length,c:p.fill.length})}</p>
+    <p class="u-hint" style="margin:0 0 10px">${tx("New: {a} · already in the app: {b} (empty fields filled in for {c})",{a:p.add.length,b:p.fill.length+p.same.length,c:p.fill.length})}${p.move.length?"<br>"+tx("{n} rows are in another week in the plan now — they move to that week.",{n:p.move.length}):""}</p>
     ${sample}${items.length>6?`<div class="u-hint" style="padding:6px 0">${tx("…and {n} more",{n:items.length-6})}</div>`:""}`;
 }
 function currImportApply(){
-  const p=currImportPlan;if(!p||!(p.add.length||p.fill.length))return;
-  const snapshot=JSON.parse(JSON.stringify(curriculum));
+  const p=currImportPlan;if(!p||!(p.add.length||p.fill.length||p.move.length))return;
+  const snapshot=JSON.parse(JSON.stringify(curriculum)),hadRev=Object.prototype.hasOwnProperty.call(settings,"currPlanRev"),oldRev=settings.currPlanRev;
   const touched=new Set();
   p.add.forEach(it=>{const {ko,en,...rec}=it;const n={id:uid(),...rec};curriculum.push(n);touched.add(n.id);});
+  if(!touched.size)p.move.forEach(({ex})=>touched.add(ex.id));
   if(!touched.size)p.fill.forEach(({ex})=>touched.add(ex.id));
   p.fill.forEach(({ex,changes})=>Object.assign(ex,changes));
+  currApplyMoves(p.move);
+  if(p.plan)currPlanSeen();
   if(save()===false)return;
   closeModal("mo-currimport");
   const yf=document.getElementById("curr-yf");if(yf)yf.value="";
@@ -11074,8 +11496,9 @@ function currImportApply(){
   // renderCurriculum does the jump once the rows are really drawn (see currJumpPending).
   _currJumpIds=touched;
   renderCurriculum();
-  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:p.fill.length}),()=>{
+  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:new Set([...p.fill,...p.move].map(x=>x.ex)).size}),()=>{
     curriculum.splice(0,curriculum.length,...snapshot);   // in place: the sync layer holds this array
+    if(hadRev)settings.currPlanRev=oldRev;else delete settings.currPlanRev;
     save();renderCurriculum();
   });
 }
@@ -14826,6 +15249,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   <div class="mb" style="max-width:520px">
     <div class="mt"><span id="ltq-title"></span><button class="bic" onclick="closeModal('mo-lt-rate')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <p class="u-hint" id="ltq-task"></p>
+    <p class="ltq-last" id="ltq-last" hidden></p>
+    <div id="ltq-sec" class="ltq-sec" hidden></div>
     <div id="ltq-list"></div>
     <div id="ltq-rub" class="ltq-rub" hidden></div>
     <div id="ltq-counts" class="ltq-counts" hidden>
