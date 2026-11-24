@@ -552,7 +552,7 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 /* v161: the task of a level in the Speaking / Writing window; a level's whole pack in the print list */
 .ltq-task{font-size:var(--fs-base);margin:8px 0 0;overflow-wrap:anywhere}
 /* v166: every skill in one go — the window between two skills */
-.lt-ph-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lt-ph-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.lt-ph-btns{display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;text-transform:none;letter-spacing:0}
 .lta-list{list-style:none;margin:0 0 12px;padding:0;border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
 .lta-list li{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--bdr);font-size:var(--fs-base);min-height:44px;box-sizing:border-box}
 .lta-list li:first-child{border-top:0}
@@ -684,6 +684,10 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .lt-left{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:4px;font-size:var(--fs-sm);color:var(--amb-t)}   /* v177: skills of the newest test still to rate */
 .lt-leftb{min-height:28px;padding:1px 10px;border:1px solid var(--amb-bdr);border-radius:99px;background:var(--amb-l);color:var(--amb-t);font-size:var(--fs-sm);font-family:var(--font);cursor:pointer}
 .lt-leftb:hover{border-color:var(--amb-t)}
+#ltrp-list{max-height:40vh;overflow-y:auto;margin-bottom:6px}   /* v178: pasted ratings, as understood */
+.ltrp-row{display:grid;gap:2px;padding:6px 0;border-bottom:1px solid var(--bdr);font-size:var(--fs-sm)}.ltrp-row:last-child{border-bottom:0}
+.ltrp-main{display:flex;align-items:center;gap:6px;flex-wrap:wrap;overflow-wrap:anywhere}.ltrp-main .lt-lv{width:22px;height:22px;font-size:12px;border-radius:6px}
+.ltrp-x{color:var(--txt2);overflow-wrap:anywhere}.ltrp-row.bad .ltrp-main{font-family:var(--mono);color:var(--txt2)}.ltrp-row.bad .ltrp-x{color:var(--red-t)}
 @media(max-width:600px){.lt-leftb{min-height:44px;padding:1px 14px}}
 .lt-acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto}
 .lt-hist{background:var(--surf2);border-bottom:1px solid var(--bdr);padding:6px 14px 8px 56px}
@@ -1864,7 +1868,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
 <!-- LEVEL TEST (v145) -->
 <div id="page-leveltest" class="page">
-  <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenTrial()" title="A test without a student — for a trial lesson, or to see the test yourself" data-i18n data-i18n-title><i class="ti ti-player-play"></i> Sample test</button><button class="btn" onclick="ltOpenScript()" title="What to read aloud and the answers, on this screen" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Teacher's script</button><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button><button class="btn" onclick="ltOpenLevels()" title="Each student's start level — where their test begins and which sheets are printed for them" data-i18n data-i18n-title><i class="ti ti-stairs-up"></i> Start levels</button><button class="btn" onclick="openModal('mo-lt-export')" title="Save the test records as a spreadsheet file" data-i18n data-i18n-title><i class="ti ti-download"></i> Save as CSV</button></div></div>
+  <div class="fbar"><div id="lt-sum" class="tag-list"></div><div class="fbar-right"><button class="btn" onclick="ltOpenTrial()" title="A test without a student — for a trial lesson, or to see the test yourself" data-i18n data-i18n-title><i class="ti ti-player-play"></i> Sample test</button><button class="btn" onclick="ltOpenScript()" title="What to read aloud and the answers, on this screen" data-i18n data-i18n-title><i class="ti ti-message-2"></i> Teacher's script</button><button class="btn" onclick="ltOpenSheets()" title="Test sheets and the answer key, for a test on paper" data-i18n data-i18n-title><i class="ti ti-printer"></i> Print sheets</button><button class="btn" onclick="ltOpenLevels()" title="Each student's start level — where their test begins and which sheets are printed for them" data-i18n data-i18n-title><i class="ti ti-stairs-up"></i> Start levels</button><button class="btn" onclick="ltOpenRPaste()" title="Put in ratings from a list — for example one made from photos of the writing" data-i18n data-i18n-title><i class="ti ti-clipboard-text"></i> Paste ratings</button><button class="btn" onclick="openModal('mo-lt-export')" title="Save the test records as a spreadsheet file" data-i18n data-i18n-title><i class="ti ti-download"></i> Save as CSV</button></div></div>
 <div class="pc">
   <div class="curr-plan" id="lt-nosync" hidden></div>
   <div class="card"><div id="lt-list"></div></div>
@@ -2343,6 +2347,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>How do I find out which books a student can read?</dt><dd>Level test → the student's <b>Details</b> → <b>Add a book check</b>. Pick a book, mark about 100 words in the middle, have the student read them aloud and count the words they miss or need help with; then ask what it was about. 5 or fewer missed in 100 is a book to read alone, 6 to 10 a book for lessons, more is too hard for now — and one band down if they could not say what it was about. Try an easier or a harder book until you have one of each: the lists at the top of the block are the range. Use the same pages for every student if you want to compare them, and avoid a book the student already knows.</dd>
           <dt>How do I test every skill in one go?</dt><dd>Level test → <b>Start test</b> on the student's row. <b>All skills</b> is picked: the reading test comes first, and when it ends a small window lists the seven skills — Reading, Listening, Grammar, Vocabulary, Phonics, Speaking, Writing — with what is done and what comes next. Press <b>Start</b> for the next skill, <b>Skip</b> to leave it for now, or <b>Stop here</b>. Listening, Grammar, Vocabulary and Phonics open on the student's screen from the reading level (on paper they open their window, to pick the level from the marked sheet); Speaking and Writing open their window, where you can record or add a photo and pick the level. At the end, <b>Reading result</b> opens the result to confirm the class level. If you stop in the middle, the student's <b>Details</b> → <b>All skills</b> picks the run up from where today's results stand. To test reading alone, pick <b>Reading only</b> in the start window.</dd>
           <dt>Can I end the test without Speaking and add it later?</dt><dd>Yes. In the window between the skills press <b>Skip</b> on Speaking (or <b>Stop here</b>) — the test ends with what is done, and nothing is lost. On the Level test page the student's row then shows <b>Still to rate</b> with a button for each skill that is not rated for this test; press <b>Speaking</b> in a later lesson, rate it, and it is done. The report follows the ratings: it takes Speaking in from the moment it is rated, so the report can be opened and printed after that. Until then the report window says, in a line above the paper, which skills are left out (or show an earlier rating) — the line is not printed. The buttons go quiet when every skill is rated, or when a new test is due.</dd>
+          <dt>Where do I keep the paper record sheet, and how do I put in ratings from a list?</dt><dd><b>Record sheet photos</b>: Level test → the student's <b>Details</b> → <b>Record sheet</b>. Add photos of the sheet you filled in by hand; they are kept with the student (sign-in needed, like recordings and photos of the writing) and can be looked at larger or deleted. The photos are only kept — what is written on them is not read into the results. <b>Paste ratings</b> (button on the Level test page): for ratings worked out outside the app, for example a list made from photos of the writing. One rating a line, the parts divided by <b>|</b>: name | skill | level | four points (content, sentences, accuracy, flow — 0 to 5 each) | words | sentences | note. Only the first three are needed; points and counts are for Speaking and Writing. A line <b>date: 2026-11-24</b> dates the lines after it (otherwise today). Press <b>Check</b> to see each line as it was understood, or why it was not, then <b>Apply</b> — nothing is saved before that, and Undo takes the saved ratings out again.</dd>
           <dt>Can I keep what a student said or wrote?</dt><dd>Yes. Level test → the student's <b>Details</b> → <b>Speaking</b>: press <b>Record</b> to record in the app (it goes on while the task is on the student's screen, and <b>Stop and keep</b> saves it), or <b>Add a recording file</b> for one you made with the phone's own recorder. <b>Writing</b>: <b>Add photos</b> takes or picks photos of the paper; large photos are made smaller first. They are kept with the student, apart from the rating, so they can be added later and a rating can be saved without them. The files go to your Google account's storage (the same place as book covers), so you need to be signed in, and they show on your other devices. A recording stops by itself after five minutes; a file can be up to 25 MB, a photo 15 MB. Deleting asks first and offers Undo for a few seconds; after that the file is gone for good.</dd>
           <dt>How do I stop in the middle of a test, and what is kept?</dt><dd>On the student's screen, hold the lock at the top right (marked <b>Teacher</b>) for a second and choose <b>Stop and leave (continue later)</b>. Everything answered so far is kept: the reading test in your data, the questions of Listening, Grammar, Vocabulary and Phonics on that device. To go on, press <b>Continue test</b> on the student's row. If the app was simply closed, it opens again on that student's test. What you picked in a Speaking or Writing window without saving is kept as well and comes back when you open the skill again. A sample keeps its reading test only. During a test of every skill you do not have to stop at all to change skill: press it in the row at the top of the student's screen. Because the answers of an unfinished skill stay on the device, finish it on the same device. And check that the device is signed in: if the Level test page shows "This device is not signed in", what you do there is not shared with your other devices.</dd>
           <dt>How do I check Listening, Grammar, Phonics and Vocabulary, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b>, <b>Grammar</b>, <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>. Phonics works like Listening (you say a word, the student picks it among look-alikes — 6 a level); Vocabulary like Grammar (the student alone — 8 a level). For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
@@ -2374,6 +2379,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v178 · 2026-11-24</dt><dd><b>Level test: photos of the record sheet, and ratings from a pasted list.</b> <b>Record sheet</b> (new button in a student's Details): keep photos of the paper record sheet with the student — add, look at larger, delete. <b>Paste ratings</b> (new button on the Level test page): ratings worked out outside the app are put in from text, one a line — name | skill | level | four points | words | sentences | note. <b>Check</b> shows how each line was understood; <b>Apply</b> saves them, with Undo.</dd>
           <dt>v177 · 2026-11-24</dt><dd><b>Level test: end without Speaking, add it later.</b> A test could already be ended with a skill skipped, and the report took the rating in whenever it was made — but nothing showed which skills were still open. Now the student's row on the Level test page shows <b>Still to rate</b> with a button for each skill not rated for the newest test (a rating counts from two weeks before the test's date); a press opens that skill. The report window says above the paper which skills are left out or show an earlier rating (not printed), so a report does not go out without Speaking unnoticed. The window between the skills says the same when skills were skipped.</dd>
           <dt>v176 · 2026-11-24</dt><dd><b>Start levels, a printed pack for each student, and easier printing.</b> <b>Start levels</b> (new button on the Level test page): a window with every student and the levels A–E. Press one and it is saved; <b>Set many at once</b> takes a pasted list, a line a student — the name (English or Korean), then the level. This is where a student's first test begins: <b>Start test</b> opens on that level. A student who has already taken a test starts the next one at the level of that test (the window says so beside the name), and once a result is confirmed the confirmed level takes the place of the level set here. <b>A pack for each student</b> (in <b>Print sheets</b>): for every student with a start level, one print with the <b>record sheet carrying the name and the level</b>, then that level's sheets — its two reading sets, one of the level below and one above, and Listening, Grammar, Vocabulary, Phonics, Speaking and Writing (11 pages a student; 10 at A and E). For one student only: <b>Start test → On paper → Print this student's sheets</b>. The level buttons in the list tick the same pack. <b>One full set</b> ticks reading sets 1 and 2 of every level and every other sheet — 40 sheets, all a class needs when the students answer aloud and the sheets are used again; <b>Tick all</b> still ticks all 50. <b>Rule card &amp; record sheet</b>: on paper nothing moves up or down by itself, so the <b>rule card</b> (three pages) says how many right send a student up, down or to a second set, where the test ends, how Listening, Grammar, Vocabulary and Phonics go, the question and task of each level for Speaking and Writing, the score sheet, the book check, and how to enter it all in the app afterwards; its numbers are worked out from the test itself. The blank <b>record sheet</b> is one page: set the number of copies when you print. <b>Report:</b> the copy for parents now prints on <b>one A4 page</b> for a usual report; the teacher's copy is as before.</dd>
           <dt>v175 · 2026-11-24</dt><dd><b>Students: mark a student who is not on your curriculum.</b> Some students are taught another way and do not follow the curriculum. In the student's window, under <b>Lesson plan</b>, there is a new switch: <b>Not on my curriculum</b>. Turn it on and the student carries an <b>Off curriculum</b> mark beside the name on the <b>Students</b> page and on the <b>Level test</b> page, and first in the line at the top of their <b>lesson window</b>. On the <b>Curriculum</b> page they get no button — they are named after the buttons, under "Off curriculum" — and they are not in the list of the <b>Monthly note</b>. Nothing else changes for them: lessons, payments, reports and the level test work as before. Turn the switch off and the mark is gone everywhere.</dd>
@@ -2448,7 +2454,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v177</b> · FAQ current as of: <b>2026-11-24</b><br/>
+          Guide written against version: <b>v178</b> · FAQ current as of: <b>2026-11-24</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2593,6 +2599,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>학생이 어떤 책까지 읽을 수 있는지 어떻게 알아보나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>책 읽기 확인 추가</b>. 책을 고르고 중간쯤에서 100단어 정도를 표시해 둔 뒤, 소리 내어 읽게 하면서 틀리거나 도와준 단어를 세세요. 다 읽으면 무슨 내용이었는지 물어봅니다. 100단어 중 5개 이하로 틀리면 혼자 읽을 책, 6~10개면 수업용 책, 그보다 많으면 아직 어려운 책이고, 내용을 말하지 못했으면 한 단계 낮춥니다. 더 쉬운 책이나 더 어려운 책으로 바꿔 가며 각각 하나씩 나오면, 맨 위의 목록이 그 학생의 범위입니다. 학생끼리 비교하려면 같은 쪽을 읽히고, 이미 아는 책은 피하세요.</dd>
           <dt>모든 영역을 한 번에 테스트하려면요?</dt><dd>레벨테스트 → 학생 줄의 <b>테스트 시작</b>. <b>모든 영역</b>이 선택되어 있습니다: 읽기 테스트를 먼저 보고, 끝나면 작은 창에 일곱 영역(읽기, 듣기, 문법, 어휘, 파닉스, 말하기, 쓰기)이 끝난 것과 다음 차례와 함께 나옵니다. 다음 영역은 <b>시작</b>, 지금은 넘어가려면 <b>건너뛰기</b>, 그만하려면 <b>여기서 마치기</b>를 누르세요. 듣기·문법·어휘·파닉스는 읽기 결과 레벨부터 학생 화면에서 열리고(종이 시험이면 채점한 시험지를 보고 레벨을 고르는 창이 열립니다), 말하기·쓰기는 녹음이나 사진을 올리고 레벨을 고르는 창이 열립니다. 마지막에 <b>읽기 결과</b>를 누르면 결과 창에서 수업 레벨을 확정할 수 있습니다. 중간에 멈췄다면 학생의 <b>자세히</b> → <b>모든 영역</b>을 누르면 오늘 한 곳부터 이어집니다. 읽기만 보려면 시작 창에서 <b>읽기만</b>을 고르세요.</dd>
           <dt>말하기를 빼고 테스트를 먼저 끝내고, 나중에 넣을 수 있나요?</dt><dd>네. 영역 사이에 뜨는 창에서 말하기 차례에 <b>건너뛰기</b>(또는 <b>여기서 마치기</b>)를 누르면 지금까지 한 것으로 테스트가 끝나고, 없어지는 것은 없습니다. 그러면 레벨테스트 페이지의 학생 줄에 <b>남은 영역</b>과 함께 이번 테스트에서 아직 평가하지 않은 영역 버튼이 보입니다. 다음 수업에서 <b>말하기</b>를 눌러 평가하면 끝입니다. 리포트는 평가를 따라갑니다. 말하기를 평가한 때부터 리포트에 들어가므로, 리포트는 그 뒤에 열어 인쇄하면 됩니다. 그 전에 리포트를 열면 종이 위쪽 한 줄에 어떤 영역이 빠져 있는지(또는 예전 평가가 들어갔는지) 알려 주며, 이 줄은 인쇄되지 않습니다. 모든 영역을 평가했거나 다음 테스트 때가 되면 버튼은 사라집니다.</dd>
+          <dt>종이 기록지는 어디에 보관하고, 목록으로 된 평가는 어떻게 넣나요?</dt><dd><b>기록지 사진</b>: 레벨테스트 → 학생의 <b>자세히</b> → <b>학생 기록지</b>. 손으로 적은 기록지를 사진으로 추가하면 학생에게 보관됩니다(녹음·쓰기 사진처럼 로그인이 필요합니다). 크게 보거나 지울 수 있습니다. 사진은 보관만 하며, 적힌 내용이 결과로 자동 입력되지는 않습니다. <b>평가 붙여 넣기</b>(레벨테스트 페이지의 버튼): 앱 밖에서 정리한 평가, 예를 들어 쓰기 사진을 보고 만든 목록을 넣습니다. 한 줄에 평가 하나, <b>|</b> 로 나눕니다: 이름 | 영역 | 레벨 | 점수 네 개(내용, 문장, 정확성, 흐름 — 각 0–5) | 단어 수 | 문장 수 | 메모. 앞의 세 가지만 있어도 되고, 점수와 개수는 말하기·쓰기에만 넣습니다. <b>날짜: 2026-11-24</b> 줄을 넣으면 그 아래 줄들의 날짜가 됩니다(없으면 오늘). <b>확인</b>을 누르면 줄마다 어떻게 읽었는지, 못 읽었으면 왜인지 보여 주고, <b>적용</b>을 눌러야 저장됩니다. 저장한 뒤 실행 취소를 누르면 다시 빠집니다.</dd>
           <dt>학생이 말한 것과 쓴 것을 보관할 수 있나요?</dt><dd>네. 레벨테스트 → 학생의 <b>자세히</b> → <b>말하기</b>: <b>녹음하기</b>를 누르면 앱에서 바로 녹음합니다(과제를 학생 화면에 띄운 동안에도 계속 녹음되고, <b>멈추고 저장</b>을 누르면 저장됩니다). 핸드폰 녹음기로 따로 녹음한 파일은 <b>녹음 파일 올리기</b>로 올립니다. <b>쓰기</b>: <b>사진 올리기</b>로 종이를 찍거나 앨범에서 고릅니다. 큰 사진은 먼저 작게 줄여서 올립니다. 평가와 따로 학생에게 보관되므로, 나중에 올려도 되고 녹음·사진 없이 평가만 저장해도 됩니다. 파일은 선생님 Google 계정의 저장소(책 표지와 같은 곳)에 올라가므로 로그인이 필요하고, 다른 기기에서도 보입니다. 녹음은 5분이 되면 스스로 멈추고, 파일은 25 MB, 사진은 15 MB까지 올릴 수 있습니다. 삭제는 먼저 물어보고 몇 초 동안 되돌리기를 보여 줍니다. 그 뒤에는 파일이 완전히 지워집니다.</dd>
           <dt>테스트 도중에 멈추려면 어떻게 하고, 무엇이 남나요?</dt><dd>학생 화면 오른쪽 위의 자물쇠(<b>선생님</b>이라고 적힌 것)를 1초쯤 길게 누르고 <b>멈추고 나가기 (나중에 이어서)</b>를 고릅니다. 그때까지 푼 것은 모두 남습니다. 읽기 테스트는 데이터에, 듣기·문법·어휘·파닉스 문항은 그 기기에 남습니다. 이어서 하려면 학생 줄의 <b>이어서 풀기</b>를 누르세요. 앱이 그냥 닫혔다면 다시 열 때 그 학생의 테스트가 바로 뜹니다. 말하기·쓰기 창에서 고르고 저장하지 않은 것도 남아서, 그 영역을 다시 열면 돌아옵니다. 샘플은 읽기 테스트만 남습니다. 모든 영역 테스트 중에는 영역을 바꾸려고 멈출 필요도 없습니다. 학생 화면 위쪽 줄에서 누르면 됩니다. 풀다 만 영역의 답은 그 기기에만 있으므로, 같은 기기에서 마저 끝내 주세요. 그 기기가 로그인되어 있는지도 확인하세요. 레벨테스트 페이지에 "이 기기는 로그인되어 있지 않습니다"가 보이면, 거기서 한 것은 다른 기기에 나타나지 않습니다.</dd>
           <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
@@ -2624,6 +2631,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v178 · 2026-11-24</dt><dd><b>레벨테스트: 기록지 사진, 그리고 목록으로 평가 넣기.</b> <b>학생 기록지</b>(학생 자세히의 새 버튼): 종이 기록지 사진을 학생에게 보관합니다 — 추가, 크게 보기, 삭제. <b>평가 붙여 넣기</b>(레벨테스트 페이지의 새 버튼): 앱 밖에서 정리한 평가를 글로 넣습니다. 한 줄에 하나 — 이름 | 영역 | 레벨 | 점수 네 개 | 단어 수 | 문장 수 | 메모. <b>확인</b>이 줄마다 어떻게 읽었는지 보여 주고, <b>적용</b>이 저장합니다(실행 취소 가능).</dd>
           <dt>v177 · 2026-11-24</dt><dd><b>레벨테스트: 말하기 없이 먼저 끝내고, 나중에 넣기.</b> 지금까지도 영역을 건너뛰고 테스트를 끝낼 수 있었고 리포트는 평가한 때부터 그 영역을 넣었지만, 어떤 영역이 남았는지 보여 주는 곳이 없었습니다. 이제 레벨테스트 페이지의 학생 줄에 <b>남은 영역</b>과 함께, 가장 최근 테스트에서 아직 평가하지 않은 영역 버튼이 보입니다(테스트 날짜 2주 전부터의 평가를 이번 것으로 봅니다). 누르면 그 영역이 열립니다. 리포트 창은 어떤 영역이 빠져 있는지, 또는 예전 평가가 들어갔는지를 종이 위쪽에 알려 주어(인쇄되지 않음) 말하기 없는 리포트가 모르고 나가는 일이 없습니다. 영역 사이 창도 건너뛴 영역이 있으면 같은 내용을 알려 줍니다.</dd>
           <dt>v176 · 2026-11-24</dt><dd><b>시작 레벨, 학생별 인쇄 묶음, 그리고 쉬워진 인쇄.</b> <b>시작 레벨</b>(레벨테스트 페이지의 새 버튼): 모든 학생과 A–E 레벨이 나오는 창입니다. 레벨을 누르면 바로 저장되고, <b>여러 명 한 번에 넣기</b>에는 한 줄에 한 명씩 이름(영어 이름이나 한글 이름)과 레벨을 적은 목록을 붙여 넣을 수 있습니다. 이 레벨에서 그 학생의 첫 테스트가 시작됩니다. <b>테스트 시작</b>이 그 레벨로 열립니다. 이미 테스트를 본 학생은 다음 테스트를 그 테스트의 레벨에서 시작하고(창의 이름 옆에 표시됩니다), 결과를 확정하면 여기의 레벨이 확정한 레벨로 바뀝니다. <b>학생별 묶음</b>(<b>시험지 인쇄</b> 창): 시작 레벨이 있는 학생마다 <b>이름과 레벨이 적힌 기록지</b>와 그 레벨의 시험지를 한 번에 인쇄합니다. 그 레벨의 읽기 세트 2개, 아래·위 레벨 1개씩, 그리고 듣기·문법·어휘·파닉스·말하기·쓰기입니다(학생 한 명에 11쪽, A와 E는 10쪽). 한 학생만 뽑으려면 <b>테스트 시작 → 종이 시험 → 이 학생 시험지 인쇄</b>를 누릅니다. 목록의 레벨 버튼도 같은 묶음을 체크합니다. <b>한 벌 체크</b>는 모든 레벨의 읽기 세트 1·2와 나머지 시험지 전부(40장)를 체크합니다. 학생이 말로 답하고 시험지를 돌려 쓰면 이 한 벌로 반 전체가 봅니다. <b>모두 체크</b>는 전과 같이 50장입니다. <b>진행 카드 · 기록지</b>: 종이에서는 자동으로 올라가거나 내려가지 않으므로, <b>진행 카드</b>(3쪽)에 몇 개 맞으면 올라가고 내려가는지, 한 장 더 푸는 경우, 테스트가 끝나는 곳, 듣기·문법·어휘·파닉스 진행 방법, 말하기·쓰기의 레벨별 질문과 과제, 채점표, 책 읽기 확인, 나중에 앱에 넣는 방법을 담았습니다. 숫자는 테스트 자체에서 계산합니다. 빈 <b>학생 기록지</b>는 한 쪽이며, 인쇄할 때 매수를 맞추면 됩니다. <b>리포트:</b> 학부모용이 보통의 경우 <b>A4 한 쪽</b>에 인쇄됩니다. 선생님용은 그대로입니다.</dd>
           <dt>v175 · 2026-11-24</dt><dd><b>학생: 내 커리큘럼으로 수업하지 않는 학생을 표시합니다.</b> 다른 방식으로 수업해서 커리큘럼을 따르지 않는 학생이 있습니다. 학생 창의 <b>수업 설정</b> 아래에 <b>내 커리큘럼으로 수업하지 않음</b> 스위치가 생겼습니다. 켜면 그 학생은 <b>학생</b> 페이지와 <b>레벨테스트</b> 페이지의 이름 옆, 그리고 <b>수업 창</b> 맨 위 줄의 첫머리에 <b>커리큘럼 외</b> 표시가 붙습니다. <b>커리큘럼</b> 페이지에서는 버튼이 없어지고 버튼들 뒤의 "커리큘럼 외" 아래에 이름만 나오며, <b>월간 안내</b>의 학생 목록에도 나오지 않습니다. 그 밖에는 달라지는 것이 없습니다. 수업 기록, 수업료, 보고서, 레벨테스트는 그대로 쓸 수 있습니다. 스위치를 끄면 표시가 모두 사라집니다.</dd>
@@ -2697,7 +2705,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v177</b> · 자주 묻는 질문 기준일: <b>2026-11-24</b><br/>
+          설명서 기준 버전: <b>v178</b> · 자주 묻는 질문 기준일: <b>2026-11-24</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3995,6 +4003,15 @@ const I18N={ko:{
   "Tick the sheets you need. They open in a new window with a Print button.":"필요한 시험지를 체크하세요. 인쇄 버튼이 있는 새 창으로 열립니다.",
   "All skills":"모든 영역","Reading only":"읽기만","What to check":"확인할 범위",
   "Reading first, then {list} — one after the other. Each can be skipped.":"읽기를 먼저 보고, 이어서 {list} 순서로 진행합니다. 영역마다 건너뛸 수 있습니다.",
+  "Photos of the record sheet":"기록지 사진","Photo of the record sheet":"기록지 사진 한 장","Photos of the paper record sheet of this student — add, look at, delete":"이 학생의 종이 기록지 사진 — 추가, 보기, 삭제",
+  "Take a photo of the record sheet you filled in by hand during the test, and keep it with the student. The photos stay here; nothing on them is read into the results.":"테스트하면서 손으로 적은 기록지를 사진으로 찍어 학생에게 보관합니다. 사진은 여기에 그대로 남으며, 사진 속 내용이 결과로 자동 입력되지는 않습니다.",
+  "Paste ratings":"평가 붙여 넣기","Put in ratings from a list — for example one made from photos of the writing":"목록으로 평가 넣기 — 예: 쓰기 사진을 보고 만든 목록","Check":"확인",
+  "For ratings worked out elsewhere — for example a list made from photos of the writing. One rating a line: name | skill | level | content sentences accuracy flow (0–5 each) | words | sentences | note. Only the first three are needed. Check first; nothing is saved until you press Apply.":"앱 밖에서 정리한 평가를 넣는 곳입니다 — 예: 쓰기 사진을 보고 만든 목록. 한 줄에 평가 하나: 이름 | 영역 | 레벨 | 내용 문장 정확성 흐름(각 0–5) | 단어 수 | 문장 수 | 메모. 앞의 세 가지만 있어도 됩니다. 먼저 확인을 누르세요. 적용을 누르기 전에는 아무것도 저장되지 않습니다.",
+  "Changed — press Check again.":"내용이 바뀌었습니다 — 확인을 다시 누르세요.","Not a date up to today.":"오늘까지의 날짜가 아닙니다.","Needs a name, a skill and a level, divided by |.":"이름, 영역, 레벨이 | 로 나뉘어 있어야 합니다.",
+  "That name fits more than one student.":"그 이름에 맞는 학생이 두 명 이상입니다.","No student has that name.":"그 이름의 학생이 없습니다.","Not a skill: {x}":"영역 이름이 아닙니다: {x}","The level is a letter from A to E.":"레벨은 A–E 중 하나입니다.",
+  "Points and counts are for Speaking and Writing only.":"점수와 개수는 말하기·쓰기에만 넣습니다.","The points are four numbers from 0 to 5.":"점수는 0–5 숫자 네 개입니다.","This student and skill are in the list twice.":"같은 학생·영역이 목록에 두 번 있습니다.",
+  "{n} ready to save.":"{n}개를 저장할 수 있습니다.","{n} not understood — they are left out.":"{n}개는 읽지 못해 빠집니다.","Already rated that day — this one is added as the newer rating.":"그날 평가가 이미 있습니다 — 이 평가가 더 새 평가로 추가됩니다.",
+  "{n} saved, then the device could not save any more. Check again to see what is left.":"{n}개를 저장한 뒤 기기에 더 저장하지 못했습니다. 확인을 다시 눌러 남은 것을 보세요.","{n} rating(s) saved":"평가 {n}개 저장됨",
   "Still to rate":"남은 영역","Not rated for this test yet — press to rate":"이번 테스트에서 아직 평가하지 않았습니다 — 눌러서 평가","Last rated {date}, before this test — press to rate again":"마지막 평가는 {date}(이번 테스트 전)입니다 — 눌러서 다시 평가",
   "Left for later: {list}. The test can end here — rate them in a later lesson from the student's row, and the report takes each one in once it is rated.":"나중으로 미룬 영역: {list}. 테스트는 여기서 끝내도 됩니다 — 다음 수업에서 학생 줄의 영역 버튼을 눌러 평가하면, 그때부터 리포트에 들어갑니다.",
   "Reading is not finished. Go on with it from the student's row: Continue test, or Start test if it was not begun.":"읽기는 끝나지 않았습니다. 학생 줄의 이어서 풀기(시작하지 않았으면 테스트 시작)로 계속하세요.",
@@ -4593,7 +4610,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v177";
+const APP_VERSION="v178";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8725,6 +8742,7 @@ document.addEventListener("click",e=>{
   else if(act==="report")ltOpenReport(aid);
   else if(act==="rate")ltOpenRate(sid,b.dataset.dom);
   else if(act==="all")ltAllOpen(sid);
+  else if(act==="sheetpic")ltOpenSheetPic(sid);
   else if(act==="move")ltOpenMove(aid);
   else if(act==="book")ltOpenBook(sid);
   else if(act==="bookdel")ltDelBook(sid,b.dataset.cid);
@@ -9561,7 +9579,7 @@ function ltRoundLeft(s,a){
 // What the Details panel of a student shows first: reading from the test, then the ratings.
 function ltProfileHtml(s){
   const e=escapeAttr,last=ltLatest(s.id);
-  let h=`<div class="lt-ph lt-ph-row"><span>${e(tx("Skills"))}</span><button type="button" class="btn btn-xs" data-lt="all" data-sid="${e(s.id)}" title="${e(tx("Go through every skill one after the other, from where today's run stands"))}"><i class="ti ti-list-check"></i> ${e(tx("All skills"))}</button></div><div class="lt-skills"><span class="lt-skill">${e(tx("Reading|skill"))}`+
+  let h=`<div class="lt-ph lt-ph-row"><span>${e(tx("Skills"))}</span><span class="lt-ph-btns">${s.trial?"":`<button type="button" class="btn btn-xs" data-lt="sheetpic" data-sid="${e(s.id)}" title="${e(tx("Photos of the paper record sheet of this student — add, look at, delete"))}"><i class="ti ti-camera"></i> ${e(tx("Record sheet"))}${ltMedia(s,"record").length?` <span class="lt-sk-m">${ltMedia(s,"record").length}</span>`:""}</button>`}<button type="button" class="btn btn-xs" data-lt="all" data-sid="${e(s.id)}" title="${e(tx("Go through every skill one after the other, from where today's run stands"))}"><i class="ti ti-list-check"></i> ${e(tx("All skills"))}</button></span></div><div class="lt-skills"><span class="lt-skill">${e(tx("Reading|skill"))}`+
     (last?ltLv(last.result.level)+`<span class="lt-sk-x">${e(LT_STAGE[last.result.stage])}</span>`:`<span class="lt-sk-x">–</span>`)+`</span>`;
   LT_DOMAIN_IDS.forEach(d=>{
     const r=ltLastRating(s,d),sc=ltScore(r);
@@ -9883,7 +9901,20 @@ function ltAllGo(){
 // rating is saved — so a recording made on the phone today can be added tomorrow.
 // Files need the account: signed out there is nowhere to put them (the browser's own storage is
 // far too small), and the buttons say so.
-const LT_MEDIA_KIND={speaking:"audio",writing:"image"};
+const LT_MEDIA_KIND={speaking:"audio",writing:"image",record:"image"};
+// v178 — "record": photos of the paper record sheet (the sheet printed with the packs, filled in by
+// hand during a test). They are kept like the photos of the writing, on the student, and have their
+// own window (mo-lt-sheetpic), opened from the student's Details. The functions below work on the
+// window that is open: that one, or the rating window (ltMT).
+const LTSP={sid:null};
+const ltMT=()=>LTSP.sid!=null&&document.getElementById("mo-lt-sheetpic").classList.contains("show")?{sid:LTSP.sid,dom:"record",box:"ltp-media",file:"ltp-file"}:{sid:LTR.sid,dom:LTR.dom,box:"ltq-media",file:"ltq-file-image"};
+const ltMediaName=d=>d==="record"?tx("Record sheet"):LT_DOMAIN_NAME[d];
+function ltOpenSheetPic(sid){
+  const s=ltStudent(sid);if(!s||s.trial)return;
+  LTSP.sid=s.id;if(!LTM.busy)LTM.err="";
+  document.getElementById("ltp-title").textContent=tx("Record sheet")+" · "+(s.name||"");
+  openModal("mo-lt-sheetpic");ltRenderMedia();
+}
 const LT_MEDIA_MAX_MB={audio:25,image:15};
 const LT_MEDIA_EXT={"audio/mp4":"m4a","audio/x-m4a":"m4a","audio/aac":"aac","audio/mpeg":"mp3","audio/mp3":"mp3","audio/wav":"wav","audio/x-wav":"wav","audio/ogg":"ogg","audio/webm":"webm",
   "image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif"};
@@ -9892,17 +9923,17 @@ const LT_REC_TYPES=["audio/mp4;codecs=mp4a.40.2","audio/mp4","audio/webm;codecs=
 // pending: files that did not get onto a student (the upload or the save failed). They stay — also
 // when the window is closed and opened again — until one more try works or the teacher throws them away.
 const LTM={rec:null,stream:null,chunks:[],t0:0,timer:null,keep:true,who:null,busy:0,err:"",pending:[]};
-const ltMediaWaiting=()=>LTM.pending.filter(p=>ltSame(p.sid,LTR.sid)&&p.dom===LTR.dom);
+const ltMediaWaiting=()=>{const T=ltMT();return LTM.pending.filter(p=>ltSame(p.sid,T.sid)&&p.dom===T.dom);};
 const ltMedia=(s,d)=>(s&&Array.isArray(s.media)?s.media:[]).filter(m=>m&&m.dom===d&&LT_MEDIA_KIND[d]===m.kind&&typeof m.url==="string"&&/^https:\/\//.test(m.url)&&typeof m.id==="string"&&/^[\w-]+$/.test(m.id));   // the id goes into a button's handler: plain characters only
 const ltMediaCanStore=()=>!!(syncUser&&window.__uploadAsset);
 const ltMediaHere=(sid,dom)=>ltSame(LTR.sid,sid)&&LTR.dom===dom&&document.getElementById("mo-lt-rate").classList.contains("show");
 const ltClock=sec=>Math.floor(sec/60)+":"+String(Math.floor(sec%60)).padStart(2,"0");
 function ltRenderMedia(){
-  const box=document.getElementById("ltq-media");if(!box)return;
-  const kind=LT_MEDIA_KIND[LTR.dom],s=ltStudent(LTR.sid);
+  const T=ltMT(),box=document.getElementById(T.box);if(!box)return;
+  const kind=LT_MEDIA_KIND[T.dom],s=ltStudent(T.sid);
   box.hidden=!kind||!s||!!s.trial;if(box.hidden)return;
-  const e=escapeAttr,audio=kind==="audio",items=ltMedia(s,LTR.dom),can=ltMediaCanStore(),off=can&&!LTM.busy?"":" disabled";
-  const recHere=!!LTM.rec&&LTM.who&&ltSame(LTM.who.sid,LTR.sid)&&LTM.who.dom===LTR.dom;
+  const e=escapeAttr,audio=kind==="audio",items=ltMedia(s,T.dom),can=ltMediaCanStore(),off=can&&!LTM.busy?"":" disabled";
+  const recHere=!!LTM.rec&&LTM.who&&ltSame(LTM.who.sid,T.sid)&&LTM.who.dom===T.dom;
   const del=m=>`<button type="button" class="bic" onclick="ltMediaDel('${e(m.id)}')" title="${e(tx("Delete"))}" aria-label="${e(tx("Delete"))}"${off}><i class="ti ti-trash"></i></button>`;
   const list=!items.length?`<p class="u-hint">${e(audio?tx("No recording yet."):tx("No photo yet."))}</p>`
     :audio?`<div class="ltm-list">${items.map(m=>`<div class="ltm-item"><span class="lt-hdate">${e(m.date||"")}${m.dur?" · "+ltClock(m.dur):""}</span><audio controls preload="none" src="${e(m.url)}"></audio>${del(m)}</div>`).join("")}</div>`
@@ -9916,8 +9947,8 @@ function ltRenderMedia(){
       `<button type="button" class="btn btn-p" onclick="ltRecStop()"><i class="ti ti-player-stop"></i> ${e(tx("Stop and keep"))}</button><button type="button" class="btn" onclick="ltRecCancel()">${e(tx("Throw away"))}</button>`
     :audio?`<button type="button" class="btn" onclick="ltRecStart()"${off||(LTM.rec?" disabled":"")}><i class="ti ti-microphone"></i> ${e(tx("Record"))}</button>`+
       `<button type="button" class="btn" onclick="document.getElementById('ltq-file-audio').click()"${off}><i class="ti ti-upload"></i> ${e(tx("Add a recording file"))}</button>`
-    :`<button type="button" class="btn" onclick="document.getElementById('ltq-file-image').click()"${off}><i class="ti ti-camera"></i> ${e(tx("Add photos"))}</button>`;
-  box.innerHTML=`<div class="lt-ph">${e(audio?tx("Recordings"):tx("Photos of the writing"))}</div>`+list+state+`<div class="ltq-sec-row">${btns}</div>`+
+    :`<button type="button" class="btn" onclick="document.getElementById('${T.file}').click()"${off}><i class="ti ti-camera"></i> ${e(tx("Add photos"))}</button>`;
+  box.innerHTML=`<div class="lt-ph">${e(audio?tx("Recordings"):T.dom==="record"?tx("Photos of the record sheet"):tx("Photos of the writing"))}</div>`+list+state+`<div class="ltq-sec-row">${btns}</div>`+
     (can?"":`<p class="u-hint">${e(tx("Sign in with your Google Account (Settings → Account) to keep recordings and photos."))}</p>`);
 }
 // Recording in the app. It goes on while the task is on the student's screen, and is kept when
@@ -10009,19 +10040,19 @@ function ltMediaDrop(){
   LTM.pending=LTM.pending.filter(p=>!mine.includes(p));LTM.err="";ltRenderMedia();
 }
 async function ltMediaFiles(input){
-  const files=[...(input.files||[])],sid=LTR.sid,dom=LTR.dom;input.value="";
+  const T=ltMT(),files=[...(input.files||[])],sid=T.sid,dom=T.dom;input.value="";
   for(const f of files)await ltMediaAdd(sid,dom,f,{name:f.name});
 }
 // Delete: asked first, then the entry goes and Undo is offered. The file itself is removed only
 // when the time for Undo has passed — until then the entry can come back whole.
 const LT_MEDIA_UNDO_MS=8000;
 function ltMediaDel(id){
-  const s=ltStudent(LTR.sid);if(!s||LTM.busy||!ltMediaCanStore())return;
-  const m=ltMedia(s,LTR.dom).find(x=>x.id===id);if(!m)return;
+  const T=ltMT(),s=ltStudent(T.sid);if(!s||LTM.busy||!ltMediaCanStore())return;
+  const m=ltMedia(s,T.dom).find(x=>x.id===id);if(!m)return;
   if(!confirm(m.kind==="audio"?tx("Delete this recording?"):tx("Delete this photo?")))return;
   const sid=s.id,at=s.media.indexOf(m),uidNow=syncUser.uid;
   if(!ltStudentPut(s,"media",s.media.filter(x=>x!==m))){showToast(ltSaveFailed());return;}
-  const redraw=()=>{if(ltSame(LTR.sid,sid))ltRenderMedia();if(curPage==="leveltest")renderLevelTest();};
+  const redraw=()=>{if(ltSame(ltMT().sid,sid))ltRenderMedia();if(curPage==="leveltest")renderLevelTest();};
   let back=false;
   const timer=setTimeout(()=>{if(!back&&m.path&&window.__deleteAsset)window.__deleteAsset(uidNow,m.path);},LT_MEDIA_UNDO_MS);
   redraw();
@@ -10035,9 +10066,9 @@ function ltMediaDel(id){
   });
 }
 function ltMediaView(id){
-  const s=ltStudent(LTR.sid),m=s&&ltMedia(s,LTR.dom).find(x=>x.id===id);if(!m)return;
-  document.getElementById("ltph-title").textContent=(s.name||"")+" · "+LT_DOMAIN_NAME[m.dom]+" · "+(m.date||"");
-  const img=document.getElementById("ltph-img");img.src=m.url;img.alt=tx("Photo of the writing");
+  const T=ltMT(),s=ltStudent(T.sid),m=s&&ltMedia(s,T.dom).find(x=>x.id===id);if(!m)return;
+  document.getElementById("ltph-title").textContent=(s.name||"")+" · "+ltMediaName(m.dom)+" · "+(m.date||"");
+  const img=document.getElementById("ltph-img");img.src=m.url;img.alt=m.dom==="record"?tx("Photo of the record sheet"):tx("Photo of the writing");
   document.getElementById("ltph-open").href=m.url;
   openModal("mo-lt-photo");
 }
@@ -10805,6 +10836,74 @@ function ltLevelsPaste(){
   out.textContent=tx("{n} set.",{n:pairs.length})+(miss.length?" "+tx("Not applied ({n}): {list}",{n:miss.length,list:miss.join(" / ")}):"");
   if(pairs.length&&!miss.length)el.value="";
   ltLevelsRender();if(curPage==="leveltest")renderLevelTest();
+}
+// ── Paste ratings (v178) ──
+// Ratings worked out outside the app — a list made from photos of the writing, say — are put in from
+// text, one rating a line, the parts divided by "|" or a tab:
+//   name | skill | level | content sentences accuracy flow | words | sentences | note
+// Only the first three are needed. The four points (0–5 each) and the two counts are for Speaking
+// and Writing. A line "date: 2026-11-24" (or "날짜: …") gives the date of the lines after it; without
+// one it is today. Check shows every line as it was understood, or why it was not; nothing is saved
+// until Apply, and Apply saves only what Check showed (typing in the box afterwards asks for Check
+// again). Each saved line is one more rating of that skill, like one saved in its window.
+const LTRP={rows:[]};
+const LT_RP_SKILL={speaking:["speaking","말하기"],writing:["writing","쓰기"],listening:["listening","듣기"],grammar:["grammar","문법"],phonics:["phonics","파닉스"],vocabulary:["vocabulary","vocab","어휘"]};
+function ltOpenRPaste(){LTRP.rows=[];document.getElementById("ltrp-list").innerHTML="";document.getElementById("ltrp-res").textContent="";document.getElementById("ltrp-apply").disabled=true;openModal("mo-lt-rpaste");}
+function ltRPasteStale(){if(!LTRP.rows.length)return;LTRP.rows=[];document.getElementById("ltrp-apply").disabled=true;document.getElementById("ltrp-res").textContent=tx("Changed — press Check again.");document.getElementById("ltrp-list").innerHTML="";}
+// The text as rows: {line, ok, why?, s, dom, entry, again?}
+function ltRPasteParse(text){
+  const norm=t=>String(t||"").toLowerCase().replace(/[\s\-_.·]/g,""),act=students.filter(x=>!x.archived),today=td(),rows=[];let date=today;
+  String(text||"").split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(line=>{
+    const dm=line.match(/^(?:date|날짜)\s*[:：]\s*(\d{4}-\d{2}-\d{2})\s*$/i);
+    if(dm){const p=dm[1].split("-").map(Number),d=new Date(p[0],p[1]-1,p[2]);
+      if(fmtDate(d)!==dm[1]||dm[1]>today)rows.push({line,ok:false,why:tx("Not a date up to today.")});else date=dm[1];return;}
+    const f=line.split(/\s*[|\t]\s*/).map(x=>x.trim()),bad=why=>{rows.push({line,ok:false,why});};
+    if(f.length<3)return bad(tx("Needs a name, a skill and a level, divided by |."));
+    const key=norm(f[0]),hit=key?act.filter(x=>norm(x.name)===key||norm(x.k)===key):[];
+    if(hit.length!==1)return bad(hit.length?tx("That name fits more than one student."):tx("No student has that name."));
+    const sk=norm(f[1]),dom=LT_DOMAIN_IDS.find(d=>(LT_RP_SKILL[d]||[]).includes(sk));
+    if(!dom)return bad(tx("Not a skill: {x}",{x:f[1]}));
+    const L=f[2].toUpperCase();if(!AEA.LEVELS.includes(L))return bad(tx("The level is a letter from A to E."));
+    const entry={date,level:L,note:f.slice(6).join(" | ").slice(0,300)},empty=x=>x==null||x===""||x==="-"||x==="–";
+    if(!ltHasRubric(dom)){if(![f[3],f[4],f[5]].every(empty))return bad(tx("Points and counts are for Speaking and Writing only."));}
+    else{
+      if(!empty(f[3])){const n=f[3].split(/[\s,\/]+/).filter(Boolean),rub=Object.fromEntries(LT_RUBRIC_IDS.map((k,i)=>[k,/^\d$/.test(n[i]||"")?Number(n[i]):-1]));
+        if(n.length!==4||!ltRubricOk(rub))return bad(tx("The points are four numbers from 0 to 5."));entry.rubric=rub;}
+      for(const [k,i] of [["words",4],["sentences",5]]){if(empty(f[i]))continue;const v=/^\d{1,3}$/.test(f[i])?Number(f[i]):null;if(v==null)return bad(tx("A count is a whole number from 0 to 999. Correct it or leave it empty."));entry[k]=v;}
+    }
+    if(rows.some(r=>r.ok&&r.s===hit[0]&&r.dom===dom&&r.entry.date===date))return bad(tx("This student and skill are in the list twice."));
+    rows.push({line,ok:true,s:hit[0],dom,entry,again:ltRatings(hit[0],dom).some(x=>x.date===date)});
+  });
+  return rows;
+}
+function ltRPasteCheck(){
+  const e=escapeAttr,rows=ltRPasteParse(document.getElementById("ltrp-text").value),ok=rows.filter(r=>r.ok),bad=rows.length-ok.length;
+  LTRP.rows=ok;
+  document.getElementById("ltrp-apply").disabled=!ok.length;
+  document.getElementById("ltrp-res").textContent=!rows.length?tx("Nothing to apply yet."):tx("{n} ready to save.",{n:ok.length})+(bad?" "+tx("{n} not understood — they are left out.",{n:bad}):"");
+  document.getElementById("ltrp-list").innerHTML=rows.map(r=>{
+    if(!r.ok)return `<div class="ltrp-row bad"><span class="ltrp-main">${e(r.line)}</span><span class="ltrp-x">${e(r.why)}</span></div>`;
+    const x=r.entry,sc=ltScore(x),cnt=LT_COUNT_LBL[r.dom]?[["words",0],["sentences",1]].filter(([k])=>x[k]!=null).map(([k,i])=>LT_COUNT_LBL[r.dom][i]+" "+x[k]):[];
+    return `<div class="ltrp-row"><span class="ltrp-main">${ltLv(x.level)}<b>${e(r.s.name||"")}</b> ${e(LT_DOMAIN_NAME[r.dom])}${sc!=null?` <span class="lt-score">${sc}/100</span>`:""}</span>`+
+      `<span class="ltrp-x">${e([x.date,x.rubric?LT_RUBRIC_IDS.map(k=>LT_RUBRIC_NAME[k]+" "+x.rubric[k]).join(" · "):"",cnt.join(" · "),x.note,r.again?tx("Already rated that day — this one is added as the newer rating."):""].filter(Boolean).join(" — "))}</span></div>`;}).join("");
+}
+function ltRPasteApply(){
+  const rows=LTRP.rows;if(!rows.length)return;
+  const done=[];
+  for(const r of rows){const s=ltStudent(r.s.id);if(!s||!ltPushRating(s,r.dom,r.entry))break;done.push(r);}
+  if(curPage==="leveltest")renderLevelTest();
+  if(done.length<rows.length){document.getElementById("ltrp-res").textContent=done.length?tx("{n} saved, then the device could not save any more. Check again to see what is left.",{n:done.length}):ltSaveFailed();LTRP.rows=[];document.getElementById("ltrp-apply").disabled=true;if(!done.length)return;}
+  else{document.getElementById("ltrp-text").value="";closeModal("mo-lt-rpaste");}
+  showUndoToast(tx("{n} rating(s) saved",{n:done.length}),()=>{
+    // each one goes again: the same entry, looked for from the newest end of that skill's list
+    const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);let left=0;
+    done.forEach(r=>{const s=ltStudent(r.s.id),all=s&&s.ratings&&Array.isArray(s.ratings[r.dom])?s.ratings[r.dom]:null;if(!all)return;
+      let i=all.lastIndexOf(r.entry);if(i<0)for(let k=all.length-1;k>=0;k--)if(same(all[k],r.entry)){i=k;break;}
+      if(i<0)return;
+      if(!ltStudentPut(s,"ratings",{...s.ratings,[r.dom]:all.filter((x,k)=>k!==i)}))left++;});
+    if(left)showToast(ltSaveFailed());
+    if(curPage==="leveltest")renderLevelTest();
+  });
 }
 // ── A printed pack for each student (v176) ──
 // For every student who has a start level (or for one student, at the level given): the record
@@ -17290,6 +17389,25 @@ document.addEventListener("DOMContentLoaded",()=>{
     <ol id="lta-list" class="lta-list"></ol>
     <div id="lta-next"></div>
     <div class="mf" id="lta-foot"></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-sheetpic">
+  <div class="mb" style="max-width:520px">
+    <div class="mt"><span id="ltp-title"></span><button class="bic" onclick="closeModal('mo-lt-sheetpic')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p class="u-hint" data-i18n>Take a photo of the record sheet you filled in by hand during the test, and keep it with the student. The photos stay here; nothing on them is read into the results.</p>
+    <div id="ltp-media" class="ltq-sec ltq-media" hidden></div>
+    <input type="file" id="ltp-file" accept="image/*" multiple hidden style="display:none" tabindex="-1" aria-hidden="true" onchange="ltMediaFiles(this)"/>
+    <div class="mf"><span></span><button class="btn" onclick="closeModal('mo-lt-sheetpic')" data-i18n>Close</button></div>
+  </div>
+</div>
+<div class="mo" id="mo-lt-rpaste">
+  <div class="mb" style="max-width:640px">
+    <div class="mt"><span data-i18n>Paste ratings</span><button class="bic" onclick="closeModal('mo-lt-rpaste')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
+    <p class="u-hint" style="margin-bottom:8px" data-i18n>For ratings worked out elsewhere — for example a list made from photos of the writing. One rating a line: name | skill | level | content sentences accuracy flow (0–5 each) | words | sentences | note. Only the first three are needed. Check first; nothing is saved until you press Apply.</p>
+    <textarea id="ltrp-text" rows="6" placeholder="Mina | Writing | C | 3 3 2 3 | 42 | 6 | note&#10;Jun | Listening | B" style="font-family:var(--mono);font-size:12px" oninput="ltRPasteStale()"></textarea>
+    <div style="display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap"><button type="button" class="btn btn-sm" onclick="ltRPasteCheck()" data-i18n>Check</button><span class="u-hint" id="ltrp-res" role="status" style="margin:0"></span></div>
+    <div id="ltrp-list"></div>
+    <div class="mf"><span></span><span style="display:flex;gap:8px"><button class="btn" onclick="closeModal('mo-lt-rpaste')" data-i18n>Close</button><button class="btn btn-p" id="ltrp-apply" onclick="ltRPasteApply()" disabled data-i18n>Apply</button></span></div>
   </div>
 </div>
 <div class="mo" id="mo-lt-photo">
