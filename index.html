@@ -4037,7 +4037,7 @@ const I18N={ko:{
   "That name fits more than one student.":"그 이름에 맞는 학생이 두 명 이상입니다.","No student has that name.":"그 이름의 학생이 없습니다.","Not a skill: {x}":"영역 이름이 아닙니다: {x}","The level is a letter from A to E.":"레벨은 A–E 중 하나입니다.",
   "Points and counts are for Speaking and Writing only.":"점수와 개수는 말하기·쓰기에만 넣습니다.","The points are four numbers from 0 to 5.":"점수는 0–5 숫자 네 개입니다.","This student and skill are in the list twice.":"같은 학생·영역이 목록에 두 번 있습니다.",
   "{n} ready to save.":"{n}개를 저장할 수 있습니다.","{n} not understood — they are left out.":"{n}개는 읽지 못해 빠집니다.","Already rated that day — this one is added as the newer rating.":"그날 평가가 이미 있습니다 — 이 평가가 더 새 평가로 추가됩니다.",
-  "{n} saved, then the device could not save any more. Check again to see what is left.":"{n}개를 저장한 뒤 기기에 더 저장하지 못했습니다. 확인을 다시 눌러 남은 것을 보세요.","{n} rating(s) saved":"평가 {n}개 저장됨",
+  "{n} saved, then the device could not save any more. The lines still in the box were not saved — press Check again.":"{n}개를 저장한 뒤 기기에 더 저장하지 못했습니다. 칸에 남은 줄은 저장되지 않은 것입니다 — 확인을 다시 누르세요.","{n} rating(s) saved":"평가 {n}개 저장됨",
   "(AI check of writing photos)":"(쓰기 사진 AI 확인)",
   "With your own Claude API key, the Writing window of the level test can read a photo of the student's writing and suggest the score sheet for you to check. Get a key at":"선생님의 Claude API 키를 넣으면, 레벨테스트의 쓰기 창에서 학생이 쓴 글 사진을 읽고 채점표를 제안해 줍니다(선생님이 확인합니다). 키 발급:",
   "(prepaid; one check costs a few US cents). The key is kept on this device only — not in your account and not in backups. When you press “Check with AI”, the photo goes to Anthropic to be read. The app sends nothing but the photo, so a name written on the paper is in it; the student's name and records in the app are not sent.":"(선불 충전 방식, 한 번 확인에 대략 수십 원에서 백 원 남짓). 키는 이 기기에만 보관됩니다 — 계정에도, 백업에도 들어가지 않습니다. “AI로 확인”을 누르면 사진이 Anthropic으로 전송되어 읽힙니다. 앱은 사진 말고는 아무것도 보내지 않습니다. 다만 종이에 적힌 이름은 사진에 들어 있고, 앱에 있는 학생 이름과 기록은 보내지 않습니다.",
@@ -11068,7 +11068,13 @@ function ltRPasteApply(){
   const done=[];
   for(const r of rows){const s=ltStudent(r.s.id);if(!s||!ltPushRating(s,r.dom,r.entry))break;done.push(r);}
   if(curPage==="leveltest")renderLevelTest();
-  if(done.length<rows.length){document.getElementById("ltrp-res").textContent=done.length?tx("{n} saved, then the device could not save any more. Check again to see what is left.",{n:done.length}):ltSaveFailed();LTRP.rows=[];document.getElementById("ltrp-apply").disabled=true;if(!done.length)return;}
+  if(done.length<rows.length){
+    // What was saved leaves the box (each saved line once), so Check and Apply cannot save it a second time.
+    const el=document.getElementById("ltrp-text"),gone=done.map(r=>r.line);
+    el.value=el.value.split(/\r?\n/).filter(l=>{const i=gone.indexOf(l.trim());if(i<0)return true;gone.splice(i,1);return false;}).join("\n");
+    document.getElementById("ltrp-list").innerHTML="";
+    document.getElementById("ltrp-res").textContent=done.length?tx("{n} saved, then the device could not save any more. The lines still in the box were not saved — press Check again.",{n:done.length}):ltSaveFailed();
+    LTRP.rows=[];document.getElementById("ltrp-apply").disabled=true;if(!done.length)return;}
   else{document.getElementById("ltrp-text").value="";closeModal("mo-lt-rpaste");}
   showUndoToast(tx("{n} rating(s) saved",{n:done.length}),()=>{
     // each one goes again: the same entry, looked for from the newest end of that skill's list
