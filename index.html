@@ -522,6 +522,8 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .cw-lv{font-size:11px;font-weight:700;color:var(--txt2)}
 .cw-chip.on .cw-lv{color:inherit}
 .cw-label{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin:0 2px 0 8px}
+.cw-off{font-size:var(--fs-sm);color:var(--txt2)}   /* v175: students not on the curriculum — named, no button */
+.off-plan{margin-left:6px;vertical-align:1px}.lm-plan .off-plan{margin-left:0}
 /* v157: the 2027 plan in one press — a single line above the sheet while the app has no 2027 topic */
 .curr-plan{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--amb-l);border:1px solid var(--amb-bdr);color:var(--amb-t);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:var(--fs-base)}
 .curr-plan[hidden]{display:none}
@@ -624,7 +626,7 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .curr-who-info[hidden]{display:none}
 .curr-who-info .cwi-main{flex:1 1 240px;min-width:0}
 .curr-who-info .cwi-acts{display:flex;gap:6px;flex-wrap:wrap}
-@media(max-width:600px){.curr-who{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cw-chip{min-height:44px;flex:none}.cw-label{flex:none}}
+@media(max-width:600px){.curr-who{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cw-chip{min-height:44px;flex:none}.cw-label,.cw-off{flex:none;white-space:nowrap}}
 /* v149: the 100-point sheet in the rating window; sample tests above the student rows */
 .ltq-rub{border-top:1px solid var(--bdr);margin-bottom:12px}
 .ltq-r{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 10px;padding:6px 0;border-bottom:1px solid var(--bdr)}
@@ -2363,6 +2365,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v175 · 2026-11-24</dt><dd><b>Students: mark a student who is not on your curriculum.</b> Some students are taught another way and do not follow the curriculum. In the student's window, under <b>Lesson plan</b>, there is a new switch: <b>Not on my curriculum</b>. Turn it on and the student carries an <b>Off curriculum</b> mark beside the name on the <b>Students</b> page and on the <b>Level test</b> page, and first in the line at the top of their <b>lesson window</b>. On the <b>Curriculum</b> page they get no button — they are named after the buttons, under "Off curriculum" — and they are not in the list of the <b>Monthly note</b>. Nothing else changes for them: lessons, payments, reports and the level test work as before. Turn the switch off and the mark is gone everywhere.</dd>
           <dt>v174 · 2026-11-24</dt><dd><b>Level test report, parents' copy: nothing measured about the student, and nothing to be ticked off later.</b> <b>Skills:</b> where the description of a level carried an amount ("three or four sentences", "about a minute"), the parents' copy now says it without the amount. <b>What comes next:</b> instead of three goals for the level and a date for the next test, it lists <b>what the lessons do</b> — things you do in class, not results to be checked at the next test — and gives no date. <b>Books</b> are as before: for each list the <b>AR and Lexile of those books</b>, from your Books page (the figure of a book, not a score of the student); a list whose books have no figure shows the titles. The line on the screen that says how many checked books have no figure now shows with either copy. The teacher's copy is unchanged: levels, scores, counts, goals, the plan and the date of the next test are all there.</dd>
           <dt>v173 · 2026-11-24</dt><dd><b>Level test report, parents' copy: no comparison with last time.</b> Under Reading, the parents' copy used to add a sentence when the student had moved on since the test before ("reading harder texts than last time", or "reading texts of the same level more steadily"). That sentence is gone: the copy for parents says how the student is now and does not compare. The comparison with the last test and the growth chart stay where they were, in the teacher's copy.</dd>
           <dt>v172 · 2026-11-24</dt><dd><b>Level test: the report has a copy for the parents and a copy for you.</b> <b>Report</b> (on a finished test, and in the result window) now opens with two buttons at the top: <b>For parents</b> and <b>For the teacher</b>. <b>For parents</b> shows first and is written in words: no level letter, no score out of 100, no counts and no chart. It says, skill by skill, what the student does now and how it was looked at (questions on the screen, a talk, a short piece of writing), what goes well, what was hard, what the lessons will work on, and your note. <b>For the teacher</b> is the report as it was — levels A–E, scores, counts, the growth chart — marked as your record, not for handing out. <b>Print</b> prints the copy that is on the screen. <b>Books:</b> for each list from the book checks (comfortable alone, right for lessons, too hard for now) the parents' copy gives the <b>AR and Lexile of those books</b>, read from your <b>Books</b> page by title — "AR 2.0~2.9 · Lexile 430~480L". These are the figures printed for the books, not a test score of the student, and the report says so. A list whose books have no AR or Lexile in Books shows the titles instead, and a line on the screen tells you how many books are missing a figure — add it on the Books page and open the report again. The teacher's copy shows the titles with the same figures beside them.</dd>
@@ -2434,7 +2437,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v174</b> · FAQ current as of: <b>2026-11-24</b><br/>
+          Guide written against version: <b>v175</b> · FAQ current as of: <b>2026-11-24</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2609,6 +2612,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v175 · 2026-11-24</dt><dd><b>학생: 내 커리큘럼으로 수업하지 않는 학생을 표시합니다.</b> 다른 방식으로 수업해서 커리큘럼을 따르지 않는 학생이 있습니다. 학생 창의 <b>수업 설정</b> 아래에 <b>내 커리큘럼으로 수업하지 않음</b> 스위치가 생겼습니다. 켜면 그 학생은 <b>학생</b> 페이지와 <b>레벨테스트</b> 페이지의 이름 옆, 그리고 <b>수업 창</b> 맨 위 줄의 첫머리에 <b>커리큘럼 외</b> 표시가 붙습니다. <b>커리큘럼</b> 페이지에서는 버튼이 없어지고 버튼들 뒤의 "커리큘럼 외" 아래에 이름만 나오며, <b>월간 안내</b>의 학생 목록에도 나오지 않습니다. 그 밖에는 달라지는 것이 없습니다. 수업 기록, 수업료, 보고서, 레벨테스트는 그대로 쓸 수 있습니다. 스위치를 끄면 표시가 모두 사라집니다.</dd>
           <dt>v174 · 2026-11-24</dt><dd><b>레벨테스트 리포트 학부모용: 학생을 숫자로 재지 않고, 나중에 확인해야 할 약속도 뺐습니다.</b> <b>영역별 모습:</b> 레벨 설명에 양이 들어 있던 문장("3~4문장으로", "1분쯤 되는")은 학부모용에서 양을 빼고 적습니다. <b>앞으로:</b> 그 레벨의 목표 세 가지와 다음 평가 날짜 대신 <b>수업에서 하는 활동</b>을 적습니다. 다음 테스트 때 달성했는지 확인해야 하는 결과가 아니라 수업에서 선생님이 하는 일이고, 날짜는 적지 않습니다. <b>책</b>은 그대로입니다. 묶음마다 도서 페이지에서 가져온 <b>그 책들의 AR·Lexile</b>이 나오고(책의 지수이지 학생의 점수가 아닙니다), 지수가 없는 책만 있는 묶음은 제목으로 나옵니다. 지수가 없는 책이 몇 권인지 알려 주는 화면 위쪽 줄은 이제 학부모용·선생님용 어느 쪽을 볼 때도 나옵니다. 선생님용은 그대로입니다. 레벨, 점수, 개수, 목표, 계획, 다음 평가 예정일이 모두 있습니다.</dd>
           <dt>v173 · 2026-11-24</dt><dd><b>레벨테스트 리포트 학부모용: 지난번과 비교하는 문장을 뺐습니다.</b> 학부모용의 읽기 칸에는 지난 테스트보다 나아졌을 때 한 문장이 붙었습니다("지난번보다 더 어려운 글을 읽고 있습니다", "같은 수준의 글을 더 안정적으로 읽고 있습니다"). 이 문장이 없어졌습니다. 학부모용은 지금 모습만 전하고 비교하지 않습니다. 지난 평가와의 비교와 성장 그래프는 선생님용에 그대로 있습니다.</dd>
           <dt>v172 · 2026-11-24</dt><dd><b>레벨테스트: 리포트가 학부모용과 선생님용으로 나뉩니다.</b> 끝난 테스트와 결과 창의 <b>리포트</b>를 열면 맨 위에 <b>학부모용</b> / <b>선생님용</b> 버튼이 있습니다. 먼저 보이는 <b>학부모용</b>은 글로 풀어 쓴 안내입니다. 레벨 글자, 100점 점수, 개수, 그래프가 없습니다. 영역별로 지금 어떤 모습인지와 어떻게 확인했는지(화면 문제, 이야기해 보기, 짧은 글쓰기), 잘하는 점, 어려워한 점, 앞으로 수업에서 할 것, 선생님 의견이 들어갑니다. <b>선생님용</b>은 지금까지의 리포트 그대로입니다(A–E 레벨, 점수, 개수, 성장 그래프). 맨 위에 선생님 기록용이라고 표시되며 나눠 드리는 문서가 아닙니다. <b>인쇄</b>는 화면에 보이는 쪽을 인쇄합니다. <b>책:</b> 책 확인으로 나온 묶음(혼자 읽기 편한 책, 수업에서 함께 읽기 알맞은 책, 조금 더 뒤에 읽을 책)마다 학부모용에는 <b>그 책들의 AR과 Lexile</b>이 나옵니다. <b>도서</b> 페이지에서 제목으로 찾아 "AR 2.0~2.9 · Lexile 430~480L"처럼 범위로 보여 줍니다. 책에 매겨진 지수이지 학생의 시험 점수가 아니며, 리포트에도 그렇게 적혀 있습니다. 도서에 AR·Lexile이 없는 책만 있는 묶음은 제목으로 나오고, 화면 위쪽 줄에 지수가 없는 책이 몇 권인지 알려 줍니다. 도서 페이지에서 채운 뒤 리포트를 다시 열면 됩니다. 선생님용에는 제목 옆에 같은 지수가 붙습니다.</dd>
@@ -2679,7 +2683,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v174</b> · 자주 묻는 질문 기준일: <b>2026-11-24</b><br/>
+          설명서 기준 버전: <b>v175</b> · 자주 묻는 질문 기준일: <b>2026-11-24</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3084,6 +3088,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <input id="sm-spk" type="number" min="1" max="999" step="1" style="flex:0 0 170px" placeholder="Speaking lesson no." title="Which lesson of the speaking course this student is on" data-i18n-ph data-i18n-title/>
       </div>
       <div class="u-hint" style="margin-top:4px" data-i18n>What this student does in class. It shows at the top of the student's lesson window.</div>
+      <label class="sw" style="margin-top:10px" data-i18n><input id="sm-offplan" type="checkbox"/><span class="sw-track"></span> Not on my curriculum</label>
+      <div class="u-hint" style="margin-top:4px" data-i18n>For a student who is taught another way, not by the curriculum. They are marked on the Students and Level test pages and in their lesson window, and are left out of the Curriculum page and the monthly note.</div>
     </div>
     <div class="fg"><label data-col="aliases" data-i18n>Bank aliases</label><input id="sm-aliases" type="text" placeholder="comma-separated" data-i18n-ph/></div>
     <div class="fg"><label data-col="notes" data-i18n>Notes</label><input id="sm-notes" type="text"/></div>
@@ -3553,7 +3559,9 @@ const I18N={ko:{
   "A week this class really happens. The weeks alternate from here, so two students can take turns on the same weekday.":"이 수업이 실제로 있는 주의 날짜. 여기서부터 격주로 번갈아 가므로 같은 요일에 두 학생이 교대로 수업할 수 있습니다.",
   "The Students list counts the months from this date":"학생 목록의 재원 개월 수를 이 날짜부터 셉니다",
   "Start date":"시작일","End date":"종료일","Archive":"보관","Payment type":"납부 방식",
-  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","Lesson plan":"수업 설정","No level":"레벨 없음","Level {l}":"레벨 {l}","Activity":"활동","Speaking lesson no.":"스피킹 회차","Which lesson of the speaking course this student is on":"이 학생이 스피킹 과정의 몇 번째 회차인지","lesson {n}":"{n}회차","The speaking lesson number has to be a whole number from 1 to 999.":"스피킹 회차는 1부터 999까지의 정수여야 합니다.",
+  "Add another time (different day/duration)":"다른 시간 추가 (다른 요일/길이)","Bank aliases":"입금자명(별칭)","Lesson plan":"수업 설정","Not on my curriculum":"내 커리큘럼으로 수업하지 않음","Off curriculum":"커리큘럼 외","Taught another way, not by the curriculum":"커리큘럼이 아닌 다른 방식으로 수업하는 학생",
+  "For a student who is taught another way, not by the curriculum. They are marked on the Students and Level test pages and in their lesson window, and are left out of the Curriculum page and the monthly note.":"커리큘럼이 아닌 다른 방식으로 수업하는 학생에게 켭니다. 학생·레벨테스트 페이지와 수업 창에 표시되고, 커리큘럼 페이지와 월간 안내에서는 빠집니다.",
+  "Every student is marked as not on the curriculum, so there is no monthly note to write.":"모든 학생이 커리큘럼 외로 표시되어 있어 쓸 월간 안내가 없습니다.","No level":"레벨 없음","Level {l}":"레벨 {l}","Activity":"활동","Speaking lesson no.":"스피킹 회차","Which lesson of the speaking course this student is on":"이 학생이 스피킹 과정의 몇 번째 회차인지","lesson {n}":"{n}회차","The speaking lesson number has to be a whole number from 1 to 999.":"스피킹 회차는 1부터 999까지의 정수여야 합니다.",
   "What this student does in class. It shows at the top of the student's lesson window.":"이 학생이 수업에서 하는 것입니다. 이 학생의 수업 창 맨 위에 보입니다.","comma-separated":"쉼표로 구분",
   "Delete student":"학생 삭제","Save student":"학생 저장","Name required":"이름을 입력하세요",
   "Delete this student? This cannot be undone.":"이 학생을 삭제할까요? 되돌릴 수 없습니다.",
@@ -4558,7 +4566,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v174";
+const APP_VERSION="v175";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -5292,6 +5300,7 @@ function fillStudentPlan(s){
   const mods=Array.isArray(s?.mods)?s.mods:[];
   PLAN_MODS.forEach(([k])=>{const e=document.getElementById("sm-mod-"+k);if(e)e.checked=mods.includes(k);});
   const sp=document.getElementById("sm-spk");if(sp)sp.value=s?.spk>0?s.spk:"";
+  const off=document.getElementById("sm-offplan");if(off)off.checked=!!s?.offPlan;
 }
 function readStudentPlan(){
   const lv=document.getElementById("sm-level")?.value||"";
@@ -5300,12 +5309,18 @@ function readStudentPlan(){
   // null tells saveStudent to stop, so a typo never wipes or changes the number already saved.
   const box=document.getElementById("sm-spk"),raw=(box?.value||"").trim(),n=Number(raw);
   if(box?.validity?.badInput||(raw!==""&&!(Number.isInteger(n)&&n>=1&&n<=999)))return null;
-  return {group:PLAN_LEVELS.includes(lv)?lv:"",mods,spk:raw===""?"":n};
+  return {group:PLAN_LEVELS.includes(lv)?lv:"",mods,spk:raw===""?"":n,offPlan:!!document.getElementById("sm-offplan")?.checked};
 }
+// v175: a student who is not taught by the curriculum (offPlan). One mark, the same everywhere:
+// beside the name on Students and Level test, and first in the line at the top of the lesson window.
+// The Curriculum page gives such a student no button and the monthly note no entry.
+const onPlan=s=>!!s&&!s.archived&&!s.offPlan;
+const offPlanBadge=s=>s&&s.offPlan?'<span class="badge bpa off-plan" title="'+escapeAttr(tx("Taught another way, not by the curriculum"))+'">'+escapeAttr(tx("Off curriculum"))+"</span>":"";
 // One line of chips for a student's plan; "" when nothing is set.
 function studentPlanHtml(s){
   if(!s)return "";
   const parts=[];
+  if(s.offPlan)parts.push(offPlanBadge(s));
   if(PLAN_LEVELS.includes(s.group))parts.push('<span class="lv-badge">'+tx("Level {l}",{l:s.group})+"</span>");
   const mods=Array.isArray(s.mods)?s.mods:[];
   PLAN_MODS.forEach(([k,label])=>{
@@ -7136,7 +7151,7 @@ function renderStudents(){
       :"";
     return `<div class="std-row${s.archived?" std-archived":""}" ondblclick="openStudentModal('${s.id}')" title="${tx("Double-click to edit")}">
     <div style="font-size:12px;color:var(--txt3);font-family:var(--mono)">${idx+1}</div>
-    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${PLAN_LEVELS.includes(s.group)?'<span class="lv-badge" title="'+tx("Level {l}",{l:s.group})+'">'+s.group+"</span>":""}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>${s.birthday?`<div class="cell-muted" title="${tx("Birthday")} ${s.birthday}${birthdayThisMonth(s.birthday)?" — "+tx("this month"):""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
+    <div style="display:flex;align-items:center;gap:9px"><div class="av">${ini(s.name)}</div><div><div style="font-weight:600;font-size:13px">${s.name}${PLAN_LEVELS.includes(s.group)?'<span class="lv-badge" title="'+tx("Level {l}",{l:s.group})+'">'+s.group+"</span>":""}${offPlanBadge(s)}${s.archived?' <span class="std-arch-badge">'+tx("Archived")+'</span>':''}</div>${s.birthday?`<div class="cell-muted" title="${tx("Birthday")} ${s.birthday}${birthdayThisMonth(s.birthday)?" — "+tx("this month"):""}"><i class="ti ti-cake"${birthdayThisMonth(s.birthday)?' style="color:var(--grn)"':""}></i> ${ageFromBirthday(s.birthday)??"—"}</div>`:""}</div></div>
     <div style="font-size:13px;color:var(--txt2)">${s.k}</div>
     <div><div style="font-size:12px;font-weight:500">${s.parent}</div><div class="cell-muted">${s.contact}</div></div>
     <div style="font-size:12px;color:var(--txt2);line-height:1.5" title="${tip}">${schedDisp}${tenureLabel(s)?`<div class="cell-muted" title="${tx("First lesson")} ${studentSince(s)}">${tenureLabel(s)}</div>`:""}</div>
@@ -8620,6 +8635,7 @@ function renderLevelTest(){
     let sub=tx("Not tested yet");
     if(last)sub=tx("Last test {date} · {res}",{date:last.date,res:last.result.level+" · "+LT_STAGE[last.result.stage]});
     const badges=[];
+    if(s.offPlan)badges.push(offPlanBadge(s));
     if(ip||left)badges.push(`<span class="badge bip">${escapeAttr(tx("In progress"))}</span>`);
     if(last&&today>=ltAddMonths(last.date,LT_RETEST_MONTHS))badges.push(`<span class="badge bpr">${escapeAttr(tx("Retest due"))}</span>`);
     const acts=[];
@@ -11464,7 +11480,7 @@ function currColsWait(){
 // Who the page is shown for (v150): "" everyone, a level letter, or "s:<student id>". It used to
 // sit in a dropdown; it is now a row of buttons above the sheet, with the students by name.
 let currWho="";
-function currViewStudent(){return currWho.startsWith("s:")?students.find(x=>!x.archived&&String(x.id)===currWho.slice(2))||null:null;}
+function currViewStudent(){return currWho.startsWith("s:")?students.find(x=>onPlan(x)&&String(x.id)===currWho.slice(2))||null:null;}
 function currViewLevel(){
   const v=currWho;
   if(v.startsWith("s:")){const s=currViewStudent();return s&&PLAN_LEVELS.includes(s.group)?s.group:"";}
@@ -11484,19 +11500,21 @@ function currHiddenNow(){
 }
 function currPick(v){
   v=String(v||"");
-  currWho=PLAN_LEVELS.includes(v)||(v.startsWith("s:")&&students.some(x=>!x.archived&&String(x.id)===v.slice(2)))?v:"";
+  currWho=PLAN_LEVELS.includes(v)||(v.startsWith("s:")&&students.some(x=>onPlan(x)&&String(x.id)===v.slice(2)))?v:"";
   renderCurriculum();
 }
 // The buttons, and under them a line about the student who is picked: the level and the lesson
 // parts the page is going by, with the way to change them and to the month's note for the parents.
 function currWhoRender(){
   const box=document.getElementById("curr-who"),info=document.getElementById("curr-who-info");if(!box||!info)return;
-  const e=escapeAttr,studs=students.filter(x=>!x.archived);
+  // (v175: students who are not on the curriculum get no button — they are named after the buttons)
+  const e=escapeAttr,studs=students.filter(onPlan),off=students.filter(x=>!x.archived&&x.offPlan);
   if(currWho.startsWith("s:")&&!currViewStudent())currWho="";
   const chip=(v,html)=>`<button type="button" class="cw-chip${currWho===v?" on":""}" aria-pressed="${currWho===v}" data-who="${e(v)}">${html}</button>`;
   box.setAttribute("aria-label",tx("Show one level, or what one student does"));
   box.innerHTML=chip("",e(tx("All levels")))+PLAN_LEVELS.map(L=>chip(L,e(L))).join("")+
-    (studs.length?`<span class="cw-label">${e(tx("Students"))}</span>`+studs.map(x=>chip("s:"+x.id,e(x.name||"")+(PLAN_LEVELS.includes(x.group)?`<span class="cw-lv">${e(x.group)}</span>`:""))).join(""):"");
+    (studs.length?`<span class="cw-label">${e(tx("Students"))}</span>`+studs.map(x=>chip("s:"+x.id,e(x.name||"")+(PLAN_LEVELS.includes(x.group)?`<span class="cw-lv">${e(x.group)}</span>`:""))).join(""):"")+
+    (off.length?`<span class="cw-label">${e(tx("Off curriculum"))}</span><span class="cw-off">${e(off.map(x=>x.name||"").join(", "))}</span>`:"");
   const s=currViewStudent();
   info.hidden=!s;
   if(!s){info.innerHTML="";return;}
@@ -11562,8 +11580,8 @@ function currNoteText(s,ym,lang){
 function openCurrNote(){
   if(currColsWait())return;
   const sel=document.getElementById("cn-sid");if(!sel)return;
-  const studs=students.filter(x=>!x.archived);
-  if(!studs.length){showToast(tx("Add a student first."));return;}
+  const studs=students.filter(onPlan);
+  if(!studs.length){showToast(students.some(x=>!x.archived)?tx("Every student is marked as not on the curriculum, so there is no monthly note to write."):tx("Add a student first."));return;}
   const cur=currViewStudent();
   sel.innerHTML=studs.map(x=>`<option value="${escapeAttr(x.id)}">${escapeAttr(x.name||"")}${PLAN_LEVELS.includes(x.group)?" · "+x.group:""}</option>`).join("");
   if(cur)sel.value=String(cur.id);
