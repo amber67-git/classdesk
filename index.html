@@ -9535,12 +9535,14 @@ function ltBooksFor(s,a){
 // Lexile — read from the Books library by title. These are the books' own published figures; a
 // student's level (A–E) is never turned into one. A band none of whose books is in the library, or
 // whose books have no figure there, gets "" and the report falls back to the titles.
-// A Lexile such as "BR120L" (below 0L) is left out of the range; "AD480L" counts as 480.
-const ltLexile=v=>{const t=String(v==null?"":v).trim();if(!t||/^BR/i.test(t))return NaN;const m=t.match(/(\d{2,4})\s*L?\b/i);return m?+m[1]:NaN;};
+// A Lexile such as "BR120L" (below 0L) is left out of the range — but it is a figure the book has,
+// so the book does not count as one without a figure; "AD480L" counts as 480, "0L" as 0.
+const ltLexBR=v=>/^BR\s*\d{1,4}\s*L?$/i.test(String(v==null?"":v).trim());
+const ltLexile=v=>{const t=String(v==null?"":v).trim();if(!t||/^BR/i.test(t))return NaN;const m=t.match(/(\d{1,4})\s*L?\b/i);return m?+m[1]:NaN;};
 function ltBkLevels(titles){
   const idx=bookLibIndex(),ar=[],lx=[];let known=0;
   titles.forEach(t=>{const b=idx.get(normTitle(t));if(!b)return;const a=parseFloat(b.arLevel),l=ltLexile(b.lexile);
-    if(isFinite(a)&&a>=0&&a<=13)ar.push(a);if(isFinite(l))lx.push(l);if((isFinite(a)&&a>=0&&a<=13)||isFinite(l))known++;});
+    if(isFinite(a)&&a>=0&&a<=13)ar.push(a);if(isFinite(l))lx.push(l);if((isFinite(a)&&a>=0&&a<=13)||isFinite(l)||ltLexBR(b.lexile))known++;});
   const span=(v,f)=>{if(!v.length)return "";const lo=Math.min(...v),hi=Math.max(...v);return lo===hi?f(lo):f(lo)+"~"+f(hi);};
   const parts=[];
   if(ar.length)parts.push("AR "+span(ar,x=>x.toFixed(1)));
@@ -10868,7 +10870,7 @@ h3{margin:0 0 6px;font-size:14.5px;font-weight:600;color:var(--brand)}p{margin:6
 .rp-grow{display:flex;align-items:center;gap:16px}.rp-grow>div{flex:1;min-width:0}.rp-grow p:first-child{margin-top:0}.growth{width:264px;flex:none;height:auto;display:block}.g-b0{fill:var(--white)}.g-b1{fill:var(--bg)}.g-frame{fill:none;stroke:var(--line)}.g-lv{font-size:13px;font-weight:600;fill:var(--muted)}
 .g-line{fill:none;stroke:var(--brand);stroke-width:2}.g-dot{fill:var(--brand);stroke:var(--white);stroke-width:2}.g-now{fill:var(--amber);stroke:var(--white);stroke-width:2}.g-date{font-size:12px;fill:var(--muted)}
 @page{size:A4;margin:12mm 14mm}
-@media(max-width:560px){.paper{padding:20px 16px}.rp-two,.rp-plan{grid-template-columns:1fr}.rp-grow{flex-direction:column;align-items:stretch}.growth{width:100%;max-width:320px}.rg-row{grid-template-columns:minmax(0,1fr) repeat(5,30px)}.rg.sc .rg-row{grid-template-columns:minmax(0,1fr) repeat(5,26px) 50px}}
+@media(max-width:560px){.paper{padding:20px 16px}.rp-two,.rp-plan{grid-template-columns:1fr}.rp-grow{flex-direction:column;align-items:stretch}.growth{width:100%;max-width:320px}.rg-row{grid-template-columns:minmax(0,1fr) repeat(5,30px)}.rg.sc .rg-row{grid-template-columns:minmax(0,1fr) repeat(5,26px) 50px}.rp-bk{grid-template-columns:1fr;gap:0;margin-bottom:6px}.rp-lv{white-space:normal}}
 @media print{body{background:var(--white)}.toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0;max-width:none}}`;
 function ltOpenReport(aid){
   const a=ltGet(aid),s=a?ltStudent(a.studentId):null;
