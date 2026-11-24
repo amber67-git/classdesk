@@ -3997,6 +3997,7 @@ const I18N={ko:{
   "Reading first, then {list} — one after the other. Each can be skipped.":"읽기를 먼저 보고, 이어서 {list} 순서로 진행합니다. 영역마다 건너뛸 수 있습니다.",
   "Still to rate":"남은 영역","Not rated for this test yet — press to rate":"이번 테스트에서 아직 평가하지 않았습니다 — 눌러서 평가","Last rated {date}, before this test — press to rate again":"마지막 평가는 {date}(이번 테스트 전)입니다 — 눌러서 다시 평가",
   "Left for later: {list}. The test can end here — rate them in a later lesson from the student's row, and the report takes each one in once it is rated.":"나중으로 미룬 영역: {list}. 테스트는 여기서 끝내도 됩니다 — 다음 수업에서 학생 줄의 영역 버튼을 눌러 평가하면, 그때부터 리포트에 들어갑니다.",
+  "Reading is not finished. Go on with it from the student's row: Continue test, or Start test if it was not begun.":"읽기는 끝나지 않았습니다. 학생 줄의 이어서 풀기(시작하지 않았으면 테스트 시작)로 계속하세요.",
   "Not rated for this test yet, so left out of this report: {list}.":"이번 테스트에서 아직 평가하지 않아 이 리포트에 빠진 영역: {list}.","Not rated again for this test — the report shows the earlier rating: {list}.":"이번 테스트에서 다시 평가하지 않아 예전 평가가 들어간 영역: {list}.",
   "In progress|all skills":"진행 중","Next":"다음","Continue|all skills":"이어서 하기","Next: {name}":"다음: {name}","Stop here":"여기서 마치기","Skip":"건너뛰기","Start":"시작","Done|all skills":"닫기",
   "Every skill is done.":"모든 영역이 끝났습니다.","That is the end of the list.":"목록의 끝입니다.","Go back to the skipped ones":"건너뛴 영역 하기","Reading result":"읽기 결과",
@@ -9781,7 +9782,9 @@ function ltAllShow(){
     box.innerHTML=`<p class="lta-h">${e(skipped?tx("That is the end of the list."):tx("Every skill is done."))}</p>`+
       `<p class="u-hint">${e(s.trial?tx("Sample: only the reading test is kept. The other levels are shown here and are not saved.")
         :tx("The levels are in the student's Details. Confirm the class level from the reading result."))}</p>`+
-      (skipped&&!s.trial?`<p class="u-hint">${e(tx("Left for later: {list}. The test can end here — rate them in a later lesson from the student's row, and the report takes each one in once it is rated.",{list:st.filter(x=>x.st==="skip").map(x=>ltAllName(x.k)).join(", ")}))}</p>`:"");
+      // (Reading has no rating button on the row: a skipped reading test is gone on with from Continue test or Start test)
+      (skipped&&!s.trial?(later=>(later.length?`<p class="u-hint">${e(tx("Left for later: {list}. The test can end here — rate them in a later lesson from the student's row, and the report takes each one in once it is rated.",{list:later.map(ltAllName).join(", ")}))}</p>`:"")+
+        (st.some(x=>x.k==="reading"&&x.st==="skip")?`<p class="u-hint">${e(tx("Reading is not finished. Go on with it from the student's row: Continue test, or Start test if it was not begun."))}</p>`:""))(st.filter(x=>x.st==="skip"&&x.k!=="reading").map(x=>x.k)):"");
     foot.innerHTML=(skipped?`<button type="button" class="btn" onclick="ltAllUnskip()">${e(tx("Go back to the skipped ones"))}</button>`:`<span></span>`)+
       `<span class="lta-r">${rd&&rd.st==="done"?`<button type="button" class="btn" onclick="ltAllReview()">${e(tx("Reading result"))}</button>`:""}<button type="button" class="btn btn-p" onclick="ltAllEnd()">${e(tx("Done|all skills"))}</button></span>`;
   }else{
