@@ -11205,12 +11205,12 @@ function ltPackCard(){
 </section>
 <section class="pk-page"><h1>종이 레벨테스트 진행 카드 <span class="sub">(3)</span></h1>
 <h2>7. 점수 — 모든 영역 100점 만점</h2>
-<p>기준은 하나입니다. 레벨마다 20점씩: <b>${LT_BAND_KO}</b>. 구간의 시작 점수(A 0, B 20, C 40, D 60, E 80)에 아래 점수를 더합니다.</p>
-<table class="lv"><tr><th class="pk-w3">영역</th><th>더하는 점수</th></tr>
-<tr><td><b>읽기</b></td><td>결과 단계: 시작 +7 · 발전 +13 · 안정 +20 &nbsp;(예: C · 발전 = 40 + 13 = 53)</td></tr>
-${LT_PACK_SEC.map(d=>{const n=LT_SEC[d].A.items.length;return `<tr><td><b>${{listening:"듣기",grammar:"문법",vocabulary:"어휘",phonics:"파닉스"}[d]}</b> <span class="tiny">/${n}</span></td><td>결과 레벨에서 맞은 수: ${Array.from({length:n+1},(_,i)=>`${i}개 +${Math.round(LT_BAND*i/n)}`).join(" · ")}</td></tr>`;}).join("")}
-<tr><td><b>말하기 · 쓰기</b></td><td>네 항목을 각각 100점 만점(0 · 20 · 40 · 60 · 80 · 100)으로 매기고 평균을 냅니다. 20은 레벨 A, 40은 B, 60은 C, 80은 D, 100은 E의 모습이고 0은 반응이 없는 경우입니다.</td></tr>
-<tr><td><b>레벨만 정한 영역</b></td><td>구간의 가운데: A 10 · B 30 · C 50 · D 70 · E 90</td></tr></table>
+<p>기준은 하나입니다. 레벨마다 20점씩: <b>${LT_BAND_KO}</b>. 구간의 시작 점수는 A 0 · B 20 · C 40 · D 60 · E 80입니다. <b>읽기와 문항 영역만</b> 결과 레벨의 시작 점수에 아래 점수를 더하고, 말하기·쓰기와 레벨만 정한 영역은 아래 점수가 그대로 최종 점수입니다.</p>
+<table class="lv"><tr><th class="pk-w3">영역</th><th>점수 내는 방법</th></tr>
+<tr><td><b>읽기</b></td><td><b>시작 점수에 더함</b> — 결과 단계: 시작 +7 · 발전 +13 · 안정 +20 &nbsp;(예: C · 발전 = 40 + 13 = 53)</td></tr>
+${LT_PACK_SEC.map(d=>{const n=LT_SEC[d].A.items.length;return `<tr><td><b>${{listening:"듣기",grammar:"문법",vocabulary:"어휘",phonics:"파닉스"}[d]}</b> <span class="tiny">/${n}</span></td><td><b>시작 점수에 더함</b> — 결과 레벨에서 맞은 수: ${Array.from({length:n+1},(_,i)=>`${i}개 +${Math.round(LT_BAND*i/n)}`).join(" · ")}</td></tr>`;}).join("")}
+<tr><td><b>말하기 · 쓰기</b></td><td><b>더하지 않음</b> — 네 항목을 각각 100점 만점(0 · 20 · 40 · 60 · 80 · 100)으로 매긴 평균이 그대로 점수입니다(예: 60 · 60 · 60 · 60 = 60). 20은 레벨 A, 40은 B, 60은 C, 80은 D, 100은 E의 모습이고 0은 반응이 없는 경우입니다.</td></tr>
+<tr><td><b>레벨만 정한 영역</b></td><td><b>더하지 않음</b> — 구간의 가운데가 그대로 점수입니다: A 10 · B 30 · C 50 · D 70 · E 90</td></tr></table>
 <p class="tiny">앱에 넣으면 점수는 앱이 계산합니다. 말하기·쓰기 채점표의 네 항목:</p>
 <table class="lv"><tr><th class="pk-w3">항목</th><th>말하기에서 볼 것</th><th>쓰기에서 볼 것</th></tr>
 <tr><td><b>내용</b></td><td>질문에 맞는 내용을 얼마나 말하는가</td><td>주제에 맞는 내용을 얼마나 쓰는가</td></tr>
