@@ -9517,9 +9517,11 @@ const LT_HOLD_MS=1200,LT_HOLD_KEEP_MS=400,LT_GHOST_MS=600;
 //    leaves such a click (a mouse's goes to what both ends of the press share, a key leaves none),
 //    so nothing is swallowed for those, and nothing before the finger has lifted;
 //  · the screen may be drawn again, and the platform may take a long press over (pointercancel)
-//    once it has lasted a while: neither ends a hold that is already well under way.
+//    once it has lasted a while: neither ends a hold that is already well under way — as long as
+//    the finger is known to be on the glass still. A cancel with no contact left (the screen was
+//    turned, the pen went away) ends the press, and so does the finger lifting afterwards.
 (function(){
-  let timer=null,btn=null,t0=0,fired=false,cancelled=false,touch=false,ghostUntil=0;
+  let timer=null,btn=null,t0=0,fired=false,cancelled=false,touch=false,key=false,touching=false,ghostUntil=0;
   const held=e=>e.target.closest?e.target.closest("#lt-screen [data-hold]"):null;
   const clear=()=>{clearTimeout(timer);timer=null;if(btn)btn.classList.remove("lt-holding");btn=null;};
   const act=kind=>{
@@ -9528,8 +9530,8 @@ const LT_HOLD_MS=1200,LT_HOLD_KEEP_MS=400,LT_GHOST_MS=600;
     else if(kind==="xdone")ltxDone();
     else if(kind==="xtask")ltxTaskDone();
   };
-  const start=(b,byTouch)=>{
-    clear();btn=b;t0=Date.now();fired=false;cancelled=false;touch=!!byTouch;b.classList.add("lt-holding");
+  const start=(b,byTouch,byKey)=>{
+    clear();btn=b;t0=Date.now();fired=false;cancelled=false;touch=!!byTouch;key=!!byKey;b.classList.add("lt-holding");
     const kind=b.dataset.hold;
     timer=setTimeout(()=>{
       clear();
@@ -9548,9 +9550,15 @@ const LT_HOLD_MS=1200,LT_HOLD_KEEP_MS=400,LT_GHOST_MS=600;
   document.addEventListener("pointerdown",e=>{const b=held(e);if(b)start(b,e.pointerType==="touch"||e.pointerType==="pen");});
   document.addEventListener("pointerup",e=>stop(!!held(e)));
   document.addEventListener("pointercancel",()=>{
-    if(timer&&Date.now()-t0>=LT_HOLD_KEEP_MS){cancelled=true;return;}   // taken over by the platform after a real press: it counts on
+    if(timer&&touching&&Date.now()-t0>=LT_HOLD_KEEP_MS){cancelled=true;return;}   // taken over by the platform after a real press, the finger still down: it counts on
     stop(false);
   });
+  // Whether a finger is on the glass — the only thing left to go by once the pointer is cancelled.
+  document.addEventListener("touchstart",e=>{touching=e.touches.length>0;},{capture:true,passive:true});
+  ["touchend","touchcancel"].forEach(type=>document.addEventListener(type,e=>{
+    touching=e.touches.length>0;
+    if(!touching&&timer&&cancelled)stop(false);          // it lifted before the time was up
+  },{capture:true,passive:true}));
   // The click (and the mouse events around it) that a finished hold leaves behind.
   ["click","mousedown","mouseup"].forEach(type=>document.addEventListener(type,e=>{
     if(Date.now()<ghostUntil){e.stopPropagation();e.preventDefault();}
@@ -9559,9 +9567,9 @@ const LT_HOLD_MS=1200,LT_HOLD_KEEP_MS=400,LT_GHOST_MS=600;
   document.addEventListener("keydown",e=>{
     if(!holdKey(e))return;const b=held(e);if(!b)return;
     e.preventDefault();
-    if(!e.repeat&&!timer)start(b);
+    if(!e.repeat&&!timer)start(b,false,true);
   });
-  document.addEventListener("keyup",e=>{if(holdKey(e)&&(held(e)||fired)){e.preventDefault();stop(true);}});
+  document.addEventListener("keyup",e=>{if(holdKey(e)&&(held(e)||fired||(timer&&key))){e.preventDefault();stop(true);}});   // also when the screen was drawn again and the key comes up somewhere else
   document.addEventListener("focusout",e=>{if(held(e)&&!fired)stop(false);});
   document.addEventListener("contextmenu",e=>{if(held(e)||Date.now()<ghostUntil)e.preventDefault();});
 })();
