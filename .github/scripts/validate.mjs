@@ -273,7 +273,7 @@ if (!existsSync("news/articles.json")) {
     for (const r of rows) {
       const whole = Array.isArray(r) && r.length >= 13 && r.length <= 14 && nw.papers && nw.papers[r[0]] &&
         Number.isInteger(r[1]) && Number.isInteger(r[2]) && typeof r[6] === "string" && r[6] &&
-        topics.has(r[7]) && [8, 9, 10, 11].every(i => Array.isArray(r[i])) && r[9].every(x => topics.has(x)) &&
+        topics.has(r[7]) && [8, 9, 10, 11].every(i => Array.isArray(r[i]) && r[i].every(x => typeof x === "string" && x)) && r[9].every(x => topics.has(x)) &&
         /^\d{4}-\d\d-\d\d$/.test(((nw.issues || {})[r[0]] || {})[r[1]] || "") && !seen.has(r[0] + "-" + r[2]) &&
         JSON.stringify(r).length < 900;                      // titles and tags only — never article text
       if (!whole) bad++;
@@ -281,7 +281,7 @@ if (!existsSync("news/articles.json")) {
     }
     if (!topics.size) fail("NEWS_TOPICS could not be read from index.html");
     else if (!rows.length) fail("news/articles.json has no articles");
-    else if (bad) fail(`news/articles.json: ${bad} line(s) are not whole (paper, issue with a date, title, a main topic of NEWS_TOPICS, tags) or are there twice`);
+    else if (bad) fail(`news/articles.json: ${bad} line(s) are not whole (paper, issue with a date, title, a main topic of NEWS_TOPICS, tags that are words) or are there twice`);
     else ok(`news/articles.json is whole (${rows.length} articles, ${topics.size} main topics)`);
   } catch (e) {
     fail("news/articles.json is not valid JSON: " + e.message);
