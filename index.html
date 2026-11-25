@@ -238,7 +238,7 @@ textarea.cs-ed.on{opacity:1;pointer-events:auto;caret-color:auto}
 .nw-bar .seg{flex-wrap:wrap;height:auto;min-height:34px;max-width:100%}
 .nw-bar input[type=text]{flex:1 1 220px;min-width:0;width:auto}
 .nw-filters select{width:auto;max-width:100%}
-.nw-filters [hidden],.nw-recent[hidden]{display:none}
+.nw-filters [hidden],.nw-recent[hidden],.nw-week[hidden]{display:none}
 .nw-recent{gap:6px}
 .nw-lbl{font-size:11px;color:var(--txt3)}
 .nw-chip{border:1px solid var(--bdr2);background:var(--surf);border-radius:99px;padding:3px 10px;font-size:12px;color:var(--txt2);cursor:pointer;font-family:var(--font)}
@@ -275,13 +275,26 @@ textarea.cs-ed.on{opacity:1;pointer-events:auto;caret-color:auto}
 .nw-topic:disabled{opacity:.5;cursor:default}
 .nw-shelf{margin-top:14px;border-top:1px solid var(--bdr);padding-top:10px}
 .nw-shelf summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--txt)}
-.nw-shelf-row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:12.5px;color:var(--txt2)}
-.nw-shelf-row b{flex:0 0 130px;color:var(--txt)}
-.nw-shelf-row select{width:auto;max-width:100%}
+.nw-sp{margin-top:8px;border:1px solid var(--bdr);border-radius:var(--r);padding:8px 10px}
+.nw-sp>summary{font-weight:500;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.nw-sp>summary span{font-size:12px;font-weight:400;color:var(--txt2)}
+.nw-said{font-size:12px;color:var(--txt2);margin:6px 0 0;overflow-wrap:anywhere}
+.nw-sadd{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.nw-sadd input{flex:1 1 200px;min-width:0;width:auto}
+.nw-sy{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:start;padding:8px 0;border-top:1px solid var(--bdr)}
+.nw-sms{display:grid;gap:4px}
+.nw-sm{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.nw-syb,.nw-smb,.nw-sib{border:1px solid var(--bdr2);background:var(--surf);color:var(--txt2);border-radius:6px;cursor:pointer;font-family:var(--font);font-size:12px;line-height:1.2}
+.nw-syb{padding:6px 10px;font-weight:700}
+.nw-smb{min-width:46px;padding:6px 6px;font-weight:600}
+.nw-sib{display:inline-grid;justify-items:center;min-width:46px;padding:3px 6px}
+.nw-sib b{font-size:12px;font-weight:600}.nw-sib i{font-style:normal;font-size:10px;color:var(--txt3)}
+.nw-syb.on,.nw-smb.on,.nw-sib.on{background:var(--grn-l);border-color:var(--grn);color:var(--txt)}
+.nw-sib.on i{color:var(--txt2)}
+@media(pointer:coarse){.nw-syb,.nw-smb,.nw-sib{min-height:40px;min-width:48px}}
 .cs-news.has{color:var(--grn)}
 .cs-news b{font-size:10px;font-weight:700;margin-left:1px}
 @media(pointer:coarse){.nw-chip{min-height:36px;padding:6px 12px}.nw-x{min-width:32px;min-height:32px}}
-@media(max-width:640px){.nw-shelf-row b{flex-basis:100%}}
 #curr-body td.cs-tools{padding:4px 6px;vertical-align:middle}
 @media(min-width:641px){
   /* the row tools (⠿ and ⋮) stay at the right edge while the sheet scrolls sideways */
@@ -4111,7 +4124,8 @@ const I18N={ko:{
   "Photos of the record sheet":"기록지 사진","Photo of the record sheet":"기록지 사진 한 장","Photos of the paper record sheet of this student — add, look at, delete":"이 학생의 종이 기록지 사진 — 추가, 보기, 삭제",
   "Take a photo of the record sheet you filled in by hand during the test, and keep it with the student. The photos stay here; nothing on them is read into the results.":"테스트하면서 손으로 적은 기록지를 사진으로 찍어 학생에게 보관합니다. 사진은 여기에 그대로 남으며, 사진 속 내용이 결과로 자동 입력되지는 않습니다.",
   // v183 — newspapers
-  "Newspapers":"신문","Newspaper":"신문","Find an article in your printed newspapers":"가지고 있는 종이 신문에서 기사 찾기","Newspaper articles for this week":"이 주에 맞는 신문 기사","Search titles, topics and keywords…":"제목·주제·키워드 검색…","Order":"순서","On the shelf only":"보유한 호만","Not used yet":"아직 안 쓴 것만","Issues on my shelf":"보유한 신문","Level {n}":"Level {n}","Normal":"보통","Very hard":"매우 어려움","Levels C–E":"C–E 레벨","Every level":"모든 난이도","Every topic":"모든 주제","Best fit first":"잘 맞는 순","Newest first":"최신순","Oldest first":"오래된 순","Searched before":"최근 검색","For this week":"이 주 추천","By topic":"주제별","Favourites":"즐겨찾기","Used":"사용 기록","Every newspaper":"모든 신문","Every publisher's level":"출판사 난이도 전체","{n} articles · list made {d}":"기사 {n}건 · 목록 작성일 {d}","The list of articles could not be read. Check the connection and try again.":"기사 목록을 읽지 못했습니다. 연결을 확인하고 다시 시도하세요.","Reading the list of articles…":"기사 목록을 읽는 중…","Main topics, with the number of articles under the filters above. Press one to see its articles.":"메인 토픽과, 위 조건에 맞는 기사 수입니다. 누르면 그 주제의 기사가 나옵니다.","Picked for this week":"이 주에 골라 둠","Same field: {t}":"같은 분야: {t}","Fits: {w}":"맞는 낱말: {w}","This week has no topic to go by yet. Use Search.":"이 주에는 아직 기준으로 삼을 주제가 없습니다. 검색을 써 보세요.","No article fits this week's topic under the filters above. Try Every level, or Search.":"위 조건에서는 이 주 주제에 맞는 기사가 없습니다. 모든 난이도로 바꾸거나 검색해 보세요.","No favourites yet — press the star on an article.":"즐겨찾기가 없습니다 — 기사의 별을 누르세요.","Nothing marked as used yet.":"사용했다고 표시한 기사가 없습니다.","Nothing fits every word. Try fewer words, another level, or By topic.":"모든 낱말에 맞는 기사가 없습니다. 낱말을 줄이거나 난이도를 바꾸거나 주제별로 찾아보세요.","No article under the filters above.":"위 조건에 맞는 기사가 없습니다.","Type a word — animal, volcano, 교통 — or pick a topic or a newspaper.":"낱말을 입력하세요 — animal, volcano, 교통 — 또는 주제나 신문을 고르세요.","{n} articles":"기사 {n}건","Show more":"더 보기","No. {n}":"{n}호","p. {n}":"{n}쪽","Take out of favourites":"즐겨찾기에서 빼기","Add to favourites":"즐겨찾기에 넣기","On the shelf":"보유","Not on the shelf":"없음","Publisher's level":"출판사 난이도","Likely to suit":"추천 레벨","(a stretch)":"(도전용)","above level E":"E 레벨보다 어려움","free to read online":"온라인 무료 기사","tagged from the title alone — a guess":"제목만 보고 분류 — 추정","Also picked for: {w}":"다른 주에도 골라 둠: {w}","Used {d}":"{d} 사용","Take out":"빼기","Pick for this week":"이 주에 넣기","Mark as used":"사용함 표시","Publisher's page":"출판사 페이지","A note for yourself":"내가 볼 메모","Not for one student":"학생 지정 안 함","The list of favourites is full. Take one out first.":"즐겨찾기가 가득 찼습니다. 하나를 먼저 빼 주세요.","Pick a date up to today.":"오늘까지의 날짜를 고르세요.","The list of used articles is full.":"사용 기록이 가득 찼습니다.","Taken out of the used list.":"사용 기록에서 뺐습니다.","A week holds up to {n} articles.":"한 주에는 기사를 {n}개까지 넣을 수 있습니다.","Say which issues you have of each newspaper: the first and the last. Articles of other issues are then marked, and can be left out.":"신문마다 가지고 있는 호의 처음과 끝을 정하세요. 그 밖의 호에 실린 기사는 표시되고, 목록에서 뺄 수도 있습니다.","from":"처음","to":"끝",
+  "Newspapers":"신문","Newspaper":"신문","Find an article in your printed newspapers":"가지고 있는 종이 신문에서 기사 찾기","Newspaper articles for this week":"이 주에 맞는 신문 기사","Search titles, topics and keywords…":"제목·주제·키워드 검색…","Order":"순서","On the shelf only":"보유한 호만","Not used yet":"아직 안 쓴 것만","Issues on my shelf":"보유한 신문","Level {n}":"Level {n}","Normal":"보통","Very hard":"매우 어려움","Levels C–E":"C–E 레벨","Every level":"모든 난이도","Every topic":"모든 주제","Best fit first":"잘 맞는 순","Newest first":"최신순","Oldest first":"오래된 순","Searched before":"최근 검색","For this week":"이 주 추천","By topic":"주제별","Favourites":"즐겨찾기","Used":"사용 기록","Every newspaper":"모든 신문","Every publisher's level":"출판사 난이도 전체","{n} articles · list made {d}":"기사 {n}건 · 목록 작성일 {d}","The list of articles could not be read. Check the connection and try again.":"기사 목록을 읽지 못했습니다. 연결을 확인하고 다시 시도하세요.","Reading the list of articles…":"기사 목록을 읽는 중…","Main topics, with the number of articles under the filters above. Press one to see its articles.":"메인 토픽과, 위 조건에 맞는 기사 수입니다. 누르면 그 주제의 기사가 나옵니다.","Picked for this week":"이 주에 골라 둠","Same field: {t}":"같은 분야: {t}","Fits: {w}":"맞는 낱말: {w}","This week has no topic to go by yet. Use Search.":"이 주에는 아직 기준으로 삼을 주제가 없습니다. 검색을 써 보세요.","No article fits this week's topic under the filters above. Try Every level, or Search.":"위 조건에서는 이 주 주제에 맞는 기사가 없습니다. 모든 난이도로 바꾸거나 검색해 보세요.","No favourites yet — press the star on an article.":"즐겨찾기가 없습니다 — 기사의 별을 누르세요.","Nothing marked as used yet.":"사용했다고 표시한 기사가 없습니다.","Nothing fits every word. Try fewer words, another level, or By topic.":"모든 낱말에 맞는 기사가 없습니다. 낱말을 줄이거나 난이도를 바꾸거나 주제별로 찾아보세요.","No article under the filters above.":"위 조건에 맞는 기사가 없습니다.","Type a word — animal, volcano, 교통 — or pick a topic or a newspaper.":"낱말을 입력하세요 — animal, volcano, 교통 — 또는 주제나 신문을 고르세요.","{n} articles":"기사 {n}건","Show more":"더 보기","No. {n}":"{n}호","p. {n}":"{n}쪽","Take out of favourites":"즐겨찾기에서 빼기","Add to favourites":"즐겨찾기에 넣기","On the shelf":"보유","Not on the shelf":"없음","Publisher's level":"출판사 난이도","Likely to suit":"추천 레벨","(a stretch)":"(도전용)","above level E":"E 레벨보다 어려움","free to read online":"온라인 무료 기사","tagged from the title alone — a guess":"제목만 보고 분류 — 추정","Also picked for: {w}":"다른 주에도 골라 둠: {w}","Used {d}":"{d} 사용","Take out":"빼기","Pick for this week":"이 주에 넣기","Mark as used":"사용함 표시","Publisher's page":"출판사 페이지","A note for yourself":"내가 볼 메모","Not for one student":"학생 지정 안 함","The list of favourites is full. Take one out first.":"즐겨찾기가 가득 찼습니다. 하나를 먼저 빼 주세요.","Pick a date up to today.":"오늘까지의 날짜를 고르세요.","The list of used articles is full.":"사용 기록이 가득 찼습니다.","Taken out of the used list.":"사용 기록에서 뺐습니다.","A week holds up to {n} articles.":"한 주에는 기사를 {n}개까지 넣을 수 있습니다.",
+  "Press the issues you have. A month or a year can be pressed as a whole, and a period can be typed. Articles of other issues are then marked, and can be left out.":"가지고 있는 호를 누르세요. 달이나 연도를 통째로 누를 수도 있고, 기간을 입력할 수도 있습니다. 그 밖의 호에 실린 기사는 표시되고, 목록에서 뺄 수도 있습니다.","{n} of {m} issues":"{m}개 호 중 {n}개","not said yet":"아직 정하지 않음","A period or issue numbers":"기간 또는 호수","Clear all":"모두 해제","All issues":"전체 선택","Not a period or issue numbers of this newspaper: {x}":"이 신문의 기간이나 호수로 읽을 수 없습니다: {x}","{n} issues added.":"{n}개 호를 추가했습니다.",
   "Paste ratings":"평가 붙여 넣기","Put in ratings from a list — for example one made from photos of the writing":"목록으로 평가 넣기 — 예: 쓰기 사진을 보고 만든 목록","Check":"확인",
   "For ratings worked out elsewhere — for example a list made from photos of the writing. One rating a line: name | skill | level | content sentences accuracy flow (each out of 100, in steps of 20) | words | sentences | note. Only the first three are needed. Check first; nothing is saved until you press Apply.":"앱 밖에서 정리한 평가를 넣는 곳입니다 — 예: 쓰기 사진을 보고 만든 목록. 한 줄에 평가 하나: 이름 | 영역 | 레벨 | 내용 문장 정확성 흐름(각 100점 만점, 20점 단위) | 단어 수 | 문장 수 | 메모. 앞의 세 가지만 있어도 됩니다. 먼저 확인을 누르세요. 적용을 누르기 전에는 아무것도 저장되지 않습니다.",
   "Changed — press Check again.":"내용이 바뀌었습니다 — 확인을 다시 누르세요.","Not a date up to today.":"오늘까지의 날짜가 아닙니다.","Needs a name, a skill and a level, divided by |.":"이름, 영역, 레벨이 | 로 나뉘어 있어야 합니다.",
@@ -12227,7 +12241,7 @@ const NEWS_LV={kt:{easy:"C",normal:"CD",hard:"DE",veryhard:"E"},nej:{"1":"DE","2
 const NEWS_LV_HARD={nej:{"3":1},net:{"1":1}};
 const NEWS_FIXED=["Photo News","Riddles","Quote of the Week","Write the correct words!","Make sentences using the words in this picture!"];
 const NEWS_MAX={fav:600,use:3000,q:12,week:12,note:400};
-const NW={data:null,wait:null,err:"",row:null,tab:"search",limit:40,form:null};
+const NW={data:null,wait:null,err:"",row:null,tab:"search",limit:40,form:null,shelfOpen:new Set()};
 const newsLevels=a=>((NEWS_LV[a.p]||{})[a.lv]||"").split("");
 const newsPlv=a=>a.p!=="kt"?(a.lv?tx("Level {n}",{n:a.lv}):""):a.lv==="easy"?tx("Easy"):a.lv==="normal"?tx("Normal"):a.lv==="hard"?tx("Hard"):a.lv==="veryhard"?tx("Very hard"):a.lv;
 // a word as it is compared: lower case, without a plural ending
@@ -12252,7 +12266,9 @@ function newsBuild(d){
     a._hay=[t,sec,a.s.join(" "),a.k.join(" "),a.ko.join(" "),d.papers[p]?d.papers[p].name:"",n+"호",a.d].join(" ").toLowerCase();
     return a;
   });
-  return {built:d.built||"",papers:d.papers,list,byId:new Map(list.map(a=>[a.id,a]))};
+  // every issue of a paper with its date, in order — the shelf is said in these
+  const issues={};Object.keys(d.papers).forEach(p=>{issues[p]=Object.entries((d.issues||{})[p]||{}).map(([n,dt])=>[+n,String(dt)]).filter(x=>Number.isFinite(x[0])).sort((x,y)=>x[0]-y[0]);});
+  return {built:d.built||"",papers:d.papers,list,byId:new Map(list.map(a=>[a.id,a])),issues};
 }
 // The file, once. Asked for again only after it could not be read.
 function newsLoad(){
@@ -12269,9 +12285,13 @@ const newsFav=()=>{const f=newsState().fav;return Array.isArray(f)?f.filter(x=>t
 const newsUse=()=>{const u=newsState().use;return Array.isArray(u)?u.filter(x=>x&&typeof x==="object"&&typeof x.a==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(String(x.d||""))):[];};
 const newsNotes=()=>{const n=newsState().note;return n&&typeof n==="object"&&!Array.isArray(n)?n:{};};
 const newsRecent=()=>{const q=newsState().q;return Array.isArray(q)?q.filter(x=>typeof x==="string"&&x.trim()).slice(0,NEWS_MAX.q):[];};
-function newsOwn(){const o=newsState().own,out={};if(o&&typeof o==="object"&&!Array.isArray(o))for(const p in o){const r=o[p];if(Array.isArray(r)&&Number.isFinite(+r[0])&&Number.isFinite(+r[1])&&+r[0]<=+r[1])out[p]=[+r[0],+r[1]];}return out;}
+// The shelf: for each paper the issues that are there, as ranges of issue numbers — as many as
+// it takes (a subscription that stopped and began again is two). {paper:[[from,to],…]}
+function newsOwn(){const o=newsState().own,out={};if(o&&typeof o==="object"&&!Array.isArray(o))for(const p in o){
+  const rs=(Array.isArray(o[p])?o[p]:[]).filter(r=>Array.isArray(r)&&Number.isFinite(+r[0])&&Number.isFinite(+r[1])&&+r[0]<=+r[1]).map(r=>[+r[0],+r[1]]);
+  if(rs.length)out[p]=rs;}return out;}
 // true / false, or null while the shelf of that paper has not been said
-const newsOwned=a=>{const r=newsOwn()[a.p];return r?a.n>=r[0]&&a.n<=r[1]:null;};
+const newsOwned=a=>{const r=newsOwn()[a.p];return r?r.some(x=>a.n>=x[0]&&a.n<=x[1]):null;};
 const newsUsedOf=id=>newsUse().filter(u=>u.a===id).sort((x,y)=>x.d<y.d?1:-1);
 function newsPut(patch){
   const has=k=>Object.prototype.hasOwnProperty.call(settings,k),had=has("news"),before=settings.news,hadU=has("_u"),oldU=settings._u;
@@ -12526,22 +12546,81 @@ function newsLink(id){
   newsRender();
 }
 // ── the issues on the shelf ──
+// Subscriptions start, stop and start again, and differ from paper to paper. So the shelf is said
+// issue by issue: every issue of a paper is a button under its month and year; a month or a year
+// is pressed as a whole; and a period can be typed ("2025-03~2025-08", "787-800"). What is kept is
+// the ranges that say the same (newsOwnPut), and the line under the paper's name reads them back.
+const newsIssues=p=>NW.data&&NW.data.issues[p]||[];
+function newsOwnSet(p){const r=newsOwn()[p]||[];return new Set(newsIssues(p).map(x=>x[0]).filter(n=>r.some(q=>n>=q[0]&&n<=q[1])));}
+// Issues next to each other in the list make one range; an issue the list does not have (its
+// number is skipped) does not break a range in two.
+function newsOwnPut(p,set){
+  const rs=[];let cur=null;
+  newsIssues(p).forEach(([n])=>{if(set.has(n)){if(cur)cur[1]=n;else{cur=[n,n];rs.push(cur);}}else cur=null;});
+  const own=Object.assign({},newsOwn());
+  if(rs.length)own[p]=rs;else delete own[p];
+  return newsPut({own});
+}
+const newsMonthName=ym=>LANG==="ko"?(+ym.slice(5))+"월":CURR_MONTHS[+ym.slice(5)-1]||ym.slice(5);
 function newsShelfRender(){
   const box=document.getElementById("nw-shelf-body"),D=NW.data,e=escapeAttr;if(!box)return;
   if(!D){box.innerHTML="";return;}
   const own=newsOwn();
-  box.innerHTML=`<p class="u-hint">${e(tx("Say which issues you have of each newspaper: the first and the last. Articles of other issues are then marked, and can be left out."))}</p>`+
+  box.innerHTML=`<p class="u-hint">${e(tx("Press the issues you have. A month or a year can be pressed as a whole, and a period can be typed. Articles of other issues are then marked, and can be left out."))}</p>`+
     Object.keys(D.papers).map(p=>{
-      const iss=[...new Map(D.list.filter(a=>a.p===p).map(a=>[a.n,a.d])).entries()].sort((x,y)=>x[0]-y[0]),r=own[p];
-      const opts=sel=>`<option value="">–</option>`+iss.map(([n,d])=>`<option value="${n}"${sel===n?" selected":""}>${e(tx("No. {n}",{n}))} · ${e(d)}</option>`).join("");
-      return `<div class="nw-shelf-row"><b>${e(D.papers[p].name)}</b><label>${e(tx("from"))} <select id="nw-own-a-${p}" onchange="newsShelfSet('${p}')">${opts(r?r[0]:null)}</select></label><label>${e(tx("to"))} <select id="nw-own-b-${p}" onchange="newsShelfSet('${p}')">${opts(r?r[1]:null)}</select></label></div>`;}).join("");
+      const iss=newsIssues(p),set=newsOwnSet(p),years=[...new Set(iss.map(x=>x[1].slice(0,4)))],rs=own[p]||[];
+      const said=rs.map(([a,b])=>{const da=(iss.find(x=>x[0]>=a)||[])[1]||"",db=(iss.slice().reverse().find(x=>x[0]<=b)||[])[1]||"";return a===b?tx("No. {n}",{n:a})+" ("+da+")":tx("No. {n}",{n:a+"–"+b})+" ("+da+" ~ "+db+")";}).join(" · ");
+      return `<details class="nw-sp" data-p="${p}"${NW.shelfOpen.has(p)?" open":""} ontoggle="newsShelfOpen(this)"><summary><b>${e(D.papers[p].name)}</b> <span>${e(set.size?tx("{n} of {m} issues",{n:set.size,m:iss.length}):tx("not said yet"))}</span></summary>`+
+        (said?`<p class="nw-said">${e(said)}</p>`:"")+
+        `<div class="nw-sadd"><input type="text" id="nw-own-in-${p}" placeholder="2025-03~2025-08, 787-800" aria-label="${e(tx("A period or issue numbers"))}" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();newsShelfAdd('${p}');}"/>`+
+          `<button type="button" class="btn btn-sm" onclick="newsShelfAdd('${p}')">${e(tx("Add"))}</button>`+
+          `<button type="button" class="btn btn-sm" onclick="newsShelfToggle('${p}','all','')">${e(set.size===iss.length&&iss.length?tx("Clear all"):tx("All issues"))}</button>`+
+          (set.size&&set.size<iss.length?`<button type="button" class="btn btn-sm" onclick="newsShelfClear('${p}')">${e(tx("Clear all"))}</button>`:"")+`</div>`+
+        years.map(y=>{
+          const inY=iss.filter(x=>x[1].startsWith(y)),months=[...new Set(inY.map(x=>x[1].slice(0,7)))],yOn=inY.every(x=>set.has(x[0]));
+          return `<div class="nw-sy"><button type="button" class="nw-syb${yOn?" on":""}" aria-pressed="${yOn}" onclick="newsShelfToggle('${p}','y','${y}')">${y}</button><div class="nw-sms">`+
+            months.map(m=>{const inM=inY.filter(x=>x[1].startsWith(m)),mOn=inM.every(x=>set.has(x[0]));
+              return `<div class="nw-sm"><button type="button" class="nw-smb${mOn?" on":""}" aria-pressed="${mOn}" onclick="newsShelfToggle('${p}','m','${m}')">${e(newsMonthName(m))}</button>`+
+                inM.map(([n,d])=>`<button type="button" class="nw-sib${set.has(n)?" on":""}" aria-pressed="${set.has(n)}" title="${e(d)}" onclick="newsShelfToggle('${p}','i','${n}')"><b>${n}</b><i>${e(d.slice(5).replace("-","."))}</i></button>`).join("")+`</div>`;}).join("")+
+          `</div></div>`;}).join("")+
+      `</details>`;}).join("");
 }
-function newsShelfSet(p){
-  const a=document.getElementById("nw-own-a-"+p).value,b=document.getElementById("nw-own-b-"+p).value,own=Object.assign({},newsOwn());
-  if(a&&b){const lo=Math.min(+a,+b),hi=Math.max(+a,+b);own[p]=[lo,hi];}
-  else if(!a&&!b)delete own[p];
-  else return;                                         // one end only: wait for the other
-  if(newsPut({own}))newsRender();
+function newsShelfOpen(el){const p=el.dataset.p;if(el.open)NW.shelfOpen.add(p);else NW.shelfOpen.delete(p);}
+// One issue, a month, a year or all of a paper: on if any of them is off, else off.
+function newsShelfToggle(p,kind,key){
+  const set=newsOwnSet(p),pick=newsIssues(p).filter(([n,d])=>kind==="i"?n===+key:kind==="m"?d.slice(0,7)===key:kind==="y"?d.slice(0,4)===key:kind==="all").map(x=>x[0]);
+  if(!pick.length)return;
+  const allOn=pick.every(n=>set.has(n));
+  pick.forEach(n=>{if(allOn)set.delete(n);else set.add(n);});
+  if(newsOwnPut(p,set))newsRender();
+}
+function newsShelfClear(p){if(newsOwnPut(p,new Set()))newsRender();}
+// A typed period, added to what is there: "2025-03~2025-08" (months), "2025-03-10~2025-06-30"
+// (days), "2025-03" (one month), "787-800" or "812" (issue numbers); several with commas.
+function newsShelfParse(p,text){
+  const iss=newsIssues(p),add=new Set(),bad=[];
+  String(text||"").split(/[,;\n]+/).map(t=>t.trim()).filter(Boolean).forEach(t=>{
+    const ds=[...t.matchAll(/(\d{4})[-./](\d{1,2})(?:[-./](\d{1,2}))?/g)].map(m=>[m[1]+"-"+m[2].padStart(2,"0"),m[3]?m[3].padStart(2,"0"):""]);
+    let hit=[];
+    if(ds.length&&ds.length<=2&&!t.replace(/(\d{4})[-./](\d{1,2})(?:[-./](\d{1,2}))?/g,"").replace(/[\s~–—-]|to|부터|까지/g,"")){
+      const a=ds[0],b=ds[1]||ds[0],lo=a[0]+"-"+(a[1]||"01"),hi=b[0]+"-"+(b[1]||"31");
+      if(lo<=hi)hit=iss.filter(x=>x[1]>=lo&&x[1]<=hi);
+    }else{
+      const m=t.replace(/호/g,"").match(/^(\d{1,5})(?:\s*[-~–—]\s*(\d{1,5}))?$/);
+      if(m){const lo=+m[1],hi=m[2]?+m[2]:lo;if(lo<=hi)hit=iss.filter(x=>x[0]>=lo&&x[0]<=hi);}
+    }
+    if(hit.length)hit.forEach(x=>add.add(x[0]));else bad.push(t);
+  });
+  return {add,bad};
+}
+function newsShelfAdd(p){
+  const el=document.getElementById("nw-own-in-"+p);if(!el||!el.value.trim())return;
+  const {add,bad}=newsShelfParse(p,el.value);
+  if(bad.length){showToast(tx("Not a period or issue numbers of this newspaper: {x}",{x:bad.join(", ")}));return;}   // nothing is taken in part
+  const set=newsOwnSet(p),before=set.size;add.forEach(n=>set.add(n));
+  if(!newsOwnPut(p,set))return;
+  NW.shelfOpen.add(p);newsRender();
+  showToast(tx("{n} issues added.",{n:set.size-before}));
 }
 
 // ═══════════════════════════════════════════════
