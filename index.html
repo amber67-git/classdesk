@@ -790,7 +790,12 @@ body.lt-testing #app-toast,body.lt-testing #undo-toast{bottom:auto!important;top
 #lt-screen .lt-exmsg{min-height:44px;margin:0;font-size:15px;font-weight:600;color:var(--lt-brand)}
 #lt-screen .lt-exmsg.lt-retry{color:var(--lt-amber-ink)}
 @media(prefers-reduced-motion:reduce){#lt-screen .lt-ko i,#lt-screen .lt-ko i::after{transition:none}}
-#lt-screen [data-hold]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+#lt-screen [data-hold]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;position:relative}
+#lt-screen .lt-btn[data-hold]{overflow:hidden}
+/* v182: while it is held, a bar fills along the bottom of the control in the time the hold takes */
+#lt-screen [data-hold].lt-holding::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--lt-amber);transform-origin:left center;animation:lt-hold 1.2s linear forwards}
+@keyframes lt-hold{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){#lt-screen [data-hold].lt-holding::after{animation:none}}
 #lt-screen .lt-passage{font-family:var(--lt-read);font-size:18px;line-height:1.75}
 #lt-screen .lt-passage h2{font:700 19px/1.3 var(--lt-read);margin-bottom:8px}
 #lt-screen .lt-passage p{margin:0 0 10px}
@@ -2382,9 +2387,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>How are the scores out of 100 worked out?</dt><dd>Every skill — Reading, Listening, Grammar, Vocabulary, Phonics, Speaking, Writing — has a score out of 100 on <b>one scale</b>: a level is a band of 20 points. <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100.</b> Where a score falls inside the band depends on what there is. <b>Reading</b>: the stage of the result — beginning 7, developing 13, secure 20 points into the band (C · developing = 40 + 13 = 53). <b>Listening, Grammar, Vocabulary, Phonics</b> checked with questions: the bottom of the result level's band plus the share right at that level × 20 (C with 3 of 5 right = 40 + 12 = 52). <b>Speaking, Writing</b>: the four points of the score sheet are each out of 100 in steps of 20 (20 is level A, 40 B, 60 C, 80 D, 100 E, 0 no response) and the score is their average. <b>A level picked without a sheet or questions</b> counts as the middle of its band (A 10, B 30, C 50, D 70, E 90). The reading score is the score of the test itself: confirming a different class level does not change it. The scores are worked out from what is stored — nothing you saved before changes — and they are for you: on the student's row and Details, in the result window, in the teacher's copy of the report, in the CSV, and on the printed record sheet and rule card. The parents' copy still has no numbers.</dd>
           <dt>How does a student start at the level I expect, and how do I pick a test book without typing?</dt><dd><b>Start level.</b> Level test → <b>Start levels</b>: press a level beside each student, or paste a list under <b>Set many at once</b>. From then on everything for that student begins there: <b>Start test</b>, the window between the skills (All skills), and each skill opened from Details or from <b>Still to rate</b> — its questions and its task open at that level. A student who has taken a reading test starts from that result, and a skill already rated starts from its last rating. A list can also come with a link (the address ends in <b>#levels=</b> and the list): the Start levels window opens with the list in its box and nothing is saved until you press <b>Apply</b>. <b>Test books.</b> The Book check window shows the books kept for a level as buttons, on the student's start level; press another level to see its books. Press a book and its title is in — then only the words missed are left to type. To change a level's list, type a title and press <b>Add to level …</b>, or press <b>Edit the list</b> and take one out. The lists are yours and go with your account; until you change them they are a starter set (level A is empty). Any other title can still be typed.</dd>
           <dt>Can I keep what a student said or wrote?</dt><dd>Yes. Level test → the student's <b>Details</b> → <b>Speaking</b>: press <b>Record</b> to record in the app (it goes on while the task is on the student's screen, and <b>Stop and keep</b> saves it), or <b>Add a recording file</b> for one you made with the phone's own recorder. <b>Writing</b>: <b>Add photos</b> takes or picks photos of the paper; large photos are made smaller first. They are kept with the student, apart from the rating, so they can be added later and a rating can be saved without them. The files go to your Google account's storage (the same place as book covers), so you need to be signed in, and they show on your other devices. A recording stops by itself after five minutes; a file can be up to 25 MB, a photo 15 MB. Deleting asks first and offers Undo for a few seconds; after that the file is gone for good.</dd>
-          <dt>How do I stop in the middle of a test, and what is kept?</dt><dd>On the student's screen, hold the lock at the top right (marked <b>Teacher</b>) for a second and choose <b>Stop and leave (continue later)</b>. Everything answered so far is kept: the reading test in your data, the questions of Listening, Grammar, Vocabulary and Phonics on that device. To go on, press <b>Continue test</b> on the student's row. If the app was simply closed, it opens again on that student's test. What you picked in a Speaking or Writing window without saving is kept as well and comes back when you open the skill again. A sample keeps its reading test only. During a test of every skill you do not have to stop at all to change skill: press it in the row at the top of the student's screen. Because the answers of an unfinished skill stay on the device, finish it on the same device. And check that the device is signed in: if the Level test page shows "This device is not signed in", what you do there is not shared with your other devices.</dd>
+          <dt>How do I stop in the middle of a test, and what is kept?</dt><dd>On the student's screen, hold the lock at the top right (marked <b>Teacher</b>) until the bar that fills along it is full (a little over a second) and choose <b>Stop and leave (continue later)</b>. Everything answered so far is kept: the reading test in your data, the questions of Listening, Grammar, Vocabulary and Phonics on that device. To go on, press <b>Continue test</b> on the student's row. If the app was simply closed, it opens again on that student's test. What you picked in a Speaking or Writing window without saving is kept as well and comes back when you open the skill again. A sample keeps its reading test only. During a test of every skill you do not have to stop at all to change skill: press it in the row at the top of the student's screen. Because the answers of an unfinished skill stay on the device, finish it on the same device. And check that the device is signed in: if the Level test page shows "This device is not signed in", what you do there is not shared with your other devices.</dd>
           <dt>How do I check Listening, Grammar, Phonics and Vocabulary, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b>, <b>Grammar</b>, <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>. Phonics works like Listening (you say a word, the student picks it among look-alikes — 6 a level); Vocabulary like Grammar (the student alone — 8 a level). For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
-          <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
+          <dt>Can the Korean help be turned on or off in the middle of a level test?</dt><dd>Yes — with the <b>한글</b> switch at the top right of the student's screen, at any level. On: the screen is in Korean with English and the question is shown in Korean under the English one (the passage and the choices stay in English). Off: the whole screen is in English only. If nobody presses it, it is on at levels A and B (when the start window has it on) and off at levels C–E. The choice follows the student through the whole test — every skill, not only the screen it was pressed on; with the start window's switch turned off there is no Korean in any skill until 한글 is pressed. A test in which it was pressed says so in the result window, so you can take that into account when you compare it with an earlier test.</dd>
           <dt>Will a student get the same level test passage again?</dt><dd>Not for a long while. Each level has four sets. A test starts with the set of that level the student met longest ago — a set never met comes first — so the same passage returns only after the other three. When a score is borderline, a second set of the same level follows in the same test. On paper you choose the set yourself; the start window suggests the one met longest ago.</dd>
           <dt>I don't see Level test in the menu.</dt><dd>If Reading was switched off before v145 (for example with the <b>Any subject</b> setup), the Level test page starts switched off as well. Turn it on in Settings → Templates → <b>Features</b> → <b>Level test</b>. Once you have switched it yourself it stays as you set it, whatever you do with Reading.</dd>
           <dt>I don't teach reading — can I hide Reading and Books?</dt><dd>Settings → Templates → <b>Features</b> → <b>Any subject</b>. The Reading and Books pages leave the menu, the lesson card loses its "Books read" section, and the Curriculum columns become Unit, Materials and Homework (Books and Grammar hidden). You can also switch each page and lesson section on its own. Nothing is deleted: switch it back on and everything is still there.</dd>
@@ -2412,6 +2417,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v182 · 2026-11-25</dt><dd><b>Level test: the long press works on a touch screen, and the Korean choice holds across the skills.</b> <b>Long press:</b> on a tablet or phone, holding the button at the bottom of a Speaking or Writing task (or of the last screen of a skill) closed the student's screen — and then the window that should have followed closed again the moment the finger lifted, so the test seemed stuck. The window now stays. While the lock or the button is held, a bar fills along it, so you can see how long to keep it pressed (a little over a second). <b>Korean:</b> the 한글 choice used to belong to one screen — with the start window's switch off, or after 한글 was turned off during reading, Korean came back as soon as another skill was opened from the row at the top. The choice now follows the student for the whole test: the start window's switch turned off means no Korean in any skill, and 한글 pressed on any screen holds for the others, also after the app is closed and opened again.</dd>
           <dt>v181 · 2026-11-25</dt><dd><b>Level test: start at the expected level everywhere, and pick test books with a tap.</b> The start level set for a student (Start levels) was used by Start test only. A skill opened from Details or from Still to rate, and the All skills window opened for a student, began at B or at the level of the student before. Now all of them begin at the student's own start level. A list of start levels can come with a link ending in <b>#levels=…</b>: the window opens with the list filled in, to press Apply. <b>Book check</b>: the books kept for each level are buttons — press the level, press the book; the lists can be changed in the window and go with your account.</dd>
           <dt>v180 · 2026-11-24</dt><dd><b>Level test: every skill out of 100, on one scale.</b> Until now the numbers did not match — sheet points from 0 to 5, questions out of 5, 8 or 6, reading as a level and a stage. Now every skill has a score out of 100 and a level is a band of 20 points: <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100</b>. Reading goes by its stage, the question skills by the share right at the result level, Speaking and Writing by the average of four points that are now each out of 100 (the buttons read 0, 20, 40, 60, 80, 100), and a level picked on its own counts as the middle of its band. Shown on the student's row and Details, in the result window, the teacher's copy of the report, the CSV, the printed record sheet and rule card, Paste ratings and the AI suggestion. Nothing stored changes; the parents' copy still has no numbers.</dd>
           <dt>v179 · 2026-11-24</dt><dd><b>Level test: check a photo of the writing with AI.</b> With your own Claude API key (Settings → <b>Claude API</b>; kept on this device only), the Writing window has a <b>Check with AI</b> button once a photo is added. Claude reads the newest photos and suggests a level, the four points, the counts, and what went well and what was hard — shown under the photos with what it read and what it was not sure of. <b>Put in the sheet</b> copies it into the window for you to change and save; nothing is saved by the AI. Only the photo, the task and the level descriptions are sent.</dd>
@@ -2490,7 +2496,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v181</b> · FAQ current as of: <b>2026-11-25</b><br/>
+          Guide written against version: <b>v182</b> · FAQ current as of: <b>2026-11-25</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2640,9 +2646,9 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>100점 만점 점수는 어떻게 정해지나요?</dt><dd>읽기·듣기·문법·어휘·파닉스·말하기·쓰기 모두 100점 만점이고 <b>기준은 하나</b>입니다. 레벨 하나가 20점 구간입니다. <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100.</b> 구간 안에서 어디인지는 가진 정보로 정합니다. <b>읽기</b>: 결과 단계 — 시작 +7, 발전 +13, 안정 +20 (C · 발전 = 40 + 13 = 53). <b>듣기·문법·어휘·파닉스</b>(문항으로 확인): 결과 레벨 구간의 시작 점수 + 그 레벨에서 맞힌 비율 × 20 (C에서 5개 중 3개 = 40 + 12 = 52). <b>말하기·쓰기</b>: 채점표 네 항목을 각각 100점 만점·20점 단위로 매기고(20은 레벨 A, 40은 B, 60은 C, 80은 D, 100은 E, 0은 무반응) 그 평균이 점수입니다. <b>채점표나 문항 없이 레벨만 고른 영역</b>은 구간의 가운데 점수입니다(A 10, B 30, C 50, D 70, E 90). 읽기 점수는 테스트 자체의 점수라서, 수업 레벨을 다르게 확정해도 바뀌지 않습니다. 점수는 저장된 내용에서 계산하므로 전에 저장한 것은 바뀌지 않습니다. 선생님만 봅니다: 학생 줄과 자세히, 결과 창, 선생님용 리포트, CSV, 인쇄하는 기록지와 진행 카드. 학부모용 리포트에는 여전히 숫자가 없습니다.</dd>
           <dt>학생이 예상 레벨에서 바로 시작하게 하려면요? 테스트용 책을 입력하지 않고 고르려면요?</dt><dd><b>시작 레벨.</b> 레벨테스트 → <b>시작 레벨</b>: 학생 옆의 레벨을 누르거나, <b>여러 명 한 번에 넣기</b>에 목록을 붙여 넣습니다. 그 뒤로는 그 학생의 모든 것이 그 레벨에서 시작합니다: <b>테스트 시작</b>, 영역 사이 창(모든 영역), 그리고 자세히나 <b>남은 영역</b>에서 연 각 영역 — 문항과 과제가 그 레벨로 열립니다. 읽기 테스트를 본 학생은 그 결과에서, 이미 평가한 영역은 마지막 평가에서 시작합니다. 목록은 링크로도 올 수 있습니다(주소 끝이 <b>#levels=</b>와 목록). 시작 레벨 창이 목록을 채운 채 열리고, <b>적용</b>을 누르기 전에는 저장되지 않습니다. <b>테스트용 책.</b> 책 읽기 확인 창에 그 레벨의 책이 버튼으로 보입니다(학생의 시작 레벨이 먼저). 다른 레벨을 누르면 그 레벨의 책이 나옵니다. 책을 누르면 제목이 들어가고, 틀린 단어 수만 적으면 됩니다. 레벨의 목록을 바꾸려면 제목을 적고 <b>레벨 …에 추가</b>를 누르거나, <b>목록 편집</b>을 눌러 뺍니다. 목록은 선생님 것이고 계정과 함께 갑니다. 바꾸기 전에는 기본 묶음이 들어 있습니다(레벨 A는 비어 있음). 다른 제목도 여전히 직접 적을 수 있습니다.</dd>
           <dt>학생이 말한 것과 쓴 것을 보관할 수 있나요?</dt><dd>네. 레벨테스트 → 학생의 <b>자세히</b> → <b>말하기</b>: <b>녹음하기</b>를 누르면 앱에서 바로 녹음합니다(과제를 학생 화면에 띄운 동안에도 계속 녹음되고, <b>멈추고 저장</b>을 누르면 저장됩니다). 핸드폰 녹음기로 따로 녹음한 파일은 <b>녹음 파일 올리기</b>로 올립니다. <b>쓰기</b>: <b>사진 올리기</b>로 종이를 찍거나 앨범에서 고릅니다. 큰 사진은 먼저 작게 줄여서 올립니다. 평가와 따로 학생에게 보관되므로, 나중에 올려도 되고 녹음·사진 없이 평가만 저장해도 됩니다. 파일은 선생님 Google 계정의 저장소(책 표지와 같은 곳)에 올라가므로 로그인이 필요하고, 다른 기기에서도 보입니다. 녹음은 5분이 되면 스스로 멈추고, 파일은 25 MB, 사진은 15 MB까지 올릴 수 있습니다. 삭제는 먼저 물어보고 몇 초 동안 되돌리기를 보여 줍니다. 그 뒤에는 파일이 완전히 지워집니다.</dd>
-          <dt>테스트 도중에 멈추려면 어떻게 하고, 무엇이 남나요?</dt><dd>학생 화면 오른쪽 위의 자물쇠(<b>선생님</b>이라고 적힌 것)를 1초쯤 길게 누르고 <b>멈추고 나가기 (나중에 이어서)</b>를 고릅니다. 그때까지 푼 것은 모두 남습니다. 읽기 테스트는 데이터에, 듣기·문법·어휘·파닉스 문항은 그 기기에 남습니다. 이어서 하려면 학생 줄의 <b>이어서 풀기</b>를 누르세요. 앱이 그냥 닫혔다면 다시 열 때 그 학생의 테스트가 바로 뜹니다. 말하기·쓰기 창에서 고르고 저장하지 않은 것도 남아서, 그 영역을 다시 열면 돌아옵니다. 샘플은 읽기 테스트만 남습니다. 모든 영역 테스트 중에는 영역을 바꾸려고 멈출 필요도 없습니다. 학생 화면 위쪽 줄에서 누르면 됩니다. 풀다 만 영역의 답은 그 기기에만 있으므로, 같은 기기에서 마저 끝내 주세요. 그 기기가 로그인되어 있는지도 확인하세요. 레벨테스트 페이지에 "이 기기는 로그인되어 있지 않습니다"가 보이면, 거기서 한 것은 다른 기기에 나타나지 않습니다.</dd>
+          <dt>테스트 도중에 멈추려면 어떻게 하고, 무엇이 남나요?</dt><dd>학생 화면 오른쪽 위의 자물쇠(<b>선생님</b>이라고 적힌 것)를 길게 누릅니다. 누르고 있으면 그 위에 막대가 차오르고, 다 차면(1초 남짓) 메뉴가 열립니다. 거기서 <b>멈추고 나가기 (나중에 이어서)</b>를 고릅니다. 그때까지 푼 것은 모두 남습니다. 읽기 테스트는 데이터에, 듣기·문법·어휘·파닉스 문항은 그 기기에 남습니다. 이어서 하려면 학생 줄의 <b>이어서 풀기</b>를 누르세요. 앱이 그냥 닫혔다면 다시 열 때 그 학생의 테스트가 바로 뜹니다. 말하기·쓰기 창에서 고르고 저장하지 않은 것도 남아서, 그 영역을 다시 열면 돌아옵니다. 샘플은 읽기 테스트만 남습니다. 모든 영역 테스트 중에는 영역을 바꾸려고 멈출 필요도 없습니다. 학생 화면 위쪽 줄에서 누르면 됩니다. 풀다 만 영역의 답은 그 기기에만 있으므로, 같은 기기에서 마저 끝내 주세요. 그 기기가 로그인되어 있는지도 확인하세요. 레벨테스트 페이지에 "이 기기는 로그인되어 있지 않습니다"가 보이면, 거기서 한 것은 다른 기기에 나타나지 않습니다.</dd>
           <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
-          <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
+          <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 선택은 그 학생의 테스트 내내 따라갑니다 — 누른 화면뿐 아니라 모든 영역에서. 시작 창의 스위치를 꺼 두면 한글을 누르기 전에는 어느 영역에도 한국어가 나오지 않습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
           <dt>메뉴에 레벨테스트가 안 보여요.</dt><dd>v145 전에 독서를 꺼 두셨다면(예: <b>모든 과목</b> 설정) 레벨테스트 화면도 꺼진 상태로 시작합니다. 설정 → 템플릿 → <b>기능</b> → <b>레벨테스트</b>에서 켜세요. 한 번 직접 켜거나 끄면, 그 뒤로는 독서를 어떻게 하든 정한 대로 유지됩니다.</dd>
           <dt>리딩 수업이 아닌데 독서와 도서를 숨길 수 있나요?</dt><dd>설정 → 템플릿 → <b>기능</b> → <b>모든 과목</b>. 독서와 도서 화면이 메뉴에서 빠지고, 수업 카드에서 "읽은 책" 항목이 사라지며, 커리큘럼 열은 단원·자료·숙제가 됩니다(도서·문법 열은 숨김). 화면과 수업 항목을 하나씩 켜고 끌 수도 있습니다. 지워지는 것은 없으니 다시 켜면 그대로 있습니다.</dd>
@@ -2670,6 +2676,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v182 · 2026-11-25</dt><dd><b>레벨테스트: 터치 화면에서 길게 누르기가 제대로 되고, 한글 선택이 모든 영역에 이어집니다.</b> <b>길게 누르기:</b> 태블릿이나 휴대폰에서 말하기·쓰기 과제 아래 버튼(또는 영역 마지막 화면의 버튼)을 길게 누르면 학생 화면은 닫혔지만, 이어서 떠야 할 창이 손가락을 떼는 순간 다시 닫혀서 다음 단계로 넘어가지 않는 것처럼 보였습니다. 이제 그 창이 그대로 남습니다. 자물쇠나 버튼을 누르고 있는 동안 그 위에 막대가 차오르므로, 얼마나 누르고 있어야 하는지 보입니다(1초 남짓). <b>한글:</b> 지금까지 한글 선택은 화면 하나에만 적용됐습니다. 시작 창에서 스위치를 꺼 두거나 읽기 도중에 한글을 꺼도, 위쪽 줄에서 다른 영역을 누르면 한국어가 다시 나왔습니다. 이제 선택이 그 학생의 테스트 내내 따라갑니다. 시작 창의 스위치를 끄면 어느 영역에도 한국어가 나오지 않고, 어느 화면에서든 한글을 누르면 다른 화면에도 그대로 적용됩니다. 앱을 닫았다 다시 열어도 유지됩니다.</dd>
           <dt>v181 · 2026-11-25</dt><dd><b>레벨테스트: 어디서 열어도 예상 레벨에서 시작, 테스트용 책은 눌러서 고르기.</b> 학생에게 정해 둔 시작 레벨은 지금까지 테스트 시작에만 쓰였습니다. 자세히나 남은 영역에서 연 영역, 그리고 학생의 모든 영역 창은 B나 바로 앞 학생의 레벨에서 시작했습니다. 이제 모두 그 학생의 시작 레벨에서 시작합니다. 시작 레벨 목록은 <b>#levels=…</b>로 끝나는 링크로도 받을 수 있습니다. 목록이 채워진 창이 열리고 적용만 누르면 됩니다. <b>책 읽기 확인</b>: 레벨별로 정해 둔 책이 버튼으로 나옵니다 — 레벨을 누르고 책을 누르면 됩니다. 목록은 창에서 바꿀 수 있고 계정과 함께 갑니다.</dd>
           <dt>v180 · 2026-11-24</dt><dd><b>레벨테스트: 모든 영역을 100점 만점, 기준 하나로.</b> 지금까지는 숫자가 제각각이었습니다 — 채점표 항목은 0~5점, 문항은 5·8·6개 중 몇 개, 읽기는 레벨과 단계. 이제 모든 영역이 100점 만점 점수를 갖고, 레벨 하나가 20점 구간입니다: <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100</b>. 읽기는 단계로, 문항 영역은 결과 레벨에서 맞힌 비율로, 말하기·쓰기는 각각 100점 만점이 된 네 항목의 평균으로 정하며(버튼이 0, 20, 40, 60, 80, 100), 레벨만 고른 영역은 구간의 가운데입니다. 학생 줄과 자세히, 결과 창, 선생님용 리포트, CSV, 인쇄하는 기록지와 진행 카드, 평가 붙여 넣기, AI 제안에 나옵니다. 저장된 내용은 바뀌지 않고, 학부모용 리포트에는 여전히 숫자가 없습니다.</dd>
           <dt>v179 · 2026-11-24</dt><dd><b>레벨테스트: 쓴 글 사진을 AI로 확인.</b> 선생님의 Claude API 키가 있으면(설정 → <b>Claude API</b>, 이 기기에만 보관) 쓰기 창에 사진을 올린 뒤 <b>AI로 확인</b> 버튼이 생깁니다. Claude가 가장 최근 사진을 읽고 레벨, 점수 네 개, 단어·문장 수, 잘한 점과 어려워한 점을 제안하며, 읽은 글과 확실하지 않은 부분도 함께 사진 아래에 보여 줍니다. <b>채점표에 넣기</b>를 누르면 창에 옮겨져 고치고 저장할 수 있습니다. AI가 저장하는 것은 없습니다. 사진과 과제, 레벨 설명만 전송됩니다.</dd>
@@ -2747,7 +2754,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v181</b> · 자주 묻는 질문 기준일: <b>2026-11-25</b><br/>
+          설명서 기준 버전: <b>v182</b> · 자주 묻는 질문 기준일: <b>2026-11-25</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -4669,7 +4676,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v181";
+const APP_VERSION="v182";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -8895,6 +8902,7 @@ function ltStart(){
   if(LTS.trial){const g=(document.getElementById("lts-guest").value||"").trim().slice(0,40);if(g)a.guest=g;}
   assessments.push(a);
   if(!saveKey("assessments")){assessments.splice(assessments.indexOf(a),1);showToast(ltSaveFailed());return;}
+  if(!paper)ltKoPrefSet(s.id,a.koHelp?null:false);          // the switch turned off: no Korean on any screen of this test
   if(LTS.trial?LTS.what==="all":LTS.all)ltAllBegin(s.id,LTS.mode,LTS.level);else ltAllEnd();
   closeModal("mo-lt-start");
   if(curPage==="leveltest")renderLevelTest();        // the row now offers "Continue", whatever happens next
@@ -9226,7 +9234,7 @@ const LT_OPEN_KEY="cd_lt_open",LT_OPEN_HOURS=12;
 function ltOpenNote(sid){
   try{
     if(sid==null)localStorage.removeItem(LT_OPEN_KEY);
-    else localStorage.setItem(LT_OPEN_KEY,JSON.stringify(Object.assign({sid:sid,t:Date.now()},ltAllOn(sid)?{mode:LTALL.mode,level:LTALL.level}:{})));
+    else localStorage.setItem(LT_OPEN_KEY,JSON.stringify(Object.assign({sid:sid,t:Date.now()},ltAllOn(sid)?{mode:LTALL.mode,level:LTALL.level}:{},ltKoPref(sid)!=null?{ko:ltKoPref(sid)}:{})));
   }catch(e){}
 }
 function ltOpenAgain(){
@@ -9236,6 +9244,7 @@ function ltOpenAgain(){
   // Only when something is really unfinished: a reading test in progress or a skill left part-way.
   if(!s||s.archived||!pageEnabled("leveltest")||!(ltInProgress(s.id)||ltDraftAny(s.id))){ltOpenNote(null);return false;}
   showPage("leveltest");ltOpenSid=s.id;
+  if(typeof n.ko==="boolean")ltKoPrefSet(s.id,n.ko);
   ltAllBegin(s.id,n.mode,AEA.LEVELS.includes(n.level)?n.level:ltStartLevel(s)||"B");   // the run as it was: on paper or on screen, and its start level
   ltAllShow();
   return true;
@@ -9299,7 +9308,19 @@ const ltQKo=it=>it.ko||LT_QKO[it.id]||"";
 // the switch on the test screen is pressed: on at levels A and B when the start window says so,
 // off (English only) above. Once pressed (a.koSet), that
 // choice holds for the rest of the test, at every level.
-function ltKoOn(a,level){return typeof a.koSet==="boolean"?a.koSet:!!a.koHelp&&(level==="A"||level==="B");}
+// v182 — Korean on the student's screen is one choice for the student, not one for each skill.
+// Whatever was chosen last — the switch in the start window turned off, or the 한글 button on any
+// screen — holds for the reading test, every skill and the resting screens of that student, until
+// it is changed or another test is started. (Before, each skill opened with its own default, so
+// Korean came back on every tab.) Kept in memory and, for a test that is reopened, in its note.
+const LTKO={sid:null,on:null};
+const ltKoPref=sid=>LTKO.sid!=null&&sid!=null&&ltSame(LTKO.sid,sid)&&typeof LTKO.on==="boolean"?LTKO.on:null;
+function ltKoPrefSet(sid,on){
+  LTKO.sid=sid;LTKO.on=typeof on==="boolean"?on:null;
+  try{const n=JSON.parse(localStorage.getItem(LT_OPEN_KEY)||"null");
+    if(n&&typeof n==="object"&&ltSame(n.sid,sid)){if(LTKO.on==null)delete n.ko;else n.ko=LTKO.on;localStorage.setItem(LT_OPEN_KEY,JSON.stringify(n));}}catch(e){}
+}
+function ltKoOn(a,level){const p=ltKoPref(a.studentId);return p!=null?p:typeof a.koSet==="boolean"?a.koSet:!!a.koHelp&&(level==="A"||level==="B");}
 function ltKoLevel(a){const p=a.path&&a.path[a.path.length-1];return p?p.level:a.startLevel;}
 // v156: the same switch decides the rest of the student's screen. On: Korean with English, as it
 // always was. Off: English only. Every such text carries both forms (data-ko / data-en) and is
@@ -9431,6 +9452,7 @@ const LT_ACTS={
     const a=ltGet(LT.aid);if(!a||a.status!=="in_progress")return;
     const on=!ltKoOn(a,ltKoLevel(a));
     if(!ltCommit(a,()=>{a.koSet=on;})){ltHint(ltSaveFailed());return;}
+    ltKoPrefSet(a.studentId,on);
     el.classList.toggle("on",on);el.setAttribute("aria-checked",String(on));
     const q=document.querySelector("#lt-screen .lt-qko");if(q)q.hidden=!on;
     document.querySelectorAll("#lt-screen [data-ko]").forEach(x=>{x.innerHTML=x.dataset[on?"ko":"en"];});
@@ -9486,38 +9508,62 @@ function ltHint(msg){
 // Teacher-only controls on the student's screen (the lock, and the way out at the end) answer to a
 // long press, so a child's tap does nothing — the result and the rest of the app stay out of reach.
 // With a keyboard the same press is Enter or Space held down on the control.
-const LT_HOLD_MS=1200;
+const LT_HOLD_MS=1200,LT_HOLD_KEEP_MS=400,LT_GHOST_MS=600;
+// v182 — three things the press needed on a touch screen:
+//  · it shows that it is being held (a bar fills along the control), so "longer" has an end;
+//  · what the press turns into when the finger lifts is swallowed. The window that the hold opens
+//    lies under the finger by then, and the click that follows the touch landed on it — on its
+//    backdrop, which closes it. The next step came up and was gone at once. Only a finger or a pen
+//    leaves such a click (a mouse's goes to what both ends of the press share, a key leaves none),
+//    so nothing is swallowed for those, and nothing before the finger has lifted;
+//  · the screen may be drawn again, and the platform may take a long press over (pointercancel)
+//    once it has lasted a while: neither ends a hold that is already well under way.
 (function(){
-  let timer=null;
+  let timer=null,btn=null,t0=0,fired=false,cancelled=false,touch=false,ghostUntil=0;
   const held=e=>e.target.closest?e.target.closest("#lt-screen [data-hold]"):null;
-  const start=b=>{
-    clearTimeout(timer);
+  const clear=()=>{clearTimeout(timer);timer=null;if(btn)btn.classList.remove("lt-holding");btn=null;};
+  const act=kind=>{
+    if(kind==="menu"){if(LTX.sid){LTX.menu=true;ltxRender();}else{LT.menu=true;ltRenderTest();}}
+    else if(kind==="review"){const a=ltGet(LT.aid);ltCloseTest();if(a)ltAfterReading(a);}
+    else if(kind==="xdone")ltxDone();
+    else if(kind==="xtask")ltxTaskDone();
+  };
+  const start=(b,byTouch)=>{
+    clear();btn=b;t0=Date.now();fired=false;cancelled=false;touch=!!byTouch;b.classList.add("lt-holding");
+    const kind=b.dataset.hold;
     timer=setTimeout(()=>{
-      timer=null;
-      if(!document.contains(b))return;
-      if(b.dataset.hold==="menu"){if(LTX.sid){LTX.menu=true;ltxRender();}else{LT.menu=true;ltRenderTest();}}
-      else if(b.dataset.hold==="review"){const a=ltGet(LT.aid);ltCloseTest();if(a)ltAfterReading(a);}
-      else if(b.dataset.hold==="xdone")ltxDone();
-      else if(b.dataset.hold==="xtask")ltxTaskDone();
+      clear();
+      // the control itself, or — if the screen was drawn again meanwhile — the one of the same kind
+      if(!document.contains(b)&&!document.querySelector(`#lt-screen [data-hold="${kind}"]`))return;
+      fired=true;if(cancelled)ghostUntil=Date.now()+LT_GHOST_MS;   // no lift will be reported for a press the platform took
+      act(kind);
     },LT_HOLD_MS);
   };
   // Let go too soon: nothing happens, and a note says to hold longer.
   const stop=note=>{
-    if(!timer)return;clearTimeout(timer);timer=null;
+    if(fired){fired=false;if(touch)ghostUntil=Date.now()+LT_GHOST_MS;return;}   // the finger lifts: its click is on the way
+    if(!timer)return;clear();
     if(note)ltHint(tx("Teacher: keep it pressed a little longer"));
   };
-  document.addEventListener("pointerdown",e=>{const b=held(e);if(b)start(b);});
+  document.addEventListener("pointerdown",e=>{const b=held(e);if(b)start(b,e.pointerType==="touch"||e.pointerType==="pen");});
   document.addEventListener("pointerup",e=>stop(!!held(e)));
-  document.addEventListener("pointercancel",()=>stop(false));
+  document.addEventListener("pointercancel",()=>{
+    if(timer&&Date.now()-t0>=LT_HOLD_KEEP_MS){cancelled=true;return;}   // taken over by the platform after a real press: it counts on
+    stop(false);
+  });
+  // The click (and the mouse events around it) that a finished hold leaves behind.
+  ["click","mousedown","mouseup"].forEach(type=>document.addEventListener(type,e=>{
+    if(Date.now()<ghostUntil){e.stopPropagation();e.preventDefault();}
+  },true));
   const holdKey=e=>e.key==="Enter"||e.key===" "||e.key==="Spacebar";
   document.addEventListener("keydown",e=>{
     if(!holdKey(e))return;const b=held(e);if(!b)return;
     e.preventDefault();
     if(!e.repeat&&!timer)start(b);
   });
-  document.addEventListener("keyup",e=>{if(holdKey(e)&&held(e)){e.preventDefault();stop(true);}});
-  document.addEventListener("focusout",e=>{if(held(e))stop(false);});
-  document.addEventListener("contextmenu",e=>{if(held(e))e.preventDefault();});
+  document.addEventListener("keyup",e=>{if(holdKey(e)&&(held(e)||fired)){e.preventDefault();stop(true);}});
+  document.addEventListener("focusout",e=>{if(held(e)&&!fired)stop(false);});
+  document.addEventListener("contextmenu",e=>{if(held(e)||Date.now()<ghostUntil)e.preventDefault();});
 })();
 
 // ── Speaking, writing, phonics, vocabulary: the teacher's own rating (v148) ──
@@ -10813,11 +10859,11 @@ function ltxOpen(sid,dom,level,opt){
   // kept and put back when the task ends (ltxTaskDone).
   const g=id=>document.getElementById(id);
   const draft=task&&ltSame(LTR.sid,s.id)&&LTR.dom===dom?{level:LTR.level,manual:LTR.manual,rub:Object.assign({},LTR.rub),note:g("ltq-note").value,c1:g("ltq-c1").value,c2:g("ltq-c2").value}:null;
-  Object.assign(LTX,{sid:s.id,dom:dom,level:level,start:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:null,final:"",saved:false,sample:sample,name:sample?String(opt.name||""):"",draft:draft,rehear:false,lost:false});
+  Object.assign(LTX,{sid:s.id,dom:dom,level:level,start:level,idx:0,sel:null,ans:[],parts:[],screen:task?"task":"intro",menu:false,ko:sample?null:ltKoPref(s.id),final:"",saved:false,sample:sample,name:sample?String(opt.name||""):"",draft:draft,rehear:false,lost:false});
   // v168: this skill was left part-way on this device — on from the next question (see ltDraftGet).
   // What was read aloud is read once more, and a result that could not be stored waits to be stored.
   const left=!sample&&!task?ltDraftGet(s.id,dom):null;
-  if(left)Object.assign(LTX,{level:left.level,start:left.start,idx:left.final?0:left.ans.length,ans:left.ans,parts:left.parts,ko:left.ko,final:left.final,screen:left.final?"end":"break",rehear:!left.final&&left.ans.length>0});
+  if(left)Object.assign(LTX,{level:left.level,start:left.start,idx:left.final?0:left.ans.length,ans:left.ans,parts:left.parts,ko:ltKoPref(s.id)!=null?ltKoPref(s.id):left.ko,final:left.final,screen:left.final?"end":"break",rehear:!left.final&&left.ans.length>0});
   if(!sample&&!task)ltOpenNote(s.id);
   closeModal("mo-lt-rate");
   document.getElementById("lt-screen").hidden=false;
@@ -10830,7 +10876,7 @@ function ltxOpen(sid,dom,level,opt){
 function ltxRest(sid,dom,kind){
   const s=ltStudent(sid);if(!s||LT.aid||LTX.sid||!LT_ALL_STEPS.includes(dom))return;
   Object.assign(LTX,{sid:s.id,dom:dom,level:"",start:"",idx:0,sel:null,ans:[],parts:[],screen:"rest",rest:kind,menu:false,
-    ko:/^[AB]$/.test(LTALL.level),final:"",saved:false,sample:false,name:"",draft:null,rehear:false,lost:false});
+    ko:ltKoPref(s.id)!=null?ltKoPref(s.id):/^[AB]$/.test(LTALL.level),final:"",saved:false,sample:false,name:"",draft:null,rehear:false,lost:false});
   ltOpenNote(s.id);closeModal("mo-lt-rate");
   document.getElementById("lt-screen").hidden=false;
   document.body.classList.add("lt-testing");
@@ -10944,7 +10990,7 @@ function ltxDone(){
 Object.assign(LT_ACTS,{
   xStart(){if(!LTX.sid)return;LTX.screen=ltxSet().passage&&(LTX.idx===0||LTX.rehear)?"hear":"run";LTX.rehear=false;ltxRender();},
   xHeard(){if(!LTX.sid)return;LTX.screen="run";ltxRender();},
-  xKo(){if(!LTX.sid)return;LTX.ko=!ltxKo();ltxRender();},
+  xKo(){if(!LTX.sid)return;LTX.ko=!ltxKo();if(!LTX.sample)ltKoPrefSet(LTX.sid,LTX.ko);ltxRender();},
   xPick(el){
     if(!LTX.sid||LTX.screen!=="run")return;
     LTX.sel=Number(el.dataset.pos);
