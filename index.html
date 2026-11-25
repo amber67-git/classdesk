@@ -684,6 +684,13 @@ button.lt-skill:hover{border-color:var(--bdr2)}
 .lt-left{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:4px;font-size:var(--fs-sm);color:var(--amb-t)}   /* v177: skills of the newest test still to rate */
 .lt-leftb{min-height:28px;padding:1px 10px;border:1px solid var(--amb-bdr);border-radius:99px;background:var(--amb-l);color:var(--amb-t);font-size:var(--fs-sm);font-family:var(--font);cursor:pointer}
 .lt-leftb:hover{border-color:var(--amb-t)}
+.ltb-pick{margin-bottom:10px}.ltb-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}   /* v181: test books of a level, as buttons */
+.ltb-chip{display:inline-flex;align-items:stretch;border:1px solid var(--bdr2);border-radius:99px;background:var(--surf);overflow:hidden;max-width:100%}
+.ltb-chip.on{border-color:var(--grn);background:var(--grn-l)}.ltb-chip.on .ltb-pickb{color:var(--grn-t);font-weight:600}
+.ltb-pickb,.ltb-x{border:0;background:none;font-family:var(--font);font-size:var(--fs-sm);color:var(--txt);cursor:pointer;min-height:34px}
+.ltb-pickb{padding:2px 12px;text-align:left;overflow-wrap:anywhere}.ltb-x{padding:0 10px 0 6px;color:var(--txt3);border-left:1px solid var(--bdr)}.ltb-x:hover{color:var(--red-t)}
+.ltb-tools{margin-top:6px}
+@media(max-width:600px){.ltb-pickb,.ltb-x{min-height:44px}}
 .ltai{margin-top:10px;padding:10px 12px;border:1px solid var(--bdr2);border-radius:10px;background:var(--surf)}   /* v179: the AI's reading, under the photos */
 .ltai .lt-ph{margin-top:0}.ltai-t{margin:4px 0 6px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);font-size:12px;color:var(--txt)}
 .ltai-l{margin:4px 0 0;font-size:var(--fs-sm);color:var(--txt2);overflow-wrap:anywhere}.ltai-l b{font-weight:600;color:var(--txt)}
@@ -2372,6 +2379,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Where do I keep the paper record sheet, and how do I put in ratings from a list?</dt><dd><b>Record sheet photos</b>: Level test → the student's <b>Details</b> → <b>Record sheet</b>. Add photos of the sheet you filled in by hand; they are kept with the student (sign-in needed, like recordings and photos of the writing) and can be looked at larger or deleted. The photos are only kept — what is written on them is not read into the results. <b>Paste ratings</b> (button on the Level test page): for ratings worked out outside the app, for example a list made from photos of the writing. One rating a line, the parts divided by <b>|</b>: name | skill | level | four points (content, sentences, accuracy, flow — each out of 100 in steps of 20, as in 60 60 40 60; the older 0 to 5 is still read) | words | sentences | note. Only the first three are needed; points and counts are for Speaking and Writing. A line <b>date: 2026-11-24</b> dates the lines after it (otherwise today). Press <b>Check</b> to see each line as it was understood, or why it was not, then <b>Apply</b> — nothing is saved before that, and Undo takes the saved ratings out again.</dd>
           <dt>Can the AI read a photo of the writing and score it?</dt><dd>Yes, with your own Claude API key. <b>Once, on each device</b>: Settings → <b>Claude API</b> → paste the key → Save (get one at platform.claude.com; it is prepaid and one check costs a few US cents). The key is kept on this device only, not in your account and not in backups. <b>Then</b>: Level test → the student's Writing window → add the photo of the writing → <b>Check with AI</b>. In up to a minute a suggestion appears under the photos: what the student wrote, anything it was not sure of, help it saw on the sheet (another pen, a spelling hint), a level, the four points, the two counts, and what went well and what was hard. <b>Put in the sheet</b> copies it into the window; change what you like and press <b>Save</b> — nothing is saved before that, and the rating is yours. The newest day's photos are sent (up to four), with the task and the level descriptions. Nothing else goes: the student's name and records in the app are not sent, though a name written on the paper is in the photo. It reads handwriting well but not perfectly, so look at what it read before you use the points.</dd>
           <dt>How are the scores out of 100 worked out?</dt><dd>Every skill — Reading, Listening, Grammar, Vocabulary, Phonics, Speaking, Writing — has a score out of 100 on <b>one scale</b>: a level is a band of 20 points. <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100.</b> Where a score falls inside the band depends on what there is. <b>Reading</b>: the stage of the result — beginning 7, developing 13, secure 20 points into the band (C · developing = 40 + 13 = 53). <b>Listening, Grammar, Vocabulary, Phonics</b> checked with questions: the bottom of the result level's band plus the share right at that level × 20 (C with 3 of 5 right = 40 + 12 = 52). <b>Speaking, Writing</b>: the four points of the score sheet are each out of 100 in steps of 20 (20 is level A, 40 B, 60 C, 80 D, 100 E, 0 no response) and the score is their average. <b>A level picked without a sheet or questions</b> counts as the middle of its band (A 10, B 30, C 50, D 70, E 90). The reading score is the score of the test itself: confirming a different class level does not change it. The scores are worked out from what is stored — nothing you saved before changes — and they are for you: on the student's row and Details, in the result window, in the teacher's copy of the report, in the CSV, and on the printed record sheet and rule card. The parents' copy still has no numbers.</dd>
+          <dt>How does a student start at the level I expect, and how do I pick a test book without typing?</dt><dd><b>Start level.</b> Level test → <b>Start levels</b>: press a level beside each student, or paste a list under <b>Set many at once</b>. From then on everything for that student begins there: <b>Start test</b>, the window between the skills (All skills), and each skill opened from Details or from <b>Still to rate</b> — its questions and its task open at that level. A student who has taken a reading test starts from that result, and a skill already rated starts from its last rating. A list can also come with a link (the address ends in <b>#levels=</b> and the list): the Start levels window opens with the list in its box and nothing is saved until you press <b>Apply</b>. <b>Test books.</b> The Book check window shows the books kept for a level as buttons, on the student's start level; press another level to see its books. Press a book and its title is in — then only the words missed are left to type. To change a level's list, type a title and press <b>Add to level …</b>, or press <b>Edit the list</b> and take one out. The lists are yours and go with your account; until you change them they are a starter set (level A is empty). Any other title can still be typed.</dd>
           <dt>Can I keep what a student said or wrote?</dt><dd>Yes. Level test → the student's <b>Details</b> → <b>Speaking</b>: press <b>Record</b> to record in the app (it goes on while the task is on the student's screen, and <b>Stop and keep</b> saves it), or <b>Add a recording file</b> for one you made with the phone's own recorder. <b>Writing</b>: <b>Add photos</b> takes or picks photos of the paper; large photos are made smaller first. They are kept with the student, apart from the rating, so they can be added later and a rating can be saved without them. The files go to your Google account's storage (the same place as book covers), so you need to be signed in, and they show on your other devices. A recording stops by itself after five minutes; a file can be up to 25 MB, a photo 15 MB. Deleting asks first and offers Undo for a few seconds; after that the file is gone for good.</dd>
           <dt>How do I stop in the middle of a test, and what is kept?</dt><dd>On the student's screen, hold the lock at the top right (marked <b>Teacher</b>) for a second and choose <b>Stop and leave (continue later)</b>. Everything answered so far is kept: the reading test in your data, the questions of Listening, Grammar, Vocabulary and Phonics on that device. To go on, press <b>Continue test</b> on the student's row. If the app was simply closed, it opens again on that student's test. What you picked in a Speaking or Writing window without saving is kept as well and comes back when you open the skill again. A sample keeps its reading test only. During a test of every skill you do not have to stop at all to change skill: press it in the row at the top of the student's screen. Because the answers of an unfinished skill stay on the device, finish it on the same device. And check that the device is signed in: if the Level test page shows "This device is not signed in", what you do there is not shared with your other devices.</dd>
           <dt>How do I check Listening, Grammar, Phonics and Vocabulary, and how long does it all take?</dt><dd>Level test → a student's <b>Details</b> → <b>Listening</b>, <b>Grammar</b>, <b>Phonics</b> or <b>Vocabulary</b> → <b>Start the questions</b>. Phonics works like Listening (you say a word, the student picks it among look-alikes — 6 a level); Vocabulary like Grammar (the student alone — 8 a level). For Listening you read the script aloud (<b>Script on this screen</b> shows it right there, <b>Script and answers</b> prints it, or hold the lock on the student's screen to see what to read now) and the student taps the answer; Grammar the student does alone. Each level is 5 (Listening) or 8 (Grammar) questions, and most students see one or two levels — about 5 minutes a skill. The reading test takes about 20 minutes, so with Listening, Grammar, Speaking and Writing it is closer to 35–40 minutes: reading in one lesson and the rest in the next works well. On paper: <b>Paper sheet</b> prints one level; mark it with the key and pick the level yourself. If the students hold printed sheets, <b>Teacher's script</b> at the top of the Level test page shows what to read aloud and the answers on your phone, a level at a time.</dd>
@@ -2403,6 +2411,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v181 · 2026-11-25</dt><dd><b>Level test: start at the expected level everywhere, and pick test books with a tap.</b> The start level set for a student (Start levels) was used by Start test only. A skill opened from Details or from Still to rate, and the All skills window opened for a student, began at B or at the level of the student before. Now all of them begin at the student's own start level. A list of start levels can come with a link ending in <b>#levels=…</b>: the window opens with the list filled in, to press Apply. <b>Book check</b>: the books kept for each level are buttons — press the level, press the book; the lists can be changed in the window and go with your account.</dd>
           <dt>v180 · 2026-11-24</dt><dd><b>Level test: every skill out of 100, on one scale.</b> Until now the numbers did not match — sheet points from 0 to 5, questions out of 5, 8 or 6, reading as a level and a stage. Now every skill has a score out of 100 and a level is a band of 20 points: <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100</b>. Reading goes by its stage, the question skills by the share right at the result level, Speaking and Writing by the average of four points that are now each out of 100 (the buttons read 0, 20, 40, 60, 80, 100), and a level picked on its own counts as the middle of its band. Shown on the student's row and Details, in the result window, the teacher's copy of the report, the CSV, the printed record sheet and rule card, Paste ratings and the AI suggestion. Nothing stored changes; the parents' copy still has no numbers.</dd>
           <dt>v179 · 2026-11-24</dt><dd><b>Level test: check a photo of the writing with AI.</b> With your own Claude API key (Settings → <b>Claude API</b>; kept on this device only), the Writing window has a <b>Check with AI</b> button once a photo is added. Claude reads the newest photos and suggests a level, the four points, the counts, and what went well and what was hard — shown under the photos with what it read and what it was not sure of. <b>Put in the sheet</b> copies it into the window for you to change and save; nothing is saved by the AI. Only the photo, the task and the level descriptions are sent.</dd>
           <dt>v178 · 2026-11-24</dt><dd><b>Level test: photos of the record sheet, and ratings from a pasted list.</b> <b>Record sheet</b> (new button in a student's Details): keep photos of the paper record sheet with the student — add, look at larger, delete. <b>Paste ratings</b> (new button on the Level test page): ratings worked out outside the app are put in from text, one a line — name | skill | level | four points | words | sentences | note. <b>Check</b> shows how each line was understood; <b>Apply</b> saves them, with Undo.</dd>
@@ -2480,7 +2489,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v180</b> · FAQ current as of: <b>2026-11-24</b><br/>
+          Guide written against version: <b>v181</b> · FAQ current as of: <b>2026-11-25</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2628,6 +2637,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>종이 기록지는 어디에 보관하고, 목록으로 된 평가는 어떻게 넣나요?</dt><dd><b>기록지 사진</b>: 레벨테스트 → 학생의 <b>자세히</b> → <b>학생 기록지</b>. 손으로 적은 기록지를 사진으로 추가하면 학생에게 보관됩니다(녹음·쓰기 사진처럼 로그인이 필요합니다). 크게 보거나 지울 수 있습니다. 사진은 보관만 하며, 적힌 내용이 결과로 자동 입력되지는 않습니다. <b>평가 붙여 넣기</b>(레벨테스트 페이지의 버튼): 앱 밖에서 정리한 평가, 예를 들어 쓰기 사진을 보고 만든 목록을 넣습니다. 한 줄에 평가 하나, <b>|</b> 로 나눕니다: 이름 | 영역 | 레벨 | 점수 네 개(내용, 문장, 정확성, 흐름 — 각 100점 만점·20점 단위, 예: 60 60 40 60. 예전의 0–5도 읽습니다) | 단어 수 | 문장 수 | 메모. 앞의 세 가지만 있어도 되고, 점수와 개수는 말하기·쓰기에만 넣습니다. <b>날짜: 2026-11-24</b> 줄을 넣으면 그 아래 줄들의 날짜가 됩니다(없으면 오늘). <b>확인</b>을 누르면 줄마다 어떻게 읽었는지, 못 읽었으면 왜인지 보여 주고, <b>적용</b>을 눌러야 저장됩니다. 저장한 뒤 실행 취소를 누르면 다시 빠집니다.</dd>
           <dt>쓴 글 사진을 AI가 읽고 채점하게 할 수 있나요?</dt><dd>네, 선생님의 Claude API 키가 있으면 됩니다. <b>기기마다 한 번</b>: 설정 → <b>Claude API</b> → 키 붙여 넣기 → 저장(키는 platform.claude.com에서 발급하며, 선불 충전 방식이고 한 번 확인에 대략 수십 원에서 백 원 남짓입니다). 키는 이 기기에만 보관되고 계정에도 백업에도 들어가지 않습니다. <b>그다음</b>: 레벨테스트 → 학생의 쓰기 창 → 쓴 글 사진 올리기 → <b>AI로 확인</b>. 1분 안에 사진 아래에 제안이 나옵니다: 학생이 쓴 글, 확실하지 않은 부분, 종이에 보이는 도움(다른 펜, 철자 힌트), 레벨, 점수 네 개, 단어·문장 수, 잘한 점과 어려워한 점. <b>채점표에 넣기</b>를 누르면 창에 옮겨지고, 원하는 대로 고친 뒤 <b>저장</b>을 누릅니다. 그 전에는 아무것도 저장되지 않으며 평가는 선생님의 것입니다. 가장 최근 날짜의 사진(최대 4장)이 과제·레벨 설명과 함께 전송됩니다. 그 밖에는 보내지 않습니다. 앱에 있는 학생 이름과 기록은 보내지 않지만, 종이에 적힌 이름은 사진에 들어 있습니다. 손글씨를 잘 읽지만 완벽하지는 않으니, 점수를 쓰기 전에 읽은 글이 맞는지 먼저 보세요.</dd>
           <dt>100점 만점 점수는 어떻게 정해지나요?</dt><dd>읽기·듣기·문법·어휘·파닉스·말하기·쓰기 모두 100점 만점이고 <b>기준은 하나</b>입니다. 레벨 하나가 20점 구간입니다. <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100.</b> 구간 안에서 어디인지는 가진 정보로 정합니다. <b>읽기</b>: 결과 단계 — 시작 +7, 발전 +13, 안정 +20 (C · 발전 = 40 + 13 = 53). <b>듣기·문법·어휘·파닉스</b>(문항으로 확인): 결과 레벨 구간의 시작 점수 + 그 레벨에서 맞힌 비율 × 20 (C에서 5개 중 3개 = 40 + 12 = 52). <b>말하기·쓰기</b>: 채점표 네 항목을 각각 100점 만점·20점 단위로 매기고(20은 레벨 A, 40은 B, 60은 C, 80은 D, 100은 E, 0은 무반응) 그 평균이 점수입니다. <b>채점표나 문항 없이 레벨만 고른 영역</b>은 구간의 가운데 점수입니다(A 10, B 30, C 50, D 70, E 90). 읽기 점수는 테스트 자체의 점수라서, 수업 레벨을 다르게 확정해도 바뀌지 않습니다. 점수는 저장된 내용에서 계산하므로 전에 저장한 것은 바뀌지 않습니다. 선생님만 봅니다: 학생 줄과 자세히, 결과 창, 선생님용 리포트, CSV, 인쇄하는 기록지와 진행 카드. 학부모용 리포트에는 여전히 숫자가 없습니다.</dd>
+          <dt>학생이 예상 레벨에서 바로 시작하게 하려면요? 테스트용 책을 입력하지 않고 고르려면요?</dt><dd><b>시작 레벨.</b> 레벨테스트 → <b>시작 레벨</b>: 학생 옆의 레벨을 누르거나, <b>여러 명 한 번에 넣기</b>에 목록을 붙여 넣습니다. 그 뒤로는 그 학생의 모든 것이 그 레벨에서 시작합니다: <b>테스트 시작</b>, 영역 사이 창(모든 영역), 그리고 자세히나 <b>남은 영역</b>에서 연 각 영역 — 문항과 과제가 그 레벨로 열립니다. 읽기 테스트를 본 학생은 그 결과에서, 이미 평가한 영역은 마지막 평가에서 시작합니다. 목록은 링크로도 올 수 있습니다(주소 끝이 <b>#levels=</b>와 목록). 시작 레벨 창이 목록을 채운 채 열리고, <b>적용</b>을 누르기 전에는 저장되지 않습니다. <b>테스트용 책.</b> 책 읽기 확인 창에 그 레벨의 책이 버튼으로 보입니다(학생의 시작 레벨이 먼저). 다른 레벨을 누르면 그 레벨의 책이 나옵니다. 책을 누르면 제목이 들어가고, 틀린 단어 수만 적으면 됩니다. 레벨의 목록을 바꾸려면 제목을 적고 <b>레벨 …에 추가</b>를 누르거나, <b>목록 편집</b>을 눌러 뺍니다. 목록은 선생님 것이고 계정과 함께 갑니다. 바꾸기 전에는 기본 묶음이 들어 있습니다(레벨 A는 비어 있음). 다른 제목도 여전히 직접 적을 수 있습니다.</dd>
           <dt>학생이 말한 것과 쓴 것을 보관할 수 있나요?</dt><dd>네. 레벨테스트 → 학생의 <b>자세히</b> → <b>말하기</b>: <b>녹음하기</b>를 누르면 앱에서 바로 녹음합니다(과제를 학생 화면에 띄운 동안에도 계속 녹음되고, <b>멈추고 저장</b>을 누르면 저장됩니다). 핸드폰 녹음기로 따로 녹음한 파일은 <b>녹음 파일 올리기</b>로 올립니다. <b>쓰기</b>: <b>사진 올리기</b>로 종이를 찍거나 앨범에서 고릅니다. 큰 사진은 먼저 작게 줄여서 올립니다. 평가와 따로 학생에게 보관되므로, 나중에 올려도 되고 녹음·사진 없이 평가만 저장해도 됩니다. 파일은 선생님 Google 계정의 저장소(책 표지와 같은 곳)에 올라가므로 로그인이 필요하고, 다른 기기에서도 보입니다. 녹음은 5분이 되면 스스로 멈추고, 파일은 25 MB, 사진은 15 MB까지 올릴 수 있습니다. 삭제는 먼저 물어보고 몇 초 동안 되돌리기를 보여 줍니다. 그 뒤에는 파일이 완전히 지워집니다.</dd>
           <dt>테스트 도중에 멈추려면 어떻게 하고, 무엇이 남나요?</dt><dd>학생 화면 오른쪽 위의 자물쇠(<b>선생님</b>이라고 적힌 것)를 1초쯤 길게 누르고 <b>멈추고 나가기 (나중에 이어서)</b>를 고릅니다. 그때까지 푼 것은 모두 남습니다. 읽기 테스트는 데이터에, 듣기·문법·어휘·파닉스 문항은 그 기기에 남습니다. 이어서 하려면 학생 줄의 <b>이어서 풀기</b>를 누르세요. 앱이 그냥 닫혔다면 다시 열 때 그 학생의 테스트가 바로 뜹니다. 말하기·쓰기 창에서 고르고 저장하지 않은 것도 남아서, 그 영역을 다시 열면 돌아옵니다. 샘플은 읽기 테스트만 남습니다. 모든 영역 테스트 중에는 영역을 바꾸려고 멈출 필요도 없습니다. 학생 화면 위쪽 줄에서 누르면 됩니다. 풀다 만 영역의 답은 그 기기에만 있으므로, 같은 기기에서 마저 끝내 주세요. 그 기기가 로그인되어 있는지도 확인하세요. 레벨테스트 페이지에 "이 기기는 로그인되어 있지 않습니다"가 보이면, 거기서 한 것은 다른 기기에 나타나지 않습니다.</dd>
           <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
@@ -2659,6 +2669,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v181 · 2026-11-25</dt><dd><b>레벨테스트: 어디서 열어도 예상 레벨에서 시작, 테스트용 책은 눌러서 고르기.</b> 학생에게 정해 둔 시작 레벨은 지금까지 테스트 시작에만 쓰였습니다. 자세히나 남은 영역에서 연 영역, 그리고 학생의 모든 영역 창은 B나 바로 앞 학생의 레벨에서 시작했습니다. 이제 모두 그 학생의 시작 레벨에서 시작합니다. 시작 레벨 목록은 <b>#levels=…</b>로 끝나는 링크로도 받을 수 있습니다. 목록이 채워진 창이 열리고 적용만 누르면 됩니다. <b>책 읽기 확인</b>: 레벨별로 정해 둔 책이 버튼으로 나옵니다 — 레벨을 누르고 책을 누르면 됩니다. 목록은 창에서 바꿀 수 있고 계정과 함께 갑니다.</dd>
           <dt>v180 · 2026-11-24</dt><dd><b>레벨테스트: 모든 영역을 100점 만점, 기준 하나로.</b> 지금까지는 숫자가 제각각이었습니다 — 채점표 항목은 0~5점, 문항은 5·8·6개 중 몇 개, 읽기는 레벨과 단계. 이제 모든 영역이 100점 만점 점수를 갖고, 레벨 하나가 20점 구간입니다: <b>A 1–20 · B 21–40 · C 41–60 · D 61–80 · E 81–100</b>. 읽기는 단계로, 문항 영역은 결과 레벨에서 맞힌 비율로, 말하기·쓰기는 각각 100점 만점이 된 네 항목의 평균으로 정하며(버튼이 0, 20, 40, 60, 80, 100), 레벨만 고른 영역은 구간의 가운데입니다. 학생 줄과 자세히, 결과 창, 선생님용 리포트, CSV, 인쇄하는 기록지와 진행 카드, 평가 붙여 넣기, AI 제안에 나옵니다. 저장된 내용은 바뀌지 않고, 학부모용 리포트에는 여전히 숫자가 없습니다.</dd>
           <dt>v179 · 2026-11-24</dt><dd><b>레벨테스트: 쓴 글 사진을 AI로 확인.</b> 선생님의 Claude API 키가 있으면(설정 → <b>Claude API</b>, 이 기기에만 보관) 쓰기 창에 사진을 올린 뒤 <b>AI로 확인</b> 버튼이 생깁니다. Claude가 가장 최근 사진을 읽고 레벨, 점수 네 개, 단어·문장 수, 잘한 점과 어려워한 점을 제안하며, 읽은 글과 확실하지 않은 부분도 함께 사진 아래에 보여 줍니다. <b>채점표에 넣기</b>를 누르면 창에 옮겨져 고치고 저장할 수 있습니다. AI가 저장하는 것은 없습니다. 사진과 과제, 레벨 설명만 전송됩니다.</dd>
           <dt>v178 · 2026-11-24</dt><dd><b>레벨테스트: 기록지 사진, 그리고 목록으로 평가 넣기.</b> <b>학생 기록지</b>(학생 자세히의 새 버튼): 종이 기록지 사진을 학생에게 보관합니다 — 추가, 크게 보기, 삭제. <b>평가 붙여 넣기</b>(레벨테스트 페이지의 새 버튼): 앱 밖에서 정리한 평가를 글로 넣습니다. 한 줄에 하나 — 이름 | 영역 | 레벨 | 점수 네 개 | 단어 수 | 문장 수 | 메모. <b>확인</b>이 줄마다 어떻게 읽었는지 보여 주고, <b>적용</b>이 저장합니다(실행 취소 가능).</dd>
@@ -2735,7 +2746,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v180</b> · 자주 묻는 질문 기준일: <b>2026-11-24</b><br/>
+          설명서 기준 버전: <b>v181</b> · 자주 묻는 질문 기준일: <b>2026-11-25</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3920,7 +3931,7 @@ const I18N={ko:{
   "Tick the pack of level {level}: its two reading sets, one of the level below and one above, and its other sheets":"레벨 {level} 묶음 체크: 그 레벨 읽기 세트 2개, 아래·위 레벨 1개씩, 그 레벨의 나머지 시험지","Level A reading sheets have colour questions: print them in colour.":"읽기 레벨 A 시험지는 색을 구분하는 문항이 있으니 컬러로 인쇄하세요.",
   // ── v160: book checks
   "Have the student read about 100 words aloud from a book they have not read. Count the words they miss or need help with, then ask what it was about.":"학생이 읽어 보지 않은 책에서 100단어쯤을 소리 내어 읽게 합니다. 틀리거나 도와준 단어를 세고, 읽은 뒤 무슨 내용이었는지 물어봅니다.",
-  "Book title":"책 제목","Words read":"읽은 단어 수","Words missed":"틀린 단어 수","Told what it was about":"내용을 말했나요","Not asked":"안 물어봄",
+  "Words read":"읽은 단어 수","Words missed":"틀린 단어 수","Told what it was about":"내용을 말했나요","Not asked":"안 물어봄",
   "Comfortable alone":"혼자 읽기 편함","Right for lessons":"수업용으로 알맞음","Too hard for now":"아직 어려움",
   "Told it well":"잘 말함","Told it with help":"도와주면 말함","Could not tell it":"못 말함",
   "Book checks ({n})":"책 읽기 확인 ({n})","Book check":"책 읽기 확인","Add a book check":"책 읽기 확인 추가","({w} words, {m} missed)":"({w}단어 중 {m}개 틀림)",
@@ -4054,6 +4065,11 @@ const I18N={ko:{
   "Put in the sheet — check it, then Save.":"채점표에 넣었습니다 — 확인한 뒤 저장하세요.","The AI is reading the photo… this takes up to a minute.":"AI가 사진을 읽는 중입니다… 1분쯤 걸릴 수 있습니다.","To use this, put your Claude API key in under Settings first.":"쓰려면 먼저 설정에서 Claude API 키를 넣으세요.",
   "AI reading — a suggestion to check":"AI가 읽은 내용 — 확인이 필요한 제안입니다","(nothing read)":"(읽은 글 없음)","Not sure of":"확실하지 않은 부분","Help on the sheet":"종이에 보이는 도움","Went well":"잘한 점","Was hard":"어려워한 점",
   "Put in the sheet":"채점표에 넣기","Dismiss":"닫기","Send the newest photos to Claude and get a suggested score sheet to check":"가장 최근 사진을 Claude에 보내 채점표 제안을 받습니다(확인 필요)","Check with AI":"AI로 확인",
+  "Test books of level":"레벨별 테스트용 책","Take out of this level's list":"이 레벨 목록에서 빼기","Take {book} out of this level's list":"{book}을(를) 이 레벨 목록에서 빼기",
+  "No test books for level {level} yet. Type a title below and press “Add to level {level}”.":"레벨 {level}의 테스트용 책이 아직 없습니다. 아래에 제목을 적고 “레벨 {level}에 추가”를 누르세요.",
+  "Add to level {level}":"레벨 {level}에 추가","Done|edit list":"편집 끝","Edit the list":"목록 편집","Added to level {level}":"레벨 {level}에 추가했습니다","Taken out of level {level}":"레벨 {level}에서 뺐습니다",
+  "Book title — pick one above, or type another":"책 제목 — 위에서 고르거나 직접 입력",
+  "This list came with the link. Look at it, then press Apply.":"링크로 온 목록입니다. 확인한 뒤 적용을 누르세요.",
   "Still to rate":"남은 영역","Not rated for this test yet — press to rate":"이번 테스트에서 아직 평가하지 않았습니다 — 눌러서 평가","Last rated {date}, before this test — press to rate again":"마지막 평가는 {date}(이번 테스트 전)입니다 — 눌러서 다시 평가",
   "Left for later: {list}. The test can end here — rate them in a later lesson from the student's row, and the report takes each one in once it is rated.":"나중으로 미룬 영역: {list}. 테스트는 여기서 끝내도 됩니다 — 다음 수업에서 학생 줄의 영역 버튼을 눌러 평가하면, 그때부터 리포트에 들어갑니다.",
   "Reading is not finished. Go on with it from the student's row: Continue test, or Start test if it was not begun.":"읽기는 끝나지 않았습니다. 학생 줄의 이어서 풀기(시작하지 않았으면 테스트 시작)로 계속하세요.",
@@ -4652,7 +4668,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v180";
+const APP_VERSION="v181";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -9219,7 +9235,7 @@ function ltOpenAgain(){
   // Only when something is really unfinished: a reading test in progress or a skill left part-way.
   if(!s||s.archived||!pageEnabled("leveltest")||!(ltInProgress(s.id)||ltDraftAny(s.id))){ltOpenNote(null);return false;}
   showPage("leveltest");ltOpenSid=s.id;
-  ltAllBegin(s.id,n.mode,AEA.LEVELS.includes(n.level)?n.level:LTALL.level);   // the run as it was: on paper or on screen, and its start level
+  ltAllBegin(s.id,n.mode,AEA.LEVELS.includes(n.level)?n.level:ltStartLevel(s)||"B");   // the run as it was: on paper or on screen, and its start level
   ltAllShow();
   return true;
 }
@@ -9740,10 +9756,57 @@ function ltStudentPut(s,key,value){
   if(hadU)s._u=oldU;else delete s._u;
   return false;
 }
-const LTB={sid:null};
+const LTB={sid:null,level:"B",edit:false};
+// v181 — test books by level. The title of a book check no longer has to be typed: the window shows
+// the books kept for a level as buttons, and a press puts the title in. The lists are the teacher's
+// (settings.ltBooks = {A:[titles]…E:[…]}, synced like every setting) and are changed in the window
+// itself — add the title in the box to the level shown, or take one out. Until they are changed
+// they are the starter set below (books sorted by level when the check was planned; A is empty).
+const LT_TEST_BOOKS={A:[],
+  B:["Happy Pig Day!","Smell My Foot!","Mulan (World of Reading 1)"],
+  C:["Captain and Matey Set Sail","The Witch Goes to School","The Bravest Dog Ever"],
+  D:["Jessica Finch in Pig Trouble","Helen Keller (Step into Reading 4)","Horrible Harry and the Ant Invasion"],
+  E:["I Wanna Iguana","The Great Kapok Tree","Hey, Little Ant"]};
+const LT_TB_MAX=30;
+const ltTbClean=a=>[...new Set((Array.isArray(a)?a:[]).filter(x=>typeof x==="string").map(x=>x.trim().slice(0,120)).filter(Boolean))].slice(0,LT_TB_MAX);
+const ltTestBooks=L=>{const o=settings&&settings.ltBooks;return ltTbClean(o&&typeof o==="object"&&!Array.isArray(o)&&Array.isArray(o[L])?o[L]:LT_TEST_BOOKS[L]);};
+// The lists as one object with the list of one level replaced; stored, and put back if the device cannot store it.
+function ltTestBooksPut(L,list){
+  const had=Object.prototype.hasOwnProperty.call(settings,"ltBooks"),before=settings.ltBooks,hadU=Object.prototype.hasOwnProperty.call(settings,"_u"),oldU=settings._u;
+  settings.ltBooks=Object.fromEntries(AEA.LEVELS.map(x=>[x,x===L?ltTbClean(list):ltTestBooks(x)]));
+  if(saveKey("settings"))return true;
+  if(had)settings.ltBooks=before;else delete settings.ltBooks;
+  if(hadU)settings._u=oldU;else delete settings._u;
+  showToast(ltSaveFailed());return false;
+}
+function ltBookPickRender(){
+  const box=document.getElementById("ltb-pick");if(!box)return;
+  const e=escapeAttr,L=LTB.level,list=ltTestBooks(L),cur=normTitle(document.getElementById("ltb-book").value),typed=document.getElementById("ltb-book").value.trim();
+  const canAdd=!!typed&&!list.some(x=>normTitle(x)===cur)&&list.length<LT_TB_MAX;
+  box.innerHTML=`<div class="ltq-sec-row"><span>${e(tx("Test books of level"))}</span><span class="seg" role="group" aria-label="${e(tx("Test books of level"))}">`+
+    AEA.LEVELS.map(x=>`<button type="button" class="seg-btn${x===L?" active":""}" aria-pressed="${x===L}" data-ltb-lv="${x}">${x}</button>`).join("")+`</span></div>`+
+    (list.length?`<div class="ltb-chips">${list.map((x,i)=>`<span class="ltb-chip${normTitle(x)===cur?" on":""}"><button type="button" class="ltb-pickb" data-ltb-i="${i}" aria-pressed="${normTitle(x)===cur}">${e(x)}</button>`+
+        (LTB.edit?`<button type="button" class="ltb-x" data-ltb-del="${i}" title="${e(tx("Take out of this level's list"))}" aria-label="${e(tx("Take {book} out of this level's list",{book:x}))}"><i class="ti ti-x" aria-hidden="true"></i></button>`:"")+`</span>`).join("")}</div>`
+      :`<p class="u-hint">${e(tx("No test books for level {level} yet. Type a title below and press “Add to level {level}”.",{level:L}))}</p>`)+
+    `<div class="ltq-sec-row ltb-tools"><button type="button" class="btn btn-xs" id="ltb-add" data-ltb-add="1"${canAdd?"":" disabled"}><i class="ti ti-plus"></i> ${e(tx("Add to level {level}",{level:L}))}</button>`+
+    (list.length?`<button type="button" class="btn btn-xs" id="ltb-edit" data-ltb-edit="1" aria-pressed="${LTB.edit}">${e(LTB.edit?tx("Done|edit list"):tx("Edit the list"))}</button>`:"")+`</div>`;
+}
+document.addEventListener("click",ev=>{
+  const b=ev.target.closest?ev.target.closest("#ltb-pick button"):null;if(!b)return;
+  const L=LTB.level,list=ltTestBooks(L),inp=document.getElementById("ltb-book");
+  if(b.dataset.ltbLv){LTB.level=b.dataset.ltbLv;ltBookPickRender();document.querySelector(`#ltb-pick [data-ltb-lv="${LTB.level}"]`)?.focus();return;}
+  if(b.dataset.ltbI!=null&&list[+b.dataset.ltbI]){inp.value=list[+b.dataset.ltbI];ltBookLive();document.getElementById("ltb-errors").focus();return;}
+  if(b.dataset.ltbEdit){LTB.edit=!LTB.edit;ltBookPickRender();document.getElementById("ltb-edit")?.focus();return;}
+  if(b.dataset.ltbAdd){const v=inp.value.trim();if(!v||list.some(x=>normTitle(x)===normTitle(v)))return;if(ltTestBooksPut(L,[...list,v]))showToast(tx("Added to level {level}",{level:L}));ltBookPickRender();return;}
+  if(b.dataset.ltbDel!=null){const i=+b.dataset.ltbDel,gone=list[i];if(gone==null)return;
+    if(!ltTestBooksPut(L,list.filter((x,k)=>k!==i)))return;
+    if(!ltTestBooks(L).length)LTB.edit=false;
+    ltBookPickRender();
+    showUndoToast(tx("Taken out of level {level}",{level:L}),()=>{const now=ltTestBooks(L);if(now.some(x=>normTitle(x)===normTitle(gone)))return;now.splice(Math.min(i,now.length),0,gone);ltTestBooksPut(L,now);if(document.getElementById("mo-lt-book").classList.contains("show"))ltBookPickRender();});}
+});
 function ltOpenBook(sid){
   const s=ltStudent(sid);if(!s||s.trial)return;
-  LTB.sid=s.id;
+  LTB.sid=s.id;LTB.level=ltStartLevel(s)||"B";LTB.edit=false;
   const g=id=>document.getElementById(id),e=escapeAttr;
   g("ltb-title").textContent=tx("Book check")+" · "+(s.name||"");
   g("ltb-book").value="";g("ltb-words").value="100";g("ltb-errors").value="";g("ltb-note").value="";
@@ -9766,6 +9829,7 @@ function ltBookLive(){
   el.innerHTML=c?`<b>${ltBkAcc(c)}%</b><span class="lt-bk-band ${ltBkBand(c)}">${e(LT_BK_NAME[ltBkBand(c)])}</span>`+(c.retell===0?`<span>${e(tx("One step down: could not say what it was about."))}</span>`:"")
     :`<span>${e(tx("In 100 words: 5 or fewer missed is a book to read alone, 6 to 10 a book for lessons, more is too hard for now."))}</span>`;
   document.getElementById("ltb-save").disabled=!c;
+  ltBookPickRender();
 }
 function ltSaveBook(){
   const s=ltStudent(LTB.sid),c=ltBookRead();if(!s||s.trial||!c)return;
@@ -9848,7 +9912,9 @@ function ltAllTick(){
     ltAllShow();
   },0);
 }
-function ltAllOpen(sid){const s=ltStudent(sid);if(!s)return;ltAllBegin(s.id,ltAllOn(s.id)?LTALL.mode:"online",LTALL.level);ltAllShow();}
+// v181: a run opened for a student it was not on begins at that student's start level (it used to
+// keep the level of whoever was tested before, or B).
+function ltAllOpen(sid){const s=ltStudent(sid);if(!s)return;const on=ltAllOn(s.id);ltAllBegin(s.id,on?LTALL.mode:"online",on?LTALL.level:ltStartLevel(s)||"B");ltAllShow();}
 function ltAllShow(){
   const s=ltStudent(LTALL.sid);
   if(!s){ltAllEnd();return;}
@@ -9941,7 +10007,7 @@ function ltTabOpen(s,k){
 // A new reading test from the resting screen: the same record ltStart makes, at the run's level.
 function ltReadingNew(sid){
   const s=ltStudent(sid);if(!s||ltInProgress(s.id))return null;
-  const a=AEA.newAssessment(uid(),s.id,ltAllOn(s.id)?LTALL.level:"B","online",ltSeen(s.id),Date.now(),undefined);
+  const a=AEA.newAssessment(uid(),s.id,ltAllOn(s.id)?LTALL.level:ltStartLevel(s)||"B","online",ltSeen(s.id),Date.now(),undefined);
   a.koHelp=true;
   assessments.push(a);
   if(!saveKey("assessments")){assessments.splice(assessments.indexOf(a),1);return null;}
@@ -10283,10 +10349,10 @@ function ltOpenRate(sid,dom,opt){
   const r=ltLastRating(s,dom);
   LTR.sid=s.id;LTR.dom=dom;LTR.level=r&&!fresh?r.level:"";LTR.manual=false;LTR.rub={};
   if(!LTAI.busy&&!(ltSame(LTAI.sid,s.id)&&dom==="writing"))Object.assign(LTAI,{sid:null,res:null,err:"",nokey:false});
-  // Where the questions start (Listening, Grammar): the last rating of this skill, or else the
-  // reading level from the newest test, or else B.
+  // Where the questions and the task start: the last rating of this skill, or else the reading
+  // level from the newest test, or else the start level set for the student (v181), or else B.
   const lastTest=ltLatest(s.id);
-  LTR.start=r?r.level:lastTest?(ltFinal(lastTest)||lastTest.result.level):"B";
+  LTR.start=r?r.level:lastTest?(ltFinal(lastTest)||lastTest.result.level):ltStartLevel(s)||"B";
   const lastEl=document.getElementById("ltq-last"),secTxt=ltSecText(r);
   lastEl.hidden=!r;lastEl.classList.toggle("new",fresh&&!!r);
   lastEl.textContent=r?(fresh?tx("Saved: level {level}",{level:r.level}):tx("Last rated {date}: level {level}",{date:r.date||"–",level:r.level}))+(secTxt?" · "+tx("questions {score}",{score:secTxt}):""):"";
@@ -11116,6 +11182,23 @@ function ltRPasteApply(){
     if(curPage==="leveltest")renderLevelTest();
   });
 }
+// v181 — a list of start levels can come in with the address (…/#levels=Mina%20B;Jun%20C): the
+// Start levels window opens with the list in its box, to look at and press Apply. Opening the link
+// saves nothing, and the part after # never leaves the device.
+function ltLevelsFromLink(){
+  const m=/^#levels=(.+)$/.exec(location.hash||"");if(!m)return false;
+  let text="";try{text=decodeURIComponent(m[1]);}catch(e){return false;}
+  try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
+  const lines=text.split(/[;\n]+/).map(x=>x.trim()).filter(Boolean).slice(0,200);
+  const scr=document.getElementById("lt-screen");
+  if(!lines.length||(scr&&!scr.hidden))return false;       // not over a test that is on the screen
+  showPage("leveltest");ltOpenLevels();
+  const el=document.getElementById("ltl-text"),out=document.getElementById("ltl-res");if(!el||!out)return false;
+  el.value=lines.join("\n");const box=el.closest("details");if(box)box.open=true;
+  out.textContent=tx("This list came with the link. Look at it, then press Apply.");
+  return true;
+}
+window.addEventListener("hashchange",ltLevelsFromLink);
 // ── A printed pack for each student (v176) ──
 // For every student who has a start level (or for one student, at the level given): the record
 // sheet with the name and the start level filled in, then the pack of that level (ltPackReading and
@@ -17486,6 +17569,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
   showPage("dashboard");
   ltOpenAgain();            // v168: closed in the middle of a level test — back to that student's test
+  ltLevelsFromLink();       // v181: a list of start levels that came with the address
   showOnboarding();
   checkBackupReminder();
   // The first check normally comes from the auth callback (signed out) or the end of the first
@@ -17638,7 +17722,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   <div class="mb" style="max-width:480px">
     <div class="mt"><span id="ltb-title"></span><button class="bic" onclick="closeModal('mo-lt-book')" title="Close" data-i18n-title><i class="ti ti-x"></i></button></div>
     <p class="u-hint" data-i18n>Have the student read about 100 words aloud from a book they have not read. Count the words they miss or need help with, then ask what it was about.</p>
-    <div class="fg"><label for="ltb-book" data-i18n>Book title</label><input id="ltb-book" type="text" maxlength="120" list="ltb-books" autocomplete="off" oninput="ltBookLive()"/><datalist id="ltb-books"></datalist></div>
+    <div id="ltb-pick" class="ltq-sec ltb-pick"></div>
+    <div class="fg"><label for="ltb-book" data-i18n>Book title — pick one above, or type another</label><input id="ltb-book" type="text" maxlength="120" list="ltb-books" autocomplete="off" oninput="ltBookLive()"/><datalist id="ltb-books"></datalist></div>
     <div class="ltq-counts">
       <div class="fg"><label for="ltb-words" data-i18n>Words read</label><input id="ltb-words" type="number" min="1" max="999" step="1" inputmode="numeric" oninput="ltBookLive()"/></div>
       <div class="fg"><label for="ltb-errors" data-i18n>Words missed</label><input id="ltb-errors" type="number" min="0" max="999" step="1" inputmode="numeric" oninput="ltBookLive()"/></div>
