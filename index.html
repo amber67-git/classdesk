@@ -13170,22 +13170,36 @@ function currWkSettle(rows){let n=0;rows.forEach(r=>{if(r&&currWkOther(r,currWkK
 // v184 — December 2026. The owner's own sheet had five topics there; the 2027 plan, which begins in
 // that month, has five more, and importing it put the two side by side. The owner chose the plan,
 // so her five rows of that month leave, once, when this device has its data (after sync) and only
-// where the plan's December is in the app. They are kept on this device (cd_dec26_removed) and
-// come back with Undo; settings.dec26 keeps them from being taken again.
+// where the plan's December is in the app. In this order:
+//   1. a copy of the five goes to this device (cd_dec26_removed) — if it cannot, nothing happens;
+//   2. they leave the list and the list is stored — if it cannot be, they are put back;
+//   3. settings.dec26 records it. If that alone cannot be stored, the removal stands (it is stored
+//      and syncing); the next start finds nothing to take and changes nothing.
+// A plan row that came in while one of the five held its week (it was given none, see
+// currWkSettle) takes the plan's week back once that week is free. Undo — offered then, in this
+// session — puts the five back; after that the device copy is there to restore them by hand.
 const CURR_DEC26_OLD=["The Fir Tree","Learning Is Fun!","What I Am Good At","Christmas Around the World","Marie Curie"];
-const CURR_DEC26_PLAN=["The Nutcracker","Float or Sink","At the Restaurant","Giving and Receiving Gifts","New Year Goals & Time Capsule"];
+const CURR_DEC26_PLAN=["The Nutcracker","Float or Sink","At the Restaurant","Giving and Receiving Gifts","New Year Goals & Time Capsule"];   // weeks 1–5
 function currDec26Once(){
   if(settings.dec26||!currAscReady())return false;
   const has=(r,t)=>currNorm(r.topic).includes(currNorm(t)),dec=curriculum.filter(r=>String(r.year)==="2026"&&r.month==="DEC");
   if(CURR_DEC26_PLAN.filter(t=>dec.some(r=>has(r,t))).length<3)return false;     // the plan's December is not here (yet)
   const old=dec.filter(r=>CURR_DEC26_OLD.some(t=>has(r,t))&&!CURR_DEC26_PLAN.some(t=>has(r,t)));
   if(!old.length)return false;
+  try{localStorage.setItem("cd_dec26_removed",JSON.stringify(old));}catch(e){return false;}
   const before=curriculum.slice();
   old.forEach(r=>curriculum.splice(curriculum.indexOf(r),1));                     // in place: the sync layer holds this array
-  settings.dec26=1;
-  if(!saveKey("curriculum")||!saveKey("settings")){curriculum.splice(0,curriculum.length,...before);delete settings.dec26;return false;}
-  try{localStorage.setItem("cd_dec26_removed",JSON.stringify(old));}catch(e){}
+  const weeks=[];                                                                 // plan rows left without a week get theirs back
+  CURR_DEC26_PLAN.forEach((t,i)=>{const r=dec.find(x=>has(x,t)&&!old.includes(x));
+    if(r&&!(+r.week>0)&&!currWkOther(r,currWkKey(Object.assign({},r,{week:i+1})))){weeks.push(r);r.week=i+1;}});
+  if(!saveKey("curriculum")){
+    curriculum.splice(0,curriculum.length,...before);weeks.forEach(r=>{r.week="";});
+    try{localStorage.removeItem("cd_dec26_removed");}catch(e){}
+    return false;
+  }
+  settings.dec26=1;saveKey("settings");
   showUndoToast(tx("December 2026 now follows the new plan: {n} topics of the old sheet were taken out.",{n:old.length}),()=>{
+    weeks.forEach(r=>{r.week="";});                                               // the weeks go back to the rows that had them
     old.forEach(r=>{if(!curriculum.some(x=>x.id===r.id))curriculum.push(r);});save();if(curPage==="curriculum")renderCurriculum();
   });
   return true;
