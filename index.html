@@ -224,6 +224,9 @@ tbody tr:hover td{background:var(--row-hover)}
 #curr-body td.cs-act{outline:1px solid var(--bdr2);outline-offset:-1px}
 #curr-body td.cs-mon{font-weight:700;color:var(--grn)}
 #curr-body td.cs-wk{text-align:center}
+#curr-body td.cs-wkdup{background:var(--red-l)!important;color:var(--red-t);font-weight:700}   /* v184: a week number another row of the month has too */
+.curr-wkdup{margin:0 0 10px;padding:8px 12px;border-radius:var(--r);background:var(--red-l);color:var(--red-t);font-size:var(--fs-sm)}
+.curr-wkdup[hidden]{display:none}
 #curr-body td.cs-topic{font-weight:500;white-space:pre-line}
 #curr-body td[rowspan]{vertical-align:middle}
 .cs-pill{font-size:11px;background:var(--surf2);padding:2px 7px;border-radius:99px;color:var(--txt2);display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
@@ -1841,6 +1844,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
     <div id="curr-plan" class="curr-plan" hidden></div>
     <div id="curr-who" class="curr-who" role="group"></div>
     <div id="curr-who-info" class="curr-who-info" hidden></div>
+    <p id="curr-wkdup" class="curr-wkdup" role="status" hidden></p>
     <div class="card">
       <!-- v138: spreadsheet tools (tablet / PC only) -->
       <div class="cs-sheetbar" role="toolbar" aria-label="Sheet">
@@ -2473,6 +2477,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>Editing the curriculum like a spreadsheet</dt><dd>On a tablet or computer: click a cell and type to replace it, or press Enter / F2 / double-click to change what is there (<kbd>Alt</kbd>+<kbd>Enter</kbd> starts a new line, <kbd>Esc</kbd> cancels). Enter, Tab and the arrow keys move; Shift+arrows or dragging selects several cells. <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>V</kbd> copy and paste — blocks from Google Sheets or Excel fill the cells, and rows past the end are added. Delete clears, <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd> undo and redo. <b>Rows:</b> <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> or drag ⠿ to move a row; right-click (or ⋮) to insert, duplicate or delete. <b>Merge</b> joins the selected cells (all, vertically or horizontally); a merged cell keeps the top-left text, and in a vertical merge every week in it shares that text. Moving a row never cuts a merge in half. The palette button colours cells, and <b>Sort</b> puts the rows shown in date order, oldest first. <b>Style:</b> <kbd>Ctrl</kbd>+<kbd>B</kbd> bold, <kbd>Ctrl</kbd>+<kbd>I</kbd> italic, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> strikethrough (or the B / I / S buttons). <b>Notes:</b> <kbd>Shift</kbd>+<kbd>F2</kbd> or right-click → Insert note; a cell with a note has a small corner mark and shows the note when selected. <b>Find and replace:</b> <kbd>Ctrl</kbd>+<kbd>F</kbd> / <kbd>H</kbd> or 🔍 — matches are outlined, Enter goes to the next one, and Replace all can be undone in one step (month and week cells are found but not replaced). <b>Filter</b> hides rows by a column's values (only on this device, until you leave the page) and sorts the rows A → Z or Z → A by that column; rows held by a vertical merge stay together. <b>Fill handle:</b> drag the small green square at the corner of the selection down or up to repeat the cells with their colour and style; two week numbers (1, 2) carry on as 3, 4, 5. The line-height button clips each row to 3 lines or 1 line on this device. Every change is saved and synced straight away.</dd>
           <dt>Writing, Speaking and Grammar have three columns each. How do I write one text for every level?</dt><dd>A week is one row, and the three columns are the levels <b>A·B</b>, <b>C</b> and <b>D·E</b>. For a text that is the same for everyone, select the three cells and press <b>Merge → Merge horizontally</b>: they become one wide cell. In the topic window (the pencil), typing the same text in all three boxes does the same. To give the levels their own texts again, press <b>Merge → Unmerge</b> or change one of the boxes. With a level or a student picked above the sheet, only that level's column shows — and a text for every level still shows there.</dd>
           <dt>How do I bring my curriculum in from a spreadsheet?</dt><dd>Curriculum → <b>Import</b>. In Google Sheets, select the rows including the heading row and copy (Ctrl+C), then paste into the box — or use File → Download → CSV and choose that file. Columns are found by their headings: MONTH, 주제 / Topics, Workbook, Writing, Reading Books, Activities, ORT, Grammar, Speaking, Note. A row holding only a year (2025) starts that year; a "[과학]"-style tag at the start of the 주제 cell becomes the category. <b>If you teach several levels</b>, give Writing, Speaking and Grammar a column for each level: headings such as <b>Writing A·B</b>, <b>Writing C</b>, <b>Writing D·E</b> — or one heading <b>Writing</b> across three columns with <b>A·B | C | D·E</b> in the row under it. One plain <b>Grammar</b> column (no level in the heading) is read as a text for every level. A sheet in the older layout — a <b>Level</b> column and a row for each level under its topic, the topic cell left empty — is still read: those rows are folded into their week. The dialog shows what it found before anything changes, topics already in the app are only filled in (never duplicated), and Undo is offered right after.</dd>
+          <dt>Can I have two rows for one week?</dt><dd>No — in a month each week number has one row. When a week is different for different levels or students, write it in that row's columns to the right (Writing, Speaking and Grammar each have A·B, C and D·E). The sheet will not let a second row take a week that is used: it keeps the cell as it was and says which topic has that week. If old data has a week twice, the week number is red and a line over the sheet lists where; give one of the rows a free week or move its contents into the other row.</dd>
           <dt>How do I find a newspaper article for a week's topic?</dt><dd>Curriculum → the newspaper button at the end of the week's row. The window lists the articles that fit the week — the title, then <b>newspaper · issue · date · page</b>, which is what you need to take the paper off the shelf — with the words that made it fit. <b>Pick for this week</b> keeps an article on the row (the button then shows how many). The <b>Newspapers</b> button at the top opens the same window for a free search. The level filter starts at C–E: a level beside an article is where it is likely to fit, worked out from the newspaper and the publisher's own level, and it is an estimate. An article tagged from a title that says little is marked as a guess. Under <b>Issues on my shelf</b> you say which issues you have — press them one by one, a whole month or year, or type a period such as 2025-03~2025-08; a subscription that stopped and began again is simply two periods. The line under the newspaper's name reads back what was kept. Other issues are then marked, and <b>On the shelf only</b> leaves them out (together with a newspaper whose shelf you have not said yet). The list holds what the publishers show to everyone; new issues are added with an app update.</dd>
           <dt>Can I use the app in Korean?</dt><dd>Settings → Templates → <b>Language</b>: "Match the device language" (default), English or 한국어. The app reloads with the new language. Only the app's own words change — student names, notes and your message templates stay exactly as you typed them. Since v129 this Guide has a Korean version too and switches with the rest of the app.</dd>
           <dt>Can I use a dark screen?</dt><dd>Settings → Templates → <b>Appearance</b>: "Match the device" (the default — dark when the phone or computer is set to dark, and it changes along with it), Light or Dark. It is set per device, so the classroom PC can stay light while your phone is dark. It is not part of a backup, and printed labels and reports always come out light.</dd>
@@ -2484,6 +2489,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>What's new — recent changes</h3>
         <p>Newest first. Only changes that affect how you use the app are listed. The version you are running is shown at the bottom of the sidebar; if it is older than the top entry here, close the app fully and open it again.</p>
         <dl>
+          <dt>v184 · 2026-11-26</dt><dd><b>Curriculum: one row a week.</b> In a month a week number belongs to one row only. What differs within a week (levels, students) goes in the columns to the right of that row, not in a second row with the same number. Typing a taken week, filling or pasting one, and saving the form into one are refused with a note; a copied or new row starts without a week; the form starts a new topic on the month's first free week; an import that brings a topic into a taken week leaves that topic without a week and says so. Rows that already share a week show the number in red, with a line over the sheet saying where. <b>December 2026:</b> your old sheet and the 2027 plan both had five topics in that month, so every week had two rows. It now follows the new plan: the five rows of the old sheet in that month were taken out once (Undo brings them back).</dd>
           <dt>v183 · 2026-11-25</dt><dd><b>New: find an article in your printed newspapers, from the Curriculum page.</b> The article lists of <b>The Kids Times, NE Times Junior and NE Times</b> from January 2024 to November 2026 (about 5,500 articles) are in the app: title, newspaper, issue number, date, page where the publisher shows it, section and the publisher's level — not the article text. Each article was tagged once with a main topic, subtopics and keywords. <b>For a week:</b> press the newspaper button at the end of a row; the articles that fit that week's topic come up with the reason, and <b>Pick for this week</b> keeps them on the row. <b>Search:</b> the <b>Newspapers</b> button at the top — by word (English or Korean), topic, newspaper, level, issue ("149호") or date. <b>By topic</b> lists the 24 main topics with the number of articles, which also helps when planning a week. You can star an article, mark it as used (date and student), add a note. <b>Issues on my shelf</b>: press the issues you have — one at a time, a month or a year at once, or type a period — as many periods as it takes for each newspaper; articles of other issues are then marked and can be left out. <b>Levels:</b> the publisher's level is shown as it is; next to it the level it is likely to suit — C to E only (The Kids Times from C, NE Times Junior from D, NE Times for E at most). Searching uses the list in the app and no outside service; it works without a connection once the list has been opened.</dd>
           <dt>v182 · 2026-11-25</dt><dd><b>Level test: the long press works on a touch screen, and the Korean choice holds across the skills.</b> <b>Long press:</b> on a tablet or phone, holding the button at the bottom of a Speaking or Writing task (or of the last screen of a skill) closed the student's screen — and then the window that should have followed closed again the moment the finger lifted, so the test seemed stuck. The window now stays. While the lock or the button is held, a bar fills along it, so you can see how long to keep it pressed (a little over a second). <b>Korean:</b> the 한글 choice used to belong to one screen — with the start window's switch off, or after 한글 was turned off during reading, Korean came back as soon as another skill was opened from the row at the top. The choice now follows the student for the whole test: the start window's switch turned off means no Korean in any skill, and 한글 pressed on any screen holds for the others, also after the app is closed and opened again.</dd>
           <dt>v181 · 2026-11-25</dt><dd><b>Level test: start at the expected level everywhere, and pick test books with a tap.</b> The start level set for a student (Start levels) was used by Start test only. A skill opened from Details or from Still to rate, and the All skills window opened for a student, began at B or at the level of the student before. Now all of them begin at the student's own start level. A list of start levels can come with a link ending in <b>#levels=…</b>: the window opens with the list filled in, to press Apply. <b>Book check</b>: the books kept for each level are buttons — press the level, press the book; the lists can be changed in the window and go with your account.</dd>
@@ -2564,7 +2570,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <!-- Maintainers: every release that changes how the app is used adds a line under "What's new" above
              and sets the version below to APP_VERSION. validate.mjs fails when the two drift apart. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          Guide written against version: <b>v183</b> · FAQ current as of: <b>2026-11-25</b><br/>
+          Guide written against version: <b>v184</b> · FAQ current as of: <b>2026-11-26</b><br/>
           (Each release that changes how the app is used adds a "What's new" line and updates this version)
         </p>
 
@@ -2716,6 +2722,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
           <dt>학생이 말한 것과 쓴 것을 보관할 수 있나요?</dt><dd>네. 레벨테스트 → 학생의 <b>자세히</b> → <b>말하기</b>: <b>녹음하기</b>를 누르면 앱에서 바로 녹음합니다(과제를 학생 화면에 띄운 동안에도 계속 녹음되고, <b>멈추고 저장</b>을 누르면 저장됩니다). 핸드폰 녹음기로 따로 녹음한 파일은 <b>녹음 파일 올리기</b>로 올립니다. <b>쓰기</b>: <b>사진 올리기</b>로 종이를 찍거나 앨범에서 고릅니다. 큰 사진은 먼저 작게 줄여서 올립니다. 평가와 따로 학생에게 보관되므로, 나중에 올려도 되고 녹음·사진 없이 평가만 저장해도 됩니다. 파일은 선생님 Google 계정의 저장소(책 표지와 같은 곳)에 올라가므로 로그인이 필요하고, 다른 기기에서도 보입니다. 녹음은 5분이 되면 스스로 멈추고, 파일은 25 MB, 사진은 15 MB까지 올릴 수 있습니다. 삭제는 먼저 물어보고 몇 초 동안 되돌리기를 보여 줍니다. 그 뒤에는 파일이 완전히 지워집니다.</dd>
           <dt>테스트 도중에 멈추려면 어떻게 하고, 무엇이 남나요?</dt><dd>학생 화면 오른쪽 위의 자물쇠(<b>선생님</b>이라고 적힌 것)를 길게 누릅니다. 누르고 있으면 그 위에 막대가 차오르고, 다 차면(1초 남짓) 메뉴가 열립니다. 거기서 <b>멈추고 나가기 (나중에 이어서)</b>를 고릅니다. 그때까지 푼 것은 모두 남습니다. 읽기 테스트는 데이터에, 듣기·문법·어휘·파닉스 문항은 그 기기에 남습니다. 이어서 하려면 학생 줄의 <b>이어서 풀기</b>를 누르세요. 앱이 그냥 닫혔다면 다시 열 때 그 학생의 테스트가 바로 뜹니다. 말하기·쓰기 창에서 고르고 저장하지 않은 것도 남아서, 그 영역을 다시 열면 돌아옵니다. 샘플은 읽기 테스트만 남습니다. 모든 영역 테스트 중에는 영역을 바꾸려고 멈출 필요도 없습니다. 학생 화면 위쪽 줄에서 누르면 됩니다. 풀다 만 영역의 답은 그 기기에만 있으므로, 같은 기기에서 마저 끝내 주세요. 그 기기가 로그인되어 있는지도 확인하세요. 레벨테스트 페이지에 "이 기기는 로그인되어 있지 않습니다"가 보이면, 거기서 한 것은 다른 기기에 나타나지 않습니다.</dd>
           <dt>듣기·문법·파닉스·어휘는 어떻게 확인하고, 전체 시간은 얼마나 걸리나요?</dt><dd>레벨테스트 → 학생의 <b>자세히</b> → <b>듣기</b>, <b>문법</b>, <b>파닉스</b> 또는 <b>어휘</b> → <b>문항 시작</b>. 파닉스는 듣기처럼(선생님이 낱말을 읽어 주면 학생이 비슷하게 생긴 낱말 중에서 고릅니다 — 레벨마다 6문항), 어휘는 문법처럼(학생 혼자 — 레벨마다 8문항) 진행합니다. 듣기는 선생님이 대본을 읽어 주고(<b>화면에서 대본 보기</b>로 바로 보거나, <b>대본과 정답</b>으로 인쇄하거나, 학생 화면의 자물쇠를 길게 눌러 지금 읽어 줄 내용을 보세요) 학생이 답을 누릅니다. 문법은 학생이 혼자 풉니다. 한 레벨이 5문항(듣기)·8문항(문법)이고 대부분 한두 레벨을 풀게 되어, 영역마다 5분쯤 걸립니다. 읽기 테스트가 20분쯤 걸리므로 듣기·문법·말하기·쓰기까지 하면 35~40분에 가깝습니다. 한 수업에 읽기를, 다음 수업에 나머지를 보는 방법이 좋습니다. 종이로 볼 때는 <b>종이 시험지</b>로 한 레벨을 인쇄해 정답지로 채점한 뒤 레벨을 직접 고르세요. 학생이 인쇄한 시험지를 들고 있을 때는 레벨테스트 페이지 위쪽의 <b>선생님 대본</b>을 누르면 읽어 줄 내용과 정답이 핸드폰 화면에 레벨별로 나옵니다.</dd>
+          <dt>한 주에 줄을 두 개 둘 수 있나요?</dt><dd>아니요 — 한 달 안에서 주차마다 한 줄입니다. 레벨이나 학생마다 다르게 하는 내용은 그 줄의 오른쪽 칸에 씁니다(쓰기·말하기·문법은 각각 A·B, C, D·E 칸이 있습니다). 이미 쓰인 주차를 다른 줄에 넣으려고 하면 표가 받아들이지 않고, 그 주차에 어떤 주제가 있는지 알려 줍니다. 예전 데이터에 같은 주차가 두 번 있으면 주차 숫자가 빨갛게 보이고 표 위에 어디인지 나옵니다. 둘 중 한 줄을 빈 주차로 옮기거나, 내용을 다른 줄로 옮기세요.</dd>
           <dt>한 주의 주제에 맞는 신문 기사는 어떻게 찾나요?</dt><dd>커리큘럼 → 그 주 줄 끝의 신문 버튼을 누릅니다. 그 주에 맞는 기사가 제목, 그리고 <b>신문 · 호수 · 날짜 · 쪽</b>(신문을 꺼낼 때 필요한 정보)과 함께 나오고, 왜 맞는지 낱말도 보여 줍니다. <b>이 주에 넣기</b>를 누르면 그 줄에 남고 버튼에 개수가 표시됩니다. 위쪽 <b>신문</b> 버튼은 같은 창을 자유 검색으로 엽니다. 레벨 필터는 C–E에서 시작합니다. 기사 옆의 레벨은 신문 종류와 출판사 난이도로 계산한 추천 레벨이며 추정입니다. 제목만으로는 내용을 알기 어려운 기사는 추정이라고 표시됩니다. <b>보유한 신문</b>에서 가지고 있는 호를 정합니다 — 하나씩 누르거나, 달·연도를 통째로 누르거나, 2025-03~2025-08처럼 기간을 입력합니다. 구독이 끊겼다 이어졌다면 기간을 두 개 넣으면 됩니다. 신문 이름 아래 줄이 저장된 내용을 다시 읽어 줍니다. 나머지 호는 표시되고, <b>보유한 호만</b>을 켜면 목록에서 빠집니다(보유를 아직 정하지 않은 신문도 함께 빠집니다). 목록은 출판사가 누구에게나 보여 주는 내용이며, 새 호는 앱 업데이트 때 추가됩니다.</dd>
           <dt>레벨테스트 도중에 한국어 도움말을 켜거나 끌 수 있나요?</dt><dd>네 — 학생 화면 오른쪽 위의 <b>한글</b> 스위치로, 어느 레벨에서든 됩니다. 켜면 화면이 한국어와 영어로 함께 나오고 영어 문제 아래에 문제를 한국어로 보여 줍니다(지문과 보기는 영어 그대로). 끄면 화면 전체가 영어로만 나옵니다. 아무도 누르지 않으면 A·B 레벨에서는 켜져 있고(시작 창에서 켜 두었을 때) C–E 레벨에서는 꺼져 있습니다. 선택은 그 학생의 테스트 내내 따라갑니다 — 누른 화면뿐 아니라 모든 영역에서. 시작 창의 스위치를 꺼 두면 한글을 누르기 전에는 어느 영역에도 한국어가 나오지 않습니다. 스위치를 누른 테스트는 결과 창에 그렇게 적히므로, 이전 테스트와 비교할 때 참고하실 수 있습니다.</dd>
           <dt>학생이 같은 레벨테스트 지문을 또 보게 되나요?</dt><dd>한동안은 아닙니다. 레벨마다 세트가 네 개 있습니다. 테스트는 그 레벨에서 학생이 가장 오래전에 본 세트로 시작하고, 본 적 없는 세트가 먼저 나옵니다. 그래서 같은 지문은 나머지 세 세트를 다 본 뒤에야 다시 나옵니다. 점수가 애매하면 같은 테스트 안에서 같은 레벨의 다른 세트가 한 번 더 나옵니다. 종이 시험은 세트를 직접 고르며, 시작 창이 가장 오래전에 본 세트를 먼저 골라 둡니다.</dd>
@@ -2745,6 +2752,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
         <h3>새로운 기능 — 최근 변경 사항</h3>
         <p>최신순입니다. 앱을 쓰는 방법이 달라진 변경만 적었습니다. 지금 쓰는 버전은 사이드바 맨 아래에 나옵니다. 여기 맨 위 항목보다 낮다면 앱을 완전히 닫았다가 다시 여세요.</p>
         <dl>
+          <dt>v184 · 2026-11-26</dt><dd><b>커리큘럼: 한 주에 한 줄.</b> 한 달 안에서 주차 숫자는 한 줄에만 씁니다. 한 주 안에서 나눌 내용(레벨, 학생)은 그 줄의 오른쪽 칸에 넣고, 같은 숫자로 줄을 하나 더 만들지 않습니다. 이미 있는 주차를 입력하거나, 채우기·붙여 넣기로 넣거나, 양식으로 저장하면 안내와 함께 받아들이지 않습니다. 복사한 줄과 새 줄은 주차 없이 시작하고, 양식은 새 주제를 그 달의 첫 빈 주차로 시작합니다. 가져오기로 들어온 주제가 이미 있는 주차에 오면 주차를 비워 두고 알려 줍니다. 이미 주차가 겹친 줄은 숫자가 빨갛게 표시되고, 표 위에 어디인지 나옵니다. <b>2026년 12월:</b> 원래 시트와 2027 계획에 그 달 주제가 5개씩 있어서 주마다 두 줄이었습니다. 이제 새 계획을 따릅니다: 원래 시트의 그 달 주제 5개를 한 번 뺐습니다(되돌리기로 다시 넣을 수 있습니다).</dd>
           <dt>v183 · 2026-11-25</dt><dd><b>새 기능: 커리큘럼 페이지에서 종이 신문 기사 찾기.</b> <b>The Kids Times, NE Times Junior, NE Times</b>의 2024년 1월–2026년 11월 기사 목록(약 5,500건)이 앱에 들어 있습니다. 제목, 신문, 호수, 발행일, 쪽(출판사가 보여 주는 경우), 분야, 출판사 난이도이며 기사 본문은 없습니다. 기사마다 메인 토픽, 세부 주제, 키워드를 한 번 붙여 두었습니다. <b>주차별:</b> 줄 끝의 신문 버튼을 누르면 그 주 주제에 맞는 기사가 이유와 함께 나오고, <b>이 주에 넣기</b>를 누르면 그 줄에 남습니다. <b>검색:</b> 위쪽 <b>신문</b> 버튼 — 낱말(영어·한국어), 주제, 신문, 레벨, 호수("149호"), 날짜로 찾습니다. <b>주제별</b>에는 메인 토픽 24개와 기사 수가 나와서 주차를 짤 때도 참고할 수 있습니다. 기사에 별표, 사용함 표시(날짜·학생), 메모를 남길 수 있습니다. <b>보유한 신문</b>: 가지고 있는 호를 누릅니다 — 하나씩, 달이나 연도를 통째로, 또는 기간을 입력해서. 신문마다 기간을 몇 개든 넣을 수 있고, 그 밖의 호에 실린 기사는 표시되거나 목록에서 빠집니다. <b>레벨:</b> 출판사 난이도는 그대로 보여 주고, 옆에 추천 레벨을 C–E로만 표시합니다(The Kids Times는 C부터, NE Times Junior는 D부터, NE Times는 E에서만). 검색은 앱 안의 목록으로만 하고 외부 서비스를 쓰지 않습니다. 목록을 한 번 연 뒤에는 연결 없이도 됩니다.</dd>
           <dt>v182 · 2026-11-25</dt><dd><b>레벨테스트: 터치 화면에서 길게 누르기가 제대로 되고, 한글 선택이 모든 영역에 이어집니다.</b> <b>길게 누르기:</b> 태블릿이나 휴대폰에서 말하기·쓰기 과제 아래 버튼(또는 영역 마지막 화면의 버튼)을 길게 누르면 학생 화면은 닫혔지만, 이어서 떠야 할 창이 손가락을 떼는 순간 다시 닫혀서 다음 단계로 넘어가지 않는 것처럼 보였습니다. 이제 그 창이 그대로 남습니다. 자물쇠나 버튼을 누르고 있는 동안 그 위에 막대가 차오르므로, 얼마나 누르고 있어야 하는지 보입니다(1초 남짓). <b>한글:</b> 지금까지 한글 선택은 화면 하나에만 적용됐습니다. 시작 창에서 스위치를 꺼 두거나 읽기 도중에 한글을 꺼도, 위쪽 줄에서 다른 영역을 누르면 한국어가 다시 나왔습니다. 이제 선택이 그 학생의 테스트 내내 따라갑니다. 시작 창의 스위치를 끄면 어느 영역에도 한국어가 나오지 않고, 어느 화면에서든 한글을 누르면 다른 화면에도 그대로 적용됩니다. 앱을 닫았다 다시 열어도 유지됩니다.</dd>
           <dt>v181 · 2026-11-25</dt><dd><b>레벨테스트: 어디서 열어도 예상 레벨에서 시작, 테스트용 책은 눌러서 고르기.</b> 학생에게 정해 둔 시작 레벨은 지금까지 테스트 시작에만 쓰였습니다. 자세히나 남은 영역에서 연 영역, 그리고 학생의 모든 영역 창은 B나 바로 앞 학생의 레벨에서 시작했습니다. 이제 모두 그 학생의 시작 레벨에서 시작합니다. 시작 레벨 목록은 <b>#levels=…</b>로 끝나는 링크로도 받을 수 있습니다. 목록이 채워진 창이 열리고 적용만 누르면 됩니다. <b>책 읽기 확인</b>: 레벨별로 정해 둔 책이 버튼으로 나옵니다 — 레벨을 누르고 책을 누르면 됩니다. 목록은 창에서 바꿀 수 있고 계정과 함께 갑니다.</dd>
@@ -2824,7 +2832,7 @@ hr{border:none;border-top:1px solid var(--bdr);margin:12px 0}
 
         <!-- Maintainers: keep this Korean copy in step with the English one above. -->
         <p style="margin-top:26px;padding-top:10px;border-top:1px solid var(--bdr);font-size:11px;color:var(--txt3)">
-          설명서 기준 버전: <b>v183</b> · 자주 묻는 질문 기준일: <b>2026-11-25</b><br/>
+          설명서 기준 버전: <b>v184</b> · 자주 묻는 질문 기준일: <b>2026-11-26</b><br/>
           (앱 사용 방법이 바뀌는 릴리스마다 "새로운 기능"에 한 줄을 더하고 이 버전을 올립니다)
         </p>
 
@@ -3475,8 +3483,8 @@ const DHW=[];
 // (v163: Writing and Grammar that are the same for every level sit in the first level column, merged across the three)
 const DC=[
   {id:"c1",month:"APR",week:1,cat:"역사",topic:"교통의 변화",wb:"",books:"Oxford RAD L5: Transportation",acts:"",note:""},
-  {id:"c2",month:"APR",week:1,cat:"디지털",topic:"오스모 코딩",wb:"Osmo",books:"",acts:"Coding Awbie",note:""},
-  {id:"c3",month:"APR",week:2,cat:"역할극",topic:"Being a Kid",wb:"Write Right 1",books:"Role-play situations",acts:"",note:"",wAB:"Paragraph to Essay",mh:{wAB:3}},
+  {id:"c2",month:"APR",week:2,cat:"디지털",topic:"오스모 코딩",wb:"Osmo",books:"",acts:"Coding Awbie",note:""},
+  {id:"c3",month:"APR",week:3,cat:"역할극",topic:"Being a Kid",wb:"Write Right 1",books:"Role-play situations",acts:"",note:"",wAB:"Paragraph to Essay",mh:{wAB:3}},
   {id:"c4",month:"MAY",week:1,cat:"생각 나누기",topic:"아낌없이 주는 나무",wb:"",books:"THE GIVING TREE",acts:"Discussion",note:"",wAB:"Opinion writing",mh:{wAB:3}},
   {id:"c5",month:"MAY",week:2,cat:"동화",topic:"Hercules",wb:"",books:"Usborne Young Reading 2-03",acts:"",note:""},
   {id:"c6",month:"MAY",week:3,cat:"과학",topic:"How Dinosaurs Fossils Are Made?",wb:"",books:"",acts:"",note:"",wAB:"Explain how fossils form",mh:{wAB:3}},
@@ -4128,6 +4136,8 @@ const I18N={ko:{
   "Newspapers":"신문","Newspaper":"신문","Find an article in your printed newspapers":"가지고 있는 종이 신문에서 기사 찾기","Newspaper articles for this week":"이 주에 맞는 신문 기사","Search titles, topics and keywords…":"제목·주제·키워드 검색…","Order":"순서","On the shelf only":"보유한 호만","Not used yet":"아직 안 쓴 것만","Issues on my shelf":"보유한 신문","Level {n}":"Level {n}","Normal":"보통","Very hard":"매우 어려움","Levels C–E":"C–E 레벨","Every level":"모든 난이도","Every topic":"모든 주제","Best fit first":"잘 맞는 순","Newest first":"최신순","Oldest first":"오래된 순","Searched before":"최근 검색","For this week":"이 주 추천","By topic":"주제별","Favourites":"즐겨찾기","Used":"사용 기록","Every newspaper":"모든 신문","Every publisher's level":"출판사 난이도 전체","{n} articles · list made {d}":"기사 {n}건 · 목록 작성일 {d}","The list of articles could not be read. Check the connection and try again.":"기사 목록을 읽지 못했습니다. 연결을 확인하고 다시 시도하세요.","Reading the list of articles…":"기사 목록을 읽는 중…","Main topics, with the number of articles under the filters above. Press one to see its articles.":"메인 토픽과, 위 조건에 맞는 기사 수입니다. 누르면 그 주제의 기사가 나옵니다.","Picked for this week":"이 주에 골라 둠","Same field: {t}":"같은 분야: {t}","Fits: {w}":"맞는 낱말: {w}","This week has no topic to go by yet. Use Search.":"이 주에는 아직 기준으로 삼을 주제가 없습니다. 검색을 써 보세요.","No article fits this week's topic under the filters above. Try Every level, or Search.":"위 조건에서는 이 주 주제에 맞는 기사가 없습니다. 모든 난이도로 바꾸거나 검색해 보세요.","No favourites yet — press the star on an article.":"즐겨찾기가 없습니다 — 기사의 별을 누르세요.","Nothing marked as used yet.":"사용했다고 표시한 기사가 없습니다.","Nothing fits every word. Try fewer words, another level, or By topic.":"모든 낱말에 맞는 기사가 없습니다. 낱말을 줄이거나 난이도를 바꾸거나 주제별로 찾아보세요.","No article under the filters above.":"위 조건에 맞는 기사가 없습니다.","Type a word — animal, volcano, 교통 — or pick a topic or a newspaper.":"낱말을 입력하세요 — animal, volcano, 교통 — 또는 주제나 신문을 고르세요.","{n} articles":"기사 {n}건","Show more":"더 보기","No. {n}":"{n}호","p. {n}":"{n}쪽","Take out of favourites":"즐겨찾기에서 빼기","Add to favourites":"즐겨찾기에 넣기","On the shelf":"보유","Not on the shelf":"없음","Publisher's level":"출판사 난이도","Likely to suit":"추천 레벨","(a stretch)":"(도전용)","above level E":"E 레벨보다 어려움","free to read online":"온라인 무료 기사","tagged from the title alone — a guess":"제목만 보고 분류 — 추정","Also picked for: {w}":"다른 주에도 골라 둠: {w}","Used {d}":"{d} 사용","Take out":"빼기","Pick for this week":"이 주에 넣기","Mark as used":"사용함 표시","Publisher's page":"출판사 페이지","A note for yourself":"내가 볼 메모","Not for one student":"학생 지정 안 함","The list of favourites is full. Take one out first.":"즐겨찾기가 가득 찼습니다. 하나를 먼저 빼 주세요.","Pick a date up to today.":"오늘까지의 날짜를 고르세요.","The list of used articles is full.":"사용 기록이 가득 찼습니다.","Taken out of the used list.":"사용 기록에서 뺐습니다.","A week holds up to {n} articles.":"한 주에는 기사를 {n}개까지 넣을 수 있습니다.",
   "Press the issues you have. A month or a year can be pressed as a whole, and a period can be typed. Articles of other issues are then marked, and can be left out.":"가지고 있는 호를 누르세요. 달이나 연도를 통째로 누를 수도 있고, 기간을 입력할 수도 있습니다. 그 밖의 호에 실린 기사는 표시되고, 목록에서 뺄 수도 있습니다.","{n} of {m} issues":"{m}개 호 중 {n}개","not said yet":"아직 정하지 않음","A period or issue numbers":"기간 또는 호수","Clear all":"모두 해제","All issues":"전체 선택","Not a period or issue numbers of this newspaper: {x}":"이 신문의 기간이나 호수로 읽을 수 없습니다: {x}","{n} issues added.":"{n}개 호를 추가했습니다.",
   "Another row has the same record number as this week, so they cannot be told apart: nothing can be picked for it here. Delete one of the two and add it again.":"다른 줄이 이 주와 같은 기록 번호를 쓰고 있어 둘을 구분할 수 없습니다. 여기서는 이 주에 기사를 넣을 수 없습니다. 둘 중 하나를 지우고 다시 추가하세요.",
+  // v184 — one row a week
+  "Week {w} of {m} already has \"{t}\". One row a week — put what differs in the columns to the right.":"{m} {w}주에는 이미 \"{t}\"이(가) 있습니다. 한 주에는 한 줄만 둡니다 — 나눌 내용은 그 줄의 오른쪽 칸에 넣으세요.","Another row of this month has the same week. One row a week — move one of them to a free week, or its contents to the columns to the right of the other.":"이 달에 같은 주차의 줄이 또 있습니다. 한 주에는 한 줄만 둡니다 — 하나를 빈 주차로 옮기거나, 내용을 다른 줄의 오른쪽 칸으로 옮기세요.","A week has more than one row in {n} places: {w}. One row a week — the red week numbers show where.":"주차가 겹친 곳이 {n}군데 있습니다: {w}. 한 주에는 한 줄만 둡니다 — 빨간 주차 숫자가 겹친 곳입니다.","{n} of them kept no week: another row already has that week.":"그중 {n}개는 그 주차에 이미 다른 줄이 있어 주차를 비워 두었습니다.","December 2026 now follows the new plan: {n} topics of the old sheet were taken out.":"2026년 12월을 새 계획으로 맞췄습니다: 원래 시트 주제 {n}개를 뺐습니다.",
   "Paste ratings":"평가 붙여 넣기","Put in ratings from a list — for example one made from photos of the writing":"목록으로 평가 넣기 — 예: 쓰기 사진을 보고 만든 목록","Check":"확인",
   "For ratings worked out elsewhere — for example a list made from photos of the writing. One rating a line: name | skill | level | content sentences accuracy flow (each out of 100, in steps of 20) | words | sentences | note. Only the first three are needed. Check first; nothing is saved until you press Apply.":"앱 밖에서 정리한 평가를 넣는 곳입니다 — 예: 쓰기 사진을 보고 만든 목록. 한 줄에 평가 하나: 이름 | 영역 | 레벨 | 내용 문장 정확성 흐름(각 100점 만점, 20점 단위) | 단어 수 | 문장 수 | 메모. 앞의 세 가지만 있어도 됩니다. 먼저 확인을 누르세요. 적용을 누르기 전에는 아무것도 저장되지 않습니다.",
   "Changed — press Check again.":"내용이 바뀌었습니다 — 확인을 다시 누르세요.","Not a date up to today.":"오늘까지의 날짜가 아닙니다.","Needs a name, a skill and a level, divided by |.":"이름, 영역, 레벨이 | 로 나뉘어 있어야 합니다.",
@@ -4750,7 +4760,7 @@ const gs=id=>students.find(s=>s.id===id);
 // the device's own timezone or system clock setting — this app is for a Korea-based class
 // schedule, so dates shouldn't shift depending on where/how the computer is configured.
 // Bumped on every release; rendered bottom-left so the running version is always visible.
-const APP_VERSION="v183";
+const APP_VERSION="v184";
 // Korean (and other IME) typing: the Enter that finishes a syllable arrives as a keydown with
 // isComposing (Safari: keyCode 229). Every Enter-to-save/search handler checks this first so the
 // half-typed word is not saved or searched early.
@@ -6419,7 +6429,8 @@ function openCurrModal(id){
   const set=(eid,v)=>{const e=document.getElementById(eid);if(e)e.value=v??"";};
   set("cm-year",c?c.year||"":(document.getElementById("curr-yf")?.value||"").replace(/\D/g,"")||new Date().getFullYear());
   {const dl=document.getElementById("cm-cat-list");if(dl)dl.innerHTML=currCategories().map(x=>`<option value="${escapeAttr(x)}"></option>`).join("");}
-  set("cm-month",c?.month||"MAY");set("cm-week",c?.week||1);set("cm-cat",c?.cat);
+  set("cm-month",c?.month||"MAY");set("cm-cat",c?.cat);
+  set("cm-week",c?c.week||"":currWkFree(document.getElementById("cm-year")?.value||"",document.getElementById("cm-month")?.value||"MAY")||"");   // v184: a new topic starts on a free week
   set("cm-topic",c?.topic);set("cm-wb",c?.wb);set("cm-books",c?.books);
   set("cm-acts",c?.acts);set("cm-note",c?.note);
   // a text that runs across the three levels (a horizontal merge) shows in each box; saving it unchanged keeps the merge
@@ -6433,7 +6444,7 @@ function saveCurr(){
   const g=id=>document.getElementById(id)?.value.trim()??"";
   const customFields=collectCustomFieldsFromModal("cm-custom-fields");
   const yr=parseInt(g("cm-year"),10);
-  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||1,cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),acts:g("cm-acts"),note:g("cm-note"),customFields};
+  const obj={year:yr>=2000&&yr<=2100?yr:"",month:g("cm-month"),week:parseInt(document.getElementById("cm-week")?.value)||"",cat:g("cm-cat"),topic:g("cm-topic"),wb:g("cm-wb"),books:g("cm-books"),acts:g("cm-acts"),note:g("cm-note"),customFields};
   if(!obj.topic){alert(tx("Topic required"));return;}
   const old=editCid?curriculum.find(c=>c.id===editCid):null;
   // The level boxes. Where the row has one text across the levels and the boxes still all say it,
@@ -6448,6 +6459,7 @@ function saveCurr(){
     else cols.forEach((f,i)=>{obj[f]=v[i];});
   }
   if(mh)obj.mh=mh;
+  {const o=currWkOther(old,currWkKey(obj));if(o){alert(currWkMsg(obj,o));return;}}   // v184: one row a week
   let rec=null;
   if(editCid){const i=curriculum.findIndex(c=>c.id===editCid);if(i>=0)rec=curriculum[i]={...curriculum[i],...obj};}
   else curriculum.push(rec={id:uid(),...obj});
@@ -12664,6 +12676,7 @@ function renderCurriculum(){
     return;
   }
   currYearsAscOnce();
+  currDec26Once();
   currPlanBar();
   applyCustomLabelsToHeader("curriculum");
   applyCurrColWidths();
@@ -12682,6 +12695,7 @@ function renderCurriculum(){
     yf.style.display=years.length?"":"none";
   }
   currWhoRender();
+  currWkNotice();
   // v138: the order is the sheet's own (see currOrdered) — moving a row moves it, nothing re-sorts.
   // v140: the sheet's column filters (tablet / PC) apply on top of the bar's filters.
   const base=currBaseFilter(),sheet=!csPhone();
@@ -12690,6 +12704,13 @@ function renderCurriculum(){
   csMarkFilters();
   csFitBox();
   currJumpPending();
+}
+// v184: where a month has a week number on more than one row, a line over the sheet says which.
+function currWkNotice(){
+  const el=document.getElementById("curr-wkdup");if(!el)return;
+  const d=currWkDupes();el.hidden=!d.length;if(!d.length){el.textContent="";return;}
+  const where=d.map(a=>[a[0].year,a[0].month,tx("Wk")+" "+a[0].week].filter(Boolean).join(" ")).slice(0,6).join(", ")+(d.length>6?" …":"");
+  el.textContent=tx("A week has more than one row in {n} places: {w}. One row a week — the red week numbers show where.",{n:d.length,w:where});
 }
 // The sheet scrolls inside its own box. The box takes the height left under the bar, the student
 // buttons and the line about the picked student — however many rows of buttons there are — so the
@@ -13133,6 +13154,42 @@ function currOrdered(cmp){
 // Signed in, it waits for the first read of the cloud's settings and curriculum: stamping settings
 // before that could overwrite newer settings saved on another device (see moveLocalFieldSetups).
 function currAscReady(){return feeAuthKnown&&(!syncUser||(!!syncSettled.settings&&!!syncSettled.curriculum));}
+// v184 — one row a week. In a month (of a year) a week number belongs to one row only: what differs
+// within a week (levels, students) goes in the columns to the right, never in a second row with the
+// same number. Every way into the sheet keeps to it — typing, fill, paste, a copied or new row, the
+// form, an import — and a month that already has a number twice (data from before) shows it in red.
+const currWkKey=r=>{const w=+r.week;return w>0&&r.month?String(r.year||"")+"|"+r.month+"|"+w:"";};
+const currWkOther=(r,key,skip)=>key?curriculum.find(x=>x!==r&&!(skip&&skip.has(x))&&currWkKey(x)===key)||null:null;
+function currWkDupes(){const m=new Map();curriculum.forEach(r=>{const k=currWkKey(r);if(k){if(!m.has(k))m.set(k,[]);m.get(k).push(r);}});return [...m.values()].filter(a=>a.length>1);}
+// the first week of a month that no row has yet
+function currWkFree(year,month){for(let w=1;w<=5;w++)if(!currWkOther(null,currWkKey({year,month,week:w})))return w;return "";}
+const currWkMsg=(r,o)=>tx("Week {w} of {m} already has \"{t}\". One row a week — put what differs in the columns to the right.",{w:r.week,m:[r.month,r.year].filter(Boolean).join(" "),t:String(o.topic||"").split("\n")[0]});
+// After an import: a row that came in (or was moved) to a week another row already has keeps no
+// week — nothing is lost, and the teacher gives it a free week or moves its contents.
+function currWkSettle(rows){let n=0;rows.forEach(r=>{if(r&&currWkOther(r,currWkKey(r))){r.week="";n++;}});return n;}
+// v184 — December 2026. The owner's own sheet had five topics there; the 2027 plan, which begins in
+// that month, has five more, and importing it put the two side by side. The owner chose the plan,
+// so her five rows of that month leave, once, when this device has its data (after sync) and only
+// where the plan's December is in the app. They are kept on this device (cd_dec26_removed) and
+// come back with Undo; settings.dec26 keeps them from being taken again.
+const CURR_DEC26_OLD=["The Fir Tree","Learning Is Fun!","What I Am Good At","Christmas Around the World","Marie Curie"];
+const CURR_DEC26_PLAN=["The Nutcracker","Float or Sink","At the Restaurant","Giving and Receiving Gifts","New Year Goals & Time Capsule"];
+function currDec26Once(){
+  if(settings.dec26||!currAscReady())return false;
+  const has=(r,t)=>currNorm(r.topic).includes(currNorm(t)),dec=curriculum.filter(r=>String(r.year)==="2026"&&r.month==="DEC");
+  if(CURR_DEC26_PLAN.filter(t=>dec.some(r=>has(r,t))).length<3)return false;     // the plan's December is not here (yet)
+  const old=dec.filter(r=>CURR_DEC26_OLD.some(t=>has(r,t))&&!CURR_DEC26_PLAN.some(t=>has(r,t)));
+  if(!old.length)return false;
+  const before=curriculum.slice();
+  old.forEach(r=>curriculum.splice(curriculum.indexOf(r),1));                     // in place: the sync layer holds this array
+  settings.dec26=1;
+  if(!saveKey("curriculum")||!saveKey("settings")){curriculum.splice(0,curriculum.length,...before);delete settings.dec26;return false;}
+  try{localStorage.setItem("cd_dec26_removed",JSON.stringify(old));}catch(e){}
+  showUndoToast(tx("December 2026 now follows the new plan: {n} topics of the old sheet were taken out.",{n:old.length}),()=>{
+    old.forEach(r=>{if(!curriculum.some(x=>x.id===r.id))curriculum.push(r);});save();if(curPage==="curriculum")renderCurriculum();
+  });
+  return true;
+}
 function currYearsAscOnce(){
   if(settings.currAsc||!currAscReady())return;
   const full=currOrdered(currNewestFirstCmp);
@@ -13153,7 +13210,7 @@ function currYearsAscOnce(){
 }
 // The sign-in state has become known, or the first cloud read has finished: the page on screen may
 // still show the old order.
-function currAscKick(){if((!settings.currAsc||currColsNeeded())&&curPage==="curriculum"&&currAscReady())renderCurriculum();}
+function currAscKick(){const d=currDec26Once();if((d||!settings.currAsc||currColsNeeded())&&curPage==="curriculum"&&currAscReady())renderCurriculum();}
 // Give the topics an ord that matches what is on screen. The first time (no ords yet) every topic
 // gets one; after that only newcomers (Add form, Import, an older app) get a value between their
 // neighbours, so only they are written.
@@ -13208,6 +13265,7 @@ function csRender(fl){
   const body=document.getElementById("curr-body");if(!body)return;
   if(CS.edit){CS.pending=true;return;}          // never pull the table out from under someone typing
   const phone=csPhone(),cols=csShown();
+  CS.wkDup=new Set(currWkDupes().flat().map(r=>r.id));
   // remember the selection by record and column, so a re-render (sync, undo…) keeps it
   const keepSel=CS.keep||(CS.vis.length?{rid:CS.vis[CS.r]?.id,col:CS.cols[CS.c],arid:CS.vis[CS.ar]?.id,acol:CS.cols[CS.ac]}:null);
   CS.keep=null;
@@ -13243,8 +13301,9 @@ function csRender(fl){
     const fm=(rec.fmt&&rec.fmt[col])||"",note=rec.cn&&rec.cn[col];
     const fx=(fm.includes("b")?" cs-b":"")+(fm.includes("i")?" cs-i":"")+(fm.includes("s")?" cs-s":"")+(note?" cs-note":"");
     const cls=`cs-c${col==="month"?" cs-mon":col==="week"?" tm cs-wk":col==="topic"?" cs-topic":col==="note"?" cell-muted cur-pre":CS_LABEL[col]?" cell-sub2 cur-pre":""}${empty}${fx}`;
-    const tip=note?` title="${escapeAttr(tx("Note")+": "+note)}"`:"";
-    return `<td class="${cls}" data-c="${CS_COLS.indexOf(col)}" data-r="${r}" data-k="${c}"${rs>1?` rowspan="${rs}"`:""}${cs>1?` colspan="${cs}"`:""}${lab}${f}${tip}>${phone?csDisplay(rec,col):`<div class="cs-v">${csDisplay(rec,col)}</div>`}</td>`;
+    const dup=col==="week"&&CS.wkDup&&CS.wkDup.has(rec.id);
+    const tip=dup?` title="${escapeAttr(tx("Another row of this month has the same week. One row a week — move one of them to a free week, or its contents to the columns to the right of the other."))}"`:note?` title="${escapeAttr(tx("Note")+": "+note)}"`:"";
+    return `<td class="${cls}${dup?" cs-wkdup":""}" data-c="${CS_COLS.indexOf(col)}" data-r="${r}" data-k="${c}"${rs>1?` rowspan="${rs}"`:""}${cs>1?` colspan="${cs}"`:""}${lab}${f}${tip}>${phone?csDisplay(rec,col):`<div class="cs-v">${csDisplay(rec,col)}</div>`}</td>`;
   };
   // v183: the week's newspaper articles — the number picked shows on the button
   const news=rec=>{const n=newsRowIds(rec).length;return `<button class="bic cs-news${n?" has":""}" onclick="newsOpen('${rec.id}')" title="${tx("Newspaper articles for this week")}"><i class="ti ti-news"></i>${n?`<b>${n}</b>`:""}</button>`;};
@@ -13372,10 +13431,20 @@ function csWrite(rec,col,val){
   col=currAnchor(rec,col);                              // a cell under a merge across the levels writes the merged text
   const v=csNormalise(col,val,rec);
   const out=col==="week"?(v?+v:""):v;
-  const g=rec.mv&&rec.mv[col];
-  (g?curriculum.filter(x=>x.mv&&x.mv[col]===g):[rec]).forEach(x=>{x[col]=out;});
+  const g=rec.mv&&rec.mv[col],rows=g?curriculum.filter(x=>x.mv&&x.mv[col]===g):[rec];
+  if(col==="week"||col==="month"){
+    const keys=new Map();
+    for(const x of rows){
+      const k=currWkKey(Object.assign({},x,{[col]:out})),o=currWkOther(x,k,new Set(rows))||(k&&keys.get(k));
+      if(o){CS.wkNote=currWkMsg(Object.assign({},x,{[col]:out}),o);return false;}
+      if(k)keys.set(k,x);
+    }
+  }
+  rows.forEach(x=>{x[col]=out;});
+  return true;
 }
 function csSave(){
+  if(CS.wkNote){showToast(CS.wkNote);CS.wkNote=null;}
   const top=CS.undo[CS.undo.length-1];
   if(top&&!top.after)csSealStep(top);
   if(save()===false){csUndo(true);return;}   // storage full: put it back (the alert has been shown)
@@ -13509,13 +13578,13 @@ function csPaste(text){
 }
 
 // ── rows ──
-const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:ref?.week||"",cat:"",topic:"",wb:"",books:"",acts:"",note:""});
+const csNewRec=ref=>({id:uid(),year:ref?ref.year||"":(+document.getElementById("curr-yf")?.value||""),month:ref?ref.month||"":(document.getElementById("curr-mf")?.value||""),week:"",cat:"",topic:"",wb:"",books:"",acts:"",note:""});
 function csSelRows(){const q=csRect();return q?CS.vis.slice(q.r0,q.r1+1):[];}
 function csInsert(where){
   const rows=csSelRows();const ref=where<0?rows[0]:rows[rows.length-1];if(!ref&&CS.vis.length)return;
   csSnap();
   const rec=csNewRec(ref||null);curriculum.push(rec);
-  const full=currOrdered();
+  const full=currOrdered().filter(r=>r!==rec);          // the row that goes after is never the new row itself
   csPlaceBlock([rec],where<0?ref:(ref?full[full.indexOf(ref)+1]||null:null));
   CS.keep={rid:rec.id,col:"topic",arid:rec.id,acol:"topic"};
   csSave();csFocus();
@@ -13528,8 +13597,8 @@ function csAddRow(){
 function csDuplicate(){
   const rows=csSelRows();if(!rows.length)return;
   csSnap();
-  const copies=rows.map(r=>{const c=JSON.parse(JSON.stringify(r));c.id=uid();delete c._u;delete c.ord;delete c.mv;return c;});
-  curriculum.push(...copies);const full=currOrdered();
+  const copies=rows.map(r=>{const c=JSON.parse(JSON.stringify(r));c.id=uid();c.week="";delete c._u;delete c.ord;delete c.mv;return c;});   // v184: a week has one row
+  curriculum.push(...copies);const full=currOrdered().filter(r=>!copies.includes(r));   // (the copies are placed, not placed after)
   csPlaceBlock(copies,full[full.indexOf(rows[rows.length-1])+1]||null);
   CS.keep={rid:copies[0].id,col:CS.cols[CS.c],arid:copies[copies.length-1].id,acol:CS.cols[CS.c]};
   csSave();
@@ -14444,6 +14513,7 @@ async function currPlanUpdate(){
     (p.holds?p.fresh:[]).forEach(it=>{const {ko,en,...rec}=it;const n={id:uid(),...rec};curriculum.push(n);touched.add(n);added.push(n);});
     currApplyRenames(p.edit);currApplyShifts(p.shift);
     currApplyRenames(p.rename);currApplyRenames(p.gram);currApplyMoves(p.move);
+    const noWk=currWkSettle([...added,...p.shift.map(x=>x.ex),...p.move.map(x=>x.ex)]);   // v184: one row a week
     places.mark();
     // What each new row holds as it comes in. Undo removes a row only while it still reads so: one
     // the teacher has typed in since is hers and stays.
@@ -14458,7 +14528,7 @@ async function currPlanUpdate(){
     // Undo takes back what the update did and nothing else: the rows that came in go, and the cells,
     // weeks, months and places it changed are what they were. An edit made since then to another
     // cell stays, and so does a row that came in and has been typed in since.
-    showUndoToast(tx("{n} rows brought in line with the plan",{n:touched.size}),()=>{
+    showUndoToast(tx("{n} rows brought in line with the plan",{n:touched.size})+(noWk?" "+tx("{n} of them kept no week: another row already has that week.",{n:noWk}):""),()=>{
       added.forEach(n=>{
         const i=curriculum.findIndex(c=>c===n||c.id===n.id);
         if(i>=0&&currPlanRowSig(curriculum[i])===born.get(n))curriculum.splice(i,1);   // in place: the sync layer holds this array
@@ -14558,12 +14628,14 @@ function currImportApply(fresh){
   const p=currImportPlan;if(!currPlanAny(p))return;
   const snapshot=JSON.parse(JSON.stringify(curriculum)),rev=currPlanRevKeep();
   const touched=new Set();
-  p.add.forEach(it=>{const {ko,en,...rec}=it;const n={id:uid(),...rec};curriculum.push(n);touched.add(n.id);});
+  const came=[];
+  p.add.forEach(it=>{const {ko,en,...rec}=it;const n={id:uid(),...rec};curriculum.push(n);came.push(n);touched.add(n.id);});
   if(!touched.size)currPlanTouched(p).forEach(ex=>touched.add(ex.id));
   if(!touched.size)p.fill.forEach(({ex})=>touched.add(ex.id));
   p.fill.forEach(({ex,changes})=>Object.assign(ex,changes));
   currApplyRenames(p.edit);currApplyShifts(p.shift);
   currApplyRenames(p.rename);currApplyRenames(p.gram);currApplyMoves(p.move);
+  const noWk=currWkSettle([...came,...p.shift.map(x=>x.ex),...p.move.map(x=>x.ex)]);   // v184: one row a week
   if(!saveKey("curriculum")){
     // Not stored: the list goes back to what it was (in place — the sync layer holds this array)
     // and the preview is worked out again, since the old one points at rows that are gone.
@@ -14578,7 +14650,7 @@ function currImportApply(fresh){
   // renderCurriculum does the jump once the rows are really drawn (see currJumpPending).
   _currJumpIds=touched;
   renderCurriculum();
-  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:new Set([...p.fill,...p.move,...p.rename,...p.gram,...p.edit,...p.shift].map(x=>x.ex)).size}),()=>{
+  showUndoToast(tx("{a} topics added · {b} updated",{a:p.add.length,b:new Set([...p.fill,...p.move,...p.rename,...p.gram,...p.edit,...p.shift].map(x=>x.ex)).size})+(noWk?" "+tx("{n} of them kept no week: another row already has that week.",{n:noWk}):""),()=>{
     curriculum.splice(0,curriculum.length,...snapshot);   // in place: the sync layer holds this array
     rev.back();
     save();renderCurriculum();
